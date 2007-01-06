@@ -22,25 +22,25 @@
 
 Gobby::EntryDialog::EntryDialog(Gtk::Window& parent,
                                 const Glib::ustring& title,
-                                const Glib::ustring& label)
- : DefaultDialog(title, parent, true, true),
-   m_label(label),
-   m_box(false, 5),
-   m_check_valid_entry(false)
+                                const Glib::ustring& label):
+	Gtk::Dialog(title, parent, true, true), m_label(label), m_box(false, 5),
+	m_check_valid_entry(false)
 {
+	m_entry.set_activates_default(true);
+
 	m_box.pack_start(m_label);
 	m_box.pack_start(m_entry);
 
 	get_vbox()->set_spacing(5);
 	get_vbox()->pack_start(m_box);
 
-	set_default_response(Gtk::RESPONSE_OK);
+	m_entry.signal_changed().connect(
+		sigc::mem_fun(*this, &EntryDialog::on_entry_changed)
+	);
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-
-	m_entry.signal_changed().connect(
-		sigc::mem_fun(*this, &EntryDialog::on_entry_changed) );
+	set_default_response(Gtk::RESPONSE_OK);
 
 	show_all();
 	set_border_width(10);
@@ -85,4 +85,3 @@ void Gobby::EntryDialog::on_entry_changed()
 	bool disable = (m_check_valid_entry && m_entry.get_text().empty() );
 	set_response_sensitive(Gtk::RESPONSE_OK, !disable);
 }
-

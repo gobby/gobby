@@ -21,12 +21,12 @@
 
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
-#include "defaultdialog.hpp"
+#include <gtkmm/dialog.h>
 
 namespace Gobby
 {
 
-class EntryDialog : public DefaultDialog
+class EntryDialog: public Gtk::Dialog
 {
 public:
 	EntryDialog(Gtk::Window& parent,

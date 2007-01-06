@@ -20,13 +20,13 @@
 #include "fileentry.hpp"
 
 Gobby::FileEntry::FileEntry(const Glib::ustring& title):
-	Gtk::HBox(), m_dialog(title), m_btn_browse(Gtk::Stock::OPEN)
+	Gtk::HBox(), m_btn_browse(Gtk::Stock::OPEN), m_dialog(title)
 {
 	init();
 }
 
 Gobby::FileEntry::FileEntry(Gtk::Window& parent, const Glib::ustring& title):
-	Gtk::HBox(), m_dialog(parent, title), m_btn_browse(Gtk::Stock::OPEN)
+	Gtk::HBox(), m_btn_browse(Gtk::Stock::OPEN), m_dialog(parent, title)
 {
 	init();
 }
@@ -37,10 +37,13 @@ void Gobby::FileEntry::init()
 	m_dialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
 	m_btn_browse.signal_clicked().connect(
-		sigc::mem_fun(*this, &FileEntry::on_browse) );
+		sigc::mem_fun(*this, &FileEntry::on_browse)
+	);
 
 	pack_start(m_ent_file, Gtk::PACK_EXPAND_WIDGET);
 	pack_start(m_btn_browse, Gtk::PACK_SHRINK);
+
+	m_ent_file.set_activates_default(true);
 
 	set_spacing(5);
 }

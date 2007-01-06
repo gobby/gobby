@@ -902,7 +902,7 @@ void Gobby::Window::on_edit_preferences()
 void Gobby::Window::on_user_set_password()
 {
 	// Build password dialog with info
-	PasswordDialog dlg(*this, _("Set user password"), false);
+	PasswordDialog dlg(*this, _("Set user password") );
 	dlg.set_info(_(
 		"Set a user password for your user account. When you try to "
 		"login next time with this user, you will be prompted for your "

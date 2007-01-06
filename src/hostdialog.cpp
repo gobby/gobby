@@ -21,7 +21,7 @@
 #include "hostdialog.hpp"
 
 Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
-	DefaultDialog(_("Create obby session"), parent, true, true),
+	Gtk::Dialog(_("Create obby session"), parent, true, true),
 	m_config(config),
 	m_table(4, 2),
 	m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
@@ -50,6 +50,17 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
 
 	m_ent_name.set_text(name);
 	m_btn_color.set_color(color);
+
+	sigc::slot<void> response(
+		sigc::bind(
+			sigc::mem_fun(*this, &Gtk::Dialog::response),
+			Gtk::RESPONSE_OK
+		)
+	);
+
+	m_ent_port.set_activates_default(true);
+	m_ent_name.set_activates_default(true);
+	m_ent_password.set_activates_default(true);
 
 	m_table.attach(m_lbl_port, 0, 1, 0, 1,
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
@@ -92,10 +103,14 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	Gtk::Button* host_btn = add_button(_("_Host"), Gtk::RESPONSE_OK);
+
 	Gtk::Image* img = Gtk::manage(
 		new Gtk::Image(Gtk::Stock::NETWORK, Gtk::ICON_SIZE_BUTTON)
-		);
+	);
+
 	host_btn->set_image(*img);
+
+	set_default_response(Gtk::RESPONSE_OK);
 
 	show_all();
 	set_border_width(10);

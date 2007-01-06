@@ -56,9 +56,6 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	Glib::RefPtr<Gtk::SourceBuffer> buf = m_doc.get_buffer();
 	m_view.set_buffer(buf);
 
-	// TODO: This belongs to document
-	buf->begin_not_undoable_action();
-
 	// Set source language by filename
 	buf->set_highlight(false);
 

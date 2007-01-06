@@ -33,7 +33,7 @@ namespace
 
 bool Gobby::is_subscribable(const LocalDocumentInfo& info)
 {
-	// Gobby only allow subscriptions to UTF-8 encoded documents
+	// Gobby only allows subscriptions to UTF-8 encoded documents
 	for(std::size_t n = 0; n < utf8_repr_count; ++ n)
 		if(info.get_encoding() == utf8_reprs[n])
 			return true;

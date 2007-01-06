@@ -45,18 +45,81 @@ public:
 private:
 	typedef ClientBuffer::connection_settings connection_settings;
 
-	class Prompt: public DefaultDialog
+	class Prompt: public Gtk::Dialog
 	{
-	public:
+	protected:
 		Prompt(Gtk::Window& parent,
 		       const Glib::ustring& title,
 		       const Glib::ustring& info,
-		       Gtk::Widget& widget,
 		       const Gtk::StockID& icon);
-	protected:
+
+		void set_custom_widget(Widget& widget);
+
 		Gtk::Table m_table;
 		Gtk::Label m_info;
 		Gtk::Image m_icon;
+	};
+
+	class NamePrompt: public Prompt
+	{
+	public:
+		NamePrompt(Gtk::Window& parent,
+		           const Glib::ustring& initial_name);
+
+		Glib::ustring get_name() const;
+	protected:
+		void on_change();
+
+		const Glib::ustring m_initial_name;
+
+		Gtk::HBox m_box;
+		Gtk::Label m_label;
+		Gtk::Entry m_entry;
+	};
+
+	class ColorPrompt: public Prompt
+	{
+	public:
+		ColorPrompt(Gtk::Window& parent,
+		            const Gdk::Color& initial_color);
+
+		Gdk::Color get_color() const;
+	protected:
+		Gtk::ColorButton m_button;
+	};
+
+	class SessionPasswordPrompt: public Prompt
+	{
+	public:
+		SessionPasswordPrompt(Gtk::Window& parent);
+
+		Glib::ustring get_password() const;
+	protected:
+		void on_change();
+
+		Gtk::HBox m_box;
+		Gtk::Label m_label;
+		Gtk::Entry m_entry;
+	};
+
+	class UserPasswordPrompt: public Prompt
+	{
+	public:
+		UserPasswordPrompt(Gtk::Window& parent,
+		                   const Glib::ustring& initial_name);
+
+		Glib::ustring get_name() const;
+		Glib::ustring get_password() const;
+	protected:
+		void on_change();
+
+		const Glib::ustring m_initial_name;
+
+		Gtk::Table m_table;
+		Gtk::Label m_lbl_name;
+		Gtk::Label m_lbl_password;
+		Gtk::Entry m_ent_name;
+		Gtk::Entry m_ent_password;
 	};
 
 	virtual void on_thread(Thread& thread);

@@ -24,7 +24,6 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/colorbutton.h>
-#include "defaultdialog.hpp"
 #include "config.hpp"
 #include "features.hpp"
 #include "colorsel.hpp"
@@ -41,11 +40,11 @@
 namespace Gobby
 {
 
-class JoinDialog : public DefaultDialog
+class JoinDialog: public Gtk::Dialog
 {
 public:
 #ifdef WITH_HOWL
-	class Columns : public Gtk::TreeModel::ColumnRecord
+	class Columns: public Gtk::TreeModel::ColumnRecord
 	{
 	public:
 		Columns();

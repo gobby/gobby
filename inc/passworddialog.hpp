@@ -19,7 +19,6 @@
 #ifndef _GOBBY_PASSWORDDIALOG_HPP_
 #define _GOBBY_PASSWORDDIALOG_HPP_
 
-#include "defaultdialog.hpp"
 #include <gtkmm/table.h>
 #include <gtkmm/label.h>
 #include <gtkmm/image.h>
@@ -28,19 +27,15 @@
 namespace Gobby
 {
 
-class PasswordDialog : public DefaultDialog
+class PasswordDialog: public Gtk::Dialog
 {
 public:
-	PasswordDialog(Gtk::Window& parent, const Glib::ustring& title,
-	               bool request);
-	~PasswordDialog();
+	PasswordDialog(Gtk::Window& parent, const Glib::ustring& title);
 
 	void set_info(const Glib::ustring& info);
 	Glib::ustring get_password() const;
 protected:
 	void on_password_changed();
-
-	bool m_request;
 
 	Gtk::Table m_table;
 

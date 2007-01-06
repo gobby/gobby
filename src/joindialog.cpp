@@ -31,12 +31,12 @@ Gobby::JoinDialog::Columns::Columns()
 #endif
 
 #ifndef WITH_HOWL
-Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
+Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config):
 #else
 Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
-                              obby::zeroconf* zeroconf)
+                              obby::zeroconf* zeroconf):
 #endif
- : DefaultDialog(_("Join obby session"), parent, true, true),
+	Gtk::Dialog(_("Join obby session"), parent, true, true),
    m_config(config),
    m_table(4, 2),
    m_lbl_host(_("Host:"), Gtk::ALIGN_RIGHT),
@@ -70,6 +70,10 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 
 	m_ent_name.set_text(name);
 	m_btn_color.set_color(color);
+
+	m_ent_host.set_activates_default(true);
+	m_ent_port.set_activates_default(true);
+	m_ent_name.set_activates_default(true);
 
 	m_table.attach(m_lbl_host, 0, 1, 0, 1,
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
@@ -123,6 +127,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::CONNECT, Gtk::RESPONSE_OK);
+	set_default_response(Gtk::RESPONSE_OK);
 
 	show_all();
 	set_border_width(10);

@@ -241,6 +241,9 @@ Gobby::Document::Document(const template_type& tmpl):
 		false
 	);
 
+	// TODO: This belongs to document
+	m_buffer->begin_not_undoable_action();
+
 	// TODO: Connect to user table's signal handler - as soon as it
 	// has some...
 	buf.user_join_event().connect(

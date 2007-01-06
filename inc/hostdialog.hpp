@@ -24,7 +24,6 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/colorbutton.h>
-#include "defaultdialog.hpp"
 #include "colorsel.hpp"
 #include "config.hpp"
 #include "fileentry.hpp"
@@ -32,7 +31,7 @@
 namespace Gobby
 {
 
-class HostDialog : public DefaultDialog
+class HostDialog: public Gtk::Dialog
 {
 public:
 	HostDialog(Gtk::Window& parent, Config& config);
