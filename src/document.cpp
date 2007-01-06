@@ -184,6 +184,20 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 	}
 }
 
+void Gobby::Document::set_selection(size_type begin, size_type end,
+                                    bool cursor_in_front)
+{
+	Gtk::TextBuffer::iterator begin_it =
+		get_buffer()->get_iter_at_offset(begin);
+	Gtk::TextBuffer::iterator end_it =
+		get_buffer()->get_iter_at_offset(end);
+
+	if(cursor_in_front)
+		get_buffer()->select_range(begin_it, end_it);
+	else
+		get_buffer()->select_range(end_it, begin_it);
+}
+
 unsigned int Gobby::Document::get_unsynced_changes_count() const
 {
 	return 0;

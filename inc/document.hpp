@@ -34,6 +34,8 @@ class Folder;
 class Document : public Gtk::SourceView
 {
 public:
+	typedef std::size_t size_type;
+
 	typedef sigc::signal<void> signal_cursor_moved_type;
 	typedef sigc::signal<void> signal_content_changed_type;
 	typedef sigc::signal<void> signal_language_changed_type;
@@ -52,6 +54,13 @@ public:
 	/** Returns the amount of unsynced operations in this document.
 	 */
 	unsigned int get_unsynced_changes_count() const;
+
+	/** Selects the given region and places the cursor in front of the
+	 * selection if <em>cursor_in_front</em> is true, otherwise behind
+	 * the selection.
+	 */
+	void set_selection(size_type begin, size_type len,
+	                   bool cursor_in_front = false);
 
 	/** Returns the current document revision.
 	 */
