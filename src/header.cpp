@@ -17,6 +17,8 @@
  */
 
 #include <gtkmm/stock.h>
+#include <obby/buffer.hpp>
+
 #include "common.hpp"
 #include "header.hpp"
 
@@ -349,8 +351,13 @@ void Gobby::Header::obby_document_insert(obby::document& document)
 
 void Gobby::Header::obby_document_remove(obby::document& document)
 {
-	// TODO: Check the documents for being 0 and deactivate save and close
-	// document
+	if(document.get_buffer().document_size() == 1)
+	{
+		// The document which is currently removed is the only
+		// existing document? Disable save and close buttons then.
+		m_group_app->get_action("SaveDocument")->set_sensitive(false);
+		m_group_app->get_action("CloseDocument")->set_sensitive(false);
+	}
 }
 
 void Gobby::Header::on_app_session_create()
