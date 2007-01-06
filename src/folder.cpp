@@ -61,7 +61,7 @@ void Gobby::Folder::obby_user_part(obby::user& user)
 void Gobby::Folder::obby_document_insert(obby::document& document)
 {
 	Document* new_doc = new Document(document);
-	append_page(*new_doc, "foo");
+	append_page(*new_doc, document.get_title());
 	new_doc->show_all();
 }
 
