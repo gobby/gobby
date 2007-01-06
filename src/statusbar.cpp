@@ -109,11 +109,11 @@ void Gobby::StatusBar::obby_user_part(const obby::user& user)
 {
 }
 
-void Gobby::StatusBar::obby_document_insert(obby::local_document_info& document)
+void Gobby::StatusBar::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document)
 {
 }
 
-void Gobby::StatusBar::obby_document_remove(obby::local_document_info& document)
+void Gobby::StatusBar::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document)
 {
 	// Last document that is closed?
 	if(document.get_buffer().document_count() == 1)

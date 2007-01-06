@@ -145,11 +145,11 @@ void Gobby::Chat::obby_user_part(const obby::user& user)
 	m_log_chat.log(str.str(), "blue");*/
 }
 
-void Gobby::Chat::obby_document_insert(obby::local_document_info& document)
+void Gobby::Chat::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document)
 {
 }
 
-void Gobby::Chat::obby_document_remove(obby::local_document_info& document)
+void Gobby::Chat::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document)
 {
 }
 

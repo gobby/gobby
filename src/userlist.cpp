@@ -172,7 +172,7 @@ void Gobby::UserList::obby_user_join(const obby::user& user)
 		{
 			on_user_subscribe(
 				user,
-				dynamic_cast<const obby::local_document_info&>(
+				dynamic_cast<const obby::basic_local_document_info<obby::document, net6::selector>&>(
 					*iter
 				)
 			);
@@ -214,7 +214,7 @@ void Gobby::UserList::obby_user_colour(const obby::user& user)
 	(*iter)[m_tree_cols.icon] = create_coloured_pixbuf(user.get_colour() );
 }
 
-void Gobby::UserList::obby_document_insert(obby::local_document_info& info)
+void Gobby::UserList::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	info.subscribe_event().connect(
 		sigc::bind(
@@ -231,14 +231,14 @@ void Gobby::UserList::obby_document_insert(obby::local_document_info& info)
 	);
 }
 
-void Gobby::UserList::obby_document_remove(obby::local_document_info& info)
+void Gobby::UserList::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	// Do nothing here because unsubscrption signal will be emitted for all
 	// users?
 }
 
 void Gobby::UserList::on_user_subscribe(const obby::user& user,
-                                        const obby::local_document_info& info)
+                                        const obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	Gtk::TreeIter iter = find_iter(m_iter_online, user.get_name() );
 	if(iter == m_iter_online->children().end() )
@@ -254,7 +254,7 @@ void Gobby::UserList::on_user_subscribe(const obby::user& user,
 }
 
 void Gobby::UserList::on_user_unsubscribe(const obby::user& user,
-                                          const obby::local_document_info& info)
+                                          const obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	Gtk::TreeIter user_iter = find_iter(m_iter_online, user.get_name() );
 	if(user_iter == m_iter_online->children().end() )

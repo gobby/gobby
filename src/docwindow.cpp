@@ -18,7 +18,7 @@
 
 #include "docwindow.hpp"
 
-Gobby::DocWindow::DocWindow(obby::local_document_info& doc,
+Gobby::DocWindow::DocWindow(obby::basic_local_document_info<obby::document, net6::selector>& doc,
                             const Folder& folder,
                             const Preferences& preferences)
  : Gtk::ScrolledWindow(), m_doc(doc, folder, preferences)

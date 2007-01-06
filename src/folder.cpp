@@ -193,7 +193,7 @@ namespace
 	}
 }
 
-void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
+void Gobby::Folder::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document)
 {
 	// Document subscription handling
 	document.subscribe_event().connect(
@@ -211,7 +211,7 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 	);
 }
 
-void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
+void Gobby::Folder::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document)
 {
 	// Nothing to do, the unsubscription signal handler has already removed
 	// the page from the notebook.
@@ -314,13 +314,13 @@ void Gobby::Folder::on_document_close(Document& document)
 }
 
 void Gobby::Folder::on_document_subscribe(const obby::user& user,
-                                          obby::local_document_info& info)
+                                          obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	if(&info.get_buffer().get_self() == &user)
 		on_self_subscribe(info);
 }
 
-void Gobby::Folder::on_self_subscribe(obby::local_document_info& info)
+void Gobby::Folder::on_self_subscribe(obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	// Create new document
 	DocWindow* new_wnd =
@@ -397,13 +397,13 @@ void Gobby::Folder::on_self_subscribe(obby::local_document_info& info)
 }
 
 void Gobby::Folder::on_document_unsubscribe(const obby::user& user,
-                                            obby::local_document_info& info)
+                                            obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	if(&info.get_buffer().get_self() == &user)
 		on_self_unsubscribe(info);
 }
 
-void Gobby::Folder::on_self_unsubscribe(obby::local_document_info& info)
+void Gobby::Folder::on_self_unsubscribe(obby::basic_local_document_info<obby::document, net6::selector>& info)
 {
 	DocWindow* wnd = NULL;
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)

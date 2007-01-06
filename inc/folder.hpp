@@ -98,8 +98,8 @@ public:
 	void obby_user_join(const obby::user& user);
 	void obby_user_part(const obby::user& user);
 	void obby_user_colour(const obby::user& user);
-	void obby_document_insert(obby::local_document_info& document);
-	void obby_document_remove(obby::local_document_info& document);
+	void obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document);
+	void obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document);
 
 	/** Signal which will be emitted if a document has been added to the
 	 * folder.
@@ -156,14 +156,14 @@ protected:
 	void on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language);
 
 	void on_document_subscribe(const obby::user& user,
-	                           obby::local_document_info& info);
+	                           obby::basic_local_document_info<obby::document, net6::selector>& info);
 	void on_document_unsubscribe(const obby::user& user,
-	                             obby::local_document_info& info);
+	                             obby::basic_local_document_info<obby::document, net6::selector>& info);
 
 	// Called by on_document_subscribe/unsubscribe if the (un)subscribing
 	// user is the local one.
-	void on_self_subscribe(obby::local_document_info& info);
-	void on_self_unsubscribe(obby::local_document_info& info);
+	void on_self_subscribe(obby::basic_local_document_info<obby::document, net6::selector>& info);
+	void on_self_unsubscribe(obby::basic_local_document_info<obby::document, net6::selector>& info);
 
 	void on_document_modified_changed(DocWindow& window);
 	void on_document_close(Document& document);

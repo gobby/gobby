@@ -51,8 +51,8 @@ public:
 	void obby_end();
 	void obby_user_join(const obby::user& user);
 	void obby_user_part(const obby::user& user);
-	void obby_document_insert(obby::local_document_info& document);
-	void obby_document_remove(obby::local_document_info& document);
+	void obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document);
+	void obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document);
 
 	virtual void on_show();
 

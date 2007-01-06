@@ -949,8 +949,8 @@ void Gobby::Window::on_obby_user_colour_failed()
 
 void Gobby::Window::on_obby_document_insert(obby::basic_document_info<obby::document, net6::selector>& document)
 {
-	obby::local_document_info& local_doc =
-		dynamic_cast<obby::local_document_info&>(document);
+	obby::basic_local_document_info<obby::document, net6::selector>& local_doc =
+		dynamic_cast<obby::basic_local_document_info<obby::document, net6::selector>&>(document);
 
 	m_folder.obby_document_insert(local_doc);
 	m_userlist.obby_document_insert(local_doc);
@@ -961,8 +961,8 @@ void Gobby::Window::on_obby_document_insert(obby::basic_document_info<obby::docu
 
 void Gobby::Window::on_obby_document_remove(obby::basic_document_info<obby::document, net6::selector>& document)
 {
-	obby::local_document_info& local_doc =
-		dynamic_cast<obby::local_document_info&>(document);
+	obby::basic_local_document_info<obby::document, net6::selector>& local_doc =
+		dynamic_cast<obby::basic_local_document_info<obby::document, net6::selector>&>(document);
 
 	m_folder.obby_document_remove(local_doc);
 	m_userlist.obby_document_remove(local_doc);

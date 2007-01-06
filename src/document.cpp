@@ -22,7 +22,7 @@
 #include "document.hpp"
 #include "folder.hpp"
 
-Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
+Gobby::Document::Document(obby::basic_local_document_info<obby::document, net6::selector>& doc, const Folder& folder,
                           const Preferences& preferences)
  : Gtk::SourceView(),
    m_doc(doc),
@@ -170,12 +170,12 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 	m_editing = false;
 }
 
-const obby::local_document_info& Gobby::Document::get_document() const
+const obby::basic_local_document_info<obby::document, net6::selector>& Gobby::Document::get_document() const
 {
 	return m_doc;
 }
 
-obby::local_document_info& Gobby::Document::get_document()
+obby::basic_local_document_info<obby::document, net6::selector>& Gobby::Document::get_document()
 {
 	return m_doc;
 }

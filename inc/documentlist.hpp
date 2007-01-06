@@ -57,15 +57,15 @@ public:
 	virtual void obby_user_join(const obby::user& user);
 	virtual void obby_user_part(const obby::user& user);
 	virtual void obby_user_colour(const obby::user& user);
-	virtual void obby_document_insert(obby::local_document_info& info);
-	virtual void obby_document_remove(obby::local_document_info& info);
+	virtual void obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& info);
+	virtual void obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& info);
 protected:
-	Gtk::TreeIter find_iter(const obby::local_document_info& info) const;
+	Gtk::TreeIter find_iter(const obby::basic_local_document_info<obby::document, net6::selector>& info) const;
 
 	virtual void on_user_subscribe(const obby::user& user,
-	                               const obby::local_document_info& info);
+	                               const obby::basic_local_document_info<obby::document, net6::selector>& info);
 	virtual void on_user_unsubscribe(const obby::user& user,
-	                                 const obby::local_document_info& info);
+	                                 const obby::basic_local_document_info<obby::document, net6::selector>& info);
 
 	virtual void on_subscribe();
 	virtual void on_selection_changed();
