@@ -426,7 +426,9 @@ void Gobby::Window::on_obby_sync()
 	obby::buffer::document_iterator iter = m_buffer->document_begin();
 	for(; iter != m_buffer->document_end(); ++ iter)
 		on_obby_document_insert(*iter);
-	m_folder.set_current_page(m_buffer->document_size() - 1);
+
+	// Set last page as active one because it is currently shown anyway.
+	m_folder.set_current_page(m_buffer->document_count() - 1);
 }
 
 void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)

@@ -358,7 +358,7 @@ void Gobby::Header::obby_document_insert(obby::document& document)
 
 void Gobby::Header::obby_document_remove(obby::document& document)
 {
-	if(document.get_buffer().document_size() == 1)
+	if(document.get_buffer().document_count() == 1)
 	{
 		// The document which is currently removed is the only
 		// existing document? Disable save and close buttons then.

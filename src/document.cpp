@@ -196,7 +196,8 @@ unsigned int Gobby::Document::get_unsynced_changes_count() const
 	if(doc == NULL)
 		return 0;
 
-	return doc->get_unsynced_changes_count();
+	// Return amount reported by document otherwise
+	return doc->unsynced_count();
 }
 
 #ifdef WITH_GTKSOURCEVIEW
