@@ -565,6 +565,8 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 
 		// Cursor position has changed
 		m_signal_cursor_moved.emit();
+		// Document content has changed
+		m_signal_content_changed.emit();
 	}
 }
 
@@ -575,6 +577,8 @@ void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
 	{
 		// Cursor position may have changed
 		m_signal_cursor_moved.emit();
+		// Document content has changed
+		m_signal_content_changed.emit();
 	}
 }
 
