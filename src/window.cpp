@@ -47,9 +47,9 @@
 #include "icon.hpp"
 #include "colorsel.hpp"
 
-Gobby::Window::Window(const IconManager& icon_mgr)
+Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL),
-   m_config(Glib::get_home_dir() + "/.gobby/config.xml"),
+   m_config(config),
    m_preferences(m_config), m_icon_mgr(icon_mgr),
    m_buffer(NULL),
 #ifdef WITH_HOWL

@@ -43,7 +43,7 @@ namespace Gobby
 class Window : public Gtk::Window
 {
 public:
-	Window(const IconManager& icon_mgr);
+	Window(const IconManager& icon_mgr, Config& config);
 	~Window();
 
         Document& get_current_document();

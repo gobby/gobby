@@ -21,6 +21,7 @@
 #include <gtkmm/messagedialog.h>
 #include "common.hpp"
 #include "icon.hpp"
+#include "config.hpp"
 #include "window.hpp"
 #include "features.hpp"
 
@@ -47,10 +48,12 @@ int main(int argc, char* argv[]) try
 	// Set default icon
 	std::list<Glib::RefPtr<Gdk::Pixbuf> > icon_list;
 	icon_list.push_back(icon_mgr.gobby);
-
 	Gtk::Window::set_default_icon_list(icon_list);
 
-	Gobby::Window wnd(icon_mgr);
+	// Read the configuration
+	Gobby::Config config(Glib::get_home_dir() + "/.gobby/config.xml");
+
+	Gobby::Window wnd(icon_mgr, config);
 	wnd.show_all();
 	kit.run(wnd);
 	return 0;
