@@ -303,6 +303,7 @@ void Gobby::Window::on_document_save()
 
 	Gtk::FileChooserDialog dlg(*this, "Save current document",
 			Gtk::FILE_CHOOSER_ACTION_SAVE);
+	dlg.set_current_name(doc.get_title() );
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 

@@ -55,3 +55,4 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 
 	scroll_to_mark(m_end_mark, 0.0f);
 }
+
