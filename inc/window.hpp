@@ -22,7 +22,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
-#include <obby/buffer.hpp>
+#include <obby/local_buffer.hpp>
 #include "config.hpp"
 #include "header.hpp"
 #include "folder.hpp"
@@ -95,7 +95,7 @@ protected:
 	Chat m_chat;
 
 	// obby
-	obby::buffer* m_buffer;
+	obby::local_buffer* m_buffer;
 	sigc::connection m_timer_conn;
 	bool m_running; // m_running is set if the obby connection has been
 	                // established successfully.

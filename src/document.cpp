@@ -172,6 +172,8 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
                                           unsigned int& col)
 {
 	// Get insert mark
+	// TODO: buffer provides a method that returns the insert mark
+	// directly.
 	Glib::RefPtr<Gtk::TextBuffer::Mark> mark =
 		m_view.get_buffer()->get_mark("insert");
 
@@ -333,7 +335,7 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 	if(!m_editing)
 	{
 		// TODO: Find a better solution to access the local user object.
-		obby::client_document* client_doc =
+		/*obby::client_document* client_doc =
 			dynamic_cast<obby::client_document*>(&m_doc);
 		obby::host_document* host_doc =
 			dynamic_cast<obby::host_document*>(&m_doc);
@@ -342,16 +344,20 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 		if(client_doc != NULL)
 			user = &client_doc->get_buffer().get_self();
 		if(host_doc != NULL)
-			user = &host_doc->get_buffer().get_self();
-
-		assert(user != NULL);
+			user = &host_doc->get_buffer().get_self();*/
+//		const obby::user& user = reinterpret_cast<const obby::local_buffer&>(m_doc.get_buffer() ).get_self();
+		// dynamic_cast suckt
+		const obby::user& user =
+			dynamic_cast<const obby::local_buffer&>(
+				m_doc.get_buffer()
+			).get_self();
 
 		// Find start position of new text
 		Gtk::TextBuffer::iterator pos = end;
 		pos.backward_chars(text.length() );
 
 		// Update colour
-		update_user_colour(pos, end, *user);
+		update_user_colour(pos, end, user);
 	}
 
 	// Document changed: Update statusbar
@@ -371,6 +377,7 @@ void Gobby::Document::on_cursor_changed(
 )
 {
 	// Insert mark changed position: Update status bar
+	// TODO: Build separate cursor changed signal?
 	if(mark->get_name() == "insert")
 		m_signal_update.emit();
 }

@@ -440,25 +440,19 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 
 void Gobby::Window::on_obby_user_join(obby::user& user)
 {
-	// TODO: Something like is_client to prevent dynamic_cast?
-	// TODO: local_buffer should fix this issue because the host does not
-	// send a user_join for the local user (well, it does, but it does
-	// it in its constructor - no signal handler could have been
-	// connected at this time).
-	obby::client_buffer* buf = dynamic_cast<obby::client_buffer*>(m_buffer);
-	if(buf)
+	// Send obby start to GUI components if this is a join command for the
+	// local user. The host does not emit such a signal (well it does, but
+	// in its constructor - no signal handler could have been connected),
+	// so it is only done for the client upon successful login
+	if(&m_buffer->get_self() == &user)
 	{
-		if(&buf->get_self() == &user)
-		{
-			// Login was sucessful, let the fun begin		
-			m_header.obby_start();
-			m_folder.obby_start();
-			m_userlist.obby_start();
-			m_chat.obby_start();
-			m_statusbar.obby_start();
+		m_header.obby_start();
+		m_folder.obby_start();
+		m_userlist.obby_start();
+		m_chat.obby_start();
+		m_statusbar.obby_start();
 
-			m_running = true;
-		}
+		m_running = true;
 	}
 
 	// Tell user join to components
