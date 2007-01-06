@@ -3,6 +3,8 @@ SUBDIRS = m4 . po
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4
 
+dist_man_MANS = gobby.1
+
 bin_PROGRAMS = gobby
 
 gobby_LDADD     = $(gobby_LIBS) $(gtksourceview_LIBS)
