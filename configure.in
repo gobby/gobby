@@ -1,0 +1,24 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT([gobby], [0.1.0], [crew@0x539.de])
+AM_INIT_AUTOMAKE
+AC_CONFIG_SRCDIR([inc/window.hpp])
+AC_CONFIG_HEADER([inc/config.hpp])
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_CACHE_SAVE
+
+# Checks for libraries.
+PKG_CHECK_MODULES([gobby], [gtkmm-2.4 lobby-1.0])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+
