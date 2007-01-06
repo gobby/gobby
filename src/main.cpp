@@ -109,7 +109,9 @@ int main(int argc, char* argv[]) try
 
 	Gtk::Main kit(argc, argv);
 	net6::main netkit;
-	Glib::thread_init();
+
+	if(!Glib::thread_supported())
+		Glib::thread_init();
 
 #ifdef WITH_GNOME
 	gnome_vfs_init();
