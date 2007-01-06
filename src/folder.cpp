@@ -23,6 +23,40 @@
 #include "document.hpp"
 #include "folder.hpp"
 
+namespace
+{
+	class KeyMap: private net6::non_copyable
+	{
+	public:
+		static const unsigned int nval = ~0u;
+
+		KeyMap()
+		{
+			m_keyvals[GDK_0] = 9;
+			m_keyvals[GDK_1] = 0;
+			m_keyvals[GDK_2] = 1;
+			m_keyvals[GDK_3] = 2;
+			m_keyvals[GDK_4] = 3;
+			m_keyvals[GDK_5] = 4;
+			m_keyvals[GDK_6] = 5;
+			m_keyvals[GDK_7] = 6;
+			m_keyvals[GDK_8] = 7;
+			m_keyvals[GDK_9] = 8;
+		}
+
+		unsigned int lookup(guint key) const
+		{
+			map_type::const_iterator iter = m_keyvals.find(key);
+			if(iter == m_keyvals.end() ) return nval;
+			return iter->second;
+		}
+
+	private:
+		typedef std::map<guint, unsigned int> map_type;
+		map_type m_keyvals;
+	};
+}
+
 Gobby::Folder::TabLabel::TabLabel(const Glib::ustring& label)
  : m_image(Gtk::Stock::CLOSE, Gtk::ICON_SIZE_MENU), m_label(label),
    m_modified("")
@@ -80,8 +114,8 @@ Gobby::Folder::TabLabel::close_event()
 
 Gobby::Folder::Folder(Header& header,
                       const Preferences& preferences):
-	Gtk::Notebook(), m_header(header), m_preferences(preferences),
-	m_buffer(NULL), m_block_language(false)
+	Gtk::Notebook(),
+	m_block_language(false), m_header(header), m_preferences(preferences), m_buffer(NULL)
 {
 	set_scrollable(true);
 
@@ -100,6 +134,8 @@ Gobby::Folder::Folder(Header& header,
 			)
 		);
 	}
+
+	add_events(Gdk::KEY_PRESS_MASK);
 }
 
 const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
@@ -132,7 +168,7 @@ void Gobby::Folder::obby_end()
 
 	// Insensitive just the text editor to allow to scroll and tab between
 	// the documents
-	for(unsigned int i = 0; i < get_n_pages(); ++ i)
+	for(int i = 0; i < get_n_pages(); ++ i)
 		static_cast<DocWindow*>(get_nth_page(i) )->disable(); //get_document().set_sensitive(false);
 
 	// Disable some items, but let save and close still active.
@@ -402,7 +438,7 @@ void Gobby::Folder::on_document_unsubscribe(const obby::user& user,
 void Gobby::Folder::on_self_unsubscribe(LocalDocumentInfo& info)
 {
 	DocWindow* wnd = NULL;
-	for(unsigned int i = 0; i < get_n_pages(); ++ i)
+	for(int i = 0; i < get_n_pages(); ++ i)
 	{
 		DocWindow* cur_wnd = static_cast<DocWindow*>(get_nth_page(i) );
 		if(&cur_wnd->get_info() == &info)
@@ -475,6 +511,39 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	// Reset tab colour from red indicating that the user has read the
 	// changes in this document.
 	set_tab_colour(window, "#000000");
+}
+
+
+bool Gobby::Folder::on_key_press_event(GdkEventKey* event)
+{
+	static KeyMap keymap;
+
+	if( (event->state & GDK_MOD1_MASK) == GDK_MOD1_MASK)
+	{
+		unsigned int page = keymap.lookup(event->keyval);
+		if(page != KeyMap::nval)
+		{
+			set_current_page(page);
+			return true;
+		}
+	}
+
+	// Is already used by GtkTextTextView...
+	if( (event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+	{
+		int offset = 0;
+		if(event->keyval == GDK_Page_Up) offset = -1;
+		if(event->keyval == GDK_Page_Down) offset = 1;
+
+		if(offset != 0)
+		{
+			int res = get_current_page() + offset + get_n_pages();
+			set_current_page(res % get_n_pages() );
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Gobby::Folder::on_document_cursor_moved(DocWindow& window)

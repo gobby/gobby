@@ -149,6 +149,8 @@ protected:
 	// Overrides
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
 
+	virtual bool on_key_press_event(GdkEventKey* event);
+
 	// Internals
 	void set_tab_colour(DocWindow& win, const Glib::ustring& colour);
 	void enable_document_items(DocumentItems which);
