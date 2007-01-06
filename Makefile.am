@@ -119,6 +119,7 @@ gobby_CPPFLAGS += -DPIXMAPS_DIR=\""$(datadir)/pixmaps"\"
 appicondir = $(datadir)/pixmaps
 appicon_DATA  = contrib/artwork/gobby.png
 appicon_DATA += contrib/artwork/userlist.png
+appicon_DATA += contrib/artwork/chat.png
 desktopdir = $(datadir)/applications
 desktop_DATA = contrib/gobby.desktop
 endif
@@ -128,6 +129,7 @@ EXTRA_DIST += contrib/artwork/gobby.png
 EXTRA_DIST += contrib/artwork/gobby.svg
 EXTRA_DIST += contrib/artwork/gobby.xpm.gz
 EXTRA_DIST += contrib/artwork/userlist.png
+EXTRA_DIST += contrib/artwork/chat.png
 EXTRA_DIST += contrib/gobby.desktop
 EXTRA_DIST += win32/gobby.ico
 EXTRA_DIST += win32/gobby.rc

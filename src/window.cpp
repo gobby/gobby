@@ -103,11 +103,12 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 
 	m_header.action_user_set_password->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
-	m_header.action_user_set_colour->signal_activate().connect(
-		sigc::mem_fun(*this, &Window::on_user_set_colour) );
-	
+
 	m_header.action_view_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_view_preferences) );
+
+	m_header.action_window_chat->signal_activate().connect(
+		sigc::mem_fun(*this, &Window::on_window_chat) );
 
 	m_header.action_help_about->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_about) );
@@ -126,6 +127,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_document_settings.document_insert_event().connect(
 		sigc::mem_fun(*this, &Window::on_settings_document_insert) );
 
+	m_conn_chat_realize = m_chat.signal_realize().connect(
+		sigc::mem_fun(*this, &Window::on_chat_realize) );
+
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
@@ -135,7 +139,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_frame_chat.add(m_chat);
 	m_frame_text.add(m_folder);
 
-	m_mainpaned.set_border_width(10);
 	m_mainpaned.pack1(m_frame_text, true, false);
 	m_mainpaned.pack2(m_frame_chat, true, false);
 
@@ -148,10 +151,17 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	// Apply initial preferences
 	apply_preferences();
 
-	set_title("Gobby");
-	set_default_size(640, 480);
+	bool show_chat = config["windows"]["chat"]["visible"].get<bool>(true);
+	m_header.action_window_chat->set_active(show_chat);
+
 
 	m_application_state.modify(APPLICATION_INITIAL, APPLICATION_NONE);
+
+	show_all_children();
+	if(!show_chat) m_frame_chat.hide();
+
+	set_title("Gobby");
+	set_default_size(640, 480);
 
 #ifdef WITH_HOWL
 	// Initialise Zeroconf
@@ -198,6 +208,10 @@ Gobby::Window::~Window()
 	// Serialise preferences into config
 	m_preferences.serialise(m_config);
 
+	m_config["windows"]["chat"]["visible"].set(
+		m_header.action_window_chat->get_active()
+	);
+
 	// Save the window's current position
 	if(m_preferences.appearance.remember)
 	{
@@ -212,18 +226,6 @@ Gobby::Window::~Window()
 		m_config["screen"]["width"].set(screen->get_width() );
 		m_config["screen"]["height"].set(screen->get_height() );
 	}
-}
-
-void Gobby::Window::on_realize()
-{
-	Gtk::Window::on_realize();
-
-	// Initialize paned sizes. This cannot be done in the constructor
-	// because the widget's sizes are not known.
-	int mainmin = m_mainpaned.property_min_position();
-	int mainmax = m_mainpaned.property_max_position();
-
-	m_mainpaned.set_position(mainmin + (mainmax - mainmin) * 3 / 4);
 }
 
 bool Gobby::Window::on_delete_event(GdkEventAny* event)
@@ -248,6 +250,12 @@ bool Gobby::Window::on_delete_event(GdkEventAny* event)
 	dlg.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_YES)->grab_focus();
 
 	return dlg.run() != Gtk::RESPONSE_YES;
+}
+
+void Gobby::Window::on_chat_realize()
+{
+	m_mainpaned.set_position(m_mainpaned.get_height() * 3 / 5);
+	m_conn_chat_realize.disconnect();
 }
 
 void Gobby::Window::obby_start()
@@ -998,6 +1006,18 @@ Gobby::Window::on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang)
 	}
 
 	doc->set_language(lang);
+}
+
+void Gobby::Window::on_window_chat()
+{
+	if(m_header.action_window_chat->get_active() )
+	{
+		m_frame_chat.show();
+	}
+	else
+	{
+		m_frame_chat.hide();
+	}
 }
 
 void Gobby::Window::on_quit()

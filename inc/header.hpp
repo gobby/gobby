@@ -170,6 +170,7 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_window;
 	const Glib::RefPtr<Gtk::ToggleAction> action_window_userlist;
 	const Glib::RefPtr<Gtk::ToggleAction> action_window_documentlist;
+	const Glib::RefPtr<Gtk::ToggleAction> action_window_chat;
 
 	const Glib::RefPtr<Gtk::Action> action_help;
 	const Glib::RefPtr<Gtk::Action> action_help_about;

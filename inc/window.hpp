@@ -71,8 +71,8 @@ public:
 	                     const std::string& encoding);
 protected:
 	// Gtk::Window overrides
-	virtual void on_realize();
 	virtual bool on_delete_event(GdkEventAny* event);
+	void on_chat_realize();
 
 	// Start/End obby session
 	void obby_start();
@@ -101,6 +101,8 @@ protected:
 	void on_view_preferences();
 	void on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang);
 
+	void on_window_chat();
+
 	// Folder UI handler
 	void on_folder_document_add(DocWindow& window);
 	void on_folder_document_remove(DocWindow& window);
@@ -114,7 +116,6 @@ protected:
 
 	// Obby signal handlers
 	void on_obby_close();
-	//void on_obby_encrypted();
 
 	void on_obby_user_join(const obby::user& user);
 	void on_obby_user_part(const obby::user& user);
@@ -147,6 +148,8 @@ protected:
 	Gtk::VBox m_mainbox;
 	Gtk::VPaned m_mainpaned;
 
+	//Gtk::Frame m_frame_action;
+
 	Gtk::Frame m_frame_chat;
 	Gtk::Frame m_frame_text;
 
@@ -163,6 +166,8 @@ protected:
 	Folder m_folder;
 	Chat m_chat;
 	StatusBar m_statusbar;
+
+	sigc::connection m_conn_chat_realize;
 
 	/** Drag+Drop handler
 	 */

@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) try
 	Gobby::Config config(Glib::get_home_dir() + "/.gobby/config.xml");
 
 	Gobby::Window wnd(icon_mgr, config);
-	wnd.show_all();
+	wnd.show();
 	kit.run(wnd);
 	return 0;
 }

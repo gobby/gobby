@@ -64,6 +64,7 @@ namespace {
 		"    <menu action=\"MenuWindow\">"
 		"      <menuitem action=\"WindowUserList\" />"
 		"      <menuitem action=\"WindowDocumentList\" />"
+		"      <menuitem action=\"WindowChat\" />"
 		"    </menu>"
 		"    <menu action=\"MenuHelp\">"
 		"      <menuitem action=\"HelpAbout\" />"
@@ -81,6 +82,7 @@ namespace {
 		"    <separator />"
 		"    <toolitem action=\"WindowUserList\" />"
 		"    <toolitem action=\"WindowDocumentList\" />"
+		"    <toolitem action=\"WindowChat\" />"
 		"  </toolbar>"
 		"</ui>";
 
@@ -398,6 +400,16 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
+	action_window_chat(
+		Gtk::ToggleAction::create(
+			"WindowChat",
+			IconManager::STOCK_CHAT,
+			_("Chat"),
+			_("Shows up a chat to talk to other people in "
+			  "the session")
+		)
+	),
+
 	action_help(Gtk::Action::create("MenuHelp", _("_Help")) ),
 
 	action_help_about(
@@ -543,6 +555,11 @@ Gobby::Header::Header(const ApplicationState& state,
 	);
 
 	set_action_auto(
+		action_window_chat, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
 		action_help, state,
 		APPLICATION_NONE, APPLICATION_NONE
 	);
@@ -586,6 +603,7 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_window->add(action_window);
 	group_window->add(action_window_userlist);
 	group_window->add(action_window_documentlist);
+	group_window->add(action_window_chat);
 
 	group_help->add(action_help);
 	group_help->add(action_help_about);
