@@ -617,6 +617,7 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 	// Set current language
 	Glib::ustring langname = document.get_language() ?
 		document.get_language()->get_name() : "None";
+	remove_entities(langname);
 	Glib::RefPtr<Gtk::RadioAction>::cast_static<Gtk::Action>(
 		m_group_app->get_action("ViewLanguage" + langname)
 	)->set_active();
