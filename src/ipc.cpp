@@ -171,8 +171,15 @@ namespace
 					)
 				);
 
-				// TODO: stat the file first to see whether
-				// it is a socket or not.
+				// Only own files
+				struct stat buf;
+				stat(abs_file.c_str(), &buf);
+				if(buf.st_uid != getuid() ) continue;
+
+				// No socket
+				if( (buf.st_mode & S_IFSOCK) == 0)
+					continue;
+
 				Gobby::Unix::FileAddress addr(abs_file.c_str());
 
 				// We found a file that looks like a socket
