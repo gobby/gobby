@@ -7,6 +7,7 @@ Critical:
 
 Major:
   * Bug: Crashes on files with encodings not being UTF-8 (#43)
+  * Languages with non-ascii-characters crash (#44)
 
 Normal:
   * Implement support for Zeroconf (#17)
@@ -37,6 +38,16 @@ files not encoded in UTF-8. Instead it should either check the document for
 UTF-8 validity and prompt the user for the right encoding if it does not 
 match, and translate it appropriately, or just refuse to open it (but the 
 former would be more acceptable than the latter).
+
+44: Languages with non-ascii-characters crash
+---------------------------------------------
+Languages with non-UTF-8 charactes cause Gobby to crash if such a character 
+is used by GtkSourceView. Gobby wants to insert these in the menu XML that 
+is created dynamically by reading the available languages. The idea is to 
+substitute such characters by there Unicode value or something (currently, 
+only German umlauts are replaced by a another string). This XML is only 
+used for internal stuff and never shown to the user, so any other 
+identifiers would be OK.
 
 17: Implement support for Zeroconf
 ----------------------------------
