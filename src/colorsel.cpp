@@ -86,6 +86,9 @@ Gobby::ColorButton::~ColorButton()
 void Gobby::ColorButton::on_clicked()
 {
 	ColorSelectionDialog dlg;
+	dlg.get_colorsel()->set_current_color(get_color() );
+	dlg.get_colorsel()->set_current_alpha(get_alpha() );
+
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		set_color(dlg.get_colorsel()->get_current_color() );
