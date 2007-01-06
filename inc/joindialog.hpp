@@ -26,6 +26,16 @@
 #include <gtkmm/colorbutton.h>
 #include "defaultdialog.hpp"
 #include "config.hpp"
+#include "features.hpp"
+#ifdef WITH_HOWL
+#include <gtkmm/box.h>
+#include <gtkmm/expander.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/liststore.h>
+#include <sigc++/connection.h>
+#include <net6/address.hpp>
+#include <obby/zeroconf.hpp>
+#endif
 
 namespace Gobby
 {
@@ -33,6 +43,18 @@ namespace Gobby
 class JoinDialog : public DefaultDialog
 {
 public:
+#ifdef WITH_HOWL
+	class Columns : public Gtk::TreeModel::ColumnRecord
+	{
+	public:
+		Columns();
+
+		Gtk::TreeModelColumn<Glib::ustring> name;
+		Gtk::TreeModelColumn<Glib::ustring> host;
+		Gtk::TreeModelColumn<unsigned int> port;
+	};
+#endif
+
 	JoinDialog(Gtk::Window& parent, Gobby::Config& config);
 	virtual ~JoinDialog();
 
@@ -49,6 +71,15 @@ public:
 protected:
 	virtual void on_response(int response_id);
 
+#ifdef WITH_HOWL
+	Gtk::TreeModel::iterator find_entry(const std::string& name) const;
+	virtual bool on_timer();
+	virtual void on_discover(const std::string& name,
+	                         const net6::ipv4_address& addr);
+	virtual void on_leave(const std::string& name);
+	virtual void on_change();
+#endif
+
 	Gobby::Config& m_config;
 
 	Gtk::Table m_table;
@@ -56,6 +87,16 @@ protected:
 	Gtk::Label m_lbl_port;
 	Gtk::Label m_lbl_name;
 	Gtk::Label m_lbl_color;
+
+#ifdef WITH_HOWL
+	Gtk::VBox m_vbox;
+	Gtk::Expander m_ep_discover;
+	Gtk::TreeView m_session_view;
+	Glib::RefPtr<Gtk::ListStore> m_session_list;
+	Columns m_session_cols;
+	obby::zeroconf m_zeroconf;
+	sigc::connection m_timer_connection;
+#endif
 
 	Gtk::Entry m_ent_host;
 	Gtk::SpinButton m_ent_port;

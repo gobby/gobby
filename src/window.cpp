@@ -42,6 +42,9 @@
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
    m_config(Glib::get_home_dir() + "/.gobby/config.xml"), m_buffer(NULL),
+#ifdef WITH_HOWL
+   m_zeroconf(NULL),
+#endif
    m_running(false), m_header(m_folder), m_statusbar(m_folder)
 {
 	m_header.session_create_event().connect(
@@ -138,6 +141,12 @@ void Gobby::Window::on_session_create() try
 		// Create new buffer
 		obby::host_buffer* buffer =
 			new HostBuffer(*this, port, name, red, green, blue);
+
+#ifdef WITH_HOWL
+		m_zeroconf = new obby::zeroconf();
+		// Publish the newly created session via ZeroConf
+		m_zeroconf->publish(name, port);
+#endif
 
 		// Delete existing buffer, take new one
 		delete m_buffer;
@@ -267,6 +276,11 @@ void Gobby::Window::on_session_quit()
 
 		delete m_buffer;
 		m_buffer = NULL;
+	}
+	if(m_zeroconf)
+	{
+		delete m_zeroconf;
+		m_zeroconf = NULL;
 	}
 }
 

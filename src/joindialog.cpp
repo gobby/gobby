@@ -17,8 +17,18 @@
  */
 
 #include <gtkmm/stock.h>
+#include <gtkmm/enums.h>
 #include "common.hpp"
 #include "joindialog.hpp"
+
+#ifdef WITH_HOWL
+Gobby::JoinDialog::Columns::Columns()
+{
+	add(name);
+	add(host);
+	add(port);
+}
+#endif
 
 Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
  : DefaultDialog(_("Join obby session"), parent, true, true),
@@ -28,6 +38,9 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
    m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
+#ifdef WITH_HOWL
+   , m_ep_discover("Local network")
+#endif
 {
 	// TODO: Read default color as random one from tom's color map
 	Gdk::Color default_color;
@@ -72,9 +85,35 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 
 	m_table.set_spacings(5);
-  
+
+#ifdef WITH_HOWL
+	m_session_list = Gtk::ListStore::create(m_session_cols);
+	m_session_view.set_model(m_session_list);
+	m_session_view.append_column("User", m_session_cols.name);
+	m_session_view.append_column("Host", m_session_cols.host);
+	m_session_view.append_column("Port", m_session_cols.port);
+	m_session_view.get_selection()->set_mode(
+		Gtk::SELECTION_SINGLE);
+	m_session_view.get_selection()->signal_changed().connect(
+		sigc::mem_fun(*this, &JoinDialog::on_change) );
+	m_ep_discover.add(m_session_view);
+
+	m_zeroconf.discover_event().connect(sigc::mem_fun(*this,
+	                                    &JoinDialog::on_discover) );
+	m_zeroconf.leave_event().connect(sigc::mem_fun(*this,
+	                                 &JoinDialog::on_leave) );
+	m_zeroconf.discover();
+	m_timer_connection = Glib::signal_timeout().connect(
+		sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
+
+	m_vbox.set_spacing(5);
+	m_vbox.pack_start(m_table);
+	m_vbox.pack_start(m_ep_discover);
+	get_vbox()->pack_start(m_vbox);
+#else
 	get_vbox()->set_spacing(5);
 	get_vbox()->pack_start(m_table);
+#endif
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
@@ -86,6 +125,10 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
 
 Gobby::JoinDialog::~JoinDialog()
 {
+#ifdef WITH_HOWL
+	if(m_timer_connection.connected() )
+		m_timer_connection.disconnect();
+#endif
 }
 
 Glib::ustring Gobby::JoinDialog::get_host() const
@@ -140,4 +183,52 @@ void Gobby::JoinDialog::on_response(int response_id)
 
 	Gtk::Dialog::on_response(response_id);
 }
+
+#ifdef WITH_HOWL
+Gtk::TreeModel::iterator
+Gobby::JoinDialog::find_entry(const std::string& name) const
+{
+	Gtk::TreeModel::iterator iter = m_session_list->children().begin();
+	for(iter; iter != m_session_list->children().end(); ++ iter)
+		if( (*iter)[m_session_cols.name] == name)
+			return iter;
+	return m_session_list->children().end();
+}
+
+bool Gobby::JoinDialog::on_timer()
+{
+	m_zeroconf.select(0);
+	return true;
+}
+
+void Gobby::JoinDialog::on_discover(const std::string& name,
+                                    const net6::ipv4_address& addr)
+{
+	// Ignore entries which introduce user names which are already in
+	// the list. The second of the clashing entries is just dropped.
+	if(find_entry(name) != m_session_list->children().end() )
+		return;
+	Gtk::TreeModel::Row row = *(m_session_list->append() );
+	row[m_session_cols.name] = name;
+	row[m_session_cols.host] = addr.get_name();
+	row[m_session_cols.port] = addr.get_port();
+}
+
+#include <iostream>
+void Gobby::JoinDialog::on_leave(const std::string& name)
+{
+	std::cout << "leave: " << name << std::endl;
+	Gtk::TreeModel::iterator iter = find_entry(name);
+	if(iter == m_session_list->children().end() ) return;
+	m_session_list->erase(iter);
+}
+
+void Gobby::JoinDialog::on_change()
+{
+	Gtk::TreeModel::iterator iter =
+		m_session_view.get_selection()->get_selected();
+	m_ent_host.set_text((*iter)[m_session_cols.host]);
+	m_ent_port.set_value((*iter)[m_session_cols.port]);
+}
+#endif
 

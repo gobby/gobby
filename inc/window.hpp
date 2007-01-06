@@ -30,6 +30,10 @@
 #include "userlist.hpp"
 #include "chat.hpp"
 #include "statusbar.hpp"
+#include "features.hpp"
+#ifdef WITH_HOWL
+#include <obby/zeroconf.hpp>
+#endif
 
 namespace Gobby
 {
@@ -104,6 +108,9 @@ protected:
 
 	// obby
 	obby::local_buffer* m_buffer;
+#ifdef WITH_HOWL
+	obby::zeroconf* m_zeroconf;
+#endif
 	sigc::connection m_timer_conn;
 	bool m_running; // m_running is set if the obby connection has been
 	                // established successfully.
