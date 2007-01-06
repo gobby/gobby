@@ -6,13 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-24 23:41+0100\n"
+"POT-Creation-Date: 2005-12-08 23:37+0100\n"
 "PO-Revision-Date: 2005-11-14 10:58+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: src/icon.cpp:2759 src/header.cpp:343 src/userlist.cpp:117
 msgid "User list"
@@ -120,7 +121,7 @@ msgstr "Suchen..."
 
 #: src/header.cpp:272
 msgid "Search for a text in the current document"
-msgstr ""
+msgstr "Das aktuelle Dokument nach einem Text durchsuchen"
 
 #: src/header.cpp:280
 msgid "Find and replace..."
@@ -128,15 +129,15 @@ msgstr "Suchen und Ersetzen..."
 
 #: src/header.cpp:281
 msgid "Search for a text and replace it with another one"
-msgstr ""
+msgstr "Zeichenkette suchen und ersetzen"
 
 #: src/header.cpp:289
 msgid "Go to line..."
-msgstr ""
+msgstr "Gehe zu Zeile..."
 
 #: src/header.cpp:290
 msgid "Move cursor to a specified line"
-msgstr ""
+msgstr "Bewegt den Cursor zu einer angegeben Zeile"
 
 #: src/header.cpp:298
 msgid "Preferences..."
@@ -189,7 +190,7 @@ msgstr "Fenster"
 
 #: src/header.cpp:344
 msgid "Shows up a list of users that are currently joined"
-msgstr ""
+msgstr "Zeigt Liste aktueller Benutzer"
 
 #: src/header.cpp:352 src/documentlist.cpp:101
 msgid "Document list"
@@ -495,73 +496,73 @@ msgstr "Verbindung verloren"
 msgid "Opening obby session..."
 msgstr "Eröffne neue Sitzung..."
 
-#: src/finddialog.cpp:45
+#: src/finddialog.cpp:43
 msgid "Find what:"
-msgstr ""
+msgstr "Suchen nach:"
+
+#: src/finddialog.cpp:44
+msgid "Replace with:"
+msgstr "Ersetzen durch:"
+
+#: src/finddialog.cpp:45
+msgid "Match whole word only"
+msgstr "Nur ganze Wörter finden"
 
 #: src/finddialog.cpp:46
-msgid "Replace with:"
-msgstr ""
+msgid "Match case"
+msgstr "Groß-/Kleinschreibung beachten"
 
 #: src/finddialog.cpp:47
-msgid "Match whole word only"
-msgstr ""
+msgid "Match as regular expression"
+msgstr "Suchbegriff als regulären Ausdruck interpretieren"
 
 #: src/finddialog.cpp:48
-msgid "Match case"
-msgstr ""
+msgid "Direction"
+msgstr "Richtung"
 
 #: src/finddialog.cpp:49
-msgid "Match as regular expression"
-msgstr ""
+msgid "_Up"
+msgstr "Ra_uf"
 
 #: src/finddialog.cpp:50
-msgid "Direction"
-msgstr ""
-
-#: src/finddialog.cpp:51
-msgid "_Up"
-msgstr ""
+msgid "_Down"
+msgstr "Ru_nter"
 
 #: src/finddialog.cpp:52
-msgid "_Down"
-msgstr ""
-
-#: src/finddialog.cpp:54
 msgid "_Replace"
-msgstr ""
+msgstr "E_rsetzen"
 
-#: src/finddialog.cpp:55
+#: src/finddialog.cpp:53
 msgid "Replace _all"
-msgstr ""
+msgstr "_Alles ersetzen"
 
-#: src/finddialog.cpp:160
+#: src/finddialog.cpp:158
 msgid "Search"
-msgstr ""
+msgstr "Suchen"
 
-#: src/finddialog.cpp:160
+#: src/finddialog.cpp:158
 msgid "Search and replace"
 msgstr "Suchen und Ersetzen"
 
-#: src/finddialog.cpp:183
+#: src/finddialog.cpp:181
 #, c-format
 msgid "\"%0%\" has not been found in the document."
-msgstr ""
+msgstr "\"%0%\" wurde nicht im Dokument gefunden."
 
-#: src/finddialog.cpp:263
+#: src/finddialog.cpp:261
 msgid "No occurence has been replaced"
-msgstr ""
+msgstr "Keine Übereinstimmung wurde ersetzt"
 
-#: src/finddialog.cpp:269
+#: src/finddialog.cpp:267
 #, c-format
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%0% Übereinstimmung wurde ersetzt"
+msgstr[1] "%0% Übereinstimmungen wurden übersetzt"
 
-#: src/finddialog.cpp:299
+#: src/finddialog.cpp:297
 msgid "No document currently opened"
-msgstr ""
+msgstr "Derzeit ist kein Dokument geöffnet"
 
 #: src/gotodialog.cpp:30
 msgid "Line number:"
@@ -569,11 +570,11 @@ msgstr "Zeilennummer:"
 
 #: src/gotodialog.cpp:32
 msgid "_Go to line"
-msgstr ""
+msgstr "_Gehe zu Zeile"
 
 #: src/gotodialog.cpp:76
 msgid "Go to line"
-msgstr ""
+msgstr "Gehe zu Zeile"
 
 #: src/window.cpp:158
 msgid ""
@@ -586,11 +587,11 @@ msgstr ""
 
 #: src/window.cpp:228
 msgid "You are still connected to a session"
-msgstr ""
+msgstr "Du bist noch zu einer Sitzung verbunden"
 
 #: src/window.cpp:236
 msgid "Do you want to close Gobby nevertheless?"
-msgstr ""
+msgstr "Willst du Gobby trotzdem schließen?"
 
 #: src/window.cpp:388
 #, c-format
@@ -604,7 +605,7 @@ msgstr "Mit %0%:%1% verbunden"
 
 #: src/window.cpp:447
 msgid "Use default .obby extension if none is given"
-msgstr ""
+msgstr "Verwende Standarderweiterung (.obby), wenn nicht anders angegeben"
 
 #: src/window.cpp:452
 msgid "Save obby session"

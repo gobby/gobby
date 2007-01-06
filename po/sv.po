@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-24 23:41+0100\n"
+"POT-Creation-Date: 2005-12-08 23:37+0100\n"
 "PO-Revision-Date: 2005-11-02 16:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -15,10 +15,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Rosetta-Version: 0.1\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
 
 #: src/icon.cpp:2759 src/header.cpp:343 src/userlist.cpp:117
 msgid "User list"
-msgstr ""
+msgstr "Användare"
 
 #: src/encoding.cpp:104
 msgid ""
@@ -41,17 +42,14 @@ msgid "Join session..."
 msgstr "Anslut till session..."
 
 #: src/header.cpp:187
-#, fuzzy
 msgid "Joins an existing obby session"
 msgstr "Ansluter till en existerande obby-session"
 
 #: src/header.cpp:195
-#, fuzzy
 msgid "Save session..."
 msgstr "Spara session..."
 
 #: src/header.cpp:196
-#, fuzzy
 msgid "Saves the complete session for a later restore"
 msgstr "Sparar den kompletta sessionen för att kunna återställa den senare"
 
@@ -112,7 +110,6 @@ msgid "Close document"
 msgstr "Stäng dokument"
 
 #: src/header.cpp:261
-#, fuzzy
 msgid "Closes an opened document"
 msgstr "Stänger ett öppet dokument"
 
@@ -126,7 +123,7 @@ msgstr "Sök..."
 
 #: src/header.cpp:272
 msgid "Search for a text in the current document"
-msgstr ""
+msgstr "Spara aktuellt dokument"
 
 #: src/header.cpp:280
 msgid "Find and replace..."
@@ -134,15 +131,15 @@ msgstr "Sök och ersätt..."
 
 #: src/header.cpp:281
 msgid "Search for a text and replace it with another one"
-msgstr ""
+msgstr "Sök efter en textsträng och ersätt med en annan"
 
 #: src/header.cpp:289
 msgid "Go to line..."
-msgstr ""
+msgstr "Hoppa till rad..."
 
 #: src/header.cpp:290
 msgid "Move cursor to a specified line"
-msgstr ""
+msgstr "Flytta markören till en angiven rad"
 
 #: src/header.cpp:298
 msgid "Preferences..."
@@ -240,7 +237,6 @@ msgid "No language selected"
 msgstr "Inget språk valt"
 
 #: src/userlist.cpp:91
-#, fuzzy
 msgid "Online"
 msgstr "Ansluten"
 
@@ -444,7 +440,6 @@ msgid "Login packet sent, waiting for response..."
 msgstr "Inloggningspaket skickat, väntar på svar..."
 
 #: src/joinprogressdialog.cpp:260 src/joinprogressdialog.cpp:423
-#, fuzzy
 msgid "New name:"
 msgstr "Nytt namn:"
 
@@ -464,9 +459,8 @@ msgstr ""
 "anslutningen."
 
 #: src/joinprogressdialog.cpp:364
-#, fuzzy
 msgid "Session password:"
-msgstr "Ange sessionslösenord"
+msgstr "Sessionslösenord:"
 
 #: src/joinprogressdialog.cpp:377
 msgid ""
@@ -502,73 +496,73 @@ msgstr "Anslutningen bruten"
 msgid "Opening obby session..."
 msgstr "Öppnar obby-session..."
 
-#: src/finddialog.cpp:45
+#: src/finddialog.cpp:43
 msgid "Find what:"
-msgstr ""
+msgstr "Sök efter:"
+
+#: src/finddialog.cpp:44
+msgid "Replace with:"
+msgstr "Ersätt med:"
+
+#: src/finddialog.cpp:45
+msgid "Match whole word only"
+msgstr "Matcha endast hela ord"
 
 #: src/finddialog.cpp:46
-msgid "Replace with:"
-msgstr ""
+msgid "Match case"
+msgstr "Matcha gemener/VERSALER"
 
 #: src/finddialog.cpp:47
-msgid "Match whole word only"
-msgstr ""
+msgid "Match as regular expression"
+msgstr "Matcha som ett reguljärt sökuttryck"
 
 #: src/finddialog.cpp:48
-msgid "Match case"
-msgstr ""
+msgid "Direction"
+msgstr "Riktning"
 
 #: src/finddialog.cpp:49
-msgid "Match as regular expression"
-msgstr ""
+msgid "_Up"
+msgstr "_Upp"
 
 #: src/finddialog.cpp:50
-msgid "Direction"
-msgstr ""
-
-#: src/finddialog.cpp:51
-msgid "_Up"
-msgstr ""
+msgid "_Down"
+msgstr "_Ner"
 
 #: src/finddialog.cpp:52
-msgid "_Down"
-msgstr ""
-
-#: src/finddialog.cpp:54
 msgid "_Replace"
-msgstr ""
+msgstr "_Ersätt"
 
-#: src/finddialog.cpp:55
+#: src/finddialog.cpp:53
 msgid "Replace _all"
-msgstr ""
+msgstr "Ersätt _alla"
 
-#: src/finddialog.cpp:160
+#: src/finddialog.cpp:158
 msgid "Search"
-msgstr ""
+msgstr "Sök"
 
-#: src/finddialog.cpp:160
+#: src/finddialog.cpp:158
 msgid "Search and replace"
-msgstr ""
+msgstr "Sök och ersätt"
 
-#: src/finddialog.cpp:183
+#: src/finddialog.cpp:181
 #, c-format
 msgid "\"%0%\" has not been found in the document."
-msgstr ""
+msgstr "\"%0%\" hittades inte i dokumentet."
 
-#: src/finddialog.cpp:263
+#: src/finddialog.cpp:261
 msgid "No occurence has been replaced"
-msgstr ""
+msgstr "Inga ersättningar gjordes"
 
-#: src/finddialog.cpp:269
+#: src/finddialog.cpp:267
 #, c-format
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%0% ersättning gjordes"
+msgstr[1] "%0% ersättningar gjordes"
 
-#: src/finddialog.cpp:299
+#: src/finddialog.cpp:297
 msgid "No document currently opened"
-msgstr ""
+msgstr "Inga dokument är öppna"
 
 #: src/gotodialog.cpp:30
 msgid "Line number:"
@@ -576,11 +570,11 @@ msgstr "Radnummer:"
 
 #: src/gotodialog.cpp:32
 msgid "_Go to line"
-msgstr ""
+msgstr "_Gå till rad"
 
 #: src/gotodialog.cpp:76
 msgid "Go to line"
-msgstr ""
+msgstr "Gå till rad"
 
 #: src/window.cpp:158
 msgid ""
@@ -593,11 +587,11 @@ msgstr ""
 
 #: src/window.cpp:228
 msgid "You are still connected to a session"
-msgstr ""
+msgstr "Du är fortfarande ansluten till en session"
 
 #: src/window.cpp:236
 msgid "Do you want to close Gobby nevertheless?"
-msgstr ""
+msgstr "Vill du stänga Gobby ändå?"
 
 #: src/window.cpp:388
 #, c-format

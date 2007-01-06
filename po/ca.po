@@ -7,13 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-24 23:41+0100\n"
+"POT-Creation-Date: 2005-12-08 23:37+0100\n"
 "PO-Revision-Date: 2005-11-02 19:42-0500\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
 
 #: src/icon.cpp:2759 src/header.cpp:343 src/userlist.cpp:117
 msgid "User list"
@@ -485,71 +486,71 @@ msgstr ""
 msgid "Opening obby session..."
 msgstr ""
 
-#: src/finddialog.cpp:45
+#: src/finddialog.cpp:43
 msgid "Find what:"
 msgstr ""
 
-#: src/finddialog.cpp:46
+#: src/finddialog.cpp:44
 msgid "Replace with:"
 msgstr ""
 
-#: src/finddialog.cpp:47
+#: src/finddialog.cpp:45
 msgid "Match whole word only"
 msgstr ""
 
-#: src/finddialog.cpp:48
+#: src/finddialog.cpp:46
 msgid "Match case"
 msgstr ""
 
-#: src/finddialog.cpp:49
+#: src/finddialog.cpp:47
 msgid "Match as regular expression"
 msgstr ""
 
-#: src/finddialog.cpp:50
+#: src/finddialog.cpp:48
 msgid "Direction"
 msgstr ""
 
-#: src/finddialog.cpp:51
+#: src/finddialog.cpp:49
 msgid "_Up"
 msgstr ""
 
-#: src/finddialog.cpp:52
+#: src/finddialog.cpp:50
 msgid "_Down"
 msgstr ""
 
-#: src/finddialog.cpp:54
+#: src/finddialog.cpp:52
 msgid "_Replace"
 msgstr ""
 
-#: src/finddialog.cpp:55
+#: src/finddialog.cpp:53
 msgid "Replace _all"
 msgstr ""
 
-#: src/finddialog.cpp:160
+#: src/finddialog.cpp:158
 msgid "Search"
 msgstr ""
 
-#: src/finddialog.cpp:160
+#: src/finddialog.cpp:158
 msgid "Search and replace"
 msgstr ""
 
-#: src/finddialog.cpp:183
+#: src/finddialog.cpp:181
 #, c-format
 msgid "\"%0%\" has not been found in the document."
 msgstr ""
 
-#: src/finddialog.cpp:263
+#: src/finddialog.cpp:261
 msgid "No occurence has been replaced"
 msgstr ""
 
-#: src/finddialog.cpp:269
+#: src/finddialog.cpp:267
 #, c-format
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/finddialog.cpp:299
+#: src/finddialog.cpp:297
 msgid "No document currently opened"
 msgstr ""
 
