@@ -23,6 +23,7 @@
 #include <obby/error.hpp>
 #include "buffer_def.hpp"
 #include "progressdialog.hpp"
+#include "colorsel.hpp"
 #include "config.hpp"
 
 namespace Gobby
@@ -87,7 +88,7 @@ private:
 
 		Gdk::Color get_color() const;
 	protected:
-		Gtk::ColorButton m_button;
+		ColorButton m_button;
 	};
 
 	class SessionPasswordPrompt: public Prompt
