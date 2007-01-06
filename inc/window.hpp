@@ -56,6 +56,7 @@ protected:
 	// Header UI handler
 	void on_session_create();
 	void on_session_join();
+	void on_session_save();
 	void on_session_quit();
 
 	void on_document_create();

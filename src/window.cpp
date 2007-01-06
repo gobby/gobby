@@ -60,6 +60,8 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_session_create) );
 	m_header.session_join_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_join) );
+	m_header.session_save_event().connect(
+		sigc::mem_fun(*this, &Window::on_session_save) );
 	m_header.session_quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_quit) );
 
@@ -333,6 +335,33 @@ void Gobby::Window::on_session_join()
 			m_buffer = buffer;
 			obby_start();
 		}
+	}
+}
+
+void Gobby::Window::on_session_save()
+{
+	Gtk::FileChooserDialog dlg(
+		*this,
+		_("Save obby session"),
+		Gtk::FILE_CHOOSER_ACTION_SAVE
+	);
+
+	// Use the last used path for this dialog, if we have any
+	if(!m_last_path.empty() )
+		dlg.set_current_folder(m_last_path);
+
+	// TODO: Store previous location of a saved obby session?
+	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		// TODO: Default extension (.obby)
+		// TODO: Overwrite confirmation
+		// Use current folder as standard folder for other dialogs
+		m_last_path = dlg.get_current_folder();
+		// Save document
+		m_buffer->serialise(dlg.get_filename() );
 	}
 }
 

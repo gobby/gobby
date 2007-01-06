@@ -73,6 +73,8 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
 	m_table.attach(m_ent_session, 1, 2, 4, 5,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 
+	// TODO: .obby file filter for restore session dialog
+
 	m_table.set_spacings(5);
   
 	get_vbox()->set_spacing(5);

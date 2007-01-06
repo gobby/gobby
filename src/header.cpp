@@ -34,6 +34,7 @@ namespace {
 		"    <menu action=\"MenuApp\">"
 		"      <menuitem action=\"CreateSession\" />"
 		"      <menuitem action=\"JoinSession\" />"
+		"      <menuitem action=\"SaveSession\" />"
 		"      <menuitem action=\"QuitSession\" />"
 		"      <separator />"
 		"      <menuitem action=\"Quit\" />"
@@ -158,6 +159,26 @@ Gobby::Header::Header(const Folder& folder)
 		sigc::mem_fun(
 			*this,
 			&Header::on_app_session_join
+		)
+	);
+
+	// Save session
+	m_group_app->add(
+		Gtk::Action::create(
+			"SaveSession",
+			// Gtk::Stock::SAVE automatically assigns a Ctrl+S
+			// shortcut which is already in use by Save Document
+			// I currently don't know how to remove the shortcut
+			// from this action
+			// - Armin, 10-21-2005
+			//Gtk::Stock::SAVE,
+			_("Save session"),
+			_("Saves the complete session to"
+			  "be able to restore it later")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_session_save
 		)
 	);
 
@@ -453,6 +474,7 @@ Gobby::Header::Header(const Folder& folder)
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
+	m_group_app->get_action("SaveSession")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
 
 	m_group_app->get_action("MenuUser")->set_sensitive(false);
@@ -505,6 +527,12 @@ Gobby::Header::signal_session_join_type
 Gobby::Header::session_join_event() const
 {
 	return m_signal_session_join;
+}
+
+Gobby::Header::signal_session_save_type
+Gobby::Header::session_save_event() const
+{
+	return m_signal_session_save;
 }
 
 Gobby::Header::signal_session_quit_type
@@ -590,6 +618,7 @@ void Gobby::Header::obby_start(obby::local_buffer& buf)
 	// Begin of obby session: Disable create/join buttons, enable quit
 	m_group_app->get_action("CreateSession")->set_sensitive(false);
 	m_group_app->get_action("JoinSession")->set_sensitive(false);
+	m_group_app->get_action("SaveSession")->set_sensitive(true);
 	m_group_app->get_action("QuitSession")->set_sensitive(true);
 
 	// Enable document buttons
@@ -611,8 +640,11 @@ void Gobby::Header::obby_start(obby::local_buffer& buf)
 void Gobby::Header::obby_end()
 {
 	// End of obby session: Enable create/join buttons, disable quit
+	// Disable save session button for now. It will stay enabled later if
+	// the window keeps the obby buffer reference.
 	m_group_app->get_action("CreateSession")->set_sensitive(true);
 	m_group_app->get_action("JoinSession")->set_sensitive(true);
+	m_group_app->get_action("SaveSession")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
 
 	// Disable user buttons
@@ -667,6 +699,11 @@ void Gobby::Header::on_app_session_join()
 	m_signal_session_join.emit();
 }
 
+void Gobby::Header::on_app_session_save()
+{
+	m_signal_session_save.emit();
+}
+
 void Gobby::Header::on_app_session_quit()
 {
 	m_signal_session_quit.emit();
@@ -719,7 +756,7 @@ void Gobby::Header::on_app_view_preferences()
 
 void Gobby::Header::on_app_view_language(Glib::RefPtr<Gtk::SourceLanguage> lang)
 {
-	// Same as above
+	// Same as below
 	if(!m_toggle_language)
 		m_signal_view_language.emit(lang);
 }
