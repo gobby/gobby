@@ -634,7 +634,7 @@ void Gobby::Window::on_document_create()
 		// " " means a newly created file
 		m_local_file_path = " ";
 		// Create new document
-		m_buffer->document_create(dlg.get_text(), "");
+		m_buffer->document_create(dlg.get_text(), "UTF-8", "");
 	}
 }
 
@@ -1070,7 +1070,7 @@ void Gobby::Window::open_local_file(const Glib::ustring& file)
 		convert2unix(content);
 
 		m_buffer->document_create(
-			Glib::path_get_basename(file), content
+			Glib::path_get_basename(file), "UTF-8", content
 		);
 	}
 	catch(Glib::Exception& e)
