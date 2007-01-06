@@ -23,7 +23,8 @@
 #include "folder.hpp"
 
 Gobby::Folder::TabLabel::TabLabel(const Glib::ustring& label)
- : m_image(Gtk::Stock::CLOSE, Gtk::ICON_SIZE_MENU), m_label(label)
+ : m_image(Gtk::Stock::CLOSE, Gtk::ICON_SIZE_MENU), m_label(label),
+   m_modified("")
 {
 	// Lookup icon size
 	int width, height;
@@ -36,6 +37,7 @@ Gobby::Folder::TabLabel::TabLabel(const Glib::ustring& label)
 
 	// Add box
 	set_spacing(5);
+	pack_start(m_modified, Gtk::PACK_SHRINK);
 	pack_start(m_label, Gtk::PACK_SHRINK);
 	pack_start(m_button, Gtk::PACK_SHRINK);
 	show_all();
@@ -45,9 +47,27 @@ Gobby::Folder::TabLabel::~TabLabel()
 {
 }
 
+Glib::ustring Gobby::Folder::TabLabel::get_label() const
+{
+	return m_label.get_text();
+}
+
+void Gobby::Folder::TabLabel::set_modified(bool modified)
+{
+	if(modified)
+		m_modified.set_text("*");
+	else
+		m_modified.set_text("");
+}
+
 void Gobby::Folder::TabLabel::set_label(const Glib::ustring& label)
 {
 	m_label.set_text(label);
+}
+
+void Gobby::Folder::TabLabel::set_use_markup(bool setting)
+{
+	m_label.set_use_markup(setting);
 }
 
 Gobby::Folder::TabLabel::close_signal_type
@@ -134,7 +154,8 @@ void Gobby::Folder::obby_user_colour(obby::user& user)
 {
 	// Pass user colour event to documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_colour(user);
+		static_cast<DocWindow*>(
+			get_nth_page(i) )->obby_user_colour(user);
 }
 
 void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
@@ -159,7 +180,7 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 				*this,
 				&Folder::on_document_content_changed
 			),
-			sigc::ref(new_doc)
+			sigc::ref(*new_wnd)
 		)
 	);
 
@@ -184,13 +205,31 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 	);
 
 	// Create label for the tab
-	TabLabel* label = Gtk::manage(new TabLabel(document.get_title() ));
+	TabLabel* label = Gtk::manage(new TabLabel(
+		"<span foreground=\"#666666\">" + document.get_title()
+		+ "</span>"));
+	label->set_use_markup();
 
 	// Connect close event
 	label->close_event().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_document_close),
 			sigc::ref(new_doc)
+		)
+	);
+
+	// Document subscription handling
+	document.subscribe_event().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &Folder::on_document_subscribe),
+			sigc::ref(*new_wnd)
+		)
+	);
+
+	document.unsubscribe_event().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &Folder::on_document_unsubscribe),
+			sigc::ref(*new_wnd)
 		)
 	);
 
@@ -250,21 +289,42 @@ Gobby::Folder::tab_switched_event() const
 	return m_signal_tab_switched;
 }
 
+void Gobby::Folder::set_tab_colour(DocWindow& win, const Glib::ustring& colour)
+{
+	TabLabel& label = *static_cast<TabLabel*>(get_tab_label(win) );
+	label.set_label("<span foreground=\"" + colour + "\">" +
+		label.get_label() + "</span>");
+	label.set_use_markup();	
+}
+
 void Gobby::Folder::on_document_modified_changed(DocWindow& window)
 {
 	// Get tab label for this document
 	TabLabel& label = *static_cast<TabLabel*>(get_tab_label(window) );
 	Document& doc = window.get_document();
 	// Show asterisk as the document's title if it has been modified
-	if(doc.get_buffer()->get_modified() )
-		label.set_label(doc.get_title() + " *");
-	else
-		label.set_label(doc.get_title() );
+	label.set_modified(doc.get_buffer()->get_modified() );
 }
 
 void Gobby::Folder::on_document_close(Document& document)
 {
 	m_signal_document_close.emit(document);
+}
+
+void Gobby::Folder::on_document_subscribe(const obby::user& user,
+                                          DocWindow& window)
+{
+	if(&window.get_document().get_document().get_buffer().get_self() ==
+	   &user)
+		set_tab_colour(window, "#000000");
+}
+
+void Gobby::Folder::on_document_unsubscribe(const obby::user& user,
+                                            DocWindow& window)
+{
+	if(&window.get_document().get_document().get_buffer().get_self() ==
+	   &user)
+	   	set_tab_colour(window, "#555555");
 }
 
 void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
@@ -287,6 +347,13 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 		);
 	}
 
+	// TODO: We should put flags into the labels which specify if the
+	// current document is subscribed and/or modified.
+	DocWindow& window = *static_cast<DocWindow*>(get_nth_page(page_num));
+	obby::local_document_info& docinfo =
+		window.get_document().get_document();
+	if(docinfo.is_subscribed(docinfo.get_buffer().get_self() ))
+		set_tab_colour(window, "#000000");
 	Gtk::Notebook::on_switch_page(page, page_num);
 }
 
@@ -298,12 +365,16 @@ void Gobby::Folder::on_document_cursor_moved(Document& document)
 		m_signal_document_cursor_moved.emit(document);
 }
 
-void Gobby::Folder::on_document_content_changed(Document& document)
+void Gobby::Folder::on_document_content_changed(DocWindow& window)
 {
 	// Update in the currently visible document? Update statusbar.
 	Gtk::Widget* wnd = get_nth_page(get_current_page() );
-	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
-		m_signal_document_content_changed.emit(document);
+	if(wnd == &window)
+		m_signal_document_content_changed.emit(window.get_document());
+	else
+	{
+		set_tab_colour(window, "#CC0000");
+	}
 }
 
 void Gobby::Folder::on_document_language_changed(Document& document)
@@ -313,4 +384,6 @@ void Gobby::Folder::on_document_language_changed(Document& document)
 	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
 		m_signal_document_language_changed.emit(document);
 }
+
+
 

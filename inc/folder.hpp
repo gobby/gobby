@@ -54,12 +54,17 @@ public:
 		TabLabel(const Glib::ustring& label);
 		~TabLabel();
 
+		Glib::ustring get_label() const;
+
+		void set_modified(bool modified = true);
 		void set_label(const Glib::ustring& label);
+		void set_use_markup(bool setting = true);
 
 		close_signal_type close_event();
 	protected:
 		Gtk::Image m_image;
 		Gtk::Label m_label;
+		Gtk::Label m_modified;
 		Gtk::Button m_button;
 		Gtk::HBox m_box;
 	};
@@ -101,12 +106,17 @@ protected:
 	// Overrides
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
 
+	void set_tab_colour(DocWindow& win, const Glib::ustring& colour);
+
 	// Signal handlers
 	void on_document_modified_changed(DocWindow& window);
 	void on_document_close(Document& document);
 
+	void on_document_subscribe(const obby::user& user, DocWindow& window);
+	void on_document_unsubscribe(const obby::user& user, DocWindow& window);
+
 	void on_document_cursor_moved(Document& document);
-	void on_document_content_changed(Document& document);
+	void on_document_content_changed(DocWindow& window);
 	void on_document_language_changed(Document& document);
 
 	signal_document_close_type m_signal_document_close;
@@ -131,3 +141,4 @@ protected:
 }
 
 #endif // _GOBBY_FOLDER_HPP_
+
