@@ -53,6 +53,7 @@ public:
 	void obby_user_part(obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
+	void obby_preferences_changed(const Preferences& preferences);
 
 protected:
 	Gtk::HBox m_box;

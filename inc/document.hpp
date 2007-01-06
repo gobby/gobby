@@ -21,6 +21,7 @@
 
 #include <obby/local_document_info.hpp>
 
+#include "preferences.hpp"
 #include "features.hpp"
 #ifdef WITH_GTKSOURCEVIEW
 #include "sourceview/sourcelanguagesmanager.hpp"
@@ -47,7 +48,8 @@ public:
 	typedef sigc::signal<void> signal_language_changed_type;
 #endif
 
-	Document(obby::local_document_info& doc, const Folder& folder);
+	Document(obby::local_document_info& doc, const Folder& folder,
+	         const Preferences& preferences);
 	virtual ~Document();
 
 	const obby::local_document_info& get_document() const;
@@ -93,25 +95,6 @@ public:
 	 * returns an invalid reference!)
 	 */
 	Glib::ustring get_content();
-
-	/** Returns whether the document is displayed with the words wrapped
-	 * to the window's width.
-	 */
-	bool get_word_wrapping() const;
-
-	/** Sets whether the words should be wrapped to the window's width.
-	 */
-	void set_word_wrapping(bool wrap);
-
-#ifdef WITH_GTKSOURCEVIEW
-	/** Returns whether line numbers are currently shown for this document.
-	 */
-	bool get_show_line_numbers() const;
-
-	/** Sets whether to show line numbers for this document.
-	 */
-	void set_show_line_numbers(bool show);
-#endif
 
 	/** Signal which will be emitted if the cursor's position changed.
 	 */
@@ -189,6 +172,9 @@ protected:
 
 	obby::local_document_info& m_doc;
 	const Folder& m_folder;
+	
+	// TODO: Value for local preferences
+	const Preferences& m_preferences;
 
 	/** Variable to prevent event handlers from endless recursion. After
 	 * an obby insert or textbuffer insert has occured, this variable is

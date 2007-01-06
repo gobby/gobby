@@ -103,18 +103,104 @@ void Gtk::SourceView::set_buffer(const Glib::RefPtr<SourceBuffer> buffer)
 	Gtk::TextView::set_buffer(buffer);
 }
 
-bool Gtk::SourceView::get_show_line_numbers() const
-{
-	return gtk_source_view_get_show_line_numbers(
-		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
-}
-
 void Gtk::SourceView::set_show_line_numbers(bool show_line_numbers)
 {
 	gtk_source_view_set_show_line_numbers(
 		gobj(),
 		show_line_numbers ? TRUE : FALSE
 	);
+}
+
+bool Gtk::SourceView::get_show_line_numbers() const
+{
+	return gtk_source_view_get_show_line_numbers(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+
+void Gtk::SourceView::set_show_line_markers(bool show)
+{
+	gtk_source_view_set_show_line_markers(gobj(), show ? TRUE : FALSE);
+}
+
+bool Gtk::SourceView::get_show_line_markers() const
+{
+	return gtk_source_view_get_show_line_markers(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+
+void Gtk::SourceView::set_tabs_width(guint width)
+{
+	gtk_source_view_set_tabs_width(gobj(), width);
+}
+
+guint Gtk::SourceView::get_tabs_width() const
+{
+	return gtk_source_view_get_tabs_width(GTK_SOURCE_VIEW(gobject_) );
+}
+
+void Gtk::SourceView::set_auto_indent(bool enable)
+{
+	gtk_source_view_set_auto_indent(gobj(), enable ? TRUE : FALSE);
+}
+
+bool Gtk::SourceView::get_auto_indent() const
+{
+	return gtk_source_view_get_auto_indent(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+void Gtk::SourceView::set_insert_spaces_instead_of_tabs(bool enable)
+{
+	gtk_source_view_set_insert_spaces_instead_of_tabs(
+		gobj(), enable ? TRUE : FALSE);
+}
+
+bool Gtk::SourceView::get_insert_spaces_instead_of_tabs() const
+{
+	return gtk_source_view_get_insert_spaces_instead_of_tabs(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+
+void Gtk::SourceView::set_show_margin(bool show)
+{
+	gtk_source_view_set_show_margin(gobj(), show ? TRUE : FALSE);
+}
+
+bool Gtk::SourceView::get_show_margin() const
+{
+	return gtk_source_view_get_show_margin(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+
+void Gtk::SourceView::set_highlight_current_line(bool show)
+{
+	gtk_source_view_set_highlight_current_line(gobj(), show ? TRUE : FALSE);
+}
+
+bool Gtk::SourceView::get_highlight_current_line() const
+{
+	return gtk_source_view_get_highlight_current_line(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+
+void Gtk::SourceView::set_margin(guint margin)
+{
+	gtk_source_view_set_margin(gobj(), margin);
+}
+
+guint Gtk::SourceView::get_margin() const
+{
+	return gtk_source_view_get_margin(GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+
+void Gtk::SourceView::set_smart_home_end(bool enable)
+{
+	gtk_source_view_set_smart_home_end(gobj(), enable ? TRUE : FALSE);
+}
+
+bool Gtk::SourceView::get_smart_home_end() const
+{
+	return gtk_source_view_get_smart_home_end(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
 }
 
 Gtk::SourceView* Glib::wrap(GtkSourceView* object, bool take_copy)

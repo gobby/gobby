@@ -16,38 +16,40 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "docwindow.hpp"
+#ifndef _GOBBY_PREFERENCES_HPP_
+#define _GOBBY_PREFERENCES_HPP_
 
-Gobby::DocWindow::DocWindow(obby::local_document_info& doc,
-                            const Folder& folder,
-                            const Preferences& preferences)
- : Gtk::ScrolledWindow(), m_doc(doc, folder, preferences)
+#include "config.hpp"
+
+namespace Gobby
 {
-	set_shadow_type(Gtk::SHADOW_IN);
-	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-	add(m_doc);
+
+class Preferences
+{
+public:
+	Preferences(Config& m_config);
+	~Preferences();
+
+	// TODO: Accessors..?
+	struct
+	{
+		unsigned int tab_width;
+		bool tab_spaces;
+		bool indentation_auto;
+	} editor;
+
+	struct
+	{
+		bool wrap_text;
+		bool wrap_words;
+		bool linenum_display;
+	} view;
+
+protected:
+	Config& m_config;
+};
+
 }
 
-Gobby::DocWindow::~DocWindow()
-{
-}
+#endif // _GOBBY_PREFERENCES_HPP_
 
-const Gobby::Document& Gobby::DocWindow::get_document() const
-{
-	return m_doc;
-}
-
-Gobby::Document& Gobby::DocWindow::get_document()
-{
-	return m_doc;
-}
-
-void Gobby::DocWindow::obby_user_join(obby::user& user)
-{
-	m_doc.obby_user_join(user);
-}
-
-void Gobby::DocWindow::obby_user_part(obby::user& user)
-{
-	m_doc.obby_user_part(user);
-}

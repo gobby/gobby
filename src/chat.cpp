@@ -133,6 +133,10 @@ void Gobby::Chat::obby_server_message(const Glib::ustring& message)
 	m_log_chat.log(message, "forest green");
 }
 
+void Gobby::Chat::obby_preferences_changed(const Preferences& preferences)
+{
+}
+
 void Gobby::Chat::on_chat()
 {
 	Glib::ustring message = m_ent_chat.get_text();

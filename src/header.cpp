@@ -51,10 +51,7 @@ namespace {
 		"      <menuitem action=\"UserSetPassword\" />"
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
-		"      <menuitem action=\"ViewWordWrap\" />"
 #ifdef WITH_GTKSOURCEVIEW
-		"      <menuitem action=\"ViewLineNumbers\" />"
-		"      <separator />"
 		"      <menuitem action=\"ViewLanguageNone\" />"
 #endif
 		"    </menu>"
@@ -123,10 +120,9 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 
 Gobby::Header::Header(const Folder& folder)
  : m_ui_manager(Gtk::UIManager::create() ),
-   m_group_app(Gtk::ActionGroup::create() ),
-   m_toggle_word_wrap(false)
+   m_group_app(Gtk::ActionGroup::create() )
 #ifdef WITH_GTKSOURCEVIEW
-   , m_toggle_language(false), m_toggle_line_numbers(false)
+   , m_toggle_language(false)
 #endif
 {
 	// Add basic menu
@@ -287,33 +283,7 @@ Gobby::Header::Header(const Folder& folder)
 	// Documents menu
 	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
 
-	// Toggle word wrapping
-	m_group_app->add(
-		Gtk::ToggleAction::create(
-			"ViewWordWrap",
-			_("Word wrapping"),
-			_("Whether to wrap the text to the document's width")
-		),
-		sigc::mem_fun(
-			*this,
-			&Header::on_app_document_word_wrap
-		)
-	);
-
 #ifdef WITH_GTKSOURCEVIEW
-	// Show line numbers
-	m_group_app->add(
-		Gtk::ToggleAction::create(
-			"ViewLineNumbers",
-			_("Line numbers"),
-			_("Whether to show line numbers for this document")
-		),
-		sigc::mem_fun(
-			*this,
-			&Header::on_app_document_line_numbers
-		)
-	);
-
 	// A kind of hack to ensure that
 	// Gtk::SourceLanguage::sourcelanguage_class_.init() is called.
 	// See the TODO item in Glib::wrap(GtkSourceLanguage*, bool) in
@@ -519,19 +489,7 @@ Gobby::Header::user_set_password_event() const
 	return m_signal_user_set_password;
 }
 
-Gobby::Header::signal_document_word_wrap_type
-Gobby::Header::document_word_wrap_event() const
-{
-	return m_signal_document_word_wrap;
-}
-
 #ifdef WITH_GTKSOURCEVIEW
-Gobby::Header::signal_document_line_numbers_type
-Gobby::Header::document_line_numbers_event() const
-{
-	return m_signal_document_line_numbers;
-}
-
 Gobby::Header::signal_document_language_type
 Gobby::Header::document_language_event() const
 {
@@ -626,6 +584,10 @@ void Gobby::Header::obby_document_remove(obby::local_document_info& document)
 	}
 }
 
+void Gobby::Header::obby_preferences_changed(const Preferences& preferences)
+{
+}
+
 void Gobby::Header::on_app_session_create()
 {
 	m_signal_session_create.emit();
@@ -671,22 +633,7 @@ void Gobby::Header::on_app_user_set_password()
 	m_signal_user_set_password.emit();
 }
 
-void Gobby::Header::on_app_document_word_wrap()
-{
-	if(!m_toggle_word_wrap)
-		m_signal_document_word_wrap.emit();
-}
-
 #ifdef WITH_GTKSOURCEVIEW
-void Gobby::Header::on_app_document_line_numbers()
-{
-	// Are we toggling line numbers manually through a tab change or
-	// something? Then we do not have to emit this signal because we
-	// read the new status from the document and need not to set the
-	// document's line number status to the value it currently has ;)
-	if(!m_toggle_line_numbers)
-		m_signal_document_line_numbers.emit();
-}
 
 void Gobby::Header::on_app_document_language(
 	Glib::RefPtr<Gtk::SourceLanguage> lang
@@ -711,23 +658,11 @@ void Gobby::Header::on_app_quit()
 void Gobby::Header::on_folder_tab_switched(Document& document)
 {
 	// We are toggling some flags
-	m_toggle_word_wrap = true;
 #ifdef WITH_GTKSOURCEVIEW
-	m_toggle_line_numbers = true;
 	m_toggle_language = true;
 #endif
 
-	// Set current word wrapping state
-	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
-		m_group_app->get_action("ViewWordWrap")
-	)->set_active(document.get_word_wrapping() );
-
 #ifdef WITH_GTKSOURCEVIEW
-	// Set current line number state
-	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
-		m_group_app->get_action("ViewLineNumbers")
-	)->set_active(document.get_show_line_numbers() );
-
 	// Set current language
 	Glib::ustring langname = document.get_language() ?
 		document.get_language()->get_name() : "None";
@@ -737,10 +672,8 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 	)->set_active();
 
 	// We are no more toggling
-	m_toggle_line_numbers = false;
 	m_toggle_language = false;
 #endif
-	m_toggle_word_wrap = false;
 }
 
 #ifdef WITH_GTKSOURCEVIEW

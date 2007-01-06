@@ -76,9 +76,32 @@ public:
 	Glib::RefPtr<const SourceBuffer> get_buffer() const;
 	void set_buffer(const Glib::RefPtr<SourceBuffer> buffer);
 
-	// TODO: Properties fuer das Zeug und so(?)
-	bool get_show_line_numbers() const;
 	void set_show_line_numbers(bool show_line_numbers);
+	bool get_show_line_numbers() const;
+
+	void set_show_line_markers(bool show);
+	bool get_show_line_markers() const;
+
+	void set_tabs_width(guint width);
+	guint get_tabs_width() const;
+
+	void set_auto_indent(bool enable);
+	bool get_auto_indent() const;
+
+	void set_insert_spaces_instead_of_tabs(bool enable);
+	bool get_insert_spaces_instead_of_tabs() const;
+
+	void set_show_margin(bool show);
+	bool get_show_margin() const;
+
+	void set_highlight_current_line(bool show);
+	bool get_highlight_current_line() const;
+
+	void set_margin(guint margin);
+	guint get_margin() const;
+
+	void set_smart_home_end(bool enable);
+	bool get_smart_home_end() const;
 };
 
 }

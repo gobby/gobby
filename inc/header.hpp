@@ -29,6 +29,7 @@
 #include "features.hpp"
 #include "document.hpp"
 #include "folder.hpp"
+#include "preferences.hpp"
 
 namespace Gobby
 {
@@ -57,9 +58,7 @@ public:
 	typedef sigc::signal<void> signal_document_close_type;
 	typedef sigc::signal<void> signal_edit_preferences_type;
 	typedef sigc::signal<void> signal_user_set_password_type;
-	typedef sigc::signal<void> signal_document_word_wrap_type;
 #ifdef WITH_GTKSOURCEVIEW
-	typedef sigc::signal<void> signal_document_line_numbers_type;
 	typedef sigc::signal<void, const Glib::RefPtr<Gtk::SourceLanguage>&>
 		signal_document_language_type;
 #endif
@@ -87,9 +86,7 @@ public:
 	signal_document_close_type document_close_event() const;
 	signal_edit_preferences_type edit_preferences_event() const;
 	signal_user_set_password_type user_set_password_event() const;
-	signal_document_word_wrap_type document_word_wrap_event() const;
 #ifdef WITH_GTKSOURCEVIEW
-	signal_document_line_numbers_type document_line_numbers_event() const;
 	signal_document_language_type document_language_event() const;
 #endif
 	signal_about_type about_event() const;
@@ -102,6 +99,7 @@ public:
 	void obby_user_part(obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
+	void obby_preferences_changed(const Preferences& preferences);
 
 protected:
 	void on_app_session_create();
@@ -113,9 +111,7 @@ protected:
 	void on_app_document_close();
 	void on_app_edit_preferences();
 	void on_app_user_set_password();
-	void on_app_document_word_wrap();
 #ifdef WITH_GTKSOURCEVIEW
-	void on_app_document_line_numbers();
 	void on_app_document_language(Glib::RefPtr<Gtk::SourceLanguage> lang);
 #endif
 	void on_app_about();
@@ -136,9 +132,7 @@ protected:
 	 * prevent recursion.
 	 */
 	bool m_toggle_language;
-	bool m_toggle_line_numbers;
 #endif
-	bool m_toggle_word_wrap;
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Callback for sorting
@@ -157,9 +151,7 @@ protected:
 	signal_document_close_type m_signal_document_close;
 	signal_edit_preferences_type m_signal_edit_preferences;
 	signal_user_set_password_type m_signal_user_set_password;
-	signal_document_word_wrap_type m_signal_document_word_wrap;
 #ifdef WITH_GTKSOURCEVIEW
-	signal_document_line_numbers_type m_signal_document_line_numbers;
 	signal_document_language_type m_signal_document_language;
 #endif
 	signal_about_type m_signal_about;

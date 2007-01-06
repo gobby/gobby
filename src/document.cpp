@@ -27,13 +27,14 @@
 #include "document.hpp"
 #include "folder.hpp"
 
-Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder)
+Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
+                          const Preferences& preferences)
 #ifdef WITH_GTKSOURCEVIEW
  : Gtk::SourceView(),
 #else
  : Gtk::TextView(),
 #endif
-   m_doc(doc), m_folder(folder), m_editing(true),
+   m_doc(doc), m_folder(folder), m_preferences(preferences), m_editing(true),
    m_btn_subscribe(_("Subscribe") )
 {
 #ifdef WITH_GTKSOURCEVIEW
@@ -223,31 +224,6 @@ Glib::ustring Gobby::Document::get_content()
 	return get_buffer()->get_text();
 }
 
-bool Gobby::Document::get_word_wrapping() const
-{
-	return get_wrap_mode() != Gtk::WRAP_NONE;
-}
-
-void Gobby::Document::set_word_wrapping(bool wrap)
-{
-	if(wrap)
-		set_wrap_mode(Gtk::WRAP_WORD_CHAR);
-	else
-		set_wrap_mode(Gtk::WRAP_NONE);
-}
-
-#ifdef WITH_GTKSOURCEVIEW
-bool Gobby::Document::get_show_line_numbers() const
-{
-	return Gtk::SourceView::get_show_line_numbers();
-}
-
-void Gobby::Document::set_show_line_numbers(bool show)
-{
-	Gtk::SourceView::set_show_line_numbers(show);
-}
-#endif
-
 void Gobby::Document::obby_user_join(obby::user& user)
 {
 	// Build tag name for this user
@@ -376,6 +352,22 @@ void Gobby::Document::on_obby_self_subscribe()
 
 	// Make the document editable
 	set_editable(true);
+
+	// Read settings from preferences
+	// Editor
+	set_tabs_width(m_preferences.editor.tab_width);
+	set_insert_spaces_instead_of_tabs(m_preferences.editor.tab_spaces);
+	set_auto_indent(m_preferences.editor.indentation_auto);
+
+	// View
+	if(m_preferences.view.wrap_text)
+		if(m_preferences.view.wrap_words)
+			set_wrap_mode(Gtk::WRAP_WORD);
+		else
+			set_wrap_mode(Gtk::WRAP_CHAR);
+	else
+		set_wrap_mode(Gtk::WRAP_NONE);
+	set_show_line_numbers(m_preferences.view.linenum_display);
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Enable highlighting
@@ -640,9 +632,8 @@ void Gobby::Document::set_intro_text()
 	add_child_at_anchor(m_btn_subscribe, anchor);
 
 	// TODO: Add people that are currently subscribed
-
 	set_editable(false);
-	set_word_wrapping(true);
+	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Do not highlight anything until the user subscribed

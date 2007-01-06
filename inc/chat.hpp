@@ -26,6 +26,7 @@
 #include <obby/user.hpp>
 #include <obby/local_document_info.hpp>
 #include <obby/local_buffer.hpp>
+#include "preferences.hpp"
 #include "historyentry.hpp"
 #include "logview.hpp"
 
@@ -49,8 +50,11 @@ public:
 	void obby_user_part(obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
+
 	void obby_message(obby::user& user, const Glib::ustring& message);
 	void obby_server_message(const Glib::ustring& message);
+
+	void obby_preferences_changed(const Preferences& preferences);
 protected:
 	void add_line(obby::user& user, const Glib::ustring& message);
 	void on_chat();

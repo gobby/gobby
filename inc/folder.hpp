@@ -29,6 +29,7 @@
 #include <obby/document.hpp>
 #include <obby/local_buffer.hpp>
 
+#include "preferences.hpp"
 #include "document.hpp"
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -72,7 +73,7 @@ public:
 #endif
 	typedef sigc::signal<void, Document&> signal_tab_switched_type;
 
-	Folder();
+	Folder(const Preferences& preferences);
 	~Folder();
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -89,6 +90,8 @@ public:
 	void obby_user_part(obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
+
+	void obby_preferences_changed(const Preferences& preferences);
 
 	signal_document_close_type document_close_event() const;
 	signal_document_cursor_moved_type document_cursor_moved_event() const;
@@ -121,6 +124,10 @@ protected:
 		m_signal_document_language_changed;
 #endif
 	signal_tab_switched_type m_signal_tab_switched;
+
+	/** Reference to current preferences
+	 */
+	const Preferences& m_preferences;
 
 	/** Signals whether the obby session is running.
 	 */

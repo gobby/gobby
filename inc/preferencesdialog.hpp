@@ -25,7 +25,7 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
-#include "config.hpp"
+#include "preferences.hpp"
 
 namespace Gobby
 {
@@ -35,21 +35,17 @@ class PreferencesDialog : public Gtk::Dialog
 public:
 	class Page : public Gtk::Frame
 	{
-		friend class PreferencesDialog;
 	public:
-		Page(Config& config);
-		~Page();
+		Page(const Preferences& preferences);
 
 	protected:
-		virtual void on_response(int response_id) = 0;
-
-		Config& m_config;
+		const Preferences& m_preferences;
 	};
 
 	class Editor : public Page
 	{
 	public:
-		Editor(Config& config);
+		Editor(const Preferences& preferences);
 		~Editor();
 
 		unsigned int get_tab_width() const;
@@ -57,8 +53,6 @@ public:
 
 		bool get_indentation_auto() const;
 	protected:
-		virtual void on_response(int response_id);
-
 		Gtk::VBox m_box;
 		Gtk::Frame m_frame_tab;
 		Gtk::Frame m_frame_indentation;
@@ -76,7 +70,7 @@ public:
 	class View : public Page
 	{
 	public:
-		View(Config& config);
+		View(const Preferences& preferences);
 		~View();
 
 		bool get_wrap_text() const;
@@ -84,8 +78,6 @@ public:
 
 		bool get_linenum_display() const;
 	protected:
-		virtual void on_response(int response_id);
-
 		Gtk::VBox m_box;
 		Gtk::Frame m_frame_wrap;
 		Gtk::Frame m_frame_linenum;
@@ -101,13 +93,11 @@ public:
 	class Appearance : public Page
 	{
 	public:
-		Appearance(Config& config);
+		Appearance(const Preferences& preferences);
 		~Appearance();
 
 		// Fetch the font
 	protected:
-		virtual void on_response(int response_id);
-
 		Gtk::VBox m_box;
 
 		Gtk::Frame m_frame_font;
@@ -115,6 +105,9 @@ public:
 		// Font chooser
 	};
 
+v v v v v v v
+	PreferencesDialog(Gtk::Window& parent, const Preferences& preferences);
+*************
 	class Security : public Page
 	{
 	public:
@@ -133,6 +126,7 @@ public:
 	};
 
 	PreferencesDialog(Gtk::Window& parent, Config& config);
+^ ^ ^ ^ ^ ^ ^
 	~PreferencesDialog();
 
 	const Editor& editor() const;
@@ -141,15 +135,13 @@ public:
 
 protected:
 	Gtk::Notebook m_notebook;
+
 	Editor m_page_editor;
 	View m_page_view;
 	Appearance m_page_appearance;
-
-	Config& m_config;
 };
 
 }
 
 #endif // _GOBBY_PREFERENCESDIALOG_HPP_
-
 

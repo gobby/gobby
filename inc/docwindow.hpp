@@ -41,7 +41,8 @@ public:
 		signal_language_changed_type;
 #endif
 
-	DocWindow(obby::local_document_info& doc, const Folder& folder);
+	DocWindow(obby::local_document_info& doc, const Folder& folder,
+	          const Preferences& preferences);
 	virtual ~DocWindow();
 
 	const Document& get_document() const;

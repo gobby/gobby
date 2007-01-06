@@ -52,8 +52,8 @@ Gobby::Folder::TabLabel::close_event()
 	return m_button.signal_clicked();
 }
 
-Gobby::Folder::Folder()
- : Gtk::Notebook(), m_running(false)
+Gobby::Folder::Folder(const Preferences& preferences)
+ : Gtk::Notebook(), m_preferences(preferences), m_running(false)
 #ifdef WITH_GTKSOURCEVIEW
    , m_lang_manager(Gtk::SourceLanguagesManager::create() )
 #endif
@@ -115,7 +115,8 @@ void Gobby::Folder::obby_user_part(obby::user& user)
 void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 {
 	// Create new document
-	DocWindow* new_wnd = Gtk::manage(new DocWindow(document, *this) );
+	DocWindow* new_wnd =
+		Gtk::manage(new DocWindow(document, *this, m_preferences) );
 	Document& new_doc = new_wnd->get_document();
 
 	// Watch update signal to emit document_updated signal if a document
@@ -183,6 +184,11 @@ void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
 			break;
 		}
 	}
+}
+
+void Gobby::Folder::obby_preferences_changed(const Preferences& preferences)
+{
+	// TODO: Tell documents about new preferences
 }
 
 // Signals

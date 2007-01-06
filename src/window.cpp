@@ -44,11 +44,12 @@
 
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
-   m_config(Glib::get_home_dir() + "/.gobby/config.xml"), m_buffer(NULL),
+   m_config(Glib::get_home_dir() + "/.gobby/config.xml"),
+   m_preferences(m_config), m_buffer(NULL),
 #ifdef WITH_HOWL
    m_zeroconf(NULL),
 #endif
-   m_header(m_folder), m_statusbar(m_folder)
+   m_folder(m_preferences), m_header(m_folder), m_statusbar(m_folder)
 {
 	// Header
 	m_header.session_create_event().connect(
@@ -73,11 +74,7 @@ Gobby::Window::Window()
 	m_header.user_set_password_event().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
 
-	m_header.document_word_wrap_event().connect(
-		sigc::mem_fun(*this, &Window::on_document_word_wrap) );
 #ifdef WITH_GTKSOURCEVIEW
-	m_header.document_line_numbers_event().connect(
-		sigc::mem_fun(*this, &Window::on_document_line_numbers) );
 	m_header.document_language_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_language) );
 #endif
@@ -435,9 +432,20 @@ void Gobby::Window::on_document_close()
 
 void Gobby::Window::on_edit_preferences()
 {
-	PreferencesDialog dlg(*this, m_config);
+	PreferencesDialog dlg(*this, m_preferences);
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		m_preferences.editor.tab_width = dlg.editor().get_tab_width();
+		m_preferences.editor.tab_spaces = dlg.editor().get_tab_spaces();
+		m_preferences.editor.indentation_auto =
+			dlg.editor().get_indentation_auto();
+
+		m_preferences.view.wrap_text = dlg.view().get_wrap_text();
+		m_preferences.view.wrap_words = dlg.view().get_wrap_words();
+		m_preferences.view.linenum_display =
+			dlg.view().get_linenum_display();
+
+		// TODO: Callback of changed configs
 	}
 }
 
@@ -459,33 +467,7 @@ void Gobby::Window::on_user_set_password()
 	}
 }
 
-void Gobby::Window::on_document_word_wrap()
-{
-	// Get current page
-	DocWindow& doc_wnd = *static_cast<DocWindow*>(
-		m_folder.get_nth_page(m_folder.get_current_page() )
-	);
-
-	// Toggle word wrapping flag
-	doc_wnd.get_document().set_word_wrapping(
-		!doc_wnd.get_document().get_word_wrapping()
-	);
-}
-
 #ifdef WITH_GTKSOURCEVIEW
-void Gobby::Window::on_document_line_numbers()
-{
-	// Get current page
-	DocWindow& doc_wnd = *static_cast<DocWindow*>(
-		m_folder.get_nth_page(m_folder.get_current_page() )
-	);
-
-	// Toggle line number flag
-	doc_wnd.get_document().set_show_line_numbers(
-		!doc_wnd.get_document().get_show_line_numbers()
-	);
-}
-
 void Gobby::Window::on_document_language(
 	const Glib::RefPtr<Gtk::SourceLanguage>& lang
 )

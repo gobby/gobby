@@ -101,6 +101,7 @@ protected:
 
 	// Config
 	Config m_config;
+	Preferences m_preferences;
 
 	// GUI
 	Gtk::VBox m_mainbox;
