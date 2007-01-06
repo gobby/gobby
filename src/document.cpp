@@ -99,7 +99,9 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 	buf->signal_erase().connect(
 		sigc::mem_fun(*this, &Document::on_erase_after), true);
 	buf->signal_mark_set().connect(
-		sigc::mem_fun(*this, &Document::on_mark_set) );
+		sigc::mem_fun(*this, &Document::on_mark_set), false);
+	buf->signal_apply_tag().connect(
+		sigc::mem_fun(*this, &Document::on_apply_tag_after), true);
 
 	// Obby signal handlers
 	doc.insert_event().before().connect(
@@ -287,36 +289,6 @@ void Gobby::Document::obby_user_part(obby::user& user)
 {
 }
 
-bool Gobby::Document::on_key_press_event(GdkEventKey* event)
-{
-	m_tag_user = NULL;
-
-	m_tag_key_press = true;
-#ifdef WITH_GTKSOURCEVIEW
-	Gtk::SourceView::on_key_press_event(event);
-#else
-	Gtk::TextView::on_key_press_event(event);
-#endif
-	m_tag_key_press = false;
-
-	if(m_tag_user != NULL)
-	{
-		// Update user colour here instead of in on_insert_after to be
-		// sure that _all_ currently existing tags are deleted. If text
-		// is copied from a buffer with user tags under it, these are
-		// pasted, too. But they are not applied in on_insert_after, so
-		// we can't remove them, ending up in two different user tags
-		// for that range of tags.
-		Gtk::TextBuffer::iterator start =
-			get_buffer()->get_iter_at_offset(m_tag_start);
-		Gtk::TextBuffer::iterator end =
-			get_buffer()->get_iter_at_offset(m_tag_end);
-		update_user_colour(start, end, *m_tag_user);
-	}
-
-	return true;
-}
-
 void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 {
 	if(m_editing) return;
@@ -344,7 +316,6 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 	begin.backward_chars(record.get_text().length() );
 	update_user_colour(begin, end, *user);
 
-	queue_draw();
 	m_editing = false;
 }
 
@@ -411,15 +382,6 @@ void Gobby::Document::on_erase_before(const Gtk::TextBuffer::iterator& begin,
 		)
 	);
 
-	// Revalidate positions, if this was deleting _and_ inserting
-	// of text with one keypress (marking something and then
-	// pasting or so).
-	if(m_tag_key_press && m_tag_user && m_tag_start >= end.get_offset() )
-	{
-		m_tag_start -= (begin.get_offset() - end.get_offset() );
-		m_tag_end -= (begin.get_offset() - end.get_offset() );
-	}
-
 	m_editing = false;
 }
 
@@ -440,20 +402,13 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 		Gtk::TextBuffer::iterator pos = end;
 		pos.backward_chars(text.length() );
 
-		// Is this an insert event resulting from a key press?
-		if(m_tag_key_press)
-		{
-			// Yeah. Save start and end position to allow the
-			// key press signal handler to update user colour.
-			m_tag_start = pos.get_offset();
-			m_tag_end = end.get_offset();
-			m_tag_user = &user;
-		}
-		else
-		{
-			// Update colour directly otherwise.
-			update_user_colour(pos, end, user);
-		}
+		// Update user colour. Set m_editing to true because this
+		// colour update came from an editing operation. See
+		// on_tag_apply below for more information on why this is
+		// necessary.
+		m_editing = true;
+		update_user_colour(pos, end, user);
+		m_editing = false;
 
 		// Content has changed
 		m_signal_content_changed.emit();
@@ -473,6 +428,42 @@ void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
 
 		// Content has changed
 		m_signal_content_changed.emit();
+	}
+}
+
+void Gobby::Document::on_apply_tag_after(const Glib::RefPtr<Gtk::TextTag>& tag,
+                                         const Gtk::TextBuffer::iterator& begin,
+                                         const Gtk::TextBuffer::iterator& end)
+{
+	Glib::ustring tag_name = tag->property_name();
+	if(!m_editing && tag_name.compare(0, 10, "gobby_user") == 0)
+	{
+		// Not editing, but user tag is inserted. Not good. May result
+		// from a copy+paste operation where tags where copied. Refresh
+		// given range.
+		unsigned int num_line = begin.get_line();
+		unsigned int num_col = begin.get_line_index();
+
+		// Find author of the text
+		const obby::line& line = m_doc.get_line(num_line);
+		obby::line::author_iterator iter = line.author_begin();
+		for(iter; iter != line.author_end(); ++ iter)
+			if(iter->position > num_col)
+				break;
+		--iter;
+
+		// Refresh. iter->author->get_user() may result in a NULL
+		// pointer if the user who wrote the original text has left
+		// the obby session. This will be automatically fixed as soon
+		// as #8 is fixed.
+		if(iter->author->get_user() != NULL)
+		{
+			m_editing = true;
+			update_user_colour(
+				begin, end, *iter->author->get_user()
+			);
+			m_editing = false;
+		}
 	}
 }
 
@@ -507,7 +498,8 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	);
 
 	// Insert new user tag to the given range
-	Glib::RefPtr<Gtk::TextTag> tag = tag_table->lookup("gobby_user_" + user.get_name() );
+	Glib::RefPtr<Gtk::TextTag> tag =
+		tag_table->lookup("gobby_user_" + user.get_name() );
 	buffer->apply_tag(tag, begin, end);
 }
 

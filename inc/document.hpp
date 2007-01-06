@@ -112,10 +112,6 @@ public:
 	void obby_user_part(obby::user& user);
 
 protected:
-	/** gtk widget overrides.
-	 */
-	virtual bool on_key_press_event(GdkEventKey* event);
-
 	/** Obby signal handlers.
 	 */
 	void on_obby_insert(const obby::insert_record& record);
@@ -136,6 +132,9 @@ protected:
 			     int bytes);
 	void on_erase_after(const Gtk::TextBuffer::iterator& begin,
 	                    const Gtk::TextBuffer::iterator& end);
+	void on_apply_tag_after(const Glib::RefPtr<Gtk::TextTag>& tag,
+	                        const Gtk::TextBuffer::iterator& begin,
+	                        const Gtk::TextBuffer::iterator& end);
 
 	/** Signal handler for the mark_set event to detect cursor movements.
 	 */
@@ -160,17 +159,6 @@ protected:
 	 */
 	bool m_editing;
 
-	/** Variable to indicate that a key is currently pressed. The insert-
-	 * text signal handler needs this to decide whether to update user
-	 * tags immediately or not. Otherwise, the key_press event handler does
-	 * this.
-	 * TODO: Find a better way, these variables are only needed in 2 or 3
-	 * functions.. :/
-	 */
-	bool m_tag_key_press;
-	unsigned long m_tag_start, m_tag_end;
-	const obby::user* m_tag_user;
-	
 	signal_cursor_moved_type m_signal_cursor_moved;
 	signal_content_changed_type m_signal_content_changed;
 #ifdef WITH_GTKSOURCEVIEW
