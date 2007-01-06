@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005-2006 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -547,8 +547,7 @@ void Gobby::Window::on_about()
 	dlg.set_comments(_("A collaborative text editor"));
 
 	dlg.set_copyright(
-		"Copyright (C) 2005, 2006 0x539 dev "
-	        "group <crew@0x539.de>"
+		"Copyright (C) 2005-2006 0x539 dev group <crew@0x539.de>"
 	);
 
 	dlg.set_logo(m_icon_mgr.gobby);
@@ -581,14 +580,7 @@ void Gobby::Window::on_about()
 		"German translation:\n"
 		"  Philipp Kern <phil@0x539.de>\n"
 		"  Armin Burgmeier <armin@0x539.de>\n"
-		"\n"
-		"Please help in translating this release using Rosetta:\n"
-		"\n"
-		"After you create your account on https://launchpad.net\n"
-		"you could access the translation template on\n"
-		"https://launchpad.net/products/gobby/+series/0.3/+pots/gobby/"
-		"\nwhere you could translate it directly into your favourite\n"
-		"language. Your help is much appreciated!"
+		"  Thomas Glatt <tom@0x539.de>\n"
 		);
 
 	dlg.set_license(
