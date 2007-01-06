@@ -4,49 +4,47 @@ Gobby
 Blocker:
 
 Critical:
-  * Excited to try it but libatk-1.6-1.dll just not found (#100)
+  * Excited to try it but libatk-1.6-1.dll just not found (#100) [libatkmm-1.6-1.dll]
 
 Major:
-  * High CPU load while writing (#45)
-  * Bug: High load (and blocking X11) when opening big text file (#48)
-  * Gobby adds additional newline on load  (#91)
-  * Special characters in title (#101)
+  * High CPU load while writing (#45) []
+  * Bug: High load (and blocking X11) when opening big text file (#48) [bug]
+  * Gobby adds additional newline on load  (#91) []
 
 Normal:
-  * Chat command infrastructure (#31)
-  * Recognise command line parameters (#33)
-  * Show the cursors and selections of all participants (#53)
-  * Documentation (#54)
-  * Encoding should be preserved (#65)
-  * automatic scroll if the end of a document is looked at (#70)
-  * Win32 Drag'n'Drop (#71)
-  * Newly joined documents are flagged as unchanged (#72)
-  * Visualise connected / subscribed using an extender (#73)
-  * Search, Replace and Goto Line features (#79)
-  * Windows install doesn't work (missing intl.dll) (#81)
-  * Central directory support (#82)
-  * UI: Closing documents should not close them for other people (#83)
-  * End-of-document cursor position behaves weirdly. (#84)
-  * Gobby should save backups (#87)
-  * obby:// protocol handler (#88)
-  * "Quit" should confirm (#93)
-  * Make it harder to lose document changes (#96)
+  * Chat command infrastructure (#31) []
+  * Recognise command line parameters (#33) []
+  * Show the cursors and selections of all participants (#53) []
+  * Documentation (#54) [doc]
+  * Encoding should be preserved (#65) []
+  * automatic scroll if the end of a document is looked at (#70) []
+  * Win32 Drag'n'Drop (#71) []
+  * Newly joined documents are flagged as unchanged (#72) []
+  * Visualise connected / subscribed using an extender (#73) []
+  * Search, Replace and Goto Line features (#79) []
+  * Windows install doesn't work (missing intl.dll) (#81) []
+  * Central directory support (#82) []
+  * UI: Closing documents should not close them for other people (#83) []
+  * End-of-document cursor position behaves weirdly. (#84) []
+  * Gobby should save backups (#87) []
+  * obby:// protocol handler (#88) []
+  * "Quit" should confirm (#93) []
+  * Make it harder to lose document changes (#96) [usability]
 
 Minor:
-  * Title bar (#92)
-  * Word-wrap in chat (#99)
+  * Title bar (#92) [win32]
 
 Trivial:
 
 Enhancement:
-  * Indicate activity by changing tab colour to the user colour (#66)
-  * Remote document browsing support (#75)
-  * Session Management (#76)
-  * Hyperlinks on chat sessions (#80)
-  * Server exit causes clients to exit (#85)
-  * Chat background filled with user colours (#90)
-  * Locate participants (#95)
-  * Automatic live storage of documents and chat logs  (#98)
+  * Indicate activity by changing tab colour to the user colour (#66) []
+  * Remote document browsing support (#75) []
+  * Session Management (#76) []
+  * Hyperlinks on chat sessions (#80) []
+  * Server exit causes clients to exit (#85) []
+  * Chat background filled with user colours (#90) []
+  * Locate participants (#95) [locate]
+  * Automatic live storage of documents and chat logs  (#98) []
 
 
 100: Excited to try it but libatk-1.6-1.dll just not found
@@ -83,13 +81,6 @@ is loaded from the disk. At a first glance only ''Glib::file_get_contents''
 and ''convert_to_utf8'' are called, so I don't understand where this 
 newline is coming from. This happens with stock 0.2.0 and with the current 
 development tree, it should also be fixed for the upcoming bugfix release.
-
-101: Special characters in title
---------------------------------
-If you name your document using (HTML) special characters like &, <, > 
-etc., the tab is named "<span foreground="#000000"><span 
-foreground="#666666">true & name</span></span>". However, the name of the 
-document is correctly displayed in the title bar.
 
 31: Chat command infrastructure
 -------------------------------
@@ -230,13 +221,6 @@ related to document titles.
 When you connect to one server and open a document and disconnect from that 
 server, and possibly connecting to another server, then the titlebar still 
 shows the old document name from the previous server.
-
-99: Word-wrap in chat
----------------------
-The chat window has no word-wrap. Well... I think it should.
-The only thing where word-wrap might be annoying is when you try to draw 
-ASCII-art in chat. But nobody would do it in the chat when there is a big 
-canvas just above it :)
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
