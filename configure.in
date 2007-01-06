@@ -46,7 +46,7 @@ AM_CONDITIONAL(WITH_GNOME, test x$ac_cv_with_gnome != xno)
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby],
                   [libxml++-2.6 gtkmm-2.4 >= 2.6.0 gtksourceview-1.0 gthread-2.0
-                   net6-1.2 obby-0.3])
+                   net6-1.2 >= 1.2.1 obby-0.3])
 AC_CACHE_SAVE
 
 # Check for the Gtkmm version available (either 2.6 or 2.8).
