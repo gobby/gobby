@@ -1,6 +1,12 @@
 Gobby
 =====
 
+Version 0.3.0:
+ * This release depends on net6 1.2.0 and obby 0.3.0, it is *not* backwards-
+   compatible protocol-wise to the 0.2.x series.
+ * Modified according to the changes in obby in relation to the new Jupiter
+   merging algorithm
+
 Version 0.2.2:
  * Gobby no longer crashes when a document is closed after quitting a
    session, spotted and fixed by Kanru Chen.
