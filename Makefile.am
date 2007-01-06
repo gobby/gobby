@@ -126,14 +126,17 @@ gobby_SOURCES += src/sourceview/sourcebuffer.cpp
 gobby_SOURCES += src/sourceview/sourcelanguage.cpp
 gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
 
+appicondir      = $(datadir)/pixmaps
+pixmapdir       = $(datadir)/pixmaps/gobby
+gobby_CPPFLAGS += -DAPPICON_DIR=\""$(appicondir)"\"
+gobby_CPPFLAGS += -DPIXMAPS_DIR=\""$(pixmapdir)"\"
+appicon_DATA    = contrib/artwork/gobby.png
+pixmap_DATA     = contrib/artwork/userlist.png
+pixmap_DATA    += contrib/artwork/doclist.png
+pixmap_DATA    += contrib/artwork/chat.png
+
 if WITH_GNOME
 # GNOME-specific installation.
-gobby_CPPFLAGS += -DPIXMAPS_DIR=\""$(datadir)/pixmaps"\"
-appicondir = $(datadir)/pixmaps
-appicon_DATA  = contrib/artwork/gobby.png
-appicon_DATA += contrib/artwork/userlist.png
-appicon_DATA += contrib/artwork/doclist.png
-appicon_DATA += contrib/artwork/chat.png
 desktopdir = $(datadir)/applications
 desktop_DATA = contrib/gobby.desktop
 endif
