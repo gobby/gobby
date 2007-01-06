@@ -26,3 +26,31 @@ Gobby::Folder::Folder()
 Gobby::Folder::~Folder()
 {
 }
+
+void Gobby::Folder::obby_start()
+{
+	set_sensitive(true);
+}
+
+void Gobby::Folder::obby_end()
+{
+	// TODO: Just remove the editable-attribute to allow the user to still
+	// save the documents.
+	set_sensitive(false);
+}
+
+void Gobby::Folder::obby_user_join(obby::user& user)
+{
+}
+
+void Gobby::Folder::obby_user_part(obby::user& user)
+{
+}
+
+void Gobby::Folder::obby_document_insert(obby::document& document)
+{
+}
+
+void Gobby::Folder::obby_document_remove(obby::document& document)
+{
+}

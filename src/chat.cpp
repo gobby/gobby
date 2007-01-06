@@ -56,6 +56,40 @@ Gobby::Chat::signal_chat_type Gobby::Chat::chat_event() const
 	return m_signal_chat;
 }
 
+void Gobby::Chat::obby_start()
+{
+	m_log_chat.clear();
+	m_ent_chat.set_sensitive(true);
+	m_btn_chat.set_sensitive(true);
+
+	set_sensitive(true);
+}
+
+void Gobby::Chat::obby_end()
+{
+	m_ent_chat.clear_history();
+	m_ent_chat.set_sensitive(false);
+	m_btn_chat.set_sensitive(false);
+}
+
+void Gobby::Chat::obby_user_join(obby::user& user)
+{
+	m_log_chat.log(user.get_name() + " has joined", "blue");
+}
+
+void Gobby::Chat::obby_user_part(obby::user& user)
+{
+	m_log_chat.log(user.get_name() + " has left", "blue");
+}
+
+void Gobby::Chat::obby_document_insert(obby::document& document)
+{
+}
+
+void Gobby::Chat::obby_document_remove(obby::document& document)
+{
+}
+
 void Gobby::Chat::on_chat()
 {
 	Glib::ustring message = m_ent_chat.get_text();

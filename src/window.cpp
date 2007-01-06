@@ -26,7 +26,8 @@
 
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
-   m_config(Glib::get_home_dir() + "/.gobby/config.xml"), m_buffer(NULL)
+   m_config(Glib::get_home_dir() + "/.gobby/config.xml"), m_buffer(NULL),
+   m_running(false), m_login_failed(false)
 {
 	m_header.session_create_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
@@ -63,7 +64,7 @@ Gobby::Window::Window()
 
 Gobby::Window::~Window()
 {
-	delete m_buffer;
+	on_session_quit();
 }
 
 void Gobby::Window::on_session_create() try
@@ -71,18 +72,21 @@ void Gobby::Window::on_session_create() try
 	CreateDialog dlg(*this, m_config);
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		m_port = dlg.get_port();
-		m_name = dlg.get_name();
-		m_color = dlg.get_color();
+		unsigned int port = dlg.get_port();
+		Glib::ustring name = dlg.get_name();
+		Gdk::Color color = dlg.get_color();	
 
-		unsigned int red = m_color.get_red() * 255 / 65535;
-		unsigned int green = m_color.get_green() * 255 / 65535;
-		unsigned int blue = m_color.get_blue() * 255 / 65535;
+		unsigned int red = color.get_red() * 255 / 65535;
+		unsigned int green = color.get_green() * 255 / 65535;
+		unsigned int blue = color.get_blue() * 255 / 65535;
 
-		// Delete existing buffer, create new one
+		// Create new buffer
+		obby::host_buffer* buffer = new obby::host_buffer(
+			port, name, red, green, blue);
+
+		// Delete existing buffer, take new one
 		delete m_buffer;
-		m_buffer = new obby::host_buffer(m_port, m_name,
-		                                 red, green, blue);
+		m_buffer = buffer;
 		
 		m_buffer->user_join_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_user_join) );
@@ -92,9 +96,28 @@ void Gobby::Window::on_session_create() try
 			sigc::mem_fun(*this, &Window::on_obby_document_insert));
 		m_buffer->remove_document_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_remove));
+
+		if(!m_timer_conn.connected() )
+			m_timer_conn = Glib::signal_timeout().connect(
+				sigc::mem_fun(*this, &Window::on_timer), 400);
+
+		// Running
+		m_running = true;
+		
+		// Delegate start of obby session
+		m_header.obby_start();
+		m_folder.obby_start();
+		m_userlist.obby_start();
+		m_chat.obby_start();
+
+		// Let the local user join
+		on_obby_user_join(buffer->get_self() );
 	}
 	else
 	{
+		if(m_timer_conn.connected() )
+			m_timer_conn.disconnect();
+
 		// Delete existing buffer, if any
 		delete m_buffer;
 		m_buffer = NULL;
@@ -116,27 +139,28 @@ void Gobby::Window::on_session_join() try
 	JoinDialog dlg(*this, m_config);
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		m_host = dlg.get_host();
-		m_port = dlg.get_port();
-		m_name = dlg.get_name();
-		m_color = dlg.get_color();
+		Glib::ustring host = dlg.get_host();
+		unsigned int port = dlg.get_port();
+		Glib::ustring name = dlg.get_name();
+		Gdk::Color color = dlg.get_color();
 
-		unsigned int red = m_color.get_red() * 255 / 65535;
-		unsigned int green = m_color.get_green() * 255 / 65535;
-		unsigned int blue = m_color.get_blue() * 255 / 65535;
+		unsigned int red = color.get_red() * 255 / 65535;
+		unsigned int green = color.get_green() * 255 / 65535;
+		unsigned int blue = color.get_blue() * 255 / 65535;
 
 		// TODO: Keep existing connection if host and port did not
 		// change
+		obby::client_buffer* buffer = new obby::client_buffer(
+			host, port);
 		delete m_buffer;
-		m_buffer = new obby::client_buffer(m_host, m_port);
+		m_buffer = buffer;
 
-		obby::client_buffer* client_buffer;
-		client_buffer = static_cast<obby::client_buffer*>(m_buffer);
-
-		client_buffer->login_failed_event().connect(
+		buffer->login_failed_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_login_failed) );
-		client_buffer->close_event().connect(
+		buffer->close_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_close) );
+		buffer->sync_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_sync) );
 		
 		m_buffer->user_join_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_user_join) );
@@ -147,10 +171,17 @@ void Gobby::Window::on_session_join() try
 		m_buffer->remove_document_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_remove));
 
-		client_buffer->login(m_name, red, green, blue);
+		if(!m_timer_conn.connected() )
+			m_timer_conn = Glib::signal_timeout().connect(
+				sigc::mem_fun(*this, &Window::on_timer), 400);
+
+		buffer->login(name, red, green, blue);
 	}
 	else
 	{
+		if(m_timer_conn.connected() )
+			m_timer_conn.disconnect();
+
 		delete m_buffer;
 		m_buffer = NULL;
 	}
@@ -168,39 +199,127 @@ catch(std::exception& e)
 
 void Gobby::Window::on_session_quit()
 {
-	delete m_buffer;
-	m_buffer = NULL;
+	if(m_buffer)
+	{
+		if(m_running)
+		{
+			m_header.obby_end();
+			m_folder.obby_end();
+			m_userlist.obby_end();
+			m_chat.obby_end();
+
+			m_running = false;
+		}
+
+		if(m_timer_conn.connected() )
+			m_timer_conn.disconnect();
+
+		delete m_buffer;
+		m_buffer = NULL;
+	}
 }
 
 void Gobby::Window::on_quit()
 {
+	on_session_quit();
 	Gtk::Main::quit();
 }
 
 void Gobby::Window::on_obby_login_failed(const std::string& reason)
 {
+	// Remove timer connection, we do not need any timer calls while
+	// displaying dialogs
+	m_timer_conn.disconnect();
 	display_error(reason);
-	on_session_join();
+
+	// We can not call on_session_join right here. In the callstack, there
+	// is a call to the timer (which emitted the login_failed signal through
+	// obby::buffer::select). on_session_join destroys this buffer, but it
+	// still remains in the callstack. The program will crash if it regains
+	// control.
+	// TODO: A good solution would be to disable the name and port field
+	// in the dialog now, because we are already connected to a server. Only
+	// the login fields (name & color) will be editable. That ensures that
+	// we need not to create a new buffer but just resend a login request.
+	m_login_failed = true;
 }
 
 void Gobby::Window::on_obby_close()
 {
+	display_error("Connection lost");
+	on_session_quit();
+}
+
+void Gobby::Window::on_obby_sync()
+{
+	// Send documents to components
+	obby::buffer::document_iterator iter = m_buffer->document_begin();
+	for(iter; iter != m_buffer->document_end(); ++ iter)
+		on_obby_document_insert(*iter);
+}
+
+bool Gobby::Window::on_timer()
+{
+	m_buffer->select(0);
+
+	// See comment in Window::on_obby_login_failed
+	if(m_login_failed)
+	{
+		on_session_join();
+		m_login_failed = false;
+	}
+
+	return true;
 }
 
 void Gobby::Window::on_obby_user_join(obby::user& user)
 {
+	// TODO: Something like is_client to prevent dynamic_cast?
+	obby::client_buffer* buf = dynamic_cast<obby::client_buffer*>(m_buffer);
+	if(buf)
+	{
+		if(&buf->get_self() == &user)
+		{
+			// Login was sucessful, let the fun begin		
+			m_header.obby_start();
+			m_folder.obby_start();
+			m_userlist.obby_start();
+			m_chat.obby_start();
+
+			m_running = true;
+		}
+	}
+
+	// Tell user join to components
+	m_header.obby_user_join(user);
+	m_folder.obby_user_join(user);
+	m_userlist.obby_user_join(user);
+	m_chat.obby_user_join(user);
 }
 
 void Gobby::Window::on_obby_user_part(obby::user& user)
 {
+	// Tell user part to components
+	m_header.obby_user_part(user);
+	m_folder.obby_user_part(user);
+	m_userlist.obby_user_part(user);
+	m_chat.obby_user_part(user);
 }
 
 void Gobby::Window::on_obby_document_insert(obby::document& document)
 {
+	m_header.obby_document_insert(document);
+	m_folder.obby_document_insert(document);
+	m_userlist.obby_document_insert(document);
+	m_chat.obby_document_insert(document);
 }
 
 void Gobby::Window::on_obby_document_remove(obby::document& document)
 {
+	m_header.obby_document_remove(document);
+	m_folder.obby_document_remove(document);
+	m_userlist.obby_document_remove(document);
+	m_chat.obby_document_remove(document);
 }
 
 void Gobby::Window::display_error(const Glib::ustring& message)

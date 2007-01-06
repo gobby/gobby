@@ -23,6 +23,8 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
+#include <libobby/user.hpp>
+#include <libobby/document.hpp>
 #include "historyentry.hpp"
 #include "logview.hpp"
 
@@ -39,6 +41,13 @@ public:
 
 	signal_chat_type chat_event() const;
 
+	// Calls from the window
+	void obby_start();
+	void obby_end();
+	void obby_user_join(obby::user& user);
+	void obby_user_part(obby::user& user);
+	void obby_document_insert(obby::document& document);
+	void obby_document_remove(obby::document& document);
 protected:
 	void on_chat();
 

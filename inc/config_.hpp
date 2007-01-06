@@ -25,6 +25,8 @@
 #include <glibmm/error.h>
 #include <glibmm/ustring.h>
 #include <gdkmm/color.h>
+
+// TODO: Use registry on windows
 #include <libxml++/nodes/element.h>
 
 namespace Gobby

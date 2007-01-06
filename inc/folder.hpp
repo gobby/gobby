@@ -20,6 +20,8 @@
 #define _GOBBY_FOLDER_HPP_
 
 #include <gtkmm/notebook.h>
+#include <libobby/user.hpp>
+#include <libobby/document.hpp>
 
 namespace Gobby
 {
@@ -33,6 +35,13 @@ public:
 	Folder();
 	~Folder();
 
+	// Calls from the window
+	void obby_start();
+	void obby_end();
+	void obby_user_join(obby::user& user);
+	void obby_user_part(obby::user& user);
+	void obby_document_insert(obby::document& document);
+	void obby_document_remove(obby::document& document);
 protected:
 };
 

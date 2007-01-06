@@ -47,11 +47,14 @@ protected:
 	// Obby signal handlers
 	void on_obby_login_failed(const std::string& reason);
 	void on_obby_close();
+	void on_obby_sync();
 
 	void on_obby_user_join(obby::user& user);
 	void on_obby_user_part(obby::user& user);
 	void on_obby_document_insert(obby::document& document);
 	void on_obby_document_remove(obby::document& document);
+
+	bool on_timer();
 
 	// Helper functions
 	void display_error(const Glib::ustring& message);
@@ -76,10 +79,11 @@ protected:
 
 	// obby
 	obby::buffer* m_buffer;
-	Glib::ustring m_host;
-	unsigned int m_port;
-	Glib::ustring m_name;
-	Gdk::Color m_color;
+	sigc::connection m_timer_conn;
+	bool m_running; // m_running is set if the obby connection has been
+	                // established successfully.
+	bool m_login_failed; // Variable used to indicate a login failed event
+	                     // See corresponding comments in window.cpp
 };
 
 }

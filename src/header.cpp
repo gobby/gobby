@@ -143,6 +143,38 @@ Gobby::Header::quit_event() const
 	return m_signal_quit;
 }
 
+void Gobby::Header::obby_start()
+{
+	// Begin of obby session: Disable create/join buttons, enable quit
+	m_group_app->get_action("CreateSession")->set_sensitive(false);
+	m_group_app->get_action("JoinSession")->set_sensitive(false);
+	m_group_app->get_action("QuitSession")->set_sensitive(true);
+}
+
+void Gobby::Header::obby_end()
+{
+	// End of obby session: Enable create/join buttons, disable quit
+	m_group_app->get_action("CreateSession")->set_sensitive(true);
+	m_group_app->get_action("JoinSession")->set_sensitive(true);
+	m_group_app->get_action("QuitSession")->set_sensitive(false);
+}
+
+void Gobby::Header::obby_user_join(obby::user& user)
+{
+}
+
+void Gobby::Header::obby_user_part(obby::user& user)
+{
+}
+
+void Gobby::Header::obby_document_insert(obby::document& document)
+{
+}
+
+void Gobby::Header::obby_document_remove(obby::document& document)
+{
+}
+
 void Gobby::Header::on_app_session_create()
 {
 	m_signal_session_create.emit();

@@ -22,6 +22,8 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/liststore.h>
+#include <libobby/user.hpp>
+#include <libobby/document.hpp>
 
 namespace Gobby
 {
@@ -36,13 +38,24 @@ public:
 		~Columns();
 
 		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Gdk::Color> color;
+//		Gtk::TreeModelColumn<Gdk::Color> color;
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > color;
 	};
 
 	UserList();
 	~UserList();
 
+	// Calls from the window
+	void obby_start();
+	void obby_end();
+	void obby_user_join(obby::user& user);
+	void obby_user_part(obby::user& user);
+	void obby_document_insert(obby::document& document);
+	void obby_document_remove(obby::document& document);
 protected:
+	// Helper functions
+	Gtk::TreeModel::iterator find_user(const Glib::ustring& name) const;
+
 	Gtk::TreeView m_list_view;
 	Glib::RefPtr<Gtk::ListStore> m_list_data;
 	Columns m_list_cols;

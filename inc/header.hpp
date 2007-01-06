@@ -23,6 +23,8 @@
 #include <gtkmm/uimanager.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/toolbar.h>
+#include <libobby/user.hpp>
+#include <libobby/document.hpp>
 
 namespace Gobby
 {
@@ -54,6 +56,14 @@ public:
 	signal_session_join_type session_join_event() const;
 	signal_session_quit_type session_quit_event() const;
 	signal_quit_type quit_event() const;
+
+	// Calls from the window
+	void obby_start();
+	void obby_end();
+	void obby_user_join(obby::user& user);
+	void obby_user_part(obby::user& user);
+	void obby_document_insert(obby::document& document);
+	void obby_document_remove(obby::document& document);
 
 protected:
 	void on_app_session_create();

@@ -24,6 +24,8 @@ Gobby::LogView::LogView()
 	m_end_mark = get_buffer()->create_mark(
 		"end_mark", get_buffer()->end(), false
 	);
+
+	set_editable(false);
 }
 
 Gobby::LogView::~LogView()
