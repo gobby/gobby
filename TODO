@@ -3,9 +3,6 @@ Gobby
 
 Serious:
  * Opening large documents is _really_ slow on win32's timer implementation
- * On connection loss: give a chance to save everything
- * Chat messages could be faked by using newline characters (split them into
-   multiple single line messages)
 
 Important:
  * Compensate changes made by others by scrolling appropriately; the current
@@ -14,7 +11,6 @@ Important:
 
 Normal:
  * Menu to switch the syntax colouring scheme.
- * Initialise size of paned widgets
  * Prompt before overwriting existing files when explicitly choosing path
  * Chat command infrastructure (/me, /ignore)
 
@@ -29,4 +25,3 @@ Minor:
 Wishlist:
  * Default to save files to the location they were loaded from
    (or save the directory of the last save)
-

@@ -57,7 +57,6 @@ protected:
 	void on_quit();
 
 	void on_chat(const Glib::ustring& message);
-	void on_document_update(Document& document);
 
 	// Obby signal handlers
 	void on_obby_login_failed(const std::string& reason);
@@ -81,7 +80,6 @@ protected:
 	// GUI
 	Gtk::VBox m_mainbox;
 	Header m_header;
-	StatusBar m_statusbar;
 
 	Gtk::VPaned m_mainpaned;
 	Gtk::HPaned m_subpaned;
@@ -93,6 +91,7 @@ protected:
 	Folder m_folder;
 	UserList m_userlist;
 	Chat m_chat;
+	StatusBar m_statusbar;
 
 	// obby
 	obby::local_buffer* m_buffer;

@@ -17,48 +17,41 @@
  */
 
 #include <sstream>
+#include <obby/buffer.hpp>
 #include "common.hpp"
 #include "statusbar.hpp"
 
-Gobby::StatusBar::StatusBar()
+Gobby::StatusBar::StatusBar(const Folder& folder)
  : Frame(), 
    m_language("", Gtk::ALIGN_LEFT),
    m_sync("", Gtk::ALIGN_LEFT),
+   m_revision("", Gtk::ALIGN_LEFT),
    m_position("", Gtk::ALIGN_LEFT)
 {
 	m_box.pack_start(m_language);
 	m_box.pack_start(m_sync);
+	m_box.pack_start(m_revision);
 	m_box.pack_start(m_position);
 	m_box.set_homogeneous(true);
 
 	add(m_box);
 	set_shadow_type(Gtk::SHADOW_OUT);
+
+	folder.document_cursor_moved_event().connect(
+		sigc::mem_fun(*this, &StatusBar::update_cursor) );
+	folder.document_changed_event().connect(
+		sigc::mem_fun(*this, &StatusBar::update_all) );
+	folder.tab_switched_event().connect(
+		sigc::mem_fun(*this, &StatusBar::update_all) );
 }
 
 Gobby::StatusBar::~StatusBar()
 {
 }
 
-void Gobby::StatusBar::update(Document& document)
-{
-	// Unsynced changes
-	unsigned int unsynced_count = document.get_unsynced_changes_count();
-	
-/*	std::stringstream sync_str;
-	if(!unsynced_count)
-		sync_str << _("In sync");
-	else
-		sync_str << unsynced_count << _(" unsynced change(s)");*/
-	
-	// Position
-	unsigned int row, col;
-	document.get_cursor_position(row, col);
-	++ row; ++ col;
-
-	std::stringstream pos_str;
-	pos_str << _("Line: ") << row << _(" Column: ") << col;
-
 #ifdef WITH_GTKSOURCEVIEW
+void Gobby::StatusBar::update_language(Document& document)
+{
 	// Selected language
 	if(document.get_language() )
 		m_language.set_text(
@@ -67,9 +60,50 @@ void Gobby::StatusBar::update(Document& document)
 		);
 	else
 		m_language.set_text(_("No language selected") );
+}
 #endif
-//	m_sync.set_text(sync_str.str() );
+
+void Gobby::StatusBar::update_sync(Document& document)
+{
+	unsigned int unsynced_count = document.get_unsynced_changes_count();
+	if(unsynced_count)
+	{
+		std::stringstream sync_str;
+		sync_str << unsynced_count << _(" unsynced change(s)");
+		m_sync.set_text(sync_str.str() );
+	}
+	else
+	{
+		m_sync.set_text(_("In sync") );
+	}
+}
+
+void Gobby::StatusBar::update_revision(Document& document)
+{
+	std::stringstream rev_str;
+	rev_str << _("Revision: ") << document.get_revision();
+	m_revision.set_text(rev_str.str() );
+}
+
+void Gobby::StatusBar::update_cursor(Document& document)
+{
+	unsigned int row, col;
+	document.get_cursor_position(row, col);
+	++ row; ++ col;
+
+	std::stringstream pos_str;
+	pos_str << _("Line: ") << row << _(" Column: ") << col;
 	m_position.set_text(pos_str.str() );
+}
+
+void Gobby::StatusBar::update_all(Document& document)
+{
+#ifdef WITH_GTKSOURCEVIEW
+	update_language(document);
+#endif
+	update_sync(document);
+	update_revision(document);
+	update_cursor(document);
 }
 
 void Gobby::StatusBar::obby_start()
@@ -79,8 +113,9 @@ void Gobby::StatusBar::obby_start()
 void Gobby::StatusBar::obby_end()
 {
 	m_language.set_text("");
-	m_position.set_text("");
 	m_sync.set_text("");
+	m_revision.set_text("");
+	m_position.set_text("");
 }
 
 void Gobby::StatusBar::obby_user_join(obby::user& user)
@@ -97,5 +132,11 @@ void Gobby::StatusBar::obby_document_insert(obby::document& document)
 
 void Gobby::StatusBar::obby_document_remove(obby::document& document)
 {
+	// Last document that is closed?
+	if(document.get_buffer().document_count() == 1)
+	{
+		// Clear statusbar
+		obby_end();
+	}
 }
 

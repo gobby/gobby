@@ -25,6 +25,7 @@
 #include <obby/user.hpp>
 #include <obby/document.hpp>
 #include "document.hpp"
+#include "folder.hpp"
 
 namespace Gobby
 {
@@ -32,10 +33,17 @@ namespace Gobby
 class StatusBar : public Gtk::Frame
 {
 public:
-	StatusBar();
+	StatusBar(const Folder& folder);
 	virtual ~StatusBar();
 
-	void update(Document& document);
+#ifdef WITH_GTKSOURCEVIEW
+	void update_language(Document& document);
+#endif
+	void update_sync(Document& document);
+	void update_revision(Document& document);
+	void update_cursor(Document& document);
+
+	void update_all(Document& document);
 
 	// Calls from the window
 	void obby_start();
@@ -49,6 +57,7 @@ protected:
 	Gtk::HBox m_box;
 	Gtk::Label m_language;
 	Gtk::Label m_sync;
+	Gtk::Label m_revision;
 	Gtk::Label m_position;
 };
 

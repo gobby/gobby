@@ -42,7 +42,7 @@
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
    m_config(Glib::get_home_dir() + "/.gobby/config.xml"), m_buffer(NULL),
-   m_running(false)
+   m_running(false), m_statusbar(m_folder)
 {
 	m_header.session_create_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
@@ -69,8 +69,6 @@ Gobby::Window::Window()
 
 	m_chat.chat_event().connect(
 		sigc::mem_fun(*this, &Window::on_chat) );
-	m_folder.document_update_event().connect(
-		sigc::mem_fun(*this, &Window::on_document_update) );
 
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
@@ -402,11 +400,11 @@ void Gobby::Window::on_chat(const Glib::ustring& message) {
 		throw std::runtime_error("tried to send chat message while not connected");
 }
 
-void Gobby::Window::on_document_update(Document& document)
+/*void Gobby::Window::on_document_update(Document& document)
 {
 	// Update statusbar
 	m_statusbar.update(document);
-}
+}*/
 
 void Gobby::Window::on_obby_login_failed(const std::string& reason)
 {

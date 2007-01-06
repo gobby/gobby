@@ -93,9 +93,16 @@ void Gobby::Folder::obby_document_insert(obby::document& document)
 
 	// Watch update signal to emit document_updated signal if a document
 	// has been updated.
-	new_doc->update_event().connect(
+	new_doc->cursor_moved_event().connect(
 		sigc::bind(
-			sigc::mem_fun(*this, &Folder::on_document_update),
+			sigc::mem_fun(*this, &Folder::on_document_cursor_moved),
+			sigc::ref(*new_doc)
+		)
+	);
+
+	new_doc->changed_event().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &Folder::on_document_changed),
 			sigc::ref(*new_doc)
 		)
 	);
@@ -123,10 +130,23 @@ void Gobby::Folder::obby_document_remove(obby::document& document)
 	}
 }
 
-Gobby::Folder::signal_document_update_type
-Gobby::Folder::document_update_event() const
+// Signals
+Gobby::Folder::signal_document_cursor_moved_type
+Gobby::Folder::document_cursor_moved_event() const
 {
-	return m_signal_document_update;
+	return m_signal_document_cursor_moved;
+}
+
+Gobby::Folder::signal_document_changed_type
+Gobby::Folder::document_changed_event() const
+{
+	return m_signal_document_changed;
+}
+
+Gobby::Folder::signal_tab_switched_type
+Gobby::Folder::tab_switched_event() const
+{
+	return m_signal_tab_switched;
 }
 
 void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
@@ -142,18 +162,25 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	if(m_running)
 	{
 		// Another document has been selected: Update statusbar
-		m_signal_document_update.emit(
-			*static_cast<Document*>(get_nth_page(page_num))
+		m_signal_tab_switched.emit(
+			*static_cast<Document*>(get_nth_page(page_num) )
 		);
 	}
 
 	Gtk::Notebook::on_switch_page(page, page_num);
 }
 
-void Gobby::Folder::on_document_update(Document& document)
+void Gobby::Folder::on_document_cursor_moved(Document& document)
 {
 	// Update in the currently visible document? Update statusbar.
 	if(get_current_page() == page_num(document) )
-		m_signal_document_update.emit(document);
+		m_signal_document_cursor_moved.emit(document);
+}
+
+void Gobby::Folder::on_document_changed(Document& document)
+{
+	// Update in the currently visible document? Update statusbar.
+	if(get_current_page() == page_num(document) )
+		m_signal_document_changed.emit(document);
 }
 

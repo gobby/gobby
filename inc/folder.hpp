@@ -41,7 +41,9 @@ namespace Gobby
 class Folder : public Gtk::Notebook
 {
 public:
-	typedef sigc::signal<void, Document&> signal_document_update_type;
+	typedef sigc::signal<void, Document&> signal_document_cursor_moved_type;
+	typedef sigc::signal<void, Document&> signal_document_changed_type;
+	typedef sigc::signal<void, Document&> signal_tab_switched_type;
 
 	Folder();
 	~Folder();
@@ -61,14 +63,20 @@ public:
 	void obby_document_insert(obby::document& document);
 	void obby_document_remove(obby::document& document);
 
-	signal_document_update_type document_update_event() const;
+	signal_document_cursor_moved_type document_cursor_moved_event() const;
+	signal_document_changed_type document_changed_event() const;
+	signal_tab_switched_type tab_switched_event() const;
 
 protected:
 	// Signal handlers
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
-	virtual void on_document_update(Document& document);
 
-	signal_document_update_type m_signal_document_update;
+	void on_document_cursor_moved(Document& document);
+	void on_document_changed(Document& document);
+
+	signal_document_cursor_moved_type m_signal_document_cursor_moved;
+	signal_document_changed_type m_signal_document_changed;
+	signal_tab_switched_type m_signal_tab_switched;
 
 	/** Signals whether the obby session is running.
 	 */

@@ -37,7 +37,8 @@ class Folder;
 class Document : public Gtk::ScrolledWindow
 {
 public:
-	typedef sigc::signal<void> signal_update_type;
+	typedef sigc::signal<void> signal_cursor_moved_type;
+	typedef sigc::signal<void> signal_changed_type;
 
 	Document(obby::document& doc, const Folder& folder);
 	virtual ~Document();
@@ -53,6 +54,10 @@ public:
 	 */
 	unsigned int get_unsynced_changes_count() const;
 
+	/** Returns the current document revision.
+	 */
+	unsigned int get_revision() const;
+
 	/** Returns the currently selected Gtk::SourceLanguage.
 	 */
 #ifdef WITH_GTKSOURCEVIEW
@@ -66,10 +71,14 @@ public:
 	 */
 	Glib::ustring get_content();
 
-	/** Signal which will be emitted if the document gets updated in a way
-	 * that is interesting for the status bar.
+	/** Signal which will be emitted if the document gets changed by a
+	 * network event.
 	 */
-	signal_update_type update_event() const;
+	signal_changed_type changed_event() const;
+
+	/** Signal which will be emitted if the cursor's position changed.
+	 */
+	signal_cursor_moved_type cursor_moved_event() const;
 
 	/** Calls from the folder.
 	 */
@@ -81,6 +90,7 @@ protected:
 	 */
 	void on_obby_insert(const obby::insert_record& record);
 	void on_obby_delete(const obby::delete_record& record);
+	void on_obby_change();
 
 	/** TextBuffer signal handlers.
 	 */
@@ -96,10 +106,10 @@ protected:
 	void on_erase_after(const Gtk::TextBuffer::iterator& begin,
 	                    const Gtk::TextBuffer::iterator& end);
 
-	/** Cursor position changed signal hanlder.
+	/** Signal handler for the mark_set event to detect cursor movements.
 	 */
-	void on_cursor_changed(const Gtk::TextBuffer::iterator& location,
-	                       const Glib::RefPtr<Gtk::TextBuffer::Mark>& mark);
+	void on_mark_set(const Gtk::TextBuffer::iterator& location,
+	                 const Glib::RefPtr<Gtk::TextBuffer::Mark>& mark);
 
 	/** Marks the given part of the text as written by <em>user</em>.
 	 */
@@ -124,7 +134,8 @@ protected:
 	 */
 	bool m_editing;
 	
-	signal_update_type m_signal_update;
+	signal_cursor_moved_type m_signal_cursor_moved;
+	signal_changed_type m_signal_changed;
 private:
 	/** Handler for update_user_colour(): It removes the given tag in
 	 * the given range if it is a gobby-user-tag.

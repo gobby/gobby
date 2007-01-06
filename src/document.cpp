@@ -92,13 +92,15 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 	buf->signal_erase().connect(
 		sigc::mem_fun(*this, &Document::on_erase_after), true);
 	buf->signal_mark_set().connect(
-		sigc::mem_fun(*this, &Document::on_cursor_changed) );
+		sigc::mem_fun(*this, &Document::on_mark_set) );
 
 	// Obby signal handlers
 	doc.insert_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_insert) );
 	doc.delete_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_delete) );
+	doc.change_event().after().connect(
+		sigc::mem_fun(*this, &Document::on_obby_change) );
 
 	// Set initial text
 	buf->set_text(doc.get_whole_buffer() );
@@ -163,19 +165,28 @@ obby::document& Gobby::Document::get_document()
 	return m_doc;
 }
 
-Gobby::Document::signal_update_type Gobby::Document::update_event() const
+Gobby::Document::signal_cursor_moved_type
+Gobby::Document::cursor_moved_event() const
+{
+	return m_signal_cursor_moved;
+}
+
+Gobby::Document::signal_changed_type Gobby::Document::changed_event() const
+{
+	return m_signal_changed;
+}
+
+/*Gobby::Document::signal_update_type Gobby::Document::update_event() const
 {
 	return m_signal_update;
 }
-	
+*/
 void Gobby::Document::get_cursor_position(unsigned int& row,
                                           unsigned int& col)
 {
 	// Get insert mark
-	// TODO: buffer provides a method that returns the insert mark
-	// directly.
 	Glib::RefPtr<Gtk::TextBuffer::Mark> mark =
-		m_view.get_buffer()->get_mark("insert");
+		m_view.get_buffer()->get_insert();
 
 	// Get corresponding iterator
 	// Gtk::TextBuffer::Mark::get_iter is not const. Why not? It prevents
@@ -198,6 +209,12 @@ unsigned int Gobby::Document::get_unsynced_changes_count() const
 
 	// Return amount reported by document otherwise
 	return doc->unsynced_count();
+}
+
+unsigned int Gobby::Document::get_revision() const
+{
+	// Get revision from obby document
+	return m_doc.get_revision();
 }
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -239,44 +256,6 @@ void Gobby::Document::obby_user_join(obby::user& user)
 
 void Gobby::Document::obby_user_part(obby::user& user)
 {
-}
-
-void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
-                                       const Glib::ustring& text,
-                                       int bytes)
-{
-	if(m_editing) return;
-	m_editing = true;
-	
-	m_doc.insert(
-		m_doc.coord_to_position(
-			begin.get_line(),
-			begin.get_line_index()
-		),
-		text
-	);
-
-	m_editing = false;
-}
-
-void Gobby::Document::on_erase_before(const Gtk::TextBuffer::iterator& begin,
-                                      const Gtk::TextBuffer::iterator& end)
-{
-	if(m_editing) return;
-	m_editing = true;
-
-	m_doc.erase(
-		m_doc.coord_to_position(
-			begin.get_line(),
-			begin.get_line_index()
-		),
-		m_doc.coord_to_position(
-			end.get_line(),
-			end.get_line_index()
-		)
-	);
-
-	m_editing = false;
 }
 
 void Gobby::Document::on_obby_insert(const obby::insert_record& record)
@@ -328,6 +307,50 @@ void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 	m_editing = false;
 }
 
+void Gobby::Document::on_obby_change()
+{
+	// Document changed
+	m_signal_changed.emit();
+}
+
+void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
+                                       const Glib::ustring& text,
+                                       int bytes)
+{
+	if(m_editing) return;
+	m_editing = true;
+
+	m_doc.insert(
+		m_doc.coord_to_position(
+			begin.get_line(),
+			begin.get_line_index()
+		),
+		text
+	);
+
+	m_editing = false;
+}
+
+void Gobby::Document::on_erase_before(const Gtk::TextBuffer::iterator& begin,
+                                      const Gtk::TextBuffer::iterator& end)
+{
+	if(m_editing) return;
+	m_editing = true;
+
+	m_doc.erase(
+		m_doc.coord_to_position(
+			begin.get_line(),
+			begin.get_line_index()
+		),
+		m_doc.coord_to_position(
+			end.get_line(),
+			end.get_line_index()
+		)
+	);
+
+	m_editing = false;
+}
+
 void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
                                       const Glib::ustring& text,
                                       int bytes)
@@ -335,19 +358,7 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 	// Other editing function is at work.
 	if(!m_editing)
 	{
-		// TODO: Find a better solution to access the local user object.
-		/*obby::client_document* client_doc =
-			dynamic_cast<obby::client_document*>(&m_doc);
-		obby::host_document* host_doc =
-			dynamic_cast<obby::host_document*>(&m_doc);
-
-		const obby::user* user = NULL;
-		if(client_doc != NULL)
-			user = &client_doc->get_buffer().get_self();
-		if(host_doc != NULL)
-			user = &host_doc->get_buffer().get_self();*/
-//		const obby::user& user = reinterpret_cast<const obby::local_buffer&>(m_doc.get_buffer() ).get_self();
-		// dynamic_cast suckt
+		// Find the user that has written this text
 		const obby::user& user =
 			dynamic_cast<const obby::local_buffer&>(
 				m_doc.get_buffer()
@@ -361,26 +372,25 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 		update_user_colour(pos, end, user);
 	}
 
-	// Document changed: Update statusbar
-	m_signal_update.emit();
+	// Cursor position has changed
+	m_signal_cursor_moved.emit();
 }
 
 void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
                                      const Gtk::TextBuffer::iterator& end)
 {
-	// Document changed: Update statusbar
-	m_signal_update.emit();
+	// Cursor position may have changed
+	m_signal_cursor_moved.emit();
 }
 
-void Gobby::Document::on_cursor_changed(
+void Gobby::Document::on_mark_set(
 	const Gtk::TextBuffer::iterator& location,
 	const Glib::RefPtr<Gtk::TextBuffer::Mark>& mark
 )
 {
-	// Insert mark changed position: Update status bar
-	// TODO: Build separate cursor changed signal?
-	if(mark->get_name() == "insert")
-		m_signal_update.emit();
+	// Insert mark changed position: Cursor position change
+	if(mark == m_view.get_buffer()->get_insert() )//->get_name() == "insert")
+		m_signal_cursor_moved.emit();
 }
 
 void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
