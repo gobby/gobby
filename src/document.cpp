@@ -55,9 +55,8 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 
 	// Insert user tags into the tag table
 	const obby::user_table& user_table = doc.get_buffer().get_user_table();
-	for(obby::user_table::user_iterator<obby::user::NONE> iter =
-		user_table.user_begin<obby::user::NONE>();
-	    iter != user_table.user_end<obby::user::NONE>();
+	for(obby::user_table::iterator iter = user_table.begin();
+	    iter != user_table.end();
 	    ++ iter)
 	{
 		// Create new tag

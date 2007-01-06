@@ -207,9 +207,9 @@ void Gobby::Window::obby_start()
 
 	// Forward user joins for users that are connected 
 	const obby::user_table& user_table = m_buffer->get_user_table();
-	for(obby::user_table::user_iterator<obby::user::CONNECTED> iter =
-		user_table.user_begin<obby::user::CONNECTED>();
-	    iter != user_table.user_end<obby::user::CONNECTED>();
+	for(obby::user_table::iterator iter =
+		user_table.begin(obby::user::flags::CONNECTED);
+	    iter != user_table.end(obby::user::flags::CONNECTED);
 	    ++ iter)
 	{
 		on_obby_user_join(*iter);

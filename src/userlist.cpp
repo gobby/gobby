@@ -207,9 +207,8 @@ void Gobby::UserList::on_folder_tab_switched(Document& document)
 	const obby::user_table& user_table =
 		info->get_buffer().get_user_table();
 	// Add all users in user table
-	for(obby::user_table::user_iterator<obby::user::NONE, false> iter =
-		user_table.user_begin<obby::user::NONE, false>();
-	    iter != user_table.user_end<obby::user::NONE, false>();
+	for(obby::user_table::iterator iter = user_table.begin();
+	    iter != user_table.end();
 	    ++ iter)
 		add_user(*iter);
 }
