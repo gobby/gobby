@@ -17,7 +17,7 @@ AC_PROG_MAKE_SET
 AC_CACHE_SAVE
 
 # Checks for libraries.
-PKG_CHECK_MODULES([gobby], [libxml++-2.6 gtkmm-2.4 lobby-1.0])
+PKG_CHECK_MODULES([gobby], [libxml++-2.6 gtkmm-2.4 >= 2.6.0 lobby-1.0])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
