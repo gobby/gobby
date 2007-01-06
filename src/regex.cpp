@@ -1,3 +1,23 @@
+/* gobby - A GTKmm driven libobby client
+ * Copyright (C) 2005 0x539 dev group
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+// Contributed by Benjamin Herr, <ben@0x539.de>. Not used for now.
+
 #include <glib/gunicode.h>
 #include <regex.h>
 #include "regex.hpp"
@@ -53,6 +73,7 @@ const regex::compile_error regex::compile_error::INVALID_SUBEXP_REF
 
 */
 
+#if 0
 namespace
 {
 	std::string make_message(void* pregex, int value)
@@ -133,4 +154,46 @@ bool regex::find(const char* string, std::pair<size_t, size_t>& matchpos,
 		g_utf8_pointer_to_offset(string, string + pmatch.rm_eo);
 
 	return true;
+}
+#endif
+
+// Simple stubs to not to depend on the GNU regex library
+regex::compile_error::compile_error(void* regex, int value):
+	std::runtime_error("You will never see this")
+{
+	throw std::logic_error("regex::compile_error::compile_error");
+}
+
+regex::regex(const char* regex_string, compile_options cflags)
+{
+}
+
+regex::~regex()
+{
+}
+
+void regex::reset(const char* regex_string, compile_options cflags)
+{
+	throw std::logic_error("regex::reset");
+}
+
+bool regex::match(const char* string, match_options eflags)
+{
+	throw std::logic_error("regex::match");
+	return false;
+}
+
+bool regex::find(const char* string,
+                 match_positions matches,
+                 match_options eflags)
+{
+	throw std::logic_error("regex::find");
+	return false;
+}
+
+bool regex::find(const char* string, std::pair<size_t, size_t>& matchpos,
+          regex::match_options eflags)
+{
+	throw std::logic_error("regex::find");
+	return false;
 }
