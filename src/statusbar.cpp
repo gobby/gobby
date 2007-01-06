@@ -109,7 +109,7 @@ void Gobby::StatusBar::update_all(Document& document)
 	update_cursor(document);
 }
 
-void Gobby::StatusBar::obby_start()
+void Gobby::StatusBar::obby_start(obby::local_buffer& buf)
 {
 }
 

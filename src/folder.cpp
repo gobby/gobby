@@ -48,7 +48,7 @@ Gobby::Folder::get_lang_manager() const
 }
 #endif
 
-void Gobby::Folder::obby_start()
+void Gobby::Folder::obby_start(obby::local_buffer& buf)
 {
 	// Remove existing pages
 	while(get_n_pages() )

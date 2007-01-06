@@ -25,6 +25,7 @@
 #include <gtkmm/toolbar.h>
 #include <obby/user.hpp>
 #include <obby/local_document_info.hpp>
+#include <obby/local_buffer.hpp>
 #include "features.hpp"
 #include "document.hpp"
 #include "folder.hpp"
@@ -91,7 +92,7 @@ public:
 	signal_quit_type quit_event() const;
 
 	// Calls from the window
-	void obby_start();
+	void obby_start(obby::local_buffer& buf);
 	void obby_end();
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);

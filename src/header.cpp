@@ -500,7 +500,7 @@ Gobby::Header::quit_event() const
 	return m_signal_quit;
 }
 
-void Gobby::Header::obby_start()
+void Gobby::Header::obby_start(obby::local_buffer& buf)
 {
 	// Begin of obby session: Disable create/join buttons, enable quit
 	m_group_app->get_action("CreateSession")->set_sensitive(false);

@@ -48,7 +48,7 @@ Gobby::UserList::~UserList()
 {
 }
 
-void Gobby::UserList::obby_start()
+void Gobby::UserList::obby_start(obby::local_buffer& buf)
 {
 	set_sensitive(true);
 }

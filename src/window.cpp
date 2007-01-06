@@ -172,11 +172,11 @@ void Gobby::Window::on_session_create() try
 		m_running = true;
 		
 		// Delegate start of obby session
-		m_header.obby_start();
-		m_folder.obby_start();
-		m_userlist.obby_start();
-		m_chat.obby_start();
-		m_statusbar.obby_start();
+		m_header.obby_start(*m_buffer);
+		m_folder.obby_start(*m_buffer);
+		m_userlist.obby_start(*m_buffer);
+		m_chat.obby_start(*m_buffer);
+		m_statusbar.obby_start(*m_buffer);
 
 		// Let the local user join
 		on_obby_user_join(buffer->get_self() );
@@ -518,11 +518,11 @@ void Gobby::Window::on_obby_user_join(obby::user& user)
 	// so it is only done for the client upon successful login
 	if(&m_buffer->get_self() == &user)
 	{
-		m_header.obby_start();
-		m_folder.obby_start();
-		m_userlist.obby_start();
-		m_chat.obby_start();
-		m_statusbar.obby_start();
+		m_header.obby_start(*m_buffer);
+		m_folder.obby_start(*m_buffer);
+		m_userlist.obby_start(*m_buffer);
+		m_chat.obby_start(*m_buffer);
+		m_statusbar.obby_start(*m_buffer);
 
 		m_running = true;
 	}

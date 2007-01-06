@@ -25,6 +25,7 @@
 #include <gtkmm/image.h>
 #include <obby/user.hpp>
 #include <obby/local_document_info.hpp>
+#include <obby/local_buffer.hpp>
 #include "historyentry.hpp"
 #include "logview.hpp"
 
@@ -42,7 +43,7 @@ public:
 	signal_chat_type chat_event() const;
 
 	// Calls from the window
-	void obby_start();
+	void obby_start(obby::local_buffer& buf);
 	void obby_end();
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);

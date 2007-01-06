@@ -58,7 +58,7 @@ Gobby::Chat::signal_chat_type Gobby::Chat::chat_event() const
 	return m_signal_chat;
 }
 
-void Gobby::Chat::obby_start()
+void Gobby::Chat::obby_start(obby::local_buffer& buf)
 {
 	m_log_chat.clear();
 	m_ent_chat.set_sensitive(true);

@@ -24,6 +24,7 @@
 #include <gtkmm/frame.h>
 #include <obby/user.hpp>
 #include <obby/local_document_info.hpp>
+#include <obby/local_buffer.hpp>
 #include "document.hpp"
 #include "folder.hpp"
 
@@ -46,7 +47,7 @@ public:
 	void update_all(Document& document);
 
 	// Calls from the window
-	void obby_start();
+	void obby_start(obby::local_buffer& buf);
 	void obby_end();
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);
