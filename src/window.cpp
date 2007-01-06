@@ -444,9 +444,9 @@ void Gobby::Window::on_chat(const Glib::ustring& message) {
 	m_statusbar.update(document);
 }*/
 
-void Gobby::Window::on_obby_login_failed(const std::string& reason)
+void Gobby::Window::on_obby_login_failed(obby::login::error error)
 {
-	display_error(reason);
+	display_error(obby::login::errstring(error) );
 	on_session_join();
 }
 

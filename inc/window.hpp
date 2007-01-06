@@ -22,6 +22,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
+#include <obby/error.hpp>
 #include <obby/local_buffer.hpp>
 #include "config.hpp"
 #include "header.hpp"
@@ -66,7 +67,7 @@ protected:
 	void on_chat(const Glib::ustring& message);
 
 	// Obby signal handlers
-	void on_obby_login_failed(const std::string& reason);
+	void on_obby_login_failed(obby::login::error error);
 	void on_obby_close();
 	void on_obby_sync();
 
