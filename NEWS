@@ -4,6 +4,10 @@ Gobby
 Version 0.2.2:
  * Gobby no longer crashes when a document is closed after quitting a
    session, spotted and fixed by Kanru Chen.
+ * Some new file extensions are mapped to their corresponding MIME type
+ * Files saved are no longer converted to the charset settings of the
+   current locale
+ * Added Spanish translation, thanks to Mario Palomo
 
 Version 0.2.1:
  * This bugfix release features a recompile of the Windows version against
