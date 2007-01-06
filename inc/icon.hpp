@@ -19,18 +19,26 @@
 #ifndef _GOBBY_ICON_HPP_
 #define _GOBBY_ICON_HPP_
 
+#include <gtkmm/stockid.h>
 #include <gdkmm/pixbuf.h>
+#include <gtkmm/iconset.h>
+#include <gtkmm/iconfactory.h>
 
 namespace Gobby
 {
 	class IconManager
 	{
 	public:
+		static Gtk::StockID STOCK_USERLIST;
+
 		IconManager();
 
 		const Glib::RefPtr<Gdk::Pixbuf> gobby;
-		// TODO: Userlist icon
-		//const Glib::RefPtr<Gdk::Pixbuf> userlist;
+		const Glib::RefPtr<Gdk::Pixbuf> userlist;
+
+	protected:
+		Gtk::IconSet m_is_userlist;
+		Glib::RefPtr<Gtk::IconFactory> m_icon_factory;
 	};
 }
 

@@ -25,6 +25,7 @@
 //#include "features.hpp"
 #include "common.hpp"
 #include "header.hpp"
+#include "icon.hpp"
 
 namespace {
 	Glib::ustring ui_desc = 
@@ -310,7 +311,7 @@ Gobby::Header::Header():
 	action_window_userlist(
 		Gtk::ToggleAction::create(
 			"WindowUserList",
-			Gtk::Stock::MISSING_IMAGE,
+			IconManager::STOCK_USERLIST,
 			_("User list"),
 			_("Shows up a list of users that are currently joined")
 		)
