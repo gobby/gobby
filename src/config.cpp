@@ -169,6 +169,9 @@ Gobby::Config::Config(const Glib::ustring& file)
 	xmlpp::Document* document = parser.get_document();
 	xmlpp::Element* root = document->get_root_node();
 
+	// Config is present, but contains no root node
+	if(root == NULL) return;
+
 	xmlpp::Node::NodeList list = root->get_children();
 	xmlpp::Node::NodeList::iterator iter;
 	for(iter = list.begin(); iter != list.end(); ++ iter)
