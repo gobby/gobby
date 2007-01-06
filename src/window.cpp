@@ -866,6 +866,42 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 
 void Gobby::Window::close_document(DocWindow& document)
 {
+	// Check for the document being modified
+	if(document.get_document().get_modified() )
+	{
+		// Setup confirmation string
+		obby::format_string str(_(
+			"The document \"%0%\" has been changed since it was "
+			"saved to disk. Are you sure that you want to close it?"
+		) );
+		str << document.get_document().get_title();
+
+		// Setup dialog
+		Gtk::MessageDialog dlg(*this, str.str(), false,
+			Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+		// Add button to allow the user to save the dialog
+		dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_APPLY);
+
+		// Show the dialog
+		int result = dlg.run();
+
+		switch(result)
+		{
+		case Gtk::RESPONSE_NO:
+			/* Don't close it */
+			return;
+			break;
+		case Gtk::RESPONSE_YES:
+			/* Yes, close it */
+			break;
+		case Gtk::RESPONSE_APPLY:
+			/* Save the document before closing it */
+			m_folder.set_current_page(m_folder.page_num(document) );
+			on_document_save();
+			break;
+		}
+	}
+
 	if(m_buffer.get() != NULL)
 	{
 		// Send remove document request

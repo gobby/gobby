@@ -73,6 +73,10 @@ public:
 	 */
 	bool is_subscribed() const;
 
+	/** Whether this document has been modified since the last save.
+	 */
+	bool get_modified() const;
+
 	/** Returns the currently selected Gtk::SourceLanguage.
 	 */
 	Glib::RefPtr<Gtk::SourceLanguage> get_language() const;

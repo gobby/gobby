@@ -205,6 +205,11 @@ const Glib::ustring& Gobby::Document::get_path() const
 	return m_path;
 }
 
+bool Gobby::Document::get_modified() const
+{
+	return get_buffer()->get_modified();
+}
+
 void Gobby::Document::set_path(const Glib::ustring& new_path)
 {
 	m_path = new_path;
