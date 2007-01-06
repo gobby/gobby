@@ -248,6 +248,9 @@ void Gobby::Window::obby_start()
 
 	// Clear location of previous session file, this is a new session
 	m_prev_session = "";
+
+	// Current document has changed, update titlebar
+	update_title_bar();
 }
 
 void Gobby::Window::obby_end()
@@ -522,7 +525,7 @@ void Gobby::Window::on_folder_document_close(Document& document)
 void Gobby::Window::on_folder_tab_switched(Document& document)
 {
 	// Update title bar
-	update_title_bar(document);
+	update_title_bar();
 }
 
 void Gobby::Window::on_document_create()
@@ -931,8 +934,17 @@ void Gobby::Window::apply_preferences()
 		m_preferences.appearance.toolbar_show);
 }
 
-void Gobby::Window::update_title_bar(const Document& document)
+void Gobby::Window::update_title_bar()
 {
+	// No document
+	if(m_folder.get_n_pages() == 0)
+	{
+		set_title("Gobby");
+		return;
+	}
+
+	// Get currently active document
+	const Document& document = get_current_document();
 	// Get title of current document
 	const Glib::ustring& file = document.get_document().get_title();
 	// Get path of current document
@@ -1038,7 +1050,7 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 		// Set path of document
 		doc.set_path(file);
 		// Update title bar according to new path
-		update_title_bar(doc);
+		update_title_bar();
 		// Unset modifified flag
 		doc.get_buffer()->set_modified(false);
 	}

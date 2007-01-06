@@ -109,7 +109,7 @@ protected:
 
 	// Helper functions
 	void apply_preferences();
-	void update_title_bar(const Document& doc);
+	void update_title_bar();
 	void open_local_file(const Glib::ustring& file);
 	void save_local_file(Document& doc, const Glib::ustring& file);
 	void close_document(DocWindow& doc);
