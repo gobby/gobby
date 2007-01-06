@@ -90,6 +90,15 @@ void Gobby::Chat::obby_document_remove(obby::document& document)
 {
 }
 
+void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
+{
+  m_log_chat.log("<" + user.get_name() + "> " + message, "black");
+}
+
+void Gobby::Chat::obby_server_message(const Glib::ustring& message) {
+  m_log_chat.log(message, "forest green");
+}
+
 void Gobby::Chat::on_chat()
 {
 	Glib::ustring message = m_ent_chat.get_text();

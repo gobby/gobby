@@ -48,6 +48,8 @@ public:
 	void obby_user_part(obby::user& user);
 	void obby_document_insert(obby::document& document);
 	void obby_document_remove(obby::document& document);
+  void obby_message(obby::user& user, const Glib::ustring& message);
+  void obby_server_message(const Glib::ustring& message);
 protected:
 	void on_chat();
 

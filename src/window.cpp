@@ -16,6 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdexcept>
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
 #include <libobby/client_buffer.hpp>
@@ -37,6 +38,9 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_session_quit) );
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
+
+  m_chat.chat_event().connect(
+    sigc::mem_fun(*this, &Window::on_chat) );
 
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
@@ -96,6 +100,12 @@ void Gobby::Window::on_session_create() try
 			sigc::mem_fun(*this, &Window::on_obby_document_insert));
 		m_buffer->remove_document_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_remove));
+
+    m_buffer->message_event().connect(
+      sigc::mem_fun(*this, &Window::on_obby_chat) );
+    m_buffer->server_message_event().connect(
+      sigc::mem_fun(*this, &Window::on_obby_server_chat) );
+
 
 		if(!m_timer_conn.connected() )
 			m_timer_conn = Glib::signal_timeout().connect(
@@ -225,6 +235,13 @@ void Gobby::Window::on_quit()
 	Gtk::Main::quit();
 }
 
+void Gobby::Window::on_chat(const Glib::ustring& message) {
+  if (m_running)
+    m_buffer->send_message(message);
+  else
+    throw std::runtime_error("tried to send chat message while not connected");
+}
+
 void Gobby::Window::on_obby_login_failed(const std::string& reason)
 {
 	// Remove timer connection, we do not need any timer calls while
@@ -257,6 +274,18 @@ void Gobby::Window::on_obby_sync()
 	for(iter; iter != m_buffer->document_end(); ++ iter)
 		on_obby_document_insert(*iter);
 }
+
+void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)
+{
+  m_chat.obby_message(user, message);
+}
+
+void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
+{
+  m_chat.obby_server_message(message);
+}
+
+
 
 bool Gobby::Window::on_timer()
 {
