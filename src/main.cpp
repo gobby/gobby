@@ -123,14 +123,15 @@ int main(int argc, char* argv[]) try
 	net6::gettext_package gobby_package(GETTEXT_PACKAGE, LOCALE_DIR);
 	Gobby::init_gettext(gobby_package);
 
-	bool disable_ipc;
+
+	bool new_instance = true;
 	Glib::ustring join;
 
 	Glib::OptionGroup opt_group_gobby("gobby", "Gobby options", "Options related directly to gobby");
-	Glib::OptionEntry opt_disable_ipc;
-	opt_disable_ipc.set_short_name('d');
-	opt_disable_ipc.set_long_name("disable-ipc");
-	opt_disable_ipc.set_description(
+	Glib::OptionEntry opt_new_instance;
+	opt_new_instance.set_short_name('n');
+	opt_new_instance.set_long_name("new-instance");
+	opt_new_instance.set_description(
 		"Do not try to contact already running gobby instance"
 	);
 
@@ -140,7 +141,7 @@ int main(int argc, char* argv[]) try
 	opt_join.set_arg_description("HOST:PORT");
 	opt_join.set_description("Join a session on the given host");
 
-	opt_group_gobby.add_entry(opt_disable_ipc, disable_ipc);
+	opt_group_gobby.add_entry(opt_new_instance, new_instance);
 	opt_group_gobby.add_entry(opt_join, join);
 
 	Glib::OptionContext opt_ctx("[file1] [file2] [...]");
@@ -231,7 +232,7 @@ int main(int argc, char* argv[]) try
 	// Gobby::Ipc::RemoteConnection's destructor.
 	std::auto_ptr<Gobby::Ipc::RemoteConnection> rem_conn;
 	if(!files.empty() )
-		rem_conn = open_files(wnd, files, disable_ipc, !join.empty());
+		rem_conn = open_files(wnd, files, new_instance, !join.empty());
 	else
 	{
 		wnd.show();
