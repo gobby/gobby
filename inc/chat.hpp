@@ -16,47 +16,42 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_WINDOW_HPP_
-#define _GOBBY_WINDOW_HPP_
+#ifndef _GOBBY_CHAT_HPP_
+#define _GOBBY_CHAT_HPP_
 
-#include <gtkmm/window.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/frame.h>
-#include "header.hpp"
-#include "folder.hpp"
-#include "userlist.hpp"
-#include "chat.hpp"
+#include <gtkmm/box.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/button.h>
+#include <gtkmm/image.h>
+#include "historyentry.hpp"
+#include "logview.hpp"
 
 namespace Gobby
 {
 
-class Window : public Gtk::Window
+class Chat : public Gtk::VBox
 {
 public:
-	Window();
-	~Window();
+	typedef sigc::signal<void, const Glib::ustring&> signal_chat_type;
+
+	Chat();
+	virtual ~Chat();
+
+	signal_chat_type chat_event() const;
 
 protected:
-	void on_session_create();
-	void on_session_join();
-	void on_session_quit();
-	void on_quit();
+	void on_chat();
 
-	Gtk::VBox m_mainbox;
-	Header m_header;
+	signal_chat_type m_signal_chat;
 
-	Gtk::VPaned m_mainpaned;
-	Gtk::HPaned m_subpaned;
-
-	Gtk::Frame m_frame_chat;
-	Gtk::Frame m_frame_list;
-	Gtk::Frame m_frame_text;
-
-	Folder m_folder;
-	UserList m_userlist;
-	Chat m_chat;
+	Gtk::Image m_img_btn;
+	Gtk::HBox m_box_chat;
+	Gtk::ScrolledWindow m_wnd_chat;
+	LogView m_log_chat;
+	HistoryEntry m_ent_chat;
+	Gtk::Button m_btn_chat;
 };
 
 }
-
-#endif // _GOBBY_WINDOW_HPP_
+	
+#endif // _GOBBY_CHAT_HPP_

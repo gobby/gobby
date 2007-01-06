@@ -16,47 +16,26 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_WINDOW_HPP_
-#define _GOBBY_WINDOW_HPP_
+#ifndef _GOBBY_FOLDER_HPP_
+#define _GOBBY_FOLDER_HPP_
 
-#include <gtkmm/window.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/frame.h>
-#include "header.hpp"
-#include "folder.hpp"
-#include "userlist.hpp"
-#include "chat.hpp"
+#include <gtkmm/notebook.h>
 
 namespace Gobby
 {
 
-class Window : public Gtk::Window
+/** Thing containing multiple documents.
+ */
+	
+class Folder : public Gtk::Notebook
 {
 public:
-	Window();
-	~Window();
+	Folder();
+	~Folder();
 
 protected:
-	void on_session_create();
-	void on_session_join();
-	void on_session_quit();
-	void on_quit();
-
-	Gtk::VBox m_mainbox;
-	Header m_header;
-
-	Gtk::VPaned m_mainpaned;
-	Gtk::HPaned m_subpaned;
-
-	Gtk::Frame m_frame_chat;
-	Gtk::Frame m_frame_list;
-	Gtk::Frame m_frame_text;
-
-	Folder m_folder;
-	UserList m_userlist;
-	Chat m_chat;
 };
 
 }
 
-#endif // _GOBBY_WINDOW_HPP_
+#endif // _GOBBY_FOLDER_HPP_

@@ -16,47 +16,33 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_WINDOW_HPP_
-#define _GOBBY_WINDOW_HPP_
+#ifndef _GOBBY_LOGVIEW_HPP_
+#define _GOBBY_LOGVIEW_HPP_
 
-#include <gtkmm/window.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/frame.h>
-#include "header.hpp"
-#include "folder.hpp"
-#include "userlist.hpp"
-#include "chat.hpp"
+#include <list>
+#include <gtkmm/textview.h>
 
 namespace Gobby
 {
 
-class Window : public Gtk::Window
+/** A Gtk::TextView-derived widget that easily supports the appending of new
+ * lines in multiple colors and scrolls automatically to the bottom, if a new
+ * line has been inserted. It is not editable by default.
+ */
+
+class LogView : public Gtk::TextView
 {
 public:
-	Window();
-	~Window();
+	LogView();
+	virtual ~LogView();
+
+	void clear();
+	void log(const Glib::ustring& text, const Glib::ustring& color);
 
 protected:
-	void on_session_create();
-	void on_session_join();
-	void on_session_quit();
-	void on_quit();
-
-	Gtk::VBox m_mainbox;
-	Header m_header;
-
-	Gtk::VPaned m_mainpaned;
-	Gtk::HPaned m_subpaned;
-
-	Gtk::Frame m_frame_chat;
-	Gtk::Frame m_frame_list;
-	Gtk::Frame m_frame_text;
-
-	Folder m_folder;
-	UserList m_userlist;
-	Chat m_chat;
+	Glib::RefPtr<Gtk::TextMark> m_end_mark;
 };
-
+	
 }
-
-#endif // _GOBBY_WINDOW_HPP_
+	
+#endif // _GOBBY_LOGVIEW_HPP_

@@ -16,47 +16,40 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_WINDOW_HPP_
-#define _GOBBY_WINDOW_HPP_
+#include "logview.hpp"
 
-#include <gtkmm/window.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/frame.h>
-#include "header.hpp"
-#include "folder.hpp"
-#include "userlist.hpp"
-#include "chat.hpp"
-
-namespace Gobby
+Gobby::LogView::LogView()
+ : Gtk::TextView()
 {
-
-class Window : public Gtk::Window
-{
-public:
-	Window();
-	~Window();
-
-protected:
-	void on_session_create();
-	void on_session_join();
-	void on_session_quit();
-	void on_quit();
-
-	Gtk::VBox m_mainbox;
-	Header m_header;
-
-	Gtk::VPaned m_mainpaned;
-	Gtk::HPaned m_subpaned;
-
-	Gtk::Frame m_frame_chat;
-	Gtk::Frame m_frame_list;
-	Gtk::Frame m_frame_text;
-
-	Folder m_folder;
-	UserList m_userlist;
-	Chat m_chat;
-};
-
+	m_end_mark = get_buffer()->create_mark(
+		"end_mark", get_buffer()->end(), false
+	);
 }
 
-#endif // _GOBBY_WINDOW_HPP_
+Gobby::LogView::~LogView()
+{
+}
+
+void Gobby::LogView::clear()
+{
+	get_buffer()->set_text("");
+}
+
+void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
+{
+	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
+	Glib::RefPtr<Gtk::TextTag> tag = buffer->get_tag_table()->lookup(color);
+
+	if(!tag)
+	{
+		tag = Gtk::TextTag::create();
+		tag->property_foreground() = color;
+		buffer->get_tag_table()->add(tag);
+	}
+
+	buffer->insert_with_tag(buffer->end(), text, tag);
+	if(text.length() && text[text.length() - 1] != '\n')
+		buffer->insert_with_tag(buffer->end(), "\n", tag);
+
+	scroll_to_mark(m_end_mark, 0.0f);
+}

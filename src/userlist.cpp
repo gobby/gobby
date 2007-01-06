@@ -16,47 +16,32 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_WINDOW_HPP_
-#define _GOBBY_WINDOW_HPP_
-
-#include <gtkmm/window.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/frame.h>
-#include "header.hpp"
-#include "folder.hpp"
 #include "userlist.hpp"
-#include "chat.hpp"
 
-namespace Gobby
+Gobby::UserList::Columns::Columns()
 {
-
-class Window : public Gtk::Window
-{
-public:
-	Window();
-	~Window();
-
-protected:
-	void on_session_create();
-	void on_session_join();
-	void on_session_quit();
-	void on_quit();
-
-	Gtk::VBox m_mainbox;
-	Header m_header;
-
-	Gtk::VPaned m_mainpaned;
-	Gtk::HPaned m_subpaned;
-
-	Gtk::Frame m_frame_chat;
-	Gtk::Frame m_frame_list;
-	Gtk::Frame m_frame_text;
-
-	Folder m_folder;
-	UserList m_userlist;
-	Chat m_chat;
-};
-
+	add(name);
+	add(color);
 }
 
-#endif // _GOBBY_WINDOW_HPP_
+Gobby::UserList::Columns::~Columns()
+{
+}
+
+Gobby::UserList::UserList()
+{
+	m_list_data = Gtk::ListStore::create(m_list_cols);
+	m_list_view.set_model(m_list_data);
+
+	m_list_view.append_column("Name", m_list_cols.name);
+	m_list_view.append_column("Color", m_list_cols.color);
+
+	set_shadow_type(Gtk::SHADOW_IN);
+	add(m_list_view);
+
+	set_sensitive(false);
+}
+
+Gobby::UserList::~UserList()
+{
+}

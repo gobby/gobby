@@ -16,47 +16,37 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_WINDOW_HPP_
-#define _GOBBY_WINDOW_HPP_
+#ifndef _GOBBY_HISTORYENTRY_HPP_
+#define _GOBBY_HISTORYENTRY_HPP_
 
-#include <gtkmm/window.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/frame.h>
-#include "header.hpp"
-#include "folder.hpp"
-#include "userlist.hpp"
-#include "chat.hpp"
+#include <list>
+#include <gtkmm/entry.h>
 
 namespace Gobby
 {
 
-class Window : public Gtk::Window
+/** Entry field which allows to scroll in history using up and down arrows keys.
+ */
+
+class HistoryEntry : public Gtk::Entry
 {
 public:
-	Window();
-	~Window();
+	HistoryEntry();
+	virtual ~HistoryEntry();
+
+	void clear_history();
 
 protected:
-	void on_session_create();
-	void on_session_join();
-	void on_session_quit();
-	void on_quit();
+	virtual void on_activate();
+	virtual bool on_key_press_event(GdkEventKey* event);
 
-	Gtk::VBox m_mainbox;
-	Header m_header;
+	void scroll_down();
+	void scroll_up();
 
-	Gtk::VPaned m_mainpaned;
-	Gtk::HPaned m_subpaned;
-
-	Gtk::Frame m_frame_chat;
-	Gtk::Frame m_frame_list;
-	Gtk::Frame m_frame_text;
-
-	Folder m_folder;
-	UserList m_userlist;
-	Chat m_chat;
+	std::list<Glib::ustring> m_history;
+	std::list<Glib::ustring>::iterator m_pos;
 };
 
 }
-
-#endif // _GOBBY_WINDOW_HPP_
+	
+#endif // _GOBBY_HISTORYENTRY_HPP_

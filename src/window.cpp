@@ -31,7 +31,26 @@ Gobby::Window::Window()
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
-	add(m_header);
+	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
+	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
+	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
+
+	m_frame_chat.add(m_chat);
+	m_frame_list.add(m_userlist);
+	m_frame_text.add(m_folder);
+
+	m_subpaned.pack1(m_frame_text, true, false);
+	m_subpaned.pack2(m_frame_list, true, false);
+
+	m_mainpaned.set_border_width(10);
+	m_mainpaned.pack1(m_subpaned, true, false);
+	m_mainpaned.pack2(m_frame_chat, true, false);
+
+	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);
+	m_mainbox.pack_start(m_mainpaned, Gtk::PACK_EXPAND_WIDGET);
+
+	add(m_mainbox);
+
 	set_title("Gobby");
 	set_default_size(640, 480);
 }
