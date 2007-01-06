@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-27 18:52+0200\n"
-"PO-Revision-Date: 2005-07-25 10:00+0200\n"
+"PO-Revision-Date: 2005-07-28 21:07+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,8 @@ msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
 msgstr ""
+"UTF-8 Kovertierung fehlgeschlagen: Entweder ist die Kodierung unbekannt oder "
+"es sind binäre Daten."
 
 #: src/chat.cpp:28
 msgid "Send"
@@ -158,11 +160,12 @@ msgstr "Ansicht"
 
 #: src/header.cpp:321
 msgid "Document preferences..."
-msgstr ""
+msgstr "Dokumenten Einstellungen"
 
 #: src/header.cpp:322
 msgid "Shows a preferences dialog that is just applied to this document"
 msgstr ""
+"Zeigt einen Einstellungsdialog der sich nur auf dieses Dokument bezieht"
 
 #. Syntax submenu
 #: src/header.cpp:332
@@ -190,7 +193,7 @@ msgstr "Hilfe"
 
 #: src/header.cpp:423
 msgid "About"
-msgstr "Über Gobby"
+msgstr "Info"
 
 #: src/header.cpp:424
 msgid "Shows Gobby's copyright and credits"
@@ -198,7 +201,7 @@ msgstr "Zeigt Informationen zu Gobbys Copyright und den Mitwirkenden an"
 
 #: src/preferencesdialog.cpp:32
 msgid "Tab Stops"
-msgstr ""
+msgstr "Tabulatoren"
 
 #: src/preferencesdialog.cpp:33
 msgid "Indentation"
@@ -206,15 +209,15 @@ msgstr "Einrückung"
 
 #: src/preferencesdialog.cpp:34
 msgid "Home/End behaviour"
-msgstr ""
+msgstr "Pos1/Ende Verhalten"
 
 #: src/preferencesdialog.cpp:35
 msgid "Tab width:"
-msgstr ""
+msgstr "Tabulatorbreite:"
 
 #: src/preferencesdialog.cpp:36
 msgid "Insert spaces instead of tabs"
-msgstr ""
+msgstr "Leerstellen statt Tabulatoren einfügen"
 
 #: src/preferencesdialog.cpp:37
 msgid "Enable automatic indentation"
@@ -222,13 +225,15 @@ msgstr "Automatische Einrückung aktivieren"
 
 #: src/preferencesdialog.cpp:38
 msgid "Smart home/end"
-msgstr ""
+msgstr "Schlaues Pos1/Ende Verhalten"
 
 #: src/preferencesdialog.cpp:51
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
 msgstr ""
+"Wenn diese Option aktiviert ist, springen die Pos1/Ende Tasten zum ersten/"
+"letzten Zeichen bevor sie zur ersten/letzten Zeile springen."
 
 #: src/preferencesdialog.cpp:113
 msgid "Text wrapping"
@@ -248,15 +253,15 @@ msgstr "Rechter Rand"
 
 #: src/preferencesdialog.cpp:117
 msgid "Bracket matching"
-msgstr ""
+msgstr "Klammernpaare finden"
 
 #: src/preferencesdialog.cpp:118
 msgid "Enable text wrapping"
-msgstr ""
+msgstr "Text-Umbruch aktivieren"
 
 #: src/preferencesdialog.cpp:119
 msgid "Do not split words over two lines"
-msgstr ""
+msgstr "Verteile Worte nicht über zwei Zeilen"
 
 #: src/preferencesdialog.cpp:120
 msgid "Display line numbers"
@@ -272,27 +277,27 @@ msgstr "Rechten Rand anzeigen"
 
 #: src/preferencesdialog.cpp:123
 msgid "Right margin at column:"
-msgstr ""
+msgstr "Rechter Rand bei Spalte:"
 
 #: src/preferencesdialog.cpp:124
 msgid "Highlight matching bracket"
-msgstr ""
+msgstr "Passende Klammer hervorheben"
 
 #: src/preferencesdialog.cpp:237
 msgid "Toolbar"
-msgstr ""
+msgstr "Werkzeugleiste"
 
 #: src/preferencesdialog.cpp:241
 msgid "Show text only"
-msgstr ""
+msgstr "Nur Text anzeigen"
 
 #: src/preferencesdialog.cpp:242
 msgid "Show icons only"
-msgstr ""
+msgstr "Nur Symbole anzeigen"
 
 #: src/preferencesdialog.cpp:243
 msgid "Show both icons and text"
-msgstr ""
+msgstr "Symbole und Text anzeigen"
 
 #: src/preferencesdialog.cpp:292
 msgid "Preferences"
@@ -305,7 +310,7 @@ msgstr "Editor"
 #. Appearance only affects the global Gobby window
 #: src/preferencesdialog.cpp:300
 msgid "Appearance"
-msgstr ""
+msgstr "Aussehen"
 
 #: src/hostdialog.cpp:24
 msgid "Create obby session"
@@ -357,18 +362,20 @@ msgstr "Name"
 
 #: src/userlist.cpp:76
 msgid "Connected"
-msgstr ""
+msgstr "Verbunden"
 
 #: src/userlist.cpp:77
-#, fuzzy
 msgid "Subscribed"
-msgstr "Abonieren"
+msgstr "Abonniert"
 
 #: src/window.cpp:142
 msgid ""
 "Howl initialisation failed. Probably you need to run mDNSResponder as root "
 "prior to Gobby. Zeroconf support is deactivated for this session."
 msgstr ""
+"Howl Initialisierung fehlgeschlagen. Wahrscheinlich musst du mDNSResponder "
+"als root starten bevor du Gobby startest. Zeroconf Unterstützung ist für "
+"diese Sitzung deaktiviert."
 
 #: src/window.cpp:339
 msgid "A collaborative text editor"
@@ -380,12 +387,12 @@ msgstr "Dokument erstellen"
 
 #: src/window.cpp:399
 msgid "Enter document name"
-msgstr "Geben Sie bitte einen Namen für das Dokument ein."
+msgstr "Geben Sie bitte einen Namen für das Dokument ein"
 
 #. Create FileChooser
 #: src/window.cpp:414
 msgid "Open new document"
-msgstr "Neues dokument öffnen"
+msgstr "Neues Dokument öffnen"
 
 #. Setup dialog
 #: src/window.cpp:461
@@ -398,17 +405,23 @@ msgid ""
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
 msgstr ""
+"Klicke auf \"Anwenden\" um die neuen Einstellungen auch auf die aktuell "
+"geöffneten Dokumente anzuwenden. \"Ok\" speichert die Werte nur für neu "
+"erstellte Dokumente."
 
 #. Build password dialog with info
 #: src/window.cpp:546
 msgid "Set user password"
-msgstr "Setzt ein Benutzerpasswort"
+msgstr "Benutzerpasswort setzen"
 
 #: src/window.cpp:548
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
+"Setze ein Benutzerpasswort für deinen Benutzerzugang. Wenn du das nächste "
+"Mal als dieser Benutzer einloggst, wirst du nach deinem Passwort gefragt "
+"werden."
 
 #: src/window.cpp:596
 #, c-format
@@ -417,6 +430,9 @@ msgid ""
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
+"Diese Einstellungen betreffen nur das aktuell aktive Dokument \"%0%\". Wenn "
+"du die globalen Einstellungen ändern willst, benutze den Einstellungen "
+"Menüpunkt im \"Edit\" Menü."
 
 #. Connection closed by remote site
 #: src/window.cpp:681 src/joinprogressdialog.cpp:151
@@ -425,7 +441,7 @@ msgstr "Verbindung verloren"
 
 #: src/window.cpp:725
 msgid "Colour change failed: Colour already in use"
-msgstr ""
+msgstr "Farbwechsel fehlgeschlagen: Farbe wird bereits verwendet."
 
 #: src/window.cpp:881
 #, c-format
@@ -433,6 +449,8 @@ msgid ""
 "The document \"%0%\" has been changed since it was saved to disk. Are you "
 "sure that you want to close it?"
 msgstr ""
+"Das Dokument \"%0%\" wurde verändert seit es das letzte Mal auf Platte "
+"gespeichert wurde. Bist du sicher das du es schliessen willst?"
 
 #: src/statusbar.cpp:65
 #, c-format
@@ -462,7 +480,7 @@ msgstr "Partner %0% (%1%) wurde nicht in der Verbindungsliste gefunden"
 
 #: src/document.cpp:35
 msgid "Subscribe"
-msgstr "Abonieren"
+msgstr "Abonnieren"
 
 #: src/document.cpp:667
 #, c-format
@@ -473,24 +491,29 @@ msgid ""
 "to subscribe to this document. Use the following button to perform this.\n"
 "\n"
 msgstr ""
+"Du hast das Dokument \"%0%\" nicht abonniert.\n"
+"\n"
+"Um Änderungen von Anderen zu sehen oder das Dokument selbst zu ändern, musst "
+"du es abonnieren. Benutze dafür den folgenden Knopf.\n"
+"\n"
 
 #. Set text
 #: src/progressdialog.cpp:95
 msgid "Waiting for thread to finish..."
-msgstr ""
+msgstr "Warte auf Beenden des Thread"
 
 #: src/hostprogressdialog.cpp:29
 msgid "Opening obby session..."
-msgstr "Eröffnet eine neue Sitzung..."
+msgstr "Eröffne neue Sitzung..."
 
 #: src/joinprogressdialog.cpp:32
 msgid "Joining obby session..."
-msgstr "Sitzung beitreten..."
+msgstr "Trete der Sitzung bei..."
 
 #. Wait for welcome packet
 #: src/joinprogressdialog.cpp:94
 msgid "Waiting for welcome packet..."
-msgstr ""
+msgstr "Warte auf Willkommenspaket..."
 
 #. Update status message
 #: src/joinprogressdialog.cpp:109
@@ -507,8 +530,8 @@ msgstr "Benutzerpasswort eingeben"
 
 #: src/joinprogressdialog.cpp:138
 msgid "Logged in successfully, synchronising session..."
-msgstr ""
+msgstr "Erfolgreich angemeldet, synchronisiere Sitzung..."
 
 #: src/passworddialog.cpp:99
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Passwörter stimmen nicht überein"
