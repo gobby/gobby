@@ -1,8 +1,4 @@
-if WIN32
-SUBDIRS = win32 . po
-else
 SUBDIRS = . po
-endif
 
 bin_PROGRAMS = gobby
 
@@ -53,6 +49,9 @@ noinst_HEADERS += inc/sourceview/private/sourcelanguagesmanager_p.hpp
 endif
 noinst_HEADERS += inc/icon.hpp
 
+.rc.res:
+	windres -i $< --input-format=rc -o $@ -O coff
+
 gobby_SOURCES =  src/config.cpp
 gobby_SOURCES += src/buffer_wrapper.cpp
 if WIN32
@@ -83,6 +82,9 @@ gobby_SOURCES += src/sourceview/sourcelanguage.cpp
 gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
 endif
 gobby_SOURCES += src/icon.cpp
+if WIN32
+gobby_SOURCES += win32/gobby.rc
+endif
 
 EXTRA_DIST =  contrib/artwork/CREDITS
 EXTRA_DIST += contrib/artwork/gobby.ico
