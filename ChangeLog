@@ -1,3 +1,66 @@
+Sun Aug 27 14:21:55 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Bump version to 0.4.1
+
+Mon Aug 21 22:41:33 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Load pixmaps from pixmaps/ if not found in PIXMAPS_DIR
+
+Mon Aug 21 20:50:44 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Move the PNGs out of contrib/artwork into pixmaps
+
+Mon Aug 21 16:28:14 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Remove inline pixmaps and use the external graphics in any case
+
+Thu Aug 17 15:08:04 CEST 2006  Philipp Kern <phil@0x539.de>
+  tagged gobby-0.4.0rc4
+
+Thu Aug 17 15:07:35 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Removed Gobby::Atomic, no longer needed
+
+Thu Aug 17 15:01:19 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Translation roundup
+
+Thu Aug 17 14:52:44 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Updated the manual page
+
+Wed Aug 16 14:42:12 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Bump version to 0.4.0rc4 and depend on obby-0.4.0rc4 or higher
+
+Wed Aug 16 14:15:55 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Preselect line in GotoDialog
+
+Wed Aug 16 14:15:24 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Do not allow self-highlighting
+
+Tue Aug 15 15:15:08 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Updated NEWS
+
+Tue Aug 15 01:14:14 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Moved the contents of the View menu to Edit
+
+Mon Aug 14 15:06:04 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Set type hint of tool windows to UTILITY
+
+Fri Aug 11 21:57:42 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Renamed disable-ipc to new-instance
+
+Tue Aug  8 18:58:16 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Made statusbar more standard-compliant
+
+Tue Aug  8 18:29:38 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Added --join and --disable-ipc command line options
+
+Tue Aug  8 16:35:14 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Set urgency hint when chat messages arrive 
+
+Tue Aug  8 15:19:12 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Save user-modified palettes in the configuration [fixes #181]
+
+Tue Aug  8 12:39:35 CEST 2006  Philipp Kern <phil@0x539.de>
+  tagged gobby-0.3.0rc3
+
+Mon Aug  7 17:46:32 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Updated ChangeLog for release
+
 Mon Aug  7 17:46:23 CEST 2006  Philipp Kern <phil@0x539.de>
   * Bumped version to 0.4.0rc3
 
@@ -10,6 +73,9 @@ Fri Jun 16 22:17:25 CEST 2006  Philipp Kern <phil@0x539.de>
 Thu Jun 15 13:09:09 CEST 2006  Philipp Kern <phil@0x539.de>
   * Do not crash when threads are already initialised
 
+Wed Jun  7 22:10:31 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Replace "Shows up" by "Displays"
+
 Wed Jun  7 16:23:04 CEST 2006  Philipp Kern <phil@0x539.de>
   tagged gobby-0.4.0rc2
 
@@ -21,9 +87,6 @@ Tue Jun  6 22:02:08 CEST 2006  Philipp Kern <phil@0x539.de>
 
 Wed Jun  7 16:17:44 CEST 2006  Armin Burgmeier <armin@0x539.de>
   * Fix SEGV caused by wrong usage of Gtk::AccelKey [fixes #163]
-
-Wed Jun  7 22:10:31 CEST 2006  Philipp Kern <phil@0x539.de>
-  * Replace "Shows up" by "Displays"
 
 Sun Jun  4 03:16:41 CEST 2006  Philipp Kern <phil@0x539.de>
   * Translation roundup; new Catalan translation, thanks to Jordi Mallach
@@ -46,11 +109,11 @@ Sun May  7 13:56:49 CEST 2006  Armin Burgmeier <armin@0x539.de>
 Sun May  7 13:54:08 CEST 2006  Armin Burgmeier <armin@0x539.de>
   * Added Document::clear()
 
-Mon Apr 24 17:51:49 CEST 2006  Armin Burgmeier <armin@0x539.de>
-  * Added contrib/artwork/doclist.png to EXTRA_DIST [fixes #152]
-
 Sat May  6 12:29:34 CEST 2006  Philipp Kern <phil@0x539.de>
   * Check for substrings in Win32 detection
+
+Mon Apr 24 17:51:49 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Added contrib/artwork/doclist.png to EXTRA_DIST [fixes #152]
 
 Wed Apr 19 02:39:03 CEST 2006  Philipp Kern <phil@0x539.de>
   * Add a man page for Gobby
