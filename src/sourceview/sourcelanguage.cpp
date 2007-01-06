@@ -108,9 +108,13 @@ Glib::ustring Gtk::SourceLanguage::get_id() const
 
 Glib::ustring Gtk::SourceLanguage::get_name() const
 {
-	return gtk_source_language_get_name(
+	gchar* name = gtk_source_language_get_name(
 		const_cast<GtkSourceLanguage*>(gobj())
 	);
+
+	Glib::ustring result(name);
+	g_free(name);
+	return result;
 }
 
 Glib::ustring Gtk::SourceLanguage::get_section() const
