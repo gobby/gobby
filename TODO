@@ -27,7 +27,6 @@ Normal:
   * obby:// protocol handler (#88)
   * "Quit" should confirm (#93)
   * Make it harder to lose document changes (#96) [usability]
-  * Userlist should be toggleable (#107)
 
 Minor:
 
@@ -44,6 +43,7 @@ Enhancement:
   * Automatic live storage of documents and chat logs  (#98)
   * RPM's and MacOS installer (#102)
   * Wiki style reverts (#104)
+  * Userlist should be toggleable (#107)
 
 
 100: Excited to try it but libatk-1.6-1.dll just not found
@@ -186,12 +186,6 @@ should stay consistent with.
 Trying to exit gobby is even worse; no check for unsaved data is performed. 
 This is related to #93.
 
-107: Userlist should be toggleable
-----------------------------------
-On the view menu, it would be nice if there was an option to toggle the 
-session participants. It uses up screen real estate I'd rather use for 
-coding.
-
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
 The tabs of documents not active should flash with the colour of the user 
@@ -274,4 +268,10 @@ drag your mouse over them.
  * Delete text "/* Gnarly comment */"
 
 
+
+107: Userlist should be toggleable
+----------------------------------
+On the view menu, it would be nice if there was an option to toggle the 
+session participants. It uses up screen real estate I'd rather use for 
+coding.
 
