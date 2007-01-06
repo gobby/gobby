@@ -25,6 +25,7 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/colorbutton.h>
 #include "defaultdialog.hpp"
+#include "colorsel.hpp"
 #include "config.hpp"
 
 namespace Gobby
@@ -59,7 +60,7 @@ protected:
 
 	Gtk::SpinButton m_ent_port;
 	Gtk::Entry m_ent_name;
-	Gtk::ColorButton m_btn_color;
+	ColorButton m_btn_color;
 	Gtk::Entry m_ent_password;
 };
 

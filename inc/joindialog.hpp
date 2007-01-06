@@ -27,6 +27,7 @@
 #include "defaultdialog.hpp"
 #include "config.hpp"
 #include "features.hpp"
+#include "colorsel.hpp"
 #ifdef WITH_HOWL
 #include <gtkmm/box.h>
 #include <gtkmm/expander.h>
@@ -101,7 +102,7 @@ protected:
 	Gtk::Entry m_ent_host;
 	Gtk::SpinButton m_ent_port;
 	Gtk::Entry m_ent_name;
-	Gtk::ColorButton m_btn_color;
+	ColorButton m_btn_color;
 };
 
 }
