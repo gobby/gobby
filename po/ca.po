@@ -7,13 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-15 23:12+0100\n"
+"POT-Creation-Date: 2005-11-24 23:41+0100\n"
 "PO-Revision-Date: 2005-11-02 19:42-0500\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: src/icon.cpp:2759 src/header.cpp:343 src/userlist.cpp:117
+msgid "User list"
+msgstr ""
 
 #: src/encoding.cpp:104
 msgid ""
@@ -23,204 +27,229 @@ msgstr ""
 "No s'ha pogut convertir l'entrada a UTF-8: la codificació és desconeguda o "
 "és entrada binària."
 
-#: src/chat.cpp:69
-msgid "Send"
-msgstr "Envia"
-
-#: src/header.cpp:175
+#: src/header.cpp:177
 msgid "Create session..."
 msgstr "Crea una sessió..."
 
-#: src/header.cpp:176
+#: src/header.cpp:178
 msgid "Opens a new obby session"
 msgstr "Obre una sessió nova d'obby"
 
-#: src/header.cpp:184
+#: src/header.cpp:186
 msgid "Join session..."
 msgstr "Uneix-te a una sessió..."
 
-#: src/header.cpp:185
+#: src/header.cpp:187
 msgid "Joins an existing obby session"
 msgstr ""
 
-#: src/header.cpp:193
+#: src/header.cpp:195
 msgid "Save session..."
 msgstr ""
 
-#: src/header.cpp:194
+#: src/header.cpp:196
 msgid "Saves the complete session for a later restore"
 msgstr ""
 
-#: src/header.cpp:202
+#: src/header.cpp:204
 msgid "Quit session"
 msgstr "Desconnecta de la sessió"
 
-#: src/header.cpp:203
+#: src/header.cpp:205
 msgid "Leaves the currently running obby session"
 msgstr "Abandona la sessió d'obby que s'està executant"
 
-#: src/header.cpp:211
+#: src/header.cpp:213
 msgid "Quit"
 msgstr "Surt"
 
-#: src/header.cpp:212
+#: src/header.cpp:214
 msgid "Quits the application"
 msgstr "Surt de l'aplicació"
 
-#: src/header.cpp:216
+#: src/header.cpp:218
 msgid "Session"
 msgstr "Sessió"
 
-#: src/header.cpp:222
+#: src/header.cpp:224
 msgid "Create document..."
 msgstr "Crea un document..."
 
-#: src/header.cpp:223
+#: src/header.cpp:225
 msgid "Creates a new document"
 msgstr "Crea un document nou"
 
-#: src/header.cpp:231
+#: src/header.cpp:233
 msgid "Open document..."
 msgstr "Obre un document..."
 
-#: src/header.cpp:232
+#: src/header.cpp:234
 msgid "Loads a file into a new document"
 msgstr "Carrega un fitxer a un document nou"
 
-#: src/header.cpp:240
+#: src/header.cpp:242
 msgid "Save document"
 msgstr "Desa el document"
 
-#: src/header.cpp:241
+#: src/header.cpp:243
 msgid "Saves a document into a file"
 msgstr "Desa el document en un fitxer"
 
-#: src/header.cpp:249
+#: src/header.cpp:251
 msgid "Save document as..."
 msgstr "Anomena i desa el document..."
 
-#: src/header.cpp:250
+#: src/header.cpp:252
 msgid "Saves a document to another location"
 msgstr "Desa el document en una altra ubicació"
 
-#: src/header.cpp:258
+#: src/header.cpp:260
 msgid "Close document"
 msgstr "Tanca el document"
 
-#: src/header.cpp:259
+#: src/header.cpp:261
 msgid "Closes an opened document"
 msgstr ""
 
-#: src/header.cpp:263
+#: src/header.cpp:265
 msgid "Edit"
 msgstr "Edita"
 
-#: src/header.cpp:269
+#: src/header.cpp:271
 msgid "Find..."
 msgstr ""
 
-#: src/header.cpp:270
+#: src/header.cpp:272
 msgid "Search for a text in the current document"
 msgstr ""
 
-#: src/header.cpp:278
+#: src/header.cpp:280
 msgid "Find and replace..."
 msgstr ""
 
-#: src/header.cpp:279
+#: src/header.cpp:281
 msgid "Search for a text and replace it with another one"
 msgstr ""
 
-#: src/header.cpp:287
+#: src/header.cpp:289
+msgid "Go to line..."
+msgstr ""
+
+#: src/header.cpp:290
+msgid "Move cursor to a specified line"
+msgstr ""
+
+#: src/header.cpp:298
 msgid "Preferences..."
 msgstr "Preferències"
 
-#: src/header.cpp:288
+#: src/header.cpp:299
 msgid "Shows up a dialog to customise Gobby for your needs"
 msgstr ""
 "Mostra un diàleg per a personalitzar el Gobby a les vostres necessitats"
 
-#: src/header.cpp:292 src/joindialog.cpp:101
+#: src/header.cpp:303 src/joindialog.cpp:101
 msgid "User"
 msgstr "Usuari"
 
-#: src/header.cpp:298
+#: src/header.cpp:309
 msgid "Set password..."
 msgstr "Estableix una contrasenya..."
 
-#: src/header.cpp:299
+#: src/header.cpp:310
 msgid "Sets a password for this user"
 msgstr "Estableix una contrasenya per a aquest usuari"
 
-#: src/header.cpp:307
+#: src/header.cpp:318
 msgid "Set colour..."
 msgstr "Estableix el color..."
 
-#: src/header.cpp:308
+#: src/header.cpp:319
 msgid "Sets a new colour for this user"
 msgstr "Estableix el color per a aquest usuari"
 
-#: src/header.cpp:312 src/preferencesdialog.cpp:313
+#: src/header.cpp:323 src/preferencesdialog.cpp:313
 msgid "View"
 msgstr "Visualitza"
 
-#: src/header.cpp:318
+#: src/header.cpp:329
 msgid "Document preferences..."
 msgstr "Preferències del document..."
 
-#: src/header.cpp:319
+#: src/header.cpp:330
 msgid "Shows a preferences dialog that is just applied to this document"
 msgstr ""
 
-#: src/header.cpp:324
+#: src/header.cpp:335
 msgid "Syntax"
 msgstr "Sintaxi"
 
-#: src/header.cpp:326
+#: src/header.cpp:337
 msgid "Window"
 msgstr ""
 
-#: src/header.cpp:332 src/userlist.cpp:68
-msgid "User list"
-msgstr ""
-
-#: src/header.cpp:333
+#: src/header.cpp:344
 msgid "Shows up a list of users that are currently joined"
 msgstr ""
 
-#: src/header.cpp:341
+#: src/header.cpp:352 src/documentlist.cpp:101
 msgid "Document list"
 msgstr ""
 
-#: src/header.cpp:342
+#: src/header.cpp:353
 msgid "Shows up a list of documents within the current session"
 msgstr ""
 
-#: src/header.cpp:347
+#: src/header.cpp:358
 msgid "Help"
 msgstr "Ajuda"
 
-#: src/header.cpp:353
+#: src/header.cpp:364
 msgid "About"
 msgstr "Quant a"
 
-#: src/header.cpp:354
+#: src/header.cpp:365
 msgid "Shows Gobby's copyright and credits"
 msgstr "Mostra el copyright del Gobby i els crèdits"
 
-#: src/header.cpp:416
+#: src/header.cpp:428
 msgid "None"
 msgstr "Cap"
 
-#: src/header.cpp:417
+#: src/header.cpp:429
 msgid "Unselects the current language"
 msgstr "Desselecciona el llenguatge actual"
 
 #. Build description string
-#: src/header.cpp:439
+#: src/header.cpp:451
 #, c-format
 msgid "Selects %0% as language"
 msgstr "Selecciona %0% com a llenguatge"
+
+#: src/statusbar.cpp:60
+#, c-format
+msgid "Selected language: %0%"
+msgstr "Llenguatge seleccionat: %0%"
+
+#: src/statusbar.cpp:66
+msgid "No language selected"
+msgstr "No hi ha cap llenguatge seleccionat"
+
+#: src/userlist.cpp:91
+msgid "Online"
+msgstr ""
+
+#: src/userlist.cpp:92
+msgid "Offline"
+msgstr ""
+
+#: src/documentlist.cpp:50
+msgid "Subscribe"
+msgstr "Subscriu-te"
+
+#: src/chat.cpp:69
+msgid "Send"
+msgstr "Envia"
 
 #: src/preferencesdialog.cpp:32
 msgid "Tab Stops"
@@ -341,6 +370,10 @@ msgstr "Editor"
 msgid "Appearance"
 msgstr "Aparença"
 
+#: src/passworddialog.cpp:99
+msgid "Passwords do not match"
+msgstr "Les contrasenyes no coincideixen"
+
 #: src/hostdialog.cpp:24
 msgid "Create obby session"
 msgstr "Crea una sessió d'obby"
@@ -388,137 +421,6 @@ msgstr "Servidor"
 #: src/joindialog.cpp:103
 msgid "Port"
 msgstr "Port"
-
-#: src/userlist.cpp:84
-msgid "Online"
-msgstr ""
-
-#: src/userlist.cpp:85
-msgid "Offline"
-msgstr ""
-
-#: src/window.cpp:156
-msgid ""
-"Howl initialisation failed. Probably you need to run mDNSResponder as root "
-"prior to Gobby. Zeroconf support is deactivated for this session."
-msgstr ""
-
-#: src/window.cpp:240
-msgid "You are still connected to a session"
-msgstr ""
-
-#: src/window.cpp:248
-msgid "Do you want to close Gobby nevertheless?"
-msgstr ""
-
-#: src/window.cpp:401
-#, c-format
-msgid "Serving on port %0%"
-msgstr ""
-
-#: src/window.cpp:446
-#, c-format
-msgid "Connected to %0%:%1%"
-msgstr ""
-
-#: src/window.cpp:460
-msgid "Use default .obby extension if none is given"
-msgstr ""
-
-#: src/window.cpp:465
-msgid "Save obby session"
-msgstr ""
-
-#: src/window.cpp:528
-msgid "A collaborative text editor"
-msgstr "Un editor de text col·laboratiu"
-
-#: src/window.cpp:649
-msgid "Create document"
-msgstr "Crea un document"
-
-#: src/window.cpp:649
-msgid "Enter document name"
-msgstr "Entrodueix el nom del document"
-
-#. Create FileChooser
-#: src/window.cpp:664
-msgid "Open new document"
-msgstr "Obre un document nou"
-
-#. Setup dialog
-#: src/window.cpp:715
-msgid "Save current document"
-msgstr "Desa el document actual"
-
-#: src/window.cpp:778
-msgid ""
-"Click on \"Apply\" to apply the new settings to documents that are currently "
-"open. \"OK\" will just store the values to use them with newly created "
-"documents."
-msgstr ""
-
-#. Build password dialog with info
-#: src/window.cpp:818
-msgid "Set user password"
-msgstr "Estableix la contrasenya d'usuari"
-
-#: src/window.cpp:820
-msgid ""
-"Set a user password for your user account. When you try to login next time "
-"with this user, you will be prompted for your password."
-msgstr ""
-
-#: src/window.cpp:872
-#, c-format
-msgid ""
-"These preferences affect only the currently active document \"%0%\". If you "
-"want to change global preferences, use the preferences menu item in the "
-"\"Edit\" menu."
-msgstr ""
-
-#. Connection closed by remote site
-#: src/window.cpp:958 src/joinprogressdialog.cpp:544
-msgid "Connection lost"
-msgstr ""
-
-#: src/window.cpp:991
-msgid "Colour change failed: Colour already in use"
-msgstr ""
-
-#: src/window.cpp:1128
-#, c-format
-msgid "Could not open file '%0%' for writing"
-msgstr ""
-
-#: src/window.cpp:1142
-#, c-format
-msgid "Could not save file '%0%': %1%"
-msgstr ""
-
-#: src/window.cpp:1168
-#, c-format
-msgid "Save changes to document \"%0%\" before closing?"
-msgstr ""
-
-#: src/window.cpp:1172
-msgid ""
-"If you don't save, changes will be discarded, but may still be retrieved if "
-"you re-subscribe to the document."
-msgstr ""
-
-#: src/statusbar.cpp:60
-#, c-format
-msgid "Selected language: %0%"
-msgstr "Llenguatge seleccionat: %0%"
-
-#: src/statusbar.cpp:66
-msgid "No language selected"
-msgstr "No hi ha cap llenguatge seleccionat"
-
-#: src/hostprogressdialog.cpp:30
-msgid "Opening obby session..."
-msgstr ""
 
 #: src/joinprogressdialog.cpp:92
 msgid "Joining obby session..."
@@ -574,9 +476,194 @@ msgstr ""
 msgid "Logged in successfully, synchronising session..."
 msgstr ""
 
-#: src/passworddialog.cpp:99
-msgid "Passwords do not match"
-msgstr "Les contrasenyes no coincideixen"
+#. Connection closed by remote site
+#: src/joinprogressdialog.cpp:544 src/window.cpp:914
+msgid "Connection lost"
+msgstr ""
+
+#: src/hostprogressdialog.cpp:30
+msgid "Opening obby session..."
+msgstr ""
+
+#: src/finddialog.cpp:45
+msgid "Find what:"
+msgstr ""
+
+#: src/finddialog.cpp:46
+msgid "Replace with:"
+msgstr ""
+
+#: src/finddialog.cpp:47
+msgid "Match whole word only"
+msgstr ""
+
+#: src/finddialog.cpp:48
+msgid "Match case"
+msgstr ""
+
+#: src/finddialog.cpp:49
+msgid "Match as regular expression"
+msgstr ""
+
+#: src/finddialog.cpp:50
+msgid "Direction"
+msgstr ""
+
+#: src/finddialog.cpp:51
+msgid "_Up"
+msgstr ""
+
+#: src/finddialog.cpp:52
+msgid "_Down"
+msgstr ""
+
+#: src/finddialog.cpp:54
+msgid "_Replace"
+msgstr ""
+
+#: src/finddialog.cpp:55
+msgid "Replace _all"
+msgstr ""
+
+#: src/finddialog.cpp:160
+msgid "Search"
+msgstr ""
+
+#: src/finddialog.cpp:160
+msgid "Search and replace"
+msgstr ""
+
+#: src/finddialog.cpp:183
+#, c-format
+msgid "\"%0%\" has not been found in the document."
+msgstr ""
+
+#: src/finddialog.cpp:263
+msgid "No occurence has been replaced"
+msgstr ""
+
+#: src/finddialog.cpp:269
+#, c-format
+msgid "%0% occurence has been replaced"
+msgid_plural "%0% occurences have been replaced"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/finddialog.cpp:299
+msgid "No document currently opened"
+msgstr ""
+
+#: src/gotodialog.cpp:30
+msgid "Line number:"
+msgstr ""
+
+#: src/gotodialog.cpp:32
+msgid "_Go to line"
+msgstr ""
+
+#: src/gotodialog.cpp:76
+msgid "Go to line"
+msgstr ""
+
+#: src/window.cpp:158
+msgid ""
+"Howl initialisation failed. Probably you need to run mDNSResponder as root "
+"prior to Gobby. Zeroconf support is deactivated for this session."
+msgstr ""
+
+#: src/window.cpp:228
+msgid "You are still connected to a session"
+msgstr ""
+
+#: src/window.cpp:236
+msgid "Do you want to close Gobby nevertheless?"
+msgstr ""
+
+#: src/window.cpp:388
+#, c-format
+msgid "Serving on port %0%"
+msgstr ""
+
+#: src/window.cpp:433
+#, c-format
+msgid "Connected to %0%:%1%"
+msgstr ""
+
+#: src/window.cpp:447
+msgid "Use default .obby extension if none is given"
+msgstr ""
+
+#: src/window.cpp:452
+msgid "Save obby session"
+msgstr ""
+
+#: src/window.cpp:515
+msgid "A collaborative text editor"
+msgstr "Un editor de text col·laboratiu"
+
+#: src/window.cpp:636
+msgid "Create document"
+msgstr "Crea un document"
+
+#: src/window.cpp:636
+msgid "Enter document name"
+msgstr "Entrodueix el nom del document"
+
+#. Create FileChooser
+#: src/window.cpp:651
+msgid "Open new document"
+msgstr "Obre un document nou"
+
+#. Setup dialog
+#: src/window.cpp:702
+msgid "Save current document"
+msgstr "Desa el document actual"
+
+#: src/window.cpp:771
+msgid ""
+"Click on \"Apply\" to apply the new settings to documents that are currently "
+"open. \"OK\" will just store the values to use them with newly created "
+"documents."
+msgstr ""
+
+#. Build password dialog with info
+#: src/window.cpp:811
+msgid "Set user password"
+msgstr "Estableix la contrasenya d'usuari"
+
+#: src/window.cpp:813
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+
+#: src/window.cpp:865
+#, c-format
+msgid ""
+"These preferences affect only the currently active document \"%0%\". If you "
+"want to change global preferences, use the preferences menu item in the "
+"\"Edit\" menu."
+msgstr ""
+
+#: src/window.cpp:947
+msgid "Colour change failed: Colour already in use"
+msgstr ""
+
+#: src/window.cpp:1079
+#, c-format
+msgid "Could not open file '%0%' for writing"
+msgstr ""
+
+#: src/window.cpp:1109
+#, c-format
+msgid "Save changes to document \"%0%\" before closing?"
+msgstr ""
+
+#: src/window.cpp:1113
+msgid ""
+"If you don't save, changes will be discarded, but may still be retrieved if "
+"you re-subscribe to the document."
+msgstr ""
 
 #~ msgid "%0% has joined"
 #~ msgstr "%0% s'ha unit"
@@ -612,6 +699,3 @@ msgstr "Les contrasenyes no coincideixen"
 
 #~ msgid "Revision: %0%"
 #~ msgstr "Revisió: %0%"
-
-#~ msgid "Subscribe"
-#~ msgstr "Subscriu-te"
