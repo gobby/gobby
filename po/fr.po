@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: http://darcs.0x539.de/trac/obby/\n"
-"POT-Creation-Date: 2005-06-14 23:42+0200\n"
-"PO-Revision-Date: 2005-06-23 22:21+0200\n"
+"POT-Creation-Date: 2005-06-24 21:59+0200\n"
+"PO-Revision-Date: 2005-06-24 22:19+0200\n"
 "Last-Translator: Peer Janssen <peer@baden-online.de>\n"
 "Language-Team: Peer Janssen <peer@baden-online.de>\n"
 "MIME-Version: 1.0\n"
@@ -30,116 +30,124 @@ msgid "%0 has left"
 msgstr "%0 est parti(e)"
 
 #. App menu
-#: src/header.cpp:121
+#: src/header.cpp:129
 msgid "Gobby"
 msgstr "Gobby"
 
-#: src/header.cpp:128
+#: src/header.cpp:136
 msgid "Create session"
 msgstr "Créer une séance"
 
-#: src/header.cpp:129
+#: src/header.cpp:137
 msgid "Opens a new obby session"
 msgstr "Ouvrir une nouvelle séance \"obby\"."
 
-#: src/header.cpp:142
+#: src/header.cpp:150
 msgid "Join session"
 msgstr "Joindre séance"
 
-#: src/header.cpp:143
+#: src/header.cpp:151
 msgid "Join an existing obby session"
 msgstr "Participer à une séance \"obby\" déjà en cours"
 
-#: src/header.cpp:156
+#: src/header.cpp:164
 msgid "Quit session"
 msgstr "Quitter séance"
 
-#: src/header.cpp:157
+#: src/header.cpp:165
 msgid "Leaves the currently running obby session"
 msgstr "Quitter la séance \"obby\" en cours"
 
-#: src/header.cpp:170
+#: src/header.cpp:178
 msgid "Quit"
 msgstr "Quitter"
 
-#: src/header.cpp:171
+#: src/header.cpp:179
 msgid "Quits the application"
 msgstr "Quitter cette application"
 
 #. Session menu
-#: src/header.cpp:180
+#: src/header.cpp:188
 msgid "Session"
 msgstr "Séance"
 
-#: src/header.cpp:187 src/window.cpp:332
+#: src/header.cpp:195 src/window.cpp:334
 msgid "Create document"
 msgstr "Créer document"
 
-#: src/header.cpp:188
+#: src/header.cpp:196
 msgid "Creates a new document"
 msgstr "Créer un nouveau document"
 
-#: src/header.cpp:201
+#: src/header.cpp:209
 msgid "Open document"
 msgstr "Ouvrir document"
 
-#: src/header.cpp:202
+#: src/header.cpp:210
 msgid "Loads a file into a new document"
 msgstr "Charger un fichier dans un nouveau document"
 
-#: src/header.cpp:215
+#: src/header.cpp:223
 msgid "Save document"
 msgstr "Enregistrer document"
 
-#: src/header.cpp:216
+#: src/header.cpp:224
 msgid "Saves a document into a file"
 msgstr "Sauvegarde du document dans un fichier"
 
-#: src/header.cpp:229
+#: src/header.cpp:237
 msgid "Close document"
 msgstr "Fermer document"
 
-#: src/header.cpp:230
+#: src/header.cpp:238
 msgid "Closes an open document"
 msgstr "Fermer un document actuellement ouvert"
 
 #. Documents menu
-#: src/header.cpp:240
+#: src/header.cpp:247
 msgid "View"
 msgstr "Affichage"
 
-#: src/header.cpp:246
+#: src/header.cpp:253
+msgid "Word wrapping"
+msgstr "Adapter longueur"
+
+#: src/header.cpp:254
+msgid "Whether to wrap the text to the document's width"
+msgstr "Adapter la longueur des lignes à la largeur du document"
+
+#: src/header.cpp:267
 msgid "Line numbers"
 msgstr "Numérotation des lignes"
 
-#: src/header.cpp:247
+#: src/header.cpp:268
 msgid "Whether to show line numbers for this document"
 msgstr "Afficher ou ne pas afficher les numéros des lignes de ce document"
 
-#: src/header.cpp:278
+#: src/header.cpp:299
 msgid "None"
 msgstr "Aucune"
 
-#: src/header.cpp:279
+#: src/header.cpp:300
 msgid "Unselects the current language"
 msgstr "Déselectionner la langue actuelle"
 
 #. Build description string
-#: src/header.cpp:299
+#: src/header.cpp:320
 #, c-format
 msgid "Selects %0 as language"
 msgstr "Selectionner la langue $0"
 
 #. Help menu
-#: src/header.cpp:336
+#: src/header.cpp:357
 msgid "Help"
 msgstr "Aide"
 
-#: src/header.cpp:343
+#: src/header.cpp:364
 msgid "About"
 msgstr "Information"
 
-#: src/header.cpp:344
+#: src/header.cpp:365
 msgid "Shows Gobby's copyright and credits"
 msgstr "Afficher les infos copyright et les remerciements concernant Gobby"
 
@@ -175,41 +183,41 @@ msgstr "Couleur"
 msgid "Name"
 msgstr "Nom"
 
-#: src/window.cpp:295
+#: src/window.cpp:297
 msgid "A collaborative text editor"
 msgstr "Un éditeur texte collaboratif"
 
-#: src/window.cpp:332
+#: src/window.cpp:334
 msgid "Enter document name"
 msgstr "Entrer le nom du document"
 
-#: src/window.cpp:341
+#: src/window.cpp:343
 msgid "Open new document"
 msgstr "Ouvrir un nouveau document"
 
-#: src/window.cpp:358
+#: src/window.cpp:360
 msgid "Save current document"
 msgstr "Enregistrer le document actuel"
 
-#: src/window.cpp:472
+#: src/window.cpp:487
 msgid "Connection lost"
 msgstr "Perte de la connexion"
 
-#: src/statusbar.cpp:65
+#: src/statusbar.cpp:66
 msgid "Selected language: %0"
 msgstr "Langue selectionnée : %0"
 
-#: src/statusbar.cpp:71
+#: src/statusbar.cpp:72
 msgid "No language selected"
 msgstr "Aucune langue selectionnée"
 
 #. TODO: ngettext
-#: src/statusbar.cpp:79
+#: src/statusbar.cpp:80
 #, c-format
 msgid "%0 pending change(s)"
 msgstr "%0 modification(s) en attente"
 
-#: src/statusbar.cpp:86
+#: src/statusbar.cpp:87
 msgid "Revision: %0"
 msgstr "Révision : %0"
 
@@ -220,12 +228,6 @@ msgstr "Copin(e) %0 (%1) n'est pas trouvable dans la liste des copin(e)s"
 #: src/document.cpp:37
 msgid "Subscribe"
 msgstr "Souscrire"
-
-#. TODO: Localise...
-#: src/document.cpp:277
-#, c-format
-msgid "User %0 is not connected"
-msgstr "Utilisateur %0 n'est pas connecté"
 
 #: src/document.cpp:606
 msgid ""

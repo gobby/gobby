@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-23 22:54+0200\n"
+"Report-Msgid-Bugs-To: http://darcs.0x539.de/trac/obby/\n"
+"POT-Creation-Date: 2005-06-24 21:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -230,13 +230,7 @@ msgstr ""
 msgid "Subscribe"
 msgstr ""
 
-#. TODO: Localise...
-#: src/document.cpp:290
-#, c-format
-msgid "User %0 is not connected"
-msgstr ""
-
-#: src/document.cpp:618
+#: src/document.cpp:606
 msgid ""
 "You are not subscribed to the document \"%0\".\n"
 "\n"

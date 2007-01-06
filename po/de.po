@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-23 22:54+0200\n"
-"PO-Revision-Date: 2005-06-24 09:57+0200\n"
+"Report-Msgid-Bugs-To: http://darcs.0x539.de/trac/obby/\n"
+"POT-Creation-Date: 2005-06-24 21:59+0200\n"
+"PO-Revision-Date: 2005-06-24 22:03+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
@@ -128,9 +128,8 @@ msgid "None"
 msgstr "Keine"
 
 #: src/header.cpp:300
-#, fuzzy
 msgid "Unselects the current language"
-msgstr ""
+msgstr "Sprachauswahl aufheben"
 
 #. Build description string
 #: src/header.cpp:320
@@ -229,12 +228,7 @@ msgstr "Partner %0 (%1) wurde nicht in der Verbindungsliste gefunden"
 msgid "Subscribe"
 msgstr ""
 
-#: src/document.cpp:290
-#, c-format
-msgid "User %0 is not connected"
-msgstr "Benutzer %0 ist nicht verbunden"
-
-#: src/document.cpp:618
+#: src/document.cpp:606
 msgid ""
 "You are not subscribed to the document \"%0\".\n"
 "\n"
@@ -242,4 +236,3 @@ msgid ""
 "to subscribe to this document. Use the following button to perform this.\n"
 "\n"
 msgstr ""
-
