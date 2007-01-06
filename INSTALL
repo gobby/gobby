@@ -8,12 +8,9 @@ Gobby: Installation Guide
 
         2.1. Binary build
         2.2. Development environment
+        2.3. Known limitations
 
    3. Linux
-
-        3.1. Gentoo Linux
-        3.2. Debian GNU/Linux
-
    4. Mac OS X
    5. FreeBSD
 
@@ -22,9 +19,8 @@ Gobby: Installation Guide
    This is a brief installation guide for Gobby, the
    collaborative editor. It is a very preliminary version and you
    could find updated information on
-   http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/wiki/Installa
-   tionGuide. Help in crafting good documentation is urgently
-   needed.
+   http://gobby.0x539.de/installationguide.html. Help in crafting
+   good documentation is urgently needed.
      _________________________________________________________
 
 2. Microsoft Windows
@@ -32,73 +28,47 @@ Gobby: Installation Guide
 2.1. Binary build
 
    Gobby's binary build needs at least Windows 2000 to run
-   correctly. In order to install it on Microsoft Windows to need
-   to take the following steps:
-
-     * Download
-       http://www.pcpm.ucl.ac.be/~gustin/win32_ports/binaries/gtk
-       mm-runtime-2.6.2-1.exe (if it is no more available please
-       refer to
-       http://www.pcpm.ucl.ac.be/~gustin/win32_ports/gtkmm.html
-       to obtain a newer copy); use the downloaded package to
-       install Gtkmm, it will in turn download Gtk+ if it is not
-       yet installed
-     * Download
-       http://darcs.0x539.de/gobby-dist/Output/gobby_setup.exe
-       and use it to install Gobby
+   correctly. You could obtain it on
+   http://gobby.0x539.de/download.html. Further information could
+   be retrieved from the already mentioned installation guide.
      _________________________________________________________
 
 2.2. Development environment
 
    It is currently not advised to build a development environment
    under Microsoft Windows. If you still want to do so please
-   refer to the information on the Wiki.
+   refer to the information in the guide on the wiki.
+     _________________________________________________________
+
+2.3. Known limitations
+
+   Gobby does not yet support ZeroConf server autodiscovery on
+   Windows.
      _________________________________________________________
 
 3. Linux
 
-   Gobby may be installed just like most other application for
-   Unix-like operating systems. You need to get the tarballs of
-   net6, obby and gobby from http://darcs.0x539.de/ first. Then
-   you need to build them in this order by running ./configure,
-   make and make install. Please look at the README files of all
-   packages to retrieve the dependency list.
+   You should look for Gobby in the package list of your
+   favourite version first. However, as major versions are likely
+   to be incompatible you might still be required to install
+   Gobby from source. Please check your distribution manuals how
+   to install the development headers of the required
+   dependencies.
 
-   There are also some packagaing systems by some distributions
-   which allow the installation of Gobby directly:
-     _________________________________________________________
-
-3.1. Gentoo Linux
-
-   Thanks to Gustavo Felisberto, Portage contains ebuild for
-   net6, obby and gobby. Just use the following command to
-   install it (but please note that you have to replace x86
-   corresponding to your architecture):
-
-   ACCEPT_KEYWORDS="~x86" emerge gobby
-     _________________________________________________________
-
-3.2. Debian GNU/Linux
-
-   Gobby is included in Debian unstable. Packages for Sarge are
-   published separately and could be used by putting the
-   following line into your /etc/apt/sources.list.
-
-   deb http://releases.0x539.de/ debian/
-
-   For Ubuntu you could substitute debian/ with ubuntu/.
+   Gobby may be installed from source just like most other
+   application for Unix-like operating systems. You need to get
+   the tarballs of net6, obby and gobby from
+   http://darcs.0x539.de/ first. Then you need to build them in
+   this order by running ./configure, make and make install.
+   Please look at the README files of all packages to retrieve
+   the dependency list.
      _________________________________________________________
 
 4. Mac OS X
 
-   Because of Gobby's dependencies it is still a bit tricky to
-   compile it on Mac OS X. Please be aware that Gobby does not
-   use Mac OS X's native interface but instead depends on Apple's
-   X11 as the windowing toolkit is uses is not (yet?) ported
-   natively to Mac OS X. The instructions on
-   http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/wiki/HowToGob
-   byFromSourceMacOSX will be kept up-to-date and are usable, but
-   lengthy.
+   The only supported method to install Gobby is via DarwinPorts
+   (http://darwinports.org). Please refer to the installation
+   guide for more information.
      _________________________________________________________
 
 5. FreeBSD
@@ -112,4 +82,3 @@ Gobby: Installation Guide
 
    cp /usr/local/lib/pkgconfig/obby-0.2.pc \
      /usr/local/libdata/pkgconfig/
-
