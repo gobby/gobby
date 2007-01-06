@@ -73,6 +73,7 @@ protected:
 
 	// Obby signal handlers
 	void on_obby_login_failed(obby::login::error error);
+	bool on_obby_global_password(std::string& password);
 	void on_obby_close();
 	void on_obby_sync();
 

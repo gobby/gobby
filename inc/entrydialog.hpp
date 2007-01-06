@@ -35,8 +35,9 @@ public:
 	virtual ~EntryDialog();
 
 	Glib::ustring get_text() const;
-
 	void set_text(const Glib::ustring& text);
+
+	Gtk::Entry& get_entry();
 
 protected:
 	Gtk::Entry m_entry;

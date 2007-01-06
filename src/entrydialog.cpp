@@ -56,3 +56,8 @@ void Gobby::EntryDialog::set_text(const Glib::ustring& text)
 {
 	m_entry.set_text(text);
 }
+
+Gtk::Entry& Gobby::EntryDialog::get_entry()
+{
+	return m_entry;
+}

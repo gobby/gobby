@@ -26,11 +26,14 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
    m_table(3, 2),
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
-   m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
+   m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT),
+   m_lbl_password(_("Password:"), Gtk::ALIGN_RIGHT)
 {
 	m_ent_port.set_range(1024, 65535);
 	m_ent_port.set_value(config["create"]["port"].get(6522) );
 	m_ent_port.set_increments(1, 256);
+
+	m_ent_password.set_visibility(false);
 
 	// TODO: Share user settings between create and join dialog
 	// TODO: Read default color as random one from tom's color map
@@ -53,12 +56,16 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 	m_table.attach(m_lbl_color, 0, 1, 2, 3,
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
+	m_table.attach(m_lbl_password, 0, 1, 3, 4,
+		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 
 	m_table.attach(m_ent_port, 1, 2, 0, 1,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 	m_table.attach(m_ent_name, 1, 2, 1, 2,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 	m_table.attach(m_btn_color, 1, 2, 2, 3,
+		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+	m_table.attach(m_ent_password, 1, 2, 3, 4,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 
 	m_table.set_spacings(5);
@@ -93,6 +100,11 @@ Gdk::Color Gobby::HostDialog::get_color() const
 	return m_btn_color.get_color();
 }
 
+Glib::ustring Gobby::HostDialog::get_password() const
+{
+	return m_ent_password.get_text();
+}
+
 void Gobby::HostDialog::set_port(unsigned int port)
 {
 	m_ent_port.set_value(static_cast<double>(port) );
@@ -106,6 +118,11 @@ void Gobby::HostDialog::set_name(const Glib::ustring& name)
 void Gobby::HostDialog::set_color(const Gdk::Color& color)
 {
 	m_btn_color.set_color(color);
+}
+
+void Gobby::HostDialog::set_password(const Glib::ustring& password)
+{
+	m_ent_password.set_text(password);
 }
 
 void Gobby::HostDialog::on_response(int response_id)

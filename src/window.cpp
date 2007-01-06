@@ -135,6 +135,7 @@ void Gobby::Window::on_session_create() try
 		unsigned int port = dlg.get_port();
 		Glib::ustring name = dlg.get_name();
 		Gdk::Color color = dlg.get_color();	
+		Glib::ustring password = dlg.get_password();
 
 		unsigned int red = color.get_red() * 255 / 65535;
 		unsigned int green = color.get_green() * 255 / 65535;
@@ -150,10 +151,12 @@ void Gobby::Window::on_session_create() try
 		m_zeroconf->publish(name, port);
 #endif
 
+		buffer->set_global_password(password);
+
 		// Delete existing buffer, take new one
 		delete m_buffer;
 		m_buffer = buffer;
-		
+
 		m_buffer->user_join_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_user_join) );
 		m_buffer->user_part_event().connect(
@@ -223,11 +226,17 @@ void Gobby::Window::on_session_join() try
 
 		buffer->login_failed_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_login_failed) );
+		buffer->global_password_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_global_password));
 		buffer->close_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_close) );
 		buffer->sync_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_sync) );
-		
+
+		/* TODO: Connect to on_global_password to prompt for password */
+		/* TODO: Add password entry widget in join dialog */
+		/* TODO: Add password entry widget in host dialog */
+
 		m_buffer->user_join_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_user_join) );
 		m_buffer->user_part_event().connect(
@@ -480,6 +489,31 @@ void Gobby::Window::on_obby_login_failed(obby::login::error error)
 {
 	display_error(obby::login::errstring(error) );
 	on_session_join();
+}
+
+bool Gobby::Window::on_obby_global_password(std::string& password)
+{
+	// Prompt for password
+	EntryDialog dlg(
+		*this,
+		_("Password required"),
+		_("Enter session password")
+	);
+
+	// Disable view of typed characters (password input)
+	dlg.get_entry().set_visibility(false);
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		// Use given text as password
+		password = dlg.get_text();
+		return true;
+	}
+	else
+	{
+		// Close connection otherwise
+		on_session_quit();
+		return false;
+	}
 }
 
 void Gobby::Window::on_obby_close()

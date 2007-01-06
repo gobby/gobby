@@ -39,10 +39,12 @@ public:
 	unsigned int get_port() const;
 	Glib::ustring get_name() const;
 	Gdk::Color get_color() const;
+	Glib::ustring get_password() const;
 
 	void set_port(unsigned int port);
 	void set_name(const Glib::ustring& name);
 	void set_color(const Gdk::Color& color);
+	void set_password(const Glib::ustring& password);
 
 protected:
 	virtual void on_response(int response_id);
@@ -53,10 +55,12 @@ protected:
 	Gtk::Label m_lbl_port;
 	Gtk::Label m_lbl_name;
 	Gtk::Label m_lbl_color;
+	Gtk::Label m_lbl_password;
 
 	Gtk::SpinButton m_ent_port;
 	Gtk::Entry m_ent_name;
 	Gtk::ColorButton m_btn_color;
+	Gtk::Entry m_ent_password;
 };
 
 }
