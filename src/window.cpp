@@ -375,6 +375,8 @@ void Gobby::Window::on_folder_tab_switched(Document& document)
 void Gobby::Window::on_document_create()
 {
 	EntryDialog dlg(*this, _("Create document"), _("Enter document name"));
+	dlg.set_check_valid_entry(true);
+
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		m_buffer->create_document(dlg.get_text() );

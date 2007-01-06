@@ -39,10 +39,17 @@ public:
 
 	Gtk::Entry& get_entry();
 
+	void set_check_valid_entry(bool enable);
+	bool get_check_valid_entry() const;
+
 protected:
+	void on_entry_changed();
+
 	Gtk::Entry m_entry;
 	Gtk::Label m_label;
 	Gtk::VBox  m_box;
+
+	bool m_check_valid_entry;
 };
 
 }

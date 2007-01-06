@@ -25,7 +25,8 @@ Gobby::EntryDialog::EntryDialog(Gtk::Window& parent,
                                 const Glib::ustring& label)
  : DefaultDialog(title, parent, true, true),
    m_label(label),
-   m_box(false, 5)
+   m_box(false, 5),
+   m_check_valid_entry(false)
 {
 	m_box.pack_start(m_label);
 	m_box.pack_start(m_entry);
@@ -37,6 +38,9 @@ Gobby::EntryDialog::EntryDialog(Gtk::Window& parent,
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+
+	m_entry.signal_changed().connect(
+		sigc::mem_fun(*this, &EntryDialog::on_entry_changed) );
 
 	show_all();
 	set_border_width(10);
@@ -61,3 +65,24 @@ Gtk::Entry& Gobby::EntryDialog::get_entry()
 {
 	return m_entry;
 }
+
+void Gobby::EntryDialog::set_check_valid_entry(bool enable)
+{
+	m_check_valid_entry = enable;
+	// Call on_entry_changed to check whether the OK button has to
+	// be sensitive or not
+	on_entry_changed();
+}
+
+bool Gobby::EntryDialog::get_check_valid_entry() const
+{
+	return m_check_valid_entry;
+}
+
+void Gobby::EntryDialog::on_entry_changed()
+{
+	// Recheck sensitivation of OK button
+	bool disable = (m_check_valid_entry && m_entry.get_text().empty() );
+	set_response_sensitive(Gtk::RESPONSE_OK, !disable);
+}
+

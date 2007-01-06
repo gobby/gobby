@@ -23,7 +23,8 @@ Gobby::DefaultDialog::DefaultDialog(const Glib::ustring& title,
                                     Gtk::Window& parent,
                                     bool modal,
                                     bool use_separator)
- : Gtk::Dialog(title, parent, modal, use_separator)
+ : Gtk::Dialog(title, parent, modal, use_separator),
+   m_ok_sensitive(true)
 {
 	add_events(Gdk::KEY_PRESS_MASK);
 }
@@ -31,15 +32,24 @@ Gobby::DefaultDialog::DefaultDialog(const Glib::ustring& title,
 Gobby::DefaultDialog::DefaultDialog(const Glib::ustring& title,
                                     bool modal,
                                     bool use_separator)
- : Gtk::Dialog(title, modal, use_separator)
+ : Gtk::Dialog(title, modal, use_separator), m_ok_sensitive(true)
 {
 	add_events(Gdk::KEY_PRESS_MASK);
 }
 
 Gobby::DefaultDialog::DefaultDialog()
- : Gtk::Dialog()
+ : Gtk::Dialog(), m_ok_sensitive(true)
 {
 	add_events(Gdk::KEY_PRESS_MASK);
+}
+
+void Gobby::DefaultDialog::set_response_sensitive(int response_id,
+                                                  bool sensitive)
+{
+	if(response_id == Gtk::RESPONSE_OK)
+		m_ok_sensitive = sensitive;
+
+	Gtk::Dialog::set_response_sensitive(response_id, sensitive);
 }
 
 bool Gobby::DefaultDialog::on_key_press_event(GdkEventKey* event)
@@ -47,10 +57,8 @@ bool Gobby::DefaultDialog::on_key_press_event(GdkEventKey* event)
 	switch(event->keyval)
 	{
 	case GDK_Return:
-		response(Gtk::RESPONSE_OK);
-		return true;
-	case GDK_Escape:
-		response(Gtk::RESPONSE_CANCEL);
+		if(m_ok_sensitive)
+			response(Gtk::RESPONSE_OK);
 		return true;
 	default:
 		return Dialog::on_key_press_event(event);
