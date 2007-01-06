@@ -114,7 +114,7 @@ obby::document& Gobby::Document::get_document()
 
 void Gobby::Document::on_insert(const Gtk::TextBuffer::iterator& begin,
                                 const Glib::ustring& text,
-                                int foo)
+                                int bytes)
 {
 	if(m_editing) return;
 	m_doc.insert(begin.get_offset(), text);

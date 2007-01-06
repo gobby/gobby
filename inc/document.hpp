@@ -46,7 +46,7 @@ public:
 protected:
 	void on_insert(const Gtk::TextBuffer::iterator& begin,
 	               const Glib::ustring& text,
-		       int foo);
+		       int bytes);
 	void on_erase(const Gtk::TextBuffer::iterator& begin,
 	              const Gtk::TextBuffer::iterator& end);
 
