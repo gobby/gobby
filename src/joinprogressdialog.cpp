@@ -20,7 +20,7 @@
 #include <obby/format_string.hpp>
 #include "common.hpp"
 #include "buffer_wrapper.hpp"
-#include "entrydialog.hpp"
+#include "passworddialog.hpp"
 #include "joinprogressdialog.hpp"
 
 Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
@@ -164,13 +164,12 @@ bool Gobby::JoinProgressDialog::prompt_password(const Glib::ustring& label,
                                                 std::string& password)
 {
 	// Setup entry dialog
-	EntryDialog dlg(*this, _("Password required"), label);
-	dlg.get_entry().set_visibility(false);
+	PasswordDialog dlg(*this, label, true);
 
 	// Run it
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		password = dlg.get_text();
+		password = dlg.get_password();
 		return true;
 	}
 	else

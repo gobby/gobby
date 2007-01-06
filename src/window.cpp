@@ -32,12 +32,13 @@
 
 #include "common.hpp"
 #include "docwindow.hpp"
+#include "passworddialog.hpp"
+#include "entrydialog.hpp"
 #include "preferencesdialog.hpp"
 #include "joindialog.hpp"
 #include "hostdialog.hpp"
 #include "joinprogressdialog.hpp"
 #include "hostprogressdialog.hpp"
-#include "entrydialog.hpp"
 #include "window.hpp"
 #include "features.hpp"
 #include "icon.hpp"
@@ -516,19 +517,17 @@ void Gobby::Window::on_edit_preferences()
 
 void Gobby::Window::on_user_set_password()
 {
-	// TODO: Password dialog with second entry field to confirm password
-	EntryDialog dlg(
-		*this,
-		_("Set user password"),
-		_("Enter new password")
-	);
-
-	dlg.get_entry().set_visibility(false);
+	PasswordDialog dlg(*this, _("Set user password"), false);
+	dlg.set_info(_(
+		"Set a user password for your user account. When you try to "
+		"login next time with this user, you will be prompted for your "
+		"password."
+	) );
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		dynamic_cast<obby::client_buffer*>(
-			m_buffer.get() )->set_password(dlg.get_text() );
+			m_buffer.get() )->set_password(dlg.get_password() );
 	}
 }
 
