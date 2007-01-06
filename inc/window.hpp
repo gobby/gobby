@@ -72,17 +72,15 @@ protected:
 	);
 #endif
 
+	void on_folder_tab_switched(Document& document);
+
 	void on_about();
 	void on_quit();
 
 	void on_chat(const Glib::ustring& message);
 
 	// Obby signal handlers
-	void on_obby_login_failed(obby::login::error error);
-	bool on_obby_global_password(std::string& password);
-	bool on_obby_user_password(std::string& password);
 	void on_obby_close();
-	void on_obby_sync();
 
 	void on_obby_user_join(obby::user& user);
 	void on_obby_user_part(obby::user& user);

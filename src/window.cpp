@@ -83,6 +83,9 @@ Gobby::Window::Window()
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
+	m_folder.tab_switched_event().connect(
+		sigc::mem_fun(*this, &Window::on_folder_tab_switched) );
+
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
@@ -315,6 +318,32 @@ void Gobby::Window::on_about()
 	dlg.run();
 }
 
+void Gobby::Window::on_folder_tab_switched(Document& document)
+{
+	const Glib::ustring& file = document.get_document().get_title();
+	Glib::ustring path = document.get_path();
+		
+	if(!path.empty() )
+	{
+		// Replace home dir by ~
+		Glib::ustring home = Glib::get_home_dir();
+		if(path.compare(0, home.length(), home) == 0)
+			path.replace(0, home.length(), "~");
+
+		// Set title with file and path
+		obby::format_string title_str("%0 (%1) - Gobby");
+		title_str << file << path;
+		set_title(title_str.str() );
+	}
+	else
+	{
+		// Path not known: Set title with file only
+		obby::format_string title_str("%0 - Gobby");
+		title_str << file;
+		set_title(title_str.str() );
+	}
+}
+
 void Gobby::Window::on_document_create()
 {
 	EntryDialog dlg(*this, _("Create document"), _("Enter document name"));
@@ -332,6 +361,7 @@ void Gobby::Window::on_document_open()
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		// TODO: Set path in newly generated document
 		m_buffer->create_document(
 			Glib::path_get_basename(dlg.get_filename()),
 			Glib::file_get_contents(dlg.get_filename()) );
@@ -356,14 +386,15 @@ void Gobby::Window::on_document_save()
 		if(stream)
 		{
 			stream << doc.get_document().get_content() << std::endl;
+			doc.get_document().set_path(dlg.get_filename() );
+			on_folder_tab_switched(doc.get_document() );
 		}
 		else
 		{
-			display_error(
-				"Could not open file " +
-				dlg.get_filename() +
-				" for writing"
-			);
+			obby::format_string str("Could not open file "
+			                        "%0 for writing");
+			str << dlg.get_filename();
+			display_error(str.str() );
 		}
 	}
 }
@@ -472,6 +503,7 @@ void Gobby::Window::on_chat(const Glib::ustring& message)
 	m_buffer->send_message(message);
 }
 
+/*
 void Gobby::Window::on_obby_login_failed(obby::login::error error)
 {
 	display_error(obby::login::errstring(error) );
@@ -529,7 +561,7 @@ bool Gobby::Window::on_obby_user_password(std::string& password)
 		on_session_quit();
 		return false;
 	}
-}
+}*/
 
 void Gobby::Window::on_obby_close()
 {
@@ -537,7 +569,7 @@ void Gobby::Window::on_obby_close()
 	on_session_quit();
 }
 
-void Gobby::Window::on_obby_sync()
+/*void Gobby::Window::on_obby_sync()
 {
 	// Send documents to components
 	obby::buffer::document_iterator iter = m_buffer->document_begin();
@@ -547,7 +579,7 @@ void Gobby::Window::on_obby_sync()
 	// Set last page as active one because it is currently shown anyway.
 	if(m_buffer->document_count() > 0)
 		m_folder.set_current_page(m_buffer->document_count() - 1);
-}
+}*/
 
 void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)
 {
@@ -601,6 +633,10 @@ void Gobby::Window::on_obby_document_remove(obby::document_info& document)
 	m_userlist.obby_document_remove(local_doc);
 	m_chat.obby_document_remove(local_doc);
 	m_statusbar.obby_document_remove(local_doc);
+
+	// Reset title if last document has been closed
+	if(m_buffer->document_count() == 1)
+		set_title("Gobby");
 }
 
 void Gobby::Window::display_error(const Glib::ustring& message)

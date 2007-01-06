@@ -65,6 +65,14 @@ public:
 	 */
 	unsigned int get_revision() const;
 
+	/** Returns the path to the file.
+	 */
+	const Glib::ustring& get_path() const;
+
+	/** Changes the path to the file.
+	 */
+	void set_path(const Glib::ustring& new_path);
+
 	/** Returns whether the local user is subscribed to this document.
 	 */
 	bool is_subscribed() const;
@@ -194,6 +202,10 @@ protected:
 	/** Button to subscribe to the document.
 	 */
 	Gtk::Button m_btn_subscribe;
+
+	/** Path to the file on the local disc.
+	 */
+	Glib::ustring m_path;
 
 	signal_cursor_moved_type m_signal_cursor_moved;
 	signal_content_changed_type m_signal_content_changed;

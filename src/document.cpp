@@ -191,6 +191,16 @@ unsigned int Gobby::Document::get_revision() const
 	return local_doc->get_revision();
 }
 
+const Glib::ustring& Gobby::Document::get_path() const
+{
+	return m_path;
+}
+
+void Gobby::Document::set_path(const Glib::ustring& new_path)
+{
+	m_path = new_path;
+}
+
 #ifdef WITH_GTKSOURCEVIEW
 Glib::RefPtr<Gtk::SourceLanguage> Gobby::Document::get_language() const
 {
