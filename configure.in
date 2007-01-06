@@ -27,7 +27,7 @@ fi
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
 # Checks for libraries.
-PKG_CHECK_MODULES([gobby], [libxml++-2.6 gtkmm-2.4 >= 2.6.0 lobby-1.0])
+PKG_CHECK_MODULES([gobby], [libxml++-2.6 gtkmm-2.4 >= 2.6.0 obby-1.0])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
