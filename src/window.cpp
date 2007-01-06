@@ -562,7 +562,12 @@ void Gobby::Window::on_about()
 	authors.push_back("  Benjamin Herr <ben@0x539.de>");
 	
 	std::deque<Glib::ustring> artists;
-	artists.push_back("Thomas Glatt <tom@0x539.de>");
+	artists.push_back("Logo:");
+	artists.push_back("  Thomas Glatt <tom@0x539.de>");
+	artists.push_back("");
+	artists.push_back("Additional artwork:");
+	artists.push_back("  Thomas Glatt <tom@0x539.de>");
+	artists.push_back("  Benjamin Herr <ben@0x539.de>");
 
 	dlg.set_authors(authors);
 	dlg.set_artists(artists);
