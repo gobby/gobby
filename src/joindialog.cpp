@@ -214,10 +214,8 @@ void Gobby::JoinDialog::on_discover(const std::string& name,
 	row[m_session_cols.port] = addr.get_port();
 }
 
-#include <iostream>
 void Gobby::JoinDialog::on_leave(const std::string& name)
 {
-	std::cout << "leave: " << name << std::endl;
 	Gtk::TreeModel::iterator iter = find_entry(name);
 	if(iter == m_session_list->children().end() ) return;
 	m_session_list->erase(iter);
