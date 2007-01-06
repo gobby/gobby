@@ -43,6 +43,7 @@ Gobby::GotoDialog::GotoDialog(Gobby::Window& parent):
 	// TODO: Change this value according to line count in current document?
 	m_ent_line.set_range(1, 0x7fffffff);
 	m_ent_line.set_increments(1, 10);
+	m_ent_line.set_activates_default(true);
 
 	m_box_top.set_spacing(10);
 	m_box_top.pack_start(m_lbl_info, Gtk::PACK_SHRINK);
