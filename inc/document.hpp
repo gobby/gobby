@@ -144,8 +144,10 @@ v v v v v v v
 protected:
 	/** Obby signal handlers.
 	 */
-	void on_obby_insert(const obby::insert_record& record);
-	void on_obby_delete(const obby::delete_record& record);
+	void on_obby_insert_before(const obby::insert_record& record);
+	void on_obby_insert_after(const obby::insert_record& record);
+	void on_obby_delete_before(const obby::delete_record& record);
+	void on_obby_delete_after(const obby::delete_record& record);
 
 	void on_obby_change_before();
 	void on_obby_change_after();

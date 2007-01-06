@@ -168,6 +168,26 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 	// Read line and column from iterator
 	row = iter.get_line();
 	col = iter.get_line_offset();
+
+	// Add tab characters to col
+	if(m_doc.get_document() && is_subscribed() )
+	{
+		const std::string& line = m_doc.get_document()->get_line(row);
+		unsigned int tabs = m_preferences.editor.tab_width;
+
+		// col chars
+		std::string::size_type chars = col; col = 0;
+		for(std::string::size_type i = 0; i < chars; ++ i)
+		{
+			unsigned int width = 1;
+			if(line[i] == '\t')
+			{
+				width = (tabs - col % tabs) % tabs;
+				if(width == 0) width = tabs;
+			}
+			col += width;
+		}
+	}
 }
 
 unsigned int Gobby::Document::get_unsynced_changes_count() const
@@ -203,6 +223,11 @@ const Glib::ustring& Gobby::Document::get_title() const
 const Glib::ustring& Gobby::Document::get_path() const
 {
 	return m_path;
+}
+
+bool Gobby::Document::is_subscribed() const
+{
+	return m_subscribed;
 }
 
 bool Gobby::Document::get_modified() const
@@ -258,7 +283,7 @@ void Gobby::Document::obby_user_colour(obby::user& user)
 	update_tag_colour(user);
 }
 
-void Gobby::Document::on_obby_insert(const obby::insert_record& record)
+void Gobby::Document::on_obby_insert_before(const obby::insert_record& record)
 {
 	if(m_editing) return;
 	m_editing = true;
@@ -288,7 +313,11 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 	m_editing = false;
 }
 
-void Gobby::Document::on_obby_delete(const obby::delete_record& record)
+void Gobby::Document::on_obby_insert_after(const obby::insert_record& record)
+{
+}
+
+void Gobby::Document::on_obby_delete_before(const obby::delete_record& record)
 {
 	if(m_editing) return;
 	m_editing = true;
@@ -304,7 +333,12 @@ void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 		buffer->get_iter_at_line_index(brow, bcol),
 		buffer->get_iter_at_line_index(erow, ecol)
 	);
+
 	m_editing = false;
+}
+
+void Gobby::Document::on_obby_delete_after(const obby::delete_record& record)
+{
 }
 
 void Gobby::Document::on_obby_change_before()
@@ -313,10 +347,11 @@ void Gobby::Document::on_obby_change_before()
 
 void Gobby::Document::on_obby_change_after()
 {
-	// Document changed
-	m_signal_content_changed.emit();
-	// Cursor may have moved
+	if(m_editing) return;
+
+	// Content may have changed / cursor have been moved
 	m_signal_cursor_moved.emit();
+	m_signal_content_changed.emit();
 }
 
 void Gobby::Document::on_obby_user_subscribe(const obby::user& user)
@@ -344,9 +379,13 @@ void Gobby::Document::on_obby_self_subscribe()
 
 	// Install signal handlers
 	doc.insert_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_insert) );
+		sigc::mem_fun(*this, &Document::on_obby_insert_before) );
+	doc.insert_event().after().connect(
+		sigc::mem_fun(*this, &Document::on_obby_insert_after) );
 	doc.delete_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_delete) );
+		sigc::mem_fun(*this, &Document::on_obby_delete_before) );
+	doc.delete_event().after().connect(
+		sigc::mem_fun(*this, &Document::on_obby_delete_after) );
 	doc.change_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_change_before) );
 	doc.change_event().after().connect(
@@ -690,6 +729,9 @@ void Gobby::Document::apply_preferences()
 	set_show_margin(m_preferences.view.margin_display);
 	set_margin(m_preferences.view.margin_pos);
 	get_buffer()->set_check_brackets(m_preferences.view.bracket_highlight);
+
+	// Cursor position may have changed because tab width may have changed
+	m_signal_cursor_moved.emit();
 }
 
 void
