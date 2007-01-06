@@ -830,6 +830,24 @@ void Gobby::Window::update_title_bar(const Document& document)
 	}
 }
 
+namespace
+{
+	// convert2unix converts a given string from any special line endings
+	// (DOS or old-style Macintosh) to Unix line endings. It does no
+	// book-keeping about the encountered endings but ensures that no
+	// CR characters are left in the string.
+	void convert2unix(std::string& str)
+	{
+		for(std::string::size_type i = 0; i < str.length(); ++ i)
+			// Convert DOS CRLF to a single LF
+			if(str[i] == '\r' && str[i+1] == '\n')
+				str.erase(i, 1);
+			// Convert Macintosh CR to LF
+			else if(str[i] == '\r')
+				str[i] = '\n';
+	}
+}
+
 void Gobby::Window::open_local_file(const Glib::ustring& file,
                                     bool open_as_edited)
 {
@@ -837,13 +855,14 @@ void Gobby::Window::open_local_file(const Glib::ustring& file,
 	{
 		// Set local file path for the document_insert callback
 		m_local_file_path = file;
+		std::string content(
+			convert_to_utf8(Glib::file_get_contents(file)) );
+		convert2unix(content);
 
 		// TODO: Set path in newly generated document
 		// TODO: Convert file to UTF-8
 		m_buffer->create_document(
-			Glib::path_get_basename(file),
-			convert_to_utf8(Glib::file_get_contents(file)),
-			open_as_edited
+			Glib::path_get_basename(file), content, open_as_edited
 		);
 	}
 	catch(Glib::Exception& e)
