@@ -64,7 +64,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 
 	m_ent_host.set_text(host);
 
-	m_ent_port.set_range(1024, 65535);
+	m_ent_port.set_range(1, 65535);
 	m_ent_port.set_value(port);
 	m_ent_port.set_increments(1, 256);
 
