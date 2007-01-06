@@ -134,7 +134,6 @@ public:
 	const Glib::RefPtr<Gtk::ActionGroup> group_session;
 	const Glib::RefPtr<Gtk::ActionGroup> group_edit;
 	const Glib::RefPtr<Gtk::ActionGroup> group_user;
-	const Glib::RefPtr<Gtk::ActionGroup> group_view;
 	const Glib::RefPtr<Gtk::ActionGroup> group_window;
 	const Glib::RefPtr<Gtk::ActionGroup> group_help;
 
@@ -157,15 +156,13 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_edit_search_replace;
 	const Glib::RefPtr<Gtk::Action> action_edit_goto_line;
 	const Glib::RefPtr<Gtk::Action> action_edit_preferences;
+	const Glib::RefPtr<Gtk::Action> action_edit_document_preferences;
+	const Glib::RefPtr<Gtk::Action> action_edit_syntax;
+	std::list<LanguageWrapper> action_edit_syntax_languages;
 
 	const Glib::RefPtr<Gtk::Action> action_user;
 	const Glib::RefPtr<Gtk::Action> action_user_set_password;
 	const Glib::RefPtr<Gtk::Action> action_user_set_colour;
-
-	const Glib::RefPtr<Gtk::Action> action_view;
-	const Glib::RefPtr<Gtk::Action> action_view_preferences;
-	const Glib::RefPtr<Gtk::Action> action_view_syntax;
-	std::list<LanguageWrapper> action_view_syntax_languages;
 
 	const Glib::RefPtr<Gtk::Action> action_window;
 	const Glib::RefPtr<Gtk::ToggleAction> action_window_userlist;

@@ -109,7 +109,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_header.action_user_set_password->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
 
-	m_header.action_view_preferences->signal_activate().connect(
+	m_header.action_edit_document_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_view_preferences) );
 
 	m_header.action_window_chat->signal_activate().connect(

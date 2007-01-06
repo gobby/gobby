@@ -121,8 +121,8 @@ Gobby::Folder::Folder(Header& header,
 	set_scrollable(true);
 
 	for(std::list<Header::LanguageWrapper>::const_iterator iter =
-		m_header.action_view_syntax_languages.begin();
-	    iter != m_header.action_view_syntax_languages.end();
+		m_header.action_edit_syntax_languages.begin();
+	    iter != m_header.action_edit_syntax_languages.end();
 	    ++ iter)
 	{
 		iter->get_action()->signal_activate().connect(
@@ -444,8 +444,8 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	{
 		m_block_language = true;
 		for(std::list<Header::LanguageWrapper>::const_iterator iter =
-			m_header.action_view_syntax_languages.begin();
-		    iter != m_header.action_view_syntax_languages.end();
+			m_header.action_edit_syntax_languages.begin();
+		    iter != m_header.action_edit_syntax_languages.end();
 		    ++ iter)
 		{
 			if(iter->get_language() == language)

@@ -48,18 +48,16 @@ namespace {
 		"      <separator />"
 		"      <menuitem action=\"EditGotoLine\" />"
 		"      <separator />"
+		"      <menuitem action=\"EditDocumentPreferences\" />"
 		"      <menuitem action=\"EditPreferences\" />"
+		"      <separator />"
+		"      <menu action=\"MenuEditSyntax\">"
+		"        <menuitem action=\"EditSyntaxLanguageNone\" />"
+		"      </menu>"
 		"    </menu>"
 		"    <menu action=\"MenuUser\">"
 		"      <menuitem action=\"UserSetPassword\" />"
 		"      <menuitem action=\"UserSetColour\" />"
-		"    </menu>"
-		"    <menu action=\"MenuView\">"
-		"      <menuitem action=\"ViewPreferences\" />"
-		"      <separator />"
-		"      <menu action=\"MenuViewSyntax\">"
-		"        <menuitem action=\"ViewSyntaxLanguageNone\" />"
-		"      </menu>"
 		"    </menu>"
 		"    <menu action=\"MenuWindow\">"
 		"      <menuitem action=\"WindowUserList\" />"
@@ -211,7 +209,6 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_session(Gtk::ActionGroup::create("MenuSession") ),
 	group_edit(Gtk::ActionGroup::create("MenuEdit") ),
 	group_user(Gtk::ActionGroup::create("MenuUser") ),
-	group_view(Gtk::ActionGroup::create("MenuView") ),
 	group_window(Gtk::ActionGroup::create("MenuWindow") ),
 	group_help(Gtk::ActionGroup::create("MenuHelp") ),
 
@@ -346,6 +343,18 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
+	action_edit_document_preferences(
+		Gtk::Action::create(
+			"EditDocumentPreferences",
+			Gtk::Stock::PREFERENCES,
+			_("Document preferences..."),
+			_("Shows a preferences dialog that is just applied to "
+			  "this document")
+		)
+	),
+
+	action_edit_syntax(Gtk::Action::create("MenuEditSyntax", _("Syntax")) ),
+
 	action_user(Gtk::Action::create("MenuUser", _("_User")) ),
 
 	action_user_set_password(
@@ -365,20 +374,6 @@ Gobby::Header::Header(const ApplicationState& state,
 			_("Sets a new colour for this user")
 		)
 	),
-
-	action_view(Gtk::Action::create("MenuView", _("_View")) ),
-
-	action_view_preferences(
-		Gtk::Action::create(
-			"ViewPreferences",
-			Gtk::Stock::PREFERENCES,
-			_("Document preferences..."),
-			_("Shows a preferences dialog that is just applied to "
-			  "this document")
-		)
-	),
-
-	action_view_syntax(Gtk::Action::create("MenuViewSyntax", _("Syntax")) ),
 
 	action_window(Gtk::Action::create("MenuWindow", _("_Window")) ),
 
@@ -511,6 +506,16 @@ Gobby::Header::Header(const ApplicationState& state,
 	);
 
 	set_action_auto(
+		action_edit_document_preferences, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_edit_syntax, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
 		action_user, state,
 		APPLICATION_SESSION, APPLICATION_NONE
 	);
@@ -523,21 +528,6 @@ Gobby::Header::Header(const ApplicationState& state,
 	set_action_auto(
 		action_user_set_colour, state,
 		APPLICATION_SESSION, APPLICATION_NONE
-	);
-
-	set_action_auto(
-		action_view, state,
-		APPLICATION_DOCUMENT, APPLICATION_NONE
-	);
-
-	set_action_auto(
-		action_view_preferences, state,
-		APPLICATION_DOCUMENT, APPLICATION_NONE
-	);
-
-	set_action_auto(
-		action_view_syntax, state,
-		APPLICATION_DOCUMENT, APPLICATION_NONE
 	);
 
 	set_action_auto(
@@ -596,14 +586,12 @@ Gobby::Header::Header(const ApplicationState& state,
 	);
 
 	group_edit->add(action_edit_preferences);
+	group_edit->add(action_edit_document_preferences);
+	group_edit->add(action_edit_syntax);
 
 	group_user->add(action_user);
 	group_user->add(action_user_set_password);
 	group_user->add(action_user_set_colour);
-
-	group_view->add(action_view);
-	group_view->add(action_view_preferences);
-	group_view->add(action_view_syntax);
 
 	group_window->add(action_window);
 	group_window->add(action_window_userlist);
@@ -630,13 +618,13 @@ Gobby::Header::Header(const ApplicationState& state,
 	// Add None-Language
 	Glib::RefPtr<Gtk::RadioAction> action = Gtk::RadioAction::create(
 		m_lang_group,
-		"ViewSyntaxLanguageNone",
+		"EditSyntaxLanguageNone",
 		_("None"),
 		_("Unselects the current language")
 	);
 
-	group_view->add(action);
-	action_view_syntax_languages.push_back(
+	group_edit->add(action);
+	action_edit_syntax_languages.push_back(
 		LanguageWrapper(
 			action,
 			Glib::RefPtr<Gtk::SourceLanguage>(NULL)
@@ -662,13 +650,13 @@ Gobby::Header::Header(const ApplicationState& state,
 		remove_dangerous_xml(language_xml_name);
 		action = Gtk::RadioAction::create(
 			m_lang_group,
-			"ViewSyntaxLanguage" + language_xml_name,
+			"EditSyntaxLanguage" + language_xml_name,
 			language->get_name(),
 			str.str()
 		);
 
-		group_view->add(action);
-		action_view_syntax_languages.push_back(
+		group_edit->add(action);
+		action_edit_syntax_languages.push_back(
 			LanguageWrapper(action, language)
 		);
 
@@ -676,9 +664,9 @@ Gobby::Header::Header(const ApplicationState& state,
 		Glib::ustring xml_desc =
 			"<ui>"
 			"  <menubar name=\"MenuMainBar\">"
-			"    <menu action=\"MenuView\">"
-			"      <menu action=\"MenuViewSyntax\">"
-			"	 <menuitem action=\"ViewSyntaxLanguage"
+			"    <menu action=\"MenuEdit\">"
+			"      <menu action=\"MenuEditSyntax\">"
+			"	 <menuitem action=\"EditSyntaxLanguage"
 				 + language_xml_name + "\" />"
 			"      </menu>"
 			"    </menu>"
@@ -692,7 +680,6 @@ Gobby::Header::Header(const ApplicationState& state,
 	m_ui_manager->insert_action_group(group_session);
 	m_ui_manager->insert_action_group(group_edit);
 	m_ui_manager->insert_action_group(group_user);
-	m_ui_manager->insert_action_group(group_view);
 	m_ui_manager->insert_action_group(group_window);
 	m_ui_manager->insert_action_group(group_help);
 
