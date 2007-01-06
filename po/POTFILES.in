@@ -7,4 +7,5 @@ src/joindialog.cpp
 src/userlist.cpp
 src/window.cpp
 src/statusbar.cpp
+src/buffer_wrapper.cpp
 

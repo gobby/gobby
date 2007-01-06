@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-04 20:01+0200\n"
+"POT-Creation-Date: 2005-06-06 14:57+0200\n"
 "PO-Revision-Date: 2005-06-04 20:24+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
@@ -61,7 +61,7 @@ msgstr "Beendet die Anwendung"
 msgid "Session"
 msgstr "Sitzung"
 
-#: src/header.cpp:186 src/window.cpp:314
+#: src/header.cpp:186 src/window.cpp:315
 msgid "Create document"
 msgstr "Dokument erstellen"
 
@@ -131,15 +131,15 @@ msgstr "Zeigt Informationen zu Gobbys Copyright und den Mitwirkenden an"
 msgid "Create obby session"
 msgstr "obby Sitzung eröffnen"
 
-#: src/hostdialog.cpp:26 src/joindialog.cpp:27
+#: src/hostdialog.cpp:27 src/joindialog.cpp:28
 msgid "Port:"
 msgstr "Port:"
 
-#: src/hostdialog.cpp:27 src/joindialog.cpp:28
+#: src/hostdialog.cpp:28 src/joindialog.cpp:29
 msgid "Name:"
 msgstr "Name:"
 
-#: src/hostdialog.cpp:28 src/joindialog.cpp:29
+#: src/hostdialog.cpp:29 src/joindialog.cpp:30
 msgid "Color:"
 msgstr "Farbe:"
 
@@ -147,7 +147,7 @@ msgstr "Farbe:"
 msgid "Join obby session"
 msgstr "Sitzung beitreten"
 
-#: src/joindialog.cpp:26
+#: src/joindialog.cpp:27
 msgid "Host:"
 msgstr "Host:"
 
@@ -159,23 +159,23 @@ msgstr "Farbe"
 msgid "Name"
 msgstr "Name"
 
-#: src/window.cpp:277
+#: src/window.cpp:278
 msgid "A collaborative text editor"
 msgstr "Ein Gemeinschaftseditor"
 
-#: src/window.cpp:314
+#: src/window.cpp:315
 msgid "Enter document name"
 msgstr "Geben Sie bitte einen Namen für das Dokument ein."
 
-#: src/window.cpp:323
+#: src/window.cpp:324
 msgid "Open new document"
 msgstr "Neues dokument öffnen"
 
-#: src/window.cpp:340
+#: src/window.cpp:341
 msgid "Save current document"
 msgstr "Aktuelles Dokument speichern"
 
-#: src/window.cpp:454
+#: src/window.cpp:455
 msgid "Connection lost"
 msgstr "Verbindung verloren"
 

@@ -17,11 +17,6 @@ endif
 noinst_HEADERS =  inc/config.hpp
 noinst_HEADERS += inc/common.hpp
 noinst_HEADERS += inc/buffer_wrapper.hpp
-if WIN32
-noinst_HEADERS += inc/buffer_wrapper_win32.hpp
-else
-noinst_HEADERS += inc/buffer_wrapper_generic.hpp
-endif
 if WITH_GTKSOURCEVIEW
 noinst_HEADERS += inc/mimemap.hpp
 endif
@@ -60,9 +55,9 @@ endif
 gobby_SOURCES =  src/config.cpp
 gobby_SOURCES += src/buffer_wrapper.cpp
 if WIN32
-gobby_SOURCES += src/buffer_wrapper_win32.cpp
+gobby_SOURCES += src/io_connection_win32.cpp
 else
-gobby_SOURCES += src/buffer_wrapper_generic.cpp
+gobby_SOURCES += src/io_connection_generic.cpp
 endif
 if WITH_GTKSOURCEVIEW
 gobby_SOURCES += src/mimemap.cpp

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-04 20:01+0200\n"
+"POT-Creation-Date: 2005-06-06 14:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Session"
 msgstr ""
 
-#: src/header.cpp:186 src/window.cpp:314
+#: src/header.cpp:186 src/window.cpp:315
 msgid "Create document"
 msgstr ""
 
@@ -132,15 +132,15 @@ msgstr ""
 msgid "Create obby session"
 msgstr ""
 
-#: src/hostdialog.cpp:26 src/joindialog.cpp:27
+#: src/hostdialog.cpp:27 src/joindialog.cpp:28
 msgid "Port:"
 msgstr ""
 
-#: src/hostdialog.cpp:27 src/joindialog.cpp:28
+#: src/hostdialog.cpp:28 src/joindialog.cpp:29
 msgid "Name:"
 msgstr ""
 
-#: src/hostdialog.cpp:28 src/joindialog.cpp:29
+#: src/hostdialog.cpp:29 src/joindialog.cpp:30
 msgid "Color:"
 msgstr ""
 
@@ -148,7 +148,7 @@ msgstr ""
 msgid "Join obby session"
 msgstr ""
 
-#: src/joindialog.cpp:26
+#: src/joindialog.cpp:27
 msgid "Host:"
 msgstr ""
 
@@ -160,23 +160,23 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/window.cpp:277
+#: src/window.cpp:278
 msgid "A collaborative text editor"
 msgstr ""
 
-#: src/window.cpp:314
+#: src/window.cpp:315
 msgid "Enter document name"
 msgstr ""
 
-#: src/window.cpp:323
+#: src/window.cpp:324
 msgid "Open new document"
 msgstr ""
 
-#: src/window.cpp:340
+#: src/window.cpp:341
 msgid "Save current document"
 msgstr ""
 
-#: src/window.cpp:454
+#: src/window.cpp:455
 msgid "Connection lost"
 msgstr ""
 

@@ -136,8 +136,8 @@ void Gobby::Window::on_session_create() try
 		unsigned int blue = color.get_blue() * 255 / 65535;
 
 		// Create new buffer
-		obby::host_buffer* buffer = new HostBuffer(
-			port, name, red, green, blue);
+		obby::host_buffer* buffer =
+			new HostBuffer(*this, port, name, red, green, blue);
 
 		// Delete existing buffer, take new one
 		delete m_buffer;
@@ -204,7 +204,8 @@ void Gobby::Window::on_session_join() try
 
 		// TODO: Keep existing connection if host and port did not
 		// change
-		obby::client_buffer* buffer = new ClientBuffer(host, port);
+		obby::client_buffer* buffer =
+			new ClientBuffer(*this, host, port);
 
 		delete m_buffer;
 		m_buffer = buffer;
