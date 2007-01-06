@@ -20,6 +20,7 @@ Normal:
   * automatic scroll if the end of a document is looked at (#70)
   * Win32 Drag'n'Drop (#71)
   * Newly joined documents are flagged as unchanged (#72)
+  * Visualise connected / subscribed using an extender (#73)
 
 Minor:
 
@@ -132,4 +133,10 @@ Maybe closing a file shouldn't delete it, but instead should just
 unsubscribe you from it?  (It seems kind of bad that someone else can close 
 their file that I'm also currently working on, and even if they get a 
 warning, I will not.)
+
+73: Visualise connected / subscribed using an extender
+------------------------------------------------------
+The connected / subscribed flag should be visualised through a nested 
+GtkExtender instead of the flags shown up in the ListView. Perhaps it needs 
+to be converted to a TreeView to realise this, though.
 
