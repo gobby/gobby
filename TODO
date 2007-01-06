@@ -8,7 +8,6 @@ Critical:
 Major:
 
 Normal:
-  * Improve the network handling on Win32 (#2)
   * Implement support for Zeroconf (#17)
   * A flag specifing if a document has changed (#25)
   * Request confirmations for unsaved documents (#26)
@@ -28,14 +27,7 @@ Enhancement:
   * Multiple user lists (#12)
   * Auto indentation (#23)
   * Focus the text-widget after having created/joined a session (#35)
-  * Document owners (#38)
 
-
-2: Improve the network handling on Win32
-----------------------------------------
-Opening large documents is ''really'' slow on the timer implementation in 
-use on Win32. Currently the connection is polled every 400ms, which is 
-certainly not optimal.
 
 17: Implement support for Zeroconf
 ----------------------------------
@@ -146,15 +138,4 @@ option to enable or disable this feature.
 ---------------------------------------------------------------
 It would be nice, if one could just create/join a session and then start to 
 write without having to focus the editor widget.
-
-38: Document owners
--------------------
-Document should store their author. This would allow two possibilites:
-
- * The owner can give different people privilegies to access his document, 
-such as ''none'', ''read'', ''read/write''.
- * The document itself is no longer identified by its ID but by its ID 
-'''and''' the ID of the document owner. This allows that a document appears 
-immediately on the client side without waiting for server acknowledegment 
-because the identifications for a document cannot conflict.
 
