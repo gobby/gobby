@@ -361,7 +361,7 @@ Gobby::PreferencesDialog::FileList::FileList(Gtk::Window& parent,
 
 	m_view.append_column(m_viewcol_pattern);
 	m_view.append_column(m_viewcol_lang);
-	m_view.append_column(m_viewcol_mimetype);
+	//m_view.append_column(m_viewcol_mimetype);
 
 	m_view.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
 	m_view.get_selection()->signal_changed().connect(
