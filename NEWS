@@ -7,6 +7,7 @@ Version 0.2.2:
  * Some new file extensions are mapped to their corresponding MIME type
  * Files saved are no longer converted to the charset settings of the
    current locale
+ * Line endings of loaded files are now unified to result only in UNIX ones
  * Added Spanish translation, thanks to Mario Palomo
 
 Version 0.2.1:
