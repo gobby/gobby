@@ -129,23 +129,6 @@ public:
 	signal_tab_switched_type
 		tab_switched_event() const;
 protected:
-	/** Parameter type for the internal enable_document_items function.
-	 */
-	enum DocumentItems {
-		/** Disable all document items.
-		 */
-		DOCUMENT_ITEMS_DISABLE_ALL = 0,
-
-		/** Enable only document items which are useful even if the
-		 * user is not subscribed to the document, disable others.
-		 */
-		DOCUMENT_ITEMS_ENABLE_DISCONN = 1,
-
-		/** Enable all document items.
-		 */
-		DOCUMENT_ITEMS_ENABLE_ALL = 2
-	};
-
 	// Overrides
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
 
@@ -153,7 +136,6 @@ protected:
 
 	// Internals
 	void set_tab_colour(DocWindow& win, const Glib::ustring& colour);
-	void enable_document_items(DocumentItems which);
 
 	// Signal handlers
 	void on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language);
@@ -179,6 +161,7 @@ protected:
 		m_signal_document_add;
 	signal_document_remove_type
 		m_signal_document_remove;
+
 	signal_document_close_request_type
 		m_signal_document_close_request;
 	signal_document_cursor_moved_type
@@ -187,6 +170,7 @@ protected:
 		m_signal_document_content_changed;
 	signal_document_language_changed_type
 		m_signal_document_language_changed;
+
 	signal_tab_switched_type
 		m_signal_tab_switched;
 

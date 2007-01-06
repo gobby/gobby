@@ -54,7 +54,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 #ifdef WITH_HOWL
 	m_zeroconf(NULL),
 #endif
-	m_document_settings(*this), m_header(),
+	m_application_state(APPLICATION_NONE),
+	m_document_settings(*this), m_header(m_application_state),
 	m_userlist(*this, m_header, m_preferences, config["windows"]),
 	m_documentlist(
 		*this,
@@ -126,13 +127,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
-	// Initialise header sensitivity
-	m_header.group_session->set_sensitive(false);
-	m_header.group_user->set_sensitive(false);
-	m_header.group_view->set_sensitive(false);
-	m_header.action_app_session_save->set_sensitive(false);
-	m_header.action_app_session_quit->set_sensitive(false);
-
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
 
@@ -154,6 +148,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 
 	set_title("Gobby");
 	set_default_size(640, 480);
+
+	m_application_state.modify(APPLICATION_INITIAL, APPLICATION_NONE);
 
 #ifdef WITH_HOWL
 	// Initialise Zeroconf
@@ -231,6 +227,7 @@ void Gobby::Window::on_realize()
 bool Gobby::Window::on_delete_event(GdkEventAny* event)
 {
 	if(m_buffer.get() == NULL) return false;
+	if(!m_buffer->is_open() ) return false;
 
 	Gtk::MessageDialog dlg(
 		*this,
@@ -271,21 +268,6 @@ void Gobby::Window::obby_start()
 	// Accept drag and drop of files into the gobby window
 	m_dnd.reset(new DragDrop(*this) );
 
-	m_header.group_session->set_sensitive(true);
-	m_header.action_session_document_create->set_sensitive(true);
-	m_header.action_session_document_open->set_sensitive(true);
-	m_header.group_user->set_sensitive(true);
-	m_header.group_view->set_sensitive(true);
-	m_header.action_app_session_save->set_sensitive(true);
-	m_header.action_app_session_quit->set_sensitive(true);
-
-	m_header.action_app_session_create->set_sensitive(false);
-	m_header.action_app_session_join->set_sensitive(false);
-
-	m_header.action_user_set_password->set_sensitive(
-		dynamic_cast<ClientBuffer*>(m_buffer.get()) != NULL
-	);
-
 	// Delegate start of obby session
 	m_folder.obby_start(*m_buffer);
 	m_document_settings.obby_start(*m_buffer);
@@ -310,8 +292,8 @@ void Gobby::Window::obby_start()
 		on_obby_document_insert(*iter);
 
 	// Set last page as active one because it is currently shown anyway.
-	if(m_buffer->document_count() > 0)
-		m_folder.set_current_page(m_buffer->document_count() - 1);
+	//if(m_buffer->document_count() > 0)
+	//	m_folder.set_current_page(m_buffer->document_count() - 1);
 
 	// Clear location of previous session file, this is a new session
 	m_prev_session = "";
@@ -325,6 +307,16 @@ void Gobby::Window::obby_start()
 		m_documentlist.show();
 		m_documentlist.grab_focus();
 	}
+
+	ApplicationFlags inc_flags = APPLICATION_SESSION;
+	ApplicationFlags exc_flags = APPLICATION_INITIAL | APPLICATION_DOCUMENT;
+
+	if(dynamic_cast<ClientBuffer*>(m_buffer.get()) != NULL)
+		exc_flags |= APPLICATION_HOST;
+	else
+		inc_flags |= APPLICATION_HOST;
+
+	m_application_state.modify(inc_flags, exc_flags);
 }
 
 void Gobby::Window::obby_end()
@@ -337,6 +329,8 @@ void Gobby::Window::obby_end()
 			"Buffer not available"
 		);
 	}
+
+	m_application_state.modify(APPLICATION_NONE, APPLICATION_SESSION);
 
 	if(m_buffer->is_open() )
 	{
@@ -360,15 +354,6 @@ void Gobby::Window::obby_end()
 	m_documentlist.obby_end();
 	m_chat.obby_end();
 	m_statusbar.obby_end();
-
-	m_header.action_session_document_create->set_sensitive(false);
-	m_header.action_session_document_open->set_sensitive(false);
-	m_header.group_user->set_sensitive(false);
-	//m_header.action_app_session_save->set_sensitive(false);
-	m_header.action_app_session_quit->set_sensitive(false);
-
-	m_header.action_app_session_create->set_sensitive(true);
-	m_header.action_app_session_join->set_sensitive(true);
 
 #ifdef WITH_HOWL
 	if(m_zeroconf.get() )
@@ -603,7 +588,16 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
 	// Select newly created page
 	m_folder.set_current_page(m_folder.page_num(window) );
-	window.grab_focus(); // TODO: Grab focus to sourceview...
+	window.grab_focus();
+
+	if(m_folder.get_n_pages() == 1)
+	{
+		// There have not been any documents before
+		m_application_state.modify(
+			APPLICATION_DOCUMENT,
+			APPLICATION_NONE
+		);
+	}
 }
 
 void Gobby::Window::on_folder_document_remove(DocWindow& window)
@@ -614,13 +608,10 @@ void Gobby::Window::on_folder_document_remove(DocWindow& window)
 	{
 		update_title_bar();
 
-		// TODO: This should be done automatically with flags for the
-		// menu items which specify when the entry is visible
-		if(m_buffer.get() == NULL || !m_buffer->is_open())
-		{
-			m_header.group_session->set_sensitive(false);
-			m_header.group_view->set_sensitive(false);
-		}
+		m_application_state.modify(
+			APPLICATION_NONE,
+			APPLICATION_DOCUMENT
+		);
 	}
 }
 
@@ -1306,18 +1297,7 @@ void Gobby::Window::close_document(DocWindow& window)
 		}
 	}
 
-//	if(m_buffer.get() != NULL)
-//	{
-		// Unsubscribe from document
-		window.get_info().unsubscribe();
-//	}
-//	else
-//	{
-		// Buffer does not exist: Maybe the connection has been lost
-		// or something: Just remove the document from the folder.
-//		m_folder.remove_page(window);
-//		on_folder_document_remove(window);
-//	}
+	window.get_info().unsubscribe();
 }
 
 void Gobby::Window::display_error(const Glib::ustring& message,
@@ -1327,4 +1307,3 @@ void Gobby::Window::display_error(const Glib::ustring& message,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
 }
-

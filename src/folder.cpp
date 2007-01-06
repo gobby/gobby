@@ -115,7 +115,8 @@ Gobby::Folder::TabLabel::close_event()
 Gobby::Folder::Folder(Header& header,
                       const Preferences& preferences):
 	Gtk::Notebook(),
-	m_block_language(false), m_header(header), m_preferences(preferences), m_buffer(NULL)
+	m_block_language(false), m_header(header), m_preferences(preferences),
+	m_buffer(NULL)
 {
 	set_scrollable(true);
 
@@ -155,9 +156,6 @@ void Gobby::Folder::obby_start(LocalBuffer& buf)
 	while(get_n_pages() )
 		remove_page(0);
 
-	// Disable all document items, there are no documents upon start
-	enable_document_items(DOCUMENT_ITEMS_DISABLE_ALL);
-
 	set_sensitive(true);
 	m_buffer = &buf;
 }
@@ -169,34 +167,19 @@ void Gobby::Folder::obby_end()
 	// Insensitive just the text editor to allow to scroll and tab between
 	// the documents
 	for(int i = 0; i < get_n_pages(); ++ i)
-		static_cast<DocWindow*>(get_nth_page(i) )->disable(); //get_document().set_sensitive(false);
-
-	// Disable some items, but let save and close still active.
-	// Disable all if the last document has been closed.
-	if(get_n_pages() > 0)
-		enable_document_items(DOCUMENT_ITEMS_ENABLE_DISCONN);
+		static_cast<DocWindow*>(get_nth_page(i) )->disable();
 }
 
 void Gobby::Folder::obby_user_join(const obby::user& user)
 {
-	// Pass user join event to documents
-	//for(unsigned int i = 0; i < get_n_pages(); ++ i)
-	//	static_cast<DocWindow*>(get_nth_page(i) )->obby_user_join(user);
 }
 
 void Gobby::Folder::obby_user_part(const obby::user& user)
 {
-	// Pass user part event to documents
-	//for(unsigned int i = 0; i < get_n_pages(); ++ i)
-	//	static_cast<DocWindow*>(get_nth_page(i) )->obby_user_part(user);
 }
 
 void Gobby::Folder::obby_user_colour(const obby::user& user)
 {
-	// Pass user colour event to documents
-	//for(unsigned int i = 0; i < get_n_pages(); ++ i)
-	//	static_cast<DocWindow*>(
-	//		get_nth_page(i) )->obby_user_colour(user);
 }
 
 namespace
@@ -300,20 +283,6 @@ void Gobby::Folder::set_tab_colour(DocWindow& win, const Glib::ustring& colour)
 	label.set_label("<span foreground=\"" + colour + "\">" +
 		escapehtml(label.get_label() ) + "</span>");
 	label.set_use_markup(true);
-}
-
-void Gobby::Folder::enable_document_items(DocumentItems which)
-{
-	m_header.action_session_document_save->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
-	m_header.action_session_document_save_as->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
-	m_header.action_session_document_close->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
-	m_header.action_view_preferences->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
-	m_header.action_view_syntax->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
 }
 
 void Gobby::Folder::on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language)
@@ -420,10 +389,6 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 	// Show child
 	new_wnd->show_all();
 
-	// Enable document items as there is at least one document we are
-	// subscribed to.
-	enable_document_items(DOCUMENT_ITEMS_ENABLE_ALL);
-
 	// Emit add_document signal
 	m_signal_document_add.emit(*new_wnd);
 }
@@ -456,12 +421,6 @@ void Gobby::Folder::on_self_unsubscribe(LocalDocumentInfo& info)
 	// Emit remove_document signal (TODO: Check that wnd still exists, it
 	// is Gtk::managed
 	m_signal_document_remove.emit(*wnd);
-
-	if(get_n_pages() == 0)
-	{
-		// Disable document items if there are no more documents left
-		enable_document_items(DOCUMENT_ITEMS_DISABLE_ALL);
-	}
 
 	// The next time the user subscribes the DocWindow will be
 	// recreated

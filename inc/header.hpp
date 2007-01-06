@@ -19,12 +19,15 @@
 #ifndef _GOBBY_HEADER_HPP_
 #define _GOBBY_HEADER_HPP_
 
+#include <list>
+
 #include <gtkmm/box.h>
 #include <gtkmm/uimanager.h>
 #include <gtkmm/radioaction.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/toolbar.h>
 
+#include "application_state.hpp"
 #include "sourceview/sourcelanguage.hpp"
 #include "sourceview/sourcelanguagesmanager.hpp"
 
@@ -46,9 +49,57 @@ public:
 		Code code() const;
 	};
 
+	/** @brief Action that automatically chances sensitivity depending
+	 * on application state.
+	 */
+	class AutoAction
+	{
+	public:
+		typedef Glib::RefPtr<Gtk::Action> action_type;
+
+		AutoAction(action_type action,
+		           const ApplicationState& state,
+		           ApplicationFlags inc_flags,
+			   ApplicationFlags exc_flags);
+
+	protected:
+		void on_state_change(const ApplicationState& state);
+
+		action_type m_action;
+		ApplicationFlags m_inc_flags;
+		ApplicationFlags m_exc_flags;
+	};
+
+	/** @brief Class that stores multiple AutoActions.
+	 *
+	 * Once an AutoAction has been created, it works without any further
+	 * need to access the AutoAction object again, one just needs to
+	 * keep the AutoAction somewhere and release it when the application
+	 * exits.
+	 *
+	 * So this class does just keep auto actions without providing access
+	 * to them.
+	 */
+	class AutoList
+	{
+	public:
+		typedef AutoAction::action_type action_type;
+
+		void add(action_type action,
+		         const ApplicationState& state,
+			 ApplicationFlags inc_flags,
+			 ApplicationFlags exc_flags);
+
+		~AutoList();
+
+	protected:
+		std::list<AutoAction*> m_list;
+	};
+
 	class LanguageWrapper
 	{
 	public:
+		//typedef AutoAction<Gtk::RadioAction> Action;
 		typedef Glib::RefPtr<Gtk::RadioAction> Action;
 		typedef Glib::RefPtr<Gtk::SourceLanguage> Language;
 
@@ -62,7 +113,7 @@ public:
 		Language m_language;
 	};
 
-	Header();
+	Header(const ApplicationState& state);
 
 	// Access to accelerator groups of the ui manager
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
@@ -122,6 +173,11 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_help_about;
 
 protected:
+	void set_action_auto(const Glib::RefPtr<Gtk::Action>& action,
+	                     const ApplicationState& state,
+	                     ApplicationFlags inc_flags,
+	                     ApplicationFlags exc_flags);
+
 	const Glib::RefPtr<Gtk::UIManager> m_ui_manager;
 	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 
@@ -129,6 +185,11 @@ protected:
 	Gtk::Toolbar* m_toolbar;
 
 	Gtk::RadioButtonGroup m_lang_group;
+
+	/** @brief List that just stores internally the auto actions to have
+	 * the actions change sensitivity automatically.
+	 */
+	AutoList m_auto_actions;
 };
 
 }

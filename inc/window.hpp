@@ -23,9 +23,11 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/messagedialog.h>
+
 #include "features.hpp"
 #include "icon.hpp"
 #include "config.hpp"
+#include "application_state.hpp"
 #include "header.hpp"
 #include "docwindow.hpp"
 #include "buffer_def.hpp"
@@ -147,6 +149,7 @@ protected:
 	Gtk::Frame m_frame_chat;
 	Gtk::Frame m_frame_text;
 
+	ApplicationState m_application_state;
 	DocumentSettings m_document_settings;
 
 	Header m_header;

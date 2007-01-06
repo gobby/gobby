@@ -149,6 +149,48 @@ Gobby::Header::LanguageWrapper::get_language() const
 	return m_language;
 }
 
+Gobby::Header::AutoAction::AutoAction(action_type action,
+                                      const ApplicationState& state,
+                                      ApplicationFlags inc_flags,
+                                      ApplicationFlags exc_flags):
+	m_action(action), m_inc_flags(inc_flags), m_exc_flags(exc_flags)
+{
+	state.state_changed_event().connect(
+		sigc::bind(
+			sigc::hide(
+				sigc::mem_fun(
+					*this,
+					&AutoAction::on_state_change
+				)
+			),
+			sigc::ref(state)
+		)
+	);
+}
+
+void Gobby::Header::AutoAction::on_state_change(const ApplicationState& state)
+{
+	m_action->set_sensitive(state.query(m_inc_flags, m_exc_flags) );
+}
+
+void Gobby::Header::AutoList::add(action_type action,
+                                  const ApplicationState& state,
+                                  ApplicationFlags inc_flags,
+                                  ApplicationFlags exc_flags)
+{
+	m_list.push_back(new AutoAction(action, state, inc_flags, exc_flags) );
+}
+
+Gobby::Header::AutoList::~AutoList()
+{
+	for(std::list<AutoAction*>::iterator iter = m_list.begin();
+	    iter != m_list.end();
+	    ++ iter)
+	{
+		delete *iter;
+	}
+}
+
 Gobby::Header::Error::Error(Code error_code, const Glib::ustring& error_message)
  : Glib::Error(g_quark_from_static_string("GOBBY_HEADER_ERROR"),
                static_cast<int>(error_code), error_message)
@@ -160,7 +202,7 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 	return static_cast<Code>(gobject_->code);
 }
 
-Gobby::Header::Header():
+Gobby::Header::Header(const ApplicationState& state):
 	group_app(Gtk::ActionGroup::create() ),
 	group_session(Gtk::ActionGroup::create() ),
 	group_edit(Gtk::ActionGroup::create() ),
@@ -369,6 +411,147 @@ Gobby::Header::Header():
 	m_ui_manager(Gtk::UIManager::create() ),
 	m_lang_manager(Gtk::SourceLanguagesManager::create() )
 {
+	// Assign auto actions
+	set_action_auto(
+		action_app, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_app_session_create, state,
+		APPLICATION_NONE, APPLICATION_SESSION
+	);
+
+	set_action_auto(
+		action_app_session_join, state,
+		APPLICATION_NONE, APPLICATION_SESSION
+	);
+
+	set_action_auto(
+		action_app_session_save, state,
+		APPLICATION_NONE, APPLICATION_INITIAL
+	);
+
+	set_action_auto(
+		action_app_session_quit, state,
+		APPLICATION_SESSION, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_app_quit, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_session, state,
+		APPLICATION_NONE, APPLICATION_INITIAL
+	);
+
+	set_action_auto(
+		action_session_document_create, state,
+		APPLICATION_SESSION, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_session_document_open, state,
+		APPLICATION_SESSION, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_session_document_save, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_session_document_save_as, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_session_document_close, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_edit, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_edit_search, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_edit_search_replace, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_edit_goto_line, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_edit_preferences, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_user, state,
+		APPLICATION_SESSION, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_user_set_password, state,
+		APPLICATION_SESSION, APPLICATION_HOST
+	);
+
+	set_action_auto(
+		action_user_set_colour, state,
+		APPLICATION_SESSION, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_view, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_view_preferences, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_view_syntax, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_window, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_window_userlist, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_window_documentlist, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_help, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
+	set_action_auto(
+		action_help_about, state,
+		APPLICATION_NONE, APPLICATION_NONE
+	);
+
 	// Add basic menu
 	m_ui_manager->add_ui_from_string(ui_desc);
 
@@ -544,3 +727,12 @@ Gtk::Toolbar& Gobby::Header::get_toolbar()
 {
 	return *m_toolbar;
 }
+
+void Gobby::Header::set_action_auto(const Glib::RefPtr<Gtk::Action>& action,
+                                    const ApplicationState& state,
+                                    ApplicationFlags inc_flags,
+                                    ApplicationFlags exc_flags)
+{
+	m_auto_actions.add(action, state, inc_flags, exc_flags);
+}
+
