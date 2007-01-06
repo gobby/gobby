@@ -19,6 +19,37 @@
 #include "common.hpp"
 #include "userlist.hpp"
 
+namespace
+{
+	Glib::RefPtr<Gdk::Pixbuf> create_coloured_pixbuf(int red, int green,
+	                                                 int blue)
+	{
+		Glib::RefPtr<Gdk::Pixbuf> pixbuf =
+			Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, 16,
+				16);
+		pixbuf->fill( (red << 24) | (green << 16) | (blue << 8) );
+
+		// Border around the color
+		guint8* pixels = pixbuf->get_pixels();
+		for(unsigned int y = 0; y < 16; ++ y)
+		{
+			for(unsigned int x = 0; x < 16; ++ x)
+			{
+				if(x == 0 || y == 0 || x == 15 || y == 15)
+				{
+					pixels[0] = 0;
+					pixels[1] = 0;
+					pixels[2] = 0;
+				}
+
+				pixels += 3;
+			}
+		}
+		return pixbuf;
+	}
+}
+
+
 Gobby::UserList::Columns::Columns()
 {
 	add(name);
@@ -67,29 +98,8 @@ void Gobby::UserList::obby_user_join(obby::user& user)
 	unsigned int green = user.get_green();
 	unsigned int blue = user.get_blue();
 
-	Glib::RefPtr<Gdk::Pixbuf> pixbuf =
-		Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, 16, 16);
-	pixbuf->fill( (red << 24) | (green << 16) | (blue << 8) );
-
-	// Border around the color
-	guint8* pixels = pixbuf->get_pixels();
-	for(unsigned int y = 0; y < 16; ++ y)
-	{
-		for(unsigned int x = 0; x < 16; ++ x)
-		{
-			if(x == 0 || y == 0 || x == 15 || y == 15)
-			{
-				pixels[0] = 0;
-				pixels[1] = 0;
-				pixels[2] = 0;
-			}
-
-			pixels += 3;
-		}
-	}
-
 	row[m_list_cols.name] = user.get_name();
-	row[m_list_cols.color] = pixbuf;
+	row[m_list_cols.color] = create_coloured_pixbuf(red, green, blue);
 }
 
 void Gobby::UserList::obby_user_part(obby::user& user)
@@ -98,6 +108,17 @@ void Gobby::UserList::obby_user_part(obby::user& user)
 	if(iter == m_list_data->children().end() ) return;
 
 	m_list_data->erase(iter);
+}
+
+void Gobby::UserList::obby_user_colour(obby::user& user)
+{
+	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
+
+	unsigned int red = user.get_red();
+	unsigned int green = user.get_green();
+	unsigned int blue = user.get_blue();
+	
+	(*iter)[m_list_cols.color] = create_coloured_pixbuf(red, green, blue);
 }
 
 void Gobby::UserList::obby_document_insert(obby::local_document_info& document)

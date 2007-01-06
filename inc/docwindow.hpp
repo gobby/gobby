@@ -50,6 +50,7 @@ public:
 	 */
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);
+	void obby_user_colour(obby::user& user);
 
 protected:
 	Document m_doc;

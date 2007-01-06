@@ -66,6 +66,7 @@ protected:
 	void on_edit_preferences();
 
 	void on_user_set_password();
+	void on_user_set_colour();
 
 	void on_view_preferences();
 	void on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang);
@@ -84,6 +85,8 @@ protected:
 
 	void on_obby_user_join(obby::user& user);
 	void on_obby_user_part(obby::user& user);
+	void on_obby_user_colour(obby::user& user);
+	void on_obby_user_colour_failed();
 	void on_obby_document_insert(obby::document_info& document);
 	void on_obby_document_remove(obby::document_info& document);
 

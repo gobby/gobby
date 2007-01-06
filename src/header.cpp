@@ -49,6 +49,7 @@ namespace {
 		"    </menu>"
 		"    <menu action=\"MenuUser\">"
 		"      <menuitem action=\"UserSetPassword\" />"
+		"      <menuitem action=\"UserSetColour\" />"
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
 		"      <menuitem action=\"ViewPreferences\" />"
@@ -280,6 +281,20 @@ Gobby::Header::Header(const Folder& folder)
 		)
 	);
 
+	// Set colour
+	m_group_app->add(
+		Gtk::Action::create(
+			"UserSetColour",
+			Gtk::Stock::SELECT_COLOR,
+			_("Set colour"),
+			_("Sets a new colour for this user")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_user_set_colour
+		)
+	);
+
 	// View menu
 	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
 
@@ -507,6 +522,12 @@ Gobby::Header::user_set_password_event() const
 	return m_signal_user_set_password;
 }
 
+Gobby::Header::signal_user_set_colour_type
+Gobby::Header::user_set_colour_event() const
+{
+	return m_signal_user_set_colour;
+}
+
 Gobby::Header::signal_view_preferences_type
 Gobby::Header::view_preferences_event() const
 {
@@ -643,6 +664,11 @@ void Gobby::Header::on_app_edit_preferences()
 void Gobby::Header::on_app_user_set_password()
 {
 	m_signal_user_set_password.emit();
+}
+
+void Gobby::Header::on_app_user_set_colour()
+{
+	m_signal_user_set_colour.emit();
 }
 
 void Gobby::Header::on_app_view_preferences()

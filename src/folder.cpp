@@ -126,6 +126,13 @@ void Gobby::Folder::obby_user_part(obby::user& user)
 		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_part(user);
 }
 
+void Gobby::Folder::obby_user_colour(obby::user& user)
+{
+	// Pass user colour event to documents
+	for(unsigned int i = 0; i < get_n_pages(); ++ i)
+		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_colour(user);
+}
+
 void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 {
 	// Create new document

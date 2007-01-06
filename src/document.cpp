@@ -232,31 +232,16 @@ Glib::ustring Gobby::Document::get_content()
 
 void Gobby::Document::obby_user_join(obby::user& user)
 {
-	// Build tag name for this user
-	Glib::ustring tag_name = "gobby_user_" + user.get_name();
-
-	// Find already existing tag
-	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
-	Glib::RefPtr<Gtk::TextBuffer::TagTable> tag_table =
-		buffer->get_tag_table();
-	Glib::RefPtr<Gtk::TextBuffer::Tag> tag = tag_table->lookup(tag_name);
-
-	// Create new tag, if it doesn't exist
-	if(!tag)
-		tag = buffer->create_tag(tag_name);
-
-	// Build color
-	Gdk::Color color;
-	color.set_red(user.get_red() * 65535 / 255);
-	color.set_green(user.get_green() * 65535 / 255);
-	color.set_blue(user.get_blue() * 65535 / 255);
-
-	// Set/Update color
-	tag->property_background_gdk() = color;
+	update_tag_colour(user);
 }
 
 void Gobby::Document::obby_user_part(obby::user& user)
 {
+}
+
+void Gobby::Document::obby_user_colour(obby::user& user)
+{
+	update_tag_colour(user);
 }
 
 void Gobby::Document::on_obby_insert(const obby::insert_record& record)
@@ -666,5 +651,30 @@ Gobby::Document::on_remove_user_colour(Glib::RefPtr<Gtk::TextBuffer::Tag> tag,
 	Glib::ustring tag_name = tag->property_name();
 	if(tag_name.compare(0, 10, "gobby_user") == 0)
 		get_buffer()->remove_tag(tag, begin, end);
+}
+
+void Gobby::Document::update_tag_colour(obby::user& user)
+{
+	// Build tag name for this user
+	Glib::ustring tag_name = "gobby_user_" + user.get_name();
+
+	// Find already existing tag
+	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer::TagTable> tag_table =
+		buffer->get_tag_table();
+	Glib::RefPtr<Gtk::TextBuffer::Tag> tag = tag_table->lookup(tag_name);
+
+	// Create new tag, if it doesn't exist
+	if(!tag)
+		tag = buffer->create_tag(tag_name);
+
+	// Build color
+	Gdk::Color color;
+	color.set_red(user.get_red() * 65535 / 255);
+	color.set_green(user.get_green() * 65535 / 255);
+	color.set_blue(user.get_blue() * 65535 / 255);
+
+	// Set/Update color
+	tag->property_background_gdk() = color;
 }
 

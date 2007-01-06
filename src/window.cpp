@@ -41,6 +41,7 @@
 #include "window.hpp"
 #include "features.hpp"
 #include "icon.hpp"
+#include "colorsel.hpp"
 
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
@@ -73,7 +74,9 @@ Gobby::Window::Window()
 
 	m_header.user_set_password_event().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
-
+	m_header.user_set_colour_event().connect(
+		sigc::mem_fun(*this, &Window::on_user_set_colour) );
+	
 	m_header.view_preferences_event().connect(
 		sigc::mem_fun(*this, &Window::on_view_preferences) );
 	m_header.view_language_event().connect(
@@ -151,10 +154,15 @@ void Gobby::Window::obby_start()
 		sigc::mem_fun(*this, &Window::on_obby_user_join) );
 	m_buffer->user_part_event().connect(
 		sigc::mem_fun(*this, &Window::on_obby_user_part) );
+	m_buffer->user_colour_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_user_colour) );
+	m_buffer->user_colour_failed_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_user_colour_failed) );
+
 	m_buffer->document_insert_event().connect(
-		sigc::mem_fun(*this, &Window::on_obby_document_insert));
+		sigc::mem_fun(*this, &Window::on_obby_document_insert) );
 	m_buffer->document_remove_event().connect(
-		sigc::mem_fun(*this, &Window::on_obby_document_remove));
+		sigc::mem_fun(*this, &Window::on_obby_document_remove) );
 
 	m_buffer->message_event().connect(
 		sigc::mem_fun(*this, &Window::on_obby_chat) );
@@ -491,6 +499,21 @@ void Gobby::Window::on_user_set_password()
 	}
 }
 
+void Gobby::Window::on_user_set_colour()
+{
+	ColorSelectionDialog dlg;
+
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		Gdk::Color color = dlg.get_colorsel()->get_current_color();
+		m_buffer->set_colour(
+			color.get_red() * 255 / 65535,
+			color.get_green() * 255 / 65535,
+			color.get_blue() * 255 / 65535
+			);
+	}
+}
+
 void Gobby::Window::on_view_preferences()
 {
 	// Get current page
@@ -584,6 +607,17 @@ void Gobby::Window::on_obby_user_part(obby::user& user)
 	m_userlist.obby_user_part(user);
 	m_chat.obby_user_part(user);
 	m_statusbar.obby_user_part(user);
+}
+
+void Gobby::Window::on_obby_user_colour(obby::user& user)
+{
+	m_userlist.obby_user_colour(user);
+	m_folder.obby_user_colour(user);
+}
+
+void Gobby::Window::on_obby_user_colour_failed()
+{
+	display_error(_("Colour change failed: Colour already in use") );
 }
 
 void Gobby::Window::on_obby_document_insert(obby::document_info& document)

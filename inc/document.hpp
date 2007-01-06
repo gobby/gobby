@@ -135,6 +135,7 @@ v v v v v v v
 	 */
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);
+	void obby_user_colour(obby::user& user);
 
 protected:
 	/** Obby signal handlers.
@@ -238,6 +239,7 @@ private:
 	                           const Gtk::TextBuffer::iterator& begin,
 	                           const Gtk::TextBuffer::iterator& end);
 
+	void update_tag_colour(obby::user& user);
 };
 
 }

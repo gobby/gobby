@@ -51,3 +51,9 @@ void Gobby::DocWindow::obby_user_part(obby::user& user)
 {
 	m_doc.obby_user_part(user);
 }
+
+void Gobby::DocWindow::obby_user_colour(obby::user& user)
+{
+	m_doc.obby_user_colour(user);
+}
+
