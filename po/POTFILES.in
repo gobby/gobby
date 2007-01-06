@@ -1,5 +1,6 @@
 # source files
 
+src/encoding.cpp
 src/chat.cpp
 src/header.cpp
 src/preferencesdialog.cpp

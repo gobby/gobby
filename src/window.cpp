@@ -31,6 +31,7 @@
 #include <obby/host_buffer.hpp>
 
 #include "common.hpp"
+#include "encoding.hpp"
 #include "docwindow.hpp"
 #include "passworddialog.hpp"
 #include "entrydialog.hpp"
@@ -809,10 +810,10 @@ void Gobby::Window::open_local_file(const Glib::ustring& file)
 		// TODO: Convert file to UTF-8
 		m_buffer->create_document(
 			Glib::path_get_basename(file),
-			Glib::file_get_contents(file)
+			convert_to_utf8(Glib::file_get_contents(file))
 		);
 	}
-	catch(Glib::FileError& e)
+	catch(Glib::Exception& e)
 	{
 		// Show errors while opening the file (e.g. if it doesn't exist)
 		display_error(e.what() );
@@ -876,4 +877,5 @@ void Gobby::Window::display_error(const Glib::ustring& message,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
 }
+
 

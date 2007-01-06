@@ -12,6 +12,7 @@ endif
 
 noinst_HEADERS =  inc/config.hpp
 noinst_HEADERS += inc/common.hpp
+noinst_HEADERS += inc/encoding.hpp
 noinst_HEADERS += inc/buffer_wrapper.hpp
 noinst_HEADERS += inc/mimemap.hpp
 noinst_HEADERS += inc/defaultdialog.hpp
@@ -52,6 +53,7 @@ BUILT_SOURCES = win32/gobby.res
 endif
 
 gobby_SOURCES =  src/config.cpp
+gobby_SOURCES += src/encoding.cpp
 gobby_SOURCES += src/buffer_wrapper.cpp
 if WIN32
 gobby_SOURCES += src/io_connection_win32.cpp
