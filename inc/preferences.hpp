@@ -30,7 +30,6 @@ public:
 	Preferences(Config& m_config);
 	~Preferences();
 
-	// TODO: Accessors..?
 	struct
 	{
 		unsigned int tab_width;

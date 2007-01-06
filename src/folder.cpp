@@ -54,6 +54,7 @@ Gobby::Folder::TabLabel::close_event()
 
 v v v v v v v
 Gobby::Folder::Folder(const Preferences& preferences)
+v v v v v v v
  : Gtk::Notebook(), m_preferences(preferences), m_running(false)
 *************
 v v v v v v v
@@ -67,6 +68,10 @@ Gobby::Folder::Folder(const Preferences& preferences)
    , m_lang_manager(Gtk::SourceLanguagesManager::create() )
 #endif
 ^ ^ ^ ^ ^ ^ ^
+^ ^ ^ ^ ^ ^ ^
+*************
+ : Gtk::Notebook(), m_preferences(preferences), m_running(false),
+   m_lang_manager(Gtk::SourceLanguagesManager::create() )
 ^ ^ ^ ^ ^ ^ ^
 {
 }

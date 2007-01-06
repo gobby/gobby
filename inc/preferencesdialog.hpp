@@ -108,13 +108,11 @@ public:
 	class Security : public Page
 	{
 	public:
-		Security(Config& config);
+		Security(const Preferences& preferences);
 		~Security();
 
 		// Fetch the key components
 	protected:
-		virtual void on_response(int response_id);
-
 		Gtk::VBox m_box;
 
 		Gtk::VBox m_box_key;
