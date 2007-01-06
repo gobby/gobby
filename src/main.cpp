@@ -185,10 +185,17 @@ int main(int argc, char* argv[]) try
 	{
 		// Make absolute filenames to understand the files
 		// from everywhere when we send them to another process
-		files[i - 1] = Glib::build_filename(
-			Glib::get_current_dir(),
-			argv[i]
-		);
+		if(!Glib::path_is_absolute(argv[i]))
+		{
+			files[i - 1] = Glib::build_filename(
+				Glib::get_current_dir(),
+				argv[i]
+			);
+		}
+		else
+		{
+			files[i - 1] = argv[i];
+		}
 	}
 
 	Gobby::IconManager icon_mgr;
