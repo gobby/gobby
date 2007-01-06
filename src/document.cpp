@@ -24,6 +24,8 @@
 #include "folder.hpp"
 
 #include <iostream>
+#include <cassert>
+	
 Gobby::Document::Document(obby::document& doc, const Folder& folder)
  : Gtk::ScrolledWindow(), m_doc(doc), m_folder(folder), m_editing(true)
 {
