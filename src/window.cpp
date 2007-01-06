@@ -343,7 +343,8 @@ void Gobby::Window::obby_end()
 	m_buffer.reset();
 
 #ifdef WITH_HOWL
-	m_zeroconf->unpublish_all();
+	if(m_zeroconf.get() )
+		m_zeroconf->unpublish_all();
 #endif
 }
 
