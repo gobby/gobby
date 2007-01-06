@@ -126,14 +126,14 @@ gobby_SOURCES += src/sourceview/sourcebuffer.cpp
 gobby_SOURCES += src/sourceview/sourcelanguage.cpp
 gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
 
-appicondir      = $(datadir)/pixmaps
-pixmapdir       = $(datadir)/pixmaps/gobby
-gobby_CPPFLAGS += -DAPPICON_DIR=\""$(appicondir)"\"
-gobby_CPPFLAGS += -DPIXMAPS_DIR=\""$(pixmapdir)"\"
-appicon_DATA    = contrib/artwork/gobby.png
-pixmap_DATA     = contrib/artwork/userlist.png
-pixmap_DATA    += contrib/artwork/doclist.png
-pixmap_DATA    += contrib/artwork/chat.png
+appicondir        = $(datadir)/pixmaps
+pixmapdir         = $(datadir)/pixmaps/gobby
+gobby_CPPFLAGS   += -DAPPICON_DIR=\""$(appicondir)"\"
+gobby_CPPFLAGS   += -DPIXMAPS_DIR=\""$(pixmapdir)"\"
+dist_appicon_DATA = pixmaps/gobby.png
+dist_pixmap_DATA  = pixmaps/userlist.png
+dist_pixmap_DATA += pixmaps/doclist.png
+dist_pixmap_DATA += pixmaps/chat.png
 
 if WITH_GNOME
 # GNOME-specific installation.
@@ -142,12 +142,8 @@ desktop_DATA = contrib/gobby.desktop
 endif
 
 EXTRA_DIST =  contrib/artwork/CREDITS
-EXTRA_DIST += contrib/artwork/gobby.png
 EXTRA_DIST += contrib/artwork/gobby.svg
 EXTRA_DIST += contrib/artwork/gobby.xpm.gz
-EXTRA_DIST += contrib/artwork/userlist.png
-EXTRA_DIST += contrib/artwork/doclist.png
-EXTRA_DIST += contrib/artwork/chat.png
 EXTRA_DIST += contrib/gobby.desktop
 EXTRA_DIST += win32/gobby.ico
 EXTRA_DIST += win32/gobby.rc
