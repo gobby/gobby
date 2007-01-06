@@ -27,7 +27,7 @@ msgstr "%0 est arrivé(e)"
 #: src/chat.cpp:86
 #, c-format
 msgid "%0 has left"
-msgstr "$0 est parti(e)"
+msgstr "%0 est parti(e)"
 
 #. App menu
 #: src/header.cpp:121
