@@ -1,8 +1,29 @@
-Wed Jun  7 16:17:44 CEST 2006  Armin Burgmeier <armin@0x539.de>
-  * Fix SEGV caused by wrong usage of Gtk::AccelKey [fixes #163]
+Mon Aug  7 17:46:23 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Bumped version to 0.4.0rc3
+
+Mon Aug  7 17:46:04 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Strictened the build-dependency on obby-0.4.0rc3
+
+Fri Jun 16 22:17:25 CEST 2006  Philipp Kern <phil@0x539.de>
+  * GCC 3.3 compile fixes
+
+Thu Jun 15 13:09:09 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Do not crash when threads are already initialised
+
+Wed Jun  7 16:23:04 CEST 2006  Philipp Kern <phil@0x539.de>
+  tagged gobby-0.4.0rc2
+
+Wed Jun  7 16:22:57 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Updated ChangeLog for release
 
 Tue Jun  6 22:02:08 CEST 2006  Philipp Kern <phil@0x539.de>
   * Depend on obby >= 0.4.0rc2; bump version to 0.4.0rc2
+
+Wed Jun  7 16:17:44 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Fix SEGV caused by wrong usage of Gtk::AccelKey [fixes #163]
+
+Wed Jun  7 22:10:31 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Replace "Shows up" by "Displays"
 
 Sun Jun  4 03:16:41 CEST 2006  Philipp Kern <phil@0x539.de>
   * Translation roundup; new Catalan translation, thanks to Jordi Mallach
