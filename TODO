@@ -43,7 +43,6 @@ Enhancement:
   * Automatic live storage of documents and chat logs  (#98)
   * RPM's and MacOS installer (#102)
   * Wiki style reverts (#104)
-  * Userlist should be toggleable (#107)
 
 
 100: Excited to try it but libatk-1.6-1.dll just not found
@@ -268,10 +267,4 @@ drag your mouse over them.
  * Delete text "/* Gnarly comment */"
 
 
-
-107: Userlist should be toggleable
-----------------------------------
-On the view menu, it would be nice if there was an option to toggle the 
-session participants. It uses up screen real estate I'd rather use for 
-coding.
 
