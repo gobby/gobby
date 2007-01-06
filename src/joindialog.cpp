@@ -49,13 +49,13 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
 	default_color.set_blue(0xffff);
 
 	Glib::ustring host =
-		config["session"]["host"].get(Glib::ustring("localhost") );
+		config["join"]["host"].get(Glib::ustring("localhost") );
 	unsigned int port =
-		config["session"]["port"].get(6522);
+		config["join"]["port"].get(6522);
 	Glib::ustring name =
-		config["session"]["name"].get(Glib::get_user_name() );
+		config["join"]["name"].get(Glib::get_user_name() );
 	Gdk::Color color =
-		config["session"]["color"].get(default_color);
+		config["join"]["color"].get(default_color);
 
 	m_ent_host.set_text(host);
 
@@ -175,10 +175,10 @@ void Gobby::JoinDialog::on_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_OK)
 	{
-		m_config["session"]["host"].set(get_host() );
-		m_config["session"]["port"].set(get_port() );
-		m_config["session"]["name"].set(get_name() );
-		m_config["session"]["color"].set(get_color() );
+		m_config["join"]["host"].set(get_host() );
+		m_config["join"]["port"].set(get_port() );
+		m_config["join"]["name"].set(get_name() );
+		m_config["join"]["color"].set(get_color() );
 	}
 
 	Gtk::Dialog::on_response(response_id);
