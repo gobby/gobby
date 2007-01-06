@@ -56,7 +56,9 @@ if test "x$GTKMM_VER" = "x28" ; then
 fi
 
 # Check for howl in libobby.
-AC_CHECK_LIB(obby, obby_has_howl)
+PKG_CHECK_MODULES([obby], [obby-0.3])
+AC_CHECK_LIB(obby, obby_has_howl, [obby_has_howl=yes], [obby_has_howl=no],
+             [$pkg_cv_obby_LIBS])
 if test "x$ac_cv_lib_obby_obby_has_howl" = "xyes" ; then
 	# We do not need any new flags as obby should take care of it.
 	PKG_CHECK_MODULES([howl], [howl])
