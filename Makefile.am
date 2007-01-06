@@ -74,7 +74,7 @@ noinst_HEADERS += inc/sourceview/private/sourcelanguagesmanager_p.hpp
 
 if WIN32
 win32/gobby.res: win32/gobby.rc
-	windres -i win32/gobby.rc --input-format=rc -o win32/gobby.res -O coff
+	$(WINDRES) -i win32/gobby.rc --input-format=rc -o win32/gobby.res -O coff
 BUILT_SOURCES = win32/gobby.res
 endif
 
