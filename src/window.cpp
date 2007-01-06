@@ -442,8 +442,8 @@ void Gobby::Window::on_session_join()
 
 			buffer->close_event().connect(
 				sigc::mem_fun(*this, &Window::on_obby_close) );
-			buffer->encrypted_event().connect(
-				sigc::mem_fun(*this, &Window::on_obby_encrypted) );
+			//buffer->encrypted_event().connect(
+			//	sigc::mem_fun(*this, &Window::on_obby_encrypted) );
 
 			buffer->request_encryption();
 
@@ -1013,10 +1013,10 @@ void Gobby::Window::on_obby_close()
 	on_session_quit();
 }
 
-void Gobby::Window::on_obby_encrypted()
+/*void Gobby::Window::on_obby_encrypted()
 {
 	display_error("Connection now encrypted");
-}
+}*/
 
 void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
