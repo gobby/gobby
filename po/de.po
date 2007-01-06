@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.1.0\n"
-"POT-Creation-Date: 2005-05-05 19:11+0200\n"
+"POT-Creation-Date: 2005-05-08 13:19+0200\n"
 "PO-Revision-Date: 2005-05-05 18:59+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
@@ -60,7 +60,7 @@ msgstr "Beendet die Anwendung"
 msgid "Session"
 msgstr "Sitzung"
 
-#: src/header.cpp:140 src/window.cpp:279
+#: src/header.cpp:140 src/window.cpp:286
 msgid "Create document"
 msgstr "Dokument erstellen"
 
@@ -137,18 +137,18 @@ msgstr "Farbe"
 msgid "Name"
 msgstr "Name"
 
-#: src/window.cpp:247
+#: src/window.cpp:254
 msgid "A collaborative text editor"
 msgstr ""
 
-#: src/window.cpp:288
+#: src/window.cpp:295
 msgid "Open new document"
 msgstr "Neues dokument öffnen"
 
-#: src/window.cpp:305
+#: src/window.cpp:312
 msgid "Save current document"
 msgstr "Aktuelles Dokument speichern"
 
-#: src/window.cpp:346
+#: src/window.cpp:359
 msgid "Connection lost"
 msgstr "Verbindung verloren"
