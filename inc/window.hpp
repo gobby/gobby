@@ -102,6 +102,7 @@ protected:
 	void on_obby_chat(obby::user& user, const Glib::ustring& message);
 
 	// Helper functions
+	Document& get_current_document();
 	void apply_preferences();
 	void update_title_bar(const Document& doc);
 	void open_local_file(const Glib::ustring& file);

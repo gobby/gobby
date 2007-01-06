@@ -355,6 +355,7 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_folder_document_close(Document& document)
 {
+	// TODO: Folder sollte eher Signale mit DocWindows emitten und so.
 	for(int i = 0; i < m_folder.get_n_pages(); ++ i)
 	{
 		Gtk::Widget* doc = m_folder.get_nth_page(i);
@@ -416,9 +417,7 @@ void Gobby::Window::on_document_open()
 void Gobby::Window::on_document_save()
 {
 	// Get page
-	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	DocWindow& wnd = *static_cast<DocWindow*>(page);
-	Document& doc = wnd.get_document();
+	Document& doc = get_current_document();
 
 	// Is there already a path for this document?
 	if(!doc.get_path().empty() )
@@ -432,9 +431,7 @@ void Gobby::Window::on_document_save()
 void Gobby::Window::on_document_save_as()
 {
 	// Get page
-	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	DocWindow& wnd = *static_cast<DocWindow*>(page);
-	Document& doc = wnd.get_document();
+	Document& doc = get_current_document();
 
 	// Setup dialog
 	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
@@ -470,7 +467,9 @@ void Gobby::Window::on_document_save_as()
 
 void Gobby::Window::on_document_close()
 {
+	// Get current page
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
+	// Close it
 	close_document(*static_cast<DocWindow*>(page) );
 }
 
@@ -519,6 +518,7 @@ void Gobby::Window::on_edit_preferences()
 
 void Gobby::Window::on_user_set_password()
 {
+	// Build password dialog with info
 	PasswordDialog dlg(*this, _("Set user password"), false);
 	dlg.set_info(_(
 		"Set a user password for your user account. When you try to "
@@ -526,6 +526,7 @@ void Gobby::Window::on_user_set_password()
 		"password."
 	) );
 
+	// Run it
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		dynamic_cast<obby::client_buffer*>(
@@ -535,10 +536,13 @@ void Gobby::Window::on_user_set_password()
 
 void Gobby::Window::on_user_set_colour()
 {
+	// Simple ColorSelectionDialog
 	ColorSelectionDialog dlg;
 
+	// Run it
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		// Convert GDK color to obby color, set new color
 		Gdk::Color color = dlg.get_colorsel()->get_current_color();
 		m_buffer->set_colour(
 			color.get_red() * 255 / 65535,
@@ -551,15 +555,10 @@ void Gobby::Window::on_user_set_colour()
 void Gobby::Window::on_view_preferences()
 {
 	// Get current page
-	DocWindow& doc = *static_cast<DocWindow*>(
-		m_folder.get_nth_page(m_folder.get_current_page()) );
+	Document& doc = get_current_document();
 
 	// Add preferences dialog
-	PreferencesDialog dlg(
-		*this,
-		doc.get_document().get_preferences(),
-		true
-	);
+	PreferencesDialog dlg(*this, doc.get_preferences(), true);
 
 	// Label text
 	obby::format_string str(_(
@@ -569,7 +568,7 @@ void Gobby::Window::on_view_preferences()
 	) );
 
 	// Get title
-	str << doc.get_document().get_title();
+	str << doc.get_title();
 
 	// Info label
 	Gtk::Label m_lbl_info(str.str() );
@@ -584,30 +583,28 @@ void Gobby::Window::on_view_preferences()
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		// Apply new preferences to the document
-		doc.get_document().set_preferences(dlg.preferences() );
+		doc.set_preferences(dlg.preferences() );
 	}
 }
 
 void
 Gobby::Window::on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang)
 {
-	// Get current page
-	DocWindow& doc = *static_cast<DocWindow*>(
-		m_folder.get_nth_page(m_folder.get_current_page() )
-	);
-
-	// Set given language
-	doc.get_document().set_language(lang);
+	// Set language of current document
+	get_current_document().set_language(lang);
 }
 
 void Gobby::Window::on_quit()
 {
-	on_session_quit();
+	// Quit session
+	obby_end();
+	// End program
 	Gtk::Main::quit();
 }
 
 void Gobby::Window::on_chat(const Glib::ustring& message)
 {
+	// Send chat message via obby
 	m_buffer->send_message(message);
 }
 
@@ -656,11 +653,13 @@ void Gobby::Window::on_obby_close()
 
 void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)
 {
+	// Got chat message
 	m_chat.obby_message(user, message);
 }
 
 void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 {
+	// Got server chat message
 	m_chat.obby_server_message(message);
 }
 
@@ -735,6 +734,14 @@ void Gobby::Window::on_obby_document_remove(obby::document_info& document)
 	// Reset title if last document has been closed
 	if(m_buffer->document_count() == 1)
 		set_title("Gobby");
+}
+
+Gobby::Document& Gobby::Window::get_current_document()
+{
+	// Get currently selected page
+	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
+	// Convert to document
+	return static_cast<DocWindow*>(page)->get_document();
 }
 
 void Gobby::Window::apply_preferences()
