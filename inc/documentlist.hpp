@@ -57,7 +57,8 @@ protected:
 
 	void on_subscribe();
 	void on_selection_changed();
-	bool on_tree_button_press(GdkEventButton* event);
+	void on_row_activated(const Gtk::TreePath& path,
+                              Gtk::TreeViewColumn* column);
 
 	LocalBuffer* m_buffer;
 	DocumentSettings& m_settings;

@@ -73,8 +73,8 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 	m_view_col.set_sort_column(settings.columns.title);
 
 	m_tree_view.add_events(Gdk::BUTTON_PRESS_MASK);
-	m_tree_view.signal_button_press_event().connect(
-		sigc::mem_fun(*this, &DocumentList::on_tree_button_press) );
+	m_tree_view.signal_row_activated().connect(
+		sigc::mem_fun(*this, &DocumentList::on_row_activated) );
 
 	m_tree_view.set_model(settings.get_list() );
 	m_tree_view.append_column(m_view_col);
@@ -213,18 +213,8 @@ void Gobby::DocumentList::on_selection_changed()
 	m_btn_subscribe.set_sensitive(false);
 }
 
-#include <iostream>
-bool Gobby::DocumentList::on_tree_button_press(GdkEventButton* event)
+void Gobby::DocumentList::on_row_activated(const Gtk::TreePath& path,
+                                           Gtk::TreeViewColumn* column)
 {
-	std::cout << event->button << std::endl;
-
-	// Double-clicking on a entry is like clicking on the subscribe
-	// button
-	if(event->type == GDK_2BUTTON_PRESS && event->button == 1)
-	{
-		on_subscribe();
-		return true;
-	}
-
-	return false;
+	on_subscribe();
 }
