@@ -404,8 +404,9 @@ void Gobby::Document::on_obby_self_subscribe()
 	// Enable highlighting
 	buf->set_highlight(true);
 
-	// Not modified when subscribed
-	buf->set_modified(false);
+	// Not modified when subscribed, if the text is empty
+	buf->set_modified(
+		!(doc.get_line_count() == 1 && doc.get_line(0).length() == 0) );
 
 	// Set initial authors
 	for(unsigned int i = 0; i < doc.get_line_count(); ++ i)
