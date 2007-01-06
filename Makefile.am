@@ -145,6 +145,7 @@ EXTRA_DIST += contrib/artwork/gobby.png
 EXTRA_DIST += contrib/artwork/gobby.svg
 EXTRA_DIST += contrib/artwork/gobby.xpm.gz
 EXTRA_DIST += contrib/artwork/userlist.png
+EXTRA_DIST += contrib/artwork/doclist.png
 EXTRA_DIST += contrib/artwork/chat.png
 EXTRA_DIST += contrib/gobby.desktop
 EXTRA_DIST += win32/gobby.ico
