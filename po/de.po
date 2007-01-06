@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-25 09:58+0200\n"
+"POT-Creation-Date: 2005-07-27 18:52+0200\n"
 "PO-Revision-Date: 2005-07-25 10:00+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
@@ -14,6 +14,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: src/encoding.cpp:103
+msgid ""
+"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
+"binary input."
+msgstr ""
 
 #: src/chat.cpp:28
 msgid "Send"
@@ -341,43 +347,52 @@ msgstr "Host"
 msgid "Port"
 msgstr "Port"
 
-#: src/userlist.cpp:68
+#: src/userlist.cpp:74
 msgid "Colour"
 msgstr "Farbe"
 
-#: src/userlist.cpp:69
+#: src/userlist.cpp:75
 msgid "Name"
 msgstr "Name"
 
-#: src/window.cpp:140
+#: src/userlist.cpp:76
+msgid "Connected"
+msgstr ""
+
+#: src/userlist.cpp:77
+#, fuzzy
+msgid "Subscribed"
+msgstr "Abonieren"
+
+#: src/window.cpp:142
 msgid ""
 "Howl initialisation failed. Probably you need to run mDNSResponder as root "
 "prior to Gobby. Zeroconf support is deactivated for this session."
 msgstr ""
 
-#: src/window.cpp:337
+#: src/window.cpp:339
 msgid "A collaborative text editor"
 msgstr "Ein Gemeinschaftseditor"
 
-#: src/window.cpp:397
+#: src/window.cpp:399
 msgid "Create document"
 msgstr "Dokument erstellen"
 
-#: src/window.cpp:397
+#: src/window.cpp:399
 msgid "Enter document name"
 msgstr "Geben Sie bitte einen Namen für das Dokument ein."
 
 #. Create FileChooser
-#: src/window.cpp:409
+#: src/window.cpp:414
 msgid "Open new document"
 msgstr "Neues dokument öffnen"
 
 #. Setup dialog
-#: src/window.cpp:456
+#: src/window.cpp:461
 msgid "Save current document"
 msgstr "Aktuelles Dokument speichern"
 
-#: src/window.cpp:501
+#: src/window.cpp:506
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
@@ -385,17 +400,17 @@ msgid ""
 msgstr ""
 
 #. Build password dialog with info
-#: src/window.cpp:541
+#: src/window.cpp:546
 msgid "Set user password"
 msgstr "Setzt ein Benutzerpasswort"
 
-#: src/window.cpp:543
+#: src/window.cpp:548
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
 
-#: src/window.cpp:584
+#: src/window.cpp:596
 #, c-format
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
@@ -404,12 +419,19 @@ msgid ""
 msgstr ""
 
 #. Connection closed by remote site
-#: src/window.cpp:669 src/joinprogressdialog.cpp:151
+#: src/window.cpp:681 src/joinprogressdialog.cpp:151
 msgid "Connection lost"
 msgstr "Verbindung verloren"
 
-#: src/window.cpp:713
+#: src/window.cpp:725
 msgid "Colour change failed: Colour already in use"
+msgstr ""
+
+#: src/window.cpp:881
+#, c-format
+msgid ""
+"The document \"%0%\" has been changed since it was saved to disk. Are you "
+"sure that you want to close it?"
 msgstr ""
 
 #: src/statusbar.cpp:65
@@ -442,7 +464,7 @@ msgstr "Partner %0% (%1%) wurde nicht in der Verbindungsliste gefunden"
 msgid "Subscribe"
 msgstr "Abonieren"
 
-#: src/document.cpp:618
+#: src/document.cpp:667
 #, c-format
 msgid ""
 "You are not subscribed to the document \"%0%\".\n"
@@ -490,4 +512,3 @@ msgstr ""
 #: src/passworddialog.cpp:99
 msgid "Passwords do not match"
 msgstr ""
-
