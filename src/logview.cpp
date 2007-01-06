@@ -52,9 +52,16 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 	localtime_r(&cur_time_t, &cur_time);
 
 	std::stringstream timestream;
-	timestream.width(2); // Ging so %.2d?
-	timestream << "[" << cur_time.tm_hour << ":" << cur_time.tm_min << ":"
-	           << cur_time.tm_sec << "] ";
+	timestream << "[";
+	timestream.width(2); timestream.fill('0');
+	timestream << cur_time.tm_hour;
+	timestream << ":";
+	timestream.width(2); timestream.fill('0');
+	timestream << cur_time.tm_min;
+	timestream << ":";
+	timestream.width(2); timestream.fill('0');
+	timestream << cur_time.tm_sec;
+	timestream << "] ";
 	ins_text = timestream.str() + ins_text;
 
 	if(!tag)
