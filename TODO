@@ -1,29 +1,107 @@
 Gobby
 =====
 
-Serious:
- * Opening large documents is _really_ slow on win32's timer implementation
- * On connection loss: give a chance to save everything
+Blocker:
 
-Important:
- * Compensate changes made by others by scrolling appropriately; the current
-   position should not change
- * User colourising does not always repaint correctly
+Critical:
+
+Major:
+  * gethostbyname on win32 (#19)
+  * Bug: User attribution copied when using copy & paste (#24)
 
 Normal:
- * Prompt before overwriting existing files when explicitly choosing path
- * Chat command infrastructure (/me, /ignore)
+  * Improve the network handling on Win32 (#2)
+  * Implement support for Zeroconf (#17)
+  * Provide some means of authentication (#21)
+  * A flag specifing if a document has changed (#25)
+  * Request confirmations for unsaved documents (#26)
+  * Switch to tabs newly opened (#27)
 
 Minor:
- * Highlighting of own nickname in chat window (Glib::ustring::find)
- * Change the colour of the labels on the notebooks to red if something
-   has changed and the document is not active and possibly to grey when
-   the document is not yet syncronised (which would depend on sync-on-request
-   within libobby)
- * Switch to tabs newly opened by self
+  * Error code transmission (#16)
+  * Repaint of user colour incorrect (#22)
 
-Wishlist:
- * Default to save files to the location they were loaded from
-   (or save the directory of the last save)
- * Request confirmation before closing (sessions with) unsaved documents
+Trivial:
 
+Enhancement:
+  * Highlighting of own nickname in chat window (#6)
+  * Flags for obby::user (#8)
+  * Syncronise documents on request (#10)
+  * Multiple user lists (#12)
+  * Translate failure messages with gettext (#14)
+  * Session serialisation (#20)
+  * Auto indentation (#23)
+
+19: gethostbyname on win32
+--------------------------
+net6 should use gethostbyname instead of getaddrinfo for the win32 
+implementation because getaddrinfo seem only to exist in Windows XP's 
+version of ws2_32.dll.
+
+24: Bug: User attribution copied when using copy & paste
+--------------------------------------------------------
+If somebody copies some text of another user on the host and pastes it then 
+it will show up temporarily as own text, but it will get the other user's 
+colour after the next redraw.
+
+2: Improve the network handling on Win32
+----------------------------------------
+Opening large documents is ''really'' slow on the timer implementation in 
+use on Win32. Currently the connection is polled every 400ms, which is 
+certainly not optimal.
+
+17: Implement support for Zeroconf
+----------------------------------
+''Zeroconf'' (also known as Apple Bonjour) is a technology to discover 
+local network services. The Gobby host may announce itself as a network 
+service which could be browsed by other clients on the local subnet. The 
+listing and delisting is implemented with the use of multicast DNS and 
+happens automatically. ''libobby'' contains an abstraction to the ''howl'' 
+implementation of this protocol.
+
+ * We need to add a linking exception for ''howl'' to ''libobby'' (#18).
+ * We need a UI implementation of ''Zeroconf'' within ''Gobby's '' join 
+dialog.
+ * We need proper integration into the GUI main loop on Linux (possibly 
+eliminating the necessity to start mDNSResponder prior to a ''howl'' using 
+application).
+
+21: Provide some means of authentication
+----------------------------------------
+''libobby'' should provide some means of authentication. There should be 
+several possibilities of authentication schemes (maybe this ticket should 
+be splitted when they are getting implemented one-by-one):
+
+ * If a user logs in the first time since the host restarted a password 
+specified by the user will be set on the server with which it could 
+authenticate itself after a connection loss.
+ * A simple global password is need to login into a server, known to all 
+users of it.
+ * The server checks a user/password combination against a user database, 
+useful for dedicated private ''obby'' servers.
+ * Single documents could be get some kind of password or access control 
+list protection, but #10 has to be implemented first.
+
+25: A flag specifing if a document has changed
+----------------------------------------------
+A flag should be implemented which specifies if the document has changed 
+since the last save. It should be reset when it is saved to disk and 
+changed as soon as the first change (local and non-local) is received and 
+put into the text buffer.
+
+26: Request confirmations for unsaved documents
+-----------------------------------------------
+Gobby should request a confirmation if you want to quit it and still have 
+unsaved documents (#25) open in the session. 
+
+27: Switch to tabs newly opened
+-------------------------------
+The current selected document should be changed to the one newly opened 
+when loading one from a file.
+
+16: Error code transmission
+---------------------------
+We should transmit error codes instead of error strings in net6. The client 
+may build a (localised, see #14) string out of it.
+
+22: 
