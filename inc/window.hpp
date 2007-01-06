@@ -61,6 +61,7 @@ protected:
 	void on_document_create();
 	void on_document_open();
 	void on_document_save();
+	void on_document_save_as();
 	void on_document_close();
 
 	void on_edit_preferences();
@@ -102,13 +103,19 @@ protected:
 
 	// Helper functions
 	void apply_preferences();
+	void update_title_bar(const Document& doc);
 	void open_local_file(const Glib::ustring& file);
+	void save_local_file(Document& doc, const Glib::ustring& file);
 	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message);
 
 	// Config
 	Config m_config;
 	Preferences m_preferences;
+
+	// Paths
+	Glib::ustring m_last_path;
+	Glib::ustring m_local_file_path;
 
 	// GUI
 	Gtk::VBox m_mainbox;

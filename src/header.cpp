@@ -42,6 +42,7 @@ namespace {
 		"      <menuitem action=\"CreateDocument\" />"
 		"      <menuitem action=\"OpenDocument\" />"
 		"      <menuitem action=\"SaveDocument\" />"
+		"      <menuitem action=\"SaveAsDocument\" />"
 		"      <menuitem action=\"CloseDocument\" />"
 		"    </menu>"
 		"    <menu action=\"MenuEdit\">"
@@ -210,7 +211,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"OpenDocument",
 			Gtk::Stock::OPEN,
-			_("Open document"),
+			_("Open document..."),
 			_("Loads a file into a new document")
 		),
 		sigc::mem_fun(
@@ -230,6 +231,20 @@ Gobby::Header::Header(const Folder& folder)
 		sigc::mem_fun(
 			*this,
 			&Header::on_app_document_save
+		)
+	);
+
+	// Save as
+	m_group_app->add(
+		Gtk::Action::create(
+			"SaveAsDocument",
+			Gtk::Stock::SAVE_AS,
+			_("Save document as..."),
+			_("Saves a document to another location")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_save_as
 		)
 	);
 
@@ -436,6 +451,7 @@ Gobby::Header::Header(const Folder& folder)
 	m_group_app->get_action("CreateDocument")->set_sensitive(false);
 	m_group_app->get_action("OpenDocument")->set_sensitive(false);
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
+	m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
 
@@ -474,6 +490,7 @@ Gtk::Toolbar& Gobby::Header::get_toolbar()
 void Gobby::Header::disable_document_actions()
 {
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
+	m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("MenuView")->set_sensitive(false);
 }
@@ -512,6 +529,12 @@ Gobby::Header::signal_document_save_type
 Gobby::Header::document_save_event() const
 {
 	return m_signal_document_save;
+}
+
+Gobby::Header::signal_document_save_as_type
+Gobby::Header::document_save_as_event() const
+{
+	return m_signal_document_save_as;
 }
 
 Gobby::Header::signal_document_close_type
@@ -580,6 +603,7 @@ void Gobby::Header::obby_start(obby::local_buffer& buf)
 
 	// Document actions will be activated from the insert_document event
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
+	m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("MenuView")->set_sensitive(false);
 }
@@ -615,6 +639,7 @@ void Gobby::Header::obby_document_insert(obby::local_document_info& document)
 	// Now we have at least one document open, so we could activate the
 	// document actions.
 	m_group_app->get_action("SaveDocument")->set_sensitive(true);
+	m_group_app->get_action("SaveAsDocument")->set_sensitive(true);
 	m_group_app->get_action("CloseDocument")->set_sensitive(true);
 	m_group_app->get_action("MenuView")->set_sensitive(true);
 }
@@ -626,6 +651,7 @@ void Gobby::Header::obby_document_remove(obby::local_document_info& document)
 		// The document which is currently removed is the only
 		// existing document? Disable document actions then.
 		m_group_app->get_action("SaveDocument")->set_sensitive(false);
+		m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
 		m_group_app->get_action("CloseDocument")->set_sensitive(false);
 		m_group_app->get_action("MenuView")->set_sensitive(false);
 	}
@@ -659,6 +685,11 @@ void Gobby::Header::on_app_document_open()
 void Gobby::Header::on_app_document_save()
 {
 	m_signal_document_save.emit();
+}
+
+void Gobby::Header::on_app_document_save_as()
+{
+	m_signal_document_save_as.emit();
 }
 
 void Gobby::Header::on_app_document_close()

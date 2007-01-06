@@ -66,6 +66,8 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_document_open) );
 	m_header.document_save_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_save) );
+	m_header.document_save_as_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_save_as) );
 	m_header.document_close_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
 
@@ -365,28 +367,8 @@ void Gobby::Window::on_folder_document_close(Document& document)
 
 void Gobby::Window::on_folder_tab_switched(Document& document)
 {
-	const Glib::ustring& file = document.get_document().get_title();
-	Glib::ustring path = document.get_path();
-		
-	if(!path.empty() )
-	{
-		// Replace home dir by ~
-		Glib::ustring home = Glib::get_home_dir();
-		if(path.compare(0, home.length(), home) == 0)
-			path.replace(0, home.length(), "~");
-
-		// Set title with file and path
-		obby::format_string title_str("%0 (%1) - Gobby");
-		title_str << file << path;
-		set_title(title_str.str() );
-	}
-	else
-	{
-		// Path not known: Set title with file only
-		obby::format_string title_str("%0 - Gobby");
-		title_str << file;
-		set_title(title_str.str() );
-	}
+	// Update title bar
+	update_title_bar(document);
 }
 
 void Gobby::Window::on_document_create()
@@ -402,16 +384,29 @@ void Gobby::Window::on_document_open()
 {
 	// Create FileChooser
 	Gtk::FileChooserDialog dlg(*this, _("Open new document"));
+
+	// Use the last used path for this dialog, if we have any
+	if(!m_last_path.empty() )
+		dlg.set_current_folder(m_last_path);
+
 	// Create buttons to close it
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
-	// TODO: MultiSelection?
+	// Allow multi selection
+	dlg.set_select_multiple(true);
+
 	// Show FileChooser
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		// Open chosen file
-		open_local_file(dlg.get_filename() );
+		// Use current folder as standard folder for later dialogs
+		m_last_path = dlg.get_current_folder();
+		// Open chosen files
+		std::list<Glib::ustring> list = dlg.get_filenames();
+		for(std::list<Glib::ustring>::iterator iter = list.begin();
+		    iter != list.end();
+		    ++ iter)
+			open_local_file(*iter);
 	}
 }
 
@@ -419,35 +414,54 @@ void Gobby::Window::on_document_save()
 {
 	// Get page
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	DocWindow& doc = *static_cast<DocWindow*>(page);
+	DocWindow& wnd = *static_cast<DocWindow*>(page);
+	Document& doc = wnd.get_document();
 
-	// Show dialog
+	// Is there already a path for this document?
+	if(!doc.get_path().empty() )
+		// Yes, so save the document there
+		save_local_file(doc, doc.get_path() );
+	else
+		// Open save as dialog otherwise
+		on_document_save_as();
+}
+
+void Gobby::Window::on_document_save_as()
+{
+	// Get page
+	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
+	DocWindow& wnd = *static_cast<DocWindow*>(page);
+	Document& doc = wnd.get_document();
+
+	// Setup dialog
 	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
-			Gtk::FILE_CHOOSER_ACTION_SAVE);
-	dlg.set_current_name(m_folder.get_tab_label_text(doc) );
+		Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+	// Does the document have already a path?
+	if(!doc.get_path().empty() )
+	{
+		// Yes, so set it as filename
+		dlg.set_filename(doc.get_path() );
+	}
+	else
+	{
+		// No, so use the last path a filesel dialog was closed with
+		if(!m_last_path.empty() )
+			dlg.set_current_folder(m_last_path);
+		// Set current title as proposed file name
+		dlg.set_current_name(doc.get_title() );
+	}
+
+	// Add buttons to close the dialog
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		// Build ofstream
-		std::ofstream stream(dlg.get_filename().c_str() );
-
-		if(stream)
-		{
-			// Save content into file
-			stream << doc.get_document().get_content() << std::endl;
-			doc.get_document().set_path(dlg.get_filename() );
-			on_folder_tab_switched(doc.get_document() );
-		}
-		else
-		{
-			// File could not be opened
-			obby::format_string str("Could not open file "
-			                        "%0 for writing");
-			str << dlg.get_filename();
-			display_error(str.str() );
-		}
+		// Use current folder as standard folder for other dialogs
+		m_last_path = dlg.get_current_folder();
+		// Save document
+		save_local_file(doc, dlg.get_filename() );
 	}
 }
 
@@ -621,7 +635,7 @@ void Gobby::Window::on_drag_data_received(
 				open_local_file(
 					Glib::filename_from_uri(*iter) );
 			}
-			catch(Glib::Exception& e)
+			catch(Glib::ConvertError& e)
 			{
 				// Show any errors while converting a file
 				display_error(e.what() );
@@ -691,11 +705,16 @@ void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 	m_chat.obby_document_insert(local_doc);
 	m_statusbar.obby_document_insert(local_doc);
 
-#if 0
 	// Get last page (the newly inserted one)
 	DocWindow* doc = static_cast<DocWindow*>(
 		m_folder.get_nth_page(m_folder.get_n_pages() - 1) );
 
+	// Set the path from which this document was opened, if we opened that
+	// file.
+	if(document.get_owner() == &m_buffer->get_self() )
+		doc->get_document().set_path(m_local_file_path);
+
+#if 0
 	doc->get_document().signal_drag_data_received().connect(
 		sigc::mem_fun(*this, &Window::on_drag_data_received) );
 #endif
@@ -723,14 +742,79 @@ void Gobby::Window::apply_preferences()
 		m_preferences.appearance.toolbar_show);
 }
 
+void Gobby::Window::update_title_bar(const Document& document)
+{
+	// Get title of current document
+	const Glib::ustring& file = document.get_document().get_title();
+	// Get path of current document
+	Glib::ustring path = document.get_path();
+
+	// Show path in title, if we know it
+	if(!path.empty() )
+	{
+		// Replace home dir by ~
+		Glib::ustring home = Glib::get_home_dir();
+		if(path.compare(0, home.length(), home) == 0)
+			path.replace(0, home.length(), "~");
+
+		// Set title with file and path
+		obby::format_string title_str("%0 (%1) - Gobby");
+		title_str << file << Glib::path_get_dirname(path);
+		set_title(title_str.str() );
+	}
+	else
+	{
+		// Path not known: Set title with file only
+		obby::format_string title_str("%0 - Gobby");
+		title_str << file;
+		set_title(title_str.str() );
+	}
+}
+
 void Gobby::Window::open_local_file(const Glib::ustring& file)
 {
-	// TODO: Set path in newly generated document
-	// TODO: Convert file to UTF-8
-	m_buffer->create_document(
-		Glib::path_get_basename(file),
-		Glib::file_get_contents(file)
-	);
+	try
+	{
+		// Set local file path for the document_insert callback
+		m_local_file_path = file;
+
+		// TODO: Set path in newly generated document
+		// TODO: Convert file to UTF-8
+		m_buffer->create_document(
+			Glib::path_get_basename(file),
+			Glib::file_get_contents(file)
+		);
+	}
+	catch(Glib::FileError& e)
+	{
+		// Show errors while opening the file (e.g. if it doesn't exist)
+		display_error(e.what() );
+	}
+}
+
+void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
+{
+	// TODO: Replace the following by a call to obby?
+	// Build ofstream
+	std::ofstream stream(file.c_str() );
+
+	// Could it be opened?
+	if(stream)
+	{
+		// Save content into file
+		stream << doc.get_content() << std::endl;
+		// Set path of document
+		doc.set_path(file);
+		// Update title bar according to new path
+		update_title_bar(doc);
+	}
+	else
+	{
+		// File could not be opened
+		obby::format_string str("Could not open file '%0' for writing");
+		str << file;
+		display_error(str.str() );
+	}
 }
 
 void Gobby::Window::close_document(DocWindow& document)
