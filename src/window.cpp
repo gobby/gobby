@@ -56,7 +56,7 @@ Gobby::Window::Window()
 #endif
    m_header(),
    m_folder(m_header, m_preferences),
-   m_userlist(m_header, m_folder),
+   m_userlist(m_header),
    m_statusbar(m_header, m_folder)
 {
 	// Header

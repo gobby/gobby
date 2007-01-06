@@ -21,11 +21,10 @@
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
-#include <gtkmm/liststore.h>
+#include <gtkmm/treestore.h>
 #include <obby/user.hpp>
-#include <obby/local_document_info.hpp>
 #include <obby/local_buffer.hpp>
-#include "folder.hpp"
+#include "header.hpp"
 
 namespace Gobby
 {
@@ -41,13 +40,12 @@ public:
 		Columns();
 		~Columns();
 
-		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > colour;
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<bool> connected;
-		Gtk::TreeModelColumn<bool> subscribed;
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
+		Gtk::TreeModelColumn<Glib::ustring> text;
+		// TODO: Column with pointer that holds reference to obby::user.
 	};
 
-	UserList(Header& header, const Folder& folder);
+	UserList(Header& header);
 	~UserList();
 
 	// Calls from the user folder
@@ -62,77 +60,22 @@ public:
 	virtual void obby_document_insert(obby::local_document_info& document);
 	virtual void obby_document_remove(obby::local_document_info& document);
 protected:
-	/** Signal handlers
-	 */
-	void on_folder_tab_switched(Document& document);
-	void on_user_subscribe(const obby::user& user,
-	                       obby::local_document_info& info);
-	void on_user_unsubscribe(const obby::user& user,
-	                         obby::local_document_info& info);
-
-	/** Helper functions
-	 */
-	Gtk::TreeModel::iterator find_user(const Glib::ustring& name) const;
-	void add_user(const obby::user& user);
-
 	/** Reference to header.
 	 */
 	Header& m_header;
 
-	/** Currently selected document.
-	 */
-	obby::local_document_info* m_info;
-
 	/** GUI components.
 	 */
-	Gtk::TreeView m_list_view;
-	Glib::RefPtr<Gtk::ListStore> m_list_data;
-	Columns m_list_cols;
+	Gtk::TreeView m_tree_view;
+	Glib::RefPtr<Gtk::TreeStore> m_tree_data;
+	Columns m_tree_cols;
 
-	Gtk::TreeViewColumn* m_view_col_colour;
-	Gtk::TreeViewColumn* m_view_col_name;
-	Gtk::TreeViewColumn* m_view_col_connected;
-	Gtk::TreeViewColumn* m_view_col_subscribed;
+	Gtk::TreeViewColumn m_view_col;
+
+	Gtk::TreeIter m_iter_online;
+	Gtk::TreeIter m_iter_offline;
 };
 
-#if 0
-/** UserList-derivated class that lists all users in the session.
- */
-class UserListSession : public UserList
-{
-public:
-	UserListSession(const Folder& folder);
-	~UserListSession();
-
-protected:
-	virtual void obby_start(obby::local_buffer& buf);
-	virtual void obby_end();
-	virtual void obby_user_join(obby::user& user);
-	virtual void obby_user_part(obby::user& user);
-};
-
-/** UserList derivated class that lists all users who are subscribed to the
- * currently active document.
- */
-class UserListDocument : public UserList
-{
-public:
-	UserListDocument(const Folder& folder);
-	~UserListDocument();
-
-protected:
-	/** Window delegates
-	 */
-	virtual void obby_start(obby::local_buffer& buf);
-	virtual void obby_end();
-	virtual void obby_user_join(obby::user& user);
-	virtual void obby_user_part(obby::user& user);
-	virtual void obby_document_insert(obby::local_document_info& info);
-	virtual void obby_document_remove(obby::local_document_info& info);
-
-};
-#endif
-
-}
+} // namespace obby
 
 #endif // _GOBBY_USERLIST_HPP_
