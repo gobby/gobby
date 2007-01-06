@@ -231,30 +231,38 @@ void Gobby::GSelector::set_timeout(const net6::socket& sock,
 bool Gobby::GSelector::on_io(Glib::IOCondition cond,
                              const net6::socket* sock)
 {
-	Glib::RecMutex::Lock lock(*m_mutex);
-	map_type::const_iterator iter = m_map.find(sock);
+	{
+		Glib::RecMutex::Lock lock(*m_mutex);
+		map_type::const_iterator iter = m_map.find(sock);
 
-	// Has been removed by previous handler
-	if(iter == m_map.end() ) return false;
+		// Has been removed by previous handler
+		if(iter == m_map.end() ) return false;
 
-	// Occured condition has been removed by previous handler
-	if( (gcond(iter->second.cond) & cond) == gcond(net6::IO_NONE))
-		return true;
+		// Occured condition has been removed by previous handler
+		if( (gcond(iter->second.cond) & cond) == gcond(net6::IO_NONE))
+			return true;
+	}
 
+	// Event handler may destroy the selector, so do not reference
+	// m_mutex anymore.
 	sock->io_event().emit(ncond(cond) );
 	return true;
 }
 
 bool Gobby::GSelector::on_timeout(const net6::socket* sock)
 {
-	Glib::RecMutex::Lock lock(*m_mutex);
-	map_type::const_iterator iter = m_map.find(sock);
+	{
+		Glib::RecMutex::Lock lock(*m_mutex);
+		map_type::const_iterator iter = m_map.find(sock);
 
-	// Quite impossible... TODO: throw logic error?
-	if(iter == m_map.end() ) return false;
-	if( (iter->second.cond & net6::IO_TIMEOUT) == net6::IO_NONE)
-		return false;
+		// Quite impossible... TODO: throw logic error?
+		if(iter == m_map.end() ) return false;
+		if( (iter->second.cond & net6::IO_TIMEOUT) == net6::IO_NONE)
+			return false;
+	}
 
+	// Event handler may destroy the selector, so do not reference
+	// m_mutex anymore.
 	sock->io_event().emit(net6::IO_TIMEOUT);
 
 	// Timeout is removed after execution

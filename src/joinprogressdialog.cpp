@@ -304,7 +304,8 @@ Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
                                               const Gdk::Color& color):
 	ProgressDialog(_("Joining obby session..."), parent),
 	m_config_entry(config_entry), m_hostname(hostname), m_port(port),
-	m_username(username), m_color(color)
+	m_username(username), m_color(color), m_got_welcome(false),
+	m_got_done(false)
 {
 	obby::format_string str("Connecting to %0%...");
 	str << hostname;
@@ -400,32 +401,24 @@ void Gobby::JoinProgressDialog::on_done()
 	// this that really waits for the welcome packet.
 	set_status_text(_("Setting up connection encryption (TLS)...") );
 	set_progress_fraction(1.0/4.0);
-#if 0
 	m_got_done = true;
 
 	// on_welcome may be called before on_done is called if the
 	// server replies faster then the thread dispatches, this happens
 	// especially with connections to localhost.
 	// Recall on_welcome in this case now
-	//
-	// TODO: This should no more be the case using obby 0.4.0 where
-	// the whole encryption initiation is before the welcome signal
-	// emission. So, remove this...
 	if(m_got_welcome)
 		on_welcome();
-#endif
 }
 
 void Gobby::JoinProgressDialog::on_welcome()
 {
-#if 0
 	m_got_welcome = true;
 
 	// Do nothing if we have not already got the done signal from the
-	// thread.
+	// thread. on_done will recall on_welcome then.
 	if(!m_got_done)
 		return;
-#endif
 
 	// TODO: Show key ID to user and allow him to deny connection
 	// Got welcome packet, send login packet now
