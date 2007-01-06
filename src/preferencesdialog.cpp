@@ -214,10 +214,13 @@ Gobby::PreferencesDialog::Appearance::
 	Appearance(const Gobby::Preferences& preferences):
 	m_frame_toolbar(_("Toolbar") ),
 	m_frame_windows(_("Windows") ),
-	m_btn_remember(_("Remember the positions and states") )
+	m_btn_remember(_("Remember the positions and states") ),
+	m_btn_urgency_hint(
+	  _("Highlight the window on incoming chat messages") )
 {
 	Gtk::ToolbarStyle style = preferences.appearance.toolbar_show;
 	bool remember = preferences.appearance.remember;
+	bool urgency_hint = preferences.appearance.urgency_hint;
 
 	m_cmb_toolbar_style.append_text(_("Show text only") );
 	m_cmb_toolbar_style.append_text(_("Show icons only") );
@@ -240,7 +243,9 @@ Gobby::PreferencesDialog::Appearance::
 	m_box_windows.set_spacing(5);
 	m_box_windows.set_border_width(5);
 	m_btn_remember.set_active(remember);
+	m_btn_urgency_hint.set_active(urgency_hint);
 	m_box_windows.pack_start(m_btn_remember, Gtk::PACK_SHRINK);
+	m_box_windows.pack_start(m_btn_urgency_hint, Gtk::PACK_SHRINK);
 
 	m_frame_windows.add(m_box_windows);
 
@@ -259,6 +264,7 @@ void Gobby::PreferencesDialog::Appearance::
 	);
 
 	appearance.remember = m_btn_remember.get_active();
+	appearance.urgency_hint = m_btn_urgency_hint.get_active();
 }
 
 Gobby::PreferencesDialog::Font::Font(const Preferences& preferences):

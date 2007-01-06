@@ -65,9 +65,9 @@ namespace
 
 }
 
-Gobby::Chat::Chat(Gtk::Window& parent)
- : Gtk::VBox(), m_parent(parent), m_buffer(NULL),
-   m_img_btn(Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON),
+Gobby::Chat::Chat(Gtk::Window& parent, const Preferences& preferences)
+ : Gtk::VBox(), m_parent(parent), m_preferences(preferences),
+   m_buffer(NULL), m_img_btn(Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON),
    m_focus(false)
 {
 	m_btn_chat.set_label(_("Send"));
@@ -278,7 +278,7 @@ void Gobby::Chat::on_message(const obby::chat::message& message)
 		throw std::logic_error("Gobby::Chat::on_message");
 
 #ifdef GTKMM_GEQ_28
-	if(!m_focus)
+	if(!m_focus && m_preferences.appearance.urgency_hint)
 		m_parent.set_urgency_hint(true);
 #endif
 }

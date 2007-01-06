@@ -131,6 +131,7 @@ public:
 
 		Gtk::VBox m_box_windows;
 		Gtk::CheckButton m_btn_remember;
+		Gtk::CheckButton m_btn_urgency_hint;
 	};
 
 	class Font: public Page

@@ -69,7 +69,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		config.get_root()["windows"]
 	),
 	m_finddialog(*this), m_gotodialog(*this),
-	m_folder(m_header, m_preferences), m_chat(*this),
+	m_folder(m_header, m_preferences), m_chat(*this, m_preferences),
 	m_statusbar(m_header, m_folder)
 {
 	// Header

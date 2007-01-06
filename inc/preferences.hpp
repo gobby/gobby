@@ -85,6 +85,7 @@ public:
 
 		Gtk::ToolbarStyle toolbar_show;
 		bool remember;
+		bool urgency_hint;
 	};
 
 	class Font

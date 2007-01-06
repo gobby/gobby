@@ -35,7 +35,8 @@ namespace Gobby
 class Chat: public Gtk::VBox
 {
 public:
-	Chat(Gtk::Window& parent);
+	Chat(Gtk::Window& parent,
+	     const Preferences& preferences);
 	virtual ~Chat();
 
 	// Calls from the window
@@ -74,6 +75,7 @@ protected:
 	                      const obby::chat::system_message& message);
 
 	Gtk::Window& m_parent;
+	const Preferences& m_preferences;
 	LocalBuffer* m_buffer;
 
 	Gtk::Image m_img_btn;

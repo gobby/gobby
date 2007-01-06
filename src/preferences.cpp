@@ -79,7 +79,8 @@ Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
 			)
 		)
 	),
-	remember(entry["windows"].get_value<bool>("remember", true) )
+	remember(entry["windows"].get_value<bool>("remember", true) ),
+	urgency_hint(entry["windows"].get_value<bool>("urgency_hint", true) )
 {
 }
 
@@ -88,6 +89,7 @@ void Gobby::Preferences::Appearance::
 {
 	entry["toolbar"].set_value("show", static_cast<int>(toolbar_show) );
 	entry["windows"].set_value("remember", remember);
+	entry["windows"].set_value("urgency_hint", urgency_hint);
 }
 
 Gobby::Preferences::Font::Font()
