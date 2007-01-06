@@ -24,8 +24,8 @@
 
 Gobby::ProgressDialog::Thread::Thread(Glib::Dispatcher& done_disp,
                                       Glib::Dispatcher& work_disp):
-	m_thread(NULL), m_quit(false), m_disp_done(done_disp),
-	m_disp_work(work_disp)
+	m_thread(NULL), m_disp_done(done_disp),
+	m_disp_work(work_disp), m_quit(false)
 {
 }
 

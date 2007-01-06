@@ -228,6 +228,7 @@ Gobby::PreferencesDialog::Appearance::
 	case Gtk::TOOLBAR_TEXT: m_cmb_toolbar_style.set_active(0); break;
 	case Gtk::TOOLBAR_ICONS: m_cmb_toolbar_style.set_active(1); break;
 	case Gtk::TOOLBAR_BOTH: m_cmb_toolbar_style.set_active(2); break;
+	default: break; // Avoids compiler warnings
 	}
 
 	m_box_toolbar.set_spacing(5);
