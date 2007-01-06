@@ -28,6 +28,7 @@ endif
 noinst_HEADERS += inc/historyentry.hpp
 noinst_HEADERS += inc/logview.hpp
 noinst_HEADERS += inc/document.hpp
+noinst_HEADERS += inc/docwindow.hpp
 noinst_HEADERS += inc/statusbar.hpp
 noinst_HEADERS += inc/header.hpp
 noinst_HEADERS += inc/folder.hpp
@@ -68,6 +69,7 @@ endif
 gobby_SOURCES += src/historyentry.cpp
 gobby_SOURCES += src/logview.cpp
 gobby_SOURCES += src/document.cpp
+gobby_SOURCES += src/docwindow.cpp
 gobby_SOURCES += src/statusbar.cpp
 gobby_SOURCES += src/header.cpp
 gobby_SOURCES += src/folder.cpp

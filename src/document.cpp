@@ -23,23 +23,30 @@
 #include "document.hpp"
 #include "folder.hpp"
 
-#include <iostream>
 #include <cassert>
-	
+
 Gobby::Document::Document(obby::document& doc, const Folder& folder)
- : Gtk::ScrolledWindow(), m_doc(doc), m_folder(folder), m_editing(true)
+#ifdef WITH_GTKSOURCEVIEW
+ : Gtk::SourceView(),
+#else
+ : Gtk::TextView(),
+#endif
+   m_doc(doc), m_folder(folder), m_editing(true)
 {
 #ifdef WITH_GTKSOURCEVIEW
-	m_view.set_show_line_numbers(true);
-	Glib::RefPtr<Gtk::SourceBuffer> buf = m_view.get_buffer();
+	set_show_line_numbers(true);
+	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
 #else
-	Glib::RefPtr<Gtk::TextBuffer> buf = m_view.get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
 #endif
+
+	// Catch key press events
+	add_events(Gdk::KEY_PRESS_MASK);
 
 	// Set monospaced font
 	Pango::FontDescription desc;
 	desc.set_family("monospace");
-	m_view.modify_font(desc);
+	modify_font(desc);
 
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -147,10 +154,6 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 	}
 
 	m_editing = false;
-	
-	set_shadow_type(Gtk::SHADOW_IN);
-	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-	add(m_view);
 }
 
 Gobby::Document::~Document()
@@ -192,7 +195,7 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 {
 	// Get insert mark
 	Glib::RefPtr<Gtk::TextBuffer::Mark> mark =
-		m_view.get_buffer()->get_insert();
+		get_buffer()->get_insert();
 
 	// Get corresponding iterator
 	// Gtk::TextBuffer::Mark::get_iter is not const. Why not? It prevents
@@ -226,32 +229,32 @@ unsigned int Gobby::Document::get_revision() const
 #ifdef WITH_GTKSOURCEVIEW
 Glib::RefPtr<Gtk::SourceLanguage> Gobby::Document::get_language() const
 {
-	return m_view.get_buffer()->get_language();
+	return get_buffer()->get_language();
 }
 
 void Gobby::Document::set_language(
 	const Glib::RefPtr<Gtk::SourceLanguage>& language
 )
 {
-	m_view.get_buffer()->set_language(language);
+	get_buffer()->set_language(language);
 	m_signal_language_changed.emit();
 }
 #endif
 
 Glib::ustring Gobby::Document::get_content()
 {
-	return m_view.get_buffer()->get_text();
+	return get_buffer()->get_text();
 }
 
 #ifdef WITH_GTKSOURCEVIEW
 bool Gobby::Document::get_show_line_numbers() const
 {
-	return m_view.get_show_line_numbers();
+	return Gtk::SourceView::get_show_line_numbers();
 }
 
 void Gobby::Document::set_show_line_numbers(bool show)
 {
-	m_view.set_show_line_numbers(show);
+	Gtk::SourceView::set_show_line_numbers(show);
 }
 #endif
 
@@ -261,7 +264,7 @@ void Gobby::Document::obby_user_join(obby::user& user)
 	Glib::ustring tag_name = "gobby_user_" + user.get_name();
 
 	// Find already existing tag
-	Glib::RefPtr<Gtk::TextBuffer> buffer = m_view.get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
 	Glib::RefPtr<Gtk::TextBuffer::TagTable> tag_table =
 		buffer->get_tag_table();
 	Glib::RefPtr<Gtk::TextBuffer::Tag> tag = tag_table->lookup(tag_name);
@@ -284,13 +287,43 @@ void Gobby::Document::obby_user_part(obby::user& user)
 {
 }
 
+bool Gobby::Document::on_key_press_event(GdkEventKey* event)
+{
+	m_tag_user = NULL;
+
+	m_tag_key_press = true;
+#ifdef WITH_GTKSOURCEVIEW
+	Gtk::SourceView::on_key_press_event(event);
+#else
+	Gtk::TextView::on_key_press_event(event);
+#endif
+	m_tag_key_press = false;
+
+	if(m_tag_user != NULL)
+	{
+		// Update user colour here instead of in on_insert_after to be
+		// sure that _all_ currently existing tags are deleted. If text
+		// is copied from a buffer with user tags under it, these are
+		// pasted, too. But they are not applied in on_insert_after, so
+		// we can't remove them, ending up in two different user tags
+		// for that range of tags.
+		Gtk::TextBuffer::iterator start =
+			get_buffer()->get_iter_at_offset(m_tag_start);
+		Gtk::TextBuffer::iterator end =
+			get_buffer()->get_iter_at_offset(m_tag_end);
+		update_user_colour(start, end, *m_tag_user);
+	}
+
+	return true;
+}
+
 void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 {
 	if(m_editing) return;
 	m_editing = true;
 
 	// Get textbuffer
-	Glib::RefPtr<Gtk::TextBuffer> buffer = m_view.get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
 
 	// Translate position to row/column
 	unsigned int row, col;
@@ -311,7 +344,7 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 	begin.backward_chars(record.get_text().length() );
 	update_user_colour(begin, end, *user);
 
-	m_view.queue_draw();
+	queue_draw();
 	m_editing = false;
 }
 
@@ -320,7 +353,7 @@ void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 	if(m_editing) return;
 	m_editing = true;
 
-	Glib::RefPtr<Gtk::TextBuffer> buffer = m_view.get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
 
 	unsigned int brow, bcol, erow, ecol;
 	m_doc.position_to_coord(record.get_begin(), brow, bcol);
@@ -378,6 +411,15 @@ void Gobby::Document::on_erase_before(const Gtk::TextBuffer::iterator& begin,
 		)
 	);
 
+	// Revalidate positions, if this was deleting _and_ inserting
+	// of text with one keypress (marking something and then
+	// pasting or so).
+	if(m_tag_key_press && m_tag_user && m_tag_start >= end.get_offset() )
+	{
+		m_tag_start -= (begin.get_offset() - end.get_offset() );
+		m_tag_end -= (begin.get_offset() - end.get_offset() );
+	}
+
 	m_editing = false;
 }
 
@@ -398,14 +440,25 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 		Gtk::TextBuffer::iterator pos = end;
 		pos.backward_chars(text.length() );
 
-		// Update colour
-		update_user_colour(pos, end, user);
+		// Is this an insert event resulting from a key press?
+		if(m_tag_key_press)
+		{
+			// Yeah. Save start and end position to allow the
+			// key press signal handler to update user colour.
+			m_tag_start = pos.get_offset();
+			m_tag_end = end.get_offset();
+			m_tag_user = &user;
+		}
+		else
+		{
+			// Update colour directly otherwise.
+			update_user_colour(pos, end, user);
+		}
 
 		// Content has changed
 		m_signal_content_changed.emit();
 
 		// Cursor position has changed
-		// TODO: Move this out of this block?
 		m_signal_cursor_moved.emit();
 	}
 }
@@ -419,7 +472,6 @@ void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
 		m_signal_cursor_moved.emit();
 
 		// Content has changed
-		// TODO: Move this out of this block?
 		m_signal_content_changed.emit();
 	}
 }
@@ -430,7 +482,7 @@ void Gobby::Document::on_mark_set(
 )
 {
 	// Insert mark changed position: Cursor position change
-	if(mark == m_view.get_buffer()->get_insert() )//->get_name() == "insert")
+	if(mark == get_buffer()->get_insert() )//->get_name() == "insert")
 		m_signal_cursor_moved.emit();
 }
 
@@ -439,7 +491,7 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
                                          const obby::user& user)
 {
 	// Remove other user tags in that range
-	Glib::RefPtr<Gtk::TextBuffer> buffer = m_view.get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
 	Glib::RefPtr<Gtk::TextBuffer::TagTable> tag_table =
 		buffer->get_tag_table();
 
@@ -455,7 +507,8 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	);
 
 	// Insert new user tag to the given range
-	buffer->apply_tag_by_name("gobby_user_" + user.get_name(), begin, end);
+	Glib::RefPtr<Gtk::TextTag> tag = tag_table->lookup("gobby_user_" + user.get_name() );
+	buffer->apply_tag(tag, begin, end);
 }
 
 void
@@ -466,6 +519,6 @@ Gobby::Document::on_remove_user_colour(Glib::RefPtr<Gtk::TextBuffer::Tag> tag,
 	// Remove tag if it is a user color tag.
 	Glib::ustring tag_name = tag->property_name();
 	if(tag_name.compare(0, 10, "gobby_user") == 0)
-		m_view.get_buffer()->remove_tag(tag, begin, end);
+		get_buffer()->remove_tag(tag, begin, end);
 }
 

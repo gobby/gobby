@@ -31,7 +31,7 @@
 
 #include "common.hpp"
 #include "buffer_wrapper.hpp"
-#include "document.hpp"
+#include "docwindow.hpp"
 #include "hostdialog.hpp"
 #include "joindialog.hpp"
 #include "entrydialog.hpp"
@@ -335,7 +335,7 @@ void Gobby::Window::on_document_open()
 void Gobby::Window::on_document_save()
 {
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	Document& doc = *static_cast<Document*>(page);
+	DocWindow& doc = *static_cast<DocWindow*>(page);
 
 	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
 			Gtk::FILE_CHOOSER_ACTION_SAVE);
@@ -349,7 +349,7 @@ void Gobby::Window::on_document_save()
 
 		if(stream)
 		{
-			stream << doc.get_content() << std::endl;
+			stream << doc.get_document().get_content() << std::endl;
 		}
 		else
 		{
@@ -373,19 +373,21 @@ void Gobby::Window::on_document_close()
 
 		// Send remove document request
 		m_buffer->remove_document(
-			static_cast<Document*>(page)->get_document()
+			static_cast<DocWindow*>(
+				page
+			)->get_document().get_document()
 		);
 	}
 	else
 	{
 		// Buffer does not exist: Maybe the connection has been lost
 		// or something: Just remove the document from the folder.
-		Gtk::Widget* doc = m_folder.get_nth_page(
+		Gtk::Widget* doc_wnd = m_folder.get_nth_page(
 			m_folder.get_current_page()
 		);
 
 		m_folder.remove_page(m_folder.get_current_page() );
-		delete doc;
+		delete doc_wnd;
 
 		// If there are no more documents disable
 		// save and close buttons in header
@@ -398,12 +400,14 @@ void Gobby::Window::on_document_close()
 void Gobby::Window::on_document_line_numbers()
 {
 	// Get current page
-	Document& doc = *static_cast<Document*>(
+	DocWindow& doc_wnd = *static_cast<DocWindow*>(
 		m_folder.get_nth_page(m_folder.get_current_page() )
 	);
 
 	// Toggle line number flag
-	doc.set_show_line_numbers(!doc.get_show_line_numbers() );
+	doc_wnd.get_document().set_show_line_numbers(
+		!doc_wnd.get_document().get_show_line_numbers()
+	);
 }
 
 void Gobby::Window::on_document_language(
@@ -411,12 +415,12 @@ void Gobby::Window::on_document_language(
 )
 {
 	// Get current page
-	Document& doc = *static_cast<Document*>(
+	DocWindow& doc = *static_cast<DocWindow*>(
 		m_folder.get_nth_page(m_folder.get_current_page() )
 	);
 
 	// Set given language
-	doc.set_language(lang);
+	doc.get_document().set_language(lang);
 }
 #endif
 

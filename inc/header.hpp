@@ -129,11 +129,13 @@ protected:
 	bool m_toggle_line_numbers;
 #endif
 
+#ifdef WITH_GTKSOURCEVIEW
 	// Callback for sorting
 	static bool language_sort_callback(
 		const Glib::RefPtr<Gtk::SourceLanguage>& lang1,
 		const Glib::RefPtr<Gtk::SourceLanguage>& lang2
 	);
+#endif
 
 	signal_session_create_type m_signal_session_create;
 	signal_session_join_type m_signal_session_join;

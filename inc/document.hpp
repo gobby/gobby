@@ -19,14 +19,14 @@
 #ifndef _GOBBY_DOCUMENT_HPP_
 #define _GOBBY_DOCUMENT_HPP_
 
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/textview.h>
 #include <obby/document.hpp>
 
 #include "features.hpp"
 #ifdef WITH_GTKSOURCEVIEW
 #include "sourceview/sourcelanguagesmanager.hpp"
 #include "sourceview/sourceview.hpp"
+#else
+#include <gtkmm/textview.h>
 #endif
 
 namespace Gobby
@@ -34,7 +34,11 @@ namespace Gobby
 
 class Folder;
 
-class Document : public Gtk::ScrolledWindow
+#ifdef WITH_GTKSOURCEVIEW
+class Document : public Gtk::SourceView
+#else
+class Document : public Gtk::TextView
+#endif
 {
 public:
 	typedef sigc::signal<void> signal_cursor_moved_type;
@@ -108,6 +112,10 @@ public:
 	void obby_user_part(obby::user& user);
 
 protected:
+	/** gtk widget overrides.
+	 */
+	virtual bool on_key_press_event(GdkEventKey* event);
+
 	/** Obby signal handlers.
 	 */
 	void on_obby_insert(const obby::insert_record& record);
@@ -143,11 +151,6 @@ protected:
 	obby::document& m_doc;
 	const Folder& m_folder;
 
-#ifdef WITH_GTKSOURCEVIEW
-	Gtk::SourceView m_view;
-#else
-	Gtk::TextView m_view;
-#endif
 	/** Variable to prevent event handlers from endless recursion. After
 	 * an obby insert or textbuffer insert has occured, this variable is
 	 * set to true, after the event has been handled, to false. If an
@@ -156,6 +159,17 @@ protected:
 	 * true, the event is ignored.
 	 */
 	bool m_editing;
+
+	/** Variable to indicate that a key is currently pressed. The insert-
+	 * text signal handler needs this to decide whether to update user
+	 * tags immediately or not. Otherwise, the key_press event handler does
+	 * this.
+	 * TODO: Find a better way, these variables are only needed in 2 or 3
+	 * functions.. :/
+	 */
+	bool m_tag_key_press;
+	unsigned long m_tag_start, m_tag_end;
+	const obby::user* m_tag_user;
 	
 	signal_cursor_moved_type m_signal_cursor_moved;
 	signal_content_changed_type m_signal_content_changed;

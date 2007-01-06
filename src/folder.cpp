@@ -17,6 +17,7 @@
  */
 
 #include "document.hpp"
+#include "docwindow.hpp"
 #include "folder.hpp"
 
 Gobby::Folder::Folder()
@@ -65,9 +66,9 @@ void Gobby::Folder::obby_end()
 	// Insensitive just the text editor to allow to scroll and tab between
 	// the documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<Document*>(
+		static_cast<DocWindow*>(
 			get_nth_page(i)
-		)->get_child()->set_sensitive(false);
+		)->get_document().set_sensitive(false);
 
 	m_running = false;
 }
@@ -76,57 +77,58 @@ void Gobby::Folder::obby_user_join(obby::user& user)
 {
 	// Pass user join event to documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<Document*>(get_nth_page(i) )->obby_user_join(user);
+		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_join(user);
 }
 
 void Gobby::Folder::obby_user_part(obby::user& user)
 {
 	// Pass user part event to documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<Document*>(get_nth_page(i) )->obby_user_part(user);
+		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_part(user);
 }
 
 void Gobby::Folder::obby_document_insert(obby::document& document)
 {
 	// Create new document
-	Document* new_doc = new Document(document, *this);
+	DocWindow* new_wnd = new DocWindow(document, *this);
+	Document& new_doc = new_wnd->get_document();
 
 	// Watch update signal to emit document_updated signal if a document
 	// has been updated.
-	new_doc->cursor_moved_event().connect(
+	new_doc.cursor_moved_event().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_document_cursor_moved),
-			sigc::ref(*new_doc)
+			sigc::ref(new_doc)
 		)
 	);
 
-	new_doc->content_changed_event().connect(
+	new_doc.content_changed_event().connect(
 		sigc::bind(
 			sigc::mem_fun(
 				*this,
 				&Folder::on_document_content_changed
 			),
-			sigc::ref(*new_doc)
+			sigc::ref(new_doc)
 		)
 	);
 
 #ifdef WITH_GTKSOURCEVIEW
-	new_doc->language_changed_event().connect(
+	new_doc.language_changed_event().connect(
 		sigc::bind(
 			sigc::mem_fun(
 				*this,
 				&Folder::on_document_language_changed
 			),
-			sigc::ref(*new_doc)
+			sigc::ref(new_doc)
 		)
 	);
 #endif
 
 	// Append document's title as new page to the notebook
-	append_page(*new_doc, document.get_title());
+	append_page(*new_wnd, document.get_title() );
 
 	// Show child
-	new_doc->show_all();
+	new_wnd->show_all();
 }
 
 void Gobby::Folder::obby_document_remove(obby::document& document)
@@ -134,8 +136,9 @@ void Gobby::Folder::obby_document_remove(obby::document& document)
 	// Find corresponding Document widget in notebook
 	for(int i = 0; i < get_n_pages(); ++ i)
 	{
-		Gtk::Widget* doc = get_nth_page(i);
-		if(&static_cast<Document*>(doc)->get_document() == &document)
+		DocWindow* doc = static_cast<DocWindow*>(get_nth_page(i) );
+		obby::document& obdoc = doc->get_document().get_document();
+		if(&obdoc == &document)
 		{
 			// Delete it.
 			remove_page(i);
@@ -186,7 +189,9 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	{
 		// Another document has been selected: Emit tabswitched
 		m_signal_tab_switched.emit(
-			*static_cast<Document*>(get_nth_page(page_num) )
+			static_cast<DocWindow*>(
+				get_nth_page(page_num)
+			)->get_document()
 		);
 	}
 
@@ -196,14 +201,16 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 void Gobby::Folder::on_document_cursor_moved(Document& document)
 {
 	// Update in the currently visible document? Update statusbar.
-	if(get_current_page() == page_num(document) )
+	Gtk::Widget* wnd = get_nth_page(get_current_page() );
+	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
 		m_signal_document_cursor_moved.emit(document);
 }
 
 void Gobby::Folder::on_document_content_changed(Document& document)
 {
 	// Update in the currently visible document? Update statusbar.
-	if(get_current_page() == page_num(document) )
+	Gtk::Widget* wnd = get_nth_page(get_current_page() );
+	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
 		m_signal_document_content_changed.emit(document);
 }
 
@@ -211,7 +218,8 @@ void Gobby::Folder::on_document_content_changed(Document& document)
 void Gobby::Folder::on_document_language_changed(Document& document)
 {
 	// Update in the currently visible document? Update statusbar.
-	if(get_current_page() == page_num(document) )
+	Gtk::Widget* wnd = get_nth_page(get_current_page() );
+	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
 		m_signal_document_language_changed.emit(document);
 }
 #endif

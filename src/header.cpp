@@ -79,8 +79,10 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 
 Gobby::Header::Header(const Folder& folder)
  : m_ui_manager(Gtk::UIManager::create() ),
-   m_group_app(Gtk::ActionGroup::create() ),
-   m_toggle_language(false), m_toggle_line_numbers(false)
+   m_group_app(Gtk::ActionGroup::create() )
+#ifdef WITH_GTKSOURCEVIEW
+   , m_toggle_language(false), m_toggle_line_numbers(false)
+#endif
 {
 	// Add basic menu
 	m_ui_manager->add_ui_from_string(ui_desc);
@@ -594,6 +596,7 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 #endif
 }
 
+#ifdef WITH_GTKSOURCEVIEW
 bool Gobby::Header::language_sort_callback(
 	const Glib::RefPtr<Gtk::SourceLanguage>& lang1,
 	const Glib::RefPtr<Gtk::SourceLanguage>& lang2
@@ -601,3 +604,4 @@ bool Gobby::Header::language_sort_callback(
 {
 	return lang1->get_name() < lang2->get_name();
 }
+#endif
