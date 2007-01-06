@@ -212,7 +212,7 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_window(Gtk::ActionGroup::create() ),
 	group_help(Gtk::ActionGroup::create() ),
 
-	action_app(Gtk::Action::create("MenuApp", "Gobby") ),
+	action_app(Gtk::Action::create("MenuApp", "_Gobby") ),
 	action_app_session_create(
 		Gtk::Action::create(
 			"AppSessionCreate",
@@ -258,7 +258,7 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
-	action_session(Gtk::Action::create("MenuSession", _("Session")) ),
+	action_session(Gtk::Action::create("MenuSession", _("_Session")) ),
 
 	action_session_document_create(
 		Gtk::Action::create(
@@ -305,7 +305,7 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
-	action_edit(Gtk::Action::create("MenuEdit", _("Edit")) ),
+	action_edit(Gtk::Action::create("MenuEdit", _("_Edit")) ),
 
 	action_edit_search(
 		Gtk::Action::create(
@@ -343,7 +343,7 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
-	action_user(Gtk::Action::create("MenuUser", _("User")) ),
+	action_user(Gtk::Action::create("MenuUser", _("_User")) ),
 
 	action_user_set_password(
 		Gtk::Action::create(
@@ -363,7 +363,7 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
-	action_view(Gtk::Action::create("MenuView", _("View")) ),
+	action_view(Gtk::Action::create("MenuView", _("_View")) ),
 
 	action_view_preferences(
 		Gtk::Action::create(
@@ -377,7 +377,7 @@ Gobby::Header::Header(const ApplicationState& state,
 
 	action_view_syntax(Gtk::Action::create("MenuViewSyntax", _("Syntax")) ),
 
-	action_window(Gtk::Action::create("MenuWindow", _("Window")) ),
+	action_window(Gtk::Action::create("MenuWindow", _("_Window")) ),
 
 	action_window_userlist(
 		Gtk::ToggleAction::create(
@@ -398,7 +398,7 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
-	action_help(Gtk::Action::create("MenuHelp", _("Help")) ),
+	action_help(Gtk::Action::create("MenuHelp", _("_Help")) ),
 
 	action_help_about(
 		Gtk::Action::create(
