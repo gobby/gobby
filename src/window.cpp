@@ -26,6 +26,7 @@
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/stock.h>
 
+#include <obby/format_string.hpp>
 #include <obby/client_buffer.hpp>
 #include <obby/host_buffer.hpp>
 
@@ -62,6 +63,9 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_document_save) );
 	m_header.document_close_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
+
+	m_header.user_set_password_event().connect(
+		sigc::mem_fun(*this, &Window::on_user_set_password) );
 
 	m_header.document_word_wrap_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_word_wrap) );
@@ -228,12 +232,13 @@ void Gobby::Window::on_session_join() try
 			sigc::mem_fun(*this, &Window::on_obby_login_failed) );
 		buffer->global_password_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_global_password));
+		buffer->user_password_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_user_password) );
 		buffer->close_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_close) );
 		buffer->sync_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_sync) );
 
-		/* TODO: Connect to on_global_password to prompt for password */
 		/* TODO: Add password entry widget in join dialog */
 		/* TODO: Add password entry widget in host dialog */
 
@@ -425,6 +430,24 @@ void Gobby::Window::on_document_close()
 	}
 }
 
+void Gobby::Window::on_user_set_password()
+{
+	// TODO: Password dialog with second entry field to confirm password
+	EntryDialog dlg(
+		*this,
+		_("Set user password"),
+		_("Enter new password")
+	);
+
+	dlg.get_entry().set_visibility(false);
+
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		dynamic_cast<obby::client_buffer*>(m_buffer)->set_password(
+			dlg.get_text() );
+	}
+}
+
 void Gobby::Window::on_document_word_wrap()
 {
 	// Get current page
@@ -498,6 +521,34 @@ bool Gobby::Window::on_obby_global_password(std::string& password)
 		*this,
 		_("Password required"),
 		_("Enter session password")
+	);
+
+	// Disable view of typed characters (password input)
+	dlg.get_entry().set_visibility(false);
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		// Use given text as password
+		password = dlg.get_text();
+		return true;
+	}
+	else
+	{
+		// Close connection otherwise
+		on_session_quit();
+		return false;
+	}
+}
+
+bool Gobby::Window::on_obby_user_password(std::string& password)
+{
+	obby::format_string str(_("Enter user password for user %0") );
+	str << m_buffer->get_name();
+
+	// Prompt for password
+	EntryDialog dlg(
+		*this,
+		_("Password required"),
+		str.str()
 	);
 
 	// Disable view of typed characters (password input)

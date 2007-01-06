@@ -21,6 +21,7 @@
 #include <gtkmm/radioaction.h>
 #include <obby/format_string.hpp>
 #include <obby/local_buffer.hpp>
+#include <obby/client_buffer.hpp>
 
 #include "features.hpp"
 #include "common.hpp"
@@ -42,6 +43,9 @@ namespace {
 		"      <menuitem action=\"OpenDocument\" />"
 		"      <menuitem action=\"SaveDocument\" />"
 		"      <menuitem action=\"CloseDocument\" />"
+		"    </menu>"
+		"    <menu action=\"MenuUser\">"
+		"      <menuitem action=\"UserSetPassword\" />"
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
 		"      <menuitem action=\"ViewWordWrap\" />"
@@ -243,6 +247,23 @@ Gobby::Header::Header(const Folder& folder)
 		)
 	);
 
+	// User menu
+	m_group_app->add(Gtk::Action::create("MenuUser", _("User")) );
+
+	// Set password
+	m_group_app->add(
+		Gtk::Action::create(
+			"UserSetPassword",
+			Gtk::Stock::DIALOG_AUTHENTICATION,
+			_("Set password"),
+			_("Sets a password for this user")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_user_set_password
+		)
+	);
+
 	// Documents menu
 	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
 
@@ -394,9 +415,9 @@ Gobby::Header::Header(const Folder& folder)
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
-#ifdef WITH_GTKSOURCEVIEW
+
+	m_group_app->get_action("MenuUser")->set_sensitive(false);
 	m_group_app->get_action("MenuView")->set_sensitive(false);
-#endif
 
 	// Connect to folder's signals
 	folder.tab_switched_event().connect(
@@ -421,9 +442,7 @@ void Gobby::Header::disable_document_actions()
 {
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
-#ifdef WITH_GTKSOURCEVIEW
 	m_group_app->get_action("MenuView")->set_sensitive(false);
-#endif
 }
 
 Gobby::Header::signal_session_create_type
@@ -466,6 +485,12 @@ Gobby::Header::signal_document_close_type
 Gobby::Header::document_close_event() const
 {
 	return m_signal_document_close;
+}
+
+Gobby::Header::signal_user_set_password_type
+Gobby::Header::user_set_password_event() const
+{
+	return m_signal_user_set_password;
 }
 
 Gobby::Header::signal_document_word_wrap_type
@@ -511,6 +536,11 @@ void Gobby::Header::obby_start(obby::local_buffer& buf)
 	m_group_app->get_action("CreateDocument")->set_sensitive(true);
 	m_group_app->get_action("OpenDocument")->set_sensitive(true);
 
+	// Enable password button if we are client
+	m_group_app->get_action("MenuUser")->set_sensitive(true);
+	m_group_app->get_action("UserSetPassword")->set_sensitive(
+		dynamic_cast<obby::client_buffer*>(&buf) != NULL);
+
 	// Document actions will be activated from the insert_document event
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
@@ -525,6 +555,9 @@ void Gobby::Header::obby_end()
 	m_group_app->get_action("CreateSession")->set_sensitive(true);
 	m_group_app->get_action("JoinSession")->set_sensitive(true);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
+
+	// Disable user buttons
+	m_group_app->get_action("MenuUser")->set_sensitive(false);
 
 	// Disable document buttons
 	m_group_app->get_action("CreateDocument")->set_sensitive(false);
@@ -600,6 +633,11 @@ void Gobby::Header::on_app_document_save()
 void Gobby::Header::on_app_document_close()
 {
 	m_signal_document_close.emit();
+}
+
+void Gobby::Header::on_app_user_set_password()
+{
+	m_signal_user_set_password.emit();
 }
 
 void Gobby::Header::on_app_document_word_wrap()

@@ -119,7 +119,7 @@ void Gobby::Chat::add_line(obby::user& user, const Glib::ustring& message)
 	Glib::ustring colour;
 	// Highlight the message if the user's nickname is found in it,
 	// but not if the message is coming from the user itself.
-	if( (user != self) &&
+	if( (&user != &self) &&
             (message.find(self.get_name() ) != Glib::ustring::npos) )
 		colour = "darkred";
 	else

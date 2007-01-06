@@ -58,6 +58,8 @@ protected:
 	void on_document_save();
 	void on_document_close();
 
+	void on_user_set_password();
+
 	void on_document_word_wrap();
 #ifdef WITH_GTKSOURCEVIEW
 	void on_document_line_numbers();
@@ -74,6 +76,7 @@ protected:
 	// Obby signal handlers
 	void on_obby_login_failed(obby::login::error error);
 	bool on_obby_global_password(std::string& password);
+	bool on_obby_user_password(std::string& password);
 	void on_obby_close();
 	void on_obby_sync();
 
