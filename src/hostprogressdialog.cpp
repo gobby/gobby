@@ -30,7 +30,7 @@ Gobby::HostProgressDialog::HostProgressDialog(Gtk::Window& parent,
 	m_port(port), m_username(username), m_color(color), m_session(session),
 	m_error("")
 {
-	set_status_text("Generating RSA key...");
+	set_status_text("Opening obby session...");
 }
 
 std::auto_ptr<Gobby::HostBuffer> Gobby::HostProgressDialog::get_buffer()
@@ -69,7 +69,7 @@ void Gobby::HostProgressDialog::on_thread(Thread& thread)
 	// Try to open the server.
 	try
 	{
-		// Create buffer, compute RSA key and stuff
+		// Create buffer
 		buffer.reset(
 			new HostBuffer(
 				username,
