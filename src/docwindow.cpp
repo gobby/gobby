@@ -72,6 +72,14 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 		sigc::mem_fun(*this, &DocWindow::on_changed)
 	);
 
+	m_doc.insert_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_insert)
+	);
+
+	m_doc.erase_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_erase)
+	);
+
 	apply_preferences();
 	buf->set_modified(!m_doc.empty() );
 
@@ -145,6 +153,11 @@ void Gobby::DocWindow::set_path(const Glib::ustring& new_path)
 bool Gobby::DocWindow::get_modified() const
 {
 	return m_view.get_buffer()->get_modified();
+}
+
+void Gobby::DocWindow::grab_focus()
+{
+	m_view.grab_focus();
 }
 
 Glib::RefPtr<Gtk::SourceLanguage> Gobby::DocWindow::get_language() const
@@ -225,6 +238,18 @@ void Gobby::DocWindow::on_changed()
 	// TODO: Check if the cursor really moved
 	m_signal_cursor_moved.emit();
 	m_signal_content_changed.emit();
+}
+
+void Gobby::DocWindow::on_insert(obby::position pos,
+                                 const std::string& error)
+{
+	m_info.insert(pos, error);
+}
+
+void Gobby::DocWindow::on_erase(obby::position pos,
+                                obby::position len)
+{
+	m_info.erase(pos, len);
 }
 
 void Gobby::DocWindow::apply_preferences()

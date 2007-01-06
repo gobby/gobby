@@ -23,6 +23,8 @@
 #include <obby/position.hpp>
 #include <obby/user_table.hpp>
 #include <obby/text.hpp>
+#include <obby/local_buffer.hpp>
+#include "gselector.hpp"
 #include "sourceview/sourcebuffer.hpp"
 
 namespace Gobby
@@ -90,17 +92,28 @@ public:
 		Gtk::TextIter m_iter_end;
 	};
 
+	// TODO: Only take user table as soon as the user table has signals
+	// like on_user_join and on_user_part
 	class template_type
 	{
 	public:
-		template_type(); // Default ctor, needed by obby, invalid
-		template_type(const obby::user_table& user_table);
+		// buffer_def cannot be included since it depends on this file
+		typedef obby::basic_local_buffer<Document, GSelector>
+			buffer_type;
 
-		const obby::user_table& get_user_table() const;
+		template_type(); // Default ctor, needed by obby, invalid
+		template_type(const buffer_type& buffer);
+
+		const buffer_type& get_buffer() const;
 
 	protected:
-		const obby::user_table* m_user_table;
+		const buffer_type* m_buffer;
 	};
+
+	typedef sigc::signal<void, obby::position, const std::string>
+		signal_insert_type;
+	typedef sigc::signal<void, obby::position, obby::position>
+		signal_erase_type;
 
 	/** @brief Creates a new document that belongs to the given buffer.
 	 */
@@ -161,6 +174,16 @@ public:
 	/** @brief Returns the underlaying Gtk::SourceBuffer.
 	 */
 	Glib::RefPtr<Gtk::SourceBuffer> get_buffer() const;
+
+	/** @brief Signal that is emitted when the local user wants to insert
+	 * text.
+	 */
+	signal_insert_type insert_event() const;
+
+	/** @brief Signal that is emitted when the local user wants to erase
+	 * text.
+	 */
+	signal_erase_type erase_event() const;
 protected:
 	typedef std::list<Glib::RefPtr<const Gtk::TextTag> > tag_list_type;
 
@@ -173,6 +196,30 @@ protected:
 	 * has changed its color.
 	 */
 	void on_user_color(const obby::user& user);
+
+	/** @brief Callback when text is inserted. This tells obby to insert
+	 * text into the document.
+	 */
+	void on_insert_before(const Gtk::TextIter& iter,
+	                      const Glib::ustring& text);
+
+	/** @brief Callback when text is inserted. This tags newly inserted
+	 * text.
+	 */
+	void on_insert_after(const Gtk::TextIter& iter,
+	                     const Glib::ustring& text);
+
+	/** @brief Callback when text is erased. This tells obby to erase
+	 * text from the document.
+	 */
+	void on_erase_before(const Gtk::TextIter& begin,
+	                     const Gtk::TextIter& end);
+
+	/** @brief Denies application of tags we do not want.
+	 */
+	void on_apply_tag_before(const Glib::RefPtr<Gtk::TextTag>& tag,
+	                         const Gtk::TextIter& begin,
+                                 const Gtk::TextIter& end);
 
 	/** @brief Returns an iterator that points at the given position.
 	 */
@@ -211,6 +258,12 @@ protected:
 	                          const std::string& str,
 	                          const obby::user* author);
 
+	/** @brief Tags a given range of text as written by <em>with</em>.
+	 */
+	void tag_text(const Gtk::TextIter& begin,
+	              const Gtk::TextIter& end,
+	              const obby::user* with);
+
 	/** @brief Helper class to use Glib::RefPtr<Gtk::TextTag> as index
 	 * of a std::map<>.
 	 */
@@ -238,8 +291,15 @@ protected:
 	// Mapping from user to tag and vice versa
 	map_user_type m_map_user;
 	map_tag_type m_map_tag;
+	const obby::user& m_self;
 
+	// Whether text is currently edited, needed to prevent recursion
+	// in signal emission
+	bool m_editing;
 	Glib::RefPtr<Gtk::SourceBuffer> m_buffer;
+
+	signal_insert_type m_signal_insert;
+	signal_erase_type m_signal_erase;
 };
 
 #if 0

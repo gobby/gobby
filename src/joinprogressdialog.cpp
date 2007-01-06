@@ -130,7 +130,7 @@ void Gobby::JoinProgressDialog::on_thread(Thread& thread)
 
 		buffer->set_document_template(
 			ClientBuffer::document_type::template_type(
-				buffer->get_user_table()
+				*buffer
 			)
 		);
 

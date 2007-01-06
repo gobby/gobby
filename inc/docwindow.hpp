@@ -89,6 +89,11 @@ public:
 	 */
 	bool get_modified() const; // TODO: Remove this in favor of get_document().get_buffer()->get_modified()
 
+	/** @brief Gives the focus to the underlaying sourceview instead of
+	 * the scrolled window containing it.
+	 */
+	void grab_focus();
+
 	/** @brief Returns the current Gtk::SourceLanguage the document is
 	 * highlighted with.
 	 */
@@ -150,6 +155,16 @@ protected:
 	/** @brief Callback when the buffer content changed.
 	 */
 	void on_changed();
+
+	/** @brief Callback when text has to be inserted.
+	 */
+	void on_insert(obby::position pos,
+	               const std::string& text);
+
+	/** @brief Callback when text has to be erased.
+	 */
+	void on_erase(obby::position pos,
+	              obby::position len);
 
 	/** @brief Helper function that applies the preferences to the buffer.
 	 */
