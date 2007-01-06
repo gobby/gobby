@@ -56,9 +56,9 @@ public:
 	// TODO: Nix auswaehlbar machen?
 	virtual void obby_start(obby::local_buffer& buf);
 	virtual void obby_end();
-	virtual void obby_user_join(obby::user& user);
-	virtual void obby_user_part(obby::user& user);
-	virtual void obby_user_colour(obby::user& user);
+	virtual void obby_user_join(const obby::user& user);
+	virtual void obby_user_part(const obby::user& user);
+	virtual void obby_user_colour(const obby::user& user);
 	virtual void obby_document_insert(obby::local_document_info& document);
 	virtual void obby_document_remove(obby::local_document_info& document);
 protected:

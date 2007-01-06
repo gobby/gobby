@@ -136,21 +136,21 @@ void Gobby::Folder::obby_end()
 	m_running = false;
 }
 
-void Gobby::Folder::obby_user_join(obby::user& user)
+void Gobby::Folder::obby_user_join(const obby::user& user)
 {
 	// Pass user join event to documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
 		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_join(user);
 }
 
-void Gobby::Folder::obby_user_part(obby::user& user)
+void Gobby::Folder::obby_user_part(const obby::user& user)
 {
 	// Pass user part event to documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
 		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_part(user);
 }
 
-void Gobby::Folder::obby_user_colour(obby::user& user)
+void Gobby::Folder::obby_user_colour(const obby::user& user)
 {
 	// Pass user colour event to documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)

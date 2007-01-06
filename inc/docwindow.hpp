@@ -48,9 +48,9 @@ public:
 
 	/** Calls from the folder.
 	 */
-	void obby_user_join(obby::user& user);
-	void obby_user_part(obby::user& user);
-	void obby_user_colour(obby::user& user);
+	void obby_user_join(const obby::user& user);
+	void obby_user_part(const obby::user& user);
+	void obby_user_colour(const obby::user& user);
 
 protected:
 	Document m_doc;

@@ -137,9 +137,9 @@ v v v v v v v
 
 	/** Calls from the folder.
 	 */
-	void obby_user_join(obby::user& user);
-	void obby_user_part(obby::user& user);
-	void obby_user_colour(obby::user& user);
+	void obby_user_join(const obby::user& user);
+	void obby_user_part(const obby::user& user);
+	void obby_user_colour(const obby::user& user);
 
 protected:
 	/** Obby signal handlers.
@@ -254,7 +254,7 @@ private:
 	                           const Gtk::TextBuffer::iterator& begin,
 	                           const Gtk::TextBuffer::iterator& end);
 
-	void update_tag_colour(obby::user& user);
+	void update_tag_colour(const obby::user& user);
 };
 
 }

@@ -118,11 +118,11 @@ void Gobby::StatusBar::obby_end()
 	m_position.set_text("");
 }
 
-void Gobby::StatusBar::obby_user_join(obby::user& user)
+void Gobby::StatusBar::obby_user_join(const obby::user& user)
 {
 }
 
-void Gobby::StatusBar::obby_user_part(obby::user& user)
+void Gobby::StatusBar::obby_user_part(const obby::user& user)
 {
 }
 

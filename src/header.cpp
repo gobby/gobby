@@ -626,11 +626,11 @@ void Gobby::Header::obby_end()
 	// were to allow the user to save documents.
 }
 
-void Gobby::Header::obby_user_join(obby::user& user)
+void Gobby::Header::obby_user_join(const obby::user& user)
 {
 }
 
-void Gobby::Header::obby_user_part(obby::user& user)
+void Gobby::Header::obby_user_part(const obby::user& user)
 {
 }
 

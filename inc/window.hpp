@@ -91,15 +91,15 @@ protected:
 	// Obby signal handlers
 	void on_obby_close();
 
-	void on_obby_user_join(obby::user& user);
-	void on_obby_user_part(obby::user& user);
-	void on_obby_user_colour(obby::user& user);
+	void on_obby_user_join(const obby::user& user);
+	void on_obby_user_part(const obby::user& user);
+	void on_obby_user_colour(const obby::user& user);
 	void on_obby_user_colour_failed();
 	void on_obby_document_insert(obby::document_info& document);
 	void on_obby_document_remove(obby::document_info& document);
 
 	void on_obby_server_chat(const Glib::ustring& message);
-	void on_obby_chat(obby::user& user, const Glib::ustring& message);
+	void on_obby_chat(const obby::user& user, const Glib::ustring& message);
 
 	// Helper functions
 	Document& get_current_document();

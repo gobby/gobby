@@ -269,16 +269,16 @@ Glib::ustring Gobby::Document::get_content()
 	return get_buffer()->get_text();
 }
 
-void Gobby::Document::obby_user_join(obby::user& user)
+void Gobby::Document::obby_user_join(const obby::user& user)
 {
 	update_tag_colour(user);
 }
 
-void Gobby::Document::obby_user_part(obby::user& user)
+void Gobby::Document::obby_user_part(const obby::user& user)
 {
 }
 
-void Gobby::Document::obby_user_colour(obby::user& user)
+void Gobby::Document::obby_user_colour(const obby::user& user)
 {
 	update_tag_colour(user);
 }
@@ -752,7 +752,7 @@ Gobby::Document::on_remove_user_colour(Glib::RefPtr<Gtk::TextBuffer::Tag> tag,
 		get_buffer()->remove_tag(tag, begin, end);
 }
 
-void Gobby::Document::update_tag_colour(obby::user& user)
+void Gobby::Document::update_tag_colour(const obby::user& user)
 {
 	// Build tag name for this user
 	Glib::ustring tag_name = "gobby_user_" + user.get_name();

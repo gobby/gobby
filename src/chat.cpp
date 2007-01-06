@@ -78,14 +78,14 @@ void Gobby::Chat::obby_end()
 	m_btn_chat.set_sensitive(false);
 }
 
-void Gobby::Chat::obby_user_join(obby::user& user)
+void Gobby::Chat::obby_user_join(const obby::user& user)
 {
 	obby::format_string str(_("%0% has joined") );
 	str << user.get_name();
 	m_log_chat.log(str.str(), "blue");
 }
 
-void Gobby::Chat::obby_user_part(obby::user& user)
+void Gobby::Chat::obby_user_part(const obby::user& user)
 {
 	obby::format_string str(_("%0% has left") );
 	str << user.get_name();
@@ -100,7 +100,8 @@ void Gobby::Chat::obby_document_remove(obby::local_document_info& document)
 {
 }
 
-void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
+void Gobby::Chat::obby_message(const obby::user& user,
+                               const Glib::ustring& message)
 {
 	// Make sure we are not deceived by rogue multi line messages
 	Glib::ustring::size_type prev = 0, pos = 0;
@@ -112,9 +113,9 @@ void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
 	add_line(user, message.substr(prev));
 }
 
-void Gobby::Chat::add_line(obby::user& user, const Glib::ustring& message)
+void Gobby::Chat::add_line(const obby::user& user, const Glib::ustring& message)
 {
-	obby::user& self = m_buffer->get_self();
+	const obby::user& self = m_buffer->get_self();
 	Glib::ustring name = self.get_name();
 
 	// Check if we have to highlight the line becasue the user's nick name

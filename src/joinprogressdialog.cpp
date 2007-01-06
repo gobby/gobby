@@ -48,6 +48,22 @@ std::auto_ptr<obby::client_buffer> Gobby::JoinProgressDialog::get_buffer()
 
 void Gobby::JoinProgressDialog::on_thread()
 {
+	/*try
+	{
+		m_buffer.reset(
+			new obby::io::client_buffer(
+#ifdef WIN32
+				m_parent,
+#endif
+				m_hostname,
+				m_port
+			)
+		);
+	}
+	catch(net6::error& e)
+	{
+		m_error = e.what();
+	}*/
 }
 
 void Gobby::JoinProgressDialog::on_done()

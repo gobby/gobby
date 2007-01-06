@@ -281,7 +281,7 @@ obby::io::client_buffer::client_buffer(const Glib::ustring& hostname,
 #ifdef WIN32
 	m_client = new client(window, addr);
 #else
-	m_client = new client(addr);
+	m_net.reset(new client(addr) );
 #endif
 	register_signal_handlers();
 }
@@ -306,7 +306,7 @@ obby::io::server_buffer::server_buffer(unsigned int port)
 #else
 	net6::server* server = new io::server(port, false);
 #endif
-	m_server = server;
+	m_net.reset(server);
 
 	register_signal_handlers();
 }
@@ -336,9 +336,10 @@ obby::io::host_buffer::host_buffer(unsigned int port,
 #else
 	net6::host* host = new io::host(port, username, false);
 #endif
-	m_server = host;
 
-	m_self = m_usertable.add_user(host->get_self(), red, green, blue);
+	m_net.reset(host);
+
+	m_self = m_user_table.add_user(host->get_self(), red, green, blue);
 	register_signal_handlers();
 }
 

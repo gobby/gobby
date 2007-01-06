@@ -46,15 +46,15 @@ public:
 	// Calls from the window
 	void obby_start(obby::local_buffer& buf);
 	void obby_end();
-	void obby_user_join(obby::user& user);
-	void obby_user_part(obby::user& user);
+	void obby_user_join(const obby::user& user);
+	void obby_user_part(const obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
 
-	void obby_message(obby::user& user, const Glib::ustring& message);
+	void obby_message(const obby::user& user, const Glib::ustring& message);
 	void obby_server_message(const Glib::ustring& message);
 protected:
-	void add_line(obby::user& user, const Glib::ustring& message);
+	void add_line(const obby::user& user, const Glib::ustring& message);
 	void on_chat();
 
 	obby::local_buffer* m_buffer;

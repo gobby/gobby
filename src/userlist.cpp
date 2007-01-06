@@ -108,6 +108,8 @@ Gobby::UserList::UserList(const Folder& folder)
 	folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &UserList::on_folder_tab_switched) );
 
+	// UserList crashes with GTK+ 2.8.x if it gets too small and no entry
+	set_size_request(200, 0);
 }
 
 Gobby::UserList::~UserList()
@@ -131,7 +133,7 @@ void Gobby::UserList::obby_end()
 	set_sensitive(false);
 }
 
-void Gobby::UserList::obby_user_join(obby::user& user)
+void Gobby::UserList::obby_user_join(const obby::user& user)
 {
 	// Is there already such a user?
 	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
@@ -147,14 +149,14 @@ void Gobby::UserList::obby_user_join(obby::user& user)
 	}
 }
 
-void Gobby::UserList::obby_user_part(obby::user& user)
+void Gobby::UserList::obby_user_part(const obby::user& user)
 {
 	// User is not anymore connceted
 	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
 	(*iter)[m_list_cols.connected] = false;
 }
 
-void Gobby::UserList::obby_user_colour(obby::user& user)
+void Gobby::UserList::obby_user_colour(const obby::user& user)
 {
 	// Get user with this name
 	Gtk::TreeModel::iterator iter = find_user(user.get_name() );

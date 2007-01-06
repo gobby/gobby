@@ -404,7 +404,7 @@ void Gobby::Window::on_document_create()
 		// " " means a newly created file
 		m_local_file_path = " ";
 		// Create new document
-		m_buffer->create_document(dlg.get_text() );
+		m_buffer->document_create(dlg.get_text(), "", false);
 	}
 }
 
@@ -570,7 +570,7 @@ void Gobby::Window::on_user_set_colour()
 {
 	// Simple ColorSelectionDialog
 	ColorSelectionDialog dlg;
-	obby::user& user = m_buffer->get_self();
+	const obby::user& user = m_buffer->get_self();
 	Gdk::Color color;
 
 	color.set_red(user.get_red() * 65535 / 255);
@@ -690,7 +690,8 @@ void Gobby::Window::on_obby_close()
 	on_session_quit();
 }
 
-void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)
+void Gobby::Window::on_obby_chat(const obby::user& user,
+                                 const Glib::ustring& message)
 {
 	// Got chat message
 	m_chat.obby_message(user, message);
@@ -702,7 +703,7 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 	m_chat.obby_server_message(message);
 }
 
-void Gobby::Window::on_obby_user_join(obby::user& user)
+void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
 	// Tell user join to components
 	m_header.obby_user_join(user);
@@ -712,7 +713,7 @@ void Gobby::Window::on_obby_user_join(obby::user& user)
 	m_statusbar.obby_user_join(user);
 }
 
-void Gobby::Window::on_obby_user_part(obby::user& user)
+void Gobby::Window::on_obby_user_part(const obby::user& user)
 {
 	// Tell user part to components
 	m_header.obby_user_part(user);
@@ -722,7 +723,7 @@ void Gobby::Window::on_obby_user_part(obby::user& user)
 	m_statusbar.obby_user_part(user);
 }
 
-void Gobby::Window::on_obby_user_colour(obby::user& user)
+void Gobby::Window::on_obby_user_colour(const obby::user& user)
 {
 	m_userlist.obby_user_colour(user);
 	m_folder.obby_user_colour(user);
@@ -860,7 +861,7 @@ void Gobby::Window::open_local_file(const Glib::ustring& file,
 			convert_to_utf8(Glib::file_get_contents(file)) );
 		convert2unix(content);
 
-		m_buffer->create_document(
+		m_buffer->document_create(
 			Glib::path_get_basename(file), content, open_as_edited
 		);
 	}
@@ -940,7 +941,7 @@ void Gobby::Window::close_document(DocWindow& document)
 	if(m_buffer.get() != NULL)
 	{
 		// Send remove document request
-		m_buffer->remove_document(
+		m_buffer->document_remove(
 			document.get_document().get_document()
 		);
 	}

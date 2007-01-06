@@ -42,17 +42,17 @@ Gobby::Document& Gobby::DocWindow::get_document()
 	return m_doc;
 }
 
-void Gobby::DocWindow::obby_user_join(obby::user& user)
+void Gobby::DocWindow::obby_user_join(const obby::user& user)
 {
 	m_doc.obby_user_join(user);
 }
 
-void Gobby::DocWindow::obby_user_part(obby::user& user)
+void Gobby::DocWindow::obby_user_part(const obby::user& user)
 {
 	m_doc.obby_user_part(user);
 }
 
-void Gobby::DocWindow::obby_user_colour(obby::user& user)
+void Gobby::DocWindow::obby_user_colour(const obby::user& user)
 {
 	m_doc.obby_user_colour(user);
 }
