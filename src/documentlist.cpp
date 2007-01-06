@@ -27,6 +27,15 @@ namespace
 
 	Gdk::Color COLOR_UNSUBSCRIBED(&COLOR_UNSUBSCRIBED_GDK, true);
 	Gdk::Color COLOR_SUBSCRIBED(&COLOR_SUBSCRIBED_GDK, true);
+
+	inline bool subscription_enabled(const Gobby::LocalDocumentInfo& info)
+	{
+		Gobby::LocalDocumentInfo::subscription_state state;
+		state = info.get_subscription_state();
+
+		return (state == Gobby::LocalDocumentInfo::SUBSCRIBED) ||
+		       (state == Gobby::LocalDocumentInfo::SUBSCRIBING);
+	}
 }
 
 Gobby::DocumentList::Columns::Columns()
@@ -47,8 +56,8 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 		preferences,
 		config_entry["documentlist"]
 	),
-	m_btn_subscribe(_("Subscribe") ),
-	m_header(header)
+	m_header(header),
+	m_btn_subscribe(_("Subscribe") )
 {
 	m_tree_data = Gtk::TreeStore::create(m_tree_cols);
 
@@ -153,8 +162,8 @@ void Gobby::DocumentList::obby_document_insert(LocalDocumentInfo& info)
 	);
 
 	(*new_doc)[m_tree_cols.text] = info.get_title();
-	(*new_doc)[m_tree_cols.color] =
-		info.is_subscribed() ? COLOR_SUBSCRIBED : COLOR_UNSUBSCRIBED;
+	(*new_doc)[m_tree_cols.color] = subscription_enabled(info) ?
+		COLOR_SUBSCRIBED : COLOR_UNSUBSCRIBED;
 	(*new_doc)[m_tree_cols.data] = static_cast<void*>(&info);
 }
 
@@ -234,7 +243,7 @@ void Gobby::DocumentList::on_subscribe()
 				)
 			);
 
-		if(!info->is_subscribed() )
+		if(!subscription_enabled(*info) )
 			info->subscribe();
 	}
 }
@@ -255,7 +264,7 @@ void Gobby::DocumentList::on_selection_changed()
 				)
 			);
 
-		if(!info->is_subscribed() )
+		if(!subscription_enabled(*info) )
 		{
 			m_btn_subscribe.set_sensitive(true);
 			return;
