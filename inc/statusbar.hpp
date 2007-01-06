@@ -22,8 +22,8 @@
 #include <glibmm/ustring.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
+#include <gtkmm/frame.h>
 #include <gtkmm/statusbar.h>
-#include <gtkmm/separator.h>
 #include <obby/user.hpp>
 #include "document.hpp"
 #include "buffer_def.hpp"
@@ -58,11 +58,14 @@ protected:
 	Header& m_header;
 
 	//Gtk::HBox m_box;
-	guint m_context_noconn;
-	guint m_context_state;
+	guint m_message_noconn;
+	guint m_message_state;
 
-	Gtk::Label m_language;
-	Gtk::Label m_position;
+	Gtk::Frame m_frm_language;
+	Gtk::Label m_lbl_language;
+
+	Gtk::Frame m_frm_position;
+	Gtk::Label m_lbl_position;
 };
 
 }
