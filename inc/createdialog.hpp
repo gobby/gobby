@@ -25,6 +25,7 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/colorbutton.h>
+#include "config_.hpp"
 
 namespace Gobby
 {
@@ -32,7 +33,7 @@ namespace Gobby
 class CreateDialog : public Gtk::Dialog
 {
 public:
-	CreateDialog(Gtk::Window& parent);
+	CreateDialog(Gtk::Window& parent, Config& config);
 	virtual ~CreateDialog();
 
 	unsigned int get_port() const;
@@ -44,6 +45,10 @@ public:
 	void set_color(const Gdk::Color& color);
 
 protected:
+	virtual void on_response(int response_id);
+
+	Config& m_config;
+
 	Gtk::Table m_table;
 	Gtk::Label m_lbl_port;
 	Gtk::Label m_lbl_name;

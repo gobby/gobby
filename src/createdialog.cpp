@@ -19,15 +19,25 @@
 #include <gtkmm/stock.h>
 #include "createdialog.hpp"
 
-Gobby::CreateDialog::CreateDialog(Gtk::Window& parent)
- : Gtk::Dialog("Create obby session", parent, true, true), m_table(3, 2),
+Gobby::CreateDialog::CreateDialog(Gtk::Window& parent, Config& config)
+ : Gtk::Dialog("Create obby session", parent, true, true), m_config(config),
+   m_table(3, 2),
    m_lbl_port("Port:", Gtk::ALIGN_RIGHT),
    m_lbl_name("Name:", Gtk::ALIGN_RIGHT),
    m_lbl_color("Color:", Gtk::ALIGN_RIGHT)
 {
 	m_ent_port.set_range(1024, 65535);
-	m_ent_port.set_value(6532);
+	m_ent_port.set_value(config["create"]["port"].get(6522) );
 	m_ent_port.set_increments(1, 256);
+
+	// TODO: Share user settings between create and join dialog
+	Glib::ustring name =
+		config["create"]["name"].get(Glib::get_user_name() );
+	Gdk::Color color =
+		config["create"]["color"].get(Gdk::Color("black") );
+
+	m_ent_name.set_text(name);
+	m_btn_color.set_color(color);
 
 	m_table.attach(m_lbl_port, 0, 1, 0, 1,
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
@@ -89,3 +99,17 @@ void Gobby::CreateDialog::set_color(const Gdk::Color& color)
 {
 	m_btn_color.set_color(color);
 }
+
+void Gobby::CreateDialog::on_response(int response_id)
+{
+	if(response_id == Gtk::RESPONSE_OK)
+	{
+		// Write new values into config
+		m_config["create"]["port"].set(get_port() );
+		m_config["create"]["name"].set(get_name() );
+		m_config["create"]["color"].set(get_color() );
+	}
+
+	Gtk::Dialog::on_response(response_id);
+}
+

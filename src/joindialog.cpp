@@ -19,18 +19,31 @@
 #include <gtkmm/stock.h>
 #include "joindialog.hpp"
 
-Gobby::JoinDialog::JoinDialog(Gtk::Window& parent)
- : Gtk::Dialog("Join obby session", parent, true, true), m_table(4, 2),
+Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
+ : Gtk::Dialog("Join obby session", parent, true, true), m_config(config),
+   m_table(4, 2),
    m_lbl_host("Host:", Gtk::ALIGN_RIGHT),
    m_lbl_port("Port:", Gtk::ALIGN_RIGHT),
    m_lbl_name("Name:", Gtk::ALIGN_RIGHT),
    m_lbl_color("Color:", Gtk::ALIGN_RIGHT)
 {
-	m_ent_host.set_text("localhost");
+	Glib::ustring host =
+		config["join"]["host"].get(Glib::ustring("localhost") );
+	unsigned int port =
+		config["join"]["port"].get(6522);
+	Glib::ustring name =
+		config["join"]["name"].get(Glib::get_user_name() );
+	Gdk::Color color =
+		config["join"]["color"].get(Gdk::Color("black") );
+
+	m_ent_host.set_text(host);
 
 	m_ent_port.set_range(1024, 65535);
-	m_ent_port.set_value(6532);
+	m_ent_port.set_value(port);
 	m_ent_port.set_increments(1, 256);
+
+	m_ent_name.set_text(name);
+	m_btn_color.set_color(color);
 
 	m_table.attach(m_lbl_host, 0, 1, 0, 1,
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
@@ -106,3 +119,17 @@ void Gobby::JoinDialog::set_color(const Gdk::Color& color)
 {
 	m_btn_color.set_color(color);
 }
+
+void Gobby::JoinDialog::on_response(int response_id)
+{
+	if(response_id == Gtk::RESPONSE_OK)
+	{
+		m_config["join"]["host"].set(get_host() );
+		m_config["join"]["port"].set(get_port() );
+		m_config["join"]["name"].set(get_name() );
+		m_config["join"]["color"].set(get_color() );
+	}
+
+	Gtk::Dialog::on_response(response_id);
+}
+

@@ -22,6 +22,8 @@
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
+#include <libobby/buffer.hpp>
+#include "config_.hpp"
 #include "header.hpp"
 #include "folder.hpp"
 #include "userlist.hpp"
@@ -42,6 +44,22 @@ protected:
 	void on_session_quit();
 	void on_quit();
 
+	// Obby signal handlers
+	void on_obby_login_failed(const std::string& reason);
+	void on_obby_close();
+
+	void on_obby_user_join(obby::user& user);
+	void on_obby_user_part(obby::user& user);
+	void on_obby_document_insert(obby::document& document);
+	void on_obby_document_remove(obby::document& document);
+
+	// Helper functions
+	void display_error(const Glib::ustring& message);
+
+	// Config
+	Config m_config;
+
+	// GUI
 	Gtk::VBox m_mainbox;
 	Header m_header;
 
@@ -55,6 +73,13 @@ protected:
 	Folder m_folder;
 	UserList m_userlist;
 	Chat m_chat;
+
+	// obby
+	obby::buffer* m_buffer;
+	Glib::ustring m_host;
+	unsigned int m_port;
+	Glib::ustring m_name;
+	Gdk::Color m_color;
 };
 
 }
