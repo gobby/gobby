@@ -15,6 +15,9 @@ Normal:
   * Allow opening files as unowned text (#52)
   * Show the cursors and selections of all participants (#53)
   * Documentation (#54)
+  * Encoding should be preserved (#65)
+  * color change for indicating activity of a document not upfront (#66)
+  * automatic scroll if the end of a document is looked at (#70)
 
 Minor:
 
@@ -80,4 +83,32 @@ Gobby should get a normal manual just like other projects. Docbook format
 is preferred. There should be a short introduction with an overview about 
 Gobby, an installation guide, some basics about the usage and some 
 documentation about the algorithms used.
+
+65: Encoding should be preserved
+--------------------------------
+The incoming encoding from what it is converted should be saved internally 
+on the host which opened them, so that the save function results in a file 
+with the original one.
+
+66: color change for indicating activity of a document not upfront
+------------------------------------------------------------------
+Several document windows is a standard on tings. At least a _talk for the 
+talk and a _document page for the summary / the condensed wisdom. In 
+moon-edit I used to open two windows, a third of the scree above for for 
+_document, two thirds of the screen below for the talk. I wonder if in 
+gobby one couldn't die the Reiter (?) above telling the document's name in 
+the color of the person last editing this document. Like that you could see 
+who is editing a document and if it's active without having it upfront. 
+Active documents with several people writing on it would change the color 
+pretty fast. If someone alone is editing the document maybe there should be 
+a blinking dot on it or so. 
+
+70: automatic scroll if the end of a document is looked at
+----------------------------------------------------------
+Someone writes new text (usually at the end of the page), but as you don't 
+try to scroll all the time you do not realize this. Instead you rest where 
+the end of the page was and do not get that new text is added to it. So: If 
+the page is scrolled to the end and new lines are added there it should 
+automatically scroll down. If you are further up and looking or working on 
+something else it shouldn't do so.
 
