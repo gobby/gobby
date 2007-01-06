@@ -155,7 +155,7 @@ namespace
 			0,
 			DVASPECT_CONTENT,
 			-1,
-			TYMED_FILE
+			TYMED_HGLOBAL
 		};
 
 		if(pDataObject->QueryGetData(&fmtetc) != S_OK)
