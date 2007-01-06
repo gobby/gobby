@@ -39,7 +39,7 @@ namespace Gobby
  * Note that all positions the document refers to are given in byte indizes
  * rather than character offsets.
  */
-class Document: private net6::non_copyable
+class Document: private net6::non_copyable, public sigc::trackable
 {
 public:
 	/** @brief Iterator class to iterate over chunks of the text.
