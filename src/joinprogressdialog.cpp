@@ -48,10 +48,12 @@ std::auto_ptr<obby::client_buffer> Gobby::JoinProgressDialog::get_buffer()
 
 void Gobby::JoinProgressDialog::on_thread()
 {
-	// Get color components
-	unsigned int red = m_color.get_red() * 255 / 65535;
-	unsigned int green = m_color.get_green() * 255 / 65535;
-	unsigned int blue = m_color.get_blue() * 255 / 65535;
+}
+
+void Gobby::JoinProgressDialog::on_done()
+{
+	// Call base function joining the thread
+	ProgressDialog::on_done();
 
 	try
 	{
@@ -66,24 +68,10 @@ void Gobby::JoinProgressDialog::on_thread()
 	}
 	catch(net6::error& e)
 	{
-		// Store error, if one occured
-		m_error = e.what();
-	}
-}
-
-void Gobby::JoinProgressDialog::on_done()
-{
-	// Call base function joining the thread
-	ProgressDialog::on_done();
-
-	// Error?
-	if(!m_error.empty() )
-	{
-		// Show it up
-		display_error(m_error);
-		// Close dialog
+		// Display error
+		display_error(e.what() );
+		// Return
 		response(Gtk::RESPONSE_CANCEL);
-		// Ignore rest of function
 		return;
 	}
 

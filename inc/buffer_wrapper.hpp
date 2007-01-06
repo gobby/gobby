@@ -264,7 +264,6 @@ public:
 	virtual ~ClientBuffer();
 
 protected:
-	ClientBuffer();
 };
 
 /** A obby::host_buffer derived class that uses Gobby::Host.

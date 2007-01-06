@@ -66,8 +66,6 @@ private:
 	Glib::ustring m_username;
 	Gdk::Color m_color;
 
-	Glib::ustring m_error;
-
 	std::auto_ptr<obby::client_buffer> m_buffer;
 };
 

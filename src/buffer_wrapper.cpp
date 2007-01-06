@@ -196,10 +196,6 @@ void Gobby::Host::reopen_impl(unsigned int port)
 	);
 }
 
-Gobby::ClientBuffer::ClientBuffer()
-{
-}
-
 Gobby::ClientBuffer::ClientBuffer(Gtk::Window& window,
                                   const Glib::ustring& hostname,
                                   unsigned int port)
