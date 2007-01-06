@@ -23,6 +23,7 @@ Normal:
   * Allow opening files as unowned text (#52)
   * Show the cursors and selections of all participants (#53)
   * Documentation (#54)
+  * Change of user colour (#60)
 
 Minor:
 
@@ -34,6 +35,7 @@ Enhancement:
   * Auto indentation (#23)
   * Focus the text-widget after having created/joined a session (#35)
   * tab width and tabs to space expanding (#49)
+  * Colourised tab labels (#59)
 
 
 43: Bug: Crashes on files with encodings not being UTF-8
@@ -85,7 +87,8 @@ put into the text buffer.
 26: Request confirmations for unsaved documents
 -----------------------------------------------
 Gobby should request a confirmation if you want to quit it and still have 
-unsaved documents (#25) open in the session. 
+unsaved documents (#25) open in the session and show a star (*) behind the 
+document's name on the tab when a document was changed.
 
 27: Switch to tabs newly opened
 -------------------------------
@@ -182,6 +185,19 @@ is preferred. There should be a short introduction with an overview about
 Gobby, an installation guide, some basics about the usage and some 
 documentation about the algorithms used.
 
+60: Change of user colour
+-------------------------
+The user colour should be changeable from within the session.
+
+ * The host has to change the colour of the user (e.g. through a call to a 
+method of obby::user)
+ * Send it to the client (e.g. obby_user_colour:34:23:12)
+ * obby::buffer must be able to interpret this
+ * Same within the client, but a packet needs to be sent to the host
+ * The new colours need to be checked if they conflict [code in 
+server_buffer::on_auth, perhaps to buffer::check_colour()], use in client 
+and host before setting it
+
 6: Highlighting of own nickname in chat window
 ----------------------------------------------
 Chat messages of others should be highlighted if the own nickname is 
@@ -220,4 +236,14 @@ Tab chars (0x09) or other tab widths are not acceptable.
 
 And hitting 4 times space for indenting obviously isn't nice either. ;)
 
+
+59: Colourised tab labels
+-------------------------
+The tab labels in the notebook holding the documents should be colourised.
+
+The proposed colours are:
+ * Grey: The user is not subscribed to this document
+ * Black: The user is subscribed to the document and has seen all changes
+ * Red: The user is subscribed to the document, it is in the background and 
+he has not yet seen all changes
 
