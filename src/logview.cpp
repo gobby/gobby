@@ -18,8 +18,12 @@
 
 #include <ctime>
 #include <obby/format_string.hpp>
-#include <libgnomevfs/gnome-vfs-utils.h>
+#include "features.hpp"
 #include "logview.hpp"
+
+#ifdef WITH_GNOME
+# include <libgnomevfs/gnome-vfs-utils.h>
+#endif
 
 #if defined(WITH_GNOME)
 void show_url(const char* url)

@@ -27,6 +27,10 @@
 #include "window.hpp"
 #include "features.hpp"
 
+#ifdef WITH_GNOME
+# include <libgnomevfs/gnome-vfs-init.h>
+#endif
+
 void handle_exception(const Glib::ustring& message)
 {
 	Gtk::MessageDialog dlg("Unhandled exception: " + message, false,
@@ -107,6 +111,10 @@ int main(int argc, char* argv[]) try
 	net6::main netkit;
 	Glib::thread_init();
 
+#ifdef WITH_GNOME
+	gnome_vfs_init();
+#endif
+
 	// Get files to open
 	std::vector<std::string> files(argc - 1);
 	for(int i = 1; i < argc; ++ i)
@@ -147,6 +155,12 @@ int main(int argc, char* argv[]) try
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
 
 	kit.run();
+
+#ifdef WITH_GNOME
+	//gnome_vfs_shutdown(); // Prints error messages.
+	                        // I don't know where they come from...
+#endif
+
 	return 0;
 }
 catch(Glib::Exception& e)
