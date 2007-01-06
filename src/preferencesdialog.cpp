@@ -186,6 +186,22 @@ void Gobby::PreferencesDialog::Appearance::on_response(int response_id)
 	}
 }
 
+Gobby::PreferencesDialog::Security::Security(Gobby::Config& config)
+ : Page(config)
+{
+}
+
+Gobby::PreferencesDialog::Security::~Security()
+{
+}
+
+void Gobby::PreferencesDialog::Security::on_response(int response_id)
+{
+	if(response_id == Gtk::RESPONSE_OK)
+	{
+	}
+}
+
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
                                             Gobby::Config& config)
  : Gtk::Dialog(_("Preferences"), parent, true), m_config(config),
