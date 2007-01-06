@@ -154,7 +154,7 @@ const Gobby::Document::MimeMap& Gobby::Document::create_mime_map()
 	map["ada"] = "text/x-ada";
 	map["c"] = "text/x-c";
 	map["h"] = "text/x-c++";
-	map["hh"] = "text/c-c++";
+	map["hh"] = "text/x-c++";
 	map["cpp"] = "text/x-c++";
 	map["hpp"] = "text/x-c++";
 	map["cc"] = "text/x-c++";
@@ -162,7 +162,7 @@ const Gobby::Document::MimeMap& Gobby::Document::create_mime_map()
 	map["diff"] = "text/x-diff";
 	map["f"] = "text/x-fortran";
 	map["f77"] = "text/x-fortran";
-	// Wi geth haskell?
+	map["hs"] = "text/x-haskell";
 	map["htm"] = "text/html";
 	map["html"] = "text/html";
 	map["xhtml"] = "text/html";
@@ -174,7 +174,7 @@ const Gobby::Document::MimeMap& Gobby::Document::create_mime_map()
 	map["lua"] = "text/x-lua";
 	// Wi geth MSIL?
 	map["dpr"] = "text/x-pascal";
-	// TODO: Pascal hat noch mehr Krams, oder?
+	map["pas"] = "text/x-pascal";
 	map["pl"] = "text/x-perl";
 	map["pm"] = "text/x-perl";
 	map["php"] = "text/x-php";
