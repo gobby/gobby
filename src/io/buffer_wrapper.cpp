@@ -335,12 +335,12 @@ obby::io::server_buffer::server_buffer()
 }
 
 obby::io::server_buffer::base_net_type*
-obby::io::server_buffer::new_net(unsigned int port)
+obby::io::server_buffer::new_net()
 {
 #ifdef WIN32
-	return new io::server(m_window, port, false);
+	return new io::server(m_window, false);
 #else
-	return new io::server(port, false);
+	return new io::server(false);
 #endif
 }
 
@@ -362,12 +362,12 @@ obby::io::host_buffer::host_buffer(const Glib::ustring& username,
 }
 
 obby::io::host_buffer::base_net_type*
-obby::io::host_buffer::new_net(unsigned int port)
+obby::io::host_buffer::new_net()
 {
 #ifdef WIN32
-	return new net_type(m_window, port, m_username, false);
+	return new net_type(m_window, m_username, false);
 #else
-	return new net_type(port, m_username, false);
+	return new net_type(m_username, false);
 #endif
 }
 

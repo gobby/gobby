@@ -261,7 +261,7 @@ protected:
 #ifdef WIN32
 	Gtk::Window& m_window;
 #endif
-	base_net_type* new_net(unsigned int port);
+	base_net_type* new_net();
 };
 
 /** A obby::host_buffer derived class that uses io::host.
@@ -284,7 +284,7 @@ public:
 #endif
 
 protected:
-	base_net_type* new_net(unsigned int port);
+	base_net_type* new_net();
 };
 
 } // namespace io
