@@ -25,9 +25,22 @@ namespace
 {
 	GdkColor COLOR_UNSUBSCRIBED_GDK = { 0, 0xaaaa, 0xaaaa, 0xaaaa };
 	GdkColor COLOR_SUBSCRIBED_GDK = { 0, 0x0000, 0x0000, 0x0000 };
+	GdkColor COLOR_UNSUBSCRIBABLE_GDK = { 0, 0xaaaa, 0x0000, 0x0000 };
 
 	Gdk::Color COLOR_UNSUBSCRIBED(&COLOR_UNSUBSCRIBED_GDK, true);
 	Gdk::Color COLOR_SUBSCRIBED(&COLOR_SUBSCRIBED_GDK, true);
+	Gdk::Color COLOR_UNSUBSCRIBABLE(&COLOR_UNSUBSCRIBABLE_GDK, true);
+
+	Gdk::Color document_color(const Gobby::LocalDocumentInfo& info)
+	{
+		if(!Gobby::is_subscribable(info) )
+			return COLOR_UNSUBSCRIBABLE;
+
+		if(!info.is_subscribed() )
+			return COLOR_UNSUBSCRIBED;
+
+		return COLOR_SUBSCRIBED;
+	}
 }
 
 Gobby::DocumentSettings::Columns::Columns()
@@ -69,9 +82,6 @@ void Gobby::DocumentSettings::obby_end()
 {
 	// Do not clear the list, one might want to save documents when
 	// the session is closed and so needs access to the save path.
-	//
-	// Note that this does not work until obby keeps the document info
-	// after the session has been closed!
 }
 
 Glib::ustring Gobby::DocumentSettings::
@@ -97,6 +107,18 @@ void Gobby::DocumentSettings::set_path(const LocalDocumentInfo& info,
                                        const Glib::ustring& path)
 {
 	(*get_iter(info))[m_cols.path] = path;
+}
+
+/*Gobby::DocumentSettings::Columns&
+Gobby::DocumentSettings::get_golumns()
+{
+	return m_columns;
+}*/
+
+const Gobby::DocumentSettings::Columns&
+Gobby::DocumentSettings::get_columns() const
+{
+	return m_cols;
 }
 
 Glib::RefPtr<Gtk::ListStore> Gobby::DocumentSettings::get_list()
@@ -125,13 +147,31 @@ void Gobby::DocumentSettings::on_document_insert(DocumentInfo& info)
 {
 	LocalDocumentInfo& local_info = dynamic_cast<LocalDocumentInfo&>(info);
 
+	local_info.subscribe_event().connect(
+		sigc::bind(
+			sigc::mem_fun(
+				*this,
+				&DocumentSettings::on_subscribe
+			),
+			sigc::ref(local_info)
+		)
+	);
+
+	local_info.unsubscribe_event().connect(
+		sigc::bind(
+			sigc::mem_fun(
+				*this,
+				&DocumentSettings::on_unsubscribe
+			),
+			sigc::ref(local_info)
+		)
+	);
+
 	Gtk::TreeIter iter = m_data->append();
 	(*iter)[m_cols.info] = &local_info;
 	(*iter)[m_cols.icon] = m_icon;
-	(*iter)[m_cols.color] = (local_info.is_subscribed() ?
-		COLOR_SUBSCRIBED : COLOR_UNSUBSCRIBED);
+	(*iter)[m_cols.color] = document_color(local_info);
 	(*iter)[m_cols.title] = local_info.get_title();
-	//(*iter)[m_cols.original_encoding] = "UTF-8";
 
 	m_map[&local_info] = iter;
 
@@ -167,14 +207,14 @@ void Gobby::DocumentSettings::on_subscribe(const obby::user& user,
                                            LocalDocumentInfo& info)
 {
 	if(&user == &info.get_buffer().get_self() )
-		(*get_iter(info))[m_cols.color] = COLOR_SUBSCRIBED;
+		(*get_iter(info))[m_cols.color] = document_color(info);
 }
 
 void Gobby::DocumentSettings::on_unsubscribe(const obby::user& user,
                                              LocalDocumentInfo& info)
 {
 	if(&user == &info.get_buffer().get_self() )
-		(*get_iter(info))[m_cols.color] = COLOR_UNSUBSCRIBED;
+		(*get_iter(info))[m_cols.color] = document_color(info);
 }
 
 Gtk::TreeIter Gobby::DocumentSettings::

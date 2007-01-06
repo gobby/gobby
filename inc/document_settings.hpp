@@ -92,6 +92,14 @@ public:
 	void set_path(const LocalDocumentInfo& info,
 	              const Glib::ustring& path);
 
+	/** @brief Returns the columns for the underlaying ListStore.
+	 */
+	//Columns& get_columns();
+
+	/** @brief Returns the columns for the underlaying ListStore.
+	 */
+	const Columns& get_columns() const;
+
 	/** @brief Returns the underlaying list that may be displayed by
 	 * a Gtk::TreeView.
 	 */

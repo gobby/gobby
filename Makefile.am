@@ -88,6 +88,7 @@ gobby_SOURCES += src/togglewindow.cpp
 gobby_SOURCES += src/header.cpp
 gobby_SOURCES += src/statusbar.cpp
 gobby_SOURCES += src/document.cpp
+gobby_SOURCES += src/buffer_def.cpp
 gobby_SOURCES += src/docwindow.cpp
 gobby_SOURCES += src/folder.cpp
 gobby_SOURCES += src/document_settings.cpp

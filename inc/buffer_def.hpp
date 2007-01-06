@@ -47,6 +47,8 @@ typedef ClientBuffer::document_info_type ClientDocumentInfo;
 typedef ServerBuffer::document_info_type ServerDocumentInfo;
 typedef HostBuffer::document_info_type HostDocumentInfo;
 
+bool is_subscribable(const Gobby::LocalDocumentInfo& info);
+
 } // namespace Gobby
 
 #endif // _GOBBY_BUFFER_DEF_HPP_

@@ -48,21 +48,23 @@
 #include "icon.hpp"
 #include "colorsel.hpp"
 
-Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
- : Gtk::Window(Gtk::WINDOW_TOPLEVEL),
-   m_config(config),
-   m_preferences(m_config), m_icon_mgr(icon_mgr),
-   m_buffer(NULL),
+Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
+	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
+	m_preferences(m_config), m_icon_mgr(icon_mgr),
 #ifdef WITH_HOWL
-   m_zeroconf(NULL),
+	m_zeroconf(NULL),
 #endif
-   m_document_settings(*this),
-   m_header(),
-   m_userlist(*this, m_header, m_preferences, config["windows"]),
-   m_documentlist(*this, m_header, m_preferences, config["windows"]),
-   m_finddialog(*this), m_gotodialog(*this),
-   m_folder(m_header, m_preferences),
-   m_statusbar(m_header, m_folder)
+	m_document_settings(*this), m_header(),
+	m_userlist(*this, m_header, m_preferences, config["windows"]),
+	m_documentlist(
+		*this,
+		m_document_settings,
+		m_header,
+		m_preferences,
+		config["windows"]
+	),
+	m_finddialog(*this), m_gotodialog(*this),
+	m_folder(m_header, m_preferences), m_statusbar(m_header, m_folder)
 {
 	// Header
 	m_header.action_app_session_create->signal_activate().connect(

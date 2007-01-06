@@ -23,6 +23,7 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
 #include "buffer_def.hpp"
+#include "document_settings.hpp"
 #include "togglewindow.hpp"
 #include "header.hpp"
 
@@ -34,58 +35,38 @@ namespace Gobby
 class DocumentList: public ToggleWindow
 {
 public:
-	class Columns: public Gtk::TreeModel::ColumnRecord
-	{
-	public:
-		Columns();
-
-		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
-		Gtk::TreeModelColumn<Glib::ustring> text;
-		Gtk::TreeModelColumn<Gdk::Color> color;
-		Gtk::TreeModelColumn<void*> data;
-	};
-
 	DocumentList(Gtk::Window& parent,
+	             DocumentSettings& settings,
 	             Header& header,
 		     const Preferences& preferences,
 		     Config::Entry& config_entry);
 
 	// Calls from the window
 	// TODO: Replace them by signal handlers from buf
-	virtual void obby_start(LocalBuffer& buf);
-	virtual void obby_end();
-	virtual void obby_user_join(const obby::user& user);
-	virtual void obby_user_part(const obby::user& user);
-	virtual void obby_user_colour(const obby::user& user);
-	virtual void obby_document_insert(LocalDocumentInfo& info);
-	virtual void obby_document_remove(LocalDocumentInfo& info);
+	void obby_start(LocalBuffer& buf);
+	void obby_end();
+
+	void obby_user_join(const obby::user& user);
+	void obby_user_part(const obby::user& user);
+	void obby_user_colour(const obby::user& user);
+	void obby_document_insert(LocalDocumentInfo& info);
+	void obby_document_remove(LocalDocumentInfo& info);
 protected:
-	Gtk::TreeIter find_iter(const LocalDocumentInfo& info) const;
+	void on_user_subscribe(const obby::user& user);
+	void on_user_unsubscribe(const obby::user& user);
 
-	virtual void on_user_subscribe(const obby::user& user,
-	                               const LocalDocumentInfo& info);
-	virtual void on_user_unsubscribe(const obby::user& user,
-	                                 const LocalDocumentInfo& info);
-
-	virtual void on_subscribe();
-	virtual void on_selection_changed();
-	virtual bool on_tree_button_press(GdkEventButton* event);
-
-	/** Reference to header.
-	 */
-	Header& m_header;
+	void on_subscribe();
+	void on_selection_changed();
+	bool on_tree_button_press(GdkEventButton* event);
 
 	LocalBuffer* m_buffer;
+	DocumentSettings& m_settings;
 
-	/** GUI components.
-	 */
 	Gtk::VBox m_mainbox;
 	Gtk::Button m_btn_subscribe;
 
 	Gtk::ScrolledWindow m_scrolled_wnd;
 	Gtk::TreeView m_tree_view;
-	Glib::RefPtr<Gtk::TreeStore> m_tree_data;
-	Columns m_tree_cols;
 
 	Gtk::TreeViewColumn m_view_col;
 };
