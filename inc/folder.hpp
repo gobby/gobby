@@ -89,8 +89,6 @@ public:
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
 
-	void obby_preferences_changed(const Preferences& preferences);
-
 	signal_document_close_type document_close_event() const;
 	signal_document_cursor_moved_type document_cursor_moved_event() const;
 	signal_document_content_changed_type

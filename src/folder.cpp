@@ -219,10 +219,6 @@ void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
 	}
 }
 
-void Gobby::Folder::obby_preferences_changed(const Preferences& preferences)
-{
-}
-
 // Signals
 Gobby::Folder::signal_document_close_type
 Gobby::Folder::document_close_event() const

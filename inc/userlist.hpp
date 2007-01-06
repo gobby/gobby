@@ -25,7 +25,6 @@
 #include <obby/user.hpp>
 #include <obby/local_document_info.hpp>
 #include <obby/local_buffer.hpp>
-#include "preferences.hpp"
 
 namespace Gobby
 {
@@ -54,8 +53,6 @@ public:
 	void obby_user_colour(obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
-
-	void obby_preferences_changed(const Preferences& preferences);
 protected:
 	// Helper functions
 	Gtk::TreeModel::iterator find_user(const Glib::ustring& name) const;

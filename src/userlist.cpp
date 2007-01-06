@@ -130,10 +130,6 @@ void Gobby::UserList::obby_document_remove(obby::local_document_info& document)
 {
 }
 
-void Gobby::UserList::obby_preferences_changed(const Preferences& preferences)
-{
-}
-
 Gtk::TreeModel::iterator
 Gobby::UserList::find_user(const Glib::ustring& name) const
 {

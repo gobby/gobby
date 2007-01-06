@@ -140,7 +140,3 @@ void Gobby::StatusBar::obby_document_remove(obby::local_document_info& document)
 	}
 }
 
-void Gobby::StatusBar::obby_preferences_changed(const Preferences& preferences)
-{
-}
-

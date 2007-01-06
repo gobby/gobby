@@ -53,8 +53,6 @@ public:
 
 	void obby_message(obby::user& user, const Glib::ustring& message);
 	void obby_server_message(const Glib::ustring& message);
-
-	void obby_preferences_changed(const Preferences& preferences);
 protected:
 	void add_line(obby::user& user, const Glib::ustring& message);
 	void on_chat();
