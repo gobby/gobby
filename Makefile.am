@@ -1,10 +1,15 @@
 bin_PROGRAMS = gobby
 
-LDADD = $(gobby_LIBS)
-INCLUDES = $(gobby_CFLAGS) -I../inc/
+gobby_LDADD    = $(gobby_LIBS)
+gobby_CPPFLAGS = $(gobby_CFLAGS) -I../inc/
 
 if WIN32
 gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc
+endif
+
+if WITH_GTKSOURCEVIEW
+gobby_CPPFLAGS += $(gtksourceview_CFLAGS)
+gobby_LDADD    += $(gtksourceview_LIBS)
 endif
 
 noinst_HEADERS =  inc/config.hpp
@@ -25,6 +30,9 @@ noinst_HEADERS += inc/hostdialog.hpp
 noinst_HEADERS += inc/joindialog.hpp
 noinst_HEADERS += inc/entrydialog.hpp
 noinst_HEADERS += inc/window.hpp 
+if WITH_GTKSOURCEVIEW
+noinst_HEADERS += inc/gtksourceview.hpp
+endif
 
 gobby_SOURCES =  src/config.cpp
 gobby_SOURCES += src/buffer_wrapper.cpp
@@ -45,4 +53,7 @@ gobby_SOURCES += src/joindialog.cpp
 gobby_SOURCES += src/entrydialog.cpp
 gobby_SOURCES += src/window.cpp
 gobby_SOURCES += src/main.cpp
+if WITH_GTKSOURCEVIEW
+gobby_SOURCES += src/gtksourceview.cpp
+endif
 

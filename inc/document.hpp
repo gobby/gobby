@@ -23,6 +23,11 @@
 #include <gtkmm/textview.h>
 #include <obby/document.hpp>
 
+#include "features.hpp"
+#ifdef WITH_GTKSOURCEVIEW
+#include "gtksourceview.hpp"
+#endif
+
 namespace Gobby
 {
 
@@ -46,7 +51,11 @@ protected:
 	void on_obby_delete(const obby::delete_record& record);
 
 	obby::document& m_doc;
+#ifdef WITH_GTKSOURCEVIEW
+	Gtk::SourceView m_view;
+#else
 	Gtk::TextView m_view;
+#endif
 	bool m_editing;
 };
 

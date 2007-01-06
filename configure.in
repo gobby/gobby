@@ -26,9 +26,24 @@ else
 fi
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
+# Let the user choose if he wants to use gtksourceview or not. The source is
+# currently under development and does not work (default to no).
+AC_ARG_WITH([gtksourceview],
+	    AS_HELP_STRING([--with-gtksourceview],
+			   [use SourceView instead of TextView [[default=no]]]),
+	    [ac_cv_use_gtksourceview=$withval], [ac_cv_use_gtksourceview=no])
+AC_CACHE_CHECK([whether to use GtkSourceView], [ac_cv_use_gtksourceview],
+	       [ac_cv_use_gtksourceview=no])
+AM_CONDITIONAL(WITH_GTKSOURCEVIEW, test x$ac_cv_use_gtksourceview != xno)
+
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [libxml++-2.6 gtkmm-2.4 >= 2.6.0 obby-1.0])
-
+if test "x$ac_cv_use_gtksourceview" != "xno" ; then
+	PKG_CHECK_MODULES([gtksourceview], [gtksourceview-1.0])
+	AC_DEFINE([WITH_GTKSOURCEVIEW], 1,
+		  [Define whether to use SourceView instead of TextView.])
+fi
+	
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
