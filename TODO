@@ -4,6 +4,7 @@ Gobby
 Serious:
  * Opening large documents is _really_ slow on win32's timer implementation
  * On connection loss: give a chance to save everything
+ * User colourising 
 
 Important:
  * Compensate changes made by others by scrolling appropriately; the current
@@ -23,7 +24,6 @@ Minor:
    the document is not yet syncronised (which would depend on sync-on-request
    within libobby)
  * Option to disable line numbers with GtkSourceView per document
- * Keyboard shortcuts
 
 Wishlist:
  * Default to save files to the location they were loaded from

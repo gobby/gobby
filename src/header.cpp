@@ -215,10 +215,10 @@ Gobby::Header::Header()
 
 	if(m_menubar == NULL)
 		throw Error(Error::MENUBAR_MISSING,
-			"XML UI definition lacks menubar");
+			_("XML UI definition lacks menubar") );
 	if(m_toolbar == NULL)
 		throw Error(Error::TOOLBAR_MISSING,
-			"XML UI definition lacks toolbar");
+			_("XML UI definition lacks toolbar") );
 
 	pack_start(*m_menubar, Gtk::PACK_SHRINK);
 	pack_start(*m_toolbar, Gtk::PACK_SHRINK);
@@ -234,6 +234,16 @@ Gobby::Header::Header()
 
 Gobby::Header::~Header()
 {
+}
+
+Glib::RefPtr<Gtk::AccelGroup> Gobby::Header::get_accel_group()
+{
+	return m_ui_manager->get_accel_group();
+}
+
+Glib::RefPtr<const Gtk::AccelGroup> Gobby::Header::get_accel_group() const
+{
+	return m_ui_manager->get_accel_group();
 }
 
 Gobby::Header::signal_session_create_type
@@ -387,5 +397,4 @@ void Gobby::Header::on_app_quit()
 {
 	m_signal_quit.emit();
 }
-
 

@@ -62,6 +62,8 @@ Gobby::Window::Window()
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
+	add_accel_group(m_header.get_accel_group() );
+
 	m_chat.chat_event().connect(
 		sigc::mem_fun(*this, &Window::on_chat) );
 	m_folder.document_update_event().connect(
