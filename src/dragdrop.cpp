@@ -168,8 +168,6 @@ namespace
 
 		HDROP drop = static_cast<HDROP>(GlobalLock(stgmed.hGlobal) );
 
-		GlobalUnlock(stgmed.hGlobal);
-
 		UINT file_count = DragQueryFileA(drop, 0xffffffff, NULL, 0);
 		for(UINT i = 0; i < file_count; ++ i)
 		{
@@ -184,6 +182,8 @@ namespace
 
 			delete[] buf;
 		}
+
+		GlobalUnlock(stgmed.hGlobal);
 
 		ReleaseStgMedium(&stgmed);
 		return S_OK;
