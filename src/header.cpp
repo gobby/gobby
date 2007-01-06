@@ -51,9 +51,14 @@ namespace {
 		"      <menuitem action=\"UserSetPassword\" />"
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
+v v v v v v v
+		"      <menuitem action=\"ViewWordWrap\" />"
+		"      <menuitem action=\"ViewLineNumbers\" />"
+		"      <separator />"
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 		"      <menuitem action=\"ViewLanguageNone\" />"
-#endif
 		"    </menu>"
 		"    <menu action=\"MenuHelp\">"
 		"      <menuitem action=\"About\" />"
@@ -120,10 +125,17 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 
 Gobby::Header::Header(const Folder& folder)
  : m_ui_manager(Gtk::UIManager::create() ),
+v v v v v v v
    m_group_app(Gtk::ActionGroup::create() )
 #ifdef WITH_GTKSOURCEVIEW
    , m_toggle_language(false)
 #endif
+*************
+   m_group_app(Gtk::ActionGroup::create() ),
+   m_toggle_word_wrap(false),
+   m_toggle_language(false),
+   m_toggle_line_numbers(false)
+^ ^ ^ ^ ^ ^ ^
 {
 	// Add basic menu
 	m_ui_manager->add_ui_from_string(ui_desc);
@@ -283,7 +295,36 @@ Gobby::Header::Header(const Folder& folder)
 	// Documents menu
 	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
 
+v v v v v v v
+	// Toggle word wrapping
+	m_group_app->add(
+		Gtk::ToggleAction::create(
+			"ViewWordWrap",
+			_("Word wrapping"),
+			_("Whether to wrap the text to the document's width")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_word_wrap
+		)
+	);
+
+	// Show line numbers
+	m_group_app->add(
+		Gtk::ToggleAction::create(
+			"ViewLineNumbers",
+			_("Line numbers"),
+			_("Whether to show line numbers for this document")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_line_numbers
+		)
+	);
+
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	// A kind of hack to ensure that
 	// Gtk::SourceLanguage::sourcelanguage_class_.init() is called.
 	// See the TODO item in Glib::wrap(GtkSourceLanguage*, bool) in
@@ -362,7 +403,6 @@ Gobby::Header::Header(const Folder& folder)
 
 		m_ui_manager->add_ui_from_string(xml_desc);
 	}
-#endif
 
 	// Help menu
 	m_group_app->add(Gtk::Action::create("MenuHelp", _("Help")) );
@@ -489,13 +529,27 @@ Gobby::Header::user_set_password_event() const
 	return m_signal_user_set_password;
 }
 
+v v v v v v v
 #ifdef WITH_GTKSOURCEVIEW
+*************
+Gobby::Header::signal_document_word_wrap_type
+Gobby::Header::document_word_wrap_event() const
+{
+	return m_signal_document_word_wrap;
+}
+
+Gobby::Header::signal_document_line_numbers_type
+Gobby::Header::document_line_numbers_event() const
+{
+	return m_signal_document_line_numbers;
+}
+
+^ ^ ^ ^ ^ ^ ^
 Gobby::Header::signal_document_language_type
 Gobby::Header::document_language_event() const
 {
 	return m_signal_document_language;
 }
-#endif
 
 Gobby::Header::signal_about_type
 Gobby::Header::about_event() const
@@ -528,9 +582,7 @@ void Gobby::Header::obby_start(obby::local_buffer& buf)
 	// Document actions will be activated from the insert_document event
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
-#ifdef WITH_GTKSOURCEVIEW
 	m_group_app->get_action("MenuView")->set_sensitive(false);
-#endif
 }
 
 void Gobby::Header::obby_end()
@@ -565,9 +617,7 @@ void Gobby::Header::obby_document_insert(obby::local_document_info& document)
 	// document actions.
 	m_group_app->get_action("SaveDocument")->set_sensitive(true);
 	m_group_app->get_action("CloseDocument")->set_sensitive(true);
-#ifdef WITH_GTKSOURCEVIEW
 	m_group_app->get_action("MenuView")->set_sensitive(true);
-#endif
 }
 
 void Gobby::Header::obby_document_remove(obby::local_document_info& document)
@@ -578,9 +628,7 @@ void Gobby::Header::obby_document_remove(obby::local_document_info& document)
 		// existing document? Disable document actions then.
 		m_group_app->get_action("SaveDocument")->set_sensitive(false);
 		m_group_app->get_action("CloseDocument")->set_sensitive(false);
-#ifdef WITH_GTKSOURCEVIEW
 		m_group_app->get_action("MenuView")->set_sensitive(false);
-#endif
 	}
 }
 
@@ -633,7 +681,25 @@ void Gobby::Header::on_app_user_set_password()
 	m_signal_user_set_password.emit();
 }
 
+v v v v v v v
 #ifdef WITH_GTKSOURCEVIEW
+*************
+void Gobby::Header::on_app_document_word_wrap()
+{
+	if(!m_toggle_word_wrap)
+		m_signal_document_word_wrap.emit();
+}
+
+void Gobby::Header::on_app_document_line_numbers()
+{
+	// Are we toggling line numbers manually through a tab change or
+	// something? Then we do not have to emit this signal because we
+	// read the new status from the document and need not to set the
+	// document's line number status to the value it currently has ;)
+	if(!m_toggle_line_numbers)
+		m_signal_document_line_numbers.emit();
+}
+^ ^ ^ ^ ^ ^ ^
 
 void Gobby::Header::on_app_document_language(
 	Glib::RefPtr<Gtk::SourceLanguage> lang
@@ -643,7 +709,6 @@ void Gobby::Header::on_app_document_language(
 	if(!m_toggle_language)
 		m_signal_document_language.emit(lang);
 }
-#endif
 
 void Gobby::Header::on_app_about()
 {
@@ -658,11 +723,28 @@ void Gobby::Header::on_app_quit()
 void Gobby::Header::on_folder_tab_switched(Document& document)
 {
 	// We are toggling some flags
+v v v v v v v
+	m_toggle_word_wrap = true;
+	m_toggle_line_numbers = true;
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	m_toggle_language = true;
-#endif
 
+v v v v v v v
+	// Set current word wrapping state
+	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
+		m_group_app->get_action("ViewWordWrap")
+	)->set_active(document.get_word_wrapping() );
+
+	// Set current line number state
+	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
+		m_group_app->get_action("ViewLineNumbers")
+	)->set_active(document.get_show_line_numbers() );
+
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	// Set current language
 	Glib::ustring langname = document.get_language() ?
 		document.get_language()->get_name() : "None";
@@ -673,10 +755,13 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 
 	// We are no more toggling
 	m_toggle_language = false;
+v v v v v v v
+	m_toggle_word_wrap = false;
+*************
 #endif
+^ ^ ^ ^ ^ ^ ^
 }
 
-#ifdef WITH_GTKSOURCEVIEW
 bool Gobby::Header::language_sort_callback(
 	const Glib::RefPtr<Gtk::SourceLanguage>& lang1,
 	const Glib::RefPtr<Gtk::SourceLanguage>& lang2
@@ -684,4 +769,4 @@ bool Gobby::Header::language_sort_callback(
 {
 	return lang1->get_name() < lang2->get_name();
 }
-#endif
+

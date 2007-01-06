@@ -44,10 +44,8 @@ Gobby::StatusBar::StatusBar(const Folder& folder)
 		sigc::mem_fun(*this, &StatusBar::update_sync) );
 	folder.document_content_changed_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_revision) );
-#ifdef WITH_GTKSOURCEVIEW
 	folder.document_language_changed_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_language) );
-#endif
 	folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_all) );
 }
@@ -56,8 +54,6 @@ Gobby::StatusBar::~StatusBar()
 {
 }
 
-#ifdef WITH_GTKSOURCEVIEW
-#include <iostream>
 void Gobby::StatusBar::update_language(Document& document)
 {
 	// Selected language
@@ -72,7 +68,6 @@ void Gobby::StatusBar::update_language(Document& document)
 		m_language.set_text(_("No language selected") );
 	}
 }
-#endif
 
 void Gobby::StatusBar::update_sync(Document& document)
 {
@@ -102,9 +97,7 @@ void Gobby::StatusBar::update_cursor(Document& document)
 
 void Gobby::StatusBar::update_all(Document& document)
 {
-#ifdef WITH_GTKSOURCEVIEW
 	update_language(document);
-#endif
 	update_sync(document);
 	update_revision(document);
 	update_cursor(document);

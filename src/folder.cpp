@@ -52,11 +52,17 @@ Gobby::Folder::TabLabel::close_event()
 	return m_button.signal_clicked();
 }
 
+v v v v v v v
+Gobby::Folder::Folder()
+ : Gtk::Notebook(), m_running(false),
+   m_lang_manager(Gtk::SourceLanguagesManager::create() )
+*************
 Gobby::Folder::Folder(const Preferences& preferences)
  : Gtk::Notebook(), m_preferences(preferences), m_running(false)
 #ifdef WITH_GTKSOURCEVIEW
    , m_lang_manager(Gtk::SourceLanguagesManager::create() )
 #endif
+^ ^ ^ ^ ^ ^ ^
 {
 }
 
@@ -64,7 +70,6 @@ Gobby::Folder::~Folder()
 {
 }
 
-#ifdef WITH_GTKSOURCEVIEW
 const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
 {
 	return m_mime_map;
@@ -75,7 +80,6 @@ Gobby::Folder::get_lang_manager() const
 {
 	return m_lang_manager;
 }
-#endif
 
 void Gobby::Folder::obby_start(obby::local_buffer& buf)
 {
@@ -138,7 +142,6 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 		)
 	);
 
-#ifdef WITH_GTKSOURCEVIEW
 	new_doc.language_changed_event().connect(
 		sigc::bind(
 			sigc::mem_fun(
@@ -148,7 +151,6 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 			sigc::ref(new_doc)
 		)
 	);
-#endif
 
 	// Create label for the tab
 	TabLabel* label = Gtk::manage(new TabLabel(document.get_title() ));
@@ -210,13 +212,11 @@ Gobby::Folder::document_content_changed_event() const
 	return m_signal_document_content_changed;
 }
 
-#ifdef WITH_GTKSOURCEVIEW
 Gobby::Folder::signal_document_language_changed_type
 Gobby::Folder::document_language_changed_event() const
 {
 	return m_signal_document_language_changed;
 }
-#endif
 
 Gobby::Folder::signal_tab_switched_type
 Gobby::Folder::tab_switched_event() const
@@ -268,7 +268,6 @@ void Gobby::Folder::on_document_content_changed(Document& document)
 		m_signal_document_content_changed.emit(document);
 }
 
-#ifdef WITH_GTKSOURCEVIEW
 void Gobby::Folder::on_document_language_changed(Document& document)
 {
 	// Update in the currently visible document? Update statusbar.
@@ -276,5 +275,4 @@ void Gobby::Folder::on_document_language_changed(Document& document)
 	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
 		m_signal_document_language_changed.emit(document);
 }
-#endif
 

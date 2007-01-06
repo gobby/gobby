@@ -37,9 +37,7 @@ public:
 	StatusBar(const Folder& folder);
 	virtual ~StatusBar();
 
-#ifdef WITH_GTKSOURCEVIEW
 	void update_language(Document& document);
-#endif
 	void update_sync(Document& document);
 	void update_revision(Document& document);
 	void update_cursor(Document& document);

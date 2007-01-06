@@ -27,31 +27,34 @@
 #include "document.hpp"
 #include "folder.hpp"
 
+v v v v v v v
+Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder)
+*************
 Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
                           const Preferences& preferences)
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
  : Gtk::SourceView(),
+v v v v v v v
+   m_doc(doc), m_folder(folder), m_editing(true),
+*************
 #else
  : Gtk::TextView(),
 #endif
    m_doc(doc), m_folder(folder), m_preferences(preferences), m_editing(true),
+^ ^ ^ ^ ^ ^ ^
    m_btn_subscribe(_("Subscribe") )
 {
-#ifdef WITH_GTKSOURCEVIEW
 	set_show_line_numbers(true);
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
 	// Prevent from GTK sourceview's undo 
 	buf->begin_not_undoable_action();
-#else
-	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
-#endif
 
 	// Set monospaced font
 	Pango::FontDescription desc;
 	desc.set_family("monospace");
 	modify_font(desc);
 
-#ifdef WITH_GTKSOURCEVIEW
 	// Set SourceLanguage by file extension
 	Glib::ustring mime_type =
 		folder.get_mime_map().get_mime_type_by_file(doc.get_title() );
@@ -65,7 +68,6 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 		if(language)
 			buf->set_language(language);
 	}
-#endif
 
 	// Insert user tags into the tag table
 	const obby::user_table& user_table = doc.get_buffer().get_user_table();
@@ -144,13 +146,11 @@ Gobby::Document::content_changed_event() const
 	return m_signal_content_changed;
 }
 
-#ifdef WITH_GTKSOURCEVIEW
 Gobby::Document::signal_language_changed_type
 Gobby::Document::language_changed_event() const
 {
 	return m_signal_language_changed;
 }
-#endif
 
 void Gobby::Document::get_cursor_position(unsigned int& row,
                                           unsigned int& col)
@@ -204,7 +204,6 @@ void Gobby::Document::set_path(const Glib::ustring& new_path)
 	m_path = new_path;
 }
 
-#ifdef WITH_GTKSOURCEVIEW
 Glib::RefPtr<Gtk::SourceLanguage> Gobby::Document::get_language() const
 {
 	return get_buffer()->get_language();
@@ -217,13 +216,38 @@ void Gobby::Document::set_language(
 	get_buffer()->set_language(language);
 	m_signal_language_changed.emit();
 }
-#endif
 
 Glib::ustring Gobby::Document::get_content()
 {
 	return get_buffer()->get_text();
 }
 
+v v v v v v v
+*************
+bool Gobby::Document::get_word_wrapping() const
+{
+	return get_wrap_mode() != Gtk::WRAP_NONE;
+}
+
+void Gobby::Document::set_word_wrapping(bool wrap)
+{
+	if(wrap)
+		set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+	else
+		set_wrap_mode(Gtk::WRAP_NONE);
+}
+
+bool Gobby::Document::get_show_line_numbers() const
+{
+	return Gtk::SourceView::get_show_line_numbers();
+}
+
+void Gobby::Document::set_show_line_numbers(bool show)
+{
+	Gtk::SourceView::set_show_line_numbers(show);
+}
+
+^ ^ ^ ^ ^ ^ ^
 void Gobby::Document::obby_user_join(obby::user& user)
 {
 	// Build tag name for this user
@@ -330,11 +354,7 @@ void Gobby::Document::on_obby_self_subscribe()
 {
 	// Get document we subscribed to
 	obby::local_document& doc = *m_doc.get_document();
-#ifdef WITH_GTKSOURCEVIEW
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
-#else
-	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
-#endif
 
 	// Install singal handlers
 	doc.insert_event().before().connect(
@@ -353,6 +373,8 @@ void Gobby::Document::on_obby_self_subscribe()
 	// Make the document editable
 	set_editable(true);
 
+v v v v v v v
+*************
 	// Read settings from preferences
 	// Editor
 	set_tabs_width(m_preferences.editor.tab_width);
@@ -370,9 +392,9 @@ void Gobby::Document::on_obby_self_subscribe()
 	set_show_line_numbers(m_preferences.view.linenum_display);
 
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	// Enable highlighting
 	buf->set_highlight(true);
-#endif
 
 	// TODO: Do this in an idle handler? *kA*
 
@@ -603,11 +625,7 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 
 void Gobby::Document::set_intro_text()
 {
-#ifdef WITH_GTKSOURCEVIEW
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
-#else
-	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
-#endif
 
 	// Build text
 	obby::format_string str(_(
@@ -635,10 +653,8 @@ void Gobby::Document::set_intro_text()
 	set_editable(false);
 	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
 
-#ifdef WITH_GTKSOURCEVIEW
 	// Do not highlight anything until the user subscribed
 	buf->set_highlight(false);
-#endif
 }
 
 void

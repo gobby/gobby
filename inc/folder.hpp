@@ -32,11 +32,9 @@
 #include "preferences.hpp"
 #include "document.hpp"
 
-#ifdef WITH_GTKSOURCEVIEW
-# include "sourceview/sourcelanguage.hpp"
-# include "sourceview/sourcelanguagesmanager.hpp"
-# include "mimemap.hpp"
-#endif
+#include "sourceview/sourcelanguage.hpp"
+#include "sourceview/sourcelanguagesmanager.hpp"
+#include "mimemap.hpp"
 
 namespace Gobby
 {
@@ -67,21 +65,17 @@ public:
 	typedef sigc::signal<void, Document&> signal_document_cursor_moved_type;
 	typedef sigc::signal<void, Document&>
 		signal_document_content_changed_type;
-#ifdef WITH_GTKSOURCEVIEW
 	typedef sigc::signal<void, Document&>
 		signal_document_language_changed_type;
-#endif
 	typedef sigc::signal<void, Document&> signal_tab_switched_type;
 
 	Folder(const Preferences& preferences);
 	~Folder();
 
-#ifdef WITH_GTKSOURCEVIEW
 	// Access to the mime map
 	const MimeMap& get_mime_map() const;
 
 	Glib::RefPtr<Gtk::SourceLanguagesManager> get_lang_manager() const;
-#endif
 
 	// Calls from the window
 	void obby_start(obby::local_buffer& buf);
@@ -97,10 +91,8 @@ public:
 	signal_document_cursor_moved_type document_cursor_moved_event() const;
 	signal_document_content_changed_type
 		document_content_changed_event() const;
-#ifdef WITH_GTKSOURCEVIEW
 	signal_document_language_changed_type
 		document_language_changed_event() const;
-#endif
 	signal_tab_switched_type tab_switched_event() const;
 
 protected:
@@ -112,17 +104,13 @@ protected:
 
 	void on_document_cursor_moved(Document& document);
 	void on_document_content_changed(Document& document);
-#ifdef WITH_GTKSOURCEVIEW
 	void on_document_language_changed(Document& document);
-#endif
 
 	signal_document_close_type m_signal_document_close;
 	signal_document_cursor_moved_type m_signal_document_cursor_moved;
 	signal_document_content_changed_type m_signal_document_content_changed;
-#ifdef WITH_GTKSOURCEVIEW
 	signal_document_language_changed_type
 		m_signal_document_language_changed;
-#endif
 	signal_tab_switched_type m_signal_tab_switched;
 
 	/** Reference to current preferences
@@ -133,10 +121,8 @@ protected:
 	 */
 	bool m_running;
 
-#ifdef WITH_GTKSOURCEVIEW
 	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 	MimeMap m_mime_map;
-#endif
 };
 
 }

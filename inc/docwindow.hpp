@@ -36,10 +36,8 @@ public:
 	typedef Document::signal_cursor_moved_type signal_cursor_moved_type;
 	typedef Document::signal_content_changed_type
 		signal_content_changed_type;
-#ifdef WITH_GTKSOURCEVIEW
 	typedef Document::signal_language_changed_type
 		signal_language_changed_type;
-#endif
 
 	DocWindow(obby::local_document_info& doc, const Folder& folder,
 	          const Preferences& preferences);

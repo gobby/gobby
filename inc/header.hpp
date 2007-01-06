@@ -58,10 +58,14 @@ public:
 	typedef sigc::signal<void> signal_document_close_type;
 	typedef sigc::signal<void> signal_edit_preferences_type;
 	typedef sigc::signal<void> signal_user_set_password_type;
+v v v v v v v
+	typedef sigc::signal<void> signal_document_word_wrap_type;
+	typedef sigc::signal<void> signal_document_line_numbers_type;
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	typedef sigc::signal<void, const Glib::RefPtr<Gtk::SourceLanguage>&>
 		signal_document_language_type;
-#endif
 	typedef sigc::signal<void> signal_about_type;
 	typedef sigc::signal<void> signal_quit_type;
 
@@ -86,9 +90,13 @@ public:
 	signal_document_close_type document_close_event() const;
 	signal_edit_preferences_type edit_preferences_event() const;
 	signal_user_set_password_type user_set_password_event() const;
+v v v v v v v
+	signal_document_word_wrap_type document_word_wrap_event() const;
+	signal_document_line_numbers_type document_line_numbers_event() const;
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	signal_document_language_type document_language_event() const;
-#endif
 	signal_about_type about_event() const;
 	signal_quit_type quit_event() const;
 
@@ -111,9 +119,13 @@ protected:
 	void on_app_document_close();
 	void on_app_edit_preferences();
 	void on_app_user_set_password();
+v v v v v v v
+	void on_app_document_word_wrap();
+	void on_app_document_line_numbers();
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	void on_app_document_language(Glib::RefPtr<Gtk::SourceLanguage> lang);
-#endif
 	void on_app_about();
 	void on_app_quit();
 
@@ -125,22 +137,24 @@ protected:
 	Gtk::MenuBar* m_menubar;
 	Gtk::Toolbar* m_toolbar;
 
-#ifdef WITH_GTKSOURCEVIEW
 	Gtk::RadioButtonGroup m_lang_group;
 
 	/** Boolean variable whether we are currently toggling line numbers to
 	 * prevent recursion.
 	 */
 	bool m_toggle_language;
+v v v v v v v
+	bool m_toggle_line_numbers;
+	bool m_toggle_word_wrap;
+*************
 #endif
+^ ^ ^ ^ ^ ^ ^
 
-#ifdef WITH_GTKSOURCEVIEW
 	// Callback for sorting
 	static bool language_sort_callback(
 		const Glib::RefPtr<Gtk::SourceLanguage>& lang1,
 		const Glib::RefPtr<Gtk::SourceLanguage>& lang2
 	);
-#endif
 
 	signal_session_create_type m_signal_session_create;
 	signal_session_join_type m_signal_session_join;
@@ -151,9 +165,13 @@ protected:
 	signal_document_close_type m_signal_document_close;
 	signal_edit_preferences_type m_signal_edit_preferences;
 	signal_user_set_password_type m_signal_user_set_password;
+v v v v v v v
+	signal_document_word_wrap_type m_signal_document_word_wrap;
+	signal_document_line_numbers_type m_signal_document_line_numbers;
+*************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 	signal_document_language_type m_signal_document_language;
-#endif
 	signal_about_type m_signal_about;
 	signal_quit_type m_signal_quit;
 };
@@ -161,3 +179,4 @@ protected:
 }
 
 #endif // _GOBBY_HEADER_HPP_
+

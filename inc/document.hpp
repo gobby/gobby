@@ -23,30 +23,20 @@
 
 #include "preferences.hpp"
 #include "features.hpp"
-#ifdef WITH_GTKSOURCEVIEW
 #include "sourceview/sourcelanguagesmanager.hpp"
 #include "sourceview/sourceview.hpp"
-#else
-#include <gtkmm/textview.h>
-#endif
 
 namespace Gobby
 {
 
 class Folder;
 
-#ifdef WITH_GTKSOURCEVIEW
 class Document : public Gtk::SourceView
-#else
-class Document : public Gtk::TextView
-#endif
 {
 public:
 	typedef sigc::signal<void> signal_cursor_moved_type;
 	typedef sigc::signal<void> signal_content_changed_type;
-#ifdef WITH_GTKSOURCEVIEW
 	typedef sigc::signal<void> signal_language_changed_type;
-#endif
 
 	Document(obby::local_document_info& doc, const Folder& folder,
 	         const Preferences& preferences);
@@ -79,7 +69,6 @@ public:
 	 */
 	bool is_subscribed() const;
 
-#ifdef WITH_GTKSOURCEVIEW
 	/** Returns the currently selected Gtk::SourceLanguage.
 	 */
 	Glib::RefPtr<Gtk::SourceLanguage> get_language() const;
@@ -87,7 +76,6 @@ public:
 	/** Sets a new Language to use.
 	 */
 	void set_language(const Glib::RefPtr<Gtk::SourceLanguage>& language);
-#endif
 
 	/** Returns the document content. Equivalent to
 	 * get_document().get_whole_buffer(), but it may be used even if the
@@ -96,6 +84,26 @@ public:
 	 */
 	Glib::ustring get_content();
 
+v v v v v v v
+*************
+	/** Returns whether the document is displayed with the words wrapped
+	 * to the window's width.
+	 */
+	bool get_word_wrapping() const;
+
+	/** Sets whether the words should be wrapped to the window's width.
+	 */
+	void set_word_wrapping(bool wrap);
+
+	/** Returns whether line numbers are currently shown for this document.
+	 */
+	bool get_show_line_numbers() const;
+
+	/** Sets whether to show line numbers for this document.
+	 */
+	void set_show_line_numbers(bool show);
+
+^ ^ ^ ^ ^ ^ ^
 	/** Signal which will be emitted if the cursor's position changed.
 	 */
 	signal_cursor_moved_type cursor_moved_event() const;
@@ -104,11 +112,9 @@ public:
 	 */
 	signal_content_changed_type content_changed_event() const;
 
-#ifdef WITH_GTKSOURCEVIEW
 	/** Signal which will be emitted if the document's language has changed.
 	 */
 	signal_language_changed_type language_changed_event() const;
-#endif
 
 	/** Calls from the folder.
 	 */
@@ -195,9 +201,7 @@ protected:
 
 	signal_cursor_moved_type m_signal_cursor_moved;
 	signal_content_changed_type m_signal_content_changed;
-#ifdef WITH_GTKSOURCEVIEW
 	signal_language_changed_type m_signal_language_changed;
-#endif
 private:
 	/** Handler for update_user_colour(): It removes the given tag in
 	 * the given range if it is a gobby-user-tag.
