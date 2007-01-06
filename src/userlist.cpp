@@ -37,6 +37,7 @@ Gobby::UserList::UserList()
 	m_list_view.append_column("Name", m_list_cols.name);
 
 	set_shadow_type(Gtk::SHADOW_IN);
+	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	add(m_list_view);
 
 	set_sensitive(false);

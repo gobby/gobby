@@ -7,6 +7,7 @@ gobby_SOURCES = \
 	src/config.cpp \
 	src/historyentry.cpp \
 	src/logview.cpp \
+	src/document.cpp \
 	src/header.cpp \
 	src/folder.cpp \
 	src/userlist.cpp \
