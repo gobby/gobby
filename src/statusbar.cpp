@@ -62,7 +62,7 @@ void Gobby::StatusBar::update_language(Document& document)
 	// Selected language
 	if(document.get_language() )
 	{
-		obby::format_string str(_("Selected language: %0") );
+		obby::format_string str(_("Selected language: %0%") );
 		str << document.get_language()->get_name().raw();
 		m_language.set_text(str.str() );
 	}
@@ -76,14 +76,14 @@ void Gobby::StatusBar::update_sync(Document& document)
 {
 	unsigned int n = document.get_unsynced_changes_count();
 	obby::format_string str(
-		ngettext("%0 pending change", "%0 pending changes", n) );
+		ngettext("%0% pending change", "%0% pending changes", n) );
 	str << n;
 	m_sync.set_text(str.str() );
 }
 
 void Gobby::StatusBar::update_revision(Document& document)
 {
-	obby::format_string str(_("Revision: %0") );
+	obby::format_string str(_("Revision: %0%") );
 	str << document.get_revision();
 	m_revision.set_text(str.str() );
 }
@@ -93,7 +93,7 @@ void Gobby::StatusBar::update_cursor(Document& document)
 	unsigned int row, col;
 	document.get_cursor_position(row, col);
 
-	obby::format_string str("Line: %0, Column: %1");
+	obby::format_string str("Line: %0%, Column: %1%");
 	str << (row + 1) << (col + 1);
 	m_position.set_text(str.str() );
 }

@@ -582,7 +582,7 @@ void Gobby::Window::on_view_preferences()
 	// Label text
 	obby::format_string str(_(
 		"These preferences affect only the currently active document "
-		"\"%0\". If you want to change global preferences, use the "
+		"\"%0%\". If you want to change global preferences, use the "
 		"preferences menu item in the \"Edit\" menu."
 	) );
 
@@ -785,14 +785,14 @@ void Gobby::Window::update_title_bar(const Document& document)
 			path.replace(0, home.length(), "~");
 
 		// Set title with file and path
-		obby::format_string title_str("%0 (%1) - Gobby");
+		obby::format_string title_str("%0% (%1%) - Gobby");
 		title_str << file << Glib::path_get_dirname(path);
 		set_title(title_str.str() );
 	}
 	else
 	{
 		// Path not known: Set title with file only
-		obby::format_string title_str("%0 - Gobby");
+		obby::format_string title_str("%0% - Gobby");
 		title_str << file;
 		set_title(title_str.str() );
 	}
@@ -840,7 +840,8 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 	else
 	{
 		// File could not be opened
-		obby::format_string str("Could not open file '%0' for writing");
+		obby::format_string str(
+			"Could not open file '%0%' for writing");
 		str << file;
 		display_error(str.str() );
 	}

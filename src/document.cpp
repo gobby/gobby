@@ -615,7 +615,7 @@ void Gobby::Document::set_intro_text()
 
 	// Build text
 	obby::format_string str(_(
-		"You are not subscribed to the document \"%0\".\n\n"
+		"You are not subscribed to the document \"%0%\".\n\n"
 		"To view changes that others make or to edit the document "
 		"yourself, you have to subscribe to this document. Use the "
 		"following button to perform this.\n\n"

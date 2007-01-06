@@ -80,14 +80,14 @@ void Gobby::Chat::obby_end()
 
 void Gobby::Chat::obby_user_join(obby::user& user)
 {
-	obby::format_string str(_("%0 has joined") );
+	obby::format_string str(_("%0% has joined") );
 	str << user.get_name();
 	m_log_chat.log(str.str(), "blue");
 }
 
 void Gobby::Chat::obby_user_part(obby::user& user)
 {
-	obby::format_string str(_("%0 has left") );
+	obby::format_string str(_("%0% has left") );
 	str << user.get_name();
 	m_log_chat.log(str.str(), "blue");
 }

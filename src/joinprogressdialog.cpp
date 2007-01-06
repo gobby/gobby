@@ -32,7 +32,7 @@ Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
  : ProgressDialog(_("Joining obby session..."), parent), m_config(config),
    m_hostname(hostname), m_port(port), m_username(username), m_color(color)
 {
-	obby::format_string str("Connecting to %0...");
+	obby::format_string str("Connecting to %0%...");
 	str << hostname;
 	set_status_text(str.str() );
 }

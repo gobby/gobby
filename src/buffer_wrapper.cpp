@@ -166,7 +166,7 @@ Gobby::Host::get_peer_iter(const net6::host::peer& peer)
 	{
 		// Should not happen...
 		obby::format_string str(
-			_("Peer %0 (%1) not found in peer list") );
+			_("Peer %0% (%1%) not found in peer list") );
 		str << peer.get_name() << peer.get_address().get_name();
 		throw Error(Error::PEER_NOT_FOUND, str.str() );
 	}

@@ -375,7 +375,7 @@ Gobby::Header::Header(const Folder& folder)
 		Glib::ustring language_xml_name = language->get_name();
 
 		// Build description string
-		obby::format_string str(_("Selects %0 as language") );
+		obby::format_string str(_("Selects %0% as language") );
 		str << language->get_name().raw();
 
 		// Add language to action group
