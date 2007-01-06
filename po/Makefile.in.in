@@ -118,7 +118,7 @@ install-data-yes: all
 	  lang=`echo $$cat | sed 's/\$(CATOBJEXT)$$//'`; \
 	  dir=$(DESTDIR)$$destdir/$$lang/LC_MESSAGES; \
 	  if test -r "$(MKINSTALLDIRS)"; then \
-	    $(MKINSTALLDIRS) $$dir; \
+	    $(SHELL) $(MKINSTALLDIRS) $$dir; \
 	  else \
 	    $(SHELL) $(top_srcdir)/mkinstalldirs $$dir; \
 	  fi; \
@@ -146,7 +146,7 @@ install-data-yes: all
 	done
 	if test "$(PACKAGE)" = "glib"; then \
 	  if test -r "$(MKINSTALLDIRS)"; then \
-	    $(MKINSTALLDIRS) $(DESTDIR)$(gettextsrcdir); \
+	    $(SHELL) $(MKINSTALLDIRS) $(DESTDIR)$(gettextsrcdir); \
 	  else \
 	    $(SHELL) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(gettextsrcdir); \
 	  fi; \
