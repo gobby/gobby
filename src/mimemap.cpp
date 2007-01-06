@@ -27,15 +27,17 @@ Gobby::MimeMap::MimeMap()
 	m_map["cpp"] = "text/x-c++";
 	m_map["hpp"] = "text/x-c++";
 	m_map["cc"] = "text/x-c++";
+	m_map["cs"] = "text/x-csharp";
 	m_map["css"] = "text/css";
 	m_map["diff"] = "text/x-diff";
+	m_map["patch"] = "text/x-diff";
 	m_map["f"] = "text/x-fortran";
 	m_map["f77"] = "text/x-fortran";
 	m_map["hs"] = "text/x-haskell";
 	m_map["htm"] = "text/html";
 	m_map["html"] = "text/html";
 	m_map["xhtml"] = "text/html";
-	// Wi geth IDL?
+	m_map["idl"] = "text/x-idl";
 	m_map["java"] = "text/x-java";
 	m_map["js"] = "text/x-javascript";
 	m_map["tex"] = "text/x-tex";
@@ -54,10 +56,13 @@ Gobby::MimeMap::MimeMap()
 	m_map["py"] = "text/x-python";
 	m_map["rb"] = "text/x-ruby";
 	m_map["sql"] = "text/x-sql";
-	// Wi geth texinfo?
-	// Wi geth vb.NET?
-	// Wi geth verilog?
+	m_map["texi"] = "text/x-texinfo";
+	m_map["bas"] = "text/x-vb";
+	m_map["vbs"] = "text/x-vb";
+	m_map["v"] = "text/x-verilog-src";
 	m_map["xml"] = "text/xml";
+	m_map["desktop"] = "application/x-gnome-app-info";
+	m_map["tcl"] = "text/x-tcl";
 }
 
 Gobby::MimeMap::~MimeMap()
