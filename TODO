@@ -4,7 +4,6 @@ Gobby
 Serious:
  * Opening large documents is _really_ slow on win32's timer implementation
  * On connection loss: give a chance to save everything
- * Gobby sometimes segfaults on exit
  * Chat messages could be faked by using newline characters (split them into
    multiple single line messages)
 
