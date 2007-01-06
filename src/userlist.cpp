@@ -82,6 +82,16 @@ Gobby::UserList::UserList(Header& header):
 	(*m_iter_online)[m_tree_cols.text] = _("Online");
 	(*m_iter_offline)[m_tree_cols.text] = _("Offline");
 
+	(*m_iter_online)[m_tree_cols.icon] = render_icon(
+		Gtk::Stock::CONNECT,
+		Gtk::ICON_SIZE_BUTTON
+	);
+
+	(*m_iter_offline)[m_tree_cols.icon] = render_icon(
+		Gtk::Stock::DISCONNECT,
+		Gtk::ICON_SIZE_BUTTON
+	);
+
 	m_view_col.set_sort_column(m_tree_cols.text);
 
 	m_tree_view.get_selection()->set_mode(Gtk::SELECTION_NONE);
@@ -217,7 +227,7 @@ void Gobby::UserList::on_user_subscribe(const obby::user& user,
 
 	Gtk::TreeIter doc = m_tree_data->append(iter->children() );
 	(*doc)[m_tree_cols.icon] = render_icon(
-		Gtk::Stock::NEW,
+		Gtk::Stock::EDIT,
 		Gtk::ICON_SIZE_BUTTON
 	);
 
