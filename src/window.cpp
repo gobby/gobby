@@ -74,8 +74,10 @@ Gobby::Window::Window()
 	m_header.user_set_password_event().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
 
-	m_header.document_language_event().connect(
-		sigc::mem_fun(*this, &Window::on_document_language) );
+	m_header.view_preferences_event().connect(
+		sigc::mem_fun(*this, &Window::on_view_preferences) );
+	m_header.view_language_event().connect(
+		sigc::mem_fun(*this, &Window::on_view_language) );
 
 	m_header.about_event().connect(
 		sigc::mem_fun(*this, &Window::on_about) );
@@ -122,6 +124,9 @@ Gobby::Window::Window()
 Gobby::Window::~Window()
 {
 	obby_end();
+
+	// Serialise preferences into config
+	m_preferences.serialise(m_config);
 }
 
 void Gobby::Window::on_realize()
@@ -431,19 +436,40 @@ void Gobby::Window::on_document_close()
 void Gobby::Window::on_edit_preferences()
 {
 	PreferencesDialog dlg(*this, m_preferences);
-	if(dlg.run() == Gtk::RESPONSE_OK)
+
+	// Info label
+	Gtk::Label m_lbl_info(_(
+		"Click on \"Apply\" to apply the new settings to documents "
+		"that are currently open. \"OK\" will just store the values "
+		"to use them with newly created documents."
+	) );
+
+	// Show info label and apply button if documents are open
+	if(m_buffer.get() && m_buffer->document_count() > 0)
 	{
-		m_preferences.editor.tab_width = dlg.editor().get_tab_width();
-		m_preferences.editor.tab_spaces = dlg.editor().get_tab_spaces();
-		m_preferences.editor.indentation_auto =
-			dlg.editor().get_indentation_auto();
+		m_lbl_info.set_line_wrap(true);
+		dlg.get_vbox()->pack_start(m_lbl_info, Gtk::PACK_SHRINK);
+		dlg.add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
+		m_lbl_info.show();
+	}
 
-		m_preferences.view.wrap_text = dlg.view().get_wrap_text();
-		m_preferences.view.wrap_words = dlg.view().get_wrap_words();
-		m_preferences.view.linenum_display =
-			dlg.view().get_linenum_display();
+	int result = dlg.run();
+	if(result == Gtk::RESPONSE_OK || result == Gtk::RESPONSE_APPLY)
+	{
+		// Use new preferences
+		m_preferences = dlg.preferences();
 
-		// TODO: Callback of changed configs
+		// Apply preferences to open documents.
+		if(result == Gtk::RESPONSE_APPLY)
+		{
+			for(int i = 0; i < m_folder.get_n_pages(); ++ i)
+			{
+				DocWindow& doc = *static_cast<DocWindow*>(
+					m_folder.get_nth_page(i) );
+				doc.get_document().set_preferences(
+					m_preferences);
+			}
+		}
 	}
 }
 
@@ -465,9 +491,44 @@ void Gobby::Window::on_user_set_password()
 	}
 }
 
-void Gobby::Window::on_document_language(
-	const Glib::RefPtr<Gtk::SourceLanguage>& lang
-)
+void Gobby::Window::on_view_preferences()
+{
+	// Get current page
+	DocWindow& doc = *static_cast<DocWindow*>(
+		m_folder.get_nth_page(m_folder.get_current_page()) );
+
+	// Add preferences dialog
+	PreferencesDialog dlg(*this, doc.get_document().get_preferences() );
+
+	// Label text
+	obby::format_string str(_(
+		"These preferences affect only the currently active document "
+		"\"%0\". If you want to change global preferences, use the "
+		"preferences menu item in the \"Edit\" menu."
+	) );
+
+	// Get title
+	str << doc.get_document().get_title();
+
+	// Info label
+	Gtk::Label m_lbl_info(str.str() );
+	m_lbl_info.set_line_wrap(true);
+
+	// Add it into the dialog
+	dlg.get_vbox()->pack_start(m_lbl_info, Gtk::PACK_SHRINK);
+	dlg.get_vbox()->reorder_child(m_lbl_info, 0); // Push to top of dialog
+	m_lbl_info.show();
+
+	// Show the dialog
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		// Apply new preferences to the document
+		doc.get_document().set_preferences(dlg.preferences() );
+	}
+}
+
+void
+Gobby::Window::on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang)
 {
 	// Get current page
 	DocWindow& doc = *static_cast<DocWindow*>(

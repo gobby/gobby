@@ -27,35 +27,15 @@
 #include "document.hpp"
 #include "folder.hpp"
 
-v v v v v v v
 Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
                           const Preferences& preferences)
-*************
-v v v v v v v
-Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder)
-*************
-Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
-                          const Preferences& preferences)
-#ifdef WITH_GTKSOURCEVIEW
-^ ^ ^ ^ ^ ^ ^
-^ ^ ^ ^ ^ ^ ^
  : Gtk::SourceView(),
-v v v v v v v
-   m_doc(doc), m_folder(folder), m_preferences(preferences), m_editing(true),
-*************
-v v v v v v v
-   m_doc(doc), m_folder(folder), m_editing(true),
-*************
-#else
- : Gtk::TextView(),
-#endif
-   m_doc(doc), m_folder(folder), m_preferences(preferences), m_editing(true),
-^ ^ ^ ^ ^ ^ ^
-^ ^ ^ ^ ^ ^ ^
-   m_btn_subscribe(_("Subscribe") )
+   m_doc(doc), m_folder(folder), m_subscribed(false),
+   m_preferences(preferences), m_editing(true),
+   m_btn_subscribe(_("Subscribe") ), m_title(doc.get_title() )
 {
-	set_show_line_numbers(true);
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
+
 	// Prevent from GTK sourceview's undo 
 	buf->begin_not_undoable_action();
 
@@ -122,6 +102,9 @@ v v v v v v v
 	// GUI signal handlers
 	m_btn_subscribe.signal_clicked().connect(
 		sigc::mem_fun(*this, &Document::on_gui_subscribe) );
+
+	// Apply preferences
+	apply_preferences();
 
 	// Set introduction text
 	set_intro_text();
@@ -203,6 +186,11 @@ unsigned int Gobby::Document::get_revision() const
 	return local_doc->get_revision();
 }
 
+const Glib::ustring& Gobby::Document::get_title() const
+{
+	return m_title;
+}
+
 const Glib::ustring& Gobby::Document::get_path() const
 {
 	return m_path;
@@ -226,40 +214,22 @@ void Gobby::Document::set_language(
 	m_signal_language_changed.emit();
 }
 
+const Gobby::Preferences& Gobby::Document::get_preferences() const
+{
+	return m_preferences;
+}
+
+void Gobby::Document::set_preferences(const Preferences& preferences)
+{
+	m_preferences = preferences;
+	apply_preferences();
+}
+
 Glib::ustring Gobby::Document::get_content()
 {
 	return get_buffer()->get_text();
 }
 
-v v v v v v v
-*************
-v v v v v v v
-*************
-bool Gobby::Document::get_word_wrapping() const
-{
-	return get_wrap_mode() != Gtk::WRAP_NONE;
-}
-
-void Gobby::Document::set_word_wrapping(bool wrap)
-{
-	if(wrap)
-		set_wrap_mode(Gtk::WRAP_WORD_CHAR);
-	else
-		set_wrap_mode(Gtk::WRAP_NONE);
-}
-
-bool Gobby::Document::get_show_line_numbers() const
-{
-	return Gtk::SourceView::get_show_line_numbers();
-}
-
-void Gobby::Document::set_show_line_numbers(bool show)
-{
-	Gtk::SourceView::set_show_line_numbers(show);
-}
-
-^ ^ ^ ^ ^ ^ ^
-^ ^ ^ ^ ^ ^ ^
 void Gobby::Document::obby_user_join(obby::user& user)
 {
 	// Build tag name for this user
@@ -364,11 +334,14 @@ void Gobby::Document::on_obby_user_unsubscribe(const obby::user& user)
 
 void Gobby::Document::on_obby_self_subscribe()
 {
+	// We are subscribed
+	m_subscribed = true;
+
 	// Get document we subscribed to
 	obby::local_document& doc = *m_doc.get_document();
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
 
-	// Install singal handlers
+	// Install signal handlers
 	doc.insert_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_insert) );
 	doc.delete_event().before().connect(
@@ -385,49 +358,11 @@ void Gobby::Document::on_obby_self_subscribe()
 	// Make the document editable
 	set_editable(true);
 
-v v v v v v v
-	// Read settings from preferences
-	// Editor
-	set_tabs_width(m_preferences.editor.tab_width);
-	set_insert_spaces_instead_of_tabs(m_preferences.editor.tab_spaces);
-	set_auto_indent(m_preferences.editor.indentation_auto);
+	// Apply preferences
+	apply_preferences();
 
-	// View
-	if(m_preferences.view.wrap_text)
-		if(m_preferences.view.wrap_words)
-			set_wrap_mode(Gtk::WRAP_WORD);
-		else
-			set_wrap_mode(Gtk::WRAP_CHAR);
-	else
-		set_wrap_mode(Gtk::WRAP_NONE);
-	set_show_line_numbers(m_preferences.view.linenum_display);
-
-*************
-v v v v v v v
-*************
-	// Read settings from preferences
-	// Editor
-	set_tabs_width(m_preferences.editor.tab_width);
-	set_insert_spaces_instead_of_tabs(m_preferences.editor.tab_spaces);
-	set_auto_indent(m_preferences.editor.indentation_auto);
-
-	// View
-	if(m_preferences.view.wrap_text)
-		if(m_preferences.view.wrap_words)
-			set_wrap_mode(Gtk::WRAP_WORD);
-		else
-			set_wrap_mode(Gtk::WRAP_CHAR);
-	else
-		set_wrap_mode(Gtk::WRAP_NONE);
-	set_show_line_numbers(m_preferences.view.linenum_display);
-
-#ifdef WITH_GTKSOURCEVIEW
-^ ^ ^ ^ ^ ^ ^
-^ ^ ^ ^ ^ ^ ^
 	// Enable highlighting
 	buf->set_highlight(true);
-
-	// TODO: Do this in an idle handler? *kA*
 
 	// Set initial authors
 	for(unsigned int i = 0; i < doc.get_line_count(); ++ i)
@@ -475,8 +410,12 @@ v v v v v v v
 
 void Gobby::Document::on_obby_self_unsubscribe()
 {
+	// We are not subscribed anymore
+	m_subscribed = false;
 	// Prevet from execution of signal handlers
 	m_editing = true;
+	// Apply preferences (which may change for non-subscribed documents)
+	apply_preferences();
 	// Set introduction text
 	set_intro_text();
 	// Re-enable signal handlers
@@ -553,9 +492,6 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 		update_user_colour(pos, end, &user);
 		m_editing = false;
 
-		// Content has changed
-//		m_signal_content_changed.emit();
-
 		// Cursor position has changed
 		m_signal_cursor_moved.emit();
 	}
@@ -568,9 +504,6 @@ void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
 	{
 		// Cursor position may have changed
 		m_signal_cursor_moved.emit();
-
-		// Content has changed
-//		m_signal_content_changed.emit();
 	}
 }
 
@@ -682,10 +615,41 @@ void Gobby::Document::set_intro_text()
 
 	// TODO: Add people that are currently subscribed
 	set_editable(false);
-	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
 
 	// Do not highlight anything until the user subscribed
 	buf->set_highlight(false);
+}
+
+void Gobby::Document::apply_preferences()
+{
+	// Editor
+	set_tabs_width(m_preferences.editor.tab_width);
+	set_insert_spaces_instead_of_tabs(m_preferences.editor.tab_spaces);
+	set_auto_indent(m_preferences.editor.indentation_auto);
+
+	// View
+	if(m_subscribed)
+	{
+		// Check preference for wrapped text
+		if(m_preferences.view.wrap_text)
+		{
+			if(m_preferences.view.wrap_words)
+				set_wrap_mode(Gtk::WRAP_CHAR);
+			else
+				set_wrap_mode(Gtk::WRAP_WORD);
+		}
+		else
+		{
+			set_wrap_mode(Gtk::WRAP_NONE);
+		}
+	}
+	else
+	{
+		// Wrap when not subscribed (intro text)
+		set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+	}
+
+	set_show_line_numbers(m_preferences.view.linenum_display);
 }
 
 void

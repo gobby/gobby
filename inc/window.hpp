@@ -67,11 +67,8 @@ protected:
 
 	void on_user_set_password();
 
-	void on_document_word_wrap();
-	void on_document_line_numbers();
-	void on_document_language(
-		const Glib::RefPtr<Gtk::SourceLanguage>& lang
-	);
+	void on_view_preferences();
+	void on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang);
 
 	// Folder UI handler
 	void on_folder_document_close(Document& document);

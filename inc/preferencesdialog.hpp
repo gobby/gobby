@@ -123,6 +123,8 @@ public:
 	PreferencesDialog(Gtk::Window& parent, const Preferences& preferences);
 	~PreferencesDialog();
 
+	Preferences preferences() const;
+
 	const Editor& editor() const;
 	const View& view() const;
 	const Appearance& appearance() const;

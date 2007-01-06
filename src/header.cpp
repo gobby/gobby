@@ -51,7 +51,10 @@ namespace {
 		"      <menuitem action=\"UserSetPassword\" />"
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
-		"      <menuitem action=\"ViewLanguageNone\" />"
+		"      <menuitem action=\"ViewPreferences\" />"
+		"      <menu action=\"MenuViewSyntax\">"
+		"        <menuitem action=\"ViewSyntaxLanguageNone\" />"
+		"      </menu>"
 		"    </menu>"
 		"    <menu action=\"MenuHelp\">"
 		"      <menuitem action=\"About\" />"
@@ -276,8 +279,26 @@ Gobby::Header::Header(const Folder& folder)
 		)
 	);
 
-	// Documents menu
+	// View menu
 	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
+
+	// Preferences
+	m_group_app->add(
+		Gtk::Action::create(
+			"ViewPreferences",
+			Gtk::Stock::PREFERENCES,
+			_("Document preferences"),
+			_("Shows a preferences dialog that is just applied to "
+			  "this document")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_view_preferences
+		)
+	);
+
+	// Syntax submenu
+	m_group_app->add(Gtk::Action::create("MenuViewSyntax", _("Syntax")) );
 
 	// A kind of hack to ensure that
 	// Gtk::SourceLanguage::sourcelanguage_class_.init() is called.
@@ -301,14 +322,14 @@ Gobby::Header::Header(const Folder& folder)
 	m_group_app->add(
 		Gtk::RadioAction::create(
 			m_lang_group,
-			"ViewLanguageNone",
+			"ViewSyntaxLanguageNone",
 			_("None"),
 			_("Unselects the current language")
 		),
 		sigc::bind(
 			sigc::mem_fun(
 				*this,
-				&Header::on_app_document_language
+				&Header::on_app_view_language
 			),
 			Glib::RefPtr<Gtk::SourceLanguage>()
 		)
@@ -331,14 +352,14 @@ Gobby::Header::Header(const Folder& folder)
 		m_group_app->add(
 			Gtk::RadioAction::create(
 				m_lang_group,
-				"ViewLanguage" + language_xml_name, 
+				"ViewSyntaxLanguage" + language_xml_name,
 				language->get_name(),
 				str.str()
 			),
 			sigc::bind(
 				sigc::mem_fun(
 					*this,
-					&Header::on_app_document_language
+					&Header::on_app_view_language
 				),
 				language
 			)
@@ -349,8 +370,10 @@ Gobby::Header::Header(const Folder& folder)
 			"<ui>"
 			"  <menubar name=\"MenuMainBar\">"
 			"    <menu action=\"MenuView\">"
-			"	<menuitem action=\"ViewLanguage"
-				+ language_xml_name + "\" />"
+			"      <menu action=\"MenuViewSyntax\">"
+			"	 <menuitem action=\"ViewSyntaxLanguage"
+				 + language_xml_name + "\" />"
+			"      </menu>"
 			"    </menu>"
 			"  </menubar>"
 			"</ui>";
@@ -483,10 +506,16 @@ Gobby::Header::user_set_password_event() const
 	return m_signal_user_set_password;
 }
 
-Gobby::Header::signal_document_language_type
-Gobby::Header::document_language_event() const
+Gobby::Header::signal_view_preferences_type
+Gobby::Header::view_preferences_event() const
 {
-	return m_signal_document_language;
+	return m_signal_view_preferences;
+}
+
+Gobby::Header::signal_view_language_type
+Gobby::Header::view_language_event() const
+{
+	return m_signal_view_language;
 }
 
 Gobby::Header::signal_about_type
@@ -570,10 +599,6 @@ void Gobby::Header::obby_document_remove(obby::local_document_info& document)
 	}
 }
 
-void Gobby::Header::obby_preferences_changed(const Preferences& preferences)
-{
-}
-
 void Gobby::Header::on_app_session_create()
 {
 	m_signal_session_create.emit();
@@ -619,13 +644,16 @@ void Gobby::Header::on_app_user_set_password()
 	m_signal_user_set_password.emit();
 }
 
-void Gobby::Header::on_app_document_language(
-	Glib::RefPtr<Gtk::SourceLanguage> lang
-)
+void Gobby::Header::on_app_view_preferences()
+{
+	m_signal_view_preferences.emit();
+}
+
+void Gobby::Header::on_app_view_language(Glib::RefPtr<Gtk::SourceLanguage> lang)
 {
 	// Same as above
 	if(!m_toggle_language)
-		m_signal_document_language.emit(lang);
+		m_signal_view_language.emit(lang);
 }
 
 void Gobby::Header::on_app_about()
@@ -648,10 +676,10 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 		document.get_language()->get_name() : "None";
 	remove_dangerous_xml(langname);
 	Glib::RefPtr<Gtk::RadioAction>::cast_static<Gtk::Action>(
-		m_group_app->get_action("ViewLanguage" + langname)
+		m_group_app->get_action("ViewSyntaxLanguage" + langname)
 	)->set_active();
 
-	// We are no more toggling
+	// We are toggling no more
 	m_toggle_language = false;
 }
 

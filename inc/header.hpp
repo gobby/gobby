@@ -59,6 +59,9 @@ public:
 	typedef sigc::signal<void> signal_edit_preferences_type;
 	typedef sigc::signal<void> signal_user_set_password_type;
 v v v v v v v
+	typedef sigc::signal<void> signal_view_preferences_type;
+*************
+v v v v v v v
 *************
 v v v v v v v
 	typedef sigc::signal<void> signal_document_word_wrap_type;
@@ -67,8 +70,9 @@ v v v v v v v
 #ifdef WITH_GTKSOURCEVIEW
 ^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
+^ ^ ^ ^ ^ ^ ^
 	typedef sigc::signal<void, const Glib::RefPtr<Gtk::SourceLanguage>&>
-		signal_document_language_type;
+		signal_view_language_type;
 	typedef sigc::signal<void> signal_about_type;
 	typedef sigc::signal<void> signal_quit_type;
 
@@ -94,6 +98,10 @@ v v v v v v v
 	signal_edit_preferences_type edit_preferences_event() const;
 	signal_user_set_password_type user_set_password_event() const;
 v v v v v v v
+	signal_view_preferences_type view_preferences_event() const;
+	signal_view_language_type view_language_event() const;
+*************
+v v v v v v v
 *************
 v v v v v v v
 	signal_document_word_wrap_type document_word_wrap_event() const;
@@ -103,6 +111,7 @@ v v v v v v v
 ^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 	signal_document_language_type document_language_event() const;
+^ ^ ^ ^ ^ ^ ^
 	signal_about_type about_event() const;
 	signal_quit_type quit_event() const;
 
@@ -113,7 +122,6 @@ v v v v v v v
 	void obby_user_part(obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
-	void obby_preferences_changed(const Preferences& preferences);
 
 protected:
 	void on_app_session_create();
@@ -126,6 +134,10 @@ protected:
 	void on_app_edit_preferences();
 	void on_app_user_set_password();
 v v v v v v v
+	void on_app_view_preferences();
+	void on_app_view_language(Glib::RefPtr<Gtk::SourceLanguage> lang);
+*************
+v v v v v v v
 *************
 v v v v v v v
 	void on_app_document_word_wrap();
@@ -135,6 +147,7 @@ v v v v v v v
 ^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 	void on_app_document_language(Glib::RefPtr<Gtk::SourceLanguage> lang);
+^ ^ ^ ^ ^ ^ ^
 	void on_app_about();
 	void on_app_quit();
 
@@ -178,6 +191,10 @@ v v v v v v v
 	signal_edit_preferences_type m_signal_edit_preferences;
 	signal_user_set_password_type m_signal_user_set_password;
 v v v v v v v
+	signal_view_preferences_type m_signal_view_preferences;
+	signal_view_language_type m_signal_view_language;
+*************
+v v v v v v v
 *************
 v v v v v v v
 	signal_document_word_wrap_type m_signal_document_word_wrap;
@@ -187,6 +204,7 @@ v v v v v v v
 ^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 	signal_document_language_type m_signal_document_language;
+^ ^ ^ ^ ^ ^ ^
 	signal_about_type m_signal_about;
 	signal_quit_type m_signal_quit;
 };

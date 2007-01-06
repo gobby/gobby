@@ -100,7 +100,7 @@ Gobby::PreferencesDialog::View::View(const Preferences& preferences)
 	bool linenum_display = preferences.view.linenum_display;
 
 	m_btn_wrap_text.set_active(wrap_text);
-	m_btn_wrap_words.set_active(wrap_words);
+	m_btn_wrap_words.set_active(!wrap_words);
 	m_btn_linenum_display.set_active(linenum_display);
 
 	m_box_wrap.set_spacing(5);
@@ -184,6 +184,22 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
 
 Gobby::PreferencesDialog::~PreferencesDialog()
 {
+}
+
+Gobby::Preferences Gobby::PreferencesDialog::preferences() const
+{
+	Preferences preferences;
+
+	preferences.editor.tab_width = m_page_editor.get_tab_width();
+	preferences.editor.tab_spaces = m_page_editor.get_tab_spaces();
+	preferences.editor.indentation_auto =
+		m_page_editor.get_indentation_auto();
+
+	preferences.view.wrap_text = m_page_view.get_wrap_text();
+	preferences.view.wrap_words = m_page_view.get_wrap_words();
+	preferences.view.linenum_display = m_page_view.get_linenum_display();
+
+	return preferences;
 }
 
 const Gobby::PreferencesDialog::Editor&

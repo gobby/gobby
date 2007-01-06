@@ -27,8 +27,26 @@ namespace Gobby
 class Preferences
 {
 public:
+	/** Uninitialised preferences.
+	 */
+	Preferences();
+
+	/** Reads preferences values out of a config.
+	 */
 	Preferences(Config& m_config);
+
+	/** Copies preferences.
+	 */
+	Preferences(const Preferences& other);
 	~Preferences();
+
+	/** Copies preferences.
+	 */
+	Preferences& operator=(const Preferences& other);
+
+	/** Serialises preferences back to config.
+	 */
+	void serialise(Config& config);
 
 	struct
 	{
@@ -43,9 +61,6 @@ public:
 		bool wrap_words;
 		bool linenum_display;
 	} view;
-
-protected:
-	Config& m_config;
 };
 
 }

@@ -57,6 +57,10 @@ public:
 	 */
 	unsigned int get_revision() const;
 
+	/** Returns the title of the file.
+	 */
+	const Glib::ustring& get_title() const;
+
 	/** Returns the path to the file.
 	 */
 	const Glib::ustring& get_path() const;
@@ -76,6 +80,14 @@ public:
 	/** Sets a new Language to use.
 	 */
 	void set_language(const Glib::RefPtr<Gtk::SourceLanguage>& language);
+
+	/** Returns the currently preferences.
+	 */
+	const Preferences& get_preferences() const;
+
+	/** Sets new preferences to use.
+	 */
+	void set_preferences(const Preferences& preferences);
 
 	/** Returns the document content. Equivalent to
 	 * get_document().get_whole_buffer(), but it may be used even if the
@@ -179,11 +191,20 @@ protected:
 	 */
 	void set_intro_text();
 
+	/** Applies the currently used preferences to the view.
+	 */
+	void apply_preferences();
+
 	obby::local_document_info& m_doc;
 	const Folder& m_folder;
+
+	/** Whether we are subscribed to this document.
+	 */
+	bool m_subscribed;
 	
-	// TODO: Value for local preferences
-	const Preferences& m_preferences;
+	/** Preferences for this document.
+	 */
+	Preferences m_preferences;
 
 	/** Variable to prevent event handlers from endless recursion. After
 	 * an obby insert or textbuffer insert has occured, this variable is
@@ -197,6 +218,10 @@ protected:
 	/** Button to subscribe to the document.
 	 */
 	Gtk::Button m_btn_subscribe;
+
+	/** Document title (even available when connection has been lost).
+	 */
+	Glib::ustring m_title;
 
 	/** Path to the file on the local disc.
 	 */

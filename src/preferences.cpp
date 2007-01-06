@@ -18,29 +18,52 @@
 
 #include "preferences.hpp"
 
-Gobby::Preferences::Preferences(Config& config)
- : m_config(config)
+Gobby::Preferences::Preferences()
 {
+	// Uninitialised preferences
+}
+
+Gobby::Preferences::Preferences(Config& config)
+{
+	// Read preferences from config
 	editor.tab_width =
 		config["editor"]["tab"]["width"].get<unsigned int>(8);
 	editor.tab_spaces = config["editor"]["tab"]["spaces"].get<bool>(false);
 	editor.indentation_auto =
 		config["editor"]["indentation"]["auto"].get<bool>(true);
 
-	view.wrap_text = config["editor"]["wrap"]["text"].get<bool>(true);
-	view.wrap_words = config["editor"]["wrap"]["words"].get<bool>(false);
+	view.wrap_text = config["view"]["wrap"]["text"].get<bool>(true);
+	view.wrap_words = config["view"]["wrap"]["words"].get<bool>(true);
 	view.linenum_display =
-		config["editor"]["linenum"]["display"].get<bool>(true);
+		config["view"]["linenum"]["display"].get<bool>(true);
+}
+
+Gobby::Preferences::Preferences(const Preferences& other)
+{
+	*this = other;
 }
 
 Gobby::Preferences::~Preferences()
 {
-	m_config["editor"]["tab"]["width"].set(editor.tab_width);
-	m_config["editor"]["tab"]["spaces"].set(editor.tab_spaces);
-	m_config["editor"]["indentation"]["auto"].set(editor.indentation_auto);
+}
 
-	m_config["view"]["wrap"]["text"].set(view.wrap_text);
-	m_config["view"]["wrap"]["words"].set(view.wrap_words);
-	m_config["view"]["linenum"]["display"].set(view.linenum_display);
+void Gobby::Preferences::serialise(Config& config)
+{
+	// Serialise into config
+	config["editor"]["tab"]["width"].set(editor.tab_width);
+	config["editor"]["tab"]["spaces"].set(editor.tab_spaces);
+	config["editor"]["indentation"]["auto"].set(editor.indentation_auto);
+
+	config["view"]["wrap"]["text"].set(view.wrap_text);
+	config["view"]["wrap"]["words"].set(view.wrap_words);
+	config["view"]["linenum"]["display"].set(view.linenum_display);
+}
+
+Gobby::Preferences& Gobby::Preferences::operator=(const Preferences& other)
+{
+	editor = other.editor;
+	view = other.view;
+
+	return *this;
 }
 
