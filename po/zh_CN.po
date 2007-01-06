@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-31 11:54+0200\n"
-"PO-Revision-Date: 2005-11-08 02:12+1300\n"
+"POT-Creation-Date: 2006-06-04 03:07+0200\n"
+"PO-Revision-Date: 2006-04-03 13:45+0000\n"
 "Last-Translator: Carlos Z.F. Liu <carlosliu@users.sourceforge.net>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -553,21 +553,21 @@ msgstr "加入 obby 会话..."
 #. The welcome event will be emitted as soon as the connection
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
-#: src/joinprogressdialog.cpp:401
+#: src/joinprogressdialog.cpp:402
 msgid "Setting up connection encryption (TLS)..."
 msgstr ""
 
 #. Update status message
-#: src/joinprogressdialog.cpp:469
+#: src/joinprogressdialog.cpp:462
 msgid "Login packet sent, waiting for response..."
 msgstr "登录包已发送，正在等待回应..."
 
-#: src/joinprogressdialog.cpp:551
+#: src/joinprogressdialog.cpp:544
 msgid "Logged in successfully, synchronising session..."
 msgstr "登入成功，正在同步会话..."
 
 #. Connection closed by remote site
-#: src/joinprogressdialog.cpp:564 src/window.cpp:1038
+#: src/joinprogressdialog.cpp:557 src/window.cpp:1043
 msgid "Connection lost"
 msgstr "连接丢失"
 
@@ -690,23 +690,23 @@ msgstr ""
 msgid "A collaborative text editor"
 msgstr ""
 
-#: src/window.cpp:676
+#: src/window.cpp:681
 msgid "Create document"
 msgstr "创建文档"
 
-#: src/window.cpp:676
+#: src/window.cpp:681
 msgid "Enter document name"
 msgstr "输入文档名"
 
-#: src/window.cpp:694
+#: src/window.cpp:699
 msgid "Open new document"
 msgstr "打开新文档"
 
-#: src/window.cpp:777
+#: src/window.cpp:782
 msgid "Save current document"
 msgstr "保存当前文档"
 
-#: src/window.cpp:859
+#: src/window.cpp:864
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
@@ -714,17 +714,17 @@ msgid ""
 msgstr ""
 
 #. Build password dialog with info
-#: src/window.cpp:903
+#: src/window.cpp:908
 msgid "Set user password"
 msgstr "设置用户密码"
 
-#: src/window.cpp:905
+#: src/window.cpp:910
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
 
-#: src/window.cpp:966
+#: src/window.cpp:971
 #, c-format
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
@@ -732,37 +732,37 @@ msgid ""
 "\"Edit\" menu."
 msgstr ""
 
-#: src/window.cpp:1076
+#: src/window.cpp:1081
 msgid "Colour change failed: Colour already in use"
 msgstr "修改颜色失败：该颜色已被使用"
 
-#: src/window.cpp:1278
+#: src/window.cpp:1283
 #, c-format
 msgid "Serving on port %0%"
 msgstr ""
 
-#: src/window.cpp:1353
+#: src/window.cpp:1358
 #, c-format
 msgid "Could not open file '%0%' for writing"
 msgstr ""
 
-#: src/window.cpp:1402
+#: src/window.cpp:1407
 #, c-format
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr ""
 
-#: src/window.cpp:1412
+#: src/window.cpp:1417
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
 msgstr ""
 
-#: src/window.cpp:1421
+#: src/window.cpp:1426
 msgid "If you don't save, changes will be discarded."
 msgstr ""
 
 #. Add button to allow the user to save the dialog
-#: src/window.cpp:1436
+#: src/window.cpp:1441
 msgid "Close without saving"
 msgstr ""
 
