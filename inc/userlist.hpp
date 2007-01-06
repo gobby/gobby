@@ -48,21 +48,30 @@ public:
 	UserList(Header& header);
 	~UserList();
 
-	// Calls from the user folder
+	// Calls from the window
 	// TODO: Replace them by signal handlers from buf
-	// TODO: TreeView mit connecteten und nicht connecteten usern
-	// TODO: Nix auswaehlbar machen?
 	virtual void obby_start(obby::local_buffer& buf);
 	virtual void obby_end();
 	virtual void obby_user_join(const obby::user& user);
 	virtual void obby_user_part(const obby::user& user);
 	virtual void obby_user_colour(const obby::user& user);
-	virtual void obby_document_insert(obby::local_document_info& document);
-	virtual void obby_document_remove(obby::local_document_info& document);
+	virtual void obby_document_insert(obby::local_document_info& info);
+	virtual void obby_document_remove(obby::local_document_info& info);
 protected:
+	Gtk::TreeIter find_iter(const Gtk::TreeIter& parent,
+	                        const Glib::ustring& text) const;
+	void remove_children(const Gtk::TreeIter& parent);
+
+	void on_user_subscribe(const obby::user& user,
+	                       const obby::local_document_info& info);
+	void on_user_unsubscribe(const obby::user& user,
+	                         const obby::local_document_info& info);
+
 	/** Reference to header.
 	 */
 	Header& m_header;
+
+	obby::local_buffer* m_buffer;
 
 	/** GUI components.
 	 */

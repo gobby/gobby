@@ -16,6 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <gtkmm/stock.h>
 #include "common.hpp"
 #include "userlist.hpp"
 
@@ -100,36 +101,159 @@ Gobby::UserList::~UserList()
 void Gobby::UserList::obby_start(obby::local_buffer& buf)
 {
 	set_sensitive(true);
+
+	m_buffer = &buf;
 }
 
 void Gobby::UserList::obby_end()
 {
 	set_sensitive(false);
-	// TODO: Remove all users in the list
+
+	remove_children(m_iter_offline);
+	remove_children(m_iter_online);
 }
 
 void Gobby::UserList::obby_user_join(const obby::user& user)
 {
-	// TODO: Check connected flag, add user to correct column, remove from
-	// other, if necessary
+	// Verify that the user is not already joined
+	if(find_iter(m_iter_online, user.get_name()) != m_iter_online->children().end() )
+		throw std::logic_error("Gobby::UserList::obby_user_join");
+
+	// Find user in offline list
+	Gtk::TreeIter iter = find_iter(m_iter_offline, user.get_name() );
+	if(iter != m_iter_offline->children().end() )
+	{
+		// Remove it, if the new user is connected
+		if(user.get_flags() & obby::user::flags::CONNECTED)
+			m_tree_data->erase(iter);
+		else
+			// Let the entry in the offline list if the new user is
+			// not connected.
+			return;
+	}
+
+	// Add it to correct list
+	if(user.get_flags() & obby::user::flags::CONNECTED)
+		iter = m_tree_data->append(m_iter_online->children());
+	else
+		iter = m_tree_data->append(m_iter_offline->children());
+
+	(*iter)[m_tree_cols.icon] = create_coloured_pixbuf(user.get_colour() );
+	(*iter)[m_tree_cols.text] = user.get_name();
+
+	// New user may already be subscribed to documents (client initial)
+	for(obby::buffer::document_iterator iter = m_buffer->document_begin();
+	    iter != m_buffer->document_end();
+	    ++ iter)
+	{
+		if(iter->is_subscribed(user) )
+		{
+			on_user_subscribe(
+				user,
+				dynamic_cast<const obby::local_document_info&>(
+					*iter
+				)
+			);
+		}
+	}
 }
 
 void Gobby::UserList::obby_user_part(const obby::user& user)
 {
-	// TODO: Remove user from online column, add to offline
+	// Find user in online list
+	Gtk::TreeIter iter = find_iter(m_iter_online, user.get_name() );
+	if(iter == m_iter_online->children().end() )
+		throw std::logic_error("Gobby::UserList::obby_user_part");
+
+	// Remove it from there
+	m_tree_data->erase(iter);
+
+	// Insert into offline list
+	iter = m_tree_data->append(m_iter_offline->children() );
+	(*iter)[m_tree_cols.icon] = create_coloured_pixbuf(user.get_colour() );
+	(*iter)[m_tree_cols.text] = user.get_name();
 }
 
 void Gobby::UserList::obby_user_colour(const obby::user& user)
 {
-	// Change user colour of given user
+	// Find user in list
+	Gtk::TreeIter iter = find_iter(m_iter_online, user.get_name() );
+	if(iter == m_iter_online->children().end() )
+		throw std::logic_error("Gobby::UserList::obby_user_colour");
+
+	// Recolour
+	(*iter)[m_tree_cols.icon] = create_coloured_pixbuf(user.get_colour() );
 }
 
 void Gobby::UserList::obby_document_insert(obby::local_document_info& info)
 {
-	// TODO: Add to (un)subscribe event, add corresponding documents as
-	// child of user into list.
+	info.subscribe_event().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &UserList::on_user_subscribe),
+			sigc::ref(info)
+		)
+	);
+
+	info.unsubscribe_event().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &UserList::on_user_unsubscribe),
+			sigc::ref(info)
+		)
+	);
 }
 
-void Gobby::UserList::obby_document_remove(obby::local_document_info& document)
+void Gobby::UserList::obby_document_remove(obby::local_document_info& info)
 {
+	// Do nothing here because unsubscrption signal will be emitted for all
+	// users?
+}
+
+void Gobby::UserList::on_user_subscribe(const obby::user& user,
+                                        const obby::local_document_info& info)
+{
+	Gtk::TreeIter iter = find_iter(m_iter_online, user.get_name() );
+	if(iter == m_iter_online->children().end() )
+		throw std::logic_error("Gobby::UserList::on_user_subscribe");
+
+	Gtk::TreeIter doc = m_tree_data->append(iter->children() );
+	(*doc)[m_tree_cols.icon] = render_icon(
+		Gtk::Stock::NEW,
+		Gtk::ICON_SIZE_BUTTON
+	);
+
+	(*doc)[m_tree_cols.text] = info.get_title();
+}
+
+void Gobby::UserList::on_user_unsubscribe(const obby::user& user,
+                                          const obby::local_document_info& info)
+{
+	Gtk::TreeIter user_iter = find_iter(m_iter_online, user.get_name() );
+	if(user_iter == m_iter_online->children().end() )
+		throw std::logic_error("Gobby::UserList::on_user_unsubscribe");
+
+	Gtk::TreeIter doc_iter = find_iter(user_iter, info.get_title() );
+	if(doc_iter == user_iter->children().end() )
+		throw std::logic_error("Gobby::UserList::on_user_unsubscribe");
+
+	m_tree_data->erase(doc_iter);
+}
+
+Gtk::TreeIter Gobby::UserList::find_iter(const Gtk::TreeIter& parent,
+                                         const Glib::ustring& text) const
+{
+	const Gtk::TreeNodeChildren& children = parent->children();
+	for(Gtk::TreeIter i = children.begin(); i != children.end(); ++ i)
+		if( (*i)[m_tree_cols.text] == text)
+			return i;
+
+	return children.end();
+}
+
+void Gobby::UserList::remove_children(const Gtk::TreeIter& parent)
+{
+	const Gtk::TreeNodeChildren& list = parent->children();
+	Gtk::TreeIter iter = list.begin();
+
+	while(iter != list.end() )
+		iter = m_tree_data->erase(iter);
 }
