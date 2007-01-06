@@ -23,7 +23,7 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
 #include <libobby/buffer.hpp>
-#include "config_.hpp"
+#include "config.hpp"
 #include "header.hpp"
 #include "folder.hpp"
 #include "userlist.hpp"

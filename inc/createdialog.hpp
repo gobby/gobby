@@ -25,7 +25,7 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/colorbutton.h>
-#include "config_.hpp"
+#include "config.hpp"
 
 namespace Gobby
 {

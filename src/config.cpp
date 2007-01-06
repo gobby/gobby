@@ -29,7 +29,7 @@
 #include <libxml++/parsers/domparser.h>
 #include <libxml++/exceptions/exception.h>
 
-#include "config_.hpp"
+#include "config.hpp"
 
 Gobby::Config::Error::Error(Code error_code, const Glib::ustring& error_message)
  : Glib::Error(g_quark_from_static_string("GOBBY_CONFIG_ERROR"),
