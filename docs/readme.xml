@@ -8,7 +8,7 @@
 	</section>
 	<section><title>Features</title>
 		<itemizedlist>
-			<listitem><para>Realtime collaboration</para></listitem>
+			<listitem><para>Realtime collaboration through encrypted connections</para></listitem>
 			<listitem><para>Each user has its own colour to be identified by others</para></listitem>
 			<listitem><para>IRC-like chat for communicating with your partners</para></listitem>
 			<listitem><para>Sidebar with all the others having joined the session</para></listitem>
@@ -28,15 +28,16 @@
 		<section><title>Dependencies</title>
 			<itemizedlist>
 				<listitem><para><literal>libsigc++ (>= 2.0.2)</literal></para></listitem>
-				<listitem><para><literal>net6 (>= 1.1.0)</literal></para></listitem>
-				<listitem><para><literal>howl (>= 0.9.8)</literal></para></listitem>
-				<listitem><para><literal>obby (>= 0.2.0)</literal></para></listitem>
+				<listitem><para><literal>GNUTLS (>= 1.0.0)</literal></para></listitem>
+				<listitem><para><literal>net6 (>= 1.3.0)</literal></para></listitem>
+				<listitem><para><literal>obby (>= 0.4.0)</literal></para></listitem>
 				<listitem><para><literal>Glib (>= 2.6.0)</literal></para></listitem>
 				<listitem><para><literal>Gtk+ (>= 2.6.0)</literal></para></listitem>
 				<listitem><para><literal>GtkSourceView</literal></para></listitem>
 				<listitem><para><literal>Glibmm (>= 2.6.0)</literal></para></listitem>
 				<listitem><para><literal>libxml++ (>= 2.6.0)</literal></para></listitem>
 				<listitem><para><literal>Gtkmm (>= 2.6.0)</literal></para></listitem>
+				<listitem><para><literal>howl (>= 0.9.8) [optional]</literal></para></listitem>
 			</itemizedlist>
 		</section>
 	</section>
@@ -51,13 +52,13 @@
 			<para>There are also two mailing lists which should provide a mean of contact to other Gobby users and to the developers.</para>
 			<itemizedlist>
 				<listitem><para><literal>obby-announce</literal>: A moderated list used to announce new releases of Gobby and its foundation, net6 and obby. Please refer to <ulink url="http://list.0x539.de/mailman/listinfo/obby-announce"><literal>http://list.0x539.de/mailman/listinfo/obby-announce</literal></ulink> if you want to subscribe it.</para></listitem>
-				<listitem><para><literal>obby-users</literal>: Discussions about Gobby's usage and installation problems. Please refer to <ulink url="http://list.0x539.de/mailman/listinfo/obby-announce"><literal>http://list.0x539.de/mailman/listinfo/obby-announce</literal></ulink> if you want to subscribe it.</para></listitem>
+				<listitem><para><literal>obby-users</literal>: Discussions about Gobby's usage and installation problems. The announcements are also posted there. Please refer to <ulink url="http://list.0x539.de/mailman/listinfo/obby-announce"><literal>http://list.0x539.de/mailman/listinfo/obby-announce</literal></ulink> if you want to subscribe it.</para></listitem>
 			</itemizedlist>
 		</section>
 	</section>
 	<section><title>Licensing</title>
 		<para>This program is written by the 0x539 dev group and is licenced under the GNU General Public License (GPL) version 2 or any later version. A copy of the license is included in the distribution.</para>
 		<para>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</para>
-		<para>Copyright (C) 2005 0x539 dev group &lt;crew@0x539.de&gt;</para>
+		<para>Copyright (C) 2005-2006 0x539 dev group &lt;crew@0x539.de&gt;</para>
 	</section>
 </article>

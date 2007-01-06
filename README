@@ -30,7 +30,7 @@ Gobby: First Contact
 
 2. Features
 
-     * Realtime collaboration
+     * Realtime collaboration through encrypted connections
      * Each user has its own colour to be identified by others
      * IRC-like chat for communicating with your partners
      * Sidebar with all the others having joined the session
@@ -56,15 +56,16 @@ Gobby: First Contact
 3.1. Dependencies
 
      * libsigc++ (>= 2.0.2)
-     * net6 ( = 1.2.x)
-     * howl (>= 0.9.8)
-     * obby ( = 0.3.x)
+     * GNUTLS (>= 1.0.0)
+     * net6 (>= 1.3.0)
+     * obby (>= 0.4.0)
      * Glib (>= 2.6.0)
      * Gtk+ (>= 2.6.0)
      * GtkSourceView
      * Glibmm (>= 2.6.0)
      * libxml++ (>= 2.6.0)
      * Gtkmm (>= 2.6.0)
+     * howl (>= 0.9.8) [optional]
      _________________________________________________________
 
 4. More information
@@ -107,7 +108,8 @@ Gobby: First Contact
        http://list.0x539.de/mailman/listinfo/obby-announce if you
        want to subscribe it.
      * obby-users: Discussions about Gobby's usage and
-       installation problems. Please refer to
+       installation problems. The announcements are also posted
+       there. Please refer to
        http://list.0x539.de/mailman/listinfo/obby-announce if you
        want to subscribe it.
      _________________________________________________________
@@ -124,5 +126,4 @@ Gobby: First Contact
    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
    PURPOSE. See the GNU General Public License for more details.
 
-   Copyright (C) 2005 0x539 dev group <crew@0x539.de>
-
+   Copyright (C) 2005-2006 0x539 dev group <crew@0x539.de>
