@@ -48,6 +48,8 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_document_create) );
 	m_header.document_open_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_open) );
+	m_header.document_save_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_save) );
 	m_header.document_close_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
 
@@ -282,6 +284,18 @@ void Gobby::Window::on_document_open()
 		m_buffer->create_document(
 			Glib::path_get_basename(dlg.get_filename()),
 			Glib::file_get_contents(dlg.get_filename()) );
+	}
+}
+
+void Gobby::Window::on_document_save()
+{
+	Gtk::FileChooserDialog dlg(*this, "Save current document",
+			Gtk::FILE_CHOOSER_ACTION_SAVE);
+	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
 	}
 }
 

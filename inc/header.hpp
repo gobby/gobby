@@ -49,6 +49,7 @@ public:
 	typedef sigc::signal<void> signal_session_quit_type;
 	typedef sigc::signal<void> signal_document_create_type;
 	typedef sigc::signal<void> signal_document_open_type;
+	typedef sigc::signal<void> signal_document_save_type;
 	typedef sigc::signal<void> signal_document_close_type;
 	typedef sigc::signal<void> signal_about_type;
 	typedef sigc::signal<void> signal_quit_type;
@@ -61,6 +62,7 @@ public:
 	signal_session_quit_type session_quit_event() const;
 	signal_document_create_type document_create_event() const;
 	signal_document_open_type document_open_event() const;
+	signal_document_save_type document_save_event() const;
 	signal_document_close_type document_close_event() const;
 	signal_about_type about_event() const;
 	signal_quit_type quit_event() const;
@@ -79,6 +81,7 @@ protected:
 	void on_app_session_quit();
 	void on_app_document_create();
 	void on_app_document_open();
+	void on_app_document_save();
 	void on_app_document_close();
 	void on_app_about();
 	void on_app_quit();
@@ -95,6 +98,7 @@ protected:
 	signal_session_quit_type m_signal_session_quit;
 	signal_document_create_type m_signal_document_create;
 	signal_document_open_type m_signal_document_open;
+	signal_document_save_type m_signal_document_save;
 	signal_document_close_type m_signal_document_close;
 	signal_about_type m_signal_about;
 	signal_quit_type m_signal_quit;

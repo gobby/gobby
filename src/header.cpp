@@ -33,6 +33,7 @@ namespace {
 		"    <menu action=\"MenuSession\">"
 		"      <menuitem action=\"CreateDocument\" />"
 		"      <menuitem action=\"OpenDocument\" />"
+		"      <menuitem action=\"SaveDocument\" />"
 		"      <menuitem action=\"CloseDocument\" />"
 		"    </menu>"
 		"    <menu action=\"MenuHelp\">"
@@ -46,6 +47,7 @@ namespace {
 		"    <separator />"
 		"    <toolitem action=\"CreateDocument\" />"
 		"    <toolitem action=\"OpenDocument\" />"
+		"    <toolitem action=\"SaveDocument\" />"
 		"    <toolitem action=\"CloseDocument\" />"
 		"  </toolbar>"
 		"</ui>";
@@ -157,6 +159,20 @@ Gobby::Header::Header()
 		)
 	);
 
+	// Save document
+	m_group_app->add(
+		Gtk::Action::create(
+			"SaveDocument",
+			Gtk::Stock::SAVE,
+			"Save document",
+			"Saves a document into a file"
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_save
+		)
+	);
+
 	// Close document
 	m_group_app->add(
 		Gtk::Action::create(
@@ -189,7 +205,6 @@ Gobby::Header::Header()
 	);
 
 	m_ui_manager->insert_action_group(m_group_app);
-//	m_ui_manager->insert_action_group(m_group_session);
 	m_ui_manager->add_ui_from_string(ui_desc);
 
 	m_menubar = static_cast<Gtk::MenuBar*>(
@@ -198,9 +213,11 @@ Gobby::Header::Header()
 		m_ui_manager->get_widget("/ToolMainBar") );
 
 	if(m_menubar == NULL)
-		throw Error(Error::MENUBAR_MISSING, "ui.xml lacks menubar");
+		throw Error(Error::MENUBAR_MISSING,
+			"XML UI definition lacks menubar");
 	if(m_toolbar == NULL)
-		throw Error(Error::TOOLBAR_MISSING, "ui.xml lacks toolbar");
+		throw Error(Error::TOOLBAR_MISSING,
+			"XML UI definition lacks toolbar");
 
 	pack_start(*m_menubar, Gtk::PACK_SHRINK);
 	pack_start(*m_toolbar, Gtk::PACK_SHRINK);
@@ -209,6 +226,7 @@ Gobby::Header::Header()
 	// or the possibility to quit it.
 	m_group_app->get_action("CreateDocument")->set_sensitive(false);
 	m_group_app->get_action("OpenDocument")->set_sensitive(false);
+	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
 }
@@ -247,6 +265,12 @@ Gobby::Header::document_open_event() const
 	return m_signal_document_open;
 }
 
+Gobby::Header::signal_document_save_type
+Gobby::Header::document_save_event() const
+{
+	return m_signal_document_save;
+}
+
 Gobby::Header::signal_document_close_type
 Gobby::Header::document_close_event() const
 {
@@ -276,7 +300,9 @@ void Gobby::Header::obby_start()
 	m_group_app->get_action("CreateDocument")->set_sensitive(true);
 	m_group_app->get_action("OpenDocument")->set_sensitive(true);
 
-	// CloseDocument will be activated from the insert_document event
+	// SaveDocument and CloseDocument will be activated from the
+	// insert_document event
+	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 }
 
@@ -290,6 +316,7 @@ void Gobby::Header::obby_end()
 	// Disable document buttons
 	m_group_app->get_action("CreateDocument")->set_sensitive(false);
 	m_group_app->get_action("OpenDocument")->set_sensitive(false);
+	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 }
 
@@ -304,13 +331,15 @@ void Gobby::Header::obby_user_part(obby::user& user)
 void Gobby::Header::obby_document_insert(obby::document& document)
 {
 	// Now we have at least one document open, so we could activate the
-	// close button.
+	// save and close buttons.
+	m_group_app->get_action("SaveDocument")->set_sensitive(true);
 	m_group_app->get_action("CloseDocument")->set_sensitive(true);
 }
 
 void Gobby::Header::obby_document_remove(obby::document& document)
 {
-	// TODO: Check the documents for being 0 and deactivate close document
+	// TODO: Check the documents for being 0 and deactivate save and close
+	// document
 }
 
 void Gobby::Header::on_app_session_create()
@@ -336,6 +365,11 @@ void Gobby::Header::on_app_document_create()
 void Gobby::Header::on_app_document_open()
 {
 	m_signal_document_open.emit();
+}
+
+void Gobby::Header::on_app_document_save()
+{
+	m_signal_document_save.emit();
 }
 
 void Gobby::Header::on_app_document_close()
