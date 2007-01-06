@@ -68,7 +68,11 @@ const Gtk::FileChooser& Gobby::FileEntry::get_file_chooser() const
 void Gobby::FileEntry::on_browse()
 {
 	if(m_dialog.run() == Gtk::RESPONSE_OK)
-		m_ent_file.set_text(m_dialog.get_filename() );
+	{
+		m_ent_file.set_text(
+			Glib::filename_to_utf8(m_dialog.get_filename())
+		);
+	}
 
 	m_dialog.hide();
 }
