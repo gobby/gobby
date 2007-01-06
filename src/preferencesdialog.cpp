@@ -151,11 +151,13 @@ Gobby::PreferencesDialog::Appearance::~Appearance()
 {
 }
 
-void Gobby::PreferencesDialog::Appearance::on_response(int response_id)
+Gobby::PreferencesDialog::Security::Security(const Preferences& preferences)
+ : Page(preferences)
 {
-	if(response_id == Gtk::RESPONSE_OK)
-	{
-	}
+}
+
+Gobby::PreferencesDialog::Security::~Security()
+{
 }
 
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,

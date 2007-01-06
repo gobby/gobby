@@ -105,19 +105,14 @@ public:
 		// Font chooser
 	};
 
-v v v v v v v
-	PreferencesDialog(Gtk::Window& parent, const Preferences& preferences);
-*************
 	class Security : public Page
 	{
 	public:
-		Security(Config& config);
+		Security(const Preferences& preferences);
 		~Security();
 
 		// Fetch the key components
 	protected:
-		virtual void on_response(int response_id);
-
 		Gtk::VBox m_box;
 
 		Gtk::VBox m_box_key;
@@ -125,8 +120,7 @@ v v v v v v v
 		// opportunity to regenerate it.
 	};
 
-	PreferencesDialog(Gtk::Window& parent, Config& config);
-^ ^ ^ ^ ^ ^ ^
+	PreferencesDialog(Gtk::Window& parent, const Preferences& preferences);
 	~PreferencesDialog();
 
 	const Editor& editor() const;
