@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([gobby], [0.4.0rc1], [crew@0x539.de])
+AC_INIT([gobby], [0.4.0rc2], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9)
 AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([inc/window.hpp])
@@ -36,7 +36,7 @@ AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby],
                   [libxml++-2.6 gtkmm-2.4 >= 2.6.0 gtksourceview-1.0 gthread-2.0
-                   net6-1.3 obby-0.4])
+                   net6-1.3 obby-0.4 >= 0.4.0rc2])
 AC_CACHE_SAVE
 
 # Check for the Gtkmm version available (either 2.6 or 2.8).
