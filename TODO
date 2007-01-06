@@ -9,7 +9,6 @@ Critical:
 Major:
   * High CPU load while writing (#45)
   * High load (and blocking X11) when opening big text file (#48) [bug]
-  * Gobby adds additional newline on load  (#91)
   * New install of gobby will not run because of a segmentation fault loading ~/.gobby/config.xml (#103)
 
 Normal:
@@ -24,16 +23,13 @@ Normal:
   * Visualise connected / subscribed using an extender (#73)
   * Search, Replace and Goto Line features (#79)
   * Central directory support (#82)
-  * UI: Closing documents should not close them for other people (#83)
-  * End-of-document cursor position behaves weirdly. (#84)
   * Gobby should save backups (#87)
   * obby:// protocol handler (#88)
   * "Quit" should confirm (#93)
   * Make it harder to lose document changes (#96) [usability]
-  * Bad button labels on the file close confirmation dialog (#105)
+  * Userlist should be toggleable (#107)
 
 Minor:
-  * Title bar (#92) [win32]
 
 Trivial:
 
@@ -76,14 +72,6 @@ Opening a 6.7MB large ChangeLog file in gobby produces 100% load and blocks
 gobby completely. Even other windows, like a ssh screen session in an aterm 
 did not respond any more. Gobby had to be killed to get the screen session 
 working again.
-
-91: Gobby adds additional newline on load 
-------------------------------------------
-Gobby adds an additional newline to the end of the document when a document 
-is loaded from the disk. At a first glance only ''Glib::file_get_contents'' 
-and ''convert_to_utf8'' are called, so I don't understand where this 
-newline is coming from. This happens with stock 0.2.0 and with the current 
-development tree, it should also be fixed for the upcoming bugfix release.
 
 103: New install of gobby will not run because of a segmentation fault loading ~/.gobby/config.xml
 --------------------------------------------------------------------------------------------------
@@ -173,25 +161,6 @@ Gobby.
 -----------------------------
 Gobby should support a central directory of Sobby servers.
 
-83: UI: Closing documents should not close them for other people
-----------------------------------------------------------------
-Presently, if one person closes a document, it closes for all other users, 
-even if they haven't saved copies. 
-
-Instead, the set of open documents should be a server feature, and each 
-client should be able to choose which documents they're subscribed to.
-
-84: End-of-document cursor position behaves weirdly.
-----------------------------------------------------
-Scenario:
-
-Person A is appending to the end of the document.  Person B wants to add 
-something below what person A is now typing.  So, person B positions their 
-cursor at the end of the document, and hits enter.  This inserts a newline, 
-and causes person A's cursor to go to the position after the newline.  
-Instead, person A's cursor should remain before the newline, so that they 
-can continue typing on their portion of the document.
-
 87: Gobby should save backups
 -----------------------------
 Gobby should save local backups in case of crashes.  
@@ -217,30 +186,11 @@ should stay consistent with.
 Trying to exit gobby is even worse; no check for unsaved data is performed. 
 This is related to #93.
 
-105: Bad button labels on the file close confirmation dialog
-------------------------------------------------------------
-If I try to close a document in gobby (on Linux), I get a dialog like the 
-following:
-
-The document "xxxx" has been changed since it was saved to disk.  Are you 
-sure that you want to close it?
-  [ No ] [ Yes ] [ Save ]
-
-
-These labels are confusing, because the dialog acts like a traditional 
-yes/no/cancel dialog, but the "yes" and "no" buttons have different 
-meanings (no=cancel, yes=no).  It would be better to use the labels 
-suggested by the Gnome HIG:
-
-http://developer.gnome.org/projects/gup/hig/2.0/windows-alert.html#save-confirmation-alerts
-
-92: Title bar
--------------
-There is a problem with the title bar on the Windows version of gobby 
-related to document titles.
-When you connect to one server and open a document and disconnect from that 
-server, and possibly connecting to another server, then the titlebar still 
-shows the old document name from the previous server.
+107: Userlist should be toggleable
+----------------------------------
+On the view menu, it would be nice if there was an option to toggle the 
+session participants. It uses up screen real estate I'd rather use for 
+coding.
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
