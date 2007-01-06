@@ -35,10 +35,13 @@ void Gobby::ProgressDialog::Thread::launch(const entry_slot& entry_func)
 {
 	// TODO: sigc::bind to on_thread_entry
 	m_entry_func = entry_func;
+
+	lock();
 	m_thread = Glib::Thread::create(
 		sigc::mem_fun(*this, &Thread::on_thread_entry),
 		false
 	);
+	unlock();
 }
 
 void Gobby::ProgressDialog::Thread::quit()
@@ -87,6 +90,9 @@ void Gobby::ProgressDialog::Thread::on_thread_entry()
 {
 	try
 	{
+		lock();
+		unlock();
+
 		// Call working function
 		m_entry_func(*this);
 	}
