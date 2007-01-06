@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-06 14:57+0200\n"
-"PO-Revision-Date: 2005-06-04 20:24+0200\n"
+"POT-Creation-Date: 2005-06-09 16:03+0200\n"
+"PO-Revision-Date: 2005-06-09 16:04+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
@@ -140,7 +140,7 @@ msgid "Name:"
 msgstr "Name:"
 
 #: src/hostdialog.cpp:29 src/joindialog.cpp:30
-msgid "Color:"
+msgid "Colour:"
 msgstr "Farbe:"
 
 #: src/joindialog.cpp:24
@@ -152,7 +152,7 @@ msgid "Host:"
 msgstr "Host:"
 
 #: src/userlist.cpp:37
-msgid "Color"
+msgid "Colour"
 msgstr "Farbe"
 
 #: src/userlist.cpp:38
@@ -202,3 +202,15 @@ msgstr "Zeile: "
 #: src/statusbar.cpp:94
 msgid " Column: "
 msgstr " Spalte: "
+
+#: src/buffer_wrapper.cpp:175
+msgid "Peer "
+msgstr "Benutzer "
+
+#: src/buffer_wrapper.cpp:175
+msgid "("
+msgstr "("
+
+#: src/buffer_wrapper.cpp:177
+msgid ") not found in peer list"
+msgstr ") wurde nicht in der Verbindungsliste gefunden"
