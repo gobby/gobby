@@ -44,6 +44,7 @@ Enhancement:
   * Chat background filled with user colours (#90)
   * Locate participants (#95)
   * Automatic live storage of documents and chat logs  (#98)
+  * RPM's and MacOS installer (#102)
 
 
 100: Excited to try it but libatk-1.6-1.dll just not found
@@ -275,4 +276,9 @@ Gobby should publish documents and chat logs to a web page so that people
 who don't have the Gobby software can still read the ongoing document and 
 conversation.  It could do this by saving to a local filesystem in a 
 specified location, or by webdav, or possibly by some other means.
+
+102: RPM's and MacOS installer
+------------------------------
+It would be really nice to have RPM's and a MacOS installer for Gobby. That 
+would give Gobby lot's of other users.
 
