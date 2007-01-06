@@ -29,6 +29,7 @@ Normal:
   * Gobby should save backups (#87)
   * Gobby starting similar to LiveHelp irc on wikicities (#88)
   * "quit" should confirm (#93)
+  * Make it harder to lose document changes (#96)
 
 Minor:
   * Title bar (#92)
@@ -41,6 +42,7 @@ Enhancement:
   * Session Management (#76)
   * Hyperlinks on chat sessions (#80)
   * Chat enhancements (#90)
+  * Locate participants (#95)
 
 
 45: High CPU load while writing
@@ -203,6 +205,17 @@ Client around it.
 When you close a session, you should need to confirm so you don't lose your 
 work.
 
+96: Make it harder to lose document changes
+-------------------------------------------
+Currently one gets the following message when clicking on 'close document': 
+"The document.. has been changed since it was saved to disk. Are you sure 
+that you want to close it?" The default user operation of clicking ok now 
+loses data! Notepad's "Save changes? Yes/no/cancel" dialog is prob what we 
+should stay consistent with.
+
+Trying to exit gobby is even worse; no check for unsaved data is performed. 
+This is related to #93.
+
 92: Title bar
 -------------
 There is a problem with the title bar on the Windows version of gobby 
@@ -245,4 +258,15 @@ opened by the default browser.
  * The background of lines in the chat box should be colour-coded with the 
 colour of the user who wrote them.
  * Timestamps should be added to the chat box.
+
+95: Locate participants
+-----------------------
+A flag of the color of the participant which indicates where is he/she 
+writing.
+
+Similar to "Locate Participants":
+http://www.codingmonkeys.de/subethaedit/images/sessionbig.png
+
+Related to:
+http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/ticket/53
 
