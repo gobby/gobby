@@ -31,7 +31,7 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences)
  : Page(preferences), m_frame_tab(_("Tab Stops") ),
    m_frame_indentation(_("Indentation") ),
    m_lbl_tab_width(_("Tab width:"), Gtk::ALIGN_RIGHT),
-   m_btn_tab_spaces(_("Use tabs instead of spaces") ),
+   m_btn_tab_spaces(_("Insert spaces instead of tabs") ),
    m_btn_indentation_auto(_("Enable automatic indentation") )
 {
 	unsigned int tab_width = preferences.editor.tab_width;
