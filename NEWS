@@ -1,6 +1,25 @@
 gobby
 =====
 
+Version 0.2.0:
+ * This version is *not* backwards-compatible to 0.1.0 due to heavy
+   changes within obby. It depends on obby 0.2.0 and net6 1.1.0.
+ * New features (in no particular order):
+   - Document subscriptions
+   - Global session passwords
+   - Basic user authentication to protect the nickname
+   - Preferences pane
+   - Zeroconf support
+   - Colour presets
+   - Colour changes from within the session
+   - Auto indentation
+   - Drag'n'drop of documents into the session
+   - Create document works without a delay
+ * Changes in the build system:
+   - It is now required to provide `gtksourceview-1.0', the depedency is no
+     more optional.
+   - Gobby now links against `gthread-2.0' which is included in `glibmm-2.4'.
+
 Version 0.1.1:
  * Bugfix release: Include contrib/gobby.desktop to fix the non-working build
    when configured ``--with-gnome''.
