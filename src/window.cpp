@@ -249,7 +249,12 @@ void Gobby::Window::on_about()
 	authors.push_back("Armin Burgmeier <armin@0x539.de>");
 	authors.push_back("Benjamin Herr <ben@0x539.de>");
 	authors.push_back("Philipp Kern <phil@0x539.de>");
+	
+	std::deque<Glib::ustring> artists;
+	artists.push_back("Thomas Glatt <tom@0x539.de>");
+
 	dlg.set_authors(authors);
+	dlg.set_artists(artists);
 
 	dlg.set_license(
 		"This program is free software; you can redistribute it\n"
