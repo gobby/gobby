@@ -24,7 +24,7 @@
 #include <gtkmm/menubar.h>
 #include <gtkmm/toolbar.h>
 #include <obby/user.hpp>
-#include <obby/document.hpp>
+#include <obby/local_document_info.hpp>
 #include "features.hpp"
 #include "document.hpp"
 #include "folder.hpp"
@@ -93,8 +93,8 @@ public:
 	void obby_end();
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);
-	void obby_document_insert(obby::document& document);
-	void obby_document_remove(obby::document& document);
+	void obby_document_insert(obby::local_document_info& document);
+	void obby_document_remove(obby::local_document_info& document);
 
 protected:
 	void on_app_session_create();
@@ -120,11 +120,11 @@ protected:
 	Gtk::Toolbar* m_toolbar;
 
 #ifdef WITH_GTKSOURCEVIEW
+	Gtk::RadioButtonGroup m_lang_group;
+		
 	/** Boolean variable whether we are currently toggling line numbers to
 	 * prevent recursion.
 	 */
-	Gtk::RadioButtonGroup m_lang_group;
-		
 	bool m_toggle_language;
 	bool m_toggle_line_numbers;
 #endif

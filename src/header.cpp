@@ -19,7 +19,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/toggleaction.h>
 #include <gtkmm/radioaction.h>
-#include <obby/buffer.hpp>
+#include <obby/local_buffer.hpp>
 
 #include "features.hpp"
 #include "common.hpp"
@@ -511,7 +511,7 @@ void Gobby::Header::obby_user_part(obby::user& user)
 {
 }
 
-void Gobby::Header::obby_document_insert(obby::document& document)
+void Gobby::Header::obby_document_insert(obby::local_document_info& document)
 {
 	// Now we have at least one document open, so we could activate the
 	// document actions.
@@ -522,7 +522,7 @@ void Gobby::Header::obby_document_insert(obby::document& document)
 #endif
 }
 
-void Gobby::Header::obby_document_remove(obby::document& document)
+void Gobby::Header::obby_document_remove(obby::local_document_info& document)
 {
 	if(document.get_buffer().document_count() == 1)
 	{

@@ -18,7 +18,8 @@
 
 #include "docwindow.hpp"
 
-Gobby::DocWindow::DocWindow(obby::document& doc, const Folder& folder)
+Gobby::DocWindow::DocWindow(obby::local_document_info& doc,
+                            const Folder& folder)
  : Gtk::ScrolledWindow(), m_doc(doc, folder)
 {
 	set_shadow_type(Gtk::SHADOW_IN);

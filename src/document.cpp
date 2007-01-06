@@ -22,16 +22,18 @@
 #include <obby/host_document.hpp>
 #include <obby/client_buffer.hpp>
 #include <obby/host_buffer.hpp>
+#include "common.hpp"
 #include "document.hpp"
 #include "folder.hpp"
 
-Gobby::Document::Document(obby::document& doc, const Folder& folder)
+Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder)
 #ifdef WITH_GTKSOURCEVIEW
  : Gtk::SourceView(),
 #else
  : Gtk::TextView(),
 #endif
-   m_doc(doc), m_folder(folder), m_editing(true)
+   m_doc(doc), m_folder(folder), m_editing(true),
+   m_btn_subscribe(_("Subscribe") )
 {
 #ifdef WITH_GTKSOURCEVIEW
 	set_show_line_numbers(true);
@@ -40,14 +42,10 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
 #endif
 
-	// Catch key press events
-	add_events(Gdk::KEY_PRESS_MASK);
-
 	// Set monospaced font
 	Pango::FontDescription desc;
 	desc.set_family("monospace");
 	modify_font(desc);
-
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Set SourceLanguage by file extension
@@ -64,12 +62,11 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 			buf->set_language(language);
 	}
 
-	buf->set_highlight(true);
+	// Do not highlight anything until the user subscribed
+	buf->set_highlight(false);
 #endif
 
-	// Insert users from user table to insert users that have already
-	// left the obby session.
-//	const obby::buffer& obbybuf = doc.get_buffer();
+	// Insert user tags into the tag table
 	const obby::user_table& user_table = doc.get_buffer().get_user_table();
 	for(obby::user_table::user_iterator<obby::user::NONE> iter =
 		user_table.user_begin<obby::user::NONE>();
@@ -105,58 +102,17 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 		sigc::mem_fun(*this, &Document::on_apply_tag_after), true);
 
 	// Obby signal handlers
-	doc.insert_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_insert) );
-	doc.delete_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_delete) );
-	doc.change_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_change_before) );
-	doc.change_event().after().connect(
-		sigc::mem_fun(*this, &Document::on_obby_change_after) );
+	doc.subscribe_event().connect(
+		sigc::mem_fun(*this, &Document::on_obby_user_subscribe) );
+	doc.unsubscribe_event().connect(
+		sigc::mem_fun(*this, &Document::on_obby_user_unsubscribe) );
 
-	// Set initial text
-	buf->set_text(doc.get_whole_buffer() );
+	// GUI signal handlers
+	m_btn_subscribe.signal_clicked().connect(
+		sigc::mem_fun(*this, &Document::on_gui_subscribe) );
 
-	// Set initial authors
-	for(unsigned int i = 0; i < doc.get_line_count(); ++ i)
-	{
-		// Get current line
-		const obby::line& line = doc.get_line(i);
-		obby::line::author_iterator prev = line.author_begin();
-		obby::line::author_iterator cur = prev;
-
-		// Iterate through it's authors list
-		for(++ cur; prev != line.author_end(); ++ cur)
-		{
-			// Get current user
-			const obby::user* user = prev->author;
-
-			// user can be NULL (server insert event, but then
-			// we do not have to apply a tag or so).
-			if(user == NULL) { prev = cur; continue; }
-
-			// Get the range to highlight
-			obby::line::size_type endpos;
-			if(cur != line.author_end() )
-				endpos = cur->position;
-			else
-				endpos = line.length();
-
-			Gtk::TextBuffer::iterator begin =
-				buf->get_iter_at_line_index(i, prev->position);
-			Gtk::TextBuffer::iterator end =
-				buf->get_iter_at_line_index(i, endpos);
-
-			// Apply corresponding tag
-			buf->apply_tag_by_name(
-				"gobby_user_" + user->get_name(),
-				begin,
-				end
-			);
-
-			prev = cur;
-		}
-	}
+	// Set introduction text
+	set_intro_text();
 
 	m_editing = false;
 }
@@ -165,12 +121,12 @@ Gobby::Document::~Document()
 {
 }
 
-const obby::document& Gobby::Document::get_document() const
+const obby::local_document_info& Gobby::Document::get_document() const
 {
 	return m_doc;
 }
 
-obby::document& Gobby::Document::get_document()
+obby::local_document_info& Gobby::Document::get_document()
 {
 	return m_doc;
 }
@@ -214,21 +170,27 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 
 unsigned int Gobby::Document::get_unsynced_changes_count() const
 {
-	obby::client_document* doc = 
-		dynamic_cast<obby::client_document*>(&m_doc);
-
-	// Changes in Server/Host documents are always synced
-	if(doc == NULL)
-		return 0;
-
-	// Return amount reported by document otherwise
-	return doc->unsynced_count();
+	// Get document
+	obby::local_document* local_doc = m_doc.get_document();
+	// No document? Seems that we are not subscribed
+	if(!local_doc) return 0;
+	// Cast to client document
+	obby::client_document* client_doc = 
+		dynamic_cast<obby::client_document*>(local_doc);
+	// No client document? Host is always synced
+	if(!client_doc) return 0;
+	// Document returns amount otherwise
+	return client_doc->unsynced_count();
 }
 
 unsigned int Gobby::Document::get_revision() const
 {
+	// Get document
+	obby::local_document* local_doc = m_doc.get_document();
+	// No document? Seems that we are not subscribed (-> no revision)
+	if(!local_doc) return 0;
 	// Get revision from obby document
-	return m_doc.get_revision();
+	return local_doc->get_revision();
 }
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -302,7 +264,8 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 
 	// Translate position to row/column
 	unsigned int row, col;
-	m_doc.position_to_coord(record.get_position(), row, col);
+	m_doc.get_document()->position_to_coord(
+		record.get_position(), row, col);
 
 	// Find obby::user that inserted the text
 	const obby::user* user = m_doc.get_buffer().get_user_table().find_user<
@@ -324,7 +287,7 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 		record.get_text()
 	);
 
-	// Colourize new text
+	// Colourize new text with that user's color
 	Gtk::TextBuffer::iterator begin = end;
 	begin.backward_chars(record.get_text().length() );
 	update_user_colour(begin, end, user);
@@ -338,10 +301,11 @@ void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 	m_editing = true;
 
 	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
-
 	unsigned int brow, bcol, erow, ecol;
-	m_doc.position_to_coord(record.get_begin(), brow, bcol);
-	m_doc.position_to_coord(record.get_end(), erow, ecol);
+	obby::local_document* doc = m_doc.get_document();
+
+	doc->position_to_coord(record.get_begin(), brow, bcol);
+	doc->position_to_coord(record.get_end(), erow, ecol);
 
 	buffer->erase(
 		buffer->get_iter_at_line_index(brow, bcol),
@@ -360,6 +324,104 @@ void Gobby::Document::on_obby_change_after()
 	m_signal_content_changed.emit();
 }
 
+void Gobby::Document::on_obby_user_subscribe(const obby::user& user)
+{
+	// Call self function if the local user subscribed
+	if(&user == &m_doc.get_buffer().get_self() )
+		on_obby_self_subscribe();
+}
+
+void Gobby::Document::on_obby_user_unsubscribe(const obby::user& user)
+{
+	// Call self function if the local user unsubscribed
+	if(&user == &m_doc.get_buffer().get_self() )
+		on_obby_self_unsubscribe();
+}
+
+void Gobby::Document::on_obby_self_subscribe()
+{
+	// Get document we subscribed to
+	obby::local_document& doc = *m_doc.get_document();
+	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
+
+	// Install singal handlers
+	doc.insert_event().before().connect(
+		sigc::mem_fun(*this, &Document::on_obby_insert) );
+	doc.delete_event().before().connect(
+		sigc::mem_fun(*this, &Document::on_obby_delete) );
+	doc.change_event().before().connect(
+		sigc::mem_fun(*this, &Document::on_obby_change_before) );
+	doc.change_event().after().connect(
+		sigc::mem_fun(*this, &Document::on_obby_change_after) );
+
+	// Set initial text
+	m_editing = true;
+	buf->set_text(doc.get_text() );
+
+	// Make the document editable
+	set_editable(true);
+	set_wrap_mode(Gtk::WRAP_NONE);
+
+	// TODO: Do this in an idle handler? *kA*
+
+	// Set initial authors
+	for(unsigned int i = 0; i < doc.get_line_count(); ++ i)
+	{
+		// Get current line
+		const obby::line& line = doc.get_line(i);
+		obby::line::author_iterator prev = line.author_begin();
+		obby::line::author_iterator cur = prev;
+
+		// Iterate through it's authors list
+		for(++ cur; prev != line.author_end(); ++ cur)
+		{
+			// Get current user
+			const obby::user* user = prev->author;
+
+			// user can be NULL (server insert event, but then
+			// we do not have to apply a tag or so).
+			if(user == NULL) { prev = cur; continue; }
+
+			// Get the range to highlight
+			obby::line::size_type endpos;
+			if(cur != line.author_end() )
+				endpos = cur->position;
+			else
+				endpos = line.length();
+
+			Gtk::TextBuffer::iterator begin =
+				buf->get_iter_at_line_index(i, prev->position);
+			Gtk::TextBuffer::iterator end =
+				buf->get_iter_at_line_index(i, endpos);
+
+			// Apply corresponding tag
+			buf->apply_tag_by_name(
+				"gobby_user_" + user->get_name(),
+				begin,
+				end
+			);
+
+			prev = cur;
+		}
+	}
+
+	m_editing = false;
+}
+
+void Gobby::Document::on_obby_self_unsubscribe()
+{
+	// Set introduction text
+	set_intro_text();
+}
+
+void Gobby::Document::on_gui_subscribe()
+{
+	// Send subscribe request
+	m_doc.subscribe();
+	// Deactivate the subscribe button since the request has been sent
+	m_btn_subscribe.set_sensitive(false);
+}
+
 void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
                                        const Glib::ustring& text,
                                        int bytes)
@@ -367,8 +429,9 @@ void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
 	if(m_editing) return;
 	m_editing = true;
 
-	m_doc.insert(
-		m_doc.coord_to_position(
+	obby::local_document* doc = m_doc.get_document();
+	doc->insert(
+		doc->coord_to_position(
 			begin.get_line(),
 			begin.get_line_index()
 		),
@@ -384,12 +447,13 @@ void Gobby::Document::on_erase_before(const Gtk::TextBuffer::iterator& begin,
 	if(m_editing) return;
 	m_editing = true;
 
-	m_doc.erase(
-		m_doc.coord_to_position(
+	obby::local_document* doc = m_doc.get_document();
+	doc->erase(
+		doc->coord_to_position(
 			begin.get_line(),
 			begin.get_line_index()
 		),
-		m_doc.coord_to_position(
+		doc->coord_to_position(
 			end.get_line(),
 			end.get_line_index()
 		)
@@ -406,10 +470,7 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 	if(!m_editing)
 	{
 		// Find the user that has written this text
-		const obby::user& user =
-			dynamic_cast<const obby::local_buffer&>(
-				m_doc.get_buffer()
-			).get_self();
+		const obby::user& user = m_doc.get_buffer().get_self();
 
 		// Find start position of new text
 		Gtk::TextBuffer::iterator pos = end;
@@ -424,7 +485,7 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 		m_editing = false;
 
 		// Content has changed
-		m_signal_content_changed.emit();
+//		m_signal_content_changed.emit();
 
 		// Cursor position has changed
 		m_signal_cursor_moved.emit();
@@ -440,7 +501,7 @@ void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
 		m_signal_cursor_moved.emit();
 
 		// Content has changed
-		m_signal_content_changed.emit();
+//		m_signal_content_changed.emit();
 	}
 }
 
@@ -458,7 +519,9 @@ void Gobby::Document::on_apply_tag_after(const Glib::RefPtr<Gtk::TextTag>& tag,
 		unsigned int num_col = begin.get_line_index();
 
 		// Find author of the text
-		const obby::line& line = m_doc.get_line(num_line);
+		obby::local_document* doc = m_doc.get_document();
+		const obby::line& line = doc->get_line(num_line);
+
 		obby::line::author_iterator iter = line.author_begin();
 		for(iter; iter != line.author_end(); ++ iter)
 			if(iter->position > num_col)
@@ -520,6 +583,30 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	// - Armin
 	for(int i = 0; i < 2; ++ i)
 		buffer->apply_tag(tag, begin, end);
+}
+
+void Gobby::Document::set_intro_text()
+{
+	get_buffer()->set_text(_(
+		"You are not subscribed to the document \"") +
+			m_doc.get_title() + _("\".\n\nTo view changes that "
+		"others make or to edit the document yourself, you have to "
+		"subscribe to this document. Use the following button to "
+		"perform this.\n\n")
+	);
+
+	Glib::RefPtr<Gtk::TextChildAnchor> anchor =
+		get_buffer()->create_child_anchor(get_buffer()->end() );
+
+	// Activate the subscribe button, if it isn't
+	m_btn_subscribe.set_sensitive(true);
+
+	add_child_at_anchor(m_btn_subscribe, anchor);
+
+	// TODO: Add people that are currently subscribed
+
+	set_editable(false);
+	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
 }
 
 void

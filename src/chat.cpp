@@ -83,11 +83,11 @@ void Gobby::Chat::obby_user_part(obby::user& user)
 	m_log_chat.log(user.get_name() + " has left", "blue");
 }
 
-void Gobby::Chat::obby_document_insert(obby::document& document)
+void Gobby::Chat::obby_document_insert(obby::local_document_info& document)
 {
 }
 
-void Gobby::Chat::obby_document_remove(obby::document& document)
+void Gobby::Chat::obby_document_remove(obby::local_document_info& document)
 {
 }
 

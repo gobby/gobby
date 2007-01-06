@@ -24,7 +24,7 @@
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
 #include <obby/user.hpp>
-#include <obby/document.hpp>
+#include <obby/local_document_info.hpp>
 #include "historyentry.hpp"
 #include "logview.hpp"
 
@@ -46,8 +46,8 @@ public:
 	void obby_end();
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);
-	void obby_document_insert(obby::document& document);
-	void obby_document_remove(obby::document& document);
+	void obby_document_insert(obby::local_document_info& document);
+	void obby_document_remove(obby::local_document_info& document);
 	void obby_message(obby::user& user, const Glib::ustring& message);
 	void obby_server_message(const Glib::ustring& message);
 protected:

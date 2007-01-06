@@ -87,7 +87,7 @@ void Gobby::Folder::obby_user_part(obby::user& user)
 		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_part(user);
 }
 
-void Gobby::Folder::obby_document_insert(obby::document& document)
+void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 {
 	// Create new document
 	DocWindow* new_wnd = new DocWindow(document, *this);
@@ -131,13 +131,15 @@ void Gobby::Folder::obby_document_insert(obby::document& document)
 	new_wnd->show_all();
 }
 
-void Gobby::Folder::obby_document_remove(obby::document& document)
+void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
 {
 	// Find corresponding Document widget in notebook
 	for(int i = 0; i < get_n_pages(); ++ i)
 	{
 		DocWindow* doc = static_cast<DocWindow*>(get_nth_page(i) );
-		obby::document& obdoc = doc->get_document().get_document();
+		obby::local_document_info& obdoc =
+			doc->get_document().get_document();
+
 		if(&obdoc == &document)
 		{
 			// Delete it.

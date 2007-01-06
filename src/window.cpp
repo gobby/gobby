@@ -156,9 +156,9 @@ void Gobby::Window::on_session_create() try
 			sigc::mem_fun(*this, &Window::on_obby_user_join) );
 		m_buffer->user_part_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_user_part) );
-		m_buffer->insert_document_event().connect(
+		m_buffer->document_insert_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_insert));
-		m_buffer->remove_document_event().connect(
+		m_buffer->document_remove_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_remove));
 
 		m_buffer->message_event().connect(
@@ -230,9 +230,9 @@ void Gobby::Window::on_session_join() try
 			sigc::mem_fun(*this, &Window::on_obby_user_join) );
 		m_buffer->user_part_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_user_part) );
-		m_buffer->insert_document_event().connect(
+		m_buffer->document_insert_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_insert));
-		m_buffer->remove_document_event().connect(
+		m_buffer->document_remove_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_remove));
 
 		m_buffer->message_event().connect(
@@ -277,11 +277,14 @@ void Gobby::Window::on_session_quit()
 		delete m_buffer;
 		m_buffer = NULL;
 	}
+
+#ifdef WITH_HOWL
 	if(m_zeroconf)
 	{
 		delete m_zeroconf;
 		m_zeroconf = NULL;
 	}
+#endif
 }
 
 void Gobby::Window::on_about()
@@ -527,22 +530,28 @@ void Gobby::Window::on_obby_user_part(obby::user& user)
 	m_statusbar.obby_user_part(user);
 }
 
-void Gobby::Window::on_obby_document_insert(obby::document& document)
+void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 {
-	m_header.obby_document_insert(document);
-	m_folder.obby_document_insert(document);
-	m_userlist.obby_document_insert(document);
-	m_chat.obby_document_insert(document);
-	m_statusbar.obby_document_insert(document);
+	obby::local_document_info& local_doc =
+		dynamic_cast<obby::local_document_info&>(document);
+
+	m_header.obby_document_insert(local_doc);
+	m_folder.obby_document_insert(local_doc);
+	m_userlist.obby_document_insert(local_doc);
+	m_chat.obby_document_insert(local_doc);
+	m_statusbar.obby_document_insert(local_doc);
 }
 
-void Gobby::Window::on_obby_document_remove(obby::document& document)
+void Gobby::Window::on_obby_document_remove(obby::document_info& document)
 {
-	m_header.obby_document_remove(document);
-	m_folder.obby_document_remove(document);
-	m_userlist.obby_document_remove(document);
-	m_chat.obby_document_remove(document);
-	m_statusbar.obby_document_remove(document);
+	obby::local_document_info& local_doc =
+		dynamic_cast<obby::local_document_info&>(document);
+
+	m_header.obby_document_remove(local_doc);
+	m_folder.obby_document_remove(local_doc);
+	m_userlist.obby_document_remove(local_doc);
+	m_chat.obby_document_remove(local_doc);
+	m_statusbar.obby_document_remove(local_doc);
 }
 
 void Gobby::Window::display_error(const Glib::ustring& message)

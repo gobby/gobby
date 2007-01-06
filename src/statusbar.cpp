@@ -17,7 +17,7 @@
  */
 
 #include <sstream>
-#include <obby/buffer.hpp>
+#include <obby/local_buffer.hpp>
 #include "common.hpp"
 #include "statusbar.hpp"
 
@@ -125,11 +125,11 @@ void Gobby::StatusBar::obby_user_part(obby::user& user)
 {
 }
 
-void Gobby::StatusBar::obby_document_insert(obby::document& document)
+void Gobby::StatusBar::obby_document_insert(obby::local_document_info& document)
 {
 }
 
-void Gobby::StatusBar::obby_document_remove(obby::document& document)
+void Gobby::StatusBar::obby_document_remove(obby::local_document_info& document)
 {
 	// Last document that is closed?
 	if(document.get_buffer().document_count() == 1)

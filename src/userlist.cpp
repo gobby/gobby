@@ -100,12 +100,12 @@ void Gobby::UserList::obby_user_part(obby::user& user)
 	m_list_data->erase(iter);
 }
 
-void Gobby::UserList::obby_document_insert(obby::document& document)
+void Gobby::UserList::obby_document_insert(obby::local_document_info& document)
 {
 	
 }
 
-void Gobby::UserList::obby_document_remove(obby::document& document)
+void Gobby::UserList::obby_document_remove(obby::local_document_info& document)
 {
 }
 

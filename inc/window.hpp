@@ -77,8 +77,8 @@ protected:
 
 	void on_obby_user_join(obby::user& user);
 	void on_obby_user_part(obby::user& user);
-	void on_obby_document_insert(obby::document& document);
-	void on_obby_document_remove(obby::document& document);
+	void on_obby_document_insert(obby::document_info& document);
+	void on_obby_document_remove(obby::document_info& document);
 
 	void on_obby_server_chat(const Glib::ustring& message);
 	void on_obby_chat(obby::user& user, const Glib::ustring& message);

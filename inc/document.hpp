@@ -19,7 +19,7 @@
 #ifndef _GOBBY_DOCUMENT_HPP_
 #define _GOBBY_DOCUMENT_HPP_
 
-#include <obby/document.hpp>
+#include <obby/local_document_info.hpp>
 
 #include "features.hpp"
 #ifdef WITH_GTKSOURCEVIEW
@@ -47,11 +47,11 @@ public:
 	typedef sigc::signal<void> signal_language_changed_type;
 #endif
 
-	Document(obby::document& doc, const Folder& folder);
+	Document(obby::local_document_info& doc, const Folder& folder);
 	virtual ~Document();
 
-	const obby::document& get_document() const;
-	obby::document& get_document();
+	const obby::local_document_info& get_document() const;
+	obby::local_document_info& get_document();
 
 	/** Writes the current cursor position into row and col.
 	 */
@@ -64,6 +64,10 @@ public:
 	/** Returns the current document revision.
 	 */
 	unsigned int get_revision() const;
+
+	/** Returns whether the local user is subscribed to this document.
+	 */
+	bool is_subscribed() const;
 
 #ifdef WITH_GTKSOURCEVIEW
 	/** Returns the currently selected Gtk::SourceLanguage.
@@ -116,8 +120,23 @@ protected:
 	 */
 	void on_obby_insert(const obby::insert_record& record);
 	void on_obby_delete(const obby::delete_record& record);
+
 	void on_obby_change_before();
 	void on_obby_change_after();
+
+	void on_obby_user_subscribe(const obby::user& user);
+	void on_obby_user_unsubscribe(const obby::user& user);
+
+	/** These are called by the on_obby_user_subscribe and
+	 * on_obby_user_unsubscribe if the user who (un)subscribed is
+	 * the local one.
+	 */
+	void on_obby_self_subscribe();
+	void on_obby_self_unsubscribe();
+
+	/** GUI callbacks.
+	 */
+	void on_gui_subscribe();
 
 	/** TextBuffer signal handlers.
 	 */
@@ -145,9 +164,13 @@ protected:
 	 */
 	void update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	                        const Gtk::TextBuffer::iterator& end,
-				const obby::user* user);
+	                        const obby::user* user);
 
-	obby::document& m_doc;
+	/** Sets intro text for the document, if the user is not subscribed.
+	 */
+	void set_intro_text();
+
+	obby::local_document_info& m_doc;
 	const Folder& m_folder;
 
 	/** Variable to prevent event handlers from endless recursion. After
@@ -158,6 +181,10 @@ protected:
 	 * true, the event is ignored.
 	 */
 	bool m_editing;
+
+	/** Button to subscribe to the document.
+	 */
+	Gtk::Button m_btn_subscribe;
 
 	signal_cursor_moved_type m_signal_cursor_moved;
 	signal_content_changed_type m_signal_content_changed;

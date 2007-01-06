@@ -20,7 +20,7 @@
 #define _GOBBY_DOCWINDOW_HPP_
 
 #include <gtkmm/scrolledwindow.h>
-#include <obby/document.hpp>
+#include <obby/local_document_info.hpp>
 
 #include "features.hpp"
 #include "document.hpp"
@@ -41,7 +41,7 @@ public:
 		signal_language_changed_type;
 #endif
 
-	DocWindow(obby::document& doc, const Folder& folder);
+	DocWindow(obby::local_document_info& doc, const Folder& folder);
 	virtual ~DocWindow();
 
 	const Document& get_document() const;

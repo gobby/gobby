@@ -23,7 +23,7 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/liststore.h>
 #include <obby/user.hpp>
-#include <obby/document.hpp>
+#include <obby/local_document_info.hpp>
 
 namespace Gobby
 {
@@ -50,8 +50,8 @@ public:
 	void obby_end();
 	void obby_user_join(obby::user& user);
 	void obby_user_part(obby::user& user);
-	void obby_document_insert(obby::document& document);
-	void obby_document_remove(obby::document& document);
+	void obby_document_insert(obby::local_document_info& document);
+	void obby_document_remove(obby::local_document_info& document);
 protected:
 	// Helper functions
 	Gtk::TreeModel::iterator find_user(const Glib::ustring& name) const;
