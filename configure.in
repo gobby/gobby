@@ -4,6 +4,7 @@
 AC_PREREQ(2.59)
 AC_INIT([gobby], [0.4.0rc1], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9)
+AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([inc/window.hpp])
 AC_CONFIG_HEADER([inc/features.hpp])
 
@@ -29,6 +30,19 @@ else
 fi
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
+# Checks for libraries.
+PKG_CHECK_MODULES([gobby],
+                  [libxml++-2.6 gtkmm-2.4 >= 2.6.0 gtksourceview-1.0 gthread-2.0
+                   net6-1.3 obby-0.4])
+AC_CACHE_SAVE
+
+# Check for the Gtkmm version available (either 2.6 or 2.8).
+PKG_CHECK_GTKMM
+if test "x$GTKMM_VER" = "x28" ; then
+  AC_DEFINE([GTKMM_GEQ_28], 1, [Defined if Gtkmm's version is 2.8 or greater])
+fi
+AC_CACHE_SAVE
+
 # As we could not yet auto-detect the GNOME desktop environment, it's the
 # user's choice to enable GNOME integration or not.
 AC_ARG_WITH([gnome],
@@ -43,18 +57,7 @@ if test "x$ac_cv_with_gnome" = "xyes" ; then
   PKG_CHECK_MODULES([gnome], [gnome-vfs-2.0])
 fi
 AM_CONDITIONAL(WITH_GNOME, test x$ac_cv_with_gnome != xno)
-
-# Checks for libraries.
-PKG_CHECK_MODULES([gobby],
-                  [libxml++-2.6 gtkmm-2.4 >= 2.6.0 gtksourceview-1.0 gthread-2.0
-                   net6-1.3 obby-0.4])
 AC_CACHE_SAVE
-
-# Check for the Gtkmm version available (either 2.6 or 2.8).
-PKG_CHECK_GTKMM
-if test "x$GTKMM_VER" = "x28" ; then
-  AC_DEFINE([GTKMM_GEQ_28], 1, [Defined if Gtkmm's version is 2.8 or greater])
-fi
 
 # Check for howl in libobby.
 PKG_CHECK_MODULES([obby], [obby-0.4])
@@ -66,6 +69,7 @@ if test "x$ac_cv_lib_obby_obby_has_howl" = "xyes" ; then
 	AC_DEFINE([WITH_HOWL], 1, [Define whether to use howl support])
 fi
 AM_CONDITIONAL(WITH_HOWL, test x$ac_cv_lib_obby_obby_has_howl = xyes)
+AC_CACHE_SAVE
 
 # Glib i18n/gettext support.
 ALL_LINGUAS="de fr es sv ca zh_CN"
