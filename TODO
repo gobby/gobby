@@ -11,19 +11,14 @@ Major:
   * Bug: High load (and blocking X11) when opening big text file (#48)
 
 Normal:
-  * Implement support for Zeroconf (#17)
-  * A flag specifing if a document has changed (#25)
   * Request confirmations for unsaved documents (#26)
   * Switch to tabs newly opened (#27)
   * Chat command infrastructure (#31)
-  * Strive for Gnome HIG compilance (#32)
   * Recognise command line parameters (#33)
-  * Colour presets (#36)
   * Write a good README for Gobby (#51)
   * Allow opening files as unowned text (#52)
   * Show the cursors and selections of all participants (#53)
   * Documentation (#54)
-  * Change of user colour (#60)
 
 Minor:
 
@@ -32,9 +27,7 @@ Trivial:
 Enhancement:
   * Highlighting of own nickname in chat window (#6)
   * Multiple user lists (#12)
-  * Auto indentation (#23)
   * Focus the text-widget after having created/joined a session (#35)
-  * tab width and tabs to space expanding (#49)
   * Colourised tab labels (#59)
 
 
@@ -61,29 +54,6 @@ gobby completely. Even other windows, like a ssh screen session in an aterm
 did not respond any more. Gobby had to be killed to get the screen session 
 working again.
 
-17: Implement support for Zeroconf
-----------------------------------
-''Zeroconf'' (also known as Apple Bonjour) is a technology to discover 
-local network services. The Gobby host may announce itself as a network 
-service which could be browsed by other clients on the local subnet. The 
-listing and delisting is implemented with the use of multicast DNS and 
-happens automatically. ''libobby'' contains an abstraction to the ''howl'' 
-implementation of this protocol.
-
- * We need to add a linking exception for ''howl'' to ''libobby'' (#18).
- * We need a UI implementation of ''Zeroconf'' within ''Gobby's '' join 
-dialog.
- * We need proper integration into the GUI main loop on Linux (possibly 
-eliminating the necessity to start mDNSResponder prior to a ''howl'' using 
-application).
-
-25: A flag specifing if a document has changed
-----------------------------------------------
-A flag should be implemented which specifies if the document has changed 
-since the last save. It should be reset when it is saved to disk and 
-changed as soon as the first change (local and non-local) is received and 
-put into the text buffer.
-
 26: Request confirmations for unsaved documents
 -----------------------------------------------
 Gobby should request a confirmation if you want to quit it and still have 
@@ -102,23 +72,6 @@ In order to get the chat more alike to other chats available in the wild
 to, like e.g. /me. Once this framework is implemented in ''Gobby'' it 
 should be easy to add new commands.
 
-32: Strive for Gnome HIG compilance
------------------------------------
-Gobby should be more or less compilant to the Gnome Human Interface 
-Guidelines when compiled ''--with-gnome''. This means at least that the 
-menu names have to be fixed and some other UI things tweaked a bit.
-
-A list of discovered flaws (details could possibly be found in the 
-attachment to this bug):
- * Add filename to window title (fixed with [179])
- * Add preferences dialog, e.g. for the following: font family/size, tab 
-indent, softtabs, autosave
- * Move syntax highlighting schemata to an extra submenu, e.g. "syntax" 
- * Reorganise the status bar to get more clearly arranged
- * Support file drag'n'drop to open the file in a new tab
- * Add a close-"x" on every tab (as in gedit) (fixed with [180])
- * Toolbar view: icons only, text only, icons and text, system default
-
 33: Recognise command line parameters
 -------------------------------------
 Command line parameters should be parsed and processed. Especially it would 
@@ -126,29 +79,6 @@ be nice if Gobby accepted one or more files in it to open it in the
 currently active Gobby session (to use ''Open With'' in your favourite 
 desktop environment). However this will get complicated when more than one 
 Gobby is open.
-
-36: Colour presets
-------------------
-There should be presets for the user's colour available in the Gobby 
-settings. Probably the colour picker needs to be extended with a palette.
-
-Tom did some research on this and found some useful colours (in HTML hex 
-values):
-{{{
-#!html
-<span style="background-color:#f9dad4;">#f9dad4</span>
-<span style="background-color:#fddfbe;">#fddfbe</span>
-<span style="background-color:#fdf3be;">#fdf3be</span>
-<span style="background-color:#f5fdbe;">#f5fdbe</span>
-<span style="background-color:#dcfdbe;">#dcfdbe</span>
-<span style="background-color:#befde2;">#befde2</span>
-<span style="background-color:#bee9fd;">#bee9fd</span>
-<span style="background-color:#becffd;">#becffd</span>
-<span style="background-color:#c7befd;">#c7befd</span>
-<span style="background-color:#f2befd;">#f2befd</span>
-<span style="background-color:#fdbedd;">#fdbedd</span>
-<span style="background-color:#f6abab;">#f6abab</span>
-}}}
 
 51: Write a good README for Gobby
 ---------------------------------
@@ -185,19 +115,6 @@ is preferred. There should be a short introduction with an overview about
 Gobby, an installation guide, some basics about the usage and some 
 documentation about the algorithms used.
 
-60: Change of user colour
--------------------------
-The user colour should be changeable from within the session.
-
- * The host has to change the colour of the user (e.g. through a call to a 
-method of obby::user)
- * Send it to the client (e.g. obby_user_colour:34:23:12)
- * obby::buffer must be able to interpret this
- * Same within the client, but a packet needs to be sent to the host
- * The new colours need to be checked if they conflict [code in 
-server_buffer::on_auth, perhaps to buffer::check_colour()], use in client 
-and host before setting it
-
 6: Highlighting of own nickname in chat window
 ----------------------------------------------
 Chat messages of others should be highlighted if the own nickname is 
@@ -215,27 +132,10 @@ selected document
  * current document: Display all users that are currently subscribed to the 
 selected document
 
-23: Auto indentation
---------------------
-GtkSourceView seems to support auto indentation. Gobby should provide an 
-option to enable or disable this feature.
-
 35: Focus the text-widget after having created/joined a session
 ---------------------------------------------------------------
 It would be nice, if one could just create/join a session and then start to 
 write without having to focus the editor widget.
-
-49: tab width and tabs to space expanding
------------------------------------------
-For using gobby on collaborative python coding (which could be one of our 
-favourite applications), we definitely need the TAB key to expand to 4 
-spaces.
-
-This is the usual python coding standard.
-Tab chars (0x09) or other tab widths are not acceptable.
-
-And hitting 4 times space for indenting obviously isn't nice either. ;)
-
 
 59: Colourised tab labels
 -------------------------
