@@ -72,16 +72,9 @@ void Gobby::StatusBar::update_language(Document& document)
 void Gobby::StatusBar::update_sync(Document& document)
 {
 	unsigned int unsynced_count = document.get_unsynced_changes_count();
-	if(unsynced_count)
-	{
-		std::stringstream sync_str;
-		sync_str << unsynced_count << _(" unsynced change(s)");
-		m_sync.set_text(sync_str.str() );
-	}
-	else
-	{
-		m_sync.set_text(_("In sync") );
-	}
+	std::stringstream sync_str;
+	sync_str << unsynced_count << _(" unsynced change(s)");
+	m_sync.set_text(sync_str.str() );
 }
 
 void Gobby::StatusBar::update_revision(Document& document)
