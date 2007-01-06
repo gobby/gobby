@@ -2,6 +2,7 @@
 # Copyright (C) 2005 0x539 dev group
 # This file is distributed under the same license as the Gobby package.
 # Peer Janssen <peer@baden-online.de>, 2005.
+# Reviewed by Mohammed Adnene Trojette <adn@diwi.org>, 2005.
 #
 msgid ""
 msgstr ""
@@ -40,23 +41,23 @@ msgstr "Créer une séance"
 
 #: src/header.cpp:137
 msgid "Opens a new obby session"
-msgstr "Ouvrir une nouvelle séance \"obby\"."
+msgstr "Ouvrir une nouvelle séance « obby »"
 
 #: src/header.cpp:150
 msgid "Join session"
-msgstr "Joindre séance"
+msgstr "Rejoindre séance"
 
 #: src/header.cpp:151
 msgid "Join an existing obby session"
-msgstr "Participer à une séance \"obby\" déjà en cours"
+msgstr "Participer à une séance « obby » déjà en cours"
 
 #: src/header.cpp:164
 msgid "Quit session"
-msgstr "Quitter séance"
+msgstr "Quitter la séance"
 
 #: src/header.cpp:165
 msgid "Leaves the currently running obby session"
-msgstr "Quitter la séance \"obby\" en cours"
+msgstr "Quitter la séance « obby » en cours"
 
 #: src/header.cpp:178
 msgid "Quit"
@@ -64,7 +65,7 @@ msgstr "Quitter"
 
 #: src/header.cpp:179
 msgid "Quits the application"
-msgstr "Quitter cette application"
+msgstr "Quitter l'application"
 
 #. Session menu
 #: src/header.cpp:188
@@ -122,7 +123,7 @@ msgstr "Numérotation des lignes"
 
 #: src/header.cpp:268
 msgid "Whether to show line numbers for this document"
-msgstr "Afficher ou ne pas afficher les numéros des lignes de ce document"
+msgstr "Afficher ou non les numéros des lignes de ce document"
 
 #: src/header.cpp:299
 msgid "None"
@@ -136,7 +137,7 @@ msgstr "Déselectionner la langue actuelle"
 #: src/header.cpp:320
 #, c-format
 msgid "Selects %0 as language"
-msgstr "Selectionner la langue $0"
+msgstr "Selectionner la langue %0"
 
 #. Help menu
 #: src/header.cpp:357
@@ -149,31 +150,31 @@ msgstr "Information"
 
 #: src/header.cpp:365
 msgid "Shows Gobby's copyright and credits"
-msgstr "Afficher les infos copyright et les remerciements concernant Gobby"
+msgstr "Afficher les infos de copyright et les remerciements concernant Gobby"
 
 #: src/hostdialog.cpp:24
 msgid "Create obby session"
-msgstr "Créer une séance \"obby\""
+msgstr "Créer une séance « obby »"
 
 #: src/hostdialog.cpp:27 src/joindialog.cpp:38
 msgid "Port:"
-msgstr "Port :"
+msgstr "Port :"
 
 #: src/hostdialog.cpp:28 src/joindialog.cpp:39
 msgid "Name:"
-msgstr "Nom :"
+msgstr "Nom :"
 
 #: src/hostdialog.cpp:29 src/joindialog.cpp:40
 msgid "Colour:"
-msgstr "Couleur :"
+msgstr "Couleur :"
 
 #: src/joindialog.cpp:34
 msgid "Join obby session"
-msgstr "Joindre une séance \"obby\""
+msgstr "Joindre une séance « obby »"
 
 #: src/joindialog.cpp:37
 msgid "Host:"
-msgstr "Host :"
+msgstr "Host :"
 
 #: src/userlist.cpp:37
 msgid "Colour"
@@ -205,7 +206,7 @@ msgstr "Perte de la connexion"
 
 #: src/statusbar.cpp:66
 msgid "Selected language: %0"
-msgstr "Langue selectionnée : %0"
+msgstr "Langue selectionnée : %0"
 
 #: src/statusbar.cpp:72
 msgid "No language selected"
@@ -219,15 +220,15 @@ msgstr "%0 modification(s) en attente"
 
 #: src/statusbar.cpp:87
 msgid "Revision: %0"
-msgstr "Révision : %0"
+msgstr "Révision : %0"
 
 #: src/buffer_wrapper.cpp:175
 msgid "Peer %0 (%1) not found in peer list"
-msgstr "Copin(e) %0 (%1) n'est pas trouvable dans la liste des copin(e)s"
+msgstr "%0 (%1) ne se trouve(nt) pas dans la liste des copin(e)s"
 
 #: src/document.cpp:37
 msgid "Subscribe"
-msgstr "Souscrire"
+msgstr "S'abonner"
 
 #: src/document.cpp:606
 msgid ""
@@ -237,9 +238,9 @@ msgid ""
 "to subscribe to this document. Use the following button to perform this.\n"
 "\n"
 msgstr ""
-"Vous n'êtes pas souscrit au document \"%0\".\n"
+"Vous n'êtes pas abonné au document « %0 ».\n"
 "\n"
 "Pour voir les modifications des autres ou pour modifier vous-mêmes le "
-"le document, vous devez souscrire à ce document. "
-"À cet effet, utilisez le bouton suivant.\n"
+"document, vous devez vous abonner à ce document. À cet effet, utilisez le "
+"bouton suivant.\n"
 "\n"
