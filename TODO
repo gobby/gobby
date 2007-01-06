@@ -14,6 +14,7 @@ Normal:
   * A flag specifing if a document has changed (#25)
   * Request confirmations for unsaved documents (#26)
   * Switch to tabs newly opened (#27)
+  * Chat command infrastructure (#31)
 
 Minor:
   * Repaint of user colour incorrect (#22)
@@ -24,6 +25,7 @@ Enhancement:
   * Highlighting of own nickname in chat window (#6)
   * Multiple user lists (#12)
   * Auto indentation (#23)
+
 
 24: Bug: User attribution copied when using copy & paste
 --------------------------------------------------------
@@ -69,6 +71,13 @@ unsaved documents (#25) open in the session.
 -------------------------------
 The current selected document should be changed to the one newly opened 
 when loading one from a file.
+
+31: Chat command infrastructure
+-------------------------------
+Chat command infrastructure (like /me, /ignore, etc.)
+
+''This is a stub and generated out of the old TODO located in the 
+repository.''
 
 22: Repaint of user colour incorrect
 ------------------------------------
