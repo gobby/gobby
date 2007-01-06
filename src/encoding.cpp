@@ -16,60 +16,16 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <cstdlib>
 #include "common.hpp"
 #include "encoding.hpp"
 
 namespace
 {
-	// Available encodings
-	Gobby::Encoding encodings[] = {
-		Gobby::Encoding("UTF-8", Gobby::Encoding::UTF_8),
-		Gobby::Encoding("ISO_8859-1", Gobby::Encoding::ISO_8859_1),
-		Gobby::Encoding("ISO_8859-15", Gobby::Encoding::ISO_8859_15),
-		Gobby::Encoding("UTF-7", Gobby::Encoding::UTF_7),
-		Gobby::Encoding("UTF-16", Gobby::Encoding::UTF_16),
-		Gobby::Encoding("UCS-2", Gobby::Encoding::UCS_2),
-		Gobby::Encoding("UCS-4", Gobby::Encoding::UCS_4)
-	};
 
-	// Amount of encodings we have
-	unsigned int encoding_count = sizeof(encodings) / sizeof(encodings[0]);
-}
-
-Gobby::Encoding::Encoding(const Glib::ustring& name, Charset charset)
- : m_name(name), m_charset(charset)
+Glib::ustring convert_to_utf8(const std::string& str, const std::string& from)
 {
-}
-
-Gobby::Encoding::Encoding(const Encoding& other)
- : m_name(other.m_name), m_charset(other.m_charset)
-{
-}
-
-Gobby::Encoding::~Encoding()
-{
-}
-
-Gobby::Encoding& Gobby::Encoding::operator=(const Encoding& other)
-{
-	m_name = other.m_name;
-	m_charset = other.m_charset;
-	return *this;
-}
-
-const Glib::ustring& Gobby::Encoding::get_name() const
-{
-	return m_name;
-}
-
-Gobby::Encoding::Charset Gobby::Encoding::get_charset() const
-{
-	return m_charset;
-}
-
-Glib::ustring Gobby::Encoding::convert_to_utf8(const std::string& str)
-{
-	Glib::ustring utf8 = Glib::convert(str, "UTF-8", m_name);
+	Glib::ustring utf8 = Glib::convert(str, "UTF-8", from);
 	if(!utf8.validate() )
 	{
 		throw Glib::ConvertError(
@@ -77,20 +33,58 @@ Glib::ustring Gobby::Encoding::convert_to_utf8(const std::string& str)
 			"Couldn't convert to UTF_8"
 		);
 	}
+
 	return utf8;
 }
 
-Glib::ustring Gobby::convert_to_utf8(const std::string& str)
+}
+
+const std::vector<std::string>& Gobby::Encoding::get_encodings()
+{
+	static const std::string encodings[] = {
+		"UTF-8",
+		"ISO-8859-1",
+		"ISO-8859-15",
+		"UTF-7",
+		"UTF-16",
+		"UCS-2",
+		"UCS-4"
+	};
+
+	static const std::size_t encoding_count =
+		sizeof(encodings) / sizeof(encodings[0]);
+
+	static std::vector<std::string> encoding_vec(
+		encodings,
+		encodings + encoding_count
+	);
+
+	return encoding_vec;
+}
+
+Glib::ustring Gobby::Encoding::convert_to_utf8(const std::string& str,
+                                               std::string& encoding)
 {
 	if(g_utf8_validate(str.c_str(), str.length(), NULL) == TRUE)
-		return str;
-
-	// Ignore UTF-8 encoding we currently checked
-	for(unsigned int i = 1; i < encoding_count; ++ i)
 	{
+		encoding = "UTF-8";
+		return str;
+	}
+
+	typedef std::vector<std::string> encoding_list_type;
+	const encoding_list_type& encodings = get_encodings();
+
+	for(encoding_list_type::const_iterator iter = encodings.begin();
+	    iter != encodings.end();
+	    ++ iter)
+	{
+		// Ignore UTF-8 encoding we currently checked
+		if(*iter == "UTF-8") continue;
+
 		try
 		{
-			return encodings[i].convert_to_utf8(str);
+			encoding = *iter;
+			return ::convert_to_utf8(str, *iter);
 		}
 		catch(Glib::ConvertError& e)
 		{

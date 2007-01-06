@@ -24,6 +24,7 @@
 #include <gdk/gdkwin32.h>
 #endif
 
+#include "encoding_selector.hpp"
 #include "dragdrop.hpp"
 #include "window.hpp"
 
@@ -176,7 +177,11 @@ namespace
 			char* buf = new char[size + 1];
 			DragQueryFileA(drop, i, buf, size + 1);
 
-			m_window.open_local_file(buf);
+			m_window.open_local_file(
+				buf,
+				Gobby::EncodingSelector::AUTO_DETECT
+			);
+
 			delete[] buf;
 		}
 
@@ -234,7 +239,10 @@ namespace
 				dlg.run();
 			}
 
-			window.open_local_file(filename);
+			window.open_local_file(
+				filename,
+				Gobby::EncodingSelector::AUTO_DETECT
+			);
 		}
 	}
 #endif

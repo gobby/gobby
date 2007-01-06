@@ -25,37 +25,15 @@
 namespace Gobby
 {
 
-class Encoding
+namespace Encoding
 {
-public:
-	enum Charset {
-		UTF_7,
-		UTF_8,
-		UTF_16,
-		ISO_8859_1,
-		ISO_8859_15,
-		UCS_2,
-		UCS_4
-	};
 
-	Encoding(const Glib::ustring& name, Charset charset);
-	Encoding(const Encoding& other);
-	~Encoding();
+const std::vector<std::string>& get_encodings();
+Glib::ustring convert_to_utf8(const std::string& str,
+                              std::string& encoding);
 
-	Encoding& operator=(const Encoding& other);
-
-	const Glib::ustring& get_name() const;
-	Charset get_charset() const;
-
-	Glib::ustring convert_to_utf8(const std::string& str);
-protected:
-	Glib::ustring m_name;
-	Charset m_charset;
-};
-
-Glib::ustring convert_to_utf8(const std::string& str);
+}
 
 }
 
 #endif // _GOBBY_ENCODING_HPP_
-

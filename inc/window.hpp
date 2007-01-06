@@ -59,11 +59,14 @@ public:
 	/** Opens a document containing the content of a file mounted on the
 	 * local filesystem.
 	 */
-	void open_local_file(const Glib::ustring& file);
+	void open_local_file(const Glib::ustring& file,
+	                     const std::string& encoding);
 
 	/** Saves an existing document to the given path.
 	 */
-	void save_local_file(DocWindow& doc, const Glib::ustring& file);
+	void save_local_file(DocWindow& doc,
+	                     const Glib::ustring& file,
+	                     const std::string& encoding);
 protected:
 	// Gtk::Window overrides
 	virtual void on_realize();
@@ -130,8 +133,10 @@ protected:
 
 	// Paths
 	std::string m_last_path;
-	std::string m_local_file_path;
 	std::string m_prev_session;
+
+	std::string m_local_file_path;
+	std::string m_local_encoding;
 
 	// GUI
 	Gtk::VBox m_mainbox;

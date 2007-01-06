@@ -34,6 +34,7 @@
 
 #include "common.hpp"
 #include "encoding.hpp"
+#include "encoding_selector.hpp"
 #include "docwindow.hpp"
 #include "passworddialog.hpp"
 #include "entrydialog.hpp"
@@ -603,9 +604,13 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 	{
 		// " " is newly created, so we do not need a path
 		if(m_local_file_path != " ")
+		{
 			window.set_path(m_local_file_path);
+			// TODO: Set document's encoding to m_local_encoding
+			// in document settings
+		}
 
-		// Crear local path
+		// Clear local path
 		m_local_file_path.clear();
 	}
 
@@ -660,7 +665,13 @@ void Gobby::Window::on_document_create()
 void Gobby::Window::on_document_open()
 {
 	// Create FileChooser
-	Gtk::FileChooserDialog dlg(*this, _("Open new document"));
+	EncodingFileChooserDialog dlg(
+		*this,
+		_("Open new document"),
+		Gtk::FILE_CHOOSER_ACTION_OPEN
+	);
+
+	dlg.get_selector().set_encoding(EncodingSelector::AUTO_DETECT);
 
 	// Use the last used path for this dialog, if we have any
 	if(!m_last_path.empty() )
@@ -683,7 +694,12 @@ void Gobby::Window::on_document_open()
 		for(std::list<Glib::ustring>::iterator iter = list.begin();
 		    iter != list.end();
 		    ++ iter)
-			open_local_file(*iter);
+		{
+			open_local_file(
+				*iter,
+				dlg.get_selector().get_encoding()
+			);
+		}
 	}
 }
 
@@ -702,7 +718,8 @@ void Gobby::Window::on_document_save()
 	// Is there already a path for this document?
 	if(!doc->get_path().empty() )
 		// Yes, so save the document there
-		save_local_file(*doc, doc->get_path() );
+		// TODO: Lookup document's encoding
+		save_local_file(*doc, doc->get_path(), "UTF-8");
 	else
 		// Open save as dialog otherwise
 		on_document_save_as();
@@ -721,8 +738,14 @@ void Gobby::Window::on_document_save_as()
 	}
 
 	// Setup dialog
-	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
-		Gtk::FILE_CHOOSER_ACTION_SAVE);
+	EncodingFileChooserDialog dlg(
+		*this,
+		_("Save current document"),
+		Gtk::FILE_CHOOSER_ACTION_SAVE
+	);
+
+	// TODO: Preselect document's encoding
+	dlg.get_selector().set_encoding("UTF-8");
 
 #ifdef GTKMM_GEQ_28
 	dlg.set_do_overwrite_confirmation(true);
@@ -752,7 +775,11 @@ void Gobby::Window::on_document_save_as()
 		// Use current folder as standard folder for other dialogs
 		m_last_path = dlg.get_current_folder();
 		// Save document
-		save_local_file(*doc, dlg.get_filename() );
+		save_local_file(
+			*doc,
+			dlg.get_filename(),
+			dlg.get_selector().get_encoding()
+		);
 	}
 }
 
@@ -1077,19 +1104,40 @@ namespace
 	}
 }
 
-void Gobby::Window::open_local_file(const Glib::ustring& file)
+void Gobby::Window::open_local_file(const Glib::ustring& file,
+                                    const std::string& encoding)
 {
 	try
 	{
 		// Set local file path for the document_insert callback
 		m_local_file_path = file;
+		m_local_encoding = encoding;
 
-		std::string content(
-			convert_to_utf8(Glib::file_get_contents(file)) );
-		convert2unix(content);
+		std::string utf8_content;
+		if(encoding == EncodingSelector::AUTO_DETECT)
+		{
+			std::string detected_encoding;
+
+			utf8_content = Encoding::convert_to_utf8(
+					Glib::file_get_contents(file),
+					detected_encoding
+			);
+
+			m_local_encoding = detected_encoding;
+		}
+		else
+		{
+			utf8_content = Glib::convert(
+				Glib::file_get_contents(file),
+				"UTF-8",
+				encoding
+			);
+		}
+
+		convert2unix(utf8_content);
 
 		m_buffer->document_create(
-			Glib::path_get_basename(file), "UTF-8", content
+			Glib::path_get_basename(file), "UTF-8", utf8_content
 		);
 	}
 	catch(Glib::Exception& e)
@@ -1099,7 +1147,9 @@ void Gobby::Window::open_local_file(const Glib::ustring& file)
 	}
 }
 
-void Gobby::Window::save_local_file(DocWindow& doc, const Glib::ustring& file)
+void Gobby::Window::save_local_file(DocWindow& doc,
+                                    const Glib::ustring& file,
+                                    const std::string& encoding)
 {
 	// Open stream to file
 	std::ofstream stream(file.c_str() );
@@ -1116,7 +1166,17 @@ void Gobby::Window::save_local_file(DocWindow& doc, const Glib::ustring& file)
 		}
 
 		// Save content into file
-		stream << doc.get_content().raw();
+		std::string conv_content = doc.get_content().raw();
+		if(encoding != "UTF-8")
+		{
+			conv_content = Glib::convert(
+				conv_content,
+				encoding,
+				"UTF-8"
+			);
+		}
+
+		stream << conv_content;
 		stream.close();
 
 		// Set path of document
@@ -1125,6 +1185,10 @@ void Gobby::Window::save_local_file(DocWindow& doc, const Glib::ustring& file)
 		update_title_bar();
 		// Unset modifified flag
 		doc.get_document().get_buffer()->set_modified(false);
+	}
+	catch(Glib::ConvertError& e)
+	{
+		display_error(e.what() );
 	}
 	catch(std::exception& e)
 	{

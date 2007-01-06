@@ -1,8 +1,8 @@
 # source files
 
-src/io/buffer_wrapper.cpp
 src/icon.cpp
 src/encoding.cpp
+src/encoding_selector.cpp
 src/header.cpp
 src/statusbar.cpp
 src/userlist.cpp
