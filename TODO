@@ -26,7 +26,6 @@ Minor:
 Trivial:
 
 Enhancement:
-  * Highlighting of own nickname in chat window (#6)
   * Multiple user lists (#12)
   * Auto indentation (#23)
   * Focus the text-widget after having created/joined a session (#35)
@@ -139,11 +138,6 @@ Gobby needs some documentation. The starting point should be the addition
 of README content. The file is currently present, but empty. It should 
 contain at least a description of it, the dependency and a short 
 installation guide for *nix systems. More could follow later.
-
-6: Highlighting of own nickname in chat window
-----------------------------------------------
-Chat messages of others should be highlighted if the own nickname is 
-mentioned in them.
 
 12: Multiple user lists
 -----------------------
