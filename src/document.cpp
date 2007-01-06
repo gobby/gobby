@@ -397,6 +397,7 @@ void Gobby::Document::on_user_join(const obby::user& user)
 		Glib::RefPtr<Gtk::TextTag> tag = Gtk::TextTag::create();
 		tag->property_background_gdk() = user_color(user);
 		m_buffer->get_tag_table()->add(tag);
+		tag->set_priority(0);
 
 		m_map_user[&user] = tag;
 		m_map_tag[tag] = &user;
