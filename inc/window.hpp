@@ -52,6 +52,7 @@ protected:
 	// Gtk::Window overrides
 	virtual void on_show();
 	virtual void on_realize();
+	virtual bool on_delete_event(GdkEventAny* event);
 
 	// Start/End obby session
 	void obby_start();

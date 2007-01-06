@@ -231,6 +231,29 @@ void Gobby::Window::on_realize()
 	m_mainpaned.set_position(mainmin + (mainmax - mainmin) * 3 / 4);
 }
 
+bool Gobby::Window::on_delete_event(GdkEventAny* event)
+{
+	if(m_buffer.get() == NULL) return false;
+
+	Gtk::MessageDialog dlg(
+		*this,
+		_("You are still connected to a session"),
+		false,
+		Gtk::MESSAGE_WARNING,
+		Gtk::BUTTONS_NONE,
+		true
+	);
+
+	dlg.set_secondary_text(
+		_("Do you want to close Gobby nevertheless?")
+	);
+
+	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dlg.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_YES);
+
+	return dlg.run() != Gtk::RESPONSE_YES;
+}
+
 void Gobby::Window::obby_start()
 {
 	// Connect to obby events
@@ -884,10 +907,13 @@ Gobby::Window::on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang)
 
 void Gobby::Window::on_quit()
 {
-	// Quit session
-	obby_end();
-	// End program
-	Gtk::Main::quit();
+	if(on_delete_event(NULL) == false)
+	{
+		// Quit session
+		obby_end();
+		// End program
+		Gtk::Main::quit();
+	}
 }
 
 /* Drag and Drop */
