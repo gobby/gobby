@@ -13,7 +13,6 @@ Major:
 Normal:
   * Chat command infrastructure (#31)
   * Recognise command line parameters (#33)
-  * Allow opening files as unowned text (#52)
   * Show the cursors and selections of all participants (#53)
   * Documentation (#54)
   * Encoding should be preserved (#65)
@@ -28,6 +27,8 @@ Minor:
 Trivial:
 
 Enhancement:
+  * Remote document browsing support (#75)
+  * Session Management (#76)
 
 
 74: Application not initialized correctly (0xc000001d) exception when loading Gobby on Windows XP
@@ -71,16 +72,6 @@ be nice if Gobby accepted one or more files in it to open it in the
 currently active Gobby session (to use ''Open With'' in your favourite 
 desktop environment). However this will get complicated when more than one 
 Gobby is open.
-
-52: Allow opening files as unowned text
----------------------------------------
-I think that the default way to open a file should be to open in as 
-unhilighted/unowned text, so that changes made to the file are more 
-visible.
-
-Possibly there could be something like an "Open file as unhilighted/unowned 
-text" checkbox in the open dialog for this?  (Not sure quite how to word 
-that to be most understandable by end-user types...)
 
 53: Show the cursors and selections of all participants
 -------------------------------------------------------
@@ -152,4 +143,20 @@ warning, I will not.)
 The connected / subscribed flag should be visualised through a nested 
 GtkExtender instead of the flags shown up in the ListView. Perhaps it needs 
 to be converted to a TreeView to realise this, though.
+
+75: Remote document browsing support
+------------------------------------
+It would be great if there were a checkbox on the file tab (besides the 
+file name) or on the list that shows subscription, that allows me to browse 
+the document with the other side cursor. 
+
+This way, one would be able to show document parts to the others without 
+hassle and pair programming with gobby would be improved.
+
+76: Session Management
+----------------------
+I noticed there is a revision number displayed in gobby, there should be a 
+way of managing gobby sessions, like loading old revisions and undoing 
+changes based on revision as well as saving sessions so they can be loaded 
+later on with the changes made by each user retained.
 
