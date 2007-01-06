@@ -30,7 +30,7 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
    m_lbl_password(_("Password:"), Gtk::ALIGN_RIGHT)
 {
 	m_ent_port.set_range(1024, 65535);
-	m_ent_port.set_value(config["session"]["port"].get(6522) );
+	m_ent_port.set_value(config["session"]["host_port"].get(6522) );
 	m_ent_port.set_increments(1, 256);
 
 	m_ent_password.set_visibility(false);
@@ -136,4 +136,5 @@ void Gobby::HostDialog::on_response(int response_id)
 
 	Gtk::Dialog::on_response(response_id);
 }
+
 

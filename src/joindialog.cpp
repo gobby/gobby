@@ -54,9 +54,9 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 	default_color.set_blue(0xffff);
 
 	Glib::ustring host =
-		config["session"]["host"].get(Glib::ustring("localhost") );
+		config["session"]["join_host"].get(Glib::ustring("localhost") );
 	unsigned int port =
-		config["session"]["port"].get(6522);
+		config["session"]["join_port"].get(6522);
 	Glib::ustring name =
 		config["session"]["name"].get(Glib::get_user_name() );
 	Gdk::Color color =
@@ -243,4 +243,5 @@ void Gobby::JoinDialog::on_change()
 	m_ent_port.set_value((*iter)[m_session_cols.port]);
 }
 #endif
+
 
