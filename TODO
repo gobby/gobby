@@ -6,16 +6,12 @@ Blocker:
 Critical:
 
 Major:
-  * Bug: Crashes on files with encodings not being UTF-8 (#43)
   * High CPU load while writing (#45)
   * Bug: High load (and blocking X11) when opening big text file (#48)
 
 Normal:
-  * Request confirmations for unsaved documents (#26)
-  * Switch to tabs newly opened (#27)
   * Chat command infrastructure (#31)
   * Recognise command line parameters (#33)
-  * Write a good README for Gobby (#51)
   * Allow opening files as unowned text (#52)
   * Show the cursors and selections of all participants (#53)
   * Documentation (#54)
@@ -25,19 +21,7 @@ Minor:
 Trivial:
 
 Enhancement:
-  * Highlighting of own nickname in chat window (#6)
-  * Multiple user lists (#12)
-  * Focus the text-widget after having created/joined a session (#35)
-  * Colourised tab labels (#59)
 
-
-43: Bug: Crashes on files with encodings not being UTF-8
---------------------------------------------------------
-Gobby should not crash with a segmentation fault when one tries to open 
-files not encoded in UTF-8. Instead it should either check the document for 
-UTF-8 validity and prompt the user for the right encoding if it does not 
-match, and translate it appropriately, or just refuse to open it (but the 
-former would be more acceptable than the latter).
 
 45: High CPU load while writing
 -------------------------------
@@ -54,17 +38,6 @@ gobby completely. Even other windows, like a ssh screen session in an aterm
 did not respond any more. Gobby had to be killed to get the screen session 
 working again.
 
-26: Request confirmations for unsaved documents
------------------------------------------------
-Gobby should request a confirmation if you want to quit it and still have 
-unsaved documents (#25) open in the session and show a star (*) behind the 
-document's name on the tab when a document was changed.
-
-27: Switch to tabs newly opened
--------------------------------
-The current selected document should be changed to the one newly opened 
-when loading one from a file.
-
 31: Chat command infrastructure
 -------------------------------
 In order to get the chat more alike to other chats available in the wild 
@@ -79,13 +52,6 @@ be nice if Gobby accepted one or more files in it to open it in the
 currently active Gobby session (to use ''Open With'' in your favourite 
 desktop environment). However this will get complicated when more than one 
 Gobby is open.
-
-51: Write a good README for Gobby
----------------------------------
-Gobby needs some documentation. The starting point should be the addition 
-of README content. The file is currently present, but empty. It should 
-contain at least a description of it, the dependency and a short 
-installation guide for *nix systems. More could follow later.
 
 52: Allow opening files as unowned text
 ---------------------------------------
@@ -114,36 +80,4 @@ Gobby should get a normal manual just like other projects. Docbook format
 is preferred. There should be a short introduction with an overview about 
 Gobby, an installation guide, some basics about the usage and some 
 documentation about the algorithms used.
-
-6: Highlighting of own nickname in chat window
-----------------------------------------------
-Chat messages of others should be highlighted if the own nickname is 
-mentioned in them.
-
-12: Multiple user lists
------------------------
-Put a Gtk::Notebook around the user list and provide 4 user lists:
-
- * whole session: Display all users that are or were in the session since 
-beginning
- * current session: Display all users that are currently in the session
- * whole document: Display all users that are or were subscribed to the 
-selected document
- * current document: Display all users that are currently subscribed to the 
-selected document
-
-35: Focus the text-widget after having created/joined a session
----------------------------------------------------------------
-It would be nice, if one could just create/join a session and then start to 
-write without having to focus the editor widget.
-
-59: Colourised tab labels
--------------------------
-The tab labels in the notebook holding the documents should be colourised.
-
-The proposed colours are:
- * Grey: The user is not subscribed to this document
- * Black: The user is subscribed to the document and has seen all changes
- * Red: The user is subscribed to the document, it is in the background and 
-he has not yet seen all changes
 
