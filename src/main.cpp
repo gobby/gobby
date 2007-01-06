@@ -20,6 +20,7 @@
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
 #include "common.hpp"
+#include "icon.hpp"
 #include "window.hpp"
 #include "features.hpp"
 
@@ -40,6 +41,14 @@ int main(int argc, char* argv[]) try
 
 	Gtk::Main kit(argc, argv);
 	Glib::thread_init();
+
+	// Set default icon
+	std::list<Glib::RefPtr<Gdk::Pixbuf> > icon_list;
+	icon_list.push_back(
+		Gdk::Pixbuf::create_from_inline(512 * 128, Gobby::Icon::gobby)
+	);
+
+	Gtk::Window::set_default_icon_list(icon_list);
 
 	Gobby::Window wnd;
 	wnd.show_all();
