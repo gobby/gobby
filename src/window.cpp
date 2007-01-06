@@ -20,10 +20,12 @@
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/filechooserdialog.h>
 #include <libobby/client_buffer.hpp>
 #include <libobby/host_buffer.hpp>
 #include "createdialog.hpp"
 #include "joindialog.hpp"
+#include "entrydialog.hpp"
 #include "window.hpp"
 #include "features.hpp"
 
@@ -38,8 +40,6 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_session_join) );
 	m_header.session_quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_quit) );
-	m_header.about_event().connect(
-		sigc::mem_fun(*this, &Window::on_about) );
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
@@ -267,6 +267,28 @@ void Gobby::Window::on_about()
 	dlg.run();
 }
 
+void Gobby::Window::on_document_create()
+{
+	EntryDialog dlg(*this, "Create document", "Enter document name");
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		m_buffer->create_document(dlg.get_text() );
+	}
+}
+
+void Gobby::Window::on_document_open()
+{
+	Gtk::FileChooserDialog dlg(*this, "Open new document");
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+		m_buffer->create_document(dlg.get_filename() );
+	}
+}
+
+void Gobby::Window::on_document_close()
+{
+}
+
 void Gobby::Window::on_quit()
 {
 	on_session_quit();
@@ -323,10 +345,11 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 	m_chat.obby_server_message(message);
 }
 
-
-
 bool Gobby::Window::on_timer()
 {
+	// TODO: Connection lost segfaultet hier..?
+//	if(!m_buffer) return true;
+
 	for(int i = 0; i < 15; ++ i)
 	{
 		m_buffer->select(0);
@@ -336,6 +359,7 @@ bool Gobby::Window::on_timer()
 		{
 			on_session_join();
 			m_login_failed = false;
+			return true;
 		}
 	}
 
