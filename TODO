@@ -30,6 +30,7 @@ Normal:
   * obby:// protocol handler (#88)
   * "Quit" should confirm (#93)
   * Make it harder to lose document changes (#96) [usability]
+  * Bad button labels on the file close confirmation dialog (#105)
 
 Minor:
   * Title bar (#92) [win32]
@@ -46,6 +47,7 @@ Enhancement:
   * Locate participants (#95)
   * Automatic live storage of documents and chat logs  (#98)
   * RPM's and MacOS installer (#102)
+  * Wiki style reverts (#104)
 
 
 100: Excited to try it but libatk-1.6-1.dll just not found
@@ -215,6 +217,23 @@ should stay consistent with.
 Trying to exit gobby is even worse; no check for unsaved data is performed. 
 This is related to #93.
 
+105: Bad button labels on the file close confirmation dialog
+------------------------------------------------------------
+If I try to close a document in gobby (on Linux), I get a dialog like the 
+following:
+
+The document "xxxx" has been changed since it was saved to disk.  Are you 
+sure that you want to close it?
+  [ No ] [ Yes ] [ Save ]
+
+
+These labels are confusing, because the dialog acts like a traditional 
+yes/no/cancel dialog, but the "yes" and "no" buttons have different 
+meanings (no=cancel, yes=no).  It would be better to use the labels 
+suggested by the Gnome HIG:
+
+http://developer.gnome.org/projects/gup/hig/2.0/windows-alert.html#save-confirmation-alerts
+
 92: Title bar
 -------------
 There is a problem with the title bar on the Windows version of gobby 
@@ -288,4 +307,21 @@ specified location, or by webdav, or possibly by some other means.
 ------------------------------
 It would be really nice to have RPM's and a MacOS installer for Gobby. That 
 would give Gobby lot's of other users.
+
+104: Wiki style reverts
+-----------------------
+In the HowToTryOutGobby page it mentions that before a server obby is 
+implemented "there should be some privileges implemented first".  An 
+alternative to this approach would be to treat the documents like a wiki 
+page, i.e. anyone can edit it but its easy to see who made what changes and 
+revert out those changes.  I'm thinking of an interface similar to the drop 
+down menu on the undo button in MS Word.  For those who aren't familiar, 
+the drop down contains a history of all of the previous changes that have 
+been made and then selects everything above and including the item as your 
+drag your mouse over them.
+
+ * Insert text "printf( "Debug: %i\n", lard );"
+ * Delete text "/* Gnarly comment */"
+
+
 
