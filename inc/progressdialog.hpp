@@ -53,6 +53,8 @@ protected:
 	Glib::Dispatcher m_disp_work;
 	Glib::Dispatcher m_disp_done;
 
+	Gtk::Window& m_parent;
+
 	int m_quit;
 private:
 	bool on_idle();

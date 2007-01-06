@@ -61,7 +61,7 @@ void Gobby::JoinProgressDialog::on_done()
 		m_buffer.reset(
 			new obby::io::client_buffer(
 #ifdef WIN32
-				*static_cast<Gtk::Window*>(get_parent()),
+				m_parent,
 #endif
 				m_hostname,
 				m_port

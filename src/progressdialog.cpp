@@ -24,7 +24,7 @@
 Gobby::ProgressDialog::ProgressDialog(const Glib::ustring& title,
                                       Gtk::Window& parent)
  : Gtk::Dialog(title, parent, true, true), 
-   m_lbl_state("", Gtk::ALIGN_CENTER)
+   m_lbl_state("", Gtk::ALIGN_CENTER), m_parent(parent)
 {
 	get_vbox()->pack_start(m_lbl_state, Gtk::PACK_SHRINK);
 	get_vbox()->pack_start(m_progress, Gtk::PACK_SHRINK);

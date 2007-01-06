@@ -54,7 +54,7 @@ void Gobby::HostProgressDialog::on_thread()
 		m_buffer.reset(
 			new obby::io::host_buffer(
 #ifdef WIN32
-				*static_cast<Gtk::Window*>(get_parent()),
+				m_parent,
 #endif
 				m_port, m_username,
 				red, green, blue
