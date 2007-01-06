@@ -19,6 +19,38 @@
 #include <gtkmm/stock.h>
 #include "header.hpp"
 
+namespace {
+	Glib::ustring ui_desc = 
+		"<ui>"
+		"  <menubar name=\"MenuMainBar\">"
+		"    <menu action=\"MenuApp\">"
+		"      <menuitem action=\"CreateSession\" />"
+		"      <menuitem action=\"JoinSession\" />"
+		"      <menuitem action=\"QuitSession\" />"
+		"      <separator />"
+		"      <menuitem action=\"Quit\" />"
+		"    </menu>"
+		"    <menu action=\"MenuSession\">"
+		"      <menuitem action=\"CreateDocument\" />"
+		"      <menuitem action=\"OpenDocument\" />"
+		"      <menuitem action=\"CloseDocument\" />"
+		"    </menu>"
+		"    <menu action=\"MenuHelp\">"
+		"      <menuitem action=\"About\" />"
+		"    </menu>"
+		"  </menubar>"
+		"  <toolbar name=\"ToolMainBar\">"
+		"    <toolitem action=\"CreateSession\" />"
+		"    <toolitem action=\"JoinSession\" />"
+		"    <toolitem action=\"QuitSession\" />"
+		"    <separator />"
+		"    <toolitem action=\"CreateDocument\" />"
+		"    <toolitem action=\"OpenDocument\" />"
+		"    <toolitem action=\"CloseDocument\" />"
+		"  </toolbar>"
+		"</ui>";
+}
+
 Gobby::Header::Error::Error(Code error_code, const Glib::ustring& error_message)
  : Glib::Error(g_quark_from_static_string("GOBBY_HEADER_ERROR"),
                static_cast<int>(error_code), error_message)
@@ -158,7 +190,7 @@ Gobby::Header::Header()
 
 	m_ui_manager->insert_action_group(m_group_app);
 //	m_ui_manager->insert_action_group(m_group_session);
-	m_ui_manager->add_ui_from_file("ui.xml");
+	m_ui_manager->add_ui_from_string(ui_desc);
 
 	m_menubar = static_cast<Gtk::MenuBar*>(
 		m_ui_manager->get_widget("/MenuMainBar") );
@@ -320,4 +352,5 @@ void Gobby::Header::on_app_quit()
 {
 	m_signal_quit.emit();
 }
+
 
