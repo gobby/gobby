@@ -101,6 +101,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_header.action_edit_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_edit_preferences) );
 
+	m_header.action_user_set_colour->signal_activate().connect(
+		sigc::mem_fun(*this, &Window::on_user_set_colour) );
 	m_header.action_user_set_password->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
 
