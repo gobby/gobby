@@ -1,12 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Free Software Foundation, Inc.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-05-08 13:19+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-06-04 18:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,89 +21,110 @@ msgid "Send"
 msgstr ""
 
 #. App menu
-#: src/header.cpp:74
+#: src/header.cpp:120
 msgid "Gobby"
 msgstr ""
 
-#: src/header.cpp:81
+#: src/header.cpp:127
 msgid "Create session"
 msgstr ""
 
-#: src/header.cpp:82
+#: src/header.cpp:128
 msgid "Opens a new obby session"
 msgstr ""
 
-#: src/header.cpp:95
+#: src/header.cpp:141
 msgid "Join session"
 msgstr ""
 
-#: src/header.cpp:96
+#: src/header.cpp:142
 msgid "Join an existing obby session"
 msgstr ""
 
-#: src/header.cpp:109
+#: src/header.cpp:155
 msgid "Quit session"
 msgstr ""
 
-#: src/header.cpp:110
+#: src/header.cpp:156
 msgid "Leaves the currently running obby session"
 msgstr ""
 
-#: src/header.cpp:123
+#: src/header.cpp:169
 msgid "Quit"
 msgstr ""
 
-#: src/header.cpp:124
+#: src/header.cpp:170
 msgid "Quits the application"
 msgstr ""
 
 #. Session menu
-#: src/header.cpp:133
+#: src/header.cpp:179
 msgid "Session"
 msgstr ""
 
-#: src/header.cpp:140 src/window.cpp:286
+#: src/header.cpp:186 src/window.cpp:314
 msgid "Create document"
 msgstr ""
 
-#: src/header.cpp:141
+#: src/header.cpp:187
 msgid "Creates a new document"
 msgstr ""
 
-#: src/header.cpp:154
+#: src/header.cpp:200
 msgid "Open document"
 msgstr ""
 
-#: src/header.cpp:155
+#: src/header.cpp:201
 msgid "Loads a file into a new document"
 msgstr ""
 
-#: src/header.cpp:168
+#: src/header.cpp:214
 msgid "Save document"
 msgstr ""
 
-#: src/header.cpp:169
+#: src/header.cpp:215
 msgid "Saves a document into a file"
 msgstr ""
 
-#: src/header.cpp:182
+#: src/header.cpp:228
 msgid "Close document"
 msgstr ""
 
-#: src/header.cpp:183
+#: src/header.cpp:229
 msgid "Closes an open document"
 msgstr ""
 
+#. Documents menu
+#: src/header.cpp:239
+msgid "View"
+msgstr ""
+
+#: src/header.cpp:245
+msgid "Line numbers"
+msgstr ""
+
+#: src/header.cpp:246
+msgid "Whether to show line numbers for this document"
+msgstr ""
+
+#: src/header.cpp:304
+msgid "Selects "
+msgstr ""
+
+#: src/header.cpp:305
+msgid " as language"
+msgstr ""
+
 #. Help menu
-#: src/header.cpp:192
+#: src/header.cpp:332
 msgid "Help"
 msgstr ""
 
-#: src/header.cpp:199
+#: src/header.cpp:339
 msgid "About"
 msgstr ""
 
-#: src/header.cpp:200
+#: src/header.cpp:340
 msgid "Shows Gobby's copyright and credits"
 msgstr ""
 
@@ -137,18 +160,18 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/window.cpp:254
+#: src/window.cpp:277
 msgid "A collaborative text editor"
 msgstr ""
 
-#: src/window.cpp:295
+#: src/window.cpp:323
 msgid "Open new document"
 msgstr ""
 
-#: src/window.cpp:312
+#: src/window.cpp:340
 msgid "Save current document"
 msgstr ""
 
-#: src/window.cpp:359
+#: src/window.cpp:454
 msgid "Connection lost"
 msgstr ""

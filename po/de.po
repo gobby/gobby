@@ -6,8 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.1.0\n"
-"POT-Creation-Date: 2005-05-08 13:19+0200\n"
-"PO-Revision-Date: 2005-05-05 18:59+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-06-04 18:31+0200\n"
+"PO-Revision-Date: 2005-06-04 18:40+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
@@ -19,99 +20,120 @@ msgid "Send"
 msgstr "Abschicken"
 
 #. App menu
-#: src/header.cpp:74
+#: src/header.cpp:120
 msgid "Gobby"
-msgstr ""
+msgstr "Gobby"
 
-#: src/header.cpp:81
+#: src/header.cpp:127
 msgid "Create session"
 msgstr "Sitzung eröffnen"
 
-#: src/header.cpp:82
+#: src/header.cpp:128
 msgid "Opens a new obby session"
-msgstr ""
+msgstr "Eröffnet eine neue Sitzung"
 
-#: src/header.cpp:95
+#: src/header.cpp:141
 msgid "Join session"
 msgstr "Sitzung beitreten"
 
-#: src/header.cpp:96
+#: src/header.cpp:142
 msgid "Join an existing obby session"
-msgstr "Tritt einer bestehenden obby Sitzung bei"
+msgstr "Tritt einer bestehenden Sitzung bei"
 
-#: src/header.cpp:109
+#: src/header.cpp:155
 msgid "Quit session"
 msgstr "Sitzung verlassen"
 
-#: src/header.cpp:110
+#: src/header.cpp:156
 msgid "Leaves the currently running obby session"
-msgstr "Verlässt die aktuell laufende obby Sitzung"
+msgstr "Verlässt die aktuell laufende Sitzung"
 
-#: src/header.cpp:123
+#: src/header.cpp:169
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/header.cpp:124
+#: src/header.cpp:170
 msgid "Quits the application"
 msgstr "Beendet die Anwendung"
 
 #. Session menu
-#: src/header.cpp:133
+#: src/header.cpp:179
 msgid "Session"
 msgstr "Sitzung"
 
-#: src/header.cpp:140 src/window.cpp:286
+#: src/header.cpp:186 src/window.cpp:314
 msgid "Create document"
 msgstr "Dokument erstellen"
 
-#: src/header.cpp:141
+#: src/header.cpp:187
 msgid "Creates a new document"
 msgstr "Erstellt ein neues Dokument"
 
-#: src/header.cpp:154
+#: src/header.cpp:200
 msgid "Open document"
 msgstr "Dokument öffnen"
 
-#: src/header.cpp:155
+#: src/header.cpp:201
 msgid "Loads a file into a new document"
 msgstr "Lädt eine Datei in ein neues Dokument"
 
-#: src/header.cpp:168
+#: src/header.cpp:214
 msgid "Save document"
 msgstr "Dokument speichern"
 
-#: src/header.cpp:169
+#: src/header.cpp:215
 msgid "Saves a document into a file"
 msgstr "Speichert ein Dokument in eine Datei"
 
-#: src/header.cpp:182
+#: src/header.cpp:228
 msgid "Close document"
 msgstr "Dokument schließen"
 
-#: src/header.cpp:183
+#: src/header.cpp:229
 msgid "Closes an open document"
 msgstr "Schließt ein geöffnetes Dokument"
 
+#. Documents menu
+#: src/header.cpp:239
+msgid "View"
+msgstr "Ansicht"
+
+#: src/header.cpp:245
+msgid "Line numbers"
+msgstr "Zeilennummern"
+
+#: src/header.cpp:246
+msgid "Whether to show line numbers for this document"
+msgstr "Anzeige von Zeilennummern"
+
+#: src/header.cpp:304
+msgid "Selects "
+msgstr "Wählt "
+
+#: src/header.cpp:305
+msgid " as language"
+msgstr " als Sprache"
+
 #. Help menu
-#: src/header.cpp:192
+#: src/header.cpp:332
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/header.cpp:199
+#: src/header.cpp:339
 msgid "About"
 msgstr "Über Gobby"
 
-#: src/header.cpp:200
+#: src/header.cpp:340
 msgid "Shows Gobby's copyright and credits"
-msgstr ""
+msgstr "Zeigt Informationen zu Gobbys Copyright und den Mitwirkenden an"
 
 #: src/hostdialog.cpp:24
 msgid "Create obby session"
-msgstr ""
+msgstr "obby Sitzung eröffnen"
 
 #: src/hostdialog.cpp:26 src/joindialog.cpp:27
 msgid "Port:"
-msgstr ""
+msgstr "Port:"
 
 #: src/hostdialog.cpp:27 src/joindialog.cpp:28
 msgid "Name:"
@@ -123,11 +145,11 @@ msgstr "Farbe:"
 
 #: src/joindialog.cpp:24
 msgid "Join obby session"
-msgstr ""
+msgstr "Sitzung beitreten"
 
 #: src/joindialog.cpp:26
 msgid "Host:"
-msgstr ""
+msgstr "Host:"
 
 #: src/userlist.cpp:37
 msgid "Color"
@@ -137,18 +159,18 @@ msgstr "Farbe"
 msgid "Name"
 msgstr "Name"
 
-#: src/window.cpp:254
+#: src/window.cpp:277
 msgid "A collaborative text editor"
-msgstr ""
+msgstr "Ein Gemeinschaftseditor"
 
-#: src/window.cpp:295
+#: src/window.cpp:323
 msgid "Open new document"
 msgstr "Neues dokument öffnen"
 
-#: src/window.cpp:312
+#: src/window.cpp:340
 msgid "Save current document"
 msgstr "Aktuelles Dokument speichern"
 
-#: src/window.cpp:359
+#: src/window.cpp:454
 msgid "Connection lost"
 msgstr "Verbindung verloren"
