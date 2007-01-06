@@ -46,6 +46,15 @@ if test "x$ac_cv_use_gtksourceview" != "xno" ; then
 	AC_DEFINE([WITH_GTKSOURCEVIEW], 1,
 		  [Define whether to use SourceView instead of TextView.])
 fi
+
+# Check for howl in libobby.
+AC_CHECK_LIB(obby, obby_has_howl)
+if test "x$ac_cv_lib_obby_obby_has_howl" = "xyes" ; then
+	# We do not need any new flags as obby should take care of it.
+	PKG_CHECK_MODULES([howl], [howl])
+	AC_DEFINE([WITH_HOWL], 1, [Define whether to use howl support])
+fi
+AM_CONDITIONAL(WITH_HOWL, test x$ac_cv_lib_obby_obby_has_howl = xyes)
 	
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
