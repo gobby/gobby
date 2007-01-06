@@ -93,11 +93,23 @@ void Gobby::Chat::obby_document_remove(obby::document& document)
 
 void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
 {
-  m_log_chat.log("<" + user.get_name() + "> " + message, "black");
+	// Make sure we are not deceived by rogue multi line messages
+	Glib::ustring::size_type prev = 0, pos = 0;
+	while( (pos = message.find('\n', pos)) != Glib::ustring::npos)
+	{
+		add_line(user, message.substr(prev, pos - prev) );
+		prev = ++pos;
+	}
 }
 
-void Gobby::Chat::obby_server_message(const Glib::ustring& message) {
-  m_log_chat.log(message, "forest green");
+void Gobby::Chat::add_line(obby::user& user, const Glib::ustring& message)
+{
+	m_log_chat.log("<" + user.get_name() + "> " + message, "black");
+}
+
+void Gobby::Chat::obby_server_message(const Glib::ustring& message)
+{
+	m_log_chat.log(message, "forest green");
 }
 
 void Gobby::Chat::on_chat()
@@ -117,3 +129,4 @@ void Gobby::Chat::on_chat()
 
 	m_signal_chat.emit(message);
 }
+
