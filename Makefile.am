@@ -151,3 +151,14 @@ EXTRA_DIST += contrib/gobby.desktop
 EXTRA_DIST += win32/gobby.ico
 EXTRA_DIST += win32/gobby.rc
 
+check_PROGRAMS = document
+TESTS = document
+
+document_SOURCES  = test/test_document.cpp
+document_SOURCES += src/document.cpp
+document_SOURCES += src/gselector.cpp
+document_SOURCES += src/sourceview/sourcebuffer.cpp
+document_SOURCES += src/sourceview/sourcelanguage.cpp
+document_LDADD    = $(gobby_LIBS) $(gtksourceview_LIBS)
+document_CPPFLAGS = $(gobby_CFLAGS) $(gtksourceview_CFLAGS)
+
