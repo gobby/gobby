@@ -61,9 +61,6 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder)
 		if(language)
 			buf->set_language(language);
 	}
-
-	// Do not highlight anything until the user subscribed
-	buf->set_highlight(false);
 #endif
 
 	// Insert user tags into the tag table
@@ -342,7 +339,11 @@ void Gobby::Document::on_obby_self_subscribe()
 {
 	// Get document we subscribed to
 	obby::local_document& doc = *m_doc.get_document();
+#ifdef WITH_GTKSOURCEVIEW
+	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
+#else
 	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
+#endif
 
 	// Install singal handlers
 	doc.insert_event().before().connect(
@@ -361,6 +362,9 @@ void Gobby::Document::on_obby_self_subscribe()
 	// Make the document editable
 	set_editable(true);
 	set_wrap_mode(Gtk::WRAP_NONE);
+
+	// Enable highlighting
+	buf->set_highlight(true);
 
 	// TODO: Do this in an idle handler? *kA*
 
@@ -587,7 +591,13 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 
 void Gobby::Document::set_intro_text()
 {
-	get_buffer()->set_text(_(
+#ifdef WITH_GTKSOURCEVIEW
+	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
+#else
+	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
+#endif
+
+	buf->set_text(_(
 		"You are not subscribed to the document \"") +
 			m_doc.get_title() + _("\".\n\nTo view changes that "
 		"others make or to edit the document yourself, you have to "
@@ -596,17 +606,21 @@ void Gobby::Document::set_intro_text()
 	);
 
 	Glib::RefPtr<Gtk::TextChildAnchor> anchor =
-		get_buffer()->create_child_anchor(get_buffer()->end() );
+		buf->create_child_anchor(buf->end() );
 
 	// Activate the subscribe button, if it isn't
 	m_btn_subscribe.set_sensitive(true);
 
+	// Add the button to the anchor
 	add_child_at_anchor(m_btn_subscribe, anchor);
 
 	// TODO: Add people that are currently subscribed
 
 	set_editable(false);
 	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+
+	// Do not highlight anything until the user subscribed
+	buf->set_highlight(false);
 }
 
 void
