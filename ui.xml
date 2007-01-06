@@ -13,5 +13,9 @@
     <toolitem action="CreateSession" />
     <toolitem action="JoinSession" />
     <toolitem action="QuitSession" />
+    <separator />
+    <toolitem action="CreateDocument" />
+    <toolitem action="OpenDocument" />
+    <toolitem action="CloseDocument" />
   </toolbar>
 </ui>

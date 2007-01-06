@@ -80,6 +80,48 @@ Gobby::Header::Header()
 		)
 	);
 
+	// Create document
+	m_group_app->add(
+		Gtk::Action::create(
+			"CreateDocument",
+			Gtk::Stock::NEW,
+			"Create document",
+			"Creates a new document"
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_create
+		)
+	);
+
+	// Open document
+	m_group_app->add(
+		Gtk::Action::create(
+			"OpenDocument",
+			Gtk::Stock::OPEN,
+			"Open document",
+			"Loads a file into a new document"
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_open
+		)
+	);
+
+	// Close document
+	m_group_app->add(
+		Gtk::Action::create(
+			"CloseDocument",
+			Gtk::Stock::CLOSE,
+			"Close document",
+			"Closes an open document"
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_close
+		)
+	);
+	
 	// Quit application
 	m_group_app->add(
 		Gtk::Action::create(
@@ -111,7 +153,11 @@ Gobby::Header::Header()
 	pack_start(*m_menubar, Gtk::PACK_SHRINK);
 	pack_start(*m_toolbar, Gtk::PACK_SHRINK);
 
-	// Without having joined a session, it may not be quit
+	// Without having joined a session, there is no support for documents
+	// or the possibility to quit it.
+	m_group_app->get_action("CreateDocument")->set_sensitive(false);
+	m_group_app->get_action("OpenDocument")->set_sensitive(false);
+	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
 }
 
@@ -137,6 +183,24 @@ Gobby::Header::session_quit_event() const
 	return m_signal_session_quit;
 }
 
+Gobby::Header::signal_document_create_type
+Gobby::Header::document_create_event() const
+{
+	return m_signal_document_create;
+}
+
+Gobby::Header::signal_document_open_type
+Gobby::Header::document_open_event() const
+{
+	return m_signal_document_open;
+}
+
+Gobby::Header::signal_document_close_type
+Gobby::Header::document_close_event() const
+{
+	return m_signal_document_close;
+}
+
 Gobby::Header::signal_quit_type
 Gobby::Header::quit_event() const
 {
@@ -149,6 +213,13 @@ void Gobby::Header::obby_start()
 	m_group_app->get_action("CreateSession")->set_sensitive(false);
 	m_group_app->get_action("JoinSession")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(true);
+
+	// Enable document buttons
+	m_group_app->get_action("CreateDocument")->set_sensitive(true);
+	m_group_app->get_action("OpenDocument")->set_sensitive(true);
+
+	// CloseDocument will be activated from the insert_document event
+	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 }
 
 void Gobby::Header::obby_end()
@@ -157,6 +228,11 @@ void Gobby::Header::obby_end()
 	m_group_app->get_action("CreateSession")->set_sensitive(true);
 	m_group_app->get_action("JoinSession")->set_sensitive(true);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
+
+	// Disable document buttons
+	m_group_app->get_action("CreateDocument")->set_sensitive(false);
+	m_group_app->get_action("OpenDocument")->set_sensitive(false);
+	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 }
 
 void Gobby::Header::obby_user_join(obby::user& user)
@@ -169,10 +245,14 @@ void Gobby::Header::obby_user_part(obby::user& user)
 
 void Gobby::Header::obby_document_insert(obby::document& document)
 {
+	// Now we have at least one document open, so we could activate the
+	// close button.
+	m_group_app->get_action("CloseDocument")->set_sensitive(true);
 }
 
 void Gobby::Header::obby_document_remove(obby::document& document)
 {
+	// TODO: Check the documents for being 0 and deactivate close document
 }
 
 void Gobby::Header::on_app_session_create()
@@ -188,6 +268,21 @@ void Gobby::Header::on_app_session_join()
 void Gobby::Header::on_app_session_quit()
 {
 	m_signal_session_quit.emit();
+}
+
+void Gobby::Header::on_app_document_create()
+{
+	m_signal_document_create.emit();
+}
+
+void Gobby::Header::on_app_document_open()
+{
+	m_signal_document_open.emit();
+}
+
+void Gobby::Header::on_app_document_close()
+{
+	m_signal_document_close.emit();
 }
 
 void Gobby::Header::on_app_quit()

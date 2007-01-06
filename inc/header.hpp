@@ -47,6 +47,9 @@ public:
 	typedef sigc::signal<void> signal_session_create_type;
 	typedef sigc::signal<void> signal_session_join_type;
 	typedef sigc::signal<void> signal_session_quit_type;
+	typedef sigc::signal<void> signal_document_create_type;
+	typedef sigc::signal<void> signal_document_open_type;
+	typedef sigc::signal<void> signal_document_close_type;
 	typedef sigc::signal<void> signal_quit_type;
 
 	Header();
@@ -55,6 +58,9 @@ public:
 	signal_session_create_type session_create_event() const;
 	signal_session_join_type session_join_event() const;
 	signal_session_quit_type session_quit_event() const;
+	signal_document_create_type document_create_event() const;
+	signal_document_open_type document_open_event() const;
+	signal_document_close_type document_close_event() const;
 	signal_quit_type quit_event() const;
 
 	// Calls from the window
@@ -69,6 +75,9 @@ protected:
 	void on_app_session_create();
 	void on_app_session_join();
 	void on_app_session_quit();
+	void on_app_document_create();
+	void on_app_document_open();
+	void on_app_document_close();
 	void on_app_quit();
 
 	Glib::RefPtr<Gtk::UIManager> m_ui_manager;
@@ -81,6 +90,9 @@ protected:
 	signal_session_create_type m_signal_session_create;
 	signal_session_join_type m_signal_session_join;
 	signal_session_quit_type m_signal_session_quit;
+	signal_document_create_type m_signal_document_create;
+	signal_document_open_type m_signal_document_open;
+	signal_document_close_type m_signal_document_close;
 	signal_quit_type m_signal_quit;
 };
 
