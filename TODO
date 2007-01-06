@@ -26,6 +26,7 @@ Normal:
   * End-of-document cursor position behaves weirdly. (#84)
   * Server exit causes clients to exit (#85)
   * Gobby should save backups (#87)
+  * Gobby starting similar to LiveHelp irc on wikicities (#88)
 
 Minor:
 
@@ -170,6 +171,20 @@ server comes back online, everyone's changes can be sent in.
 87: Gobby should save backups
 -----------------------------
 Gobby should save local backups in case of crashes.  
+
+88: Gobby starting similar to LiveHelp irc on wikicities
+--------------------------------------------------------
+Mattis: 
+
+[http://wikicities.com/index.php/Special:Recentchanges wikicities: recent 
+changes], down on the left there is a button ''Live help''. Clicking it it 
+takes you right into the wikicities channel on irc. A similar button 
+starting up gobby would be cool.  
+
+Armin:
+ * uff, that takes reimplementing libobby completely in Java, building a 
+Client around it.
+ * probably registering a obby://-protocoll at the system
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
