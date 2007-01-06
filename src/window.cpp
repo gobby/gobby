@@ -1031,7 +1031,7 @@ void Gobby::Window::close_document(DocWindow& document)
 		// Add button to allow the user to save the dialog
 		dlg.add_button("Close without saving", Gtk::RESPONSE_REJECT);
 		dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-		dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_ACCEPT);
+		dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_ACCEPT)->grab_focus();
 
 		// Show the dialog
 		int result = dlg.run();
