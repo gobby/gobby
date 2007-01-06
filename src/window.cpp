@@ -294,13 +294,16 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 
 bool Gobby::Window::on_timer()
 {
-	m_buffer->select(0);
-
-	// See comment in Window::on_obby_login_failed
-	if(m_login_failed)
+	for(int i = 0; i < 15; ++ i)
 	{
-		on_session_join();
-		m_login_failed = false;
+		m_buffer->select(0);
+
+		// See comment in Window::on_obby_login_failed
+		if(m_login_failed)
+		{
+			on_session_join();
+			m_login_failed = false;
+		}
 	}
 
 	return true;
