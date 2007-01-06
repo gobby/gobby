@@ -1,0 +1,482 @@
+Sat Jun  4 19:48:53 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed a segfault which occured sometimes when closing documents
+
+Sat Jun  4 19:47:16 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Introduced DefaultDialog to allow to press Enter in dialogs
+
+Sat Jun  4 19:08:02 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Show up user-colourising text immediately [fixes #22]
+
+Sat Jun  4 19:03:40 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Removed the useless ENABLE_NLS check as we hard-depend on gettext
+
+Sat Jun  4 18:24:32 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Translated missing strings into German
+
+Sat Jun  4 18:07:20 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Use another default color as black [fixes #34]
+
+Sat Jun  4 17:40:27 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Remove entities in on_folder_tab_switched
+
+Sat Jun  4 17:40:13 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * A much better fix for #24
+
+Sat Jun  4 16:50:36 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Updated the gettext template and the German translation
+
+Sat Jun  4 15:46:39 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Removed Umlauts from Language file names to build valid XML, renamed Document to View in menu
+
+Sat Jun  4 09:52:11 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Update user colour in key press event handler if possible [fixes #24]
+  
+  If someone copied a part of the buffer, the tags applied to it were copied, too.
+  If he pasted it then, the insert-text signal handler could not remove those tags
+  because they were not yet applied. So it ended up in having to user colour tags
+  applied to the new range of text: The one from the user who pasted the text and
+  the one from the user who wrote the original text.
+  
+  This is solved by adding tags followed by a key press event not anymore in the
+  insert-text event handler but in the key press event handler, which is called
+  later, when the pasted tag already has been applied. Then, it may be removed and
+  the one and only user colour tag can be set.
+
+Fri Jun  3 11:35:13 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Use "n unsynced change(s)" instead of "in sync"
+
+Fri Jun  3 10:16:33 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Fixed my messup fixing the chat multiline handling
+
+Fri Jun  3 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jun  2 21:01:51 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jun  2 20:49:18 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jun  2 20:47:57 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jun  2 20:40:35 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jun  2 19:39:45 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Merging the multi-line chat fixes
+
+Tue May 31 09:15:41 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Splitting up received lines of chat by newlines, added todo items
+
+Thu Jun  2 15:33:49 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Menu to switch the syntax colouring scheme [fixes #4]
+
+Wed Jun  1 20:59:19 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Option to disable line numbers [fixes #7]
+
+Wed Jun  1 18:25:31 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Show revision and sync state in statusbar [fixes #13]
+
+Wed Jun  1 16:36:06 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed some errors caused by recent libobby API changes
+
+Mon May 30 15:23:18 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Set correct notebook tab after startup
+
+Sun May 29 19:39:23 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Use of local_buffer instead of dynamic casts [ref #9]
+
+Sun May 29 13:48:11 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Initialise size of paned widgets [fixes #5]
+
+Sun May 29 11:40:30 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Allow the user to save documents after connection loss [fixes #1]
+
+Sun May 29 10:36:25 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Disable close and save buttons if no more documents are open
+
+Sat May 28 14:02:55 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Send lines separately in chat
+
+Thu May 26 23:29:22 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Changed the desktop item's name to be a bit more compilant
+
+Thu May 26 20:28:16 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Segfault fixed some time ago...
+
+Sun May 22 20:20:14 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Ebuild change: Depend on gtksourceview, use GNOME integration
+
+Sat May 21 10:27:02 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Load icon from file when compiled --with-gnome
+
+Sat May 21 09:58:31 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Resized the 128x128 XPM to 32x32
+
+Fri May 20 19:51:28 UTC 2005  Philipp Kern <pkern@debian.org>
+  * Added missing assert include
+
+Fri May 20 10:00:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added build-dependency on net6-1.0
+
+Thu May 19 17:21:06 UTC 2005  Philipp Kern <phil@0x539.de>
+  * configure now detects the presence of GtkSourceView automatically
+
+Thu May 19 17:19:08 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Makefile.am had a wrong conditional statement
+
+Sun May 15 10:57:39 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Serious bug exploited, po/ permission-related build fix
+
+Sun May 15 10:56:53 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added GNOME integration
+
+Wed May 11 19:04:04 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added gzip'ed XPM version of the Gobby logo
+
+Tue May 10 12:23:31 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed a segfault which occured sometimes on the exit
+
+Sun May  8 15:25:41 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Shuffled some files around, fixed non-gtksourceview build [phil]
+
+Sun May  8 15:19:02 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * WIN32 build fix (resource files build correctly) [phil]
+
+Sun May  8 12:59:24 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * gobby resource file until autotools are able to build it
+
+Sun May  8 11:09:00 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Sized gobby.ico to 48x48
+  Bigger icons just waste memory on windows, they will never be shown in their full size.
+
+Sun May  8 12:07:42 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Try to build gobby.res from top-level Makefile.am
+
+Sun May  8 11:33:27 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Use Automake for win32/ subdirectory
+
+Sun May  8 11:23:54 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Fixed make dist
+
+Sun May  8 11:23:42 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Delocalised two error strings
+
+Sun May  8 11:20:20 UTC 2005  Philipp Kern <phil@0x539.de>
+  * po reflect new line numbers within the source files
+
+Sun May  8 11:14:33 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Include contrib/ and win32/ in make dist
+
+Sun May  8 11:10:13 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added more WIN32 build stuff
+
+Sat May  7 23:44:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Suppress the console window in favour of a real GUI application
+
+Sat May  7 20:52:11 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Win32 does not have localtime_r
+  We do not need thread safety anyway...
+
+Sat May  7 20:50:34 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * make dist requires ChangeLog...
+
+Sat May  7 20:49:55 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * win32 resource file for the gobby icon
+
+Sat May  7 19:07:20 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * User colourising
+
+Sat May  7 10:56:35 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added keyboard shortcuts
+
+Sat May  7 10:46:34 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Moved language manager to folder
+
+Sat May  7 10:34:02 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Replaced _ macro by an inline function
+
+Sat May  7 10:32:46 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Separate mime map
+
+Fri May  6 19:48:57 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * StatusBar showing cursor position and current language
+
+Fri May  6 10:58:15 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added more TODO items
+
+Thu May  5 20:53:46 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Made the TODO list more readable
+
+Thu May  5 18:39:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * A missing shell call produced build errors
+
+Thu May  5 18:16:01 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Set scripts executable and use a partial checkout in the ebuild
+
+Thu May  5 17:34:55 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added missing po/Makefile.in.in
+
+Thu May  5 17:14:51 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Gobby i18n, German translation added
+
+Thu May  5 16:48:50 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Ignore more intermediate files
+
+Thu May  5 16:45:00 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added mkinstalldirs from Autotools
+
+Thu May  5 14:02:49 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * auto* updated some auto-generated files...
+
+Thu May  5 14:00:18 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Gobby sends positions now in bytes and no longer in characters.
+  libobby takes all positions in bytes to having not to care about different
+  encodings.
+
+Wed May  4 09:16:30 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Display a Gtk::MessageDialog on an unhandled exception
+
+Wed Apr 27 20:08:00 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Fixed gobby to compile without gtksourceview
+
+Tue Apr 26 14:33:06 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Insert parameter placeholder corrected
+
+Mon Apr 25 15:44:22 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Ugly fix to get the times right
+
+Mon Apr 25 13:07:46 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Implemented timestamps in logview
+
+Mon Apr 25 10:43:49 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Some corrections to the file types
+
+Sun Apr 24 20:03:33 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Set current name in the Save FileChooser
+
+Sun Apr 24 19:57:19 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added two new TODO items
+
+Fri Apr 22 20:52:29 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Code highlighting by file extension
+
+Fri Apr 22 20:50:25 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Some GtkSourceView wrapper fixes and extensions
+
+Fri Apr 22 15:00:36 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * GtkSourceLanguagesManager wrapper
+
+Thu Apr 21 20:07:42 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Wrapped GtkSourceLanguage
+
+Thu Apr 21 17:13:51 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Use a monospaced font for the TextView
+
+Wed Apr 20 17:58:59 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * GtkSourceBuffer wrapper
+
+Mon Apr 18 19:21:37 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Save document was missing in the source
+
+Sun Apr 17 20:26:29 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Check for howl in libobby
+
+Sun Apr 17 17:52:01 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * sourceview/-subdir for sourceview wrappers, Gtk::SourceView aktually works
+
+Sun Apr 17 15:31:15 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Gather host information correctly
+
+Sun Apr 17 14:59:06 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Win32 buffer_wrappers using a timer
+
+Fri Apr 15 21:48:03 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added inline gobby icon
+
+Fri Apr 15 14:10:38 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added some first wrapper code for GtkSourceView -- disfunctional
+
+Fri Apr 15 14:09:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added framework to use SourceView instead of TextView
+
+Fri Apr 15 21:48:28 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added tom as artist
+
+Fri Apr 15 21:09:41 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added artwork credits
+
+Fri Apr 15 21:09:23 UTC 2005  Thomas Glatt <tom@0x539.de>
+  * Added Gobby artwork
+
+Fri Apr 15 20:16:30 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Call correct base_function in Gobby::Host::on_connect
+
+Fri Apr 15 20:00:12 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Adjusted buffer_wrapper for net6 API corrections
+
+Thu Apr 14 17:38:34 UTC 2005  Philipp Kern <phil@0x539.de>
+  tagged stable 2005-04-14
+
+Thu Apr 14 17:14:36 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added boringfile
+
+Thu Apr 14 17:12:45 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added save document hooks, but w/o real functionality
+
+Thu Apr 14 15:43:55 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Use the new include path of libobby
+
+Thu Apr 14 15:15:10 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Check for obby-1.0 instead of lobby-1.0
+
+Thu Apr 14 14:03:44 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Implemented open document
+
+Thu Apr 14 13:00:53 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Removed ui.xml from the ebuild
+
+Thu Apr 14 12:57:57 UTC 2005  Philipp Kern <phil@0x539.de>
+  * XML UI descriptions are now present within src/header.cpp
+
+Thu Apr 14 12:55:58 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Compile the right buffer wrappers for their corresponding platform
+
+Thu Apr 14 12:47:33 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Fix buffer wrapper to use generic on !WIN32
+
+Tue Apr 12 18:19:08 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Splitted buffer_wrapper up to buffer_wrapper_generic and buffer_wrapper.
+  buffer_wrapper_win32 will follow.
+
+Mon Apr 11 11:30:44 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Implemented close a bit more correctly, updated TODO
+
+Mon Apr 11 06:09:02 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Remove current document, *hopefully* w/o memory leak
+
+Sun Apr 10 20:30:05 UTC 2005  Thomas Glatt <tom@0x539.de>
+  * Ebuild for gobby
+
+Sun Apr 10 10:59:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Resolved conflict in Makefile.am related to WIN32 build
+
+Sun Apr 10 10:58:12 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added WIN32 build support
+
+Sat Apr  9 20:56:29 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Win32 build fixes; buffer_wrappers still use a timer on win32
+
+Sat Apr  9 20:55:45 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Distribute header files with 'make dist'
+
+Sat Apr  9 15:41:38 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Replaced ERROR with IOERROR in buffer_wrappers according to new net6 API
+
+Sat Apr  9 15:12:29 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed missing <cassert> include in buffer_wrapper.cpp
+
+Sat Apr  9 12:01:32 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Use the file name of the file to open as document title
+
+Sat Apr  9 11:37:52 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Relicensed under the GPL
+  
+    Reasoning: There was never the intention to license gobby under the LGPL.
+    COPYING included the GPL but all the license headers referred to the LGPL.
+    This is now fixed in accordance with all the contributing authors.
+  
+    ACK:
+    - Armin Burgmeier <armin@0x539.de>
+    - Philipp Kern <phil@0x539.de>
+    - Benjamin Herr <ben@0x539.de>
+  
+  
+
+Sat Apr  9 11:23:21 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Watching on Glib::signal_io() instead of using a timer
+
+Fri Apr  8 16:23:52 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed a crash in gobby which occured if a connection has been lost
+
+Fri Apr  8 16:16:58 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Changed Menu-Action 'Help' to 'MenuHelp', for consistency with other actions
+
+Fri Apr  8 16:16:33 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Resolved a conflict in inc/window.hpp and src/window.cpp
+
+Fri Apr  8 16:04:47 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Document creation
+
+Fri Apr  8 11:03:24 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added about dialog
+
+Fri Apr  8 08:47:43 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Added entrydialog to prompt for strings
+
+Fri Apr  8 08:11:37 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed gobby synchronization
+
+Fri Apr  8 08:06:59 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Added menu items for *Document, fixed typo
+
+Fri Apr  8 06:21:11 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Moved config_.hpp to config.hpp, introduced features.hpp
+
+Thu Apr  7 23:08:50 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added initial NEWS content and Ben to AUTHORS
+
+Thu Apr  7 23:06:59 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added document toolbar button stubs
+
+Thu Apr  7 22:59:55 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Receive document title from libobby
+
+Thu Apr  7 13:50:30 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * h4ck
+
+Thu Apr  7 12:13:04 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Todo: Exceptions?
+
+Thu Apr  7 12:11:50 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Fixed window to also connect chat signals on join
+
+Thu Apr  7 12:11:12 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Fixed indenting spaces to be tabs
+
+Thu Apr  7 13:40:13 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Document synchronisation thorugh libobby
+
+Thu Apr  7 11:49:23 UTC 2005  Benjamin Herr <ben@0x539.de>
+  * Added handling of chat events from m_chat and m_buffer
+
+Tue Apr  5 16:19:05 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Initial TODO file
+
+Mon Apr  4 12:14:16 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Depend on gtkmm-2.4 >= 2.6.0
+
+Sun Apr  3 18:47:44 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Document class representing an obby::document
+
+Sun Apr  3 14:50:25 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Event delegations
+
+Sun Apr  3 11:54:56 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * XML config file in home dir; requires libxml++
+
+Sat Apr  2 20:00:09 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added create & join dialogs
+
+Sat Apr  2 19:18:45 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Skeleton of the UI
+
+Sat Apr  2 16:12:51 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Header, GTK naming scheme
+
+Wed Mar 30 17:56:03 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Autotoolised gobby
+
+Wed Mar 30 17:12:54 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Empty gobby window
