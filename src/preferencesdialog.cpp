@@ -260,28 +260,30 @@ void Gobby::PreferencesDialog::Appearance::
 	appearance.remember = m_btn_remember.get_active();
 }
 
-Gobby::PreferencesDialog::Font::Font(const Preferences& preferences)
+Gobby::PreferencesDialog::Font::Font(const Preferences& preferences):
+	m_init_font(preferences.font.desc.to_string() )
 {
 	// Call to set_font_name does not work before realization of the
 	// font selection widget
 	m_font_sel.signal_realize().connect(
-		sigc::hide_return(
-			sigc::bind(
-				sigc::mem_fun(
-					m_font_sel,
-					&Gtk::FontSelection::set_font_name
-				),
-				preferences.font.desc.to_string()
-			)
-		)
+		sigc::mem_fun(*this, &Font::on_fontsel_realize)
 	);
 
 	add(m_font_sel);
 }
 
+void Gobby::PreferencesDialog::Font::on_fontsel_realize()
+{
+	m_font_sel.set_font_name(m_init_font);
+	m_init_font.clear();
+}
+
 void Gobby::PreferencesDialog::Font::set(Preferences::Font& font) const
 {
-	font.desc = Pango::FontDescription(m_font_sel.get_font_name());
+	if(m_init_font.empty() )
+		font.desc = Pango::FontDescription(m_font_sel.get_font_name());
+	else
+		font.desc = Pango::FontDescription(m_init_font);
 }
 
 Gobby::PreferencesDialog::FileList::LanguageColumns::LanguageColumns()

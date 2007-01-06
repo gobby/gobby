@@ -140,7 +140,10 @@ public:
 		void set(Preferences::Font& font) const;
 
 	protected:
+		void on_fontsel_realize();
+
 		Gtk::FontSelection m_font_sel;
+		Glib::ustring m_init_font;
 	};
 
 	class FileList: public Page
