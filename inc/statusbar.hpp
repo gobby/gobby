@@ -38,8 +38,6 @@ public:
 	virtual ~StatusBar();
 
 	void update_language(Document& document);
-	void update_sync(Document& document);
-	void update_revision(Document& document);
 	void update_cursor(Document& document);
 
 	void update_all(Document& document);
@@ -55,8 +53,6 @@ public:
 protected:
 	Gtk::HBox m_box;
 	Gtk::Label m_language;
-	Gtk::Label m_sync;
-	Gtk::Label m_revision;
 	Gtk::Label m_position;
 };
 

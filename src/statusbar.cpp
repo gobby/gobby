@@ -26,15 +26,9 @@
 Gobby::StatusBar::StatusBar(const Folder& folder)
  : Frame(), 
    m_language("", Gtk::ALIGN_LEFT),
-   m_sync("", Gtk::ALIGN_LEFT),
-   m_revision("", Gtk::ALIGN_LEFT),
    m_position("", Gtk::ALIGN_LEFT)
 {
 	m_box.pack_start(m_language, Gtk::PACK_SHRINK);
-	m_box.pack_start(*Gtk::manage(new Gtk::VSeparator), Gtk::PACK_SHRINK);
-	m_box.pack_start(m_sync, Gtk::PACK_SHRINK);
-	m_box.pack_start(*Gtk::manage(new Gtk::VSeparator), Gtk::PACK_SHRINK);
-	m_box.pack_start(m_revision, Gtk::PACK_SHRINK);
 	m_box.pack_end(m_position, Gtk::PACK_SHRINK, 2);
 	m_box.set_spacing(5);
 
@@ -43,10 +37,6 @@ Gobby::StatusBar::StatusBar(const Folder& folder)
 
 	folder.document_cursor_moved_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_cursor) );
-	folder.document_content_changed_event().connect(
-		sigc::mem_fun(*this, &StatusBar::update_sync) );
-	folder.document_content_changed_event().connect(
-		sigc::mem_fun(*this, &StatusBar::update_revision) );
 	folder.document_language_changed_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_language) );
 	folder.tab_switched_event().connect(
@@ -72,22 +62,6 @@ void Gobby::StatusBar::update_language(Document& document)
 	}
 }
 
-void Gobby::StatusBar::update_sync(Document& document)
-{
-	unsigned int n = document.get_unsynced_changes_count();
-	obby::format_string str(
-		ngettext("%0% pending change", "%0% pending changes", n) );
-	str << n;
-	m_sync.set_text(str.str() );
-}
-
-void Gobby::StatusBar::update_revision(Document& document)
-{
-	obby::format_string str(_("Revision: %0%") );
-	str << document.get_revision();
-	m_revision.set_text(str.str() );
-}
-
 void Gobby::StatusBar::update_cursor(Document& document)
 {
 	unsigned int row, col;
@@ -101,8 +75,6 @@ void Gobby::StatusBar::update_cursor(Document& document)
 void Gobby::StatusBar::update_all(Document& document)
 {
 	update_language(document);
-	update_sync(document);
-	update_revision(document);
 	update_cursor(document);
 }
 
@@ -113,8 +85,6 @@ void Gobby::StatusBar::obby_start(obby::local_buffer& buf)
 void Gobby::StatusBar::obby_end()
 {
 	m_language.set_text("");
-	m_sync.set_text("");
-	m_revision.set_text("");
 	m_position.set_text("");
 }
 
