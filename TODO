@@ -6,7 +6,6 @@ Blocker:
 Critical:
 
 Major:
-  * Bug: User attribution copied when using copy & paste (#24)
 
 Normal:
   * Improve the network handling on Win32 (#2)
@@ -15,9 +14,12 @@ Normal:
   * Request confirmations for unsaved documents (#26)
   * Switch to tabs newly opened (#27)
   * Chat command infrastructure (#31)
+  * Strive for Gnome HIG compilance (#32)
+  * Recognise command line parameters (#33)
+  * Colour presets (#36)
+  * Format strings for texts to translate (#37)
 
 Minor:
-  * Repaint of user colour incorrect (#22)
 
 Trivial:
 
@@ -25,13 +27,9 @@ Enhancement:
   * Highlighting of own nickname in chat window (#6)
   * Multiple user lists (#12)
   * Auto indentation (#23)
+  * Focus the text-widget after having created/joined a session (#35)
+  * Document owners (#38)
 
-
-24: Bug: User attribution copied when using copy & paste
---------------------------------------------------------
-If somebody copies some text of another user on the host and pastes it then 
-it will show up temporarily as own text, but it will get the other user's 
-colour after the next redraw.
 
 2: Improve the network handling on Win32
 ----------------------------------------
@@ -79,12 +77,48 @@ Chat command infrastructure (like /me, /ignore, etc.)
 ''This is a stub and generated out of the old TODO located in the 
 repository.''
 
-22: Repaint of user colour incorrect
-------------------------------------
-If a user writes anything into a Gobby document, the background gets 
-colourised with this users colour, but the operation is not performed 
-immediately but with the next redraw of the cursor or the line or 
-something.
+32: Strive for Gnome HIG compilance
+-----------------------------------
+Gobby should be more or less compilant to the Gnome Human Interface 
+Guidelines when compiled ''--with-gnome''. This means at least that the 
+menu names have to be fixed and some other UI things tweaked a bit.
+
+33: Recognise command line parameters
+-------------------------------------
+Command line parameters should be parsed and processed. Especially it would 
+be nice if Gobby accepted one or more files in it to open it in the 
+currently active Gobby session (to use ''Open With'' in your favourite 
+desktop environment). However this will get complicated when more than one 
+Gobby is open.
+
+36: Colour presets
+------------------
+There should be presets for the user's colour available in the Gobby 
+settings. Probably the colour picker needs to be extended with a palette.
+
+Tom did some research on this and found some useful colours (in HTML hex 
+values):
+{{{
+#!html
+<span style="background-color:#f9dad4;">#f9dad4</span>
+<span style="background-color:#fddfbe;">#fddfbe</span>
+<span style="background-color:#fdf3be;">#fdf3be</span>
+<span style="background-color:#f5fdbe;">#f5fdbe</span>
+<span style="background-color:#dcfdbe;">#dcfdbe</span>
+<span style="background-color:#befde2;">#befde2</span>
+<span style="background-color:#bee9fd;">#bee9fd</span>
+<span style="background-color:#becffd;">#becffd</span>
+<span style="background-color:#c7befd;">#c7befd</span>
+<span style="background-color:#f2befd;">#f2befd</span>
+<span style="background-color:#fdbedd;">#fdbedd</span>
+<span style="background-color:#f6abab;">#f6abab</span>
+}}}
+
+37: Format strings for texts to translate
+-----------------------------------------
+We should use format strings instead of just catting strings togeather to 
+permit translators to change word order. Maybe a wrapper around 
+''g_sprintf_strdup''.
 
 6: Highlighting of own nickname in chat window
 ----------------------------------------------
@@ -107,4 +141,20 @@ selected document
 --------------------
 GtkSourceView seems to support auto indentation. Gobby should provide an 
 option to enable or disable this feature.
+
+35: Focus the text-widget after having created/joined a session
+---------------------------------------------------------------
+It would be nice, if one could just create/join a session and then start to 
+write without having to focus the editor widget.
+
+38: Document owners
+-------------------
+Document should store their author. This would allow two possibilites:
+
+ * The owner can give different people privilegies to access his document, 
+such as ''none'', ''read'', ''read/write''.
+ * The document itself is no longer identified by its ID but by its ID 
+'''and''' the ID of the document owner. This allows that a document appears 
+immediately on the client side without waiting for server acknowledegment 
+because the identifications for a document cannot conflict.
 
