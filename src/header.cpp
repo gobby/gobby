@@ -59,6 +59,10 @@ namespace {
 		"        <menuitem action=\"ViewSyntaxLanguageNone\" />"
 		"      </menu>"
 		"    </menu>"
+		"    <menu action=\"MenuWindow\">"
+		"      <menuitem action=\"WindowUserList\" />"
+		"      <menuitem action=\"WindowDocumentList\" />"
+		"    </menu>"
 		"    <menu action=\"MenuHelp\">"
 		"      <menuitem action=\"HelpAbout\" />"
 		"    </menu>"
@@ -72,6 +76,9 @@ namespace {
 		"    <toolitem action=\"SessionDocumentOpen\" />"
 		"    <toolitem action=\"SessionDocumentSave\" />"
 		"    <toolitem action=\"SessionDocumentClose\" />"
+		"    <separator />"
+		"    <toolitem action=\"WindowUserList\" />"
+		"    <toolitem action=\"WindowDocumentList\" />"
 		"  </toolbar>"
 		"</ui>";
 
@@ -157,6 +164,7 @@ Gobby::Header::Header():
 	group_edit(Gtk::ActionGroup::create() ),
 	group_user(Gtk::ActionGroup::create() ),
 	group_view(Gtk::ActionGroup::create() ),
+	group_window(Gtk::ActionGroup::create() ),
 	group_help(Gtk::ActionGroup::create() ),
 
 	action_app(Gtk::Action::create("MenuApp", "Gobby") ),
@@ -297,6 +305,27 @@ Gobby::Header::Header():
 
 	action_view_syntax(Gtk::Action::create("MenuViewSyntax", _("Syntax")) ),
 
+	action_window(Gtk::Action::create("MenuWindow", _("Window")) ),
+
+	action_window_userlist(
+		Gtk::ToggleAction::create(
+			"WindowUserList",
+			Gtk::Stock::MISSING_IMAGE,
+			_("User list"),
+			_("Shows up a list of users that are currently joined")
+		)
+	),
+
+	action_window_documentlist(
+		Gtk::ToggleAction::create(
+			"WindowDocumentList",
+			Gtk::Stock::EDIT,
+			_("Document list"),
+			_("Shows up a list of documents within the "
+			  "current session")
+		)
+	),
+
 	action_help(Gtk::Action::create("MenuHelp", _("Help")) ),
 
 	action_help_about(
@@ -338,6 +367,10 @@ Gobby::Header::Header():
 	group_view->add(action_view);
 	group_view->add(action_view_preferences);
 	group_view->add(action_view_syntax);
+
+	group_window->add(action_window);
+	group_window->add(action_window_userlist);
+	group_window->add(action_window_documentlist);
 
 	group_help->add(action_help);
 	group_help->add(action_help_about);
@@ -421,6 +454,7 @@ Gobby::Header::Header():
 	m_ui_manager->insert_action_group(group_edit);
 	m_ui_manager->insert_action_group(group_user);
 	m_ui_manager->insert_action_group(group_view);
+	m_ui_manager->insert_action_group(group_window);
 	m_ui_manager->insert_action_group(group_help);
 
 	m_menubar = static_cast<Gtk::MenuBar*>(
@@ -478,289 +512,3 @@ Gtk::Toolbar& Gobby::Header::get_toolbar()
 {
 	return *m_toolbar;
 }
-
-#if 0
-void Gobby::Header::disable_document_actions()
-{
-	m_group_app->get_action("SaveDocument")->set_sensitive(false);
-	m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
-	m_group_app->get_action("CloseDocument")->set_sensitive(false);
-	m_group_app->get_action("MenuView")->set_sensitive(false);
-}
-
-Gobby::Header::signal_session_create_type
-Gobby::Header::session_create_event() const
-{
-	return m_signal_session_create;
-}
-
-Gobby::Header::signal_session_join_type
-Gobby::Header::session_join_event() const
-{
-	return m_signal_session_join;
-}
-
-Gobby::Header::signal_session_save_type
-Gobby::Header::session_save_event() const
-{
-	return m_signal_session_save;
-}
-
-Gobby::Header::signal_session_quit_type
-Gobby::Header::session_quit_event() const
-{
-	return m_signal_session_quit;
-}
-
-Gobby::Header::signal_document_create_type
-Gobby::Header::document_create_event() const
-{
-	return m_signal_document_create;
-}
-
-Gobby::Header::signal_document_open_type
-Gobby::Header::document_open_event() const
-{
-	return m_signal_document_open;
-}
-
-Gobby::Header::signal_document_save_type
-Gobby::Header::document_save_event() const
-{
-	return m_signal_document_save;
-}
-
-Gobby::Header::signal_document_save_as_type
-Gobby::Header::document_save_as_event() const
-{
-	return m_signal_document_save_as;
-}
-
-Gobby::Header::signal_document_close_type
-Gobby::Header::document_close_event() const
-{
-	return m_signal_document_close;
-}
-
-Gobby::Header::signal_edit_preferences_type
-Gobby::Header::edit_preferences_event() const
-{
-	return m_signal_edit_preferences;
-}
-
-Gobby::Header::signal_user_set_password_type
-Gobby::Header::user_set_password_event() const
-{
-	return m_signal_user_set_password;
-}
-
-Gobby::Header::signal_user_set_colour_type
-Gobby::Header::user_set_colour_event() const
-{
-	return m_signal_user_set_colour;
-}
-
-Gobby::Header::signal_view_preferences_type
-Gobby::Header::view_preferences_event() const
-{
-	return m_signal_view_preferences;
-}
-
-Gobby::Header::signal_view_language_type
-Gobby::Header::view_language_event() const
-{
-	return m_signal_view_language;
-}
-
-Gobby::Header::signal_about_type
-Gobby::Header::about_event() const
-{
-	return m_signal_about;
-}
-
-Gobby::Header::signal_quit_type
-Gobby::Header::quit_event() const
-{
-	return m_signal_quit;
-}
-
-void Gobby::Header::obby_start(obby::local_buffer& buf)
-{
-	// Begin of obby session: Disable create/join buttons, enable quit
-	m_group_app->get_action("CreateSession")->set_sensitive(false);
-	m_group_app->get_action("JoinSession")->set_sensitive(false);
-	m_group_app->get_action("SaveSession")->set_sensitive(true);
-	m_group_app->get_action("QuitSession")->set_sensitive(true);
-
-	// Enable document buttons
-	m_group_app->get_action("CreateDocument")->set_sensitive(true);
-	m_group_app->get_action("OpenDocument")->set_sensitive(true);
-
-	// Enable password button if we are client
-	m_group_app->get_action("MenuUser")->set_sensitive(true);
-	m_group_app->get_action("UserSetPassword")->set_sensitive(
-		dynamic_cast<obby::client_buffer*>(&buf) != NULL);
-
-	// Document actions will be activated from the insert_document event
-	m_group_app->get_action("SaveDocument")->set_sensitive(false);
-	m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
-	m_group_app->get_action("CloseDocument")->set_sensitive(false);
-	m_group_app->get_action("MenuView")->set_sensitive(false);
-}
-
-void Gobby::Header::obby_end()
-{
-	// End of obby session: Enable create/join buttons, disable quit
-	// Disable save session button for now. It will stay enabled later if
-	// the window keeps the obby buffer reference.
-	m_group_app->get_action("CreateSession")->set_sensitive(true);
-	m_group_app->get_action("JoinSession")->set_sensitive(true);
-	m_group_app->get_action("SaveSession")->set_sensitive(false);
-	m_group_app->get_action("QuitSession")->set_sensitive(false);
-
-	// Disable user buttons
-	m_group_app->get_action("MenuUser")->set_sensitive(false);
-
-	// Disable document buttons
-	m_group_app->get_action("CreateDocument")->set_sensitive(false);
-	m_group_app->get_action("OpenDocument")->set_sensitive(false);
-
-	// Leave document actions like SaveDocument and CloseDocument as they
-	// were to allow the user to save documents.
-}
-
-void Gobby::Header::obby_user_join(const obby::user& user)
-{
-}
-
-void Gobby::Header::obby_user_part(const obby::user& user)
-{
-}
-
-void Gobby::Header::obby_document_insert(obby::local_document_info& document)
-{
-	// Now we have at least one document open, so we could activate the
-	// document actions.
-	m_group_app->get_action("SaveDocument")->set_sensitive(true);
-	m_group_app->get_action("SaveAsDocument")->set_sensitive(true);
-	//m_group_app->get_action("CloseDocument")->set_sensitive(true);
-	m_group_app->get_action("MenuView")->set_sensitive(true);
-}
-
-void Gobby::Header::obby_document_remove(obby::local_document_info& document)
-{
-	if(document.get_buffer().document_count() == 1)
-	{
-		// The document which is currently removed is the only
-		// existing document? Disable document actions then.
-		m_group_app->get_action("SaveDocument")->set_sensitive(false);
-		m_group_app->get_action("SaveAsDocument")->set_sensitive(false);
-		m_group_app->get_action("CloseDocument")->set_sensitive(false);
-		m_group_app->get_action("MenuView")->set_sensitive(false);
-	}
-}
-
-void Gobby::Header::on_app_session_create()
-{
-	m_signal_session_create.emit();
-}
-
-void Gobby::Header::on_app_session_join()
-{
-	m_signal_session_join.emit();
-}
-
-void Gobby::Header::on_app_session_save()
-{
-	m_signal_session_save.emit();
-}
-
-void Gobby::Header::on_app_session_quit()
-{
-	m_signal_session_quit.emit();
-}
-
-void Gobby::Header::on_app_document_create()
-{
-	m_signal_document_create.emit();
-}
-
-void Gobby::Header::on_app_document_open()
-{
-	m_signal_document_open.emit();
-}
-
-void Gobby::Header::on_app_document_save()
-{
-	m_signal_document_save.emit();
-}
-
-void Gobby::Header::on_app_document_save_as()
-{
-	m_signal_document_save_as.emit();
-}
-
-void Gobby::Header::on_app_document_close()
-{
-	m_signal_document_close.emit();
-}
-
-void Gobby::Header::on_app_edit_preferences()
-{
-	m_signal_edit_preferences.emit();
-}
-
-void Gobby::Header::on_app_user_set_password()
-{
-	m_signal_user_set_password.emit();
-}
-
-void Gobby::Header::on_app_user_set_colour()
-{
-	m_signal_user_set_colour.emit();
-}
-
-void Gobby::Header::on_app_view_preferences()
-{
-	m_signal_view_preferences.emit();
-}
-
-void Gobby::Header::on_app_view_language(Glib::RefPtr<Gtk::SourceLanguage> lang)
-{
-	// Same as below
-	if(!m_toggle_language)
-		m_signal_view_language.emit(lang);
-}
-
-void Gobby::Header::on_app_about()
-{
-	m_signal_about.emit();
-}
-
-void Gobby::Header::on_app_quit()
-{
-	m_signal_quit.emit();
-}
-
-void Gobby::Header::on_folder_tab_switched(Document& document)
-{
-	// We are toggling some flags
-	m_toggle_language = true;
-
-	// Set current language
-	Glib::ustring langname = document.get_language() ?
-		document.get_language()->get_name() : "None";
-	remove_dangerous_xml(langname);
-	Glib::RefPtr<Gtk::RadioAction>::cast_static<Gtk::Action>(
-		m_group_app->get_action("ViewSyntaxLanguage" + langname)
-	)->set_active();
-
-	// Foognar
-	m_group_app->get_action("CloseDocument")->set_sensitive(
-		document.is_subscribed()
-	);
-
-	// We are toggling no more
-	m_toggle_language = false;
-}
-#endif

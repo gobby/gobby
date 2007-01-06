@@ -24,6 +24,7 @@
 #include <gtkmm/treestore.h>
 #include <obby/user.hpp>
 #include <obby/local_buffer.hpp>
+#include "toolwindow.hpp"
 #include "header.hpp"
 
 namespace Gobby
@@ -31,21 +32,21 @@ namespace Gobby
 
 /** List showing users that are participating in the obby session.
  */
-class UserList: public Gtk::ScrolledWindow
+class UserList: public ToolWindow
 {
 public:
 	class Columns: public Gtk::TreeModel::ColumnRecord
 	{
 	public:
 		Columns();
-		~Columns();
 
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 		Gtk::TreeModelColumn<Glib::ustring> text;
-		// TODO: Column with pointer that holds reference to obby::user.
+		// TODO: Column with pointer that holds reference to obby::user?
 	};
 
-	UserList(Header& header);
+	UserList(Gtk::Window& parent,
+	         Header& header);
 	~UserList();
 
 	// Calls from the window
@@ -75,6 +76,7 @@ protected:
 
 	/** GUI components.
 	 */
+	Gtk::ScrolledWindow m_scrolled_wnd;
 	Gtk::TreeView m_tree_view;
 	Glib::RefPtr<Gtk::TreeStore> m_tree_data;
 	Columns m_tree_cols;

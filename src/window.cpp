@@ -56,7 +56,7 @@ Gobby::Window::Window()
 #endif
    m_header(),
    m_folder(m_header, m_preferences),
-   m_userlist(m_header),
+   m_userlist(*this, m_header),
    m_statusbar(m_header, m_folder)
 {
 	// Header
@@ -119,7 +119,7 @@ Gobby::Window::Window()
 	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
 
 	m_frame_chat.add(m_chat);
-	m_frame_list.add(m_userlist);
+	//m_frame_list.add(m_userlist);
 	m_frame_text.add(m_folder);
 
 	m_subpaned.pack1(m_frame_text, true, false);

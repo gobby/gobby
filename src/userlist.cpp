@@ -60,11 +60,9 @@ Gobby::UserList::Columns::Columns()
 	add(text);
 }
 
-Gobby::UserList::Columns::~Columns()
-{
-}
-
-Gobby::UserList::UserList(Header& header):
+Gobby::UserList::UserList(Gtk::Window& parent,
+                          Header& header):
+	ToolWindow(parent, _("User list"), header.action_window_userlist),
 	m_header(header)
 {
 	m_tree_data = Gtk::TreeStore::create(m_tree_cols);
@@ -97,11 +95,14 @@ Gobby::UserList::UserList(Header& header):
 	m_tree_view.get_selection()->set_mode(Gtk::SELECTION_NONE);
 	m_tree_view.set_headers_visible(false);
 
-	set_shadow_type(Gtk::SHADOW_IN);
-	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-	set_sensitive(false);
+	m_scrolled_wnd.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	m_scrolled_wnd.add(m_tree_view);
+	m_scrolled_wnd.set_sensitive(false);
 
-	add(m_tree_view);
+	add(m_scrolled_wnd);
+	show_all_children();
+
+	set_default_size(200, 400);
 }
 
 Gobby::UserList::~UserList()
@@ -110,14 +111,14 @@ Gobby::UserList::~UserList()
 
 void Gobby::UserList::obby_start(obby::local_buffer& buf)
 {
-	set_sensitive(true);
+	m_scrolled_wnd.set_sensitive(true);
 
 	m_buffer = &buf;
 }
 
 void Gobby::UserList::obby_end()
 {
-	set_sensitive(false);
+	m_scrolled_wnd.set_sensitive(false);
 
 	remove_children(m_iter_offline);
 	remove_children(m_iter_online);
