@@ -173,8 +173,7 @@ Gobby::Header::Header(const Folder& folder)
 			// - Armin, 10-21-2005
 			//Gtk::Stock::SAVE,
 			_("Save session"),
-			_("Saves the complete session to"
-			  "be able to restore it later")
+			_("Saves the complete session for a later restore")
 		),
 		sigc::mem_fun(
 			*this,
