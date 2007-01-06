@@ -52,110 +52,80 @@ Gobby::GSelector::~GSelector()
 		it->second.conn.disconnect();
 }
 
-void Gobby::GSelector::add(const net6::socket& sock, net6::io_condition cond)
+net6::io_condition Gobby::GSelector::get(const net6::socket& sock) const
 {
-	map_type::iterator iter = m_map.find(&sock);
-	if(iter != m_map.end() )
-	{
-		// Flags are already set
-		if( (iter->second.cond & cond) == cond)
-			return;
+	map_type::const_iterator iter = m_map.find(&sock);
 
-		iter->second.cond |= cond;
-
-		iter->second.conn.disconnect();
-		iter->second.conn = Glib::signal_io().connect(
-			sigc::bind(
-				sigc::mem_fun(*this, &GSelector::on_io),
-				&sock
-			),
-			iter->second.chan,
-			gcond(iter->second.cond)
-		);
-	}
+	if(iter == m_map.end() )
+		return net6::IO_NONE;
 	else
-	{
-		if(cond == net6::IO_NONE)
-			return;
-
-		SelectedSocket& sel = m_map[&sock];
-
-		net6::socket::socket_type fd = sock.cobj();
-
-		sel.chan =
-#ifdef _WIN32
-			Glib::IOChannel::create_from_win32_socket(fd);
-#else
-			Glib::IOChannel::create_from_fd(fd);
-#endif
-
-		sel.conn = Glib::signal_io().connect(
-			sigc::bind(
-				sigc::mem_fun(*this, &GSelector::on_io),
-				&sock
-			),
-			sel.chan,
-			gcond(cond)
-		);
-
-		sel.sock = &sock;
-		sel.cond = cond;
-	}
+		return iter->second.cond;
 }
 
-void Gobby::GSelector::remove(const net6::socket& sock, net6::io_condition cond)
+void Gobby::GSelector::add_socket(const net6::socket& sock,
+                                  net6::io_condition cond)
 {
-	map_type::iterator iter = m_map.find(&sock);
-	if(iter == m_map.end() ) return;
+	SelectedSocket& sel = m_map[&sock];
 
-	// Flags are not set
-	if(iter->second.cond & cond == net6::IO_NONE)
+	net6::socket::socket_type fd = sock.cobj();
+
+	sel.chan =
+#ifdef _WIN32
+		Glib::IOChannel::create_from_win32_socket(fd);
+#else
+		Glib::IOChannel::create_from_fd(fd);
+#endif
+
+	sel.conn = Glib::signal_io().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &GSelector::on_io),
+			&sock
+		),
+		sel.chan,
+		gcond(cond)
+	);
+
+	sel.sock = &sock;
+	sel.cond = cond;
+}
+
+void Gobby::GSelector::modify_socket(map_type::iterator iter,
+                                     net6::io_condition cond)
+{
+	// Flags are already set
+	if(iter->second.cond == cond)
 		return;
 
-	iter->second.cond &= ~cond;
-	if(iter->second.cond == net6::IO_NONE)
-	{
-		iter->second.conn.disconnect();
-		m_map.erase(iter);
-	}
-	else
-	{
-		iter->second.conn.disconnect();
+	iter->second.cond = cond;
 
-		iter->second.conn = Glib::signal_io().connect(
-			sigc::bind(
-				sigc::mem_fun(*this, &GSelector::on_io),
-				&sock
-			),
-			iter->second.chan,
-			gcond(iter->second.cond)
-		);
-	}
+	iter->second.conn.disconnect();
+	iter->second.conn = Glib::signal_io().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &GSelector::on_io),
+			iter->first
+		),
+		iter->second.chan,
+		gcond(iter->second.cond)
+	);
+}
+
+void Gobby::GSelector::delete_socket(map_type::iterator iter)
+{
+	iter->second.conn.disconnect();
+	m_map.erase(iter);
 }
 
 void Gobby::GSelector::set(const net6::socket& sock, net6::io_condition cond)
 {
-	// TODO: Port add and remove to set
 	map_type::iterator iter = m_map.find(&sock);
-	if(cond == net6::IO_NONE && iter == m_map.end() )
-		return;
-	else if(cond == net6::IO_NONE)
-		remove(sock, ~cond);
-	else if(iter == m_map.end() )
-		add(sock, cond);
-	else
-	{
-		remove(sock, ~cond);
-		add(sock, cond);
-	}
-}
 
-net6::io_condition Gobby::GSelector::check(const net6::socket& sock,
-                                           net6::io_condition mask) const
-{
-	map_type::const_iterator iter = m_map.find(&sock);
-	if(iter == m_map.end() ) return net6::IO_NONE;
-	return iter->second.cond & mask;
+	if(cond != net6::IO_NONE)
+		if(iter == m_map.end() )
+			add_socket(sock, cond);
+		else
+			modify_socket(iter, cond);
+	else if(iter != m_map.end() )
+		delete_socket(iter);
 }
 
 bool Gobby::GSelector::on_io(Glib::IOCondition cond,

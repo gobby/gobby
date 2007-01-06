@@ -39,16 +39,20 @@ public:
 
 	~GSelector();
 
-	void add(const net6::socket& sock, net6::io_condition cond);
-	void remove(const net6::socket& sock, net6::io_condition cond);
+	net6::io_condition get(const net6::socket& sock) const;
 	void set(const net6::socket& sock, net6::io_condition cond);
 	net6::io_condition check(const net6::socket& sock,
 	                         net6::io_condition mask) const;
 
 protected:
+	typedef std::map<const net6::socket*, SelectedSocket> map_type;
+
+	void add_socket(const net6::socket& sock, net6::io_condition cond);
+	void modify_socket(map_type::iterator iter, net6::io_condition cond);
+	void delete_socket(map_type::iterator iter);
+
 	bool on_io(Glib::IOCondition cond, const net6::socket* sock) const;
 
-	typedef std::map<const net6::socket*, SelectedSocket> map_type;
 
 	map_type m_map;
 };
