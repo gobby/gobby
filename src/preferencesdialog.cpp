@@ -193,7 +193,7 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
 {
 	m_notebook.append_page(m_page_editor, _("Editor") );
 	m_notebook.append_page(m_page_view, _("View") );
-	m_notebook.append_page(m_page_appearance, _("Appearance") );
+//	m_notebook.append_page(m_page_appearance, _("Appearance") );
 
 	get_vbox()->set_spacing(5);
 	get_vbox()->pack_start(m_notebook, Gtk::PACK_EXPAND_WIDGET);

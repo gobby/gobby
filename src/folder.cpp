@@ -31,7 +31,7 @@ Gobby::Folder::TabLabel::TabLabel(const Glib::ustring& label)
 	Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
 
 	// Resize button to image's size
-	m_button.set_size_request(width + 4, height);
+	m_button.set_size_request(width + 4, height + 4);
 	m_button.add(m_image);
 	m_button.set_relief(Gtk::RELIEF_NONE);
 
