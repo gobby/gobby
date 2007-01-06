@@ -22,6 +22,9 @@
 #include <glibmm/ustring.h>
 #include <glibmm/refptr.h>
 #include <glibmm/iochannel.h>
+#ifdef WIN32
+# include <gtkmm/window.h>
+#endif
 #include <net6/non_copyable.hpp>
 #include <net6/socket.hpp>
 
