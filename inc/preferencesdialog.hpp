@@ -22,6 +22,8 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/box.h>
+#include <gtkmm/expander.h>
+#include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
@@ -52,10 +54,13 @@ public:
 		bool get_tab_spaces() const;
 
 		bool get_indentation_auto() const;
+
+		bool get_homeend_smart() const;
 	protected:
 		Gtk::VBox m_box;
 		Gtk::Frame m_frame_tab;
 		Gtk::Frame m_frame_indentation;
+		Gtk::Frame m_frame_homeend;
 
 		Gtk::VBox m_box_tab;
 		Gtk::HBox m_box_tab_width;
@@ -65,6 +70,11 @@ public:
 
 		Gtk::VBox m_box_indentation;
 		Gtk::CheckButton m_btn_indentation_auto;
+
+		Gtk::VBox m_box_homeend;
+		Gtk::CheckButton m_btn_homeend_smart;
+		Gtk::Label m_lbl_homeend_smart;
+		Gtk::Expander m_ep_homeend_smart;
 	};
 
 	class View : public Page

@@ -30,17 +30,27 @@ Gobby::PreferencesDialog::Page::Page(const Preferences& preferences)
 Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences)
  : Page(preferences), m_frame_tab(_("Tab Stops") ),
    m_frame_indentation(_("Indentation") ),
+   m_frame_homeend(_("Home/End behaviour") ),
    m_lbl_tab_width(_("Tab width:"), Gtk::ALIGN_RIGHT),
    m_btn_tab_spaces(_("Insert spaces instead of tabs") ),
-   m_btn_indentation_auto(_("Enable automatic indentation") )
+   m_btn_indentation_auto(_("Enable automatic indentation") ),
+   m_btn_homeend_smart(_("Smart home/end") ),
+   m_ep_homeend_smart(_("What is this?") ),
+   m_lbl_homeend_smart(_("With smart Home/End enabled, Home/End keys move to "
+                         "first/last character before going to the start/end "
+                         "of the line."), Gtk::ALIGN_LEFT)
 {
 	unsigned int tab_width = preferences.editor.tab_width;
 	bool tab_spaces = preferences.editor.tab_spaces;
 	bool indentation_auto = preferences.editor.indentation_auto;
+	bool homeend_smart = preferences.editor.homeend_smart;
 
 	m_ent_tab_width.set_range(1, 8);
 	m_ent_tab_width.set_value(tab_width);
 	m_ent_tab_width.set_increments(1, 1);
+
+	m_lbl_homeend_smart.set_line_wrap(true);
+	m_ep_homeend_smart.add(m_lbl_homeend_smart);
 
 	m_box_tab_width.set_spacing(5);
 	m_box_tab_width.pack_start(m_lbl_tab_width, Gtk::PACK_SHRINK);
@@ -48,6 +58,7 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences)
 
 	m_btn_tab_spaces.set_active(tab_spaces);
 	m_btn_indentation_auto.set_active(indentation_auto);
+	m_btn_homeend_smart.set_active(homeend_smart);
 
 	m_box_tab.set_spacing(5);
 	m_box_tab.set_border_width(5);
@@ -58,12 +69,19 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences)
 	m_box_indentation.set_border_width(5);
 	m_box_indentation.pack_start(m_btn_indentation_auto, Gtk::PACK_SHRINK);
 
+	m_box_homeend.set_spacing(5);
+	m_box_homeend.set_border_width(5);
+	m_box_homeend.pack_start(m_btn_homeend_smart, Gtk::PACK_SHRINK);
+	m_box_homeend.pack_start(m_ep_homeend_smart, Gtk::PACK_SHRINK);
+
 	m_frame_tab.add(m_box_tab);
 	m_frame_indentation.add(m_box_indentation);
+	m_frame_homeend.add(m_box_homeend);
 
 	m_box.set_spacing(5);
 	m_box.pack_start(m_frame_tab, Gtk::PACK_SHRINK);
 	m_box.pack_start(m_frame_indentation, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_frame_homeend, Gtk::PACK_SHRINK);
 
 	set_border_width(10);
 	add(m_box);
@@ -86,6 +104,11 @@ bool Gobby::PreferencesDialog::Editor::get_tab_spaces() const
 bool Gobby::PreferencesDialog::Editor::get_indentation_auto() const
 {
 	return m_btn_indentation_auto.get_active();
+}
+
+bool Gobby::PreferencesDialog::Editor::get_homeend_smart() const
+{
+	return m_btn_homeend_smart.get_active();
 }
 
 Gobby::PreferencesDialog::View::View(const Preferences& preferences)
@@ -264,6 +287,7 @@ Gobby::Preferences Gobby::PreferencesDialog::preferences() const
 	preferences.editor.tab_spaces = m_page_editor.get_tab_spaces();
 	preferences.editor.indentation_auto =
 		m_page_editor.get_indentation_auto();
+	preferences.editor.homeend_smart = m_page_editor.get_homeend_smart();
 
 	preferences.view.wrap_text = m_page_view.get_wrap_text();
 	preferences.view.wrap_words = m_page_view.get_wrap_words();

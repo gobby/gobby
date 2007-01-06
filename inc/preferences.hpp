@@ -53,6 +53,7 @@ public:
 		unsigned int tab_width;
 		bool tab_spaces;
 		bool indentation_auto;
+		bool homeend_smart;
 	} editor;
 
 	struct

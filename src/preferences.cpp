@@ -31,6 +31,8 @@ Gobby::Preferences::Preferences(Config& config)
 	editor.tab_spaces = config["editor"]["tab"]["spaces"].get<bool>(false);
 	editor.indentation_auto =
 		config["editor"]["indentation"]["auto"].get<bool>(true);
+	editor.homeend_smart =
+		config["editor"]["homeend"]["smart"].get<bool>(true);
 
 	view.wrap_text = config["view"]["wrap"]["text"].get<bool>(true);
 	view.wrap_words = config["view"]["wrap"]["words"].get<bool>(true);
@@ -61,6 +63,7 @@ void Gobby::Preferences::serialise(Config& config)
 	config["editor"]["tab"]["width"].set(editor.tab_width);
 	config["editor"]["tab"]["spaces"].set(editor.tab_spaces);
 	config["editor"]["indentation"]["auto"].set(editor.indentation_auto);
+	config["editor"]["homeend"]["smart"].set(editor.homeend_smart);
 
 	config["view"]["wrap"]["text"].set(view.wrap_text);
 	config["view"]["wrap"]["words"].set(view.wrap_words);

@@ -626,6 +626,7 @@ void Gobby::Document::apply_preferences()
 	set_tabs_width(m_preferences.editor.tab_width);
 	set_insert_spaces_instead_of_tabs(m_preferences.editor.tab_spaces);
 	set_auto_indent(m_preferences.editor.indentation_auto);
+	set_smart_home_end(m_preferences.editor.homeend_smart);
 
 	// View
 	if(m_subscribed)
