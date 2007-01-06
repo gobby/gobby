@@ -28,7 +28,6 @@ Gobby::Chat::Chat()
 	m_btn_chat.set_label(_("Send"));
 	m_btn_chat.set_image(m_img_btn);
 
-	m_btn_chat.set_size_request(100, -1);
 	m_btn_chat.signal_clicked().connect(
 		sigc::mem_fun(*this, &Chat::on_chat) );
 	m_ent_chat.signal_activate().connect(
