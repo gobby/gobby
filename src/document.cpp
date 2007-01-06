@@ -58,14 +58,11 @@ obby::document& Gobby::Document::get_document()
 	return m_doc;
 }
 
-#include <iostream>
 void Gobby::Document::on_insert(const Gtk::TextBuffer::iterator& begin,
                                 const Glib::ustring& text,
                                 int foo)
 {
 	if(m_editing) return;
-
-	std::cout << "Insert " << text << " at " << begin.get_offset() << std::endl;
 	m_doc.insert(begin.get_offset(), text);
 }
 
@@ -73,9 +70,6 @@ void Gobby::Document::on_erase(const Gtk::TextBuffer::iterator& begin,
                                const Gtk::TextBuffer::iterator& end)
 {
 	if(m_editing) return;
-	
-	std::cout << "Erasing from " << begin.get_offset()
-	          << " to " << end.get_offset() << std::endl;
 	m_doc.erase(begin.get_offset(), end.get_offset() );
 }
 

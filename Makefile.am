@@ -4,6 +4,7 @@ LDADD = $(gobby_LIBS)
 INCLUDES = $(gobby_CFLAGS) -I../inc/
 
 gobby_SOURCES = \
+	src/buffer_wrapper.cpp \
 	src/config.cpp \
 	src/historyentry.cpp \
 	src/logview.cpp \

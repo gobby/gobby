@@ -23,6 +23,7 @@
 #include <gtkmm/filechooserdialog.h>
 #include <libobby/client_buffer.hpp>
 #include <libobby/host_buffer.hpp>
+#include "buffer_wrapper.hpp"
 #include "createdialog.hpp"
 #include "joindialog.hpp"
 #include "entrydialog.hpp"
@@ -32,7 +33,7 @@
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
    m_config(Glib::get_home_dir() + "/.gobby/config.xml"), m_buffer(NULL),
-   m_running(false), m_login_failed(false)
+   m_running(false)
 {
 	m_header.session_create_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
@@ -99,7 +100,7 @@ void Gobby::Window::on_session_create() try
 		unsigned int blue = color.get_blue() * 255 / 65535;
 
 		// Create new buffer
-		obby::host_buffer* buffer = new obby::host_buffer(
+		obby::host_buffer* buffer = new HostBuffer(
 			port, name, red, green, blue);
 
 		// Delete existing buffer, take new one
@@ -120,11 +121,6 @@ void Gobby::Window::on_session_create() try
 		m_buffer->server_message_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_server_chat) );
 
-
-		if(!m_timer_conn.connected() )
-			m_timer_conn = Glib::signal_timeout().connect(
-				sigc::mem_fun(*this, &Window::on_timer), 400);
-
 		// Running
 		m_running = true;
 		
@@ -139,9 +135,6 @@ void Gobby::Window::on_session_create() try
 	}
 	else
 	{
-		if(m_timer_conn.connected() )
-			m_timer_conn.disconnect();
-
 		// Delete existing buffer, if any
 		delete m_buffer;
 		m_buffer = NULL;
@@ -174,8 +167,8 @@ void Gobby::Window::on_session_join() try
 
 		// TODO: Keep existing connection if host and port did not
 		// change
-		obby::client_buffer* buffer = new obby::client_buffer(
-			host, port);
+		obby::client_buffer* buffer = new ClientBuffer(host, port);
+
 		delete m_buffer;
 		m_buffer = buffer;
 
@@ -200,17 +193,10 @@ void Gobby::Window::on_session_join() try
 		m_buffer->server_message_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_server_chat) );
 
-		if(!m_timer_conn.connected() )
-			m_timer_conn = Glib::signal_timeout().connect(
-				sigc::mem_fun(*this, &Window::on_timer), 400);
-
 		buffer->login(name, red, green, blue);
 	}
 	else
 	{
-		if(m_timer_conn.connected() )
-			m_timer_conn.disconnect();
-
 		delete m_buffer;
 		m_buffer = NULL;
 	}
@@ -239,9 +225,6 @@ void Gobby::Window::on_session_quit()
 
 			m_running = false;
 		}
-
-		if(m_timer_conn.connected() )
-			m_timer_conn.disconnect();
 
 		delete m_buffer;
 		m_buffer = NULL;
@@ -314,21 +297,8 @@ void Gobby::Window::on_chat(const Glib::ustring& message) {
 
 void Gobby::Window::on_obby_login_failed(const std::string& reason)
 {
-	// Remove timer connection, we do not need any timer calls while
-	// displaying dialogs
-	m_timer_conn.disconnect();
 	display_error(reason);
-
-	// We can not call on_session_join right here. In the callstack, there
-	// is a call to the timer (which emitted the login_failed signal through
-	// obby::buffer::select). on_session_join destroys this buffer, but it
-	// still remains in the callstack. The program will crash if it regains
-	// control.
-	// TODO: A good solution would be to disable the name and port field
-	// in the dialog now, because we are already connected to a server. Only
-	// the login fields (name & color) will be editable. That ensures that
-	// we need not to create a new buffer but just resend a login request.
-	m_login_failed = true;
+	on_session_join();
 }
 
 void Gobby::Window::on_obby_close()
@@ -353,25 +323,6 @@ void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)
 void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 {
 	m_chat.obby_server_message(message);
-}
-
-bool Gobby::Window::on_timer()
-{
-	for(int i = 0; i < 15; ++ i)
-	{
-		if(!m_buffer) break;
-		m_buffer->select(0);
-
-		// See comment in Window::on_obby_login_failed
-		if(m_login_failed)
-		{
-			on_session_join();
-			m_login_failed = false;
-			return true;
-		}
-	}
-
-	return true;
 }
 
 void Gobby::Window::on_obby_user_join(obby::user& user)

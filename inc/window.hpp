@@ -66,8 +66,6 @@ protected:
 	void on_obby_server_chat(const Glib::ustring& message);
 	void on_obby_chat(obby::user& user, const Glib::ustring& message);
 
-	bool on_timer();
-
 	// Helper functions
 	void display_error(const Glib::ustring& message);
 
@@ -94,8 +92,6 @@ protected:
 	sigc::connection m_timer_conn;
 	bool m_running; // m_running is set if the obby connection has been
 	                // established successfully.
-	bool m_login_failed; // Variable used to indicate a login failed event
-	                     // See corresponding comments in window.cpp
 };
 
 }
