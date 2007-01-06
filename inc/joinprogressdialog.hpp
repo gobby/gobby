@@ -152,10 +152,12 @@ private:
 
 	std::auto_ptr<ClientBuffer> m_buffer;
 
+#if 0
 	// Got done signal from connection thread
 	bool m_got_done;
 	// Got welcome packet
 	bool m_got_welcome;
+#endif
 };
 
 } // namespace Gobby

@@ -113,7 +113,7 @@ Gobby::JoinProgressDialog::NamePrompt::
 		Gtk::Stock::DIALOG_QUESTION
 	),
 	m_initial_name(initial_name),
-	m_label(_("New name:") )
+	m_label(_("New name:"), Gtk::ALIGN_RIGHT)
 {
 	m_entry.signal_changed().connect(
 		sigc::mem_fun(*this, &NamePrompt::on_change)
@@ -181,7 +181,7 @@ Gobby::JoinProgressDialog::SessionPasswordPrompt::
 		  "password to be able to join the obby session."),
 		Gtk::Stock::DIALOG_AUTHENTICATION
 	),
-	m_label(_("Session password:") )
+	m_label(_("Session password:"), Gtk::ALIGN_RIGHT)
 {
 	m_entry.signal_changed().connect(
 		sigc::mem_fun(*this, &SessionPasswordPrompt::on_change)
@@ -242,13 +242,13 @@ Gobby::JoinProgressDialog::UserPasswordPrompt::
 	m_table.attach(
 		m_lbl_name,
 		0, 1, 0, 1,
-		Gtk::SHRINK, Gtk::SHRINK
+		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK
 	);
 
 	m_table.attach(
 		m_lbl_password,
 		0, 1, 1, 2,
-		Gtk::SHRINK, Gtk::SHRINK
+		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK
 	);
 
 	m_table.attach(
@@ -303,8 +303,8 @@ Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
                                               const Glib::ustring& username,
                                               const Gdk::Color& color)
  : ProgressDialog(_("Joining obby session..."), parent), m_config(config),
-   m_hostname(hostname), m_port(port), m_username(username), m_color(color),
-   m_got_done(false), m_got_welcome(false)
+   m_hostname(hostname), m_port(port), m_username(username), m_color(color)
+   //m_got_done(false), m_got_welcome(false)
 {
 	obby::format_string str("Connecting to %0%...");
 	str << hostname;
@@ -393,29 +393,41 @@ void Gobby::JoinProgressDialog::on_done()
 		display_error(m_error);
 		// Bad response
 		response(Gtk::RESPONSE_CANCEL);
+		return;
 	}
 
 	// Thread has established connection, wait for welcome packet
-	set_status_text(_("Waiting for welcome packet...") );
+	// The welcome event will be emitted as soon as the connection
+	// has been encrypted. Maybe we should have another step before
+	// this that really waits for the welcome packet.
+	set_status_text(_("Setting up connection encryption (TLS)...") );
 	set_progress_fraction(1.0/4.0);
+#if 0
 	m_got_done = true;
 
 	// on_welcome may be called before on_done is called if the
 	// server replies faster then the thread dispatches, this happens
 	// especially with connections to localhost.
 	// Recall on_welcome in this case now
+	//
+	// TODO: This should no more be the case using obby 0.4.0 where
+	// the whole encryption initiation is before the welcome signal
+	// emission. So, remove this...
 	if(m_got_welcome)
 		on_welcome();
+#endif
 }
 
 void Gobby::JoinProgressDialog::on_welcome()
 {
+#if 0
 	m_got_welcome = true;
 
 	// Do nothing if we have not already got the done signal from the
 	// thread.
 	if(!m_got_done)
 		return;
+#endif
 
 	// TODO: Show key ID to user and allow him to deny connection
 	// Got welcome packet, send login packet now
