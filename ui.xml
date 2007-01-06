@@ -13,6 +13,9 @@
       <menuitem action="OpenDocument" />
       <menuitem action="CloseDocument" />
     </menu>
+    <menu action="Help">
+      <menuitem action="About" />
+    </menu>
   </menubar>
   <toolbar name="ToolMainBar">
     <toolitem action="CreateSession" />

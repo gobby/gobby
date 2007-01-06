@@ -18,12 +18,14 @@
 
 #include <stdexcept>
 #include <gtkmm/main.h>
+#include <gtkmm/aboutdialog.h>
 #include <gtkmm/messagedialog.h>
 #include <libobby/client_buffer.hpp>
 #include <libobby/host_buffer.hpp>
 #include "createdialog.hpp"
 #include "joindialog.hpp"
 #include "window.hpp"
+#include "features.hpp"
 
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
@@ -36,6 +38,8 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_session_join) );
 	m_header.session_quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_quit) );
+	m_header.about_event().connect(
+		sigc::mem_fun(*this, &Window::on_about) );
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
@@ -232,6 +236,35 @@ void Gobby::Window::on_session_quit()
 		delete m_buffer;
 		m_buffer = NULL;
 	}
+}
+
+void Gobby::Window::on_about()
+{
+	Gtk::AboutDialog dlg;
+	dlg.set_name("Gobby");
+	dlg.set_version(PACKAGE_VERSION);
+	dlg.set_comments("A collaborative text editor");
+	dlg.set_copyright("Copyright (C) 2005 0x539 dev group <crew@0x539.de>");
+
+	std::deque<Glib::ustring> authors;
+	authors.push_back("Armin Burgmeier <armin@0x539.de>");
+	authors.push_back("Benjamin Herr <ben@0x539.de>");
+	authors.push_back("Philipp Kern <phil@0x539.de>");
+	dlg.set_authors(authors);
+
+	dlg.set_license(
+		"This program is free software; you can redistribute it\n"
+		"and/or modify it under the terms of the GNU General Public\n"
+		"License as published by the Free Software Foundation; either\n"
+		"version 2 of the License, or (at your option) any later\n"
+		"version.\n"
+		"\n"
+		"This program is distributed in the hope that it will be\n"
+		"useful, but WITHOUT ANY WARRANTY; without even the implied\n"
+		"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+		"PURPOSE.  See the GNU General Public License for more details."
+	);
+	dlg.run();
 }
 
 void Gobby::Window::on_quit()

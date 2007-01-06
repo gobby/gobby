@@ -38,8 +38,6 @@ Gobby::Header::Header()
 	// App menu
 	m_group_app->add(Gtk::Action::create("MenuApp", "Gobby") );
 
-	m_group_app->add(Gtk::Action::create("MenuSession", "Session") );
-
 	// Create session
 	m_group_app->add(
 		Gtk::Action::create(
@@ -82,6 +80,9 @@ Gobby::Header::Header()
 		)
 	);
 
+	// Session menu
+	m_group_app->add(Gtk::Action::create("MenuSession", "Session") );
+
 	// Create document
 	m_group_app->add(
 		Gtk::Action::create(
@@ -123,7 +124,24 @@ Gobby::Header::Header()
 			&Header::on_app_document_close
 		)
 	);
-	
+
+	// Help menu
+	m_group_app->add(Gtk::Action::create("Help", "Help") );
+
+	// Display about dialog
+	m_group_app->add(
+		Gtk::Action::create(
+			"About",
+			Gtk::Stock::ABOUT,
+			"About",
+			"Shows Gobby's copyright and credits"
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_about
+		)
+	);
+
 	// Quit application
 	m_group_app->add(
 		Gtk::Action::create(
@@ -201,6 +219,12 @@ Gobby::Header::signal_document_close_type
 Gobby::Header::document_close_event() const
 {
 	return m_signal_document_close;
+}
+
+Gobby::Header::signal_about_type
+Gobby::Header::about_event() const
+{
+	return m_signal_about;
 }
 
 Gobby::Header::signal_quit_type
@@ -285,6 +309,11 @@ void Gobby::Header::on_app_document_open()
 void Gobby::Header::on_app_document_close()
 {
 	m_signal_document_close.emit();
+}
+
+void Gobby::Header::on_app_about()
+{
+	m_signal_about.emit();
 }
 
 void Gobby::Header::on_app_quit()

@@ -42,6 +42,7 @@ protected:
 	void on_session_create();
 	void on_session_join();
 	void on_session_quit();
+	void on_about();
 	void on_quit();
 
 	void on_chat(const Glib::ustring& message);
