@@ -1,5 +1,13 @@
-gobby
+Gobby
 =====
+
+Version 0.2.2:
+ * Gobby no longer crashes when a document is closed after quitting a
+   session, spotted and fixed by Kanru Chen.
+
+Version 0.2.1:
+ * This bugfix release features a recompile of the Windows version against
+   more hardware-independent libraries.
 
 Version 0.2.0:
  * This version is *not* backwards-compatible to 0.1.0 due to heavy
