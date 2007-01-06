@@ -111,7 +111,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 	m_vbox.pack_start(m_table);
 
 #ifdef WITH_ZEROCONF
-	if(m_zeroconf)
+	if(m_zeroconf != NULL)
 	{
 		m_session_list = Gtk::ListStore::create(m_session_cols);
 		m_session_view.set_model(m_session_list);
@@ -128,9 +128,6 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 			sigc::mem_fun(*this, &JoinDialog::on_discover));
 		m_zeroconf->leave_event().connect(
 			sigc::mem_fun(*this, &JoinDialog::on_leave) );
-		m_zeroconf->discover();
-		m_timer_connection = Glib::signal_timeout().connect(
-			sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
 
 		m_vbox.pack_start(m_ep_discover);
 	}
@@ -149,10 +146,6 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 
 Gobby::JoinDialog::~JoinDialog()
 {
-#ifdef WITH_ZEROCONF
-	if(m_timer_connection.connected() )
-		m_timer_connection.disconnect();
-#endif
 }
 
 Glib::ustring Gobby::JoinDialog::get_host() const
@@ -251,6 +244,24 @@ void Gobby::JoinDialog::on_change()
 		m_session_view.get_selection()->get_selected();
 	m_ent_host.set_text((*iter)[m_session_cols.host]);
 	m_ent_port.set_value((*iter)[m_session_cols.port]);
+}
+
+void Gobby::JoinDialog::on_show()
+{
+	Gtk::Dialog::on_show();
+	if(m_zeroconf != NULL && !m_timer_connection.connected())
+	{
+		m_session_list->clear();
+		m_zeroconf->discover();
+		m_timer_connection = Glib::signal_timeout().connect(
+			sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
+	}
+}
+
+void Gobby::JoinDialog::on_hide()
+{
+	Gtk::Dialog::on_hide();
+	m_timer_connection.disconnect();
 }
 #endif
 

@@ -85,6 +85,9 @@ protected:
 	                         const net6::ipv4_address& addr);
 	virtual void on_leave(const std::string& name);
 	virtual void on_change();
+
+	virtual void on_show();
+	virtual void on_hide();
 #endif
 
 	Gobby::Config::ParentEntry& m_config_entry;
