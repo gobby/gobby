@@ -23,7 +23,7 @@
 #include <locale.h>
 
 template<typename char_type>
-inline char_type* _(const char_type* text) {
+inline const char_type* _(const char_type* text) {
 	return gettext(text);
 }
 
