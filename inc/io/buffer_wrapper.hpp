@@ -272,7 +272,7 @@ public:
 	typedef host net_type;
 
 #ifdef WIN32
-	host_buffer(Gtk::Window& window
+	host_buffer(Gtk::Window& window,
 	            const Glib::ustring& username,
 	            const colour& colour);
 #else

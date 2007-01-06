@@ -354,7 +354,7 @@ obby::io::host_buffer::host_buffer(const Glib::ustring& username,
 #endif
  : obby::host_buffer(username, colour),
 #ifdef WIN32
-   server_buffer(window),
+   server_buffer(window)
 #else
    server_buffer()
 #endif
@@ -365,7 +365,7 @@ obby::io::host_buffer::net_type*
 obby::io::host_buffer::new_net(unsigned int port)
 {
 #ifdef WIN32
-	return new net_type(window, port, m_username, false);
+	return new net_type(m_window, port, m_username, false);
 #else
 	return new net_type(port, m_username, false);
 #endif
