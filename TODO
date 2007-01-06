@@ -8,7 +8,6 @@ Critical:
 Major:
   * High CPU load while writing (#45)
   * High load (and blocking X11) when opening big text file (#48) [bug]
-  * New install of gobby will not run because of a segmentation fault loading ~/.gobby/config.xml (#103)
 
 Normal:
   * Chat command infrastructure (#31)
@@ -49,12 +48,6 @@ Opening a 6.7MB large ChangeLog file in gobby produces 100% load and blocks
 gobby completely. Even other windows, like a ssh screen session in an aterm 
 did not respond any more. Gobby had to be killed to get the screen session 
 working again.
-
-103: New install of gobby will not run because of a segmentation fault loading ~/.gobby/config.xml
---------------------------------------------------------------------------------------------------
-Could be a packaging problem, but it seems like a default configuration 
-should be used if one is not found in the user's home directory.  This 
-ticket is actually for gobby version 0.2.2
 
 31: Chat command infrastructure
 -------------------------------
