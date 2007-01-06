@@ -87,7 +87,7 @@ bool Gobby::Client::on_io(Glib::IOCondition condition)
 		const_cast<net6::tcp_client_socket&>(conn.get_socket() );
 
 	if(condition & (Glib::IO_ERR | Glib::IO_HUP) )
-		sock.error_event().emit(sock, net6::socket::ERROR);
+		sock.error_event().emit(sock, net6::socket::IOERROR);
 	
 	if(condition & (Glib::IO_IN) )
 		sock.read_event().emit(sock, net6::socket::INCOMING);
@@ -278,7 +278,7 @@ bool Gobby::Host::on_server_io(Glib::IOCondition condition)
 {
 	if(condition & (Glib::IO_ERR | Glib::IO_HUP ) )
 		serv_sock->error_event().emit(
-			*serv_sock, net6::socket::ERROR);
+			*serv_sock, net6::socket::IOERROR);
 
 	if(condition & (Glib::IO_IN) )
 		serv_sock->read_event().emit(
@@ -309,7 +309,7 @@ bool Gobby::Host::on_io(Glib::IOCondition condition, net6::host::peer* peer)
 				peer->get_socket() );
 
 		if(condition & (Glib::IO_ERR | Glib::IO_HUP) )
-			sock.error_event().emit(sock, net6::socket::ERROR);
+			sock.error_event().emit(sock, net6::socket::IOERROR);
 
 		if(condition & Glib::IO_IN)
 			sock.read_event().emit(sock, net6::socket::INCOMING);
