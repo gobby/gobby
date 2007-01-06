@@ -9,7 +9,7 @@ SLOT="0"
 KEYWORDS="~x86 ~ppc ~amd64"
 IUSE=""
 EDARCS_REPOSITORY="http://darcs.0x539.de/gobby"
-EDARCS_GET_CMD="get --verbose"
+EDARCS_GET_CMD="get --verbose --set-scripts-executable --partial"
 
 DEPEND=">=dev-cpp/gtkmm-2.6
         >=dev-libs/libsigc++-2.0
