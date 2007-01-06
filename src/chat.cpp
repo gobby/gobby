@@ -114,15 +114,33 @@ void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
 
 void Gobby::Chat::add_line(obby::user& user, const Glib::ustring& message)
 {
-	obby::user self = m_buffer->get_self();
-	Glib::ustring colour;
-	// Highlight the message if the user's nickname is found in it,
-	// but not if the message is coming from the user itself.
-	if( (&user != &self) &&
-            (message.find(self.get_name() ) != Glib::ustring::npos) )
-		colour = "darkred";
-	else
-		colour = "black";
+	obby::user& self = m_buffer->get_self();
+	Glib::ustring name = self.get_name();
+
+	// Check if we have to highlight the line becasue the user's nick name
+	// was found in the the message.
+	Glib::ustring colour = "black";
+
+	// Only check for highlighting if another user wrote this message
+	if(&self != &user)
+	{
+		Glib::ustring::size_type pos = 0;
+		while( (message.find(name, pos)) != Glib::ustring::npos)
+		{
+			// Check that the found position is not part of another
+			// word ('ck' should not be found in 'luck' and such).
+			if(pos > 0 && Glib::Unicode::isalnum(message[pos - 1]) )
+				{ ++ pos; continue; }
+
+			if(pos + name.length() < message.length() &&
+			   Glib::Unicode::isalnum(message[pos + name.length()]))
+				{ ++ pos; continue; }
+
+			// Found occurence
+			colour = "darkred";
+			break;
+		}
+	}
 
 	m_log_chat.log("<" + user.get_name() + "> " + message, colour);
 }
