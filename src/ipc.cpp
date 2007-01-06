@@ -22,6 +22,7 @@
 #endif
 
 #include <glibmm/pattern.h>
+#include <sys/stat.h>
 #include "ipc.hpp"
 
 namespace
