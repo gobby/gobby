@@ -86,6 +86,8 @@ public:
 
 v v v v v v v
 *************
+v v v v v v v
+*************
 	/** Returns whether the document is displayed with the words wrapped
 	 * to the window's width.
 	 */
@@ -103,6 +105,7 @@ v v v v v v v
 	 */
 	void set_show_line_numbers(bool show);
 
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 	/** Signal which will be emitted if the cursor's position changed.
 	 */

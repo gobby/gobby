@@ -52,11 +52,14 @@ namespace {
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
 v v v v v v v
+*************
+v v v v v v v
 		"      <menuitem action=\"ViewWordWrap\" />"
 		"      <menuitem action=\"ViewLineNumbers\" />"
 		"      <separator />"
 *************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 		"      <menuitem action=\"ViewLanguageNone\" />"
 		"    </menu>"
@@ -126,6 +129,10 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 Gobby::Header::Header(const Folder& folder)
  : m_ui_manager(Gtk::UIManager::create() ),
 v v v v v v v
+   m_group_app(Gtk::ActionGroup::create() ),
+   m_toggle_language(false)
+*************
+v v v v v v v
    m_group_app(Gtk::ActionGroup::create() )
 #ifdef WITH_GTKSOURCEVIEW
    , m_toggle_language(false)
@@ -135,6 +142,7 @@ v v v v v v v
    m_toggle_word_wrap(false),
    m_toggle_language(false),
    m_toggle_line_numbers(false)
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 {
 	// Add basic menu
@@ -296,6 +304,8 @@ v v v v v v v
 	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
 
 v v v v v v v
+*************
+v v v v v v v
 	// Toggle word wrapping
 	m_group_app->add(
 		Gtk::ToggleAction::create(
@@ -324,6 +334,7 @@ v v v v v v v
 
 *************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 	// A kind of hack to ensure that
 	// Gtk::SourceLanguage::sourcelanguage_class_.init() is called.
@@ -530,6 +541,8 @@ Gobby::Header::user_set_password_event() const
 }
 
 v v v v v v v
+*************
+v v v v v v v
 #ifdef WITH_GTKSOURCEVIEW
 *************
 Gobby::Header::signal_document_word_wrap_type
@@ -544,6 +557,7 @@ Gobby::Header::document_line_numbers_event() const
 	return m_signal_document_line_numbers;
 }
 
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 Gobby::Header::signal_document_language_type
 Gobby::Header::document_language_event() const
@@ -682,6 +696,8 @@ void Gobby::Header::on_app_user_set_password()
 }
 
 v v v v v v v
+*************
+v v v v v v v
 #ifdef WITH_GTKSOURCEVIEW
 *************
 void Gobby::Header::on_app_document_word_wrap()
@@ -701,6 +717,7 @@ void Gobby::Header::on_app_document_line_numbers()
 }
 ^ ^ ^ ^ ^ ^ ^
 
+^ ^ ^ ^ ^ ^ ^
 void Gobby::Header::on_app_document_language(
 	Glib::RefPtr<Gtk::SourceLanguage> lang
 )
@@ -724,10 +741,13 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 {
 	// We are toggling some flags
 v v v v v v v
+*************
+v v v v v v v
 	m_toggle_word_wrap = true;
 	m_toggle_line_numbers = true;
 *************
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 	m_toggle_language = true;
 
@@ -737,6 +757,8 @@ v v v v v v v
 		m_group_app->get_action("ViewWordWrap")
 	)->set_active(document.get_word_wrapping() );
 
+v v v v v v v
+^ ^ ^ ^ ^ ^ ^
 	// Set current line number state
 	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
 		m_group_app->get_action("ViewLineNumbers")
@@ -756,9 +778,12 @@ v v v v v v v
 	// We are no more toggling
 	m_toggle_language = false;
 v v v v v v v
+*************
+v v v v v v v
 	m_toggle_word_wrap = false;
 *************
 #endif
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 }
 

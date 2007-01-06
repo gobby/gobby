@@ -28,13 +28,21 @@
 #include "folder.hpp"
 
 v v v v v v v
+Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
+                          const Preferences& preferences)
+*************
+v v v v v v v
 Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder)
 *************
 Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
                           const Preferences& preferences)
 #ifdef WITH_GTKSOURCEVIEW
 ^ ^ ^ ^ ^ ^ ^
+^ ^ ^ ^ ^ ^ ^
  : Gtk::SourceView(),
+v v v v v v v
+   m_doc(doc), m_folder(folder), m_preferences(preferences), m_editing(true),
+*************
 v v v v v v v
    m_doc(doc), m_folder(folder), m_editing(true),
 *************
@@ -42,6 +50,7 @@ v v v v v v v
  : Gtk::TextView(),
 #endif
    m_doc(doc), m_folder(folder), m_preferences(preferences), m_editing(true),
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
    m_btn_subscribe(_("Subscribe") )
 {
@@ -224,6 +233,8 @@ Glib::ustring Gobby::Document::get_content()
 
 v v v v v v v
 *************
+v v v v v v v
+*************
 bool Gobby::Document::get_word_wrapping() const
 {
 	return get_wrap_mode() != Gtk::WRAP_NONE;
@@ -247,6 +258,7 @@ void Gobby::Document::set_show_line_numbers(bool show)
 	Gtk::SourceView::set_show_line_numbers(show);
 }
 
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 void Gobby::Document::obby_user_join(obby::user& user)
 {
@@ -374,6 +386,24 @@ void Gobby::Document::on_obby_self_subscribe()
 	set_editable(true);
 
 v v v v v v v
+	// Read settings from preferences
+	// Editor
+	set_tabs_width(m_preferences.editor.tab_width);
+	set_insert_spaces_instead_of_tabs(m_preferences.editor.tab_spaces);
+	set_auto_indent(m_preferences.editor.indentation_auto);
+
+	// View
+	if(m_preferences.view.wrap_text)
+		if(m_preferences.view.wrap_words)
+			set_wrap_mode(Gtk::WRAP_WORD);
+		else
+			set_wrap_mode(Gtk::WRAP_CHAR);
+	else
+		set_wrap_mode(Gtk::WRAP_NONE);
+	set_show_line_numbers(m_preferences.view.linenum_display);
+
+*************
+v v v v v v v
 *************
 	// Read settings from preferences
 	// Editor
@@ -392,6 +422,7 @@ v v v v v v v
 	set_show_line_numbers(m_preferences.view.linenum_display);
 
 #ifdef WITH_GTKSOURCEVIEW
+^ ^ ^ ^ ^ ^ ^
 ^ ^ ^ ^ ^ ^ ^
 	// Enable highlighting
 	buf->set_highlight(true);

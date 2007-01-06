@@ -74,11 +74,6 @@ Gobby::Window::Window()
 	m_header.user_set_password_event().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
 
-	m_header.document_word_wrap_event().connect(
-		sigc::mem_fun(*this, &Window::on_document_word_wrap) );
-#ifdef WITH_GTKSOURCEVIEW
-	m_header.document_line_numbers_event().connect(
-		sigc::mem_fun(*this, &Window::on_document_line_numbers) );
 	m_header.document_language_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_language) );
 
@@ -468,33 +463,6 @@ void Gobby::Window::on_user_set_password()
 		dynamic_cast<obby::client_buffer*>(
 			m_buffer.get() )->set_password(dlg.get_text() );
 	}
-}
-
-void Gobby::Window::on_document_word_wrap()
-{
-	// Get current page
-	DocWindow& doc_wnd = *static_cast<DocWindow*>(
-		m_folder.get_nth_page(m_folder.get_current_page() )
-	);
-
-	// Toggle word wrapping flag
-	doc_wnd.get_document().set_word_wrapping(
-		!doc_wnd.get_document().get_word_wrapping()
-	);
-}
-
-#ifdef WITH_GTKSOURCEVIEW
-void Gobby::Window::on_document_line_numbers()
-{
-	// Get current page
-	DocWindow& doc_wnd = *static_cast<DocWindow*>(
-		m_folder.get_nth_page(m_folder.get_current_page() )
-	);
-
-	// Toggle line number flag
-	doc_wnd.get_document().set_show_line_numbers(
-		!doc_wnd.get_document().get_show_line_numbers()
-	);
 }
 
 void Gobby::Window::on_document_language(
