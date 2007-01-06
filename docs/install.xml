@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<article>
+	<title>Gobby: Installation Guide</title>
+	<section><title>Introduction</title>
+		<para>This is a brief installation guide for Gobby, the collaborative editor. It is a very preliminary version and you could find updated information on <ulink url="http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/wiki/InstallationGuide"><literal>http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/wiki/InstallationGuide</literal></ulink>. Help in crafting good documentation is urgently needed.</para>
+	</section>
+	<section><title>Microsoft Windows</title>
+		<section><title>Binary build</title>
+			<para>Gobby's binary build needs at least Windows 2000 to run correctly. In order to install it on Microsoft Windows to need to take the following steps:</para>
+			<itemizedlist>
+				<listitem><para>Download <ulink url="http://www.pcpm.ucl.ac.be/~gustin/win32_ports/binaries/gtkmm-runtime-2.6.2-1.exe"><literal>http://www.pcpm.ucl.ac.be/~gustin/win32_ports/binaries/gtkmm-runtime-2.6.2-1.exe</literal></ulink> (if it is no more available please refer to <ulink url="http://www.pcpm.ucl.ac.be/~gustin/win32_ports/gtkmm.html"><literal>http://www.pcpm.ucl.ac.be/~gustin/win32_ports/gtkmm.html</literal></ulink> to obtain a newer copy); use the downloaded package to install Gtkmm, it will in turn download Gtk+ if it is not yet installed</para></listitem>
+				<listitem><para>Download <ulink url="http://darcs.0x539.de/gobby-dist/Output/gobby_setup.exe"><literal>http://darcs.0x539.de/gobby-dist/Output/gobby_setup.exe</literal></ulink> and use it to install Gobby</para></listitem>
+			</itemizedlist>
+		</section>
+		<section><title>Development environment</title>
+			<para>It is currently not advised to build a development environment under Microsoft Windows. If you still want to do so please refer to the information on the Wiki.</para>
+		</section>
+	</section>
+	<section><title>Linux</title>
+		<para>Gobby may be installed just like most other application for Unix-like operating systems. You need to get the tarballs of net6, obby and gobby from <ulink url="http://releases.0x539.de/"><literal>http://darcs.0x539.de/</literal></ulink> first. Then you need to build them in this order by running <literal>./configure, make</literal> and <literal>make install</literal>. Please look at the <literal>README</literal> files of all packages to retrieve the dependency list.</para>
+		<para>There are also some packagaing systems by some distributions which allow the installation of Gobby directly:</para>
+		<section><title>Gentoo Linux</title>
+			<para>Thanks to Gustavo Felisberto, Portage contains ebuild for net6, obby and gobby. Just use the following command to install it (but please note that you have to replace <literal>x86</literal> corresponding to your architecture):</para>
+<literallayout>
+ACCEPT_KEYWORDS="~x86" emerge gobby
+</literallayout>
+		</section>
+		<section><title>Debian GNU/Linux</title>
+			<para>Gobby is included in Debian unstable. Packages for Sarge are published separately and could be used by putting the following line into your <literal>/etc/apt/sources.list</literal>.</para>
+<literallayout>
+deb http://releases.0x539.de/ debian/
+</literallayout>
+			<para>For Ubuntu you could substitute <literal>debian/</literal> with <literal>ubuntu/</literal>.</para>
+		</section>
+	</section>
+	<section><title>Mac OS X</title>
+		<para>Because of Gobby's dependencies it is still a bit tricky to compile it on Mac OS X. Please be aware that Gobby does not use Mac OS X's native interface but instead depends on Apple's X11 as the windowing toolkit is uses is not (yet?) ported natively to Mac OS X. The instructions on <ulink url="http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/wiki/HowToGobbyFromSourceMacOSX"><literal>http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/wiki/HowToGobbyFromSourceMacOSX</literal></ulink> will be kept up-to-date and are usable, but lengthy.</para>
+	</section>
+	<section><title>FreeBSD</title>
+		<para>net6, obby and Gobby should compile as is on FreeBSD, but you might need to relocate some pkg-config control files after the installation of the libraries.</para>
+<literallayout>
+cp /usr/local/lib/pkgconfig/net6-1.1.pc \
+  /usr/local/libdata/pkgconfig/
+</literallayout>
+<literallayout>
+cp /usr/local/lib/pkgconfig/obby-0.2.pc \
+  /usr/local/libdata/pkgconfig/
+</literallayout>
+	</section>
+</article>

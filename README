@@ -1,0 +1,128 @@
+
+Gobby: First Contact
+     _________________________________________________________
+
+   Table of Contents
+   1. Synopsis
+   2. Features
+   3. Installation
+
+        3.1. Dependencies
+
+   4. More information
+
+        4.1. How to report bugs
+        4.2. How to get involved
+
+   5. Licensing
+
+1. Synopsis
+
+   Gobby is a free collaborative editor. This means that it
+   provides you with the possibility to edit files simultaneously
+   with other users over a network. It supports multiple
+   documents in one session and a multi-user chat. The platforms
+   on which you could use Gobby are so far Microsoft Windows,
+   Linux, Mac OS X and other Unix-like ones. Developed with the
+   Gtk+ toolkit it integrates nicely into the GNOME desktop
+   environment if you want it to.
+     _________________________________________________________
+
+2. Features
+
+     * Realtime collaboration
+     * Each user has its own colour to be identified by others
+     * IRC-like chat for communicating with your partners
+     * Sidebar with all the others having joined the session
+     * Syntax highlighting, auto indentation, configurable tab
+       width
+     * Multiple documnets in one session
+     * Document subscriptions
+     * User authentication
+     * Zeroconf support (optional)
+     * Unicode support
+     * Internationalisation
+     * Cross-platform: Microsoft Windows, Linux, Mac OS X, other
+       flavours of Unix
+     * Free software, licenced under the terms of the GNU General
+       Public License
+     _________________________________________________________
+
+3. Installation
+
+   Please see INSTALL for details.
+     _________________________________________________________
+
+3.1. Dependencies
+
+     * libsigc++ (>= 2.0.2)
+     * net6 (>= 1.1.0)
+     * howl (>= 0.9.8)
+     * obby (>= 0.2.0)
+     * Glib (>= 2.6.0)
+     * Gtk+ (>= 2.6.0)
+     * GtkSourceView
+     * Glibmm (>= 2.6.0)
+     * libxml++ (>= 2.6.0)
+     * Gtkmm (>= 2.6.0)
+     _________________________________________________________
+
+4. More information
+
+   The development of the obby family is coordinated on its Trac
+   project page on http://darcs.0x539.de/trac/obby/. The primary
+   distribution point is http://releases.0x539.de/.
+     _________________________________________________________
+
+4.1. How to report bugs
+
+   Bugs could be filed as tickets at
+   http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/newticket or
+   submitted directly to us at crew@0x539.de. Please include a
+   reachable email address in your bug report as we often need to
+   contact the reporters for clarifications. Commonly bugs are
+   scheduled for the next major release and will be listed in the
+   roadmap.
+     _________________________________________________________
+
+4.2. How to get involved
+
+   We urgently seek all kind of people who could help us in any
+   way. Firstly we need documentation writers who could help us
+   crafting a help file and some standalone documentation for the
+   web. Secondly, if you are skilled in C++ programming, we could
+   need helping hands with programming. You could use our project
+   page as a starting point to look for tickets which need
+   fixing. And last, but certainly not least, we need translators
+   who get their hands at Gobby's string templates to get it
+   localised. Thus more could use Gobby in their native language.
+   Just contact us, if in doubt, for more details.
+
+   There are also two mailing lists which should provide a mean
+   of contact to other Gobby users and to the developers.
+
+     * obby-announce: A moderated list used to announce new
+       releases of Gobby and its foundation, net6 and obby.
+       Please refer to
+       http://list.0x539.de/mailman/listinfo/obby-announce if you
+       want to subscribe it.
+     * obby-users: Discussions about Gobby's usage and
+       installation problems. Please refer to
+       http://list.0x539.de/mailman/listinfo/obby-announce if you
+       want to subscribe it.
+     _________________________________________________________
+
+5. Licensing
+
+   This program is written by the 0x539 dev group and is licenced
+   under the GNU General Public License (GPL) version 2 or any
+   later version. A copy of the license is included in the
+   distribution.
+
+   This program is distributed in the hope that it will be
+   useful, but WITHOUT ANY WARRANTY; without even the implied
+   warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+   PURPOSE. See the GNU General Public License for more details.
+
+   Copyright (C) 2005 0x539 dev group <crew@0x539.de>
+

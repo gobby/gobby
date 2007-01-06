@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<article>
+	<title>Gobby: First Contact</title>
+	<section><title>Synopsis</title>
+		<para>Gobby is a free collaborative editor. This means that it provides you with the possibility to edit files simultaneously with other users over a network. It supports multiple documents in one session and a multi-user chat. The platforms on which you could use Gobby are so far Microsoft Windows, Linux, Mac OS X and other Unix-like ones. Developed with the Gtk+ toolkit it integrates nicely into the GNOME desktop environment if you want it to.</para>
+	</section>
+	<section><title>Features</title>
+		<itemizedlist>
+			<listitem><para>Realtime collaboration</para></listitem>
+			<listitem><para>Each user has its own colour to be identified by others</para></listitem>
+			<listitem><para>IRC-like chat for communicating with your partners</para></listitem>
+			<listitem><para>Sidebar with all the others having joined the session</para></listitem>
+			<listitem><para>Syntax highlighting, auto indentation, configurable tab width</para></listitem>
+			<listitem><para>Multiple documnets in one session</para></listitem>
+			<listitem><para>Document subscriptions</para></listitem>
+			<listitem><para>User authentication</para></listitem>
+			<listitem><para>Zeroconf support (optional)</para></listitem>
+			<listitem><para>Unicode support</para></listitem>
+			<listitem><para>Internationalisation</para></listitem>
+			<listitem><para>Cross-platform: Microsoft Windows, Linux, Mac OS X, other flavours of Unix</para></listitem>
+			<listitem><para>Free software, licenced under the terms of the GNU General Public License</para></listitem>
+		</itemizedlist>
+	</section>
+	<section><title>Installation</title>
+		<para>Please see <literal>INSTALL</literal> for details.</para>
+		<section><title>Dependencies</title>
+			<itemizedlist>
+				<listitem><para><literal>libsigc++ (>= 2.0.2)</literal></para></listitem>
+				<listitem><para><literal>net6 (>= 1.1.0)</literal></para></listitem>
+				<listitem><para><literal>howl (>= 0.9.8)</literal></para></listitem>
+				<listitem><para><literal>obby (>= 0.2.0)</literal></para></listitem>
+				<listitem><para><literal>Glib (>= 2.6.0)</literal></para></listitem>
+				<listitem><para><literal>Gtk+ (>= 2.6.0)</literal></para></listitem>
+				<listitem><para><literal>GtkSourceView</literal></para></listitem>
+				<listitem><para><literal>Glibmm (>= 2.6.0)</literal></para></listitem>
+				<listitem><para><literal>libxml++ (>= 2.6.0)</literal></para></listitem>
+				<listitem><para><literal>Gtkmm (>= 2.6.0)</literal></para></listitem>
+			</itemizedlist>
+		</section>
+	</section>
+	<section>
+		<title>More information</title>
+		<para>The development of the <literal>obby</literal> family is coordinated on its Trac project page on <ulink url="http://darcs.0x539.de/trac/obby/"><literal>http://darcs.0x539.de/trac/obby/</literal></ulink>. The primary distribution point is <ulink url="http://releases.0x539.de"><literal>http://releases.0x539.de/</literal></ulink>.</para>
+		<section><title>How to report bugs</title>
+			<para>Bugs could be filed as tickets at <ulink url="http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/newticket"><literal>http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/newticket</literal></ulink> or submitted directly to us at <ulink url="mailto:crew@0x539.de"><literal>crew@0x539.de</literal></ulink>. Please include a reachable email address in your bug report as we often need to contact the reporters for clarifications. Commonly bugs are scheduled for the next major release and will be listed in the roadmap.</para>
+		</section>
+		<section><title>How to get involved</title>
+			<para>We urgently seek all kind of people who could help us in any way. Firstly we need documentation writers who could help us crafting a help file and some standalone documentation for the web. Secondly, if you are skilled in C++ programming, we could need helping hands with programming. You could use our project page as a starting point to look for tickets which need fixing. And last, but certainly not least, we need translators who get their hands at Gobby's string templates to get it localised. Thus more could use Gobby in their native language. Just contact us, if in doubt, for more details.</para>
+			<para>There are also two mailing lists which should provide a mean of contact to other Gobby users and to the developers.</para>
+			<itemizedlist>
+				<listitem><para><literal>obby-announce</literal>: A moderated list used to announce new releases of Gobby and its foundation, net6 and obby. Please refer to <ulink url="http://list.0x539.de/mailman/listinfo/obby-announce"><literal>http://list.0x539.de/mailman/listinfo/obby-announce</literal></ulink> if you want to subscribe it.</para></listitem>
+				<listitem><para><literal>obby-users</literal>: Discussions about Gobby's usage and installation problems. Please refer to <ulink url="http://list.0x539.de/mailman/listinfo/obby-announce"><literal>http://list.0x539.de/mailman/listinfo/obby-announce</literal></ulink> if you want to subscribe it.</para></listitem>
+			</itemizedlist>
+		</section>
+	</section>
+	<section><title>Licensing</title>
+		<para>This program is written by the 0x539 dev group and is licenced under the GNU General Public License (GPL) version 2 or any later version. A copy of the license is included in the distribution.</para>
+		<para>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</para>
+		<para>Copyright (C) 2005 0x539 dev group &lt;crew@0x539.de&gt;</para>
+	</section>
+</article>
