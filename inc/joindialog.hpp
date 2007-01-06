@@ -94,8 +94,9 @@ protected:
 	Gtk::Label m_lbl_name;
 	Gtk::Label m_lbl_color;
 
-#ifdef WITH_HOWL
 	Gtk::VBox m_vbox;
+
+#ifdef WITH_HOWL
 	Gtk::Expander m_ep_discover;
 	Gtk::TreeView m_session_view;
 	Glib::RefPtr<Gtk::ListStore> m_session_list;

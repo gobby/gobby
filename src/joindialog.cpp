@@ -90,6 +90,8 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 
 	m_table.set_spacings(5);
+	m_vbox.set_spacing(5);
+	m_vbox.pack_start(m_table);
 
 #ifdef WITH_HOWL
 	if(m_zeroconf)
@@ -113,21 +115,11 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 		m_timer_connection = Glib::signal_timeout().connect(
 			sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
 
-		m_vbox.set_spacing(5);
-		m_vbox.pack_start(m_table);
 		m_vbox.pack_start(m_ep_discover);
-		get_vbox()->pack_start(m_vbox);
 	}
-	else
-	{
-		// Howl is deactivated
-		get_vbox()->set_spacing(5);
-		get_vbox()->pack_start(m_table);
-	}
-#else
-	get_vbox()->set_spacing(5);
-	get_vbox()->pack_start(m_table);
 #endif
+
+	get_vbox()->pack_start(m_vbox);
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
