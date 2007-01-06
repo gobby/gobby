@@ -17,8 +17,10 @@
  */
 
 #include <gtkmm/stock.h>
+#include <gtkmm/toggleaction.h>
 #include <obby/buffer.hpp>
 
+#include "features.hpp"
 #include "common.hpp"
 #include "header.hpp"
 
@@ -39,6 +41,12 @@ namespace {
 		"      <menuitem action=\"SaveDocument\" />"
 		"      <menuitem action=\"CloseDocument\" />"
 		"    </menu>"
+#ifdef WITH_GTKSOURCEVIEW
+		"    <menu action=\"MenuDocument\">"
+		"      <menuitem action=\"DocumentLineNumbers\" />"
+		"      <separator />"
+		"    </menu>"
+#endif
 		"    <menu action=\"MenuHelp\">"
 		"      <menuitem action=\"About\" />"
 		"    </menu>"
@@ -67,10 +75,11 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 	return static_cast<Code>(gobject_->code);
 }
 
-Gobby::Header::Header()
+Gobby::Header::Header(const Folder& folder)
  : m_ui_manager(Gtk::UIManager::create() ),
    m_group_app(Gtk::ActionGroup::create() ),
-   m_group_session(Gtk::ActionGroup::create() )
+   m_group_session(Gtk::ActionGroup::create() ),
+   m_toggle_line_numbers(false)
 {
 	// App menu
 	m_group_app->add(Gtk::Action::create("MenuApp", _("Gobby")) );
@@ -190,6 +199,24 @@ Gobby::Header::Header()
 		)
 	);
 
+#ifdef WITH_GTKSOURCEVIEW
+	// Documents menu
+	m_group_app->add(Gtk::Action::create("MenuDocument", _("Document")) );
+
+	// Show line numbers
+	m_group_app->add(
+		Gtk::ToggleAction::create(
+			"DocumentLineNumbers",
+			_("Line numbers"),
+			_("Whether to show line numbers for this document")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_line_numbers
+		)
+	);
+#endif
+
 	// Help menu
 	m_group_app->add(Gtk::Action::create("MenuHelp", _("Help")) );
 
@@ -232,6 +259,13 @@ Gobby::Header::Header()
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
+#ifdef WITH_GTKSOURCEVIEW
+	m_group_app->get_action("MenuDocument")->set_sensitive(false);
+#endif
+
+	// Connect to folder's signals
+	folder.tab_switched_event().connect(
+		sigc::mem_fun(*this, &Header::on_folder_tab_switched) );
 }
 
 Gobby::Header::~Header()
@@ -248,10 +282,13 @@ Glib::RefPtr<const Gtk::AccelGroup> Gobby::Header::get_accel_group() const
 	return m_ui_manager->get_accel_group();
 }
 
-void Gobby::Header::disable_close_save()
+void Gobby::Header::disable_document_actions()
 {
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
+#ifdef WITH_GTKSOURCEVIEW
+	m_group_app->get_action("MenuDocument")->set_sensitive(false);
+#endif
 }
 
 Gobby::Header::signal_session_create_type
@@ -296,6 +333,14 @@ Gobby::Header::document_close_event() const
 	return m_signal_document_close;
 }
 
+#ifdef WITH_GTKSOURCEVIEW
+Gobby::Header::signal_document_line_numbers_type
+Gobby::Header::document_line_numbers_event() const
+{
+	return m_signal_document_line_numbers;
+}
+#endif
+
 Gobby::Header::signal_about_type
 Gobby::Header::about_event() const
 {
@@ -319,10 +364,12 @@ void Gobby::Header::obby_start()
 	m_group_app->get_action("CreateDocument")->set_sensitive(true);
 	m_group_app->get_action("OpenDocument")->set_sensitive(true);
 
-	// SaveDocument and CloseDocument will be activated from the
-	// insert_document event
+	// Document actions will be activated from the insert_document event
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
+#ifdef WITH_GTKSOURCEVIEW
+	m_group_app->get_action("MenuDocument")->set_sensitive(false);
+#endif
 }
 
 void Gobby::Header::obby_end()
@@ -336,8 +383,8 @@ void Gobby::Header::obby_end()
 	m_group_app->get_action("CreateDocument")->set_sensitive(false);
 	m_group_app->get_action("OpenDocument")->set_sensitive(false);
 
-	// Leave SaveDocument and CloseDocument as they were to allow the user
-	// to save documents.
+	// Leave document actions like SaveDocument and CloseDocument as they
+	// were to allow the user to save documents.
 }
 
 void Gobby::Header::obby_user_join(obby::user& user)
@@ -351,9 +398,12 @@ void Gobby::Header::obby_user_part(obby::user& user)
 void Gobby::Header::obby_document_insert(obby::document& document)
 {
 	// Now we have at least one document open, so we could activate the
-	// save and close buttons.
+	// document actions.
 	m_group_app->get_action("SaveDocument")->set_sensitive(true);
 	m_group_app->get_action("CloseDocument")->set_sensitive(true);
+#ifdef WITH_GTKSOURCEVIEW
+	m_group_app->get_action("MenuDocument")->set_sensitive(true);
+#endif
 }
 
 void Gobby::Header::obby_document_remove(obby::document& document)
@@ -361,9 +411,12 @@ void Gobby::Header::obby_document_remove(obby::document& document)
 	if(document.get_buffer().document_count() == 1)
 	{
 		// The document which is currently removed is the only
-		// existing document? Disable save and close buttons then.
+		// existing document? Disable document actions then.
 		m_group_app->get_action("SaveDocument")->set_sensitive(false);
 		m_group_app->get_action("CloseDocument")->set_sensitive(false);
+#ifdef WITH_GTKSOURCEVIEW
+		m_group_app->get_action("MenuDocument")->set_sensitive(false);
+#endif
 	}
 }
 
@@ -402,6 +455,18 @@ void Gobby::Header::on_app_document_close()
 	m_signal_document_close.emit();
 }
 
+#ifdef WITH_GTKSOURCEVIEW
+void Gobby::Header::on_app_document_line_numbers()
+{
+	// Are we toggling line numbers manually through a tab change or
+	// something? Then we do not have to emit this signal because we
+	// read the new status from the document and need not to set the
+	// document's line number status to the value it currently has ;)
+	if(!m_toggle_line_numbers)
+		m_signal_document_line_numbers.emit();
+}
+#endif
+
 void Gobby::Header::on_app_about()
 {
 	m_signal_about.emit();
@@ -412,3 +477,18 @@ void Gobby::Header::on_app_quit()
 	m_signal_quit.emit();
 }
 
+void Gobby::Header::on_folder_tab_switched(Document& document)
+{
+#ifdef WITH_GTKSOURCEVIEW
+	// We are toggling line numbers
+	m_toggle_line_numbers = true;
+
+	// Set current line number state
+	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
+		m_group_app->get_action("DocumentLineNumbers")
+	)->set_active(document.get_show_line_numbers() );
+
+	// We are no more toggling
+	m_toggle_line_numbers = false;
+#endif
+}

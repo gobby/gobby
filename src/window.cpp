@@ -42,7 +42,7 @@
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
    m_config(Glib::get_home_dir() + "/.gobby/config.xml"), m_buffer(NULL),
-   m_running(false), m_statusbar(m_folder)
+   m_running(false), m_header(m_folder), m_statusbar(m_folder)
 {
 	m_header.session_create_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
@@ -59,6 +59,11 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_document_save) );
 	m_header.document_close_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
+
+#ifdef WITH_GTKSOURCEVIEW
+	m_header.document_line_numbers_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_line_numbers) );
+#endif
 
 	m_header.about_event().connect(
 		sigc::mem_fun(*this, &Window::on_about) );
@@ -383,9 +388,21 @@ void Gobby::Window::on_document_close()
 		// If there are no more documents disable
 		// save and close buttons in header
 		if(!m_folder.get_n_pages() )
-			m_header.disable_close_save();
+			m_header.disable_document_actions();
 	}
 }
+
+#ifdef WITH_GTKSOURCEVIEW
+void Gobby::Window::on_document_line_numbers()
+{
+	// Get current page
+	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
+	Document* doc = static_cast<Document*>(page);
+
+	// Toggle line number flag
+	doc->set_show_line_numbers(!doc->get_show_line_numbers() );
+}
+#endif
 
 void Gobby::Window::on_quit()
 {

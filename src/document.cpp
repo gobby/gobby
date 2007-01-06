@@ -229,6 +229,18 @@ Glib::ustring Gobby::Document::get_content()
 	return m_view.get_buffer()->get_text();
 }
 
+#ifdef WITH_GTKSOURCEVIEW
+bool Gobby::Document::get_show_line_numbers() const
+{
+	return m_view.get_show_line_numbers();
+}
+
+void Gobby::Document::set_show_line_numbers(bool show)
+{
+	m_view.set_show_line_numbers(show);
+}
+#endif
+
 void Gobby::Document::obby_user_join(obby::user& user)
 {
 	// Build tag name for this user

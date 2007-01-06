@@ -25,6 +25,9 @@
 #include <gtkmm/toolbar.h>
 #include <obby/user.hpp>
 #include <obby/document.hpp>
+#include "features.hpp"
+#include "document.hpp"
+#include "folder.hpp"
 
 namespace Gobby
 {
@@ -51,19 +54,23 @@ public:
 	typedef sigc::signal<void> signal_document_open_type;
 	typedef sigc::signal<void> signal_document_save_type;
 	typedef sigc::signal<void> signal_document_close_type;
+#ifdef WITH_GTKSOURCEVIEW
+	typedef sigc::signal<void> signal_document_line_numbers_type;
+#endif
 	typedef sigc::signal<void> signal_about_type;
 	typedef sigc::signal<void> signal_quit_type;
 
-	Header();
+	Header(const Folder& folder);
 	~Header();
 
 	// Access to accelerator groups of the ui manager
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
 	Glib::RefPtr<const Gtk::AccelGroup> get_accel_group() const;
 
-	// Disables close and save buttons. The windows calls this after
-	// all remaining documents have been closed after a connection loss.
-	void disable_close_save();
+	// Disables actions that deal with documents. The windowscalls this
+	// after all remaining documents have been closed after a connection
+	// loss.
+	void disable_document_actions();
 
 	signal_session_create_type session_create_event() const;
 	signal_session_join_type session_join_event() const;
@@ -72,6 +79,9 @@ public:
 	signal_document_open_type document_open_event() const;
 	signal_document_save_type document_save_event() const;
 	signal_document_close_type document_close_event() const;
+#ifdef WITH_GTKSOURCEVIEW
+	signal_document_line_numbers_type document_line_numbers_event() const;
+#endif
 	signal_about_type about_event() const;
 	signal_quit_type quit_event() const;
 
@@ -91,15 +101,28 @@ protected:
 	void on_app_document_open();
 	void on_app_document_save();
 	void on_app_document_close();
+#ifdef WITH_GTKSOURCEVIEW
+	void on_app_document_line_numbers();
+#endif
 	void on_app_about();
 	void on_app_quit();
+
+	void on_folder_tab_switched(Document& document);
 
 	Glib::RefPtr<Gtk::UIManager> m_ui_manager;
 	Glib::RefPtr<Gtk::ActionGroup> m_group_app;
 	Glib::RefPtr<Gtk::ActionGroup> m_group_session;
+	Glib::RefPtr<Gtk::ActionGroup> m_group_document;
 
 	Gtk::MenuBar* m_menubar;
 	Gtk::Toolbar* m_toolbar;
+
+#ifdef WITH_GTKSOURCEVIEW
+	/** Boolean variable whether we are currently toggling line numbers to
+	 * prevent recursion.
+	 */
+	bool m_toggle_line_numbers;
+#endif
 
 	signal_session_create_type m_signal_session_create;
 	signal_session_join_type m_signal_session_join;
@@ -108,6 +131,9 @@ protected:
 	signal_document_open_type m_signal_document_open;
 	signal_document_save_type m_signal_document_save;
 	signal_document_close_type m_signal_document_close;
+#ifdef WITH_GTKSOURCEVIEW
+	signal_document_line_numbers_type m_signal_document_line_numbers;
+#endif
 	signal_about_type m_signal_about;
 	signal_quit_type m_signal_quit;
 };

@@ -53,6 +53,10 @@ protected:
 	void on_document_save();
 	void on_document_close();
 
+#ifdef WITH_GTKSOURCEVIEW
+	void on_document_line_numbers();
+#endif
+
 	void on_about();
 	void on_quit();
 
@@ -79,7 +83,6 @@ protected:
 
 	// GUI
 	Gtk::VBox m_mainbox;
-	Header m_header;
 
 	Gtk::VPaned m_mainpaned;
 	Gtk::HPaned m_subpaned;
@@ -91,6 +94,8 @@ protected:
 	Folder m_folder;
 	UserList m_userlist;
 	Chat m_chat;
+
+	Header m_header;
 	StatusBar m_statusbar;
 
 	// obby

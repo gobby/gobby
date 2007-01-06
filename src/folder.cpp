@@ -161,7 +161,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	// there is no need to update anything.
 	if(m_running)
 	{
-		// Another document has been selected: Update statusbar
+		// Another document has been selected: Emit tabswitched
 		m_signal_tab_switched.emit(
 			*static_cast<Document*>(get_nth_page(page_num) )
 		);

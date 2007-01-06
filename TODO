@@ -20,7 +20,6 @@ Minor:
    has changed and the document is not active and possibly to grey when
    the document is not yet syncronised (which would depend on sync-on-request
    within libobby)
- * Option to disable line numbers with GtkSourceView per document
 
 Wishlist:
  * Default to save files to the location they were loaded from

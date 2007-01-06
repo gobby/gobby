@@ -71,6 +71,16 @@ public:
 	 */
 	Glib::ustring get_content();
 
+#ifdef WITH_GTKSOURCEVIEW
+	/** Returns whether line numbers are currently shown for this document.
+	 */
+	bool get_show_line_numbers() const;
+
+	/** Sets whether to show line numbers for this document.
+	 */
+	void set_show_line_numbers(bool show);
+#endif
+
 	/** Signal which will be emitted if the document gets changed by a
 	 * network event.
 	 */
