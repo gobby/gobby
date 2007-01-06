@@ -46,6 +46,10 @@ namespace
 
 	net6::io_condition IO_FLAGS =
 		net6::IO_INCOMING | net6::IO_OUTGOING | net6::IO_ERROR;
+
+#ifdef _WIN32
+	bool win32_idle_func() { return false; }
+#endif
 }
 
 Gobby::GSelector::GSelector():
@@ -260,6 +264,14 @@ bool Gobby::GSelector::on_timeout(const net6::socket* sock)
 		if( (iter->second.cond & net6::IO_TIMEOUT) == net6::IO_NONE)
 			return false;
 	}
+
+#ifdef _WIN32
+	// When the timeout event handler sends data (like net6_ping), glib
+	// does not emit a signal_io (with Glib::IO_OUT) until another event
+	// occured that wakes up the main loop. This idle event is this other
+	// event. Seems to be a bug in Glib/Win32 however.
+	Glib::signal_idle().connect(sigc::ptr_fun(win32_idle_func) );
+#endif
 
 	// Event handler may destroy the selector, so do not reference
 	// m_mutex anymore.
