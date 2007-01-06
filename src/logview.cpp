@@ -25,6 +25,10 @@
 # include <libgnomevfs/gnome-vfs-utils.h>
 #endif
 
+#ifdef WIN32
+# include <windows.h>
+#endif
+
 #if defined(WITH_GNOME)
 void show_url(const char* url)
 {
