@@ -36,7 +36,7 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
                                   DocumentSettings& settings,
                                   Header& header,
                                   const Preferences& preferences,
-				  Config::Entry& config_entry):
+				  Config::ParentEntry& config_entry):
 	ToggleWindow(
 		parent,
 		header.action_window_documentlist,

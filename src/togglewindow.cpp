@@ -21,7 +21,7 @@
 Gobby::ToggleWindow::ToggleWindow(Gtk::Window& parent,
                                   const Glib::RefPtr<Gtk::ToggleAction>& action,
 			          const Preferences& preferences,
-				  Config::Entry& config_entry):
+				  Config::ParentEntry& config_entry):
 	ToolWindow(parent),
 	m_action(action),
 	m_preferences(preferences),
@@ -33,10 +33,10 @@ Gobby::ToggleWindow::ToggleWindow(Gtk::Window& parent,
 	if(preferences.appearance.remember)
 	{
 		// Read the ToggleWindow's last position from config
-		const int x = config_entry["x"].get<int>(0);
-		const int y = config_entry["y"].get<int>(0);
-		const int w = config_entry["width"].get<int>(0);
-		const int h = config_entry["height"].get<int>(0);
+		const int x = config_entry.get_value<int>("x", 0);
+		const int y = config_entry.get_value<int>("y", 0);
+		const int w = config_entry.get_value<int>("width", 0);
+		const int h = config_entry.get_value<int>("height", 0);
 		bool first_run = (x == 0 && y == 0 && w == 0 && h == 0);
 
 		if(!first_run)
@@ -45,7 +45,7 @@ Gobby::ToggleWindow::ToggleWindow(Gtk::Window& parent,
 			resize(w, h);
 		}
 
-		if(config_entry["visible"].get<bool>(false) )
+		if(config_entry.get_value<bool>("visible", false) )
 		{
 			// Show widget after parent has been shown
 			parent.signal_show().connect(
@@ -62,11 +62,11 @@ Gobby::ToggleWindow::~ToggleWindow()
 		get_position(x, y);
 		get_size(w, h);
 
-		m_config_entry["x"].set(x);
-		m_config_entry["y"].set(y);
-		m_config_entry["width"].set(w);
-		m_config_entry["height"].set(h);
-		m_config_entry["visible"].set(is_visible() );
+		m_config_entry.set_value("x", x);
+		m_config_entry.set_value("y", y);
+		m_config_entry.set_value("width", w);
+		m_config_entry.set_value("height", h);
+		m_config_entry.set_value("visible", is_visible() );
 	}
 }
 
@@ -89,4 +89,3 @@ void Gobby::ToggleWindow::on_hide()
 	m_action->set_active(false);
 	ToolWindow::on_hide();
 }
-

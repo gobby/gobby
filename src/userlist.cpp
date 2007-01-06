@@ -67,7 +67,7 @@ Gobby::UserList::Columns::Columns()
 Gobby::UserList::UserList(Gtk::Window& parent,
                           Header& header,
                           const Preferences& m_preferences,
-			  Config::Entry& config_entry):
+			  Config::ParentEntry& config_entry):
 	ToggleWindow(
 		parent,
 		header.action_window_userlist,

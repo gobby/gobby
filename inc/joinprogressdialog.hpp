@@ -31,7 +31,8 @@ namespace Gobby
 class JoinProgressDialog: public ProgressDialog
 {
 public:
-	JoinProgressDialog(Gtk::Window& parent, Config& config,
+	JoinProgressDialog(Gtk::Window& parent,
+	                   Config::ParentEntry& config_entry,
 	                   const Glib::ustring& hostname,
 	                   unsigned int port,
 	                   const Glib::ustring& username,
@@ -142,7 +143,7 @@ private:
 
 	virtual void on_response(int response_id);
 
-	Config& m_config;
+	Config::ParentEntry& m_config_entry;
 
 	Glib::ustring m_hostname;
 	unsigned int m_port;

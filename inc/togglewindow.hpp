@@ -35,7 +35,7 @@ public:
 	ToggleWindow(Gtk::Window& parent,
 	             const Glib::RefPtr<Gtk::ToggleAction>& action,
 	             const Preferences& preferences,
-		     Config::Entry& config_entry);
+		     Config::ParentEntry& config_entry);
 	~ToggleWindow();
 
 protected:
@@ -46,7 +46,7 @@ protected:
 
 	Glib::RefPtr<Gtk::ToggleAction> m_action;
 	const Preferences& m_preferences;
-	Config::Entry& m_config_entry;
+	Config::ParentEntry& m_config_entry;
 };
 
 } // namespace obby

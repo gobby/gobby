@@ -297,20 +297,18 @@ void Gobby::JoinProgressDialog::UserPasswordPrompt::on_change()
 }
 
 Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
-                                              Config& config,
+                                              Config::ParentEntry& config_entry,
                                               const Glib::ustring& hostname,
                                               unsigned int port,
                                               const Glib::ustring& username,
-                                              const Gdk::Color& color)
- : ProgressDialog(_("Joining obby session..."), parent), m_config(config),
-   m_hostname(hostname), m_port(port), m_username(username), m_color(color)
-   //m_got_done(false), m_got_welcome(false)
+                                              const Gdk::Color& color):
+	ProgressDialog(_("Joining obby session..."), parent),
+	m_config_entry(config_entry), m_hostname(hostname), m_port(port),
+	m_username(username), m_color(color)
 {
 	obby::format_string str("Connecting to %0%...");
 	str << hostname;
 	set_status_text(str.str() );
-
-	// TODO: Write new username and colour (if any) to config, on destruction!
 }
 
 std::auto_ptr<Gobby::ClientBuffer> Gobby::JoinProgressDialog::get_buffer()
@@ -577,6 +575,6 @@ void Gobby::JoinProgressDialog::display_error(const Glib::ustring& message)
 
 void Gobby::JoinProgressDialog::on_response(int response_id)
 {
-	m_config["session"]["name"].set(m_username);
-	m_config["session"]["color"].set(m_color);
+	m_config_entry.set_value("name", m_username);
+	m_config_entry.set_value("color", m_color);
 }

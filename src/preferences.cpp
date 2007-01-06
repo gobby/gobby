@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005, 2006 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -22,82 +22,86 @@ Gobby::Preferences::Editor::Editor()
 {
 }
 
-Gobby::Preferences::Editor::Editor(Config::Entry& entry):
-	tab_width(entry["tab"]["width"].get<unsigned int>(8)),
-	tab_spaces(entry["tab"]["spaces"].get<bool>(false)),
-	indentation_auto(entry["indentation"]["auto"].get<bool>(true)),
-	homeend_smart(entry["homeend"]["smart"].get<bool>(true) )
+Gobby::Preferences::Editor::Editor(Config::ParentEntry& entry):
+	tab_width(entry["tab"].get_value<unsigned int>("width", 8)),
+	tab_spaces(entry["tab"].get_value<bool>("spaces", false)),
+	indentation_auto(entry["indentation"].get_value<bool>("auto", true)),
+	homeend_smart(entry["homeend"].get_value<bool>("smart", true) )
 {
 }
 
-void Gobby::Preferences::Editor::serialise(Config::Entry& entry) const
+void Gobby::Preferences::Editor::serialise(Config::ParentEntry& entry) const
 {
-	entry["tab"]["width"].set(tab_width);
-	entry["tab"]["spaces"].set(tab_spaces);
-	entry["indentation"]["auto"].set(indentation_auto);
-	entry["homeend"]["smart"].set(homeend_smart);
+	entry["tab"].set_value("width", tab_width);
+	entry["tab"].set_value("spaces", tab_spaces);
+	entry["indentation"].set_value("auto", indentation_auto);
+	entry["homeend"].set_value("smart", homeend_smart);
 }
 
 Gobby::Preferences::View::View()
 {
 }
 
-Gobby::Preferences::View::View(Config::Entry& entry):
-	wrap_text(entry["wrap"]["text"].get<bool>(true) ),
-	wrap_words(entry["wrap"]["words"].get<bool>(true) ),
-	linenum_display(entry["linenum"]["display"].get<bool>(true) ),
-	curline_highlight(entry["curline"]["highlight"].get<bool>(true) ),
-	margin_display(entry["margin"]["display"].get<bool>(true) ),
-	margin_pos(entry["margin"]["pos"].get<unsigned int>(80) ),
-	bracket_highlight(entry["bracket"]["highlight"].get<bool>(true) )
+Gobby::Preferences::View::View(Config::ParentEntry& entry):
+	wrap_text(entry["wrap"].get_value<bool>("text", true) ),
+	wrap_words(entry["wrap"].get_value<bool>("words", true) ),
+	linenum_display(entry["linenum"].get_value<bool>("display", true) ),
+	curline_highlight(
+		entry["curline"].get_value<bool>("highlight", true)
+	),
+	margin_display(entry["margin"].get_value<bool>("display", true) ),
+	margin_pos(entry["margin"].get_value<unsigned int>("pos", 80) ),
+	bracket_highlight(entry["bracket"].get_value<bool>("highlight", true) )
 {
 }
 
-void Gobby::Preferences::View::serialise(Config::Entry& entry) const
+void Gobby::Preferences::View::serialise(Config::ParentEntry& entry) const
 {
-	entry["wrap"]["text"].set(wrap_text);
-	entry["wrap"]["words"].set(wrap_words);
-	entry["linenum"]["display"].set(linenum_display);
-	entry["curline"]["highlight"].set(curline_highlight);
-	entry["margin"]["display"].set(margin_display);
-	entry["margin"]["pos"].set(margin_pos);
-	entry["bracket"]["highlight"].set(bracket_highlight);
+	entry["wrap"].set_value("text", wrap_text);
+	entry["wrap"].set_value("words", wrap_words);
+	entry["linenum"].set_value("display", linenum_display);
+	entry["curline"].set_value("highlight", curline_highlight);
+	entry["margin"].set_value("display", margin_display);
+	entry["margin"].set_value("pos", margin_pos);
+	entry["bracket"].set_value("highlight", bracket_highlight);
 }
 
 Gobby::Preferences::Appearance::Appearance()
 {
 }
 
-Gobby::Preferences::Appearance::Appearance(Config::Entry& entry):
+Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
 	toolbar_show(
 		static_cast<Gtk::ToolbarStyle>(
-			entry["toolbar"]["show"].get<int>(
+			entry["toolbar"].get_value<int>(
+				"show",
 				static_cast<int>(Gtk::TOOLBAR_BOTH)
 			)
 		)
 	),
-	remember(entry["windows"]["remember"].get<bool>(true) )
+	remember(entry["windows"].get_value<bool>("remember", true) )
 {
 }
 
-void Gobby::Preferences::Appearance::serialise(Config::Entry& entry) const
+void Gobby::Preferences::Appearance::
+	serialise(Config::ParentEntry& entry) const
 {
-	entry["toolbar"]["show"].set(static_cast<int>(toolbar_show) );
-	entry["windows"]["remember"].set(remember);
+	entry["toolbar"].set_value("show", static_cast<int>(toolbar_show) );
+	entry["windows"].set_value("remember", remember);
 }
 
 Gobby::Preferences::Font::Font()
 {
 }
 
-Gobby::Preferences::Font::Font(Config::Entry& entry):
-	desc(entry["desc"].get<Glib::ustring>("Monospace 10") )
+Gobby::Preferences::Font::Font(Config::ParentEntry& entry):
+	desc(entry.get_value<Glib::ustring>("desc", "Monospace 10") )
 {
 }
 
-void Gobby::Preferences::Font::serialise(Config::Entry& entry) const
+void Gobby::Preferences::Font::serialise(Config::ParentEntry& entry) const
 {
-	entry["desc"].set(desc.to_string());
+	entry.set_value("desc", desc.to_string());
 }
 
 Gobby::Preferences::FileList::iterator::iterator(const base_iterator iter):
@@ -147,21 +151,29 @@ Gobby::Preferences::FileList::FileList()
 {
 }
 
-Gobby::Preferences::FileList::FileList(Config::Entry& entry,
+Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
                                        const LangManager& lang_mgr)
 {
 	if(entry.begin() != entry.end() )
 	{
-		for(Config::Entry::iterator iter = entry.begin();
+		for(Config::ParentEntry::iterator iter = entry.begin();
 		    iter != entry.end();
 		    ++ iter)
 		{
-			Config::Entry& ent = iter.entry();
+			Config::Entry& ent = *iter;
+			Config::ParentEntry* parent_entry =
+				dynamic_cast<Config::ParentEntry*>(&ent);
 
-			Glib::ustring pattern =
-				ent["pattern"].get<Glib::ustring>("unknown");
-			Glib::ustring mime =
-				ent["mime_type"].get<Glib::ustring>("unknown");
+			// Don't know what it is...
+			if(parent_entry == NULL) continue;
+
+			Glib::ustring pattern = parent_entry->get_value<
+				Glib::ustring
+			>("pattern", "unknown");
+
+			Glib::ustring mime = parent_entry->get_value<
+				Glib::ustring
+			>("mime_type", "unknown");
 
 			Glib::RefPtr<Gtk::SourceLanguage> lang =
 				lang_mgr->get_language_from_mime_type(mime);
@@ -226,7 +238,7 @@ Gobby::Preferences::FileList::FileList(Config::Entry& entry,
 	}
 }
 
-void Gobby::Preferences::FileList::serialise(Config::Entry& entry) const
+void Gobby::Preferences::FileList::serialise(Config::ParentEntry& entry) const
 {
 	int num = 0;
 
@@ -240,10 +252,10 @@ void Gobby::Preferences::FileList::serialise(Config::Entry& entry) const
 		std::list<Glib::ustring> mime_types =
 			iter->second->get_mime_types();
 
-		Config::Entry& main = entry[stream.str()];
+		Config::ParentEntry& main = entry.set_parent(stream.str());
 
-		main["pattern"].set(iter->first);
-		main["mime_type"].set(mime_types.front());
+		main.set_value("pattern", iter->first);
+		main.set_value("mime_type", mime_types.front());
 	}
 }
 
@@ -288,20 +300,20 @@ Gobby::Preferences::Preferences()
 }
 
 Gobby::Preferences::Preferences(Config& config, const LangManager& lang_mgr):
-	editor(config["editor"]),
-	view(config["view"]),
-	appearance(config["appearance"]),
-	font(config["font"]),
-	files(config["files"], lang_mgr)
+	editor(config.get_root()["editor"]),
+	view(config.get_root()["view"]),
+	appearance(config.get_root()["appearance"]),
+	font(config.get_root()["font"]),
+	files(config.get_root()["files"], lang_mgr)
 {
 }
 
 void Gobby::Preferences::serialise(Config& config) const
 {
 	// Serialise into config
-	editor.serialise(config["editor"]);
-	view.serialise(config["view"]);
-	appearance.serialise(config["appearance"]);
-	font.serialise(config["font"]);
-	files.serialise(config["files"]);
+	editor.serialise(config.get_root()["editor"]);
+	view.serialise(config.get_root()["view"]);
+	appearance.serialise(config.get_root()["appearance"]);
+	font.serialise(config.get_root()["font"]);
+	files.serialise(config.get_root()["files"]);
 }

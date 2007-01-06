@@ -48,7 +48,7 @@ public:
 	UserList(Gtk::Window& parent,
 	         Header& header,
 		 const Preferences& preferences,
-		 Config::Entry& config_entry);
+		 Config::ParentEntry& config_entry);
 
 	// Calls from the window
 	// TODO: Replace them by signal handlers from buf

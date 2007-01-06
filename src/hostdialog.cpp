@@ -20,9 +20,10 @@
 #include "common.hpp"
 #include "hostdialog.hpp"
 
-Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
+Gobby::HostDialog::HostDialog(Gtk::Window& parent,
+                              Config::ParentEntry& config_entry):
 	Gtk::Dialog(_("Create obby session"), parent, true, true),
-	m_config(config),
+	m_config_entry(config_entry),
 	m_table(4, 2),
 	m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
 	m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
@@ -32,7 +33,7 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
 	m_ent_session(*this, _("Restore session") )
 {
 	m_ent_port.set_range(1024, 65535);
-	m_ent_port.set_value(config["session"]["host_port"].get(6522) );
+	m_ent_port.set_value(config_entry.get_value("host_port", 6522) );
 	m_ent_port.set_increments(1, 256);
 
 	m_ent_password.set_visibility(false);
@@ -43,10 +44,15 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
 	default_color.set_green(0xcccc);
 	default_color.set_blue(0xffff);
 
-	Glib::ustring name =
-		config["session"]["name"].get(Glib::get_user_name() );
-	Gdk::Color color =
-		config["session"]["color"].get(Gdk::Color(default_color) );
+	Glib::ustring name = config_entry.get_value(
+		"name",
+		Glib::get_user_name()
+	);
+
+	Gdk::Color color = config_entry.get_value(
+		"color",
+		Gdk::Color(default_color)
+	);
 
 	m_ent_name.set_text(name);
 	m_btn_color.set_color(color);
@@ -176,11 +182,10 @@ void Gobby::HostDialog::on_response(int response_id)
 	if(response_id == Gtk::RESPONSE_OK)
 	{
 		// Write new values into config
-		m_config["session"]["host_port"].set(get_port() );
-		m_config["session"]["name"].set(get_name() );
-		m_config["session"]["color"].set(get_color() );
+		m_config_entry.set_value("host_port", get_port() );
+		m_config_entry.set_value("name", get_name() );
+		m_config_entry.set_value("color", get_color() );
 	}
 
 	Gtk::Dialog::on_response(response_id);
 }
-

@@ -56,9 +56,11 @@ public:
 #endif
 
 #ifndef WITH_HOWL
-	JoinDialog(Gtk::Window& parent, Gobby::Config& config);
+	JoinDialog(Gtk::Window& parent,
+	           Config::ParentEntry& config_entry);
 #else
-	JoinDialog(Gtk::Window& parent, Gobby::Config& config,
+	JoinDialog(Gtk::Window& parent,
+	           Config::ParentEntry& config_entry,
 	           obby::zeroconf* zeroconf);
 #endif
 	virtual ~JoinDialog();
@@ -85,7 +87,7 @@ protected:
 	virtual void on_change();
 #endif
 
-	Gobby::Config& m_config;
+	Gobby::Config::ParentEntry& m_config_entry;
 
 	Gtk::Table m_table;
 	Gtk::Label m_lbl_host;

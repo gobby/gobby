@@ -56,13 +56,18 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_application_state, m_lang_manager),
-	m_userlist(*this, m_header, m_preferences, config["windows"]),
+	m_userlist(
+		*this,
+		m_header,
+		m_preferences,
+		config.get_root()["windows"]
+	),
 	m_documentlist(
 		*this,
 		m_document_settings,
 		m_header,
 		m_preferences,
-		config["windows"]
+		config.get_root()["windows"]
 	),
 	m_finddialog(*this), m_gotodialog(*this),
 	m_folder(m_header, m_preferences), m_statusbar(m_header, m_folder)
@@ -151,10 +156,13 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	// Apply initial preferences
 	apply_preferences();
 
-	bool show_chat = config["windows"]["chat"]["visible"].get<bool>(true);
+	Config::ParentEntry& windows = config.get_root()["windows"];
+	bool show_chat = windows["chat"].get_value<bool>(
+		"visible",
+		true
+	);
+
 	m_header.action_window_chat->set_active(show_chat);
-
-
 	m_application_state.modify(APPLICATION_INITIAL, APPLICATION_NONE);
 
 	show_all_children();
@@ -181,18 +189,21 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 
 	if(m_preferences.appearance.remember)
 	{
+		Config::ParentEntry& screen = config.get_root()["screen"];
+
 		// Restore the window's position from the configuration
-        	const int x = config["windows"]["main"]["x"].get<int>(0);
-	        const int y = config["windows"]["main"]["y"].get<int>(0);
-		const int w = config["windows"]["main"]["width"].get<int>(0);
-		const int h = config["windows"]["main"]["height"].get<int>(0);
-		const int s_w = config["screen"]["width"].get<int>(0);
-		const int s_h = config["screen"]["height"].get<int>(0);
+        	const int x = windows["main"].get_value<int>("x", 0);
+	        const int y = windows["main"].get_value<int>("y", 0);
+		const int w = windows["main"].get_value<int>("width", 0);
+		const int h = windows["main"].get_value<int>("height", 0);
+
+		const int s_w = screen.get_value<int>("width", 0);
+		const int s_h = screen.get_value<int>("height", 0);
 		bool first_run = (x == 0 && y == 0 && w == 0 && h == 0);
 
-		Glib::RefPtr<Gdk::Screen> screen(get_screen() );
-		if((screen->get_width() >= s_w && screen->get_height() >= s_h)
-			&& !first_run)
+		Glib::RefPtr<Gdk::Screen> scr(get_screen() );
+		if( (scr->get_width() >= s_w && scr->get_height() >= s_h) &&
+		    (!first_run) )
 		{
 			move(x, y);
 			resize(w, h);
@@ -208,7 +219,9 @@ Gobby::Window::~Window()
 	// Serialise preferences into config
 	m_preferences.serialise(m_config);
 
-	m_config["windows"]["chat"]["visible"].set(
+	Config::ParentEntry& windows = m_config.get_root()["windows"];
+	windows["chat"].set_value(
+		"visible",
 		m_header.action_window_chat->get_active()
 	);
 
@@ -217,14 +230,16 @@ Gobby::Window::~Window()
 	{
 		int x, y, w, h;
 		get_position(x, y); get_size(w, h);
-		Glib::RefPtr<Gdk::Screen> screen(get_screen() );
+		Glib::RefPtr<Gdk::Screen> scr(get_screen() );
 
-		m_config["windows"]["main"]["x"].set(x);
-		m_config["windows"]["main"]["y"].set(y);
-		m_config["windows"]["main"]["width"].set(w);
-		m_config["windows"]["main"]["height"].set(h);
-		m_config["screen"]["width"].set(screen->get_width() );
-		m_config["screen"]["height"].set(screen->get_height() );
+		windows["main"].set_value("x", x);
+		windows["main"].set_value("y", y);
+		windows["main"].set_value("width", w);
+		windows["main"].set_value("height", h);
+
+		Config::ParentEntry& screen = m_config.get_root()["screen"];
+		screen.set_value("width", scr->get_width() );
+		screen.set_value("height", scr->get_height() );
 	}
 }
 
@@ -400,10 +415,16 @@ void Gobby::Window::on_session_join()
 	if(m_join_dlg.get() == NULL)
 	{
 #ifndef WITH_HOWL
-		m_join_dlg.reset(new JoinDialog(*this, m_config) );
+		m_join_dlg.reset(
+			new JoinDialog(*this, m_config.get_root()["session"])
+		);
 #else
 		m_join_dlg.reset(
-			new JoinDialog(*this, m_config, m_zeroconf.get())
+			new JoinDialog(
+				*this,
+				m_config.get_root()["session"],
+				m_zeroconf.get()
+			)
 		);
 #endif
 	}
@@ -417,7 +438,14 @@ void Gobby::Window::on_session_join()
 		Gdk::Color color = m_join_dlg->get_color();
 
 		JoinProgressDialog prgdlg(
-			*this, m_config, host, port, name, color);
+			*this,
+			m_config.get_root()["session"],
+			host,
+			port,
+			name,
+			color
+		);
+
 		if(prgdlg.run() == Gtk::RESPONSE_OK)
 		{
 			prgdlg.hide();
@@ -1176,7 +1204,11 @@ bool Gobby::Window::session_open(bool initial_dialog)
 	}
 
 	if(m_host_dlg.get() == NULL)
-		m_host_dlg.reset(new HostDialog(*this, m_config) );
+	{
+		m_host_dlg.reset(
+			new HostDialog(*this, m_config.get_root()["session"])
+		);
+	}
 
 	int response = Gtk::RESPONSE_OK;
 	if(initial_dialog) response = m_host_dlg->run();

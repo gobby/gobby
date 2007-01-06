@@ -31,13 +31,15 @@ Gobby::JoinDialog::Columns::Columns()
 #endif
 
 #ifndef WITH_HOWL
-Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config):
+Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
+                              Config::ParentEntry& config_entry):
 #else
-Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
+Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
+                              Config::ParentEntry& config_entry,
                               obby::zeroconf* zeroconf):
 #endif
 	Gtk::Dialog(_("Join obby session"), parent, true, true),
-   m_config(config),
+   m_config_entry(config_entry),
    m_table(4, 2),
    m_lbl_host(_("Host:"), Gtk::ALIGN_RIGHT),
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
@@ -53,14 +55,25 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 	default_color.set_green(0xcccc);
 	default_color.set_blue(0xffff);
 
-	Glib::ustring host =
-		config["session"]["join_host"].get(Glib::ustring("localhost") );
-	unsigned int port =
-		config["session"]["join_port"].get(6522);
-	Glib::ustring name =
-		config["session"]["name"].get(Glib::get_user_name() );
-	Gdk::Color color =
-		config["session"]["color"].get(default_color);
+	Glib::ustring host = config_entry.get_value<Glib::ustring>(
+		"join_host",
+		Glib::ustring("localhost")
+	);
+
+	unsigned int port = config_entry.get_value<unsigned int>(
+		"join_port",
+		6522
+	);
+
+	Glib::ustring name = config_entry.get_value<Glib::ustring>(
+		"name",
+		Glib::get_user_name()
+	);
+
+	Gdk::Color color =  config_entry.get_value<Gdk::Color>(
+		"color",
+		default_color
+	);
 
 	m_ent_host.set_text(host);
 
@@ -186,10 +199,10 @@ void Gobby::JoinDialog::on_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_OK)
 	{
-		m_config["session"]["join_host"].set(get_host() );
-		m_config["session"]["join_port"].set(get_port() );
-		m_config["session"]["name"].set(get_name() );
-		m_config["session"]["color"].set(get_color() );
+		m_config_entry.set_value("join_host", get_host() );
+		m_config_entry.set_value("join_port", get_port() );
+		m_config_entry.set_value("name", get_name() );
+		m_config_entry.set_value("color", get_color() );
 	}
 
 	Gtk::Dialog::on_response(response_id);

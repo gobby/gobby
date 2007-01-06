@@ -34,7 +34,7 @@ namespace Gobby
 class HostDialog: public Gtk::Dialog
 {
 public:
-	HostDialog(Gtk::Window& parent, Config& config);
+	HostDialog(Gtk::Window& parent, Config::ParentEntry& config_entry);
 	virtual ~HostDialog();
 
 	unsigned int get_port() const;
@@ -52,7 +52,7 @@ public:
 protected:
 	virtual void on_response(int response_id);
 
-	Config& m_config;
+	Config::ParentEntry& m_config_entry;
 
 	Gtk::Table m_table;
 	Gtk::Label m_lbl_port;

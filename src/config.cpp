@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005, 2006 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -31,7 +31,6 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/fileutils.h>
 #include <glibmm/exception.h>
-#include <libxml++/nodes/textnode.h>
 #include <libxml++/parsers/domparser.h>
 #include <libxml++/exceptions/exception.h>
 
@@ -62,6 +61,8 @@ namespace
 			std::string error_message = static_cast<LPSTR>(msgbuf);
 			LocalFree(msgbuf);
 
+			// TODO: Convert to UTF-8?
+
 			throw Gobby::Config::Error(
 				Gobby::Config::Error::PATH_CREATION_FAILED,
 				"Could not create directory " +
@@ -79,11 +80,40 @@ namespace
 		}
 #endif
 	}
+
+	void create_path_to(const std::string& to)
+	{
+		// Directory exists, nothing to do
+		if(Glib::file_test(to, Glib::FILE_TEST_IS_DIR) )
+			return;
+
+		// Find path to the directory to create
+		Glib::ustring path_to = Glib::path_get_dirname(to);
+
+		// Create this path, if it doesn't exists
+		create_path_to(path_to);
+
+		// Create new directory
+		create_directory(to.c_str() );
+	}
+
+	template<typename Map>
+	typename Map::mapped_type ptrmap_find(const Map& map,
+	                                      const typename Map::key_type& key)
+	{
+		typename Map::const_iterator iter = map.find(key);
+		if(iter == map.end() ) return NULL;
+		return iter->second;
+	}
 }
 
-Gobby::Config::Error::Error(Code error_code, const Glib::ustring& error_message)
- : Glib::Error(g_quark_from_static_string("GOBBY_CONFIG_ERROR"),
-               static_cast<int>(error_code), error_message)
+Gobby::Config::Error::Error(Code error_code,
+                            const Glib::ustring& error_message):
+	Glib::Error(
+		g_quark_from_static_string("GOBBY_CONFIG_ERROR"),
+		static_cast<int>(error_code),
+		error_message
+	)
 {
 }
 
@@ -92,127 +122,149 @@ Gobby::Config::Error::Code Gobby::Config::Error::code() const
 	return static_cast<Code>(gobject_->code);
 }
 
-Gobby::Config::Entry::iterator::iterator(const base_type& base):
-	m_iter(base)
+Gobby::Config::Entry::Entry(const Glib::ustring& name):
+	m_name(name)
 {
 }
 
-Gobby::Config::Entry::iterator& Gobby::Config::Entry::iterator::operator++()
+const Glib::ustring& Gobby::Config::Entry::get_name() const
 {
-	++ m_iter;
-	return *this;
+	return m_name;
 }
 
-Gobby::Config::Entry::iterator Gobby::Config::Entry::iterator::operator++(int)
-{
-	iterator temp(*this);
-	++ *this;
-	return temp;
-}
-
-bool Gobby::Config::Entry::iterator::operator==(const iterator& other) const
-{
-	return m_iter == other.m_iter;
-}
-
-bool Gobby::Config::Entry::iterator::operator!=(const iterator& other) const
-{
-	return m_iter != other.m_iter;
-}
-
-const Glib::ustring& Gobby::Config::Entry::iterator::index() const
-{
-	return m_iter->first;
-}
-
-Gobby::Config::Entry& Gobby::Config::Entry::iterator::entry()
-{
-	return m_iter->second;
-}
-
-Gobby::Config::Entry::Entry()
+Gobby::Config::ParentEntry::ParentEntry(const Glib::ustring& name):
+	Entry(name)
 {
 }
 
-Gobby::Config::Entry::Entry(const Entry& other)
- : m_table(other.m_table), m_value(other.m_value)
+Gobby::Config::ParentEntry::ParentEntry(const xmlpp::Element& elem):
+	Entry(elem.get_name() )
 {
-}
-
-Gobby::Config::Entry::~Entry()
-{
-}
-
-Gobby::Config::Entry& Gobby::Config::Entry::operator=(const Entry& other)
-{
-	if(&other == this)
-		return *this;
-
-	m_table = other.m_table;
-	m_value = other.m_value;
-
-	return *this;
-}
-
-void Gobby::Config::Entry::load(const xmlpp::Element& element)
-{
-	if(element.get_child_text() )
-		if(!element.get_child_text()->is_white_space() )
-			m_value = element.get_child_text()->get_content();
-
-	xmlpp::Node::NodeList list = element.get_children();
-	xmlpp::Node::NodeList::iterator iter;
-	for(iter = list.begin(); iter != list.end(); ++ iter)
+	xmlpp::Node::NodeList list = elem.get_children();
+	for(xmlpp::Node::NodeList::iterator iter = list.begin();
+	    iter != list.end();
+	    ++ iter)
 	{
 		xmlpp::Element* child = dynamic_cast<xmlpp::Element*>(*iter);
-		xmlpp::TextNode* text = dynamic_cast<xmlpp::TextNode*>(*iter);
+		if(child == NULL) continue;
 
-		if(child != NULL)
+		if(child->get_child_text() &&
+		   !child->get_child_text()->is_white_space())
 		{
-			m_table[child->get_name()].load(*child);
+			ValueEntry* entry = new TypedValueEntry<Glib::ustring>(
+				*child
+			);
+
+			m_map[child->get_name()] = entry;
 		}
-		/*else if(text != NULL)
+		else
 		{
-			m_value = text->get_content();
-		}*/
+			m_map[child->get_name()] = new ParentEntry(*child);
+		}
 	}
 }
 
-void Gobby::Config::Entry::save(xmlpp::Element& element) const
+Gobby::Config::ParentEntry::~ParentEntry()
 {
-	element.set_child_text(m_value);
-
-	std::map<Glib::ustring, Entry>::const_iterator i;
-	for(i = m_table.begin(); i != m_table.end(); ++ i)
+	for(map_type::iterator iter = m_map.begin();
+	    iter != m_map.end();
+	    ++ iter)
 	{
-		xmlpp::Element* child = element.add_child(i->first);
-		i->second.save(*child);
+		delete iter->second;
 	}
 }
 
-bool Gobby::Config::Entry::has_entry(const Glib::ustring& index) const
+void Gobby::Config::ParentEntry::save(xmlpp::Element& elem) const
 {
-	return m_table.find(index) != m_table.end();
+	for(map_type::const_iterator iter = m_map.begin();
+	    iter != m_map.end();
+	    ++ iter)
+	{
+		Entry* entry = iter->second;
+		xmlpp::Element* child = elem.add_child(entry->get_name() );
+		entry->save(*child);
+	}
 }
 
-Gobby::Config::Entry&
-Gobby::Config::Entry::operator[](const Glib::ustring& index)
+Gobby::Config::Entry* Gobby::Config::ParentEntry::
+	get_child(const Glib::ustring& name)
 {
-	return m_table[index];
+	return ptrmap_find(m_map, name);
 }
 
-Gobby::Config::Entry::iterator Gobby::Config::Entry::begin()
+const Gobby::Config::Entry* Gobby::Config::ParentEntry::
+	get_child(const Glib::ustring& name) const
 {
-	return iterator(m_table.begin() );
+	return ptrmap_find(m_map, name);
 }
 
-Gobby::Config::Entry::iterator Gobby::Config::Entry::end()
+Gobby::Config::ParentEntry* Gobby::Config::ParentEntry::
+	get_parent_child(const Glib::ustring& name)
 {
-	return iterator(m_table.end() );
+	return dynamic_cast<ParentEntry*>(get_child(name) );
 }
 
-Gobby::Config::Config(const Glib::ustring& file)
- : m_filename(file)
+const Gobby::Config::ParentEntry* Gobby::Config::ParentEntry::
+	get_parent_child(const Glib::ustring& name) const
+{
+	return dynamic_cast<const ParentEntry*>(get_child(name) );
+}
+
+Gobby::Config::ValueEntry* Gobby::Config::ParentEntry::
+	get_value_child(const Glib::ustring& name)
+{
+	return dynamic_cast<ValueEntry*>(get_child(name) );
+}
+
+const Gobby::Config::ValueEntry* Gobby::Config::ParentEntry::
+	get_value_child(const Glib::ustring& name) const
+{
+	return dynamic_cast<const ValueEntry*>(get_child(name) );
+}
+
+Gobby::Config::ParentEntry& Gobby::Config::ParentEntry::
+	operator[](const Glib::ustring& name)
+{
+	ParentEntry* entry = get_parent_child(name);
+	if(entry != NULL) return *entry;
+	return set_parent(name);
+}
+
+Gobby::Config::ParentEntry& Gobby::Config::ParentEntry::
+	set_parent(const Glib::ustring& name)
+{
+	Entry* entry = get_child(name);
+	if(entry != NULL) delete entry;
+
+	ParentEntry* child = new ParentEntry(name);
+	m_map[name] = child;
+	return *child;
+}
+
+Gobby::Config::ParentEntry::iterator Gobby::Config::ParentEntry::begin()
+{
+	return iterator(m_map.begin() );
+}
+
+Gobby::Config::ParentEntry::const_iterator Gobby::Config::ParentEntry::
+	begin() const
+{
+	return const_iterator(m_map.begin() );
+}
+
+Gobby::Config::ParentEntry::iterator Gobby::Config::ParentEntry::end()
+{
+	return iterator(m_map.end() );
+}
+
+Gobby::Config::ParentEntry::const_iterator Gobby::Config::ParentEntry::
+	end() const
+{
+	return const_iterator(m_map.end() );
+}
+
+Gobby::Config::Config(const Glib::ustring& file):
+	m_filename(file)
 {
 	xmlpp::DomParser parser;
 
@@ -223,6 +275,7 @@ Gobby::Config::Config(const Glib::ustring& file)
 	catch(xmlpp::exception& e)
 	{
 		// Empty config
+		m_root.reset(new ParentEntry("gobby_config") );
 		return;
 	}
 
@@ -230,30 +283,20 @@ Gobby::Config::Config(const Glib::ustring& file)
 	xmlpp::Element* root = document->get_root_node();
 
 	// Config is present, but contains no root node
-	if(root == NULL) return;
-
-	xmlpp::Node::NodeList list = root->get_children();
-	xmlpp::Node::NodeList::iterator iter;
-	for(iter = list.begin(); iter != list.end(); ++ iter)
+	if(root == NULL)
 	{
-		xmlpp::Element* child = dynamic_cast<xmlpp::Element*>(*iter);
-		if(!child) continue;
-
-		m_table[child->get_name()].load(*child);
+		m_root.reset(new ParentEntry("gobby_config") );
+		return;
 	}
+
+	m_root.reset(new ParentEntry(*root) );
 }
 
 Gobby::Config::~Config()
 {
 	xmlpp::Document document;
 	xmlpp::Element* root = document.create_root_node("gobby_config");
-
-	std::map<Glib::ustring, Entry>::iterator i;
-	for(i = m_table.begin(); i != m_table.end(); ++ i)
-	{
-		xmlpp::Element* child = root->add_child(i->first);
-		i->second.save(*child);
-	}
+	m_root->save(*root);
 
 	try
 	{
@@ -272,45 +315,59 @@ Gobby::Config::~Config()
 	}
 }
 
-Gobby::Config::Entry& Gobby::Config::operator[](const Glib::ustring& index)
+Gobby::Config::ParentEntry& Gobby::Config::get_root()
 {
-	return m_table[index];
+	return *m_root;
 }
 
-void Gobby::Config::create_path_to(const Glib::ustring& to)
+const Gobby::Config::ParentEntry& Gobby::Config::get_root() const
 {
-	// Directory exists, nothing to do
-	if(Glib::file_test(to, Glib::FILE_TEST_IS_DIR) )
-		return;
-
-	// Find path to the directory to create
-	Glib::ustring path_to = Glib::path_get_dirname(to);
-
-	// Create this path, if it doesn't exists
-	create_path_to(path_to);
-
-	// Create new directory
-	create_directory(to.c_str() );
+	return *m_root;
 }
 
-std::ostream& Gobby::operator<<(std::ostream& out, const Gdk::Color& color)
+std::string serialise::default_context_to<Gdk::Color>::
+	to_string(const data_type& from) const
 {
-	unsigned int red = color.get_red() * 255 / 65535;
-	unsigned int green = color.get_green() * 255 / 65535;
-	unsigned int blue = color.get_blue() * 255 / 65535;
+	unsigned int red = from.get_red() * 255 / 65535;
+	unsigned int green = from.get_green() * 255 / 65535;
+	unsigned int blue = from.get_blue() * 255 / 65535;
 
-	out << std::hex << ( (red << 16) | (green << 8) | blue);
-	return out;
+	std::stringstream stream;
+	stream << std::hex << ( (red << 16) | (green << 8) | blue);
+	return stream.str();
 }
 
-std::istream& Gobby::operator>>(std::istream& in, Gdk::Color& color)
+serialise::default_context_from<Gdk::Color>::data_type
+serialise::default_context_from<Gdk::Color>::
+	from_string(const std::string& from) const
 {
 	unsigned int rgb_color;
-	in >> std::hex >> rgb_color;
+	std::stringstream stream(from);
+	stream >> std::hex >> rgb_color;
 
+	if(stream.bad() )
+	{
+		throw conversion_error(
+			from + " should be hexadecimal color triple"
+		);
+	}
+
+	Gdk::Color color;
 	color.set_red( ((rgb_color >> 16) & 0xff) * 65535 / 255);
 	color.set_green( ((rgb_color >> 8) & 0xff) * 65535 / 255);
 	color.set_blue( ((rgb_color) & 0xff) * 65535 / 255);
-	return in;
+	return color;
 }
 
+std::string serialise::default_context_to<Glib::ustring>::
+	to_string(const data_type& from) const
+{
+	return from;
+}
+
+serialise::default_context_from<Glib::ustring>::data_type
+serialise::default_context_from<Glib::ustring>::
+	from_string(const std::string& from) const
+{
+	return from;
+}

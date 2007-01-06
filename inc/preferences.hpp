@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005, 2006 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -51,8 +51,8 @@ public:
 	{
 	public:
 		Editor();
-		Editor(Config::Entry& entry);
-		void serialise(Config::Entry& entry) const;
+		Editor(Config::ParentEntry& entry);
+		void serialise(Config::ParentEntry& entry) const;
 
 		unsigned int tab_width;
 		bool tab_spaces;
@@ -64,8 +64,8 @@ public:
 	{
 	public:
 		View();
-		View(Config::Entry& entry);
-		void serialise(Config::Entry& entry) const;
+		View(Config::ParentEntry& entry);
+		void serialise(Config::ParentEntry& entry) const;
 
 		bool wrap_text;
 		bool wrap_words;
@@ -80,8 +80,8 @@ public:
 	{
 	public:
 		Appearance();
-		Appearance(Config::Entry& entry);
-		void serialise(Config::Entry& entry) const;
+		Appearance(Config::ParentEntry& entry);
+		void serialise(Config::ParentEntry& entry) const;
 
 		Gtk::ToolbarStyle toolbar_show;
 		bool remember;
@@ -91,8 +91,8 @@ public:
 	{
 	public:
 		Font();
-		Font(Config::Entry& entry);
-		void serialise(Config::Entry& entry) const;
+		Font(Config::ParentEntry& entry);
+		void serialise(Config::ParentEntry& entry) const;
 
 		Pango::FontDescription desc;
 	};
@@ -123,9 +123,10 @@ public:
 		};
 
 		FileList();
-		FileList(Config::Entry& entry, const LangManager& lang_mgr);
+		FileList(Config::ParentEntry& entry,
+		         const LangManager& lang_mgr);
 
-		void serialise(Config::Entry& entry) const;
+		void serialise(Config::ParentEntry& entry) const;
 
 		// This function may also return an already existing iterator
 		// when pattern is already in the map. Compare lang to be sure
