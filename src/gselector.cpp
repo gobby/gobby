@@ -133,6 +133,23 @@ void Gobby::GSelector::remove(const net6::socket& sock, net6::io_condition cond)
 	}
 }
 
+void Gobby::GSelector::set(const net6::socket& sock, net6::io_condition cond)
+{
+	// TODO: Port add and remove to set
+	map_type::iterator iter = m_map.find(&sock);
+	if(cond == net6::IO_NONE && iter == m_map.end() )
+		return;
+	else if(cond == net6::IO_NONE)
+		remove(sock, ~cond);
+	else if(iter == m_map.end() )
+		add(sock, cond);
+	else
+	{
+		remove(sock, ~cond);
+		add(sock, cond);
+	}
+}
+
 net6::io_condition Gobby::GSelector::check(const net6::socket& sock,
                                            net6::io_condition mask) const
 {

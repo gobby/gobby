@@ -106,6 +106,7 @@ protected:
 
 	// Obby signal handlers
 	void on_obby_close();
+	void on_obby_encrypted();
 
 	void on_obby_user_join(const obby::user& user);
 	void on_obby_user_part(const obby::user& user);

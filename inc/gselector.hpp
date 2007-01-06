@@ -41,6 +41,7 @@ public:
 
 	void add(const net6::socket& sock, net6::io_condition cond);
 	void remove(const net6::socket& sock, net6::io_condition cond);
+	void set(const net6::socket& sock, net6::io_condition cond);
 	net6::io_condition check(const net6::socket& sock,
 	                         net6::io_condition mask) const;
 

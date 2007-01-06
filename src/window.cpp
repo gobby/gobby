@@ -429,6 +429,10 @@ void Gobby::Window::on_session_join()
 
 			buffer->close_event().connect(
 				sigc::mem_fun(*this, &Window::on_obby_close) );
+			buffer->encrypted_event().connect(
+				sigc::mem_fun(*this, &Window::on_obby_encrypted) );
+
+			buffer->request_encryption();
 
 			obby::format_string str(_("Connected to %0%:%1%") );
 			str << host << port;
@@ -914,6 +918,11 @@ void Gobby::Window::on_obby_close()
 	on_session_quit();
 }
 
+void Gobby::Window::on_obby_encrypted()
+{
+	display_error("Connection now encrypted");
+}
+
 void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
 	// Tell user join to components
@@ -1176,3 +1185,4 @@ void Gobby::Window::display_error(const Glib::ustring& message,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
 }
+
