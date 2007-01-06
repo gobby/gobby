@@ -64,10 +64,10 @@ when loading one from a file.
 
 31: Chat command infrastructure
 -------------------------------
-Chat command infrastructure (like /me, /ignore, etc.)
-
-''This is a stub and generated out of the old TODO located in the 
-repository.''
+In order to get the chat more alike to other chats available in the wild 
+(like IRC) there should be some commands provider the user might be used 
+to, like e.g. /me. Once this framework is implemented in ''Gobby'' it 
+should be easy to add new commands.
 
 32: Strive for Gnome HIG compilance
 -----------------------------------
