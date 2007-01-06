@@ -35,7 +35,7 @@ namespace Gobby
 class Chat: public Gtk::VBox
 {
 public:
-	Chat();
+	Chat(Gtk::Window& parent);
 	virtual ~Chat();
 
 	// Calls from the window
@@ -48,6 +48,11 @@ public:
 
 protected:
 	void on_chat();
+
+#ifdef GTKMM_GEQ_28
+	bool on_focus_in(GdkEventFocus* event);
+	bool on_focus_out(GdkEventFocus* event);
+#endif
 
 	void on_query_failed(const obby::command_query& query);
 	void on_help(const std::string& name, const std::string& desc);
@@ -68,6 +73,7 @@ protected:
 	void recv_system_line(const std::string& line,
 	                      const obby::chat::system_message& message);
 
+	Gtk::Window& m_parent;
 	LocalBuffer* m_buffer;
 
 	Gtk::Image m_img_btn;
@@ -76,6 +82,8 @@ protected:
 	LogView m_log_chat;
 	HistoryEntry m_ent_chat;
 	Gtk::Button m_btn_chat;
+
+	bool m_focus;
 };
 
 }

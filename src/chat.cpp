@@ -19,6 +19,8 @@
 #include <obby/client_buffer.hpp>
 
 #include <gtkmm/stock.h>
+#include <gtkmm/window.h>
+
 #include <obby/format_string.hpp>
 #include "common.hpp"
 #include "chat.hpp"
@@ -60,11 +62,13 @@ namespace
 
 		func(text.substr(prev) );
 	}
+
 }
 
-Gobby::Chat::Chat()
- : Gtk::VBox(), m_buffer(NULL),
-   m_img_btn(Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON)
+Gobby::Chat::Chat(Gtk::Window& parent)
+ : Gtk::VBox(), m_parent(parent), m_buffer(NULL),
+   m_img_btn(Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON),
+   m_focus(false)
 {
 	m_btn_chat.set_label(_("Send"));
 	m_btn_chat.set_image(m_img_btn);
@@ -88,11 +92,38 @@ Gobby::Chat::Chat()
 
 	set_spacing(5);
 	set_sensitive(false);
+
+#ifdef GTKMM_GEQ_28
+	m_parent.signal_focus_in_event().connect(
+		sigc::mem_fun(*this, &Chat::on_focus_in)
+	);
+
+	m_parent.signal_focus_out_event().connect(
+		sigc::mem_fun(*this, &Chat::on_focus_out)
+	);
+#endif
 }
 
 Gobby::Chat::~Chat()
 {
 }
+
+#ifdef GTKMM_GEQ_28
+// m_parent.has_focus() seems not to work, so we keep track of focus
+// ourselves
+bool Gobby::Chat::on_focus_in(GdkEventFocus* event)
+{
+	m_focus = true;
+	m_parent.set_urgency_hint(false);
+	return false;
+}
+
+bool Gobby::Chat::on_focus_out(GdkEventFocus* event)
+{
+	m_focus = false;
+	return false;
+}
+#endif
 
 void Gobby::Chat::obby_start(LocalBuffer& buf)
 {
@@ -245,6 +276,11 @@ void Gobby::Chat::on_message(const obby::chat::message& message)
 		on_system_message(*system_message);
 	else
 		throw std::logic_error("Gobby::Chat::on_message");
+
+#ifdef GTKMM_GEQ_28
+	if(!m_focus)
+		m_parent.set_urgency_hint(true);
+#endif
 }
 
 void Gobby::Chat::on_user_message(const obby::chat::user_message& message)
