@@ -76,9 +76,10 @@ void Gobby::StatusBar::update_language(Document& document)
 
 void Gobby::StatusBar::update_sync(Document& document)
 {
-	// TODO: ngettext
-	obby::format_string str(_("%0 pending change(s)") );
-	str << document.get_unsynced_changes_count();
+	unsigned int n = document.get_unsynced_changes_count();
+	obby::format_string str(
+		ngettext("%0 pending change", "%0 pending changes", n) );
+	str << n;
 	m_sync.set_text(str.str() );
 }
 

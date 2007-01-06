@@ -5,148 +5,162 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
-"Report-Msgid-Bugs-To: http://darcs.0x539.de/trac/obby/\n"
-"POT-Creation-Date: 2005-06-24 21:59+0200\n"
-"PO-Revision-Date: 2005-06-24 22:03+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-21 19:26+0200\n"
+"PO-Revision-Date: 2005-07-21 19:37+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: src/chat.cpp:27
+#: src/chat.cpp:28
 msgid "Send"
 msgstr "Abschicken"
 
-#: src/chat.cpp:79
+#: src/chat.cpp:84
 #, c-format
 msgid "%0 has joined"
 msgstr " %0 hat die Sitzung betreten"
 
-#: src/chat.cpp:86
+#: src/chat.cpp:91
 #, c-format
 msgid "%0 has left"
 msgstr "%0 hat die Sitzung verlassen"
 
 #. App menu
-#: src/header.cpp:129
+#: src/header.cpp:133
 msgid "Gobby"
 msgstr "Gobby"
 
-#: src/header.cpp:136
+#: src/header.cpp:140
 msgid "Create session"
 msgstr "Sitzung eröffnen"
 
-#: src/header.cpp:137
+#: src/header.cpp:141
 msgid "Opens a new obby session"
 msgstr "Eröffnet eine neue Sitzung"
 
-#: src/header.cpp:150
+#: src/header.cpp:154
 msgid "Join session"
 msgstr "Sitzung beitreten"
 
-#: src/header.cpp:151
+#: src/header.cpp:155
 msgid "Join an existing obby session"
 msgstr "Tritt einer bestehenden Sitzung bei"
 
-#: src/header.cpp:164
+#: src/header.cpp:168
 msgid "Quit session"
 msgstr "Sitzung verlassen"
 
-#: src/header.cpp:165
+#: src/header.cpp:169
 msgid "Leaves the currently running obby session"
 msgstr "Verlässt die aktuell laufende Sitzung"
 
-#: src/header.cpp:178
+#: src/header.cpp:182
 msgid "Quit"
 msgstr "Beenden"
 
-#: src/header.cpp:179
+#: src/header.cpp:183
 msgid "Quits the application"
 msgstr "Beendet die Anwendung"
 
 #. Session menu
-#: src/header.cpp:188
+#: src/header.cpp:192
 msgid "Session"
 msgstr "Sitzung"
 
-#: src/header.cpp:195 src/window.cpp:334
+#: src/header.cpp:199 src/window.cpp:365
 msgid "Create document"
 msgstr "Dokument erstellen"
 
-#: src/header.cpp:196
+#: src/header.cpp:200
 msgid "Creates a new document"
 msgstr "Erstellt ein neues Dokument"
 
-#: src/header.cpp:209
+#: src/header.cpp:213
 msgid "Open document"
 msgstr "Dokument öffnen"
 
-#: src/header.cpp:210
+#: src/header.cpp:214
 msgid "Loads a file into a new document"
 msgstr "Lädt eine Datei in ein neues Dokument"
 
-#: src/header.cpp:223
+#: src/header.cpp:227
 msgid "Save document"
 msgstr "Dokument speichern"
 
-#: src/header.cpp:224
+#: src/header.cpp:228
 msgid "Saves a document into a file"
 msgstr "Speichert ein Dokument in eine Datei"
 
-#: src/header.cpp:237
+#: src/header.cpp:241
 msgid "Close document"
 msgstr "Dokument schließen"
 
-#: src/header.cpp:238
+#: src/header.cpp:242
 msgid "Closes an open document"
 msgstr "Schließt ein geöffnetes Dokument"
 
+#. User menu
+#: src/header.cpp:251
+msgid "User"
+msgstr ""
+
+#: src/header.cpp:258
+msgid "Set password"
+msgstr ""
+
+#: src/header.cpp:259
+msgid "Sets a password for this user"
+msgstr ""
+
 #. Documents menu
-#: src/header.cpp:247
+#: src/header.cpp:268
 msgid "View"
 msgstr "Ansicht"
 
-#: src/header.cpp:253
+#: src/header.cpp:274
 msgid "Word wrapping"
 msgstr "Zeilenumbruch"
 
-#: src/header.cpp:254
+#: src/header.cpp:275
 msgid "Whether to wrap the text to the document's width"
 msgstr "Automatisches Umbrechen von Wörtern am Dokumentrand"
 
-#: src/header.cpp:267
+#: src/header.cpp:288
 msgid "Line numbers"
 msgstr "Zeilennummern"
 
-#: src/header.cpp:268
+#: src/header.cpp:289
 msgid "Whether to show line numbers for this document"
 msgstr "Anzeige von Zeilennummern"
 
-#: src/header.cpp:299
+#: src/header.cpp:320
 msgid "None"
 msgstr "Keine"
 
-#: src/header.cpp:300
+#: src/header.cpp:321
 msgid "Unselects the current language"
 msgstr "Sprachauswahl aufheben"
 
 #. Build description string
-#: src/header.cpp:320
+#: src/header.cpp:341
 #, c-format
 msgid "Selects %0 as language"
 msgstr "Wählt %0 als Sprache aus"
 
 #. Help menu
-#: src/header.cpp:357
+#: src/header.cpp:378
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/header.cpp:364
+#: src/header.cpp:385
 msgid "About"
 msgstr "Über Gobby"
 
-#: src/header.cpp:365
+#: src/header.cpp:386
 msgid "Shows Gobby's copyright and credits"
 msgstr "Zeigt Informationen zu Gobbys Copyright und den Mitwirkenden an"
 
@@ -166,6 +180,10 @@ msgstr "Name:"
 msgid "Colour:"
 msgstr "Farbe:"
 
+#: src/hostdialog.cpp:30
+msgid "Password:"
+msgstr "Passwort:"
+
 #: src/joindialog.cpp:34
 msgid "Join obby session"
 msgstr "Sitzung beitreten"
@@ -182,23 +200,33 @@ msgstr "Farbe"
 msgid "Name"
 msgstr "Name"
 
-#: src/window.cpp:297
+#: src/window.cpp:289
 msgid "A collaborative text editor"
 msgstr "Ein Gemeinschaftseditor"
 
-#: src/window.cpp:334
+#: src/window.cpp:365
 msgid "Enter document name"
 msgstr "Geben Sie bitte einen Namen für das Dokument ein."
 
-#: src/window.cpp:343
+#: src/window.cpp:374
 msgid "Open new document"
 msgstr "Neues dokument öffnen"
 
-#: src/window.cpp:360
+#. Show dialog
+#: src/window.cpp:394
 msgid "Save current document"
 msgstr "Aktuelles Dokument speichern"
 
-#: src/window.cpp:487
+#: src/window.cpp:434
+msgid "Set user password"
+msgstr ""
+
+#: src/window.cpp:435
+msgid "Enter new password"
+msgstr ""
+
+#. Connection closed by remote site
+#: src/window.cpp:501 src/joinprogressdialog.cpp:151
 msgid "Connection lost"
 msgstr "Verbindung verloren"
 
@@ -210,25 +238,26 @@ msgstr "Ausgewählte Sprache: %0"
 msgid "No language selected"
 msgstr "Keine Sprache ausgewählt"
 
-#. TODO: ngettext
-#: src/statusbar.cpp:80
+#: src/statusbar.cpp:82 src/statusbar.cpp:84
 #, c-format
-msgid "%0 pending change(s)"
-msgstr "%0 ausstehende Änderung(en)"
+msgid "%0 pending change"
+msgid_plural "%0 pending changes"
+msgstr[0] "%0 ausstehende Änderung"
+msgstr[1] "%0 ausstehende Änderungen"
 
-#: src/statusbar.cpp:87
+#: src/statusbar.cpp:91
 msgid "Revision: %0"
 msgstr "Revision: %0"
 
-#: src/buffer_wrapper.cpp:175
+#: src/buffer_wrapper.cpp:169
 msgid "Peer %0 (%1) not found in peer list"
 msgstr "Partner %0 (%1) wurde nicht in der Verbindungsliste gefunden"
 
 #: src/document.cpp:37
 msgid "Subscribe"
-msgstr ""
+msgstr "Abonieren"
 
-#: src/document.cpp:606
+#: src/document.cpp:622
 msgid ""
 "You are not subscribed to the document \"%0\".\n"
 "\n"
@@ -236,3 +265,45 @@ msgid ""
 "to subscribe to this document. Use the following button to perform this.\n"
 "\n"
 msgstr ""
+
+#. Set text
+#: src/progressdialog.cpp:95
+msgid "Waiting for thread to finish..."
+msgstr ""
+
+#: src/hostprogressdialog.cpp:29
+#, fuzzy
+msgid "Opening obby session..."
+msgstr "Eröffnet eine neue Sitzung"
+
+#: src/joinprogressdialog.cpp:32
+#, fuzzy
+msgid "Joining obby session..."
+msgstr "Sitzung beitreten"
+
+#. Wait for welcome packet
+#: src/joinprogressdialog.cpp:94
+msgid "Waiting for welcome packet..."
+msgstr ""
+
+#. Update status message
+#: src/joinprogressdialog.cpp:109
+msgid "Login packet sent, waiting for response..."
+msgstr "Anmeldepaket gesendet, warte auf Antwort..."
+
+#: src/joinprogressdialog.cpp:122
+msgid "Enter session password"
+msgstr "Sitzungspasswort eingeben"
+
+#: src/joinprogressdialog.cpp:129
+msgid "Enter user password"
+msgstr "Benutzerpasswort eingeben"
+
+#: src/joinprogressdialog.cpp:138
+msgid "Logged in successfully, synchronising session..."
+msgstr ""
+
+#. Setup entry dialog
+#: src/joinprogressdialog.cpp:167
+msgid "Password required"
+msgstr "Passwort erforderlich"
