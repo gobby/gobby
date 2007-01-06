@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 16:31+0200\n"
+"POT-Creation-Date: 2005-07-25 09:58+0200\n"
 "PO-Revision-Date: 2005-06-24 22:19+0200\n"
 "Last-Translator: Peer Janssen <peer@baden-online.de>\n"
 "Language-Team: Peer Janssen <peer@baden-online.de>\n"
@@ -21,13 +21,13 @@ msgid "Send"
 msgstr "Envoyer"
 
 #: src/chat.cpp:83
-#, c-format
-msgid "%0 has joined"
+#, fuzzy, c-format
+msgid "%0% has joined"
 msgstr "%0 est arrivé(e)"
 
 #: src/chat.cpp:90
-#, c-format
-msgid "%0 has left"
+#, fuzzy, c-format
+msgid "%0% has left"
 msgstr "%0 est parti(e)"
 
 #. App menu
@@ -36,7 +36,8 @@ msgid "Gobby"
 msgstr "Gobby"
 
 #: src/header.cpp:141
-msgid "Create session"
+#, fuzzy
+msgid "Create session..."
 msgstr "Créer une séance"
 
 #: src/header.cpp:142
@@ -44,7 +45,8 @@ msgid "Opens a new obby session"
 msgstr "Ouvrir une nouvelle séance « obby »"
 
 #: src/header.cpp:155
-msgid "Join session"
+#, fuzzy
+msgid "Join session..."
 msgstr "Rejoindre séance"
 
 #: src/header.cpp:156
@@ -72,8 +74,9 @@ msgstr "Quitter l'application"
 msgid "Session"
 msgstr "Séance"
 
-#: src/header.cpp:200 src/window.cpp:377
-msgid "Create document"
+#: src/header.cpp:200
+#, fuzzy
+msgid "Create document..."
 msgstr "Créer document"
 
 #: src/header.cpp:201
@@ -120,8 +123,8 @@ msgstr "Fermer un document actuellement ouvert"
 msgid "Edit"
 msgstr ""
 
-#: src/header.cpp:273 src/preferencesdialog.cpp:292
-msgid "Preferences"
+#: src/header.cpp:273
+msgid "Preferences..."
 msgstr ""
 
 #: src/header.cpp:274
@@ -129,12 +132,12 @@ msgid "Shows up a dialog to customise Gobby for your needs"
 msgstr ""
 
 #. User menu
-#: src/header.cpp:283 src/joindialog.cpp:94
+#: src/header.cpp:283 src/joindialog.cpp:99
 msgid "User"
 msgstr ""
 
 #: src/header.cpp:290
-msgid "Set password"
+msgid "Set password..."
 msgstr ""
 
 #: src/header.cpp:291
@@ -143,7 +146,7 @@ msgstr ""
 
 #: src/header.cpp:304
 #, fuzzy
-msgid "Set colour"
+msgid "Set colour..."
 msgstr "Couleur"
 
 #: src/header.cpp:305
@@ -156,7 +159,7 @@ msgid "View"
 msgstr "Affichage"
 
 #: src/header.cpp:321
-msgid "Document preferences"
+msgid "Document preferences..."
 msgstr ""
 
 #: src/header.cpp:322
@@ -178,8 +181,8 @@ msgstr "Déselectionner la langue actuelle"
 
 #. Build description string
 #: src/header.cpp:378
-#, c-format
-msgid "Selects %0 as language"
+#, fuzzy, c-format
+msgid "Selects %0% as language"
 msgstr "Selectionner la langue %0"
 
 #. Help menu
@@ -295,6 +298,10 @@ msgstr ""
 msgid "Show both icons and text"
 msgstr ""
 
+#: src/preferencesdialog.cpp:292
+msgid "Preferences"
+msgstr ""
+
 #: src/preferencesdialog.cpp:296
 msgid "Editor"
 msgstr ""
@@ -308,15 +315,15 @@ msgstr ""
 msgid "Create obby session"
 msgstr "Créer une séance « obby »"
 
-#: src/hostdialog.cpp:27 src/joindialog.cpp:39
+#: src/hostdialog.cpp:27 src/joindialog.cpp:43
 msgid "Port:"
 msgstr "Port :"
 
-#: src/hostdialog.cpp:28 src/joindialog.cpp:40
+#: src/hostdialog.cpp:28 src/joindialog.cpp:44
 msgid "Name:"
 msgstr "Nom :"
 
-#: src/hostdialog.cpp:29 src/joindialog.cpp:41
+#: src/hostdialog.cpp:29 src/joindialog.cpp:45
 msgid "Colour:"
 msgstr "Couleur :"
 
@@ -324,24 +331,24 @@ msgstr "Couleur :"
 msgid "Password:"
 msgstr ""
 
-#: src/joindialog.cpp:35
+#: src/joindialog.cpp:39
 msgid "Join obby session"
 msgstr "Joindre une séance « obby »"
 
-#: src/joindialog.cpp:38
+#: src/joindialog.cpp:42
 msgid "Host:"
 msgstr "Host :"
 
-#: src/joindialog.cpp:43
+#: src/joindialog.cpp:47
 msgid "Local network"
 msgstr ""
 
-#: src/joindialog.cpp:95
+#: src/joindialog.cpp:100
 #, fuzzy
 msgid "Host"
 msgstr "Host :"
 
-#: src/joindialog.cpp:96
+#: src/joindialog.cpp:101
 #, fuzzy
 msgid "Port"
 msgstr "Port :"
@@ -354,59 +361,72 @@ msgstr "Couleur"
 msgid "Name"
 msgstr "Nom"
 
-#: src/window.cpp:318
+#: src/window.cpp:140
+msgid ""
+"Howl initialisation failed. Probably you need to run mDNSResponder as root "
+"prior to Gobby. Zeroconf support is deactivated for this session."
+msgstr ""
+
+#: src/window.cpp:337
 msgid "A collaborative text editor"
 msgstr "Un éditeur texte collaboratif"
 
-#: src/window.cpp:377
+#: src/window.cpp:397
+msgid "Create document"
+msgstr "Créer document"
+
+#: src/window.cpp:397
 msgid "Enter document name"
 msgstr "Entrer le nom du document"
 
 #. Create FileChooser
-#: src/window.cpp:387
+#: src/window.cpp:409
 msgid "Open new document"
 msgstr "Ouvrir un nouveau document"
 
 #. Setup dialog
-#: src/window.cpp:438
+#: src/window.cpp:456
 msgid "Save current document"
 msgstr "Enregistrer le document actuel"
 
-#: src/window.cpp:481
+#: src/window.cpp:501
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
 msgstr ""
 
-#: src/window.cpp:520
+#. Build password dialog with info
+#: src/window.cpp:541
 msgid "Set user password"
 msgstr ""
 
-#: src/window.cpp:522
+#: src/window.cpp:543
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
 
-#: src/window.cpp:564
+#: src/window.cpp:584
+#, c-format
 msgid ""
-"These preferences affect only the currently active document \"%0\". If you "
+"These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
 
 #. Connection closed by remote site
-#: src/window.cpp:651 src/joinprogressdialog.cpp:151
+#: src/window.cpp:669 src/joinprogressdialog.cpp:151
 msgid "Connection lost"
 msgstr "Perte de la connexion"
 
-#: src/window.cpp:693
+#: src/window.cpp:713
 msgid "Colour change failed: Colour already in use"
 msgstr ""
 
 #: src/statusbar.cpp:65
-msgid "Selected language: %0"
+#, fuzzy, c-format
+msgid "Selected language: %0%"
 msgstr "Langue selectionnée : %0"
 
 #: src/statusbar.cpp:71
@@ -415,26 +435,29 @@ msgstr "Aucune langue selectionnée"
 
 #: src/statusbar.cpp:79
 #, fuzzy, c-format
-msgid "%0 pending change"
-msgid_plural "%0 pending changes"
+msgid "%0% pending change"
+msgid_plural "%0% pending changes"
 msgstr[0] "%0 modification(s) en attente"
 msgstr[1] "%0 modification(s) en attente"
 
 #: src/statusbar.cpp:86
-msgid "Revision: %0"
+#, fuzzy, c-format
+msgid "Revision: %0%"
 msgstr "Révision : %0"
 
 #: src/buffer_wrapper.cpp:169
-msgid "Peer %0 (%1) not found in peer list"
+#, fuzzy, c-format
+msgid "Peer %0% (%1%) not found in peer list"
 msgstr "%0 (%1) ne se trouve(nt) pas dans la liste des copin(e)s"
 
 #: src/document.cpp:35
 msgid "Subscribe"
 msgstr "S'abonner"
 
-#: src/document.cpp:613
+#: src/document.cpp:618
+#, fuzzy, c-format
 msgid ""
-"You are not subscribed to the document \"%0\".\n"
+"You are not subscribed to the document \"%0%\".\n"
 "\n"
 "To view changes that others make or to edit the document yourself, you have "
 "to subscribe to this document. Use the following button to perform this.\n"

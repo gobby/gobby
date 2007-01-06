@@ -138,7 +138,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"CreateSession",
 			Gtk::Stock::NETWORK,
-			_("Create session"),
+			_("Create session..."),
 			_("Opens a new obby session")
 		),
 		sigc::mem_fun(
@@ -152,7 +152,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"JoinSession",
 			Gtk::Stock::CONNECT,
-			_("Join session"),
+			_("Join session..."),
 			_("Join an existing obby session")
 		),
 		sigc::mem_fun(
@@ -197,7 +197,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"CreateDocument",
 			Gtk::Stock::NEW,
-			_("Create document"),
+			_("Create document..."),
 			_("Creates a new document")
 		),
 		sigc::mem_fun(
@@ -270,7 +270,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"EditPreferences",
 			Gtk::Stock::PREFERENCES,
-			_("Preferences"),
+			_("Preferences..."),
 			_("Shows up a dialog to customise Gobby for your needs")
 		),
 		sigc::mem_fun(
@@ -287,7 +287,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"UserSetPassword",
 			Gtk::Stock::DIALOG_AUTHENTICATION,
-			_("Set password"),
+			_("Set password..."),
 			_("Sets a password for this user")
 		),
 		sigc::mem_fun(
@@ -301,7 +301,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"UserSetColour",
 			Gtk::Stock::SELECT_COLOR,
-			_("Set colour"),
+			_("Set colour..."),
 			_("Sets a new colour for this user")
 		),
 		sigc::mem_fun(
@@ -318,7 +318,7 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::Action::create(
 			"ViewPreferences",
 			Gtk::Stock::PREFERENCES,
-			_("Document preferences"),
+			_("Document preferences..."),
 			_("Shows a preferences dialog that is just applied to "
 			  "this document")
 		),

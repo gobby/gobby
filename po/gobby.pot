@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-24 16:31+0200\n"
+"POT-Creation-Date: 2005-07-25 09:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,12 +23,12 @@ msgstr ""
 
 #: src/chat.cpp:83
 #, c-format
-msgid "%0 has joined"
+msgid "%0% has joined"
 msgstr ""
 
 #: src/chat.cpp:90
 #, c-format
-msgid "%0 has left"
+msgid "%0% has left"
 msgstr ""
 
 #. App menu
@@ -37,7 +37,7 @@ msgid "Gobby"
 msgstr ""
 
 #: src/header.cpp:141
-msgid "Create session"
+msgid "Create session..."
 msgstr ""
 
 #: src/header.cpp:142
@@ -45,7 +45,7 @@ msgid "Opens a new obby session"
 msgstr ""
 
 #: src/header.cpp:155
-msgid "Join session"
+msgid "Join session..."
 msgstr ""
 
 #: src/header.cpp:156
@@ -73,8 +73,8 @@ msgstr ""
 msgid "Session"
 msgstr ""
 
-#: src/header.cpp:200 src/window.cpp:377
-msgid "Create document"
+#: src/header.cpp:200
+msgid "Create document..."
 msgstr ""
 
 #: src/header.cpp:201
@@ -118,8 +118,8 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: src/header.cpp:273 src/preferencesdialog.cpp:292
-msgid "Preferences"
+#: src/header.cpp:273
+msgid "Preferences..."
 msgstr ""
 
 #: src/header.cpp:274
@@ -127,12 +127,12 @@ msgid "Shows up a dialog to customise Gobby for your needs"
 msgstr ""
 
 #. User menu
-#: src/header.cpp:283 src/joindialog.cpp:94
+#: src/header.cpp:283 src/joindialog.cpp:99
 msgid "User"
 msgstr ""
 
 #: src/header.cpp:290
-msgid "Set password"
+msgid "Set password..."
 msgstr ""
 
 #: src/header.cpp:291
@@ -140,7 +140,7 @@ msgid "Sets a password for this user"
 msgstr ""
 
 #: src/header.cpp:304
-msgid "Set colour"
+msgid "Set colour..."
 msgstr ""
 
 #: src/header.cpp:305
@@ -153,7 +153,7 @@ msgid "View"
 msgstr ""
 
 #: src/header.cpp:321
-msgid "Document preferences"
+msgid "Document preferences..."
 msgstr ""
 
 #: src/header.cpp:322
@@ -176,7 +176,7 @@ msgstr ""
 #. Build description string
 #: src/header.cpp:378
 #, c-format
-msgid "Selects %0 as language"
+msgid "Selects %0% as language"
 msgstr ""
 
 #. Help menu
@@ -290,6 +290,10 @@ msgstr ""
 msgid "Show both icons and text"
 msgstr ""
 
+#: src/preferencesdialog.cpp:292
+msgid "Preferences"
+msgstr ""
+
 #: src/preferencesdialog.cpp:296
 msgid "Editor"
 msgstr ""
@@ -303,15 +307,15 @@ msgstr ""
 msgid "Create obby session"
 msgstr ""
 
-#: src/hostdialog.cpp:27 src/joindialog.cpp:39
+#: src/hostdialog.cpp:27 src/joindialog.cpp:43
 msgid "Port:"
 msgstr ""
 
-#: src/hostdialog.cpp:28 src/joindialog.cpp:40
+#: src/hostdialog.cpp:28 src/joindialog.cpp:44
 msgid "Name:"
 msgstr ""
 
-#: src/hostdialog.cpp:29 src/joindialog.cpp:41
+#: src/hostdialog.cpp:29 src/joindialog.cpp:45
 msgid "Colour:"
 msgstr ""
 
@@ -319,23 +323,23 @@ msgstr ""
 msgid "Password:"
 msgstr ""
 
-#: src/joindialog.cpp:35
+#: src/joindialog.cpp:39
 msgid "Join obby session"
 msgstr ""
 
-#: src/joindialog.cpp:38
+#: src/joindialog.cpp:42
 msgid "Host:"
 msgstr ""
 
-#: src/joindialog.cpp:43
+#: src/joindialog.cpp:47
 msgid "Local network"
 msgstr ""
 
-#: src/joindialog.cpp:95
+#: src/joindialog.cpp:100
 msgid "Host"
 msgstr ""
 
-#: src/joindialog.cpp:96
+#: src/joindialog.cpp:101
 msgid "Port"
 msgstr ""
 
@@ -347,59 +351,72 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/window.cpp:318
+#: src/window.cpp:140
+msgid ""
+"Howl initialisation failed. Probably you need to run mDNSResponder as root "
+"prior to Gobby. Zeroconf support is deactivated for this session."
+msgstr ""
+
+#: src/window.cpp:337
 msgid "A collaborative text editor"
 msgstr ""
 
-#: src/window.cpp:377
+#: src/window.cpp:397
+msgid "Create document"
+msgstr ""
+
+#: src/window.cpp:397
 msgid "Enter document name"
 msgstr ""
 
 #. Create FileChooser
-#: src/window.cpp:387
+#: src/window.cpp:409
 msgid "Open new document"
 msgstr ""
 
 #. Setup dialog
-#: src/window.cpp:438
+#: src/window.cpp:456
 msgid "Save current document"
 msgstr ""
 
-#: src/window.cpp:481
+#: src/window.cpp:501
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
 msgstr ""
 
-#: src/window.cpp:520
+#. Build password dialog with info
+#: src/window.cpp:541
 msgid "Set user password"
 msgstr ""
 
-#: src/window.cpp:522
+#: src/window.cpp:543
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
 
-#: src/window.cpp:564
+#: src/window.cpp:584
+#, c-format
 msgid ""
-"These preferences affect only the currently active document \"%0\". If you "
+"These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
 
 #. Connection closed by remote site
-#: src/window.cpp:651 src/joinprogressdialog.cpp:151
+#: src/window.cpp:669 src/joinprogressdialog.cpp:151
 msgid "Connection lost"
 msgstr ""
 
-#: src/window.cpp:693
+#: src/window.cpp:713
 msgid "Colour change failed: Colour already in use"
 msgstr ""
 
 #: src/statusbar.cpp:65
-msgid "Selected language: %0"
+#, c-format
+msgid "Selected language: %0%"
 msgstr ""
 
 #: src/statusbar.cpp:71
@@ -408,26 +425,29 @@ msgstr ""
 
 #: src/statusbar.cpp:79
 #, c-format
-msgid "%0 pending change"
-msgid_plural "%0 pending changes"
+msgid "%0% pending change"
+msgid_plural "%0% pending changes"
 msgstr[0] ""
 msgstr[1] ""
 
 #: src/statusbar.cpp:86
-msgid "Revision: %0"
+#, c-format
+msgid "Revision: %0%"
 msgstr ""
 
 #: src/buffer_wrapper.cpp:169
-msgid "Peer %0 (%1) not found in peer list"
+#, c-format
+msgid "Peer %0% (%1%) not found in peer list"
 msgstr ""
 
 #: src/document.cpp:35
 msgid "Subscribe"
 msgstr ""
 
-#: src/document.cpp:613
+#: src/document.cpp:618
+#, c-format
 msgid ""
-"You are not subscribed to the document \"%0\".\n"
+"You are not subscribed to the document \"%0%\".\n"
 "\n"
 "To view changes that others make or to edit the document yourself, you have "
 "to subscribe to this document. Use the following button to perform this.\n"
