@@ -43,10 +43,10 @@ namespace {
 		"      <menuitem action=\"CloseDocument\" />"
 		"    </menu>"
 #ifdef WITH_GTKSOURCEVIEW
-		"    <menu action=\"MenuDocument\">"
-		"      <menuitem action=\"DocumentLineNumbers\" />"
+		"    <menu action=\"MenuView\">"
+		"      <menuitem action=\"ViewLineNumbers\" />"
 		"      <separator />"
-		"      <menuitem action=\"DocumentLanguageNone\" />"
+		"      <menuitem action=\"ViewLanguageNone\" />"
 		"    </menu>"
 #endif
 		"    <menu action=\"MenuHelp\">"
@@ -64,6 +64,35 @@ namespace {
 		"    <toolitem action=\"CloseDocument\" />"
 		"  </toolbar>"
 		"</ui>";
+
+	void replace_string(Glib::ustring& string,
+	                    const Glib::ustring& find,
+	                    const Glib::ustring& replace)
+	{
+		Glib::ustring::size_type pos = 0;
+		while((pos = string.find(find, pos)) != Glib::ustring::npos)
+		{
+			string.replace(pos, find.length(), replace);
+			pos += replace.length();
+		}
+	}
+	
+	void remove_entities(Glib::ustring& string)
+	{
+		// Note that this file needs to be UTF-8 encoded!
+		replace_string(string, "ä", "auml");
+		replace_string(string, "Ä", "Auml");
+		replace_string(string, "ö", "ouml");
+		replace_string(string, "Ö", "Ouml");
+		replace_string(string, "ü", "uuml");
+		replace_string(string, "Ü", "Uuml");
+		replace_string(string, "ß", "szlig");
+		replace_string(string, "<", "lt");
+		replace_string(string, ">", "gt");
+		replace_string(string, "\"", "quot");
+
+		// TODO: Remove some more dangerous characters
+	}
 }
 
 Gobby::Header::Error::Error(Code error_code, const Glib::ustring& error_message)
@@ -207,12 +236,12 @@ Gobby::Header::Header(const Folder& folder)
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Documents menu
-	m_group_app->add(Gtk::Action::create("MenuDocument", _("Document")) );
+	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
 
 	// Show line numbers
 	m_group_app->add(
 		Gtk::ToggleAction::create(
-			"DocumentLineNumbers",
+			"ViewLineNumbers",
 			_("Line numbers"),
 			_("Whether to show line numbers for this document")
 		),
@@ -244,7 +273,7 @@ Gobby::Header::Header(const Folder& folder)
 	m_group_app->add(
 		Gtk::RadioAction::create(
 			m_lang_group,
-			"DocumentLanguageNone",
+			"ViewLanguageNone",
 			"None",
 			"Unselects the current language"
 		),
@@ -263,12 +292,14 @@ Gobby::Header::Header(const Folder& folder)
 	{
 		// Get current language 
 		Glib::RefPtr<Gtk::SourceLanguage> language = *iter;
+		Glib::ustring language_xml_name = language->get_name();
 
 		// Add language to action group
+		remove_entities(language_xml_name);
 		m_group_app->add(
 			Gtk::RadioAction::create(
 				m_lang_group,
-				"DocumentLanguage" + language->get_name(), 
+				"ViewLanguage" + language_xml_name, 
 				language->get_name(),
 				_("Selects ") + language->get_name() +
 					_(" as language")
@@ -286,9 +317,9 @@ Gobby::Header::Header(const Folder& folder)
 		Glib::ustring xml_desc =
 			"<ui>"
 			"  <menubar name=\"MenuMainBar\">"
-			"    <menu action=\"MenuDocument\">"
-			"	<menuitem action=\"DocumentLanguage"
-				+ language->get_name() + "\" />"
+			"    <menu action=\"MenuView\">"
+			"	<menuitem action=\"ViewLanguage"
+				+ language_xml_name + "\" />"
 			"    </menu>"
 			"  </menubar>"
 			"</ui>";
@@ -339,7 +370,7 @@ Gobby::Header::Header(const Folder& folder)
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 	m_group_app->get_action("QuitSession")->set_sensitive(false);
 #ifdef WITH_GTKSOURCEVIEW
-	m_group_app->get_action("MenuDocument")->set_sensitive(false);
+	m_group_app->get_action("MenuView")->set_sensitive(false);
 #endif
 
 	// Connect to folder's signals
@@ -366,7 +397,7 @@ void Gobby::Header::disable_document_actions()
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 #ifdef WITH_GTKSOURCEVIEW
-	m_group_app->get_action("MenuDocument")->set_sensitive(false);
+	m_group_app->get_action("MenuView")->set_sensitive(false);
 #endif
 }
 
@@ -453,7 +484,7 @@ void Gobby::Header::obby_start()
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);
 	m_group_app->get_action("CloseDocument")->set_sensitive(false);
 #ifdef WITH_GTKSOURCEVIEW
-	m_group_app->get_action("MenuDocument")->set_sensitive(false);
+	m_group_app->get_action("MenuView")->set_sensitive(false);
 #endif
 }
 
@@ -487,7 +518,7 @@ void Gobby::Header::obby_document_insert(obby::document& document)
 	m_group_app->get_action("SaveDocument")->set_sensitive(true);
 	m_group_app->get_action("CloseDocument")->set_sensitive(true);
 #ifdef WITH_GTKSOURCEVIEW
-	m_group_app->get_action("MenuDocument")->set_sensitive(true);
+	m_group_app->get_action("MenuView")->set_sensitive(true);
 #endif
 }
 
@@ -500,7 +531,7 @@ void Gobby::Header::obby_document_remove(obby::document& document)
 		m_group_app->get_action("SaveDocument")->set_sensitive(false);
 		m_group_app->get_action("CloseDocument")->set_sensitive(false);
 #ifdef WITH_GTKSOURCEVIEW
-		m_group_app->get_action("MenuDocument")->set_sensitive(false);
+		m_group_app->get_action("MenuView")->set_sensitive(false);
 #endif
 	}
 }
@@ -580,14 +611,14 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 
 	// Set current line number state
 	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
-		m_group_app->get_action("DocumentLineNumbers")
+		m_group_app->get_action("ViewLineNumbers")
 	)->set_active(document.get_show_line_numbers() );
 
 	// Set current language
 	Glib::ustring langname = document.get_language() ?
 		document.get_language()->get_name() : "None";
 	Glib::RefPtr<Gtk::RadioAction>::cast_static<Gtk::Action>(
-		m_group_app->get_action("DocumentLanguage" + langname)
+		m_group_app->get_action("ViewLanguage" + langname)
 	)->set_active();
 
 	// We are no more toggling
