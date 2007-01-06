@@ -91,7 +91,11 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
 	get_vbox()->pack_start(m_table);
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+	Gtk::Button* host_btn = add_button(_("_Host"), Gtk::RESPONSE_OK);
+	Gtk::Image* img = Gtk::manage(
+		new Gtk::Image(Gtk::Stock::NETWORK, Gtk::ICON_SIZE_BUTTON)
+		);
+	host_btn->set_image(*img);
 
 	show_all();
 	set_border_width(10);
