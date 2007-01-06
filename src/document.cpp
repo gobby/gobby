@@ -16,19 +16,66 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "sourceview/sourcelanguagesmanager.hpp"
 #include "document.hpp"
 
+#ifdef WITH_GTKSOURCEVIEW
+const Gobby::Document::MimeMap& Gobby::Document::m_mime_map =
+	Gobby::Document::create_mime_map();
+#endif
+
 Gobby::Document::Document(obby::document& doc)
- : Gtk::ScrolledWindow(), m_doc(doc), m_editing(true)
+ : Gtk::ScrolledWindow(), m_doc(doc), m_editing(true),
+   m_lang_manager(Gtk::SourceLanguagesManager::create() )
 {
 #ifdef WITH_GTKSOURCEVIEW
 	m_view.set_show_line_numbers(true);
-#endif
+	Glib::RefPtr<Gtk::SourceBuffer> buf = m_view.get_buffer();
+#else
 	Glib::RefPtr<Gtk::TextBuffer> buf = m_view.get_buffer();
+#endif
 
+	// Set monospaced font
 	Pango::FontDescription desc;
 	desc.set_family("monospace");
 	m_view.modify_font(desc);
+
+
+#ifdef WITH_GTKSOURCEVIEW
+	// Set source language by file extension
+	Glib::ustring title = doc.get_title();
+	Glib::ustring::size_type pos = title.rfind('.');
+	if(pos != Glib::ustring::npos)
+	{
+		Glib::ustring extension = title.substr(pos + 1);
+		MimeMap::const_iterator iter = m_mime_map.find(extension);
+		if(iter != m_mime_map.end() )
+		{
+			Glib::ustring mime = iter->second;
+			Glib::RefPtr<Gtk::SourceLanguage> language = 
+				m_lang_manager->get_language_from_mime_type(
+					mime
+				);
+			if(language)
+			{
+				buf->set_language(language);
+			}
+			else
+			{
+				g_warning("Could not find syntax file for file "
+				          "extension %s (mime-type %s)",
+				          extension.c_str(), mime.c_str() );
+			}
+		}
+		else
+		{
+			g_warning("Could not detect file type of file "
+			          "extension '%s'", extension.c_str() );
+		}
+	}
+
+	buf->set_highlight(true);
+#endif
 
 	// Textbuffer signal handlers
 	buf->signal_insert().connect(
@@ -98,3 +145,51 @@ void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 	m_editing = false;
 }
 
+#ifdef WITH_GTKSOURCEVIEW
+const Gobby::Document::MimeMap& Gobby::Document::create_mime_map()
+{
+	static MimeMap map;
+
+	// Translates file extension to mime type
+	map["ada"] = "text/x-ada";
+	map["c"] = "text/x-c";
+	map["h"] = "text/x-c++";
+	map["hh"] = "text/c-c++";
+	map["cpp"] = "text/x-c++";
+	map["hpp"] = "text/x-c++";
+	map["cc"] = "text/x-c++";
+	map["css"] = "text/css";
+	map["diff"] = "text/x-diff";
+	map["f"] = "text/x-fortran";
+	map["f77"] = "text/x-fortran";
+	// Wi geth haskell?
+	map["htm"] = "text/html";
+	map["html"] = "text/html";
+	map["xhtml"] = "text/html";
+	// Wi geth IDL?
+	map["java"] = "text/x-java";
+	map["js"] = "text/x-javascript";
+	map["tex"] = "text/x-tex";
+	map["latex"] = "text/x-tex";
+	map["lua"] = "text/x-lua";
+	// Wi geth MSIL?
+	map["dpr"] = "text/x-pascal";
+	// TODO: Pascal hat noch mehr Krams, oder?
+	map["pl"] = "text/x-perl";
+	map["pm"] = "text/x-perl";
+	map["php"] = "text/x-php";
+	map["php3"] = "text/x-php";
+	map["php4"] = "text/x-php";
+	map["php5"] = "text/x-php";
+	map["po"] = "text/x-gettext-translation";
+	map["py"] = "text/x-python";
+	map["rb"] = "text/x-ruby";
+	map["sql"] = "text/x-sql";
+	// Wi geth texinfo?
+	// Wi geth vb.NET?
+	// Wi geth verilog?
+	map["xml"] = "text/xml";
+
+	return map;
+}
+#endif

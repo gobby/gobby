@@ -25,6 +25,7 @@
 
 #include "features.hpp"
 #ifdef WITH_GTKSOURCEVIEW
+#include "sourceview/sourcelanguagesmanager.hpp"
 #include "sourceview/sourceview.hpp"
 #endif
 
@@ -34,6 +35,8 @@ namespace Gobby
 class Document : public Gtk::ScrolledWindow
 {
 public:
+	typedef std::map<Glib::ustring, Glib::ustring> MimeMap;
+
 	Document(obby::document& doc);
 	virtual ~Document();
 
@@ -53,10 +56,18 @@ protected:
 	obby::document& m_doc;
 #ifdef WITH_GTKSOURCEVIEW
 	Gtk::SourceView m_view;
+	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 #else
 	Gtk::TextView m_view;
 #endif
 	bool m_editing;
+
+public:
+#ifdef WITH_GTKSOURCEVIEW
+	static const MimeMap& create_mime_map();
+	static const MimeMap& m_mime_map;
+#endif
+
 };
 
 }
