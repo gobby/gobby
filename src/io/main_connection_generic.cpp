@@ -24,26 +24,25 @@ namespace
 	bool on_io(Glib::IOCondition condition,
 	           const obby::io::main_connection& connection)
 	{
-		const net6::socket/*&*/ /*const_*/sock = connection.get_socket();
+		const net6::socket& sock = connection.get_socket();
 //		net6::socket& sock = const_cast<net6::socket&>(const_sock);
 
 		if(condition & (Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL) )
-			sock.io_event().emit(net6::socket::IOERROR);
+			sock.io_event().emit(net6::IO_ERROR);
 
 		if(condition & (Glib::IO_IN) )
-			sock.io_event().emit(net6::socket::INCOMING);
+			sock.io_event().emit(net6::IO_INCOMING);
 
 		if(condition & (Glib::IO_OUT) )
-			sock.io_event().emit(net6::socket::OUTGOING);
+			sock.io_event().emit(net6::IO_OUTGOING);
 
 		return true;
 	}
 }
 
 obby::io::main_connection::main_connection(const net6::socket& sock,
-                                           Condition condition)
- : m_socket(sock),
-   m_condition(static_cast<main_connection::Condition>(0) )
+                                           Condition condition):
+	m_socket(sock), m_condition(static_cast<main_connection::Condition>(0) )
 {
 	net6::socket::socket_type fd = sock.cobj();
 	m_channel = Glib::IOChannel::create_from_fd(fd);

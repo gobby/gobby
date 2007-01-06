@@ -64,7 +64,7 @@ public:
 	 */
 #ifdef WIN32
 	main_connection(Gtk::Window& window, const net6::socket& sock,
-	               Condition condition);
+	                Condition condition);
 #else
 	main_connection(const net6::socket& sock, Condition condition);
 #endif
@@ -140,19 +140,19 @@ inline main_connection::Condition operator^(
 inline main_connection::Condition operator|=(
 	main_connection::Condition& rhs, main_connection::Condition lhs
 ) {
-	rhs = (rhs | lhs);
+	return rhs = (rhs | lhs);
 }
 
 inline main_connection::Condition operator&=(
 	main_connection::Condition& rhs, main_connection::Condition lhs
 ) {
-	rhs = (rhs & lhs);
+	return rhs = (rhs & lhs);
 }
 
 inline main_connection::Condition operator^=(
 	main_connection::Condition& rhs, main_connection::Condition lhs
 ) {
-	rhs = (rhs ^ lhs);
+	return rhs = (rhs ^ lhs);
 }
 
 inline main_connection::Condition operator~(main_connection::Condition rhs) {
