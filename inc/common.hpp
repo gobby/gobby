@@ -21,7 +21,11 @@
 
 #include <libintl.h>
 #include <locale.h>
-#define _(text) gettext(text)
+
+template<typename char_type>
+inline char_type* _(const char_type* text) {
+	return gettext(text);
+}
 
 #endif // _GOBBY_COMMON_HPP_
 
