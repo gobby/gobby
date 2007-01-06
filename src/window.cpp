@@ -281,6 +281,10 @@ void Gobby::Window::on_session_create()
 				m_zeroconf->publish(name, port);
 #endif
 
+			obby::format_string str(_("Serving on port %0%") );
+			str << port;
+			m_statusbar.update_connection(str.str() );
+
 			// Start session
 			m_buffer = buffer;
 			obby_start();
@@ -318,6 +322,10 @@ void Gobby::Window::on_session_join()
 
 			buffer->close_event().connect(
 				sigc::mem_fun(*this, &Window::on_obby_close) );
+
+			obby::format_string str(_("Connected to %0%:%1%") );
+			str << host << port;
+			m_statusbar.update_connection(str.str() );
 
 			// Start session
 			m_buffer = buffer;

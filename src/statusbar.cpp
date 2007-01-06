@@ -26,12 +26,16 @@
 Gobby::StatusBar::StatusBar(const Folder& folder)
  : Frame(), 
    m_language("", Gtk::ALIGN_LEFT),
+   m_connection("Not connected", Gtk::ALIGN_LEFT),
    m_position("", Gtk::ALIGN_LEFT)
 {
 	m_box.pack_start(m_language, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_sep, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_connection, Gtk::PACK_SHRINK);
 	m_box.pack_end(m_position, Gtk::PACK_SHRINK, 2);
 	m_box.set_spacing(5);
 
+	m_sep.hide();
 	add(m_box);
 	set_shadow_type(Gtk::SHADOW_OUT);
 
@@ -40,7 +44,7 @@ Gobby::StatusBar::StatusBar(const Folder& folder)
 	folder.document_language_changed_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_language) );
 	folder.tab_switched_event().connect(
-		sigc::mem_fun(*this, &StatusBar::update_all) );
+		sigc::mem_fun(*this, &StatusBar::update_from_document) );
 }
 
 Gobby::StatusBar::~StatusBar()
@@ -60,6 +64,7 @@ void Gobby::StatusBar::update_language(Document& document)
 	{
 		m_language.set_text(_("No language selected") );
 	}
+	m_sep.show();
 }
 
 void Gobby::StatusBar::update_cursor(Document& document)
@@ -72,10 +77,15 @@ void Gobby::StatusBar::update_cursor(Document& document)
 	m_position.set_text(str.str() );
 }
 
-void Gobby::StatusBar::update_all(Document& document)
+void Gobby::StatusBar::update_from_document(Document& document)
 {
 	update_language(document);
 	update_cursor(document);
+}
+
+void Gobby::StatusBar::update_connection(const Glib::ustring& str)
+{
+	m_connection.set_text(str);
 }
 
 void Gobby::StatusBar::obby_start(obby::local_buffer& buf)
@@ -85,6 +95,8 @@ void Gobby::StatusBar::obby_start(obby::local_buffer& buf)
 void Gobby::StatusBar::obby_end()
 {
 	m_language.set_text("");
+	m_sep.hide();
+	m_connection.set_text("Not connected");
 	m_position.set_text("");
 }
 
@@ -105,8 +117,16 @@ void Gobby::StatusBar::obby_document_remove(obby::local_document_info& document)
 	// Last document that is closed?
 	if(document.get_buffer().document_count() == 1)
 	{
-		// Clear statusbar
-		obby_end();
+		// Clear document-related statusbar items
+		m_language.set_text("");
+		m_sep.hide();
+		m_position.set_text("");
 	}
+}
+
+void Gobby::StatusBar::on_show()
+{
+	Gtk::Frame::on_show();
+	m_sep.hide();
 }
 

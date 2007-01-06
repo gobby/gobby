@@ -19,9 +19,11 @@
 #ifndef _GOBBY_STATUSBAR_HPP_
 #define _GOBBY_STATUSBAR_HPP_
 
+#include <glibmm/ustring.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/separator.h>
 #include <obby/user.hpp>
 #include <obby/local_document_info.hpp>
 #include <obby/local_buffer.hpp>
@@ -39,8 +41,9 @@ public:
 
 	void update_language(Document& document);
 	void update_cursor(Document& document);
+	void update_from_document(Document& document);
 
-	void update_all(Document& document);
+	void update_connection(const Glib::ustring& str);
 
 	// Calls from the window
 	void obby_start(obby::local_buffer& buf);
@@ -50,10 +53,15 @@ public:
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
 
+	virtual void on_show();
+
 protected:
 	Gtk::HBox m_box;
 	Gtk::Label m_language;
+	Gtk::Label m_connection;
 	Gtk::Label m_position;
+
+	Gtk::VSeparator m_sep;
 };
 
 }
