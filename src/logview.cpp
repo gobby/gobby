@@ -17,7 +17,7 @@
  */
 
 #include <ctime>
-#include <sstream>
+#include <obby/format_string.hpp>
 #include "logview.hpp"
 
 Gobby::LogView::LogView()
@@ -40,7 +40,15 @@ void Gobby::LogView::clear()
 	get_buffer()->set_text("");
 }
 
-void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
+void Gobby::LogView::log(const Glib::ustring& text,
+                         const Glib::ustring& color)
+{
+	log(text, color, std::time(NULL) );
+}
+
+void Gobby::LogView::log(const Glib::ustring& text,
+                         const Glib::ustring& color,
+                         std::time_t timestamp)
 {
 	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
 	Glib::RefPtr<Gtk::TextTag> tag = buffer->get_tag_table()->lookup(color);
@@ -48,23 +56,22 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 	Glib::ustring ins_text = text;
 	if(ins_text[ins_text.length() - 1] != '\n') ins_text += "\n";
 
-	struct std::tm* cur_time;
-	time_t cur_time_t = std::time(NULL);
-	cur_time = localtime(&cur_time_t);
+	const char* formatter = "%T";
+	std::time_t cur_time_t = std::time(NULL);
+	std::tm cur_time_tm = *std::localtime(&cur_time_t);
+	std::tm given_time_tm = *std::localtime(&timestamp);
 
-	// TODO: Use strftime
-	std::stringstream timestream;
-	timestream << "[";
-	timestream.width(2); timestream.fill('0');
-	timestream << cur_time->tm_hour;
-	timestream << ":";
-	timestream.width(2); timestream.fill('0');
-	timestream << cur_time->tm_min;
-	timestream << ":";
-	timestream.width(2); timestream.fill('0');
-	timestream << cur_time->tm_sec;
-	timestream << "] ";
-	ins_text = timestream.str() + ins_text;
+	// Show date if the text was not logged today
+	if(cur_time_tm.tm_yday != given_time_tm.tm_yday ||
+	   cur_time_tm.tm_year != given_time_tm.tm_year)
+	{
+		formatter = "%x %T";
+	}
+
+	char buf[0x7f];
+	std::strftime(buf, 0x7f, formatter, &given_time_tm);
+	obby::format_string str("[%0%] %1%");
+	str << buf << ins_text;
 
 	if(!tag)
 	{
@@ -73,8 +80,7 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 		buffer->get_tag_table()->add(tag);
 	}
 
-	buffer->insert_with_tag(buffer->end(), ins_text, tag);
-
+	buffer->insert_with_tag(buffer->end(), str.str(), tag);
 	scroll_to_mark(m_end_mark, 0.0f);
 }
 

@@ -30,14 +30,18 @@ namespace Gobby
  * line has been inserted. It is not editable by default.
  */
 
-class LogView : public Gtk::TextView
+class LogView: public Gtk::TextView
 {
 public:
 	LogView();
 	virtual ~LogView();
 
 	void clear();
-	void log(const Glib::ustring& text, const Glib::ustring& color);
+	void log(const Glib::ustring& text,
+	         const Glib::ustring& color);
+	void log(const Glib::ustring& text,
+	         const Glib::ustring& color,
+		 const std::time_t timestamp);
 
 protected:
 	Glib::RefPtr<Gtk::TextMark> m_end_mark;
