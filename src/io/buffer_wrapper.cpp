@@ -31,7 +31,8 @@ obby::io::client::client(const net6::address& addr)
 #ifdef WIN32
      window,
 #endif
-     conn.get_socket(),
+     conn->get_socket(),
+
      main_connection::IO_IN | main_connection::IO_ERROR
    )
 {
