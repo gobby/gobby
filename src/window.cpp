@@ -57,6 +57,7 @@ Gobby::Window::Window(const IconManager& icon_mgr)
 #endif
    m_header(),
    m_userlist(*this, m_header),
+   m_documentlist(*this, m_header),
    m_folder(m_header, m_preferences),
    m_statusbar(m_header, m_folder)
 {
@@ -98,8 +99,12 @@ Gobby::Window::Window(const IconManager& icon_mgr)
 		sigc::mem_fun(*this, &Window::on_about) );
 
 	// Folder
-	m_folder.document_close_event().connect(
-		sigc::mem_fun(*this, &Window::on_folder_document_close) );
+	m_folder.document_add_event().connect(
+		sigc::mem_fun(*this, &Window::on_folder_document_add) );
+	m_folder.document_remove_event().connect(
+		sigc::mem_fun(*this, &Window::on_folder_document_remove) );
+	m_folder.document_close_request_event().connect(
+		sigc::mem_fun(*this, &Window::on_folder_document_close_request) );
 	m_folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &Window::on_folder_tab_switched) );
 
@@ -210,6 +215,7 @@ void Gobby::Window::obby_start()
 	// Delegate start of obby session
 	m_folder.obby_start(*m_buffer);
 	m_userlist.obby_start(*m_buffer);
+	m_documentlist.obby_start(*m_buffer);
 	m_chat.obby_start(*m_buffer);
 	m_statusbar.obby_start(*m_buffer);
 
@@ -237,6 +243,13 @@ void Gobby::Window::obby_start()
 
 	// Current document has changed, update titlebar
 	update_title_bar();
+
+	// Show up document list if obby buffer contains documents
+	if(m_buffer->document_count() > 0)
+	{
+		m_documentlist.show();
+		m_documentlist.grab_focus();
+	}
 }
 
 void Gobby::Window::obby_end()
@@ -250,6 +263,7 @@ void Gobby::Window::obby_end()
 	// Tell GUI components that the session ended
 	m_folder.obby_end();
 	m_userlist.obby_end();
+	m_documentlist.obby_end();
 	m_chat.obby_end();
 	m_statusbar.obby_end();
 
@@ -489,14 +503,46 @@ void Gobby::Window::on_about()
 	dlg.run();
 }
 
-void Gobby::Window::on_folder_document_close(Document& document)
+void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
-	// TODO: Folder sollte eher Signale mit DocWindows emitten und so.
+	const obby::document_info& document =
+		window.get_document().get_document();
+
+	// Set the path from which this document was opened, if we opened that
+	// file.
+	if(document.get_owner() == &m_buffer->get_self() &&
+	   !m_local_file_path.empty() )
+	{
+		// " " is newly created, so we do not need a path
+		if(m_local_file_path != " ")
+			window.get_document().set_path(m_local_file_path);
+
+		// Crear local path
+		m_local_file_path.clear();
+	}
+
+	// Select newly created page
+	m_folder.set_current_page(m_folder.page_num(window) );
+	window.get_document().grab_focus();
+}
+
+void Gobby::Window::on_folder_document_remove(DocWindow& window)
+{
+	// Update title bar if there are no more documents left
+	// (folder_tab_switched is not emitted in this case)
+	if(m_folder.get_n_pages() == 0)
+		update_title_bar();
+}
+
+void Gobby::Window::on_folder_document_close_request(Document& document)
+{
+	// TODO: Folder should emit signal with DocWindow
 	for(int i = 0; i < m_folder.get_n_pages(); ++ i)
 	{
 		Gtk::Widget* doc = m_folder.get_nth_page(i);
 		if(&static_cast<DocWindow*>(doc)->get_document() == &document)
 		{
+			// Close this document
 			close_document(*static_cast<DocWindow*>(doc));
 			break;
 		}
@@ -802,6 +848,7 @@ void Gobby::Window::on_obby_user_join(const obby::user& user)
 	// Tell user join to components
 	m_folder.obby_user_join(user);
 	m_userlist.obby_user_join(user);
+	m_documentlist.obby_user_join(user);
 	m_chat.obby_user_join(user);
 	m_statusbar.obby_user_join(user);
 }
@@ -811,6 +858,7 @@ void Gobby::Window::on_obby_user_part(const obby::user& user)
 	// Tell user part to components
 	m_folder.obby_user_part(user);
 	m_userlist.obby_user_part(user);
+	m_documentlist.obby_user_part(user);
 	m_chat.obby_user_part(user);
 	m_statusbar.obby_user_part(user);
 }
@@ -818,6 +866,7 @@ void Gobby::Window::on_obby_user_part(const obby::user& user)
 void Gobby::Window::on_obby_user_colour(const obby::user& user)
 {
 	m_userlist.obby_user_colour(user);
+	m_documentlist.obby_user_colour(user);
 	m_folder.obby_user_colour(user);
 }
 
@@ -833,29 +882,9 @@ void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 
 	m_folder.obby_document_insert(local_doc);
 	m_userlist.obby_document_insert(local_doc);
+	m_documentlist.obby_document_insert(local_doc);
 	m_chat.obby_document_insert(local_doc);
 	m_statusbar.obby_document_insert(local_doc);
-
-	// Get last page (the newly inserted one)
-	DocWindow* doc = static_cast<DocWindow*>(
-		m_folder.get_nth_page(m_folder.get_n_pages() - 1) );
-
-	// Set the path from which this document was opened, if we opened that
-	// file.
-	if(document.get_owner() == &m_buffer->get_self() &&
-	   !m_local_file_path.empty() )
-	{
-		// Select newly created page
-		m_folder.set_current_page(m_folder.get_n_pages() - 1);
-		doc->get_document().grab_focus();
-
-		// " " is newly created, so we do not need a path
-		if(m_local_file_path != " ")
-			doc->get_document().set_path(m_local_file_path);
-
-		// Crear local path
-		m_local_file_path.clear();
-	}
 }
 
 void Gobby::Window::on_obby_document_remove(obby::document_info& document)
@@ -865,12 +894,9 @@ void Gobby::Window::on_obby_document_remove(obby::document_info& document)
 
 	m_folder.obby_document_remove(local_doc);
 	m_userlist.obby_document_remove(local_doc);
+	m_documentlist.obby_document_remove(local_doc);
 	m_chat.obby_document_remove(local_doc);
 	m_statusbar.obby_document_remove(local_doc);
-
-	// Reset title if last document has been closed
-	if(m_buffer->document_count() == 1)
-		set_title("Gobby");
 }
 
 Gobby::Document& Gobby::Window::get_current_document()
@@ -1024,12 +1050,11 @@ void Gobby::Window::close_document(DocWindow& document)
 		);
 
 		obby::format_string secondary_str(
-			_("If you don't save, changes will be discarded but "
+			_("If you don't save, changes will be discarded, but "
 			  "may still be retrieved if you re-subscribe to the "
 			  "document.")
 		);
 
-		// TODO: Remember the time the user saved the document.
 		primary_str << document.get_document().get_title();
 
 		// Setup dialog
@@ -1072,17 +1097,14 @@ void Gobby::Window::close_document(DocWindow& document)
 
 	if(m_buffer.get() != NULL)
 	{
-		// Send remove document request
-		// TODO: Gobby::Document should do this.
+		// Unsubscribe from document
 		document.get_document().get_document().unsubscribe();
-		/*m_buffer->document_remove(
-			document.get_document().get_document()
-		);*/
 	}
 	else
 	{
 		// Buffer does not exist: Maybe the connection has been lost
 		// or something: Just remove the document from the folder.
+		on_folder_document_remove(document);
 		m_folder.remove_page(document);
 	}
 }

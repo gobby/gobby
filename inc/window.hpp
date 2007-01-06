@@ -29,6 +29,7 @@
 #include "docwindow.hpp"
 #include "folder.hpp"
 #include "userlist.hpp"
+#include "documentlist.hpp"
 #include "chat.hpp"
 #include "statusbar.hpp"
 #include "features.hpp"
@@ -75,7 +76,9 @@ protected:
 	void on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang);
 
 	// Folder UI handler
-	void on_folder_document_close(Document& document);
+	void on_folder_document_add(DocWindow& window);
+	void on_folder_document_remove(DocWindow& window);
+	void on_folder_document_close_request(Document& document);
 	void on_folder_tab_switched(Document& document);
 
 	void on_about();
@@ -126,6 +129,7 @@ protected:
 
 	Header m_header;
 	UserList m_userlist;
+	DocumentList m_documentlist;
 
 	Folder m_folder;
 	Chat m_chat;

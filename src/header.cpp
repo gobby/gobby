@@ -17,12 +17,8 @@
  */
 
 #include <gtkmm/stock.h>
-//#include <gtkmm/toggleaction.h>
 #include <obby/format_string.hpp>
-//#include <obby/local_buffer.hpp>
-//#include <obby/client_buffer.hpp>
 
-//#include "features.hpp"
 #include "common.hpp"
 #include "header.hpp"
 #include "icon.hpp"

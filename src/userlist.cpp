@@ -95,6 +95,7 @@ Gobby::UserList::UserList(Gtk::Window& parent,
 	m_tree_view.get_selection()->set_mode(Gtk::SELECTION_NONE);
 	m_tree_view.set_headers_visible(false);
 
+	m_scrolled_wnd.set_shadow_type(Gtk::SHADOW_IN);
 	m_scrolled_wnd.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	m_scrolled_wnd.add(m_tree_view);
 	m_scrolled_wnd.set_sensitive(false);
@@ -103,6 +104,7 @@ Gobby::UserList::UserList(Gtk::Window& parent,
 	show_all_children();
 
 	set_default_size(200, 400);
+	set_border_width(10);
 }
 
 Gobby::UserList::~UserList()

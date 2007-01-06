@@ -49,7 +49,6 @@ public:
 		typedef Glib::SignalProxy0<void> close_signal_type;
 
 		TabLabel(const Glib::ustring& label);
-		~TabLabel();
 
 		Glib::ustring get_label() const;
 
@@ -68,8 +67,12 @@ public:
 		Gtk::HBox m_box;
 	};
 
+	typedef sigc::signal<void, DocWindow&>
+		signal_document_add_type;
+	typedef sigc::signal<void, DocWindow&>
+		signal_document_remove_type;
 	typedef sigc::signal<void, Document&>
-		signal_document_close_type;
+		signal_document_close_request_type;
 	typedef sigc::signal<void, Document&>
 		signal_document_cursor_moved_type;
 	typedef sigc::signal<void, Document&>
@@ -89,9 +92,7 @@ public:
 
 	// Calls from the window
 	// TODO: Replace the last 5 of these functions by direct signal
-	// connections to obby::local_buffer and emit two own signals
-	// local_document_insert or something with the Gobby::Document that
-	// has been inserted.
+	// connections to obby::local_buffer
 	void obby_start(obby::local_buffer& buf);
 	void obby_end();
 	void obby_user_join(const obby::user& user);
@@ -100,8 +101,24 @@ public:
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
 
-	signal_document_close_type
-		document_close_event() const;
+	/** Signal which will be emitted if a document has been added to the
+	 * folder.
+	 */
+	signal_document_add_type
+		document_add_event() const;
+
+	/** Signal which will be emitted if a document has been removed from
+	 * the folder.
+	 */
+	signal_document_remove_type
+		document_remove_event() const;
+
+	/** Signal which will be emitted if the user wants to close a document
+	 * (by clicking on the close button on the tab label).
+	 */
+	signal_document_close_request_type
+		document_close_request_event() const;
+
 	signal_document_cursor_moved_type
 		document_cursor_moved_event() const;
 	signal_document_content_changed_type
@@ -121,7 +138,7 @@ protected:
 		/** Enable only document items which are useful even if the
 		 * user is not subscribed to the document, disable others.
 		 */
-		DOCUMENT_ITEMS_ENABLE_NOSUBSCRIBE = 1,
+		//DOCUMENT_ITEMS_ENABLE_NOSUBSCRIBE = 1,
 
 		/** Enable all document items.
 		 */
@@ -138,8 +155,15 @@ protected:
 	// Signal handlers
 	void on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language);
 
-	void on_document_subscribe(const obby::user& user, DocWindow& window);
-	void on_document_unsubscribe(const obby::user& user, DocWindow& window);
+	void on_document_subscribe(const obby::user& user,
+	                           obby::local_document_info& info);
+	void on_document_unsubscribe(const obby::user& user,
+	                             obby::local_document_info& info);
+
+	// Called by on_document_subscribe/unsubscribe if the (un)subscribing
+	// user is the local one.
+	void on_self_subscribe(obby::local_document_info& info);
+	void on_self_unsubscribe(obby::local_document_info& info);
 
 	void on_document_modified_changed(DocWindow& window);
 	void on_document_close(Document& document);
@@ -148,8 +172,12 @@ protected:
 	void on_document_content_changed(DocWindow& window);
 	void on_document_language_changed(Document& document);
 
-	signal_document_close_type
-		m_signal_document_close;
+	signal_document_add_type
+		m_signal_document_add;
+	signal_document_remove_type
+		m_signal_document_remove;
+	signal_document_close_request_type
+		m_signal_document_close_request;
 	signal_document_cursor_moved_type
 		m_signal_document_cursor_moved;
 	signal_document_content_changed_type
@@ -159,6 +187,8 @@ protected:
 	signal_tab_switched_type
 		m_signal_tab_switched;
 
+	/** Whether to block the handling of the language changed event.
+	 */
 	bool m_block_language;
 
 	/** Reference to Header.
@@ -172,6 +202,10 @@ protected:
 	/** Contains a pointer to the current active obby buffer.
 	 */
 	obby::local_buffer* m_buffer;
+
+	/** Connection to the unsubscribe signal.
+	 */
+	sigc::connection m_conn_unsubscribe;
 
 	MimeMap m_mime_map;
 };

@@ -42,7 +42,6 @@ public:
 
 	Document(obby::local_document_info& doc, const Folder& folder,
 	         const Preferences& preferences);
-	virtual ~Document();
 
 	const obby::local_document_info& get_document() const;
 	obby::local_document_info& get_document();
@@ -70,7 +69,7 @@ public:
 
 	/** Returns whether the local user is subscribed to this document.
 	 */
-	bool is_subscribed() const;
+//	bool is_subscribed() const;
 
 	/** Whether this document has been modified since the last save.
 	 */
@@ -155,6 +154,7 @@ protected:
 	void on_obby_change_before();
 	void on_obby_change_after();
 
+#if 0
 	void on_obby_user_subscribe(const obby::user& user);
 	void on_obby_user_unsubscribe(const obby::user& user);
 
@@ -164,10 +164,11 @@ protected:
 	 */
 	void on_obby_self_subscribe();
 	void on_obby_self_unsubscribe();
+#endif
 
 	/** GUI callbacks.
 	 */
-	void on_gui_subscribe();
+	//void on_gui_subscribe();
 
 #if 0
 	/** Drag+Drop.
@@ -208,7 +209,7 @@ protected:
 
 	/** Sets intro text for the document, if the user is not subscribed.
 	 */
-	void set_intro_text();
+	//void set_intro_text();
 
 	/** Applies the currently used preferences to the view.
 	 */
@@ -220,14 +221,14 @@ protected:
 
 	/** Connections to obby's signals.
 	 */
-	sigc::connection m_conn_ins_before;
+	/*sigc::connection m_conn_ins_before;
 	sigc::connection m_conn_ins_after;
 	sigc::connection m_conn_del_before;
-	sigc::connection m_conn_del_after;
+	sigc::connection m_conn_del_after;*/
 
 	/** Whether we are subscribed to this document.
 	 */
-	bool m_subscribed;
+	//bool m_subscribed;
 	
 	/** Preferences for this document.
 	 */
@@ -244,7 +245,7 @@ protected:
 
 	/** Button to subscribe to the document.
 	 */
-	Gtk::Button m_btn_subscribe;
+	//Gtk::Button m_btn_subscribe;
 
 	/** Document title (even available when connection has been lost).
 	 */

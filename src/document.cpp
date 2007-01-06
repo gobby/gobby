@@ -22,49 +22,17 @@
 #include "document.hpp"
 #include "folder.hpp"
 
-#if 0
-namespace
-{
-	extern "C"
-	{
-
-	/** Evil hack, deals with GTK+'s internals, but GTK+ provides no way
-	 * to change a mark's gravity.
-	 */
-	typedef struct _GtkTextLineSegmentClass GtkTextLineSegmentClass;
-
-	struct GtkTextLineSegment {
-		GtkTextLineSegmentClass* type;
-	};
-
-	extern GtkTextLineSegmentClass gtk_text_right_mark_type;
-	extern GtkTextLineSegmentClass gtk_text_left_mark_type;
-
-	void gtk_text_mark_set_gravity(GtkTextMark* mark, bool left_gravity)
-	{
-		if(left_gravity)
-		{
-			static_cast<GtkTextLineSegment*>(mark->segment)->type =
-				&gtk_text_left_mark_type;
-		}
-		else
-		{
-			static_cast<GtkTextLineSegment*>(mark->segment)->type =
-				&gtk_text_right_mark_type;
-		}
-	}
-
-	} // extern "C"
-}
-#endif
-
 Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
                           const Preferences& preferences)
  : Gtk::SourceView(),
-   m_doc(doc), m_subscribed(false),
+   m_doc(doc),
    m_preferences(preferences), m_editing(true),
-   m_btn_subscribe(_("Subscribe") ), m_title(doc.get_title() )
+   m_title(doc.get_title() )
 {
+	// Documents can only show content if the local user is subscribed
+	if(!doc.is_subscribed() )
+		throw std::logic_error("Gobby::Document::Document");
+
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
 
 	// Prevent from GTK sourceview's undo 
@@ -88,6 +56,9 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 
 		set_language(language);
 	}
+
+	// Switch syntax highlighting on
+	buf->set_highlight(true);
 
 	// Insert user tags into the tag table
 	const obby::user_table& user_table = doc.get_buffer().get_user_table();
@@ -131,48 +102,72 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 	buf->signal_apply_tag().connect(
 		sigc::mem_fun(*this, &Document::on_apply_tag_after), true);
 
-	// Obby signal handler
-	doc.subscribe_event().connect(
-		sigc::mem_fun(*this, &Document::on_obby_user_subscribe) );
-	doc.unsubscribe_event().connect(
-		sigc::mem_fun(*this, &Document::on_obby_user_unsubscribe) );
-
-#if 0
-	gtk_text_mark_set_gravity(
-		get_buffer()->get_insert()->gobj(),
-		true
-	);
-
-	gtk_text_mark_set_gravity(
-		get_buffer()->get_selection_bound()->gobj(),
-		true
-	);
-#endif
-
-#if 0
-	// Allow drag+drop of uri-lists and plaintext. uri-list is forwarded to
-	// the window while plaintext will be inserted into the document.
-	std::list<Gtk::TargetEntry> targets;
-	targets.push_back(Gtk::TargetEntry("text/uri-list") );
-	targets.push_back(Gtk::TargetEntry("text/plain") );
-	drag_dest_set(targets);
-#endif
-
-	// GUI signal handlers
-	m_btn_subscribe.signal_clicked().connect(
-		sigc::mem_fun(*this, &Document::on_gui_subscribe) );
+	// Install signal handlers
+	const obby::document& content = doc.get_content();
+	content.insert_event().before().connect(
+		sigc::mem_fun(*this, &Document::on_obby_insert_before) );
+	content.insert_event().after().connect(
+		sigc::mem_fun(*this, &Document::on_obby_insert_after) );
+	content.delete_event().before().connect(
+		sigc::mem_fun(*this, &Document::on_obby_delete_before) );
+	content.delete_event().after().connect(
+		sigc::mem_fun(*this, &Document::on_obby_delete_after) );
 
 	// Apply preferences
 	apply_preferences();
 
-	// Set introduction text
-	set_intro_text();
+	// Set initial text
+	m_editing = true;
+	buf->set_text(content.get_text() );
+
+	// Not modified when subscribed, if the text is empty
+	buf->set_modified(
+		content.get_line_count() != 1 ||
+		content.get_line(0).length() != 0
+	);
+
+	// Set initial authors
+	for(unsigned int i = 0; i < content.get_line_count(); ++ i)
+	{
+		// Get current line
+		const obby::line& line = content.get_line(i);
+		obby::line::author_iterator prev = line.author_begin();
+		obby::line::author_iterator cur = prev;
+
+		// Iterate through it's authors list
+		for(++ cur; prev != line.author_end(); ++ cur)
+		{
+			// Get current user
+			const obby::user* user = prev->author;
+
+			// user can be NULL (server insert event, but then
+			// we do not have to apply a tag or so).
+			if(user == NULL) { prev = cur; continue; }
+
+			// Get the range to highlight
+			obby::line::size_type endpos;
+			if(cur != line.author_end() )
+				endpos = cur->position;
+			else
+				endpos = line.length();
+
+			Gtk::TextBuffer::iterator begin =
+				buf->get_iter_at_line_index(i, prev->position);
+			Gtk::TextBuffer::iterator end =
+				buf->get_iter_at_line_index(i, endpos);
+
+			// Apply corresponding tag
+			buf->apply_tag_by_name(
+				"gobby_user_" + user->get_name(),
+				begin,
+				end
+			);
+
+			prev = cur;
+		}
+	}
 
 	m_editing = false;
-}
-
-Gobby::Document::~Document()
-{
 }
 
 const obby::local_document_info& Gobby::Document::get_document() const
@@ -220,23 +215,20 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 	col = iter.get_line_offset();
 
 	// Add tab characters to col
-	if(is_subscribed() )
-	{
-		const std::string& line = m_doc.get_content().get_line(row);
-		unsigned int tabs = m_preferences.editor.tab_width;
+	const std::string& line = m_doc.get_content().get_line(row);
+	unsigned int tabs = m_preferences.editor.tab_width;
 
-		// col chars
-		std::string::size_type chars = col; col = 0;
-		for(std::string::size_type i = 0; i < chars; ++ i)
+	// col chars
+	std::string::size_type chars = col; col = 0;
+	for(std::string::size_type i = 0; i < chars; ++ i)
+	{
+		unsigned int width = 1;
+		if(line[i] == '\t')
 		{
-			unsigned int width = 1;
-			if(line[i] == '\t')
-			{
-				width = (tabs - col % tabs) % tabs;
-				if(width == 0) width = tabs;
-			}
-			col += width;
+			width = (tabs - col % tabs) % tabs;
+			if(width == 0) width = tabs;
 		}
+		col += width;
 	}
 }
 
@@ -255,11 +247,6 @@ const Glib::ustring& Gobby::Document::get_title() const
 const Glib::ustring& Gobby::Document::get_path() const
 {
 	return m_path;
-}
-
-bool Gobby::Document::is_subscribed() const
-{
-	return m_subscribed;
 }
 
 bool Gobby::Document::get_modified() const
@@ -391,170 +378,6 @@ void Gobby::Document::on_obby_delete_after(obby::position pos,
 	m_signal_cursor_moved.emit();
 	m_signal_content_changed.emit();
 }
-
-void Gobby::Document::on_obby_user_subscribe(const obby::user& user)
-{
-	// Call self function if the local user subscribed
-	if(&user == &m_doc.get_buffer().get_self() )
-		on_obby_self_subscribe();
-}
-
-void Gobby::Document::on_obby_user_unsubscribe(const obby::user& user)
-{
-	// Call self function if the local user unsubscribed
-	if(&user == &m_doc.get_buffer().get_self() )
-		on_obby_self_unsubscribe();
-}
-
-void Gobby::Document::on_obby_self_subscribe()
-{
-	if(m_subscribed)
-	{
-		throw std::logic_error(
-			"Gobby::Document::on_obby_self_subscribe"
-		);
-	}
-
-	// We are subscribed
-	m_subscribed = true;
-
-	// Get document we subscribed to
-	const obby::document& doc = m_doc.get_content();
-	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
-
-	// Install signal handlers
-	m_conn_ins_before = doc.insert_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_insert_before) );
-	m_conn_ins_after = doc.insert_event().after().connect(
-		sigc::mem_fun(*this, &Document::on_obby_insert_after) );
-	m_conn_del_before = doc.delete_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_delete_before) );
-	m_conn_del_after = doc.delete_event().after().connect(
-		sigc::mem_fun(*this, &Document::on_obby_delete_after) );
-
-	// Set initial text
-	m_editing = true;
-	buf->set_text(doc.get_text() );
-
-	// Make the document editable
-	set_editable(true);
-
-	// Apply preferences
-	apply_preferences();
-
-	// Enable highlighting
-	buf->set_highlight(true);
-
-	// Not modified when subscribed, if the text is empty
-	buf->set_modified(
-		!(doc.get_line_count() == 1 && doc.get_line(0).length() == 0) );
-
-	// Set initial authors
-	for(unsigned int i = 0; i < doc.get_line_count(); ++ i)
-	{
-		// Get current line
-		const obby::line& line = doc.get_line(i);
-		obby::line::author_iterator prev = line.author_begin();
-		obby::line::author_iterator cur = prev;
-
-		// Iterate through it's authors list
-		for(++ cur; prev != line.author_end(); ++ cur)
-		{
-			// Get current user
-			const obby::user* user = prev->author;
-
-			// user can be NULL (server insert event, but then
-			// we do not have to apply a tag or so).
-			if(user == NULL) { prev = cur; continue; }
-
-			// Get the range to highlight
-			obby::line::size_type endpos;
-			if(cur != line.author_end() )
-				endpos = cur->position;
-			else
-				endpos = line.length();
-
-			Gtk::TextBuffer::iterator begin =
-				buf->get_iter_at_line_index(i, prev->position);
-			Gtk::TextBuffer::iterator end =
-				buf->get_iter_at_line_index(i, endpos);
-
-			// Apply corresponding tag
-			buf->apply_tag_by_name(
-				"gobby_user_" + user->get_name(),
-				begin,
-				end
-			);
-
-			prev = cur;
-		}
-	}
-
-	// Cursor moved because the introduction text has been deleted
-	m_signal_cursor_moved.emit();
-	// Content changed because the introduction text has been deleted
-	m_signal_content_changed.emit();
-
-	m_editing = false;
-}
-
-void Gobby::Document::on_obby_self_unsubscribe()
-{
-	if(!m_subscribed)
-	{
-		throw std::logic_error(
-			"Gobby::Document::on_obby_self_unsubscribe"
-		);
-	}
-
-	// Remove signal handlers from obby document
-	m_conn_ins_before.disconnect();
-	m_conn_ins_after.disconnect();
-	m_conn_del_before.disconnect();
-	m_conn_del_after.disconnect();
-
-	// We are not subscribed anymore
-	m_subscribed = false;
-	// Prevent from execution of signal handlers
-	m_editing = true;
-	// Apply preferences (which may change for non-subscribed documents)
-	apply_preferences();
-	// Set introduction text
-	set_intro_text();
-	// Re-enable signal handlers
-	m_editing = false;
-}
-
-void Gobby::Document::on_gui_subscribe()
-{
-	// Send subscribe request
-	m_doc.subscribe();
-	// Deactivate the subscribe button since the request has been sent
-	m_btn_subscribe.set_sensitive(false);
-}
-
-#if 0
-// Hack to allow to drop files on a document. They will be opened as new
-// documents if the contained data is an uri list, inserted into this document
-// if its text.
-bool Gobby::Document::on_drag_motion(
-	const Glib::RefPtr<Gdk::DragContext>& context,
-	int x, int y, guint32 time
-)
-{
-	// Check available targets
-	std::vector<std::string> targets = context->get_targets();
-	for(unsigned int i = 0; i < targets.size(); ++ i)
-		// Is one of them uri-lists?
-		if(targets[i] == "text/uri-list")
-			// Yes so stop here to not show the insertion marker
-			// The event will be delayed to
-			return false;
-
-	// Call base function otherwise
-	return Gtk::SourceView::on_drag_motion(context, x, y, time);
-}
-#endif
 
 void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
                                        const Glib::ustring& text,
@@ -715,43 +538,6 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	buffer->apply_tag(tag, begin, end);
 }
 
-void Gobby::Document::set_intro_text()
-{
-	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
-
-	// Build text
-	obby::format_string str(_(
-		"You are not subscribed to the document \"%0%\".\n\n"
-		"To view changes that others make or to edit the document "
-		"yourself, you have to subscribe to this document. Use the "
-		"following button to perform this.\n\n"
-	) );
-	str << m_doc.get_title();
-
-	// Set it
-	buf->set_text(str.str() );
-
-	// Add child anchor for the button
-	Glib::RefPtr<Gtk::TextChildAnchor> anchor =
-		buf->create_child_anchor(buf->end() );
-
-	// Activate the subscribe button, if it isn't
-	m_btn_subscribe.show();
-	m_btn_subscribe.set_sensitive(true);
-
-	// Add the button to the anchor
-	add_child_at_anchor(m_btn_subscribe, anchor);
-
-	// TODO: Add people that are currently subscribed
-	set_editable(false);
-
-	// Intro text is not modified
-	get_buffer()->set_modified(false);
-
-	// Do not highlight anything until the user subscribed
-	buf->set_highlight(false);
-}
-
 void Gobby::Document::apply_preferences()
 {
 	// Editor
@@ -761,25 +547,17 @@ void Gobby::Document::apply_preferences()
 	set_smart_home_end(m_preferences.editor.homeend_smart);
 
 	// View
-	if(m_subscribed)
+	// Check preference for wrapped text
+	if(m_preferences.view.wrap_text)
 	{
-		// Check preference for wrapped text
-		if(m_preferences.view.wrap_text)
-		{
-			if(m_preferences.view.wrap_words)
-				set_wrap_mode(Gtk::WRAP_CHAR);
-			else
-				set_wrap_mode(Gtk::WRAP_WORD);
-		}
+		if(m_preferences.view.wrap_words)
+			set_wrap_mode(Gtk::WRAP_CHAR);
 		else
-		{
-			set_wrap_mode(Gtk::WRAP_NONE);
-		}
+			set_wrap_mode(Gtk::WRAP_WORD);
 	}
 	else
 	{
-		// Wrap when not subscribed (intro text)
-		set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+		set_wrap_mode(Gtk::WRAP_NONE);
 	}
 
 	set_show_line_numbers(m_preferences.view.linenum_display);
