@@ -12,6 +12,7 @@ endif
 
 noinst_HEADERS = inc/io/main_connection.hpp
 noinst_HEADERS += inc/io/buffer_wrapper.hpp
+noinst_HEADERS += inc/atomic.hpp
 noinst_HEADERS += inc/config.hpp
 noinst_HEADERS += inc/common.hpp
 noinst_HEADERS += inc/encoding.hpp
@@ -59,6 +60,7 @@ else
 gobby_SOURCES = src/io/main_connection_generic.cpp
 endif
 gobby_SOURCES += src/io/buffer_wrapper.cpp
+gobby_SOURCES += src/atomic.cpp
 gobby_SOURCES += src/config.cpp
 gobby_SOURCES += src/encoding.cpp
 gobby_SOURCES += src/mimemap.cpp
