@@ -28,6 +28,12 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
    m_lbl_color(_("Color:"), Gtk::ALIGN_RIGHT)
 {
+	// TODO: Read default color as random one from tom's color map
+	Gdk::Color default_color;
+	default_color.set_red(0xcccc);
+	default_color.set_green(0xcccc);
+	default_color.set_blue(0xffff);
+
 	Glib::ustring host =
 		config["join"]["host"].get(Glib::ustring("localhost") );
 	unsigned int port =
@@ -35,7 +41,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
 	Glib::ustring name =
 		config["join"]["name"].get(Glib::get_user_name() );
 	Gdk::Color color =
-		config["join"]["color"].get(Gdk::Color("black") );
+		config["join"]["color"].get(default_color);
 
 	m_ent_host.set_text(host);
 

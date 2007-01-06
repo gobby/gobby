@@ -32,10 +32,16 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
 	m_ent_port.set_increments(1, 256);
 
 	// TODO: Share user settings between create and join dialog
+	// TODO: Read default color as random one from tom's color map
+	Gdk::Color default_color;
+	default_color.set_red(0xcccc);
+	default_color.set_green(0xcccc);
+	default_color.set_blue(0xffff);
+
 	Glib::ustring name =
 		config["create"]["name"].get(Glib::get_user_name() );
 	Gdk::Color color =
-		config["create"]["color"].get(Gdk::Color("black") );
+		config["create"]["color"].get(Gdk::Color(default_color) );
 
 	m_ent_name.set_text(name);
 	m_btn_color.set_color(color);
