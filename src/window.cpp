@@ -417,6 +417,13 @@ void Gobby::Window::on_document_open()
 	if(!m_last_path.empty() )
 		dlg.set_current_folder(m_last_path);
 
+	// Create open_as_edited toggle
+	Gtk::CheckButton open_as_edited_check_button(
+		_("Hilight documents to appear written by you") );
+	dlg.get_vbox()->pack_start(open_as_edited_check_button,
+		Gtk::PACK_SHRINK);
+	open_as_edited_check_button.show();
+
 	// Create buttons to close it
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
@@ -434,7 +441,8 @@ void Gobby::Window::on_document_open()
 		for(std::list<Glib::ustring>::iterator iter = list.begin();
 		    iter != list.end();
 		    ++ iter)
-			open_local_file(*iter);
+			open_local_file(*iter,
+				open_as_edited_check_button.get_active() );
 	}
 }
 
@@ -822,7 +830,8 @@ void Gobby::Window::update_title_bar(const Document& document)
 	}
 }
 
-void Gobby::Window::open_local_file(const Glib::ustring& file)
+void Gobby::Window::open_local_file(const Glib::ustring& file,
+                                    bool open_as_edited)
 {
 	try
 	{
@@ -833,7 +842,8 @@ void Gobby::Window::open_local_file(const Glib::ustring& file)
 		// TODO: Convert file to UTF-8
 		m_buffer->create_document(
 			Glib::path_get_basename(file),
-			convert_to_utf8(Glib::file_get_contents(file))
+			convert_to_utf8(Glib::file_get_contents(file)),
+			open_as_edited
 		);
 	}
 	catch(Glib::Exception& e)

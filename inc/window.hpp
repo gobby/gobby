@@ -105,7 +105,8 @@ protected:
 	Document& get_current_document();
 	void apply_preferences();
 	void update_title_bar(const Document& doc);
-	void open_local_file(const Glib::ustring& file);
+	void open_local_file(const Glib::ustring& file,
+	                     bool open_as_edited = 0);
 	void save_local_file(Document& doc, const Glib::ustring& file);
 	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message,
