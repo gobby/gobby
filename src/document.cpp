@@ -564,7 +564,13 @@ Gtk::TextIter Gobby::Document::insert_impl(const Gtk::TextIter& iter,
 	begin.backward_chars(g_utf8_strlen(str.c_str(), -1));
 
 	tag_text(begin, result, author);
-	return result;
+
+	// Left gravity cursor on remote insert
+	if(result == m_buffer->get_insert()->get_iter() )
+		m_buffer->move_mark(m_buffer->get_insert(), begin);
+
+	if(result == m_buffer->get_selection_bound()->get_iter() )
+		m_buffer->move_mark(m_buffer->get_selection_bound(), begin);
 
 	return result;
 }
