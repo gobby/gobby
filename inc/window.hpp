@@ -135,11 +135,11 @@ protected:
 	Gtk::Frame m_frame_list;
 	Gtk::Frame m_frame_text;
 
+	Header m_header;
+
 	Folder m_folder;
 	UserList m_userlist;
 	Chat m_chat;
-
-	Header m_header;
 	StatusBar m_statusbar;
 
 	// obby
@@ -153,5 +153,3 @@ protected:
 }
 
 #endif // _GOBBY_WINDOW_HPP_
-
-

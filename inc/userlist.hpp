@@ -32,10 +32,10 @@ namespace Gobby
 
 /** List showing users that are participating in the obby session.
  */
-class UserList : public Gtk::ScrolledWindow
+class UserList: public Gtk::ScrolledWindow
 {
 public:
-	class Columns : public Gtk::TreeModel::ColumnRecord
+	class Columns: public Gtk::TreeModel::ColumnRecord
 	{
 	public:
 		Columns();
@@ -47,12 +47,12 @@ public:
 		Gtk::TreeModelColumn<bool> subscribed;
 	};
 
-	UserList(const Folder& folder);
+	UserList(Header& header, const Folder& folder);
 	~UserList();
 
 	// Calls from the user folder
 	// TODO: Replace them by signal handlers from buf
-	// TODO: Context menu to show/hide non-connected users
+	// TODO: TreeView mit connecteten und nicht connecteten usern
 	// TODO: Nix auswaehlbar machen?
 	virtual void obby_start(obby::local_buffer& buf);
 	virtual void obby_end();
@@ -74,6 +74,10 @@ protected:
 	 */
 	Gtk::TreeModel::iterator find_user(const Glib::ustring& name) const;
 	void add_user(const obby::user& user);
+
+	/** Reference to header.
+	 */
+	Header& m_header;
 
 	/** Currently selected document.
 	 */

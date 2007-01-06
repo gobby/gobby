@@ -42,15 +42,15 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 	// Set SourceLanguage by file extension
 	Glib::ustring mime_type =
 		folder.get_mime_map().get_mime_type_by_file(doc.get_title() );
+
 	if(!mime_type.empty() )
 	{
-		Glib::RefPtr<Gtk::SourceLanguagesManager> manager =
+		Glib::RefPtr<const Gtk::SourceLanguagesManager> manager =
 			folder.get_lang_manager();
 		Glib::RefPtr<Gtk::SourceLanguage> language = 
 			manager->get_language_from_mime_type(mime_type);
 
-		if(language)
-			buf->set_language(language);
+		set_language(language);
 	}
 
 	// Insert user tags into the tag table
@@ -714,6 +714,7 @@ void Gobby::Document::set_intro_text()
 		buf->create_child_anchor(buf->end() );
 
 	// Activate the subscribe button, if it isn't
+	m_btn_subscribe.show();
 	m_btn_subscribe.set_sensitive(true);
 
 	// Add the button to the anchor

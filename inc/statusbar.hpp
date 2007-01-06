@@ -28,15 +28,16 @@
 #include <obby/local_document_info.hpp>
 #include <obby/local_buffer.hpp>
 #include "document.hpp"
+#include "header.hpp"
 #include "folder.hpp"
 
 namespace Gobby
 {
 
-class StatusBar : public Gtk::Frame
+class StatusBar: public Gtk::Frame
 {
 public:
-	StatusBar(const Folder& folder);
+	StatusBar(Header& header, const Folder& folder);
 	virtual ~StatusBar();
 
 	void update_language(Document& document);
@@ -56,6 +57,8 @@ public:
 	virtual void on_show();
 
 protected:
+	Header& m_header;
+
 	Gtk::HBox m_box;
 	Gtk::Label m_language;
 	Gtk::Label m_connection;

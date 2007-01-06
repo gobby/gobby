@@ -16,6 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdexcept>
 #include <gtkmm/box.h>
 #include <gtkmm/stock.h>
 
@@ -52,6 +53,11 @@ Glib::ustring Gobby::Folder::TabLabel::get_label() const
 	return m_label.get_text();
 }
 
+void Gobby::Folder::TabLabel::set_close_sensitive(bool sensitive)
+{
+	m_button.set_sensitive(sensitive);
+}
+
 void Gobby::Folder::TabLabel::set_modified(bool modified)
 {
 	if(modified)
@@ -76,32 +82,26 @@ Gobby::Folder::TabLabel::close_event()
 	return m_button.signal_clicked();
 }
 
-v v v v v v v
-Gobby::Folder::Folder(const Preferences& preferences)
-v v v v v v v
- : Gtk::Notebook(), m_preferences(preferences), m_running(false)
-*************
-v v v v v v v
-Gobby::Folder::Folder()
- : Gtk::Notebook(), m_running(false),
-   m_lang_manager(Gtk::SourceLanguagesManager::create() )
-*************
-Gobby::Folder::Folder(const Preferences& preferences)
- : Gtk::Notebook(), m_preferences(preferences), m_running(false)
-#ifdef WITH_GTKSOURCEVIEW
-   , m_lang_manager(Gtk::SourceLanguagesManager::create() )
-#endif
-^ ^ ^ ^ ^ ^ ^
-^ ^ ^ ^ ^ ^ ^
-*************
- : Gtk::Notebook(), m_preferences(preferences), m_running(false),
-   m_lang_manager(Gtk::SourceLanguagesManager::create() )
-^ ^ ^ ^ ^ ^ ^
+Gobby::Folder::Folder(Header& header,
+                      const Preferences& preferences):
+	Gtk::Notebook(), m_header(header), m_preferences(preferences),
+	m_buffer(NULL), m_block_language(false)
 {
-}
-
-Gobby::Folder::~Folder()
-{
+	for(std::list<Header::LanguageWrapper>::const_iterator iter =
+		m_header.action_view_syntax_languages.begin();
+	    iter != m_header.action_view_syntax_languages.end();
+	    ++ iter)
+	{
+		iter->get_action()->signal_activate().connect(
+			sigc::bind(
+				sigc::mem_fun(
+					*this,
+					&Folder::on_language_changed
+				),
+				iter->get_language()
+			)
+		);
+	}
 }
 
 const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
@@ -109,31 +109,35 @@ const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
 	return m_mime_map;
 }
 
-Glib::RefPtr<Gtk::SourceLanguagesManager>
+Glib::RefPtr<const Gtk::SourceLanguagesManager>
 Gobby::Folder::get_lang_manager() const
 {
-	return m_lang_manager;
+	return m_header.get_lang_manager();
 }
 
 void Gobby::Folder::obby_start(obby::local_buffer& buf)
 {
+	// Remove existing pages from older session
 	while(get_n_pages() )
 		remove_page(0);
 
+	// Disable all document items, there are no documents upon start
+	enable_document_items(DOCUMENT_ITEMS_DISABLE_ALL);
+
 	set_sensitive(true);
-	m_running = true;
+	m_buffer = &buf;
 }
 
 void Gobby::Folder::obby_end()
 {
+	m_buffer = NULL;
+
 	// Insensitive just the text editor to allow to scroll and tab between
 	// the documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
 		static_cast<DocWindow*>(
 			get_nth_page(i)
 		)->get_document().set_sensitive(false);
-
-	m_running = false;
 }
 
 void Gobby::Folder::obby_user_join(const obby::user& user)
@@ -236,7 +240,7 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 	TabLabel* label = Gtk::manage(new TabLabel(
 		"<span foreground=\"#666666\">" +
 		escapehtml(document.get_title() ) + "</span>"));
-	label->set_use_markup();
+	label->set_use_markup(true);
 
 	// Connect close event
 	label->close_event().connect(
@@ -264,6 +268,14 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 	// Append document's title as new page to the notebook
 	append_page(*new_wnd, *label);
 
+	// Set close sensitivity according to subscription status of
+	// new document
+	static_cast<TabLabel*>(get_tab_label(*new_wnd))->
+		set_close_sensitive(new_doc.is_subscribed() );
+
+	// Document items are enabled in switch_page callback which is called
+	// by append_page if this is the first document.
+
 	// Show child
 	new_wnd->show_all();
 }
@@ -281,6 +293,19 @@ void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
 		{
 			// Remove page
 			remove_page(*doc);
+
+			// No more pages left?
+			if(get_n_pages() == 0)
+			{
+				// TODO: Check if this is useless because
+				// switch_page may be emitted by remove_page.
+
+				// Disable menu items that deal with docuents
+				enable_document_items(
+					DOCUMENT_ITEMS_DISABLE_ALL
+				);
+			}
+
 			break;
 		}
 	}
@@ -322,7 +347,38 @@ void Gobby::Folder::set_tab_colour(DocWindow& win, const Glib::ustring& colour)
 	TabLabel& label = *static_cast<TabLabel*>(get_tab_label(win) );
 	label.set_label("<span foreground=\"" + colour + "\">" +
 		escapehtml(label.get_label() ) + "</span>");
-	label.set_use_markup();	
+	label.set_use_markup(true);
+}
+
+void Gobby::Folder::enable_document_items(DocumentItems which)
+{
+	m_header.action_session_document_save->
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+	m_header.action_session_document_save_as->
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+	m_header.action_session_document_close->
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+	m_header.action_view_preferences->
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_NOSUBSCRIBE);
+	m_header.action_view_syntax->
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+}
+
+void Gobby::Folder::on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language)
+{
+	// TODO: Gobby::Block
+	if(m_block_language) return;
+
+	m_block_language = true;
+	Gtk::Widget* wnd = get_nth_page(get_current_page() );
+
+	// wnd should not be NULL because the language radio items are only
+	// enabled if
+	if(wnd == NULL)
+		throw std::logic_error("Gobby::Folder::on_language_changed");
+
+	static_cast<DocWindow*>(wnd)->get_document().set_language(language);
+	m_block_language = false;
 }
 
 void Gobby::Folder::on_document_modified_changed(DocWindow& window)
@@ -344,7 +400,18 @@ void Gobby::Folder::on_document_subscribe(const obby::user& user,
 {
 	if(&window.get_document().get_document().get_buffer().get_self() ==
 	   &user)
+	{
 		set_tab_colour(window, "#000000");
+		static_cast<TabLabel*>(get_tab_label(window))->
+			set_close_sensitive(true);
+
+		if(page_num(window) == get_current_page() )
+		{
+			enable_document_items(
+				DOCUMENT_ITEMS_ENABLE_ALL
+			);
+		}
+	}
 }
 
 void Gobby::Folder::on_document_unsubscribe(const obby::user& user,
@@ -352,7 +419,18 @@ void Gobby::Folder::on_document_unsubscribe(const obby::user& user,
 {
 	if(&window.get_document().get_document().get_buffer().get_self() ==
 	   &user)
+	{
 	   	set_tab_colour(window, "#555555");
+		static_cast<TabLabel*>(get_tab_label(window))->
+			set_close_sensitive(false);
+
+		if(page_num(window) == get_current_page() )
+		{
+			enable_document_items(
+				DOCUMENT_ITEMS_ENABLE_NOSUBSCRIBE
+			);
+		}
+	}
 }
 
 void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
@@ -363,29 +441,53 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	// has been closed. Therefore, the corresponding obby::documents do
 	// not exist anymore, and updating the statusbar accesses these.
 
+	DocWindow& window = *static_cast<DocWindow*>(get_nth_page(page_num));
 	// However, if the obby session has been closed the statusbar is empty,
 	// there is no need to update anything.
-	if(m_running)
+	Glib::RefPtr<Gtk::SourceLanguage> language =
+		window.get_document().get_language();
+
+	// Set correct menu item
+	if(!m_block_language)
+	{
+		m_block_language = true;
+		for(std::list<Header::LanguageWrapper>::const_iterator iter =
+			m_header.action_view_syntax_languages.begin();
+		    iter != m_header.action_view_syntax_languages.end();
+		    ++ iter)
+		{
+			if(iter->get_language() == language)
+				iter->get_action()->set_active(true);
+
+		}
+		m_block_language = false;
+	}
+
+	if(m_buffer != NULL)
 	{
 		// Another document has been selected: Emit tabswitched
-		m_signal_tab_switched.emit(
-			static_cast<DocWindow*>(
-				get_nth_page(page_num)
-			)->get_document()
-		);
+		m_signal_tab_switched.emit(window.get_document() );
 	}
+
+	enable_document_items(
+		window.get_document().is_subscribed() ?
+			DOCUMENT_ITEMS_ENABLE_ALL :
+			DOCUMENT_ITEMS_ENABLE_NOSUBSCRIBE
+	);
 
 	// TODO: We should put flags into the labels which specify if the
 	// current document is subscribed and/or modified.
-	DocWindow& window = *static_cast<DocWindow*>(get_nth_page(page_num));
+	// TODO: Why do we need to set the tab colour here? o_O!
+	//  -- armin 11/5/2005
 	if(window.get_document().is_subscribed() )
 		set_tab_colour(window, "#000000");
+
 	Gtk::Notebook::on_switch_page(page, page_num);
 }
 
 void Gobby::Folder::on_document_cursor_moved(Document& document)
 {
-	// Update in the currently visible document? Update statusbar.
+	// Update in the currently visible document? Cursor position has moved.
 	Gtk::Widget* wnd = get_nth_page(get_current_page() );
 	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
 		m_signal_document_cursor_moved.emit(document);
@@ -393,12 +495,16 @@ void Gobby::Folder::on_document_cursor_moved(Document& document)
 
 void Gobby::Folder::on_document_content_changed(DocWindow& window)
 {
-	// Update in the currently visible document? Update statusbar.
 	Gtk::Widget* wnd = get_nth_page(get_current_page() );
 	if(wnd == &window)
+	{
+		// Update in the currently visible document? Update statusbar.
 		m_signal_document_content_changed.emit(window.get_document());
+	}
 	else
 	{
+		// Show red tab colour otherwise indicating that someone edited
+		// this document.
 		set_tab_colour(window, "#CC0000");
 	}
 }
@@ -410,6 +516,3 @@ void Gobby::Folder::on_document_language_changed(Document& document)
 	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
 		m_signal_document_language_changed.emit(document);
 }
-
-
-

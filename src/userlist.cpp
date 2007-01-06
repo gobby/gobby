@@ -65,8 +65,8 @@ Gobby::UserList::Columns::~Columns()
 {
 }
 
-Gobby::UserList::UserList(const Folder& folder)
- : m_info(NULL)
+Gobby::UserList::UserList(Header& header, const Folder& folder):
+	m_header(header), m_info(NULL)
 {
 	m_list_data = Gtk::ListStore::create(m_list_cols);
 	m_list_view.set_model(m_list_data);

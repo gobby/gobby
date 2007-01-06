@@ -21,23 +21,20 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/uimanager.h>
+#include <gtkmm/radioaction.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/toolbar.h>
-#include <obby/user.hpp>
-#include <obby/local_document_info.hpp>
-#include <obby/local_buffer.hpp>
-#include "features.hpp"
-#include "document.hpp"
-#include "folder.hpp"
-#include "preferences.hpp"
+
+#include "sourceview/sourcelanguage.hpp"
+#include "sourceview/sourcelanguagesmanager.hpp"
 
 namespace Gobby
 {
 
-class Header : public Gtk::VBox
+class Header: public Gtk::VBox
 {
 public:
-	class Error : public Glib::Error
+	class Error: public Glib::Error
 	{
 	public:
 		enum Code {
@@ -49,7 +46,23 @@ public:
 		Code code() const;
 	};
 
-	typedef sigc::signal<void> signal_session_create_type;
+	class LanguageWrapper
+	{
+	public:
+		typedef Glib::RefPtr<Gtk::RadioAction> Action;
+		typedef Glib::RefPtr<Gtk::SourceLanguage> Language;
+
+		LanguageWrapper(Action action,
+		                Language language);
+
+		Action get_action() const;
+		Language get_language() const;
+	protected:
+		Action m_action;
+		Language m_language;
+	};
+
+/*	typedef sigc::signal<void> signal_session_create_type;
 	typedef sigc::signal<void> signal_session_join_type;
 	typedef sigc::signal<void> signal_session_save_type;
 	typedef sigc::signal<void> signal_session_quit_type;
@@ -65,20 +78,24 @@ public:
 	typedef sigc::signal<void, const Glib::RefPtr<Gtk::SourceLanguage>&>
 		signal_view_language_type;
 	typedef sigc::signal<void> signal_about_type;
-	typedef sigc::signal<void> signal_quit_type;
+	typedef sigc::signal<void> signal_quit_type;*/
 
-	Header(const Folder& folder);
-	~Header();
+	Header();
 
 	// Access to accelerator groups of the ui manager
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
 	Glib::RefPtr<const Gtk::AccelGroup> get_accel_group() const;
 
+	Glib::RefPtr<Gtk::SourceLanguagesManager>
+		get_lang_manager();
+	Glib::RefPtr<const Gtk::SourceLanguagesManager>
+		get_lang_manager() const;
+
 	// Access to toolbar & menubar
 	Gtk::MenuBar& get_menubar();
 	Gtk::Toolbar& get_toolbar();
 
-	// Disables actions that deal with documents. The windowscalls this
+/*	// Disables actions that deal with documents. The windowscalls this
 	// after all remaining documents have been closed after a connection
 	// loss.
 	void disable_document_actions();
@@ -106,10 +123,9 @@ public:
 	void obby_user_join(const obby::user& user);
 	void obby_user_part(const obby::user& user);
 	void obby_document_insert(obby::local_document_info& document);
-	void obby_document_remove(obby::local_document_info& document);
+	void obby_document_remove(obby::local_document_info& document);*/
 
-protected:
-	void on_app_session_create();
+/*	void on_app_session_create();
 	void on_app_session_join();
 	void on_app_session_save();
 	void on_app_session_quit();
@@ -126,10 +142,47 @@ protected:
 	void on_app_about();
 	void on_app_quit();
 
-	void on_folder_tab_switched(Document& document);
+	void on_folder_tab_switched(Document& document);*/
 
-	Glib::RefPtr<Gtk::UIManager> m_ui_manager;
-	Glib::RefPtr<Gtk::ActionGroup> m_group_app;
+	const Glib::RefPtr<Gtk::ActionGroup> group_app;
+	const Glib::RefPtr<Gtk::ActionGroup> group_session;
+	const Glib::RefPtr<Gtk::ActionGroup> group_edit;
+	const Glib::RefPtr<Gtk::ActionGroup> group_user;
+	const Glib::RefPtr<Gtk::ActionGroup> group_view;
+	const Glib::RefPtr<Gtk::ActionGroup> group_help;
+
+	const Glib::RefPtr<Gtk::Action> action_app;
+	const Glib::RefPtr<Gtk::Action> action_app_session_create;
+	const Glib::RefPtr<Gtk::Action> action_app_session_join;
+	const Glib::RefPtr<Gtk::Action> action_app_session_save;
+	const Glib::RefPtr<Gtk::Action> action_app_session_quit;
+	const Glib::RefPtr<Gtk::Action> action_app_quit;
+
+	const Glib::RefPtr<Gtk::Action> action_session;
+	const Glib::RefPtr<Gtk::Action> action_session_document_create;
+	const Glib::RefPtr<Gtk::Action> action_session_document_open;
+	const Glib::RefPtr<Gtk::Action> action_session_document_save;
+	const Glib::RefPtr<Gtk::Action> action_session_document_save_as;
+	const Glib::RefPtr<Gtk::Action> action_session_document_close;
+
+	const Glib::RefPtr<Gtk::Action> action_edit;
+	const Glib::RefPtr<Gtk::Action> action_edit_preferences;
+
+	const Glib::RefPtr<Gtk::Action> action_user;
+	const Glib::RefPtr<Gtk::Action> action_user_set_password;
+	const Glib::RefPtr<Gtk::Action> action_user_set_colour;
+
+	const Glib::RefPtr<Gtk::Action> action_view;
+	const Glib::RefPtr<Gtk::Action> action_view_preferences;
+	const Glib::RefPtr<Gtk::Action> action_view_syntax;
+	std::list<LanguageWrapper> action_view_syntax_languages;
+
+	const Glib::RefPtr<Gtk::Action> action_help;
+	const Glib::RefPtr<Gtk::Action> action_help_about;
+
+protected:
+	const Glib::RefPtr<Gtk::UIManager> m_ui_manager;
+	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 
 	Gtk::MenuBar* m_menubar;
 	Gtk::Toolbar* m_toolbar;
@@ -139,15 +192,15 @@ protected:
 	/** Boolean variable whether we are currently toggling line numbers to
 	 * prevent recursion.
 	 */
-	bool m_toggle_language;
+	//bool m_toggle_language;
 
 	// Callback for sorting
-	static bool language_sort_callback(
+	/*static bool language_sort_callback(
 		const Glib::RefPtr<Gtk::SourceLanguage>& lang1,
 		const Glib::RefPtr<Gtk::SourceLanguage>& lang2
-	);
+	);*/
 
-	signal_session_create_type m_signal_session_create;
+/*	signal_session_create_type m_signal_session_create;
 	signal_session_join_type m_signal_session_join;
 	signal_session_save_type m_signal_session_save;
 	signal_session_quit_type m_signal_session_quit;
@@ -162,10 +215,9 @@ protected:
 	signal_view_preferences_type m_signal_view_preferences;
 	signal_view_language_type m_signal_view_language;
 	signal_about_type m_signal_about;
-	signal_quit_type m_signal_quit;
+	signal_quit_type m_signal_quit;*/
 };
 
 }
 
 #endif // _GOBBY_HEADER_HPP_
-

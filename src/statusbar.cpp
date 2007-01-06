@@ -23,8 +23,9 @@
 #include "common.hpp"
 #include "statusbar.hpp"
 
-Gobby::StatusBar::StatusBar(const Folder& folder)
- : Frame(), 
+Gobby::StatusBar::StatusBar(Header& header, const Folder& folder)
+ : Frame(),
+   m_header(header),
    m_language("", Gtk::ALIGN_LEFT),
    m_connection("Not connected", Gtk::ALIGN_LEFT),
    m_position("", Gtk::ALIGN_LEFT)

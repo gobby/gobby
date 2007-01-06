@@ -52,47 +52,49 @@ Gobby::Window::Window()
 #ifdef WITH_HOWL
    m_zeroconf(NULL),
 #endif
-   m_folder(m_preferences), m_userlist(m_folder),
-   m_header(m_folder), m_statusbar(m_folder)
+   m_header(),
+   m_folder(m_header, m_preferences),
+   m_userlist(m_header, m_folder),
+   m_statusbar(m_header, m_folder)
 {
 	// Header
-	m_header.session_create_event().connect(
+	m_header.action_app_session_create->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
-	m_header.session_join_event().connect(
+	m_header.action_app_session_join->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_session_join) );
-	m_header.session_save_event().connect(
+	m_header.action_app_session_save->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_session_save) );
-	m_header.session_quit_event().connect(
+	m_header.action_app_session_quit->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_session_quit) );
+	m_header.action_app_quit->signal_activate().connect(
+		sigc::mem_fun(*this, &Window::on_quit) );
 
-	m_header.document_create_event().connect(
+	m_header.action_session_document_create->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_document_create) );
-	m_header.document_open_event().connect(
+	m_header.action_session_document_open->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_document_open) );
-	m_header.document_save_event().connect(
+	m_header.action_session_document_save->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_document_save) );
-	m_header.document_save_as_event().connect(
+	m_header.action_session_document_save_as->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_document_save_as) );
-	m_header.document_close_event().connect(
+	m_header.action_session_document_close->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
 
-	m_header.edit_preferences_event().connect(
+	m_header.action_edit_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_edit_preferences) );
 
-	m_header.user_set_password_event().connect(
+	m_header.action_user_set_password->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
-	m_header.user_set_colour_event().connect(
+	m_header.action_user_set_colour->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_colour) );
 	
-	m_header.view_preferences_event().connect(
+	m_header.action_view_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_view_preferences) );
-	m_header.view_language_event().connect(
-		sigc::mem_fun(*this, &Window::on_view_language) );
+	/*m_header.view_language_event().connect(
+		sigc::mem_fun(*this, &Window::on_view_language) );*/
 
-	m_header.about_event().connect(
+	m_header.action_help_about->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_about) );
-	m_header.quit_event().connect(
-		sigc::mem_fun(*this, &Window::on_quit) );
 
 	// Folder
 	m_folder.document_close_event().connect(
@@ -103,8 +105,12 @@ Gobby::Window::Window()
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
-	//m_chat.chat_event().connect(
-	//	sigc::mem_fun(*this, &Window::on_chat) );
+	// Initialise header sensitivity
+	m_header.group_session->set_sensitive(false);
+	m_header.group_user->set_sensitive(false);
+	m_header.group_view->set_sensitive(false);
+	m_header.action_app_session_save->set_sensitive(false);
+	m_header.action_app_session_quit->set_sensitive(false);
 
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
@@ -200,8 +206,20 @@ void Gobby::Window::obby_start()
 	targets.push_back(Gtk::TargetEntry("text/uri-list") );
 	drag_dest_set(targets);
 
+	m_header.group_session->set_sensitive(true);
+	m_header.group_user->set_sensitive(true);
+	m_header.group_view->set_sensitive(true);
+	m_header.action_app_session_save->set_sensitive(true);
+	m_header.action_app_session_quit->set_sensitive(true);
+
+	m_header.action_app_session_create->set_sensitive(false);
+	m_header.action_app_session_join->set_sensitive(false);
+
+	m_header.action_user_set_password->set_sensitive(
+		dynamic_cast<obby::client_buffer*>(m_buffer.get()) != NULL
+	);
+
 	// Delegate start of obby session
-	m_header.obby_start(*m_buffer);
 	m_folder.obby_start(*m_buffer);
 	m_userlist.obby_start(*m_buffer);
 	m_chat.obby_start(*m_buffer);
@@ -239,11 +257,19 @@ void Gobby::Window::obby_end()
 	if(!m_buffer.get() ) return;
 
 	// Tell GUI components that the session ended
-	m_header.obby_end();
 	m_folder.obby_end();
 	m_userlist.obby_end();
 	m_chat.obby_end();
 	m_statusbar.obby_end();
+
+	m_header.group_session->set_sensitive(false);
+	m_header.group_user->set_sensitive(false);
+	m_header.group_view->set_sensitive(false);
+	m_header.action_app_session_save->set_sensitive(false);
+	m_header.action_app_session_quit->set_sensitive(false);
+
+	m_header.action_app_session_create->set_sensitive(true);
+	m_header.action_app_session_join->set_sensitive(true);
 
 	// Delete buffer
 	m_buffer.reset();
@@ -787,7 +813,6 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
 	// Tell user join to components
-	m_header.obby_user_join(user);
 	m_folder.obby_user_join(user);
 	m_userlist.obby_user_join(user);
 	m_chat.obby_user_join(user);
@@ -797,7 +822,6 @@ void Gobby::Window::on_obby_user_join(const obby::user& user)
 void Gobby::Window::on_obby_user_part(const obby::user& user)
 {
 	// Tell user part to components
-	m_header.obby_user_part(user);
 	m_folder.obby_user_part(user);
 	m_userlist.obby_user_part(user);
 	m_chat.obby_user_part(user);
@@ -820,7 +844,6 @@ void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 	obby::local_document_info& local_doc =
 		dynamic_cast<obby::local_document_info&>(document);
 
-	m_header.obby_document_insert(local_doc);
 	m_folder.obby_document_insert(local_doc);
 	m_userlist.obby_document_insert(local_doc);
 	m_chat.obby_document_insert(local_doc);
@@ -858,7 +881,6 @@ void Gobby::Window::on_obby_document_remove(obby::document_info& document)
 	obby::local_document_info& local_doc =
 		dynamic_cast<obby::local_document_info&>(document);
 
-	m_header.obby_document_remove(local_doc);
 	m_folder.obby_document_remove(local_doc);
 	m_userlist.obby_document_remove(local_doc);
 	m_chat.obby_document_remove(local_doc);
@@ -1027,8 +1049,12 @@ void Gobby::Window::close_document(DocWindow& document)
 			on_document_save();
 			break;
 		case Gtk::RESPONSE_CANCEL:
-			/* Close the document without being saved */
+		case Gtk::RESPONSE_DELETE_EVENT:
+			/* Do not close the document */
 			return;
+			break;
+		default:
+			throw std::logic_error("Gobby::Window::close_document");
 			break;
 		}
 	}
@@ -1036,20 +1062,17 @@ void Gobby::Window::close_document(DocWindow& document)
 	if(m_buffer.get() != NULL)
 	{
 		// Send remove document request
-		m_buffer->document_remove(
+		// TODO: Gobby::Document should do this.
+		document.get_document().get_document().unsubscribe();
+		/*m_buffer->document_remove(
 			document.get_document().get_document()
-		);
+		);*/
 	}
 	else
 	{
 		// Buffer does not exist: Maybe the connection has been lost
 		// or something: Just remove the document from the folder.
 		m_folder.remove_page(document);
-
-		// If there are no more documents, disable
-		// save and close buttons in header
-		if(!m_folder.get_n_pages() )
-			m_header.disable_document_actions();
 	}
 }
 
