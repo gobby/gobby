@@ -855,12 +855,11 @@ void Gobby::Window::open_local_file(const Glib::ustring& file,
 	{
 		// Set local file path for the document_insert callback
 		m_local_file_path = file;
+
 		std::string content(
 			convert_to_utf8(Glib::file_get_contents(file)) );
 		convert2unix(content);
 
-		// TODO: Set path in newly generated document
-		// TODO: Convert file to UTF-8
 		m_buffer->create_document(
 			Glib::path_get_basename(file), content, open_as_edited
 		);
