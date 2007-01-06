@@ -21,6 +21,7 @@
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/stock.h>
 #include <libobby/client_buffer.hpp>
 #include <libobby/host_buffer.hpp>
 #include "buffer_wrapper.hpp"
@@ -272,9 +273,13 @@ void Gobby::Window::on_document_create()
 void Gobby::Window::on_document_open()
 {
 	Gtk::FileChooserDialog dlg(*this, "Open new document");
+	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		m_buffer->create_document(dlg.get_filename() );
+		m_buffer->create_document(
+			Glib::path_get_basename(dlg.get_filename()) );
 	}
 }
 
