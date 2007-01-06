@@ -25,10 +25,9 @@ Normal:
   * Central directory support (#82)
   * UI: Closing documents should not close them for other people (#83)
   * End-of-document cursor position behaves weirdly. (#84)
-  * Server exit causes clients to exit (#85)
   * Gobby should save backups (#87)
-  * Gobby starting similar to LiveHelp irc on wikicities (#88)
-  * "quit" should confirm (#93)
+  * obby:// protocol handler (#88)
+  * "Quit" should confirm (#93)
   * Make it harder to lose document changes (#96)
 
 Minor:
@@ -41,8 +40,10 @@ Enhancement:
   * Remote document browsing support (#75)
   * Session Management (#76)
   * Hyperlinks on chat sessions (#80)
-  * Chat enhancements (#90)
+  * Server exit causes clients to exit (#85)
+  * Chat background filled with user colours (#90)
   * Locate participants (#95)
+  * Automatic live storage of documents and chat logs  (#98)
 
 
 45: High CPU load while writing
@@ -175,35 +176,19 @@ and causes person A's cursor to go to the position after the newline.
 Instead, person A's cursor should remain before the newline, so that they 
 can continue typing on their portion of the document.
 
-85: Server exit causes clients to exit
---------------------------------------
-When a server disconnects, clients shouldn't exit (potentially losing 
-text).  Instead, they should just indicate to the user that they are 
-disconnected, and allow them to save and continue editing text.  If the 
-server comes back online, everyone's changes can be sent in.
-
 87: Gobby should save backups
 -----------------------------
 Gobby should save local backups in case of crashes.  
 
-88: Gobby starting similar to LiveHelp irc on wikicities
---------------------------------------------------------
-Mattis: 
+88: obby:// protocol handler
+----------------------------
+Gobby should register itself as a handler for the obby:// protocol. Like 
+this sites could link to obby servers for live sessions.
 
-[http://wikicities.com/index.php/Special:Recentchanges wikicities: recent 
-changes], down on the left there is a button ''Live help''. Clicking it it 
-takes you right into the wikicities channel on irc. A similar button 
-starting up gobby would be cool.  
-
-Armin:
- * uff, that takes reimplementing libobby completely in Java, building a 
-Client around it.
- * probably registering a obby://-protocoll at the system
-
-93: "quit" should confirm
+93: "Quit" should confirm
 -------------------------
-When you close a session, you should need to confirm so you don't lose your 
-work.
+When you close a session, Gobby should warn if you try to close unsaved 
+documents.
 
 96: Make it harder to lose document changes
 -------------------------------------------
@@ -241,6 +226,8 @@ the document with the other side cursor.
 This way, one would be able to show document parts to the others without 
 hassle and pair programming with gobby would be improved.
 
+(Depends on #53)
+
 76: Session Management
 ----------------------
 I noticed there is a revision number displayed in gobby, there should be a 
@@ -253,11 +240,17 @@ later on with the changes made by each user retained.
 Links on chat could be transformed to hyperlinks and sent to the O.S. to be 
 opened by the default browser.
 
-90: Chat enhancements
----------------------
- * The background of lines in the chat box should be colour-coded with the 
+85: Server exit causes clients to exit
+--------------------------------------
+When a server disconnects, clients shouldn't exit (potentially losing 
+text).  Instead, they should just indicate to the user that they are 
+disconnected, and allow them to save and continue editing text.  If the 
+server comes back online, everyone's changes can be sent in.
+
+90: Chat background filled with user colours
+--------------------------------------------
+The background of lines in the chat box should be colour-coded with the 
 colour of the user who wrote them.
- * Timestamps should be added to the chat box.
 
 95: Locate participants
 -----------------------
@@ -269,4 +262,11 @@ http://www.codingmonkeys.de/subethaedit/images/sessionbig.png
 
 Related to:
 http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/ticket/53
+
+98: Automatic live storage of documents and chat logs 
+------------------------------------------------------
+Gobby should publish documents and chat logs to a web page so that people 
+who don't have the Gobby software can still read the ongoing document and 
+conversation.  It could do this by saving to a local filesystem in a 
+specified location, or by webdav, or possibly by some other means.
 
