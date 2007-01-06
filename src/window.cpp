@@ -48,7 +48,7 @@ Gobby::Window::Window()
    m_config(Glib::get_home_dir() + "/.gobby/config.xml"),
    m_preferences(m_config), m_buffer(NULL),
 #ifdef WITH_HOWL
-   m_zeroconf(NULL),
+   m_zeroconf(),
 #endif
    m_folder(m_preferences), m_header(m_folder), m_statusbar(m_folder)
 {
@@ -219,8 +219,7 @@ void Gobby::Window::obby_end()
 	// Delete buffer and zeroconf
 	m_buffer.reset();
 #ifdef WITH_HOWL
-	delete m_zeroconf;
-	m_zeroconf = NULL;
+	m_zeroconf.unpublish_all();
 #endif
 }
 
@@ -252,8 +251,7 @@ void Gobby::Window::on_session_create()
 			buffer->set_global_password(password);
 #ifdef WITH_HOWL
 			// Publish the newly created session via ZeroConf
-			m_zeroconf = new obby::zeroconf();
-			m_zeroconf->publish(name, port);
+			m_zeroconf.publish(name, port);
 #endif
 
 			// Start session
@@ -265,7 +263,12 @@ void Gobby::Window::on_session_create()
 
 void Gobby::Window::on_session_join()
 {
+#ifndef WITH_HOWL
 	JoinDialog dlg(*this, m_config);
+#else
+	JoinDialog dlg(*this, m_config, &m_zeroconf);
+#endif
+
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		dlg.hide();

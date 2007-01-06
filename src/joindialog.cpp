@@ -30,7 +30,8 @@ Gobby::JoinDialog::Columns::Columns()
 }
 #endif
 
-Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
+Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
+                              void* zeroconf)
  : DefaultDialog(_("Join obby session"), parent, true, true),
    m_config(config),
    m_table(4, 2),
@@ -39,7 +40,8 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
    m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
 #ifdef WITH_HOWL
-   , m_ep_discover("Local network")
+   , m_ep_discover("Local network"),
+     m_zeroconf(*static_cast<obby::zeroconf*>(zeroconf))
 #endif
 {
 	// TODO: Read default color as random one from tom's color map

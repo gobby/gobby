@@ -56,7 +56,8 @@ public:
 	};
 #endif
 
-	JoinDialog(Gtk::Window& parent, Gobby::Config& config);
+	JoinDialog(Gtk::Window& parent, Gobby::Config& config,
+	           void* zeroconf = NULL);
 	virtual ~JoinDialog();
 
 	Glib::ustring get_host() const;
@@ -95,7 +96,7 @@ protected:
 	Gtk::TreeView m_session_view;
 	Glib::RefPtr<Gtk::ListStore> m_session_list;
 	Columns m_session_cols;
-	obby::zeroconf m_zeroconf;
+	obby::zeroconf& m_zeroconf;
 	sigc::connection m_timer_connection;
 #endif
 

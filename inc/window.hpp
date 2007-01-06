@@ -129,7 +129,7 @@ protected:
 	// obby
 	std::auto_ptr<obby::local_buffer> m_buffer;
 #ifdef WITH_HOWL
-	obby::zeroconf* m_zeroconf;
+	obby::zeroconf m_zeroconf;
 #endif
 	sigc::connection m_timer_conn;
 };
