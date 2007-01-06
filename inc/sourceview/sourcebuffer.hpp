@@ -24,6 +24,7 @@
 
 #include <gtkmm/textbuffer.h>
 #include <gtksourceview/gtksourcebuffer.h>
+#include "sourceview/sourcelanguage.hpp"
 
 typedef struct _GtkSourceBuffer GtkSourceBuffer;
 typedef struct _GtkSourceBufferClass GtkSourceBufferClass;
@@ -54,6 +55,8 @@ protected:
 	explicit SourceBuffer(GtkSourceBuffer* castitem);
 
 public:
+	typedef TextBuffer::iterator iterator;
+
 	virtual ~SourceBuffer();
 
 	static GType get_type() G_GNUC_CONST;
@@ -67,15 +70,57 @@ public:
 
 protected:
 	// Default Signal handlers
-	// ...
+	virtual void on_can_undo(bool can_undo);
+	virtual void on_can_redo(bool can_redo);
+	virtual void on_highlight_updated(const iterator& begin,
+	                                  const iterator& end);
+	virtual void on_marker_updated(const iterator& pos);
+
 protected:
 	SourceBuffer();
+	explicit SourceBuffer(const Glib::RefPtr<SourceLanguage>& language);
 	// explicit SourceBuffer(const Glib::RefPtr<TagTable>& tag_table);
 
 public:
 	static Glib::RefPtr<SourceBuffer> create();
+	static Glib::RefPtr<SourceBuffer> create(
+		const Glib::RefPtr<SourceLanguage>& language
+	);
+
 	// static Glib::RefPtr<SourceBuffer> create(const Glib::RefPtr<TagTable>& tag_table);
+
+	bool get_check_brackets() const;
+	void set_check_brackets(bool check_brackets);
+//	void set_bracket_match_style(const Glib::RefPtr<SourceTagStyle>& style);
 	
+	bool get_highlight() const;
+	void set_highlight(bool highlight);
+
+	gint get_max_undo_levels() const;
+	void set_max_undo_levels(gint max_undo_levels);
+
+	Glib::RefPtr<SourceLanguage> get_language() const;
+	void set_language(const Glib::RefPtr<SourceLanguage> language);
+
+	gunichar get_escape_char() const;
+	void set_escape_char(gunichar escape_char);
+
+	bool can_undo() const;
+	bool can_redo() const;
+
+	void undo();
+	void redo();
+
+	void begin_not_undoable_action();
+	void end_not_undoable_action();
+
+	// TODO: Marker stuff
+
+	Glib::SignalProxy1<void, bool> signal_can_undo();
+	Glib::SignalProxy1<void, bool> signal_can_redo();
+	Glib::SignalProxy2<void, const iterator&, const iterator&>
+		signal_highlight_updated();
+	Glib::SignalProxy1<void, const iterator&> signal_marker_updated();
 };
 
 }

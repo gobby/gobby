@@ -75,6 +75,8 @@ public:
 	GtkSourceLanguagesManager* gobj_copy();
 
 public:
+	static Glib::RefPtr<SourceLanguagesManager> create();
+
 	Glib::SListHandle<Glib::RefPtr<SourceLanguage> > 
 		get_available_languages() const;
 

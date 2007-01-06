@@ -88,6 +88,12 @@ GtkSourceLanguagesManager* Gtk::SourceLanguagesManager::gobj_copy()
 	return gobj();
 }
 
+Glib::RefPtr<Gtk::SourceLanguagesManager>
+Gtk::SourceLanguagesManager::create()
+{
+	return Glib::RefPtr<SourceLanguagesManager>(new SourceLanguagesManager);
+}
+
 Glib::SListHandle<Glib::RefPtr<Gtk::SourceLanguage> >
 Gtk::SourceLanguagesManager::get_available_languages() const
 {
@@ -110,7 +116,8 @@ Gtk::SourceLanguagesManager::get_language_from_mime_type(
 		gtk_source_languages_manager_get_language_from_mime_type(
 			const_cast<GtkSourceLanguagesManager*>(gobj()),
 			mime_type.c_str()
-		) // TODO: Take new copy?
+		),
+		true 
 	);
 			
 }

@@ -49,6 +49,13 @@ protected:
 	// You could prevent the original default signal handlers being called
 	// by overriding the *_impl method.
 	// TODO: .
+	static void can_undo_callback(GtkSourceBuffer* self, gboolean can_undo);
+	static void can_redo_callback(GtkSourceBuffer* self, gboolean can_redo);
+	static void highlight_updated_callback(GtkSourceBuffer* self,
+	                                       GtkTextIter* begin,
+	                                       GtkTextIter* end);
+	static void marker_updated_callback(GtkSourceBuffer* self,
+	                                    GtkTextIter* pos);
 
 	// Callbacks (virtual functions):
 };

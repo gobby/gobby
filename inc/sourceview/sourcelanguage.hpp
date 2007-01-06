@@ -52,7 +52,11 @@ private:
 	SourceLanguage(const SourceLanguage& other);
 	SourceLanguage& operator=(const SourceLanguage& other);
 
-protected:
+//protected:
+// TODO: SourceLanguage() is needed by Glib::wrap(), but should be protected,
+// though...
+public:
+	SourceLanguage();
 	explicit SourceLanguage(const Glib::ConstructParams& construct_params);
 	explicit SourceLanguage(GtkSourceLanguage* castitem);
 
