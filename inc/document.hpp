@@ -51,18 +51,10 @@ public:
 	 */
 	void get_cursor_position(unsigned int& row, unsigned int& col);
 
-	/** Returns the amount of unsynced operations in this document.
-	 */
-	unsigned int get_unsynced_changes_count() const;
-
 	/** Selects the given region and scrolls to the selected text.
 	 */
 	void set_selection(const Gtk::TextIter& begin,
 	                   const Gtk::TextIter& end);
-
-	/** Returns the current document revision.
-	 */
-	unsigned int get_revision() const;
 
 	/** Returns the title of the file.
 	 */
@@ -222,8 +214,16 @@ protected:
 	 */
 	void apply_preferences();
 
+	/** The underlaying obby document info.
+	 */
 	obby::local_document_info& m_doc;
-	const Folder& m_folder;
+
+	/** Connections to obby's signals.
+	 */
+	sigc::connection m_conn_ins_before;
+	sigc::connection m_conn_ins_after;
+	sigc::connection m_conn_del_before;
+	sigc::connection m_conn_del_after;
 
 	/** Whether we are subscribed to this document.
 	 */

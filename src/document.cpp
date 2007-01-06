@@ -61,7 +61,7 @@ namespace
 Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
                           const Preferences& preferences)
  : Gtk::SourceView(),
-   m_doc(doc), m_folder(folder), m_subscribed(false),
+   m_doc(doc), m_subscribed(false),
    m_preferences(preferences), m_editing(true),
    m_btn_subscribe(_("Subscribe") ), m_title(doc.get_title() )
 {
@@ -131,7 +131,7 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 	buf->signal_apply_tag().connect(
 		sigc::mem_fun(*this, &Document::on_apply_tag_after), true);
 
-	// Obby signal handlers
+	// Obby signal handler
 	doc.subscribe_event().connect(
 		sigc::mem_fun(*this, &Document::on_obby_user_subscribe) );
 	doc.unsubscribe_event().connect(
@@ -245,35 +245,6 @@ void Gobby::Document::set_selection(const Gtk::TextIter& begin,
 {
         get_buffer()->select_range(begin, end);
         scroll_to(get_buffer()->get_insert(), 0.1);
-}
-
-unsigned int Gobby::Document::get_unsynced_changes_count() const
-{
-	return 0;
-	/*
-	// Get document
-	obby::local_document* local_doc = m_doc.get_document();
-	// No document? Seems that we are not subscribed
-	if(!local_doc) return 0;
-	// Cast to client document
-	obby::client_document* client_doc = 
-		dynamic_cast<obby::client_document*>(local_doc);
-	// No client document? Host is always synced
-	if(!client_doc) return 0;
-	// Document returns amount otherwise
-	return client_doc->unsynced_count();*/
-}
-
-unsigned int Gobby::Document::get_revision() const
-{
-	return 0;
-	/*
-	// Get document
-	obby::local_document* local_doc = m_doc.get_document();
-	// No document? Seems that we are not subscribed (-> no revision)
-	if(!local_doc) return 0;
-	// Get revision from obby document
-	return local_doc->get_revision();*/
 }
 
 const Glib::ustring& Gobby::Document::get_title() const
@@ -452,18 +423,14 @@ void Gobby::Document::on_obby_self_subscribe()
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
 
 	// Install signal handlers
-	doc.insert_event().before().connect(
+	m_conn_ins_before = doc.insert_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_insert_before) );
-	doc.insert_event().after().connect(
+	m_conn_ins_after = doc.insert_event().after().connect(
 		sigc::mem_fun(*this, &Document::on_obby_insert_after) );
-	doc.delete_event().before().connect(
+	m_conn_del_before = doc.delete_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_delete_before) );
-	doc.delete_event().after().connect(
+	m_conn_del_after = doc.delete_event().after().connect(
 		sigc::mem_fun(*this, &Document::on_obby_delete_after) );
-	/*doc.change_event().before().connect(
-		sigc::mem_fun(*this, &Document::on_obby_change_before) );
-	doc.change_event().after().connect(
-		sigc::mem_fun(*this, &Document::on_obby_change_after) );*/
 
 	// Set initial text
 	m_editing = true;
@@ -539,6 +506,12 @@ void Gobby::Document::on_obby_self_unsubscribe()
 			"Gobby::Document::on_obby_self_unsubscribe"
 		);
 	}
+
+	// Remove signal handlers from obby document
+	m_conn_ins_before.disconnect();
+	m_conn_ins_after.disconnect();
+	m_conn_del_before.disconnect();
+	m_conn_del_after.disconnect();
 
 	// We are not subscribed anymore
 	m_subscribed = false;
@@ -739,15 +712,7 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	if(!tag)
 		throw std::logic_error("Gobby::Document::update_user_colour");
 
-	// Apply tag twice to show it up immediately. I do not know why this
-	// is necessary but if we do only apply it once, we have to wait for
-	// the next event that refreshes the current line. I tried appending
-	// queue_draw() after the apply_tag call, but it did not help
-	// - Armin
-//	for(int i = 0; i < 2; ++ i)
-//	// Applying once seems to work now?
-//	// - Armin (29.07.2005)
-		buffer->apply_tag(tag, begin, end);
+	buffer->apply_tag(tag, begin, end);
 }
 
 void Gobby::Document::set_intro_text()
