@@ -18,8 +18,8 @@
 
 #include <cassert>
 #include <obby/format_string.hpp>
-#include "common.hpp"
 #include "io/buffer_wrapper.hpp"
+#include "common.hpp"
 
 #ifdef WIN32
 obby::io::client::client(Gtk::Window& window, const net6::address& addr)
