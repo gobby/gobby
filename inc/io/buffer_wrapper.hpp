@@ -273,10 +273,11 @@ public:
 
 #ifdef WIN32
 	host_buffer(Gtk::Window& window
-	           const Glib::ustring& username, int red, int green, int blue);
+	            const Glib::ustring& username,
+	            const colour& colour);
 #else
-	host_buffer(const Glib::ustring& username, int red,
-	            int green, int blue);
+	host_buffer(const Glib::ustring& username,
+	            const colour& colour);
 #endif
 
 protected:

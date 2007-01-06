@@ -76,7 +76,7 @@ void Gobby::HostProgressDialog::on_thread(Thread& thread)
 #ifdef WIN32
 				parent,
 #endif
-				username, red, green, blue
+				username, obby::colour(red, green, blue)
 			)
 		);
 

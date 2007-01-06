@@ -176,7 +176,7 @@ void Gobby::JoinProgressDialog::on_welcome()
 	unsigned int green = m_color.get_green() * 255 / 65535;
 	unsigned int blue = m_color.get_blue() * 255 / 65535;
 
-	m_buffer->login(m_username, red, green, blue);
+	m_buffer->login(m_username, obby::colour(red, green, blue) );
 
 	// Update status message
 	set_status_text(_("Login packet sent, waiting for response...") );

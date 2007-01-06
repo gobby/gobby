@@ -162,9 +162,9 @@ void Gobby::UserList::obby_user_colour(const obby::user& user)
 	// Get user with this name
 	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
 	// Get new colour
-	unsigned int red = user.get_red();
-	unsigned int green = user.get_green();
-	unsigned int blue = user.get_blue();
+	unsigned int red = user.get_colour().get_red();
+	unsigned int green = user.get_colour().get_green();
+	unsigned int blue = user.get_colour().get_blue();
 	// Update it
 	(*iter)[m_list_cols.colour] = create_coloured_pixbuf(red, green, blue);
 }
@@ -250,9 +250,9 @@ void Gobby::UserList::add_user(const obby::user& user)
 {
 	Gtk::TreeModel::Row row = *(m_list_data->append() );
 
-	unsigned int red = user.get_red();
-	unsigned int green = user.get_green();
-	unsigned int blue = user.get_blue();
+	unsigned int red = user.get_colour().get_red();
+	unsigned int green = user.get_colour().get_green();
+	unsigned int blue = user.get_colour().get_blue();
 
 	row[m_list_cols.name] = user.get_name();
 	row[m_list_cols.colour] = create_coloured_pixbuf(red, green, blue);

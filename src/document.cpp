@@ -65,9 +65,9 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 
 		// Build user color
 		Gdk::Color color;
-		color.set_red(iter->get_red() * 65535 / 255);
-		color.set_green(iter->get_green() * 65535 / 255);
-		color.set_blue(iter->get_blue() * 65535 / 255);
+		color.set_red(iter->get_colour().get_red() * 65535 / 255);
+		color.set_green(iter->get_colour().get_green() * 65535 / 255);
+		color.set_blue(iter->get_colour().get_blue() * 65535 / 255);
 
 		// Assign color to tag
 		tag->property_background_gdk() = color;
@@ -789,9 +789,9 @@ void Gobby::Document::update_tag_colour(const obby::user& user)
 
 	// Build color
 	Gdk::Color color;
-	color.set_red(user.get_red() * 65535 / 255);
-	color.set_green(user.get_green() * 65535 / 255);
-	color.set_blue(user.get_blue() * 65535 / 255);
+	color.set_red(user.get_colour().get_red() * 65535 / 255);
+	color.set_green(user.get_colour().get_green() * 65535 / 255);
+	color.set_blue(user.get_colour().get_blue() * 65535 / 255);
 
 	// Set/Update color
 	tag->property_background_gdk() = color;

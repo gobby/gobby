@@ -604,9 +604,9 @@ void Gobby::Window::on_user_set_colour()
 	const obby::user& user = m_buffer->get_self();
 	Gdk::Color color;
 
-	color.set_red(user.get_red() * 65535 / 255);
-	color.set_green(user.get_green() * 65535 / 255);
-	color.set_blue(user.get_blue() * 65535 / 255);
+	color.set_red(user.get_colour().get_red() * 65535 / 255);
+	color.set_green(user.get_colour().get_green() * 65535 / 255);
+	color.set_blue(user.get_colour().get_blue() * 65535 / 255);
 	dlg.get_colorsel()->set_current_color(color);
 
 	// Run it
@@ -615,10 +615,12 @@ void Gobby::Window::on_user_set_colour()
 		// Convert GDK color to obby color, set new color
 		Gdk::Color color = dlg.get_colorsel()->get_current_color();
 		m_buffer->set_colour(
-			color.get_red() * 255 / 65535,
-			color.get_green() * 255 / 65535,
-			color.get_blue() * 255 / 65535
-			);
+			obby::colour(
+				color.get_red() * 255 / 65535,
+				color.get_green() * 255 / 65535,
+				color.get_blue() * 255 / 65535
+			)
+		);
 	}
 }
 

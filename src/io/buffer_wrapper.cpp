@@ -346,13 +346,13 @@ obby::io::server_buffer::new_net(unsigned int port)
 
 #ifdef WIN32
 obby::io::host_buffer::host_buffer(Gtk::Window& window,
-                                   const Glib::ustring& username, int red,
-                                   int green, int blue)
+                                   const Glib::ustring& username,
+                                   const colour& colour)
 #else
-obby::io::host_buffer::host_buffer(const Glib::ustring& username, int red,
-                                   int green, int blue)
+obby::io::host_buffer::host_buffer(const Glib::ustring& username,
+                                   const colour& colour)
 #endif
- : obby::host_buffer(username, red, green, blue),
+ : obby::host_buffer(username, colour),
 #ifdef WIN32
    server_buffer(window),
 #else
