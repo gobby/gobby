@@ -51,8 +51,8 @@ AC_CACHE_SAVE
 
 # Check for the Gtkmm version available (either 2.6 or 2.8).
 PKG_CHECK_GTKMM
-if test "x$GTKMM" = "x28" ; then
-  AC_DEFINE([GTKMM_IS_28], 1, [Defined if Gtkmm's version is 2.8 or greater])
+if test "x$GTKMM_VER" = "x28" ; then
+  AC_DEFINE([GTKMM_GEQ_28], 1, [Defined if Gtkmm's version is 2.8 or greater])
 fi
 
 # Check for howl in libobby.
