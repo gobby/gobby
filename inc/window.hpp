@@ -55,6 +55,9 @@ protected:
 
 #ifdef WITH_GTKSOURCEVIEW
 	void on_document_line_numbers();
+	void on_document_language(
+		const Glib::RefPtr<Gtk::SourceLanguage>& lang
+	);
 #endif
 
 	void on_about();

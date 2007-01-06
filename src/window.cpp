@@ -63,6 +63,8 @@ Gobby::Window::Window()
 #ifdef WITH_GTKSOURCEVIEW
 	m_header.document_line_numbers_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_line_numbers) );
+	m_header.document_language_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_language) );
 #endif
 
 	m_header.about_event().connect(
@@ -396,11 +398,25 @@ void Gobby::Window::on_document_close()
 void Gobby::Window::on_document_line_numbers()
 {
 	// Get current page
-	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	Document* doc = static_cast<Document*>(page);
+	Document& doc = *static_cast<Document*>(
+		m_folder.get_nth_page(m_folder.get_current_page() )
+	);
 
 	// Toggle line number flag
-	doc->set_show_line_numbers(!doc->get_show_line_numbers() );
+	doc.set_show_line_numbers(!doc.get_show_line_numbers() );
+}
+
+void Gobby::Window::on_document_language(
+	const Glib::RefPtr<Gtk::SourceLanguage>& lang
+)
+{
+	// Get current page
+	Document& doc = *static_cast<Document*>(
+		m_folder.get_nth_page(m_folder.get_current_page() )
+	);
+
+	// Set given language
+	doc.set_language(lang);
 }
 #endif
 

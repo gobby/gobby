@@ -150,7 +150,9 @@ void Gtk::SourceLanguage::set_mime_types(
 Glib::RefPtr<Gtk::SourceLanguage>
 Glib::wrap(GtkSourceLanguage* object, bool take_copy)
 {
+	// TODO: Put this into somewhere to be called immediately(?)
 	Gtk::SourceLanguage::sourcelanguage_class_.init();
+
 	return Glib::RefPtr<Gtk::SourceLanguage>(
 		dynamic_cast<Gtk::SourceLanguage*>(Glib::wrap_auto(
 			reinterpret_cast<GObject*>(object),

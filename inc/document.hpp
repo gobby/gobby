@@ -38,7 +38,10 @@ class Document : public Gtk::ScrolledWindow
 {
 public:
 	typedef sigc::signal<void> signal_cursor_moved_type;
-	typedef sigc::signal<void> signal_changed_type;
+	typedef sigc::signal<void> signal_content_changed_type;
+#ifdef WITH_GTKSOURCEVIEW
+	typedef sigc::signal<void> signal_language_changed_type;
+#endif
 
 	Document(obby::document& doc, const Folder& folder);
 	virtual ~Document();
@@ -58,10 +61,14 @@ public:
 	 */
 	unsigned int get_revision() const;
 
+#ifdef WITH_GTKSOURCEVIEW
 	/** Returns the currently selected Gtk::SourceLanguage.
 	 */
-#ifdef WITH_GTKSOURCEVIEW
 	Glib::RefPtr<Gtk::SourceLanguage> get_language() const;
+
+	/** Sets a new Language to use.
+	 */
+	void set_language(const Glib::RefPtr<Gtk::SourceLanguage>& language);
 #endif
 
 	/** Returns the document content. Equivalent to
@@ -81,14 +88,19 @@ public:
 	void set_show_line_numbers(bool show);
 #endif
 
-	/** Signal which will be emitted if the document gets changed by a
-	 * network event.
-	 */
-	signal_changed_type changed_event() const;
-
 	/** Signal which will be emitted if the cursor's position changed.
 	 */
 	signal_cursor_moved_type cursor_moved_event() const;
+
+	/** Signal which will be emitted if the document's content was changed.
+	 */
+	signal_content_changed_type content_changed_event() const;
+
+#ifdef WITH_GTKSOURCEVIEW
+	/** Signal which will be emitted if the document's language has changed.
+	 */
+	signal_language_changed_type language_changed_event() const;
+#endif
 
 	/** Calls from the folder.
 	 */
@@ -100,7 +112,8 @@ protected:
 	 */
 	void on_obby_insert(const obby::insert_record& record);
 	void on_obby_delete(const obby::delete_record& record);
-	void on_obby_change();
+	void on_obby_change_before();
+	void on_obby_change_after();
 
 	/** TextBuffer signal handlers.
 	 */
@@ -145,7 +158,10 @@ protected:
 	bool m_editing;
 	
 	signal_cursor_moved_type m_signal_cursor_moved;
-	signal_changed_type m_signal_changed;
+	signal_content_changed_type m_signal_content_changed;
+#ifdef WITH_GTKSOURCEVIEW
+	signal_language_changed_type m_signal_language_changed;
+#endif
 private:
 	/** Handler for update_user_colour(): It removes the given tag in
 	 * the given range if it is a gobby-user-tag.

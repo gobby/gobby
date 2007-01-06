@@ -536,12 +536,23 @@ Gtk::SourceBuffer::set_language(const Glib::RefPtr<SourceLanguage> language)
 {
 	// Add new reference to the language because the C instance holds a
 	// new reference now.
-	g_object_ref(G_OBJECT(language->gobj()) );
+	if(language)
+	{
+		// TODO: Is this required?
+		g_object_ref(G_OBJECT(language->gobj()) );
 
-	gtk_source_buffer_set_language(
-		gobj(),
-		language->gobj()
-	);
+		gtk_source_buffer_set_language(
+			gobj(),
+			language->gobj()
+		);
+	}
+	else
+	{
+		gtk_source_buffer_set_language(
+			gobj(),
+			NULL
+		);
+	}
 }
 
 gunichar Gtk::SourceBuffer::get_escape_char() const

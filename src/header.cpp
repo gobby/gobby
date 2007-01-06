@@ -18,6 +18,7 @@
 
 #include <gtkmm/stock.h>
 #include <gtkmm/toggleaction.h>
+#include <gtkmm/radioaction.h>
 #include <obby/buffer.hpp>
 
 #include "features.hpp"
@@ -45,6 +46,7 @@ namespace {
 		"    <menu action=\"MenuDocument\">"
 		"      <menuitem action=\"DocumentLineNumbers\" />"
 		"      <separator />"
+		"      <menuitem action=\"DocumentLanguageNone\" />"
 		"    </menu>"
 #endif
 		"    <menu action=\"MenuHelp\">"
@@ -78,9 +80,11 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 Gobby::Header::Header(const Folder& folder)
  : m_ui_manager(Gtk::UIManager::create() ),
    m_group_app(Gtk::ActionGroup::create() ),
-   m_group_session(Gtk::ActionGroup::create() ),
-   m_toggle_line_numbers(false)
+   m_toggle_language(false), m_toggle_line_numbers(false)
 {
+	// Add basic menu
+	m_ui_manager->add_ui_from_string(ui_desc);
+
 	// App menu
 	m_group_app->add(Gtk::Action::create("MenuApp", _("Gobby")) );
 
@@ -215,6 +219,80 @@ Gobby::Header::Header(const Folder& folder)
 			&Header::on_app_document_line_numbers
 		)
 	);
+
+	// A kind of hack to ensure that
+	// Gtk::SourceLanguage::sourcelanguage_class_.init() is called.
+	// See the TODO item in Glib::wrap(GtkSourceLanguage*, bool) in
+	// sourcelanguage.cpp
+	GtkSourceLanguage* lang = NULL;
+	Glib::wrap(lang, false);
+
+	// Get languages manager
+	Glib::RefPtr<Gtk::SourceLanguagesManager> lang_manager =
+		folder.get_lang_manager();
+
+	// Get available languages
+	std::list<Glib::RefPtr<Gtk::SourceLanguage> > lang_list =
+		lang_manager->get_available_languages();
+	
+	// Sort languages by name
+	lang_list.sort(&Header::language_sort_callback);
+
+	// Add None-Language
+	m_group_app->add(
+		Gtk::RadioAction::create(
+			m_lang_group,
+			"DocumentLanguageNone",
+			"None",
+			"Unselects the current language"
+		),
+		sigc::bind(
+			sigc::mem_fun(
+				*this,
+				&Header::on_app_document_language
+			),
+			Glib::RefPtr<Gtk::SourceLanguage>()
+		)
+	);
+
+	// Add languages
+	std::list<Glib::RefPtr<Gtk::SourceLanguage> >::const_iterator iter;
+	for(iter = lang_list.begin(); iter != lang_list.end(); ++ iter)
+	{
+		// Get current language 
+		Glib::RefPtr<Gtk::SourceLanguage> language = *iter;
+
+		// Add language to action group
+		m_group_app->add(
+			Gtk::RadioAction::create(
+				m_lang_group,
+				"DocumentLanguage" + language->get_name(), 
+				language->get_name(),
+				_("Selects ") + language->get_name() +
+					_(" as language")
+			),
+			sigc::bind(
+				sigc::mem_fun(
+					*this,
+					&Header::on_app_document_language
+				),
+				language
+			)
+		);
+
+		// Add menu item to UI
+		Glib::ustring xml_desc =
+			"<ui>"
+			"  <menubar name=\"MenuMainBar\">"
+			"    <menu action=\"MenuDocument\">"
+			"	<menuitem action=\"DocumentLanguage"
+				+ language->get_name() + "\" />"
+			"    </menu>"
+			"  </menubar>"
+			"</ui>";
+
+		m_ui_manager->add_ui_from_string(xml_desc);
+	}
 #endif
 
 	// Help menu
@@ -235,7 +313,6 @@ Gobby::Header::Header(const Folder& folder)
 	);
 
 	m_ui_manager->insert_action_group(m_group_app);
-	m_ui_manager->add_ui_from_string(ui_desc);
 
 	m_menubar = static_cast<Gtk::MenuBar*>(
 		m_ui_manager->get_widget("/MenuMainBar") );
@@ -338,6 +415,12 @@ Gobby::Header::signal_document_line_numbers_type
 Gobby::Header::document_line_numbers_event() const
 {
 	return m_signal_document_line_numbers;
+}
+
+Gobby::Header::signal_document_language_type
+Gobby::Header::document_language_event() const
+{
+	return m_signal_document_language;
 }
 #endif
 
@@ -465,6 +548,15 @@ void Gobby::Header::on_app_document_line_numbers()
 	if(!m_toggle_line_numbers)
 		m_signal_document_line_numbers.emit();
 }
+
+void Gobby::Header::on_app_document_language(
+	Glib::RefPtr<Gtk::SourceLanguage> lang
+)
+{
+	// Same as above
+	if(!m_toggle_language)
+		m_signal_document_language.emit(lang);
+}
 #endif
 
 void Gobby::Header::on_app_about()
@@ -482,13 +574,30 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 #ifdef WITH_GTKSOURCEVIEW
 	// We are toggling line numbers
 	m_toggle_line_numbers = true;
+	m_toggle_language = true;
 
 	// Set current line number state
 	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
 		m_group_app->get_action("DocumentLineNumbers")
 	)->set_active(document.get_show_line_numbers() );
 
+	// Set current language
+	Glib::ustring langname = document.get_language() ?
+		document.get_language()->get_name() : "None";
+	Glib::RefPtr<Gtk::RadioAction>::cast_static<Gtk::Action>(
+		m_group_app->get_action("DocumentLanguage" + langname)
+	)->set_active();
+
 	// We are no more toggling
 	m_toggle_line_numbers = false;
+	m_toggle_language = false;
 #endif
+}
+
+bool Gobby::Header::language_sort_callback(
+	const Glib::RefPtr<Gtk::SourceLanguage>& lang1,
+	const Glib::RefPtr<Gtk::SourceLanguage>& lang2
+)
+{
+	return lang1->get_name() < lang2->get_name();
 }

@@ -103,7 +103,7 @@ Gtk::SourceLanguagesManager::get_available_languages() const
 				const_cast<GtkSourceLanguagesManager*>(gobj())
 			)
 		),
-		Glib::OWNERSHIP_SHALLOW // Or OWNERSHIP_NONE? Test...
+		Glib::OWNERSHIP_NONE
 	);
 }
 

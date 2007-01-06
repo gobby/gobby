@@ -42,7 +42,12 @@ class Folder : public Gtk::Notebook
 {
 public:
 	typedef sigc::signal<void, Document&> signal_document_cursor_moved_type;
-	typedef sigc::signal<void, Document&> signal_document_changed_type;
+	typedef sigc::signal<void, Document&>
+		signal_document_content_changed_type;
+#ifdef WITH_GTKSOURCEVIEW
+	typedef sigc::signal<void, Document&>
+		signal_document_language_changed_type;
+#endif
 	typedef sigc::signal<void, Document&> signal_tab_switched_type;
 
 	Folder();
@@ -64,7 +69,12 @@ public:
 	void obby_document_remove(obby::document& document);
 
 	signal_document_cursor_moved_type document_cursor_moved_event() const;
-	signal_document_changed_type document_changed_event() const;
+	signal_document_content_changed_type
+		document_content_changed_event() const;
+#ifdef WITH_GTKSOURCEVIEW
+	signal_document_language_changed_type
+		document_language_changed_event() const;
+#endif
 	signal_tab_switched_type tab_switched_event() const;
 
 protected:
@@ -72,10 +82,17 @@ protected:
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
 
 	void on_document_cursor_moved(Document& document);
-	void on_document_changed(Document& document);
+	void on_document_content_changed(Document& document);
+#ifdef WITH_GTKSOURCEVIEW
+	void on_document_language_changed(Document& document);
+#endif
 
 	signal_document_cursor_moved_type m_signal_document_cursor_moved;
-	signal_document_changed_type m_signal_document_changed;
+	signal_document_content_changed_type m_signal_document_content_changed;
+#ifdef WITH_GTKSOURCEVIEW
+	signal_document_language_changed_type
+		m_signal_document_language_changed;
+#endif
 	signal_tab_switched_type m_signal_tab_switched;
 
 	/** Signals whether the obby session is running.

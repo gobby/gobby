@@ -100,12 +100,27 @@ void Gobby::Folder::obby_document_insert(obby::document& document)
 		)
 	);
 
-	new_doc->changed_event().connect(
+	new_doc->content_changed_event().connect(
 		sigc::bind(
-			sigc::mem_fun(*this, &Folder::on_document_changed),
+			sigc::mem_fun(
+				*this,
+				&Folder::on_document_content_changed
+			),
 			sigc::ref(*new_doc)
 		)
 	);
+
+#ifdef WITH_GTKSOURCEVIEW
+	new_doc->language_changed_event().connect(
+		sigc::bind(
+			sigc::mem_fun(
+				*this,
+				&Folder::on_document_language_changed
+			),
+			sigc::ref(*new_doc)
+		)
+	);
+#endif
 
 	// Append document's title as new page to the notebook
 	append_page(*new_doc, document.get_title());
@@ -137,11 +152,19 @@ Gobby::Folder::document_cursor_moved_event() const
 	return m_signal_document_cursor_moved;
 }
 
-Gobby::Folder::signal_document_changed_type
-Gobby::Folder::document_changed_event() const
+Gobby::Folder::signal_document_content_changed_type
+Gobby::Folder::document_content_changed_event() const
 {
-	return m_signal_document_changed;
+	return m_signal_document_content_changed;
 }
+
+#ifdef WITH_GTKSOURCEVIEW
+Gobby::Folder::signal_document_language_changed_type
+Gobby::Folder::document_language_changed_event() const
+{
+	return m_signal_document_language_changed;
+}
+#endif
 
 Gobby::Folder::signal_tab_switched_type
 Gobby::Folder::tab_switched_event() const
@@ -177,10 +200,19 @@ void Gobby::Folder::on_document_cursor_moved(Document& document)
 		m_signal_document_cursor_moved.emit(document);
 }
 
-void Gobby::Folder::on_document_changed(Document& document)
+void Gobby::Folder::on_document_content_changed(Document& document)
 {
 	// Update in the currently visible document? Update statusbar.
 	if(get_current_page() == page_num(document) )
-		m_signal_document_changed.emit(document);
+		m_signal_document_content_changed.emit(document);
 }
+
+#ifdef WITH_GTKSOURCEVIEW
+void Gobby::Folder::on_document_language_changed(Document& document)
+{
+	// Update in the currently visible document? Update statusbar.
+	if(get_current_page() == page_num(document) )
+		m_signal_document_language_changed.emit(document);
+}
+#endif
 

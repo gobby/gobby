@@ -10,7 +10,6 @@ Important:
  * User colourising does not always repaint correctly
 
 Normal:
- * Menu to switch the syntax colouring scheme.
  * Prompt before overwriting existing files when explicitly choosing path
  * Chat command infrastructure (/me, /ignore)
 

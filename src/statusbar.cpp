@@ -39,8 +39,14 @@ Gobby::StatusBar::StatusBar(const Folder& folder)
 
 	folder.document_cursor_moved_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_cursor) );
-	folder.document_changed_event().connect(
-		sigc::mem_fun(*this, &StatusBar::update_all) );
+	folder.document_content_changed_event().connect(
+		sigc::mem_fun(*this, &StatusBar::update_sync) );
+	folder.document_content_changed_event().connect(
+		sigc::mem_fun(*this, &StatusBar::update_revision) );
+#ifdef WITH_GTKSOURCEVIEW
+	folder.document_language_changed_event().connect(
+		sigc::mem_fun(*this, &StatusBar::update_language) );
+#endif
 	folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_all) );
 }

@@ -99,8 +99,10 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 		sigc::mem_fun(*this, &Document::on_obby_insert) );
 	doc.delete_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_delete) );
+	doc.change_event().before().connect(
+		sigc::mem_fun(*this, &Document::on_obby_change_before) );
 	doc.change_event().after().connect(
-		sigc::mem_fun(*this, &Document::on_obby_change) );
+		sigc::mem_fun(*this, &Document::on_obby_change_after) );
 
 	// Set initial text
 	buf->set_text(doc.get_whole_buffer() );
@@ -171,16 +173,20 @@ Gobby::Document::cursor_moved_event() const
 	return m_signal_cursor_moved;
 }
 
-Gobby::Document::signal_changed_type Gobby::Document::changed_event() const
+Gobby::Document::signal_content_changed_type
+Gobby::Document::content_changed_event() const
 {
-	return m_signal_changed;
+	return m_signal_content_changed;
 }
 
-/*Gobby::Document::signal_update_type Gobby::Document::update_event() const
+#ifdef WITH_GTKSOURCEVIEW
+Gobby::Document::signal_language_changed_type
+Gobby::Document::language_changed_event() const
 {
-	return m_signal_update;
+	return m_signal_language_changed;
 }
-*/
+#endif
+
 void Gobby::Document::get_cursor_position(unsigned int& row,
                                           unsigned int& col)
 {
@@ -221,6 +227,14 @@ unsigned int Gobby::Document::get_revision() const
 Glib::RefPtr<Gtk::SourceLanguage> Gobby::Document::get_language() const
 {
 	return m_view.get_buffer()->get_language();
+}
+
+void Gobby::Document::set_language(
+	const Glib::RefPtr<Gtk::SourceLanguage>& language
+)
+{
+	m_view.get_buffer()->set_language(language);
+	m_signal_language_changed.emit();
 }
 #endif
 
@@ -319,10 +333,14 @@ void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 	m_editing = false;
 }
 
-void Gobby::Document::on_obby_change()
+void Gobby::Document::on_obby_change_before()
+{
+}
+
+void Gobby::Document::on_obby_change_after()
 {
 	// Document changed
-	m_signal_changed.emit();
+	m_signal_content_changed.emit();
 }
 
 void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
@@ -382,17 +400,28 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 
 		// Update colour
 		update_user_colour(pos, end, user);
-	}
 
-	// Cursor position has changed
-	m_signal_cursor_moved.emit();
+		// Content has changed
+		m_signal_content_changed.emit();
+
+		// Cursor position has changed
+		// TODO: Move this out of this block?
+		m_signal_cursor_moved.emit();
+	}
 }
 
 void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
                                      const Gtk::TextBuffer::iterator& end)
 {
-	// Cursor position may have changed
-	m_signal_cursor_moved.emit();
+	if(!m_editing)
+	{
+		// Cursor position may have changed
+		m_signal_cursor_moved.emit();
+
+		// Content has changed
+		// TODO: Move this out of this block?
+		m_signal_content_changed.emit();
+	}
 }
 
 void Gobby::Document::on_mark_set(
