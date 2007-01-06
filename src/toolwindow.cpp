@@ -19,9 +19,31 @@
 #include "toolwindow.hpp"
 
 Gobby::ToolWindow::ToolWindow(Gtk::Window& parent):
-	Gtk::Window(Gtk::WINDOW_TOPLEVEL)
+	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
+	m_x(0), m_y(0), m_w(0), m_h(0)
 {
 	set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 	set_transient_for(parent);
 	set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
+}
+
+// GTK+ does not remember the position of toolwindows when
+// the parent window has been moved or resized - workaround
+void Gobby::ToolWindow::on_show()
+{
+	Gtk::Window::on_show();
+
+	if(m_x == 0 && m_y == 0 && m_w == 0 && m_h == 0)
+		return;
+
+	move(m_x, m_y);
+	resize(m_w, m_h);
+}
+
+void Gobby::ToolWindow::on_hide()
+{
+	get_position(m_x, m_y);
+	get_size(m_w, m_h);
+
+	Gtk::Window::on_hide();
 }

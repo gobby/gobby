@@ -81,12 +81,12 @@ void Gobby::ToggleWindow::on_activate()
 void Gobby::ToggleWindow::on_show()
 {
 	m_action->set_active(true);
-	Gtk::Window::on_show();
+	ToolWindow::on_show();
 }
 
 void Gobby::ToggleWindow::on_hide()
 {
 	m_action->set_active(false);
-	Gtk::Window::on_hide();
+	ToolWindow::on_hide();
 }
 

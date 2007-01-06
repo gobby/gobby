@@ -30,6 +30,12 @@ class ToolWindow: public Gtk::Window
 {
 public:
 	ToolWindow(Gtk::Window& parent);
+
+protected:
+	virtual void on_show();
+	virtual void on_hide();
+
+	int m_x, m_y, m_w, m_h;
 };
 
 } // namespace obby
