@@ -55,6 +55,8 @@ protected:
 	void add_line(obby::user& user, const Glib::ustring& message);
 	void on_chat();
 
+	obby::local_buffer* m_buffer;
+
 	signal_chat_type m_signal_chat;
 
 	Gtk::Image m_img_btn;

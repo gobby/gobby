@@ -22,7 +22,8 @@
 #include "chat.hpp"
 
 Gobby::Chat::Chat()
- : Gtk::VBox(), m_img_btn(Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON)
+ : Gtk::VBox(), m_buffer(NULL),
+   m_img_btn(Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON)
 {
 	m_btn_chat.set_label(_("Send"));
 	m_btn_chat.set_image(m_img_btn);
@@ -60,6 +61,8 @@ Gobby::Chat::signal_chat_type Gobby::Chat::chat_event() const
 
 void Gobby::Chat::obby_start(obby::local_buffer& buf)
 {
+	m_buffer = &buf;
+
 	m_log_chat.clear();
 	m_ent_chat.set_sensitive(true);
 	m_btn_chat.set_sensitive(true);
@@ -69,6 +72,8 @@ void Gobby::Chat::obby_start(obby::local_buffer& buf)
 
 void Gobby::Chat::obby_end()
 {
+	m_buffer = NULL;
+
 	m_ent_chat.clear_history();
 	m_ent_chat.set_sensitive(false);
 	m_btn_chat.set_sensitive(false);
@@ -110,7 +115,17 @@ void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
 
 void Gobby::Chat::add_line(obby::user& user, const Glib::ustring& message)
 {
-	m_log_chat.log("<" + user.get_name() + "> " + message, "black");
+	obby::user self = m_buffer->get_self();
+	Glib::ustring colour;
+	// Highlight the message if the user's nickname is found in it,
+	// but not if the message is coming from the user itself.
+	if( (user != self) &&
+            (message.find(self.get_name() ) != Glib::ustring::npos) )
+		colour = "darkred";
+	else
+		colour = "black";
+
+	m_log_chat.log("<" + user.get_name() + "> " + message, colour);
 }
 
 void Gobby::Chat::obby_server_message(const Glib::ustring& message)
