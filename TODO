@@ -104,4 +104,80 @@ when loading one from a file.
 We should transmit error codes instead of error strings in net6. The client 
 may build a (localised, see #14) string out of it.
 
-22: Repaint o
+22: Repaint of user colour incorrect
+------------------------------------
+If a user writes anything into a Gobby document, the background gets 
+colourised with this users colour, but the operation is not performed 
+immediately but with the next redraw of the cursor or the line or 
+something.
+
+6: Highlighting of own nickname in chat window
+----------------------------------------------
+Chat messages of others should be highlighted if the own nickname is 
+mentioned in them.
+
+8: Flags for obby::user
+-----------------------
+Extend obby::user with a 'flags' field. The idea behind is to introduce a 
+flag like obby::user::connected which specifies if this user is currently 
+connected to the obby session. We would not need the user_table classes any 
+longer and resolve the confusion of obby::user vs. obby::user_table::user.
+
+However, this feature _is_ dangerous because many code would have to be 
+adjusted to ignore non-connected user. Maybe we can provide two iterators: 
+user_iterator and connected_user_iterator or something. Or 
+user_iterator::step(user::flags).
+
+We should think and discuss about this before doing anything.
+
+10: Syncronise documents on request
+-----------------------------------
+Currently, all documents are synced to incoming clients. Having large 
+and/or many documents, this causes much network traffic even if a user just 
+wants to edit one of these documents.
+
+The idea is to send just a document list on connection. Users can subscribe 
+and unsubscribe to documents which means that the document content is 
+synced and they can edit the documents collaboratively until they 
+unsubscribe.
+
+create_document should subscribe the creating user automatically.
+
+Of course, Gobby also needs many adjustments to support this feature.
+
+12: Multiple user lists
+-----------------------
+Put a Gtk::Notebook around the user list and provide 4 user lists:
+
+ * whole session: Display all users that are or were in the session since 
+beginning
+ * current session: Display all users that are currently in the session
+ * whole document: Display all users that are or were subscribed to the 
+selected document
+ * current document: Display all users that are currently subscribed to the 
+selected document
+
+14: Translate failure messages with gettext
+-------------------------------------------
+The failure messages issued by net6 should be localised and translated with 
+gettext.
+
+20: Session serialisation
+-------------------------
+When multiple persons are editing a document the situation that one 
+(perhaps the host) has to leave is quite common. ''libobby'' should support 
+some kind of session serialisation while preserving the history (and thus 
+the attribution of each character to the corresponding user) so that it 
+could be easily resumed. Probably (possibly compressed) XML should be used 
+to serialise a tree of objects. The following features should be 
+implemented:
+
+ * Load/save documents to/from file and/or memory (while preserving 
+history)
+ * Load/save complete obby session
+
+23: Auto indentation
+--------------------
+GtkSourceView seems to support auto indentation. Gobby should provide an 
+option to enable or disable this feature.
+
