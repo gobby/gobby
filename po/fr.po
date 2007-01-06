@@ -22,6 +22,8 @@ msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
 msgstr ""
+"Le texte n'a pas pu être converti en UTF-8 : Soit le codage n'est pas connu, "
+"soit il s'agit de « données binaires »."
 
 #: src/chat.cpp:28
 msgid "Send"
