@@ -24,8 +24,11 @@ Gobby::Document::Document(obby::document& doc)
 #ifdef WITH_GTKSOURCEVIEW
 	m_view.set_show_line_numbers(true);
 #endif
-
 	Glib::RefPtr<Gtk::TextBuffer> buf = m_view.get_buffer();
+
+	Pango::FontDescription desc;
+	desc.set_family("monospace");
+	m_view.modify_font(desc);
 
 	// Textbuffer signal handlers
 	buf->signal_insert().connect(
