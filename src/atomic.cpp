@@ -41,5 +41,5 @@ Gobby::Atomic& Gobby::Atomic::operator=(bool value)
 
 Gobby::Atomic::operator bool() const
 {
-	return g_atomic_int_get(&m_val) != 0;
+	return g_atomic_int_get(const_cast<gint*>(&m_val) ) != 0;
 }
