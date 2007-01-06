@@ -985,35 +985,50 @@ void Gobby::Window::close_document(DocWindow& document)
 	// Check for the document being modified
 	if(document.get_document().get_modified() )
 	{
-		// Setup confirmation string
-		obby::format_string str(_(
-			"The document \"%0%\" has been changed since it was "
-			"saved to disk. Are you sure that you want to close it?"
-		) );
-		str << document.get_document().get_title();
+		// Setup confirmation strings
+		obby::format_string primary_str(
+			_("Save changes to document \"%0%\" before closing?")
+		);
+
+		obby::format_string secondary_str(
+			_("If you don't save, changes will be discarded but "
+			  "may still be retrieved if you re-subscribe to the "
+			  "document.")
+		);
+
+		// TODO: Remember the time the user saved the document.
+		primary_str << document.get_document().get_title();
 
 		// Setup dialog
-		Gtk::MessageDialog dlg(*this, str.str(), false,
-			Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+		Gtk::MessageDialog dlg(*this, primary_str.str(), false,
+			Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE, true);
+
+		// Set secondary text
+		dlg.set_secondary_text(secondary_str.str() );
+
 		// Add button to allow the user to save the dialog
-		dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_APPLY);
+		dlg.add_button("Close without saving", Gtk::RESPONSE_REJECT);
+		dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+		dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_ACCEPT);
 
 		// Show the dialog
 		int result = dlg.run();
 
 		switch(result)
 		{
-		case Gtk::RESPONSE_NO:
-			/* Don't close it */
-			return;
+		case Gtk::RESPONSE_REJECT:
+			/* Close the document */
 			break;
-		case Gtk::RESPONSE_YES:
-			/* Yes, close it */
-			break;
-		case Gtk::RESPONSE_APPLY:
+		case Gtk::RESPONSE_ACCEPT:
 			/* Save the document before closing it */
 			m_folder.set_current_page(m_folder.page_num(document) );
+			// TODO: Do not close the document if the user cancells
+			// the save dialog.
 			on_document_save();
+			break;
+		case Gtk::RESPONSE_CANCEL:
+			/* Close the document without being saved */
+			return;
 			break;
 		}
 	}
