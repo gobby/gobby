@@ -19,6 +19,7 @@
 #include <cassert>
 #include <obby/client_user_table.hpp>
 #include <obby/host_user_table.hpp>
+#include <obby/format_string.hpp>
 #include "common.hpp"
 #include "buffer_wrapper.hpp"
 
@@ -170,12 +171,10 @@ Gobby::Host::get_peer_iter(const net6::host::peer& peer)
 	if(iter == m_peer_map.end() )
 	{
 		// Should not happen...
-		throw Error(
-			Error::PEER_NOT_FOUND,
-			_("Peer ") + peer.get_name() + _("(")
-			+ peer.get_address().get_name() +
-			_(") not found in peer list")
-		);
+		obby::format_string str(
+			_("Peer %0 (%1) not found in peer list") );
+		str << peer.get_name() << peer.get_address().get_name();
+		throw Error(Error::PEER_NOT_FOUND, str.str() );
 	}
 
 	return iter;

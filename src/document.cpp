@@ -17,6 +17,7 @@
  */
 
 #include <iostream>
+#include <obby/format_string.hpp>
 #include <obby/user_table.hpp>
 #include <obby/client_document.hpp>
 #include <obby/host_document.hpp>
@@ -597,14 +598,19 @@ void Gobby::Document::set_intro_text()
 	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
 #endif
 
-	buf->set_text(_(
-		"You are not subscribed to the document \"") +
-			m_doc.get_title() + _("\".\n\nTo view changes that "
-		"others make or to edit the document yourself, you have to "
-		"subscribe to this document. Use the following button to "
-		"perform this.\n\n")
-	);
+	// Build text
+	obby::format_string str(_(
+		"You are not subscribed to the document \"%0\".\n\n"
+		"To view changes that others make or to edit the document "
+		"yourself, you have to subscribe to this document. Use the "
+		"following button to perform this.\n\n"
+	) );
+	str << m_doc.get_title();
 
+	// Set it
+	buf->set_text(str.str() );
+
+	// Add child anchor for the button
 	Glib::RefPtr<Gtk::TextChildAnchor> anchor =
 		buf->create_child_anchor(buf->end() );
 

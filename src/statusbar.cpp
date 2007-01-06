@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <obby/format_string.hpp>
 #include <obby/local_buffer.hpp>
 #include "common.hpp"
 #include "statusbar.hpp"
@@ -60,39 +61,41 @@ void Gobby::StatusBar::update_language(Document& document)
 {
 	// Selected language
 	if(document.get_language() )
-		m_language.set_text(
-			_("Selected language: ") +
-			document.get_language()->get_name()
-		);
+	{
+		obby::format_string str(_("Selected language: %0") );
+		str << document.get_language()->get_name();
+		m_language.set_text(str.str() );
+	}
 	else
+	{
 		m_language.set_text(_("No language selected") );
+	}
 }
 #endif
 
 void Gobby::StatusBar::update_sync(Document& document)
 {
-	unsigned int unsynced_count = document.get_unsynced_changes_count();
-	std::stringstream sync_str;
-	sync_str << unsynced_count << _(" unsynced change(s)");
-	m_sync.set_text(sync_str.str() );
+	// TODO: ngettext
+	obby::format_string str(_("%0 pending change(s)") );
+	str << document.get_unsynced_changes_count();
+	m_sync.set_text(str.str() );
 }
 
 void Gobby::StatusBar::update_revision(Document& document)
 {
-	std::stringstream rev_str;
-	rev_str << _("Revision: ") << document.get_revision();
-	m_revision.set_text(rev_str.str() );
+	obby::format_string str(_("Revision: %0") );
+	str << document.get_revision();
+	m_revision.set_text(str.str() );
 }
 
 void Gobby::StatusBar::update_cursor(Document& document)
 {
 	unsigned int row, col;
 	document.get_cursor_position(row, col);
-	++ row; ++ col;
 
-	std::stringstream pos_str;
-	pos_str << _("Line: ") << row << _(" Column: ") << col;
-	m_position.set_text(pos_str.str() );
+	obby::format_string str("Line: %0 Column: %1");
+	str << (row + 1) << (col + 1);
+	m_position.set_text(str.str() );
 }
 
 void Gobby::StatusBar::update_all(Document& document)

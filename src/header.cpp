@@ -19,6 +19,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/toggleaction.h>
 #include <gtkmm/radioaction.h>
+#include <obby/format_string.hpp>
 #include <obby/local_buffer.hpp>
 
 #include "features.hpp"
@@ -274,8 +275,8 @@ Gobby::Header::Header(const Folder& folder)
 		Gtk::RadioAction::create(
 			m_lang_group,
 			"ViewLanguageNone",
-			"None",
-			"Unselects the current language"
+			_("None"),
+			_("Unselects the current language")
 		),
 		sigc::bind(
 			sigc::mem_fun(
@@ -294,6 +295,10 @@ Gobby::Header::Header(const Folder& folder)
 		Glib::RefPtr<Gtk::SourceLanguage> language = *iter;
 		Glib::ustring language_xml_name = language->get_name();
 
+		// Build description string
+		obby::format_string str(_("Selects %0 as language") );
+		str << language->get_name();
+
 		// Add language to action group
 		remove_entities(language_xml_name);
 		m_group_app->add(
@@ -301,8 +306,7 @@ Gobby::Header::Header(const Folder& folder)
 				m_lang_group,
 				"ViewLanguage" + language_xml_name, 
 				language->get_name(),
-				_("Selects ") + language->get_name() +
-					_(" as language")
+				str.str()
 			),
 			sigc::bind(
 				sigc::mem_fun(

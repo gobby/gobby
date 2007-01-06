@@ -17,6 +17,7 @@
  */
 
 #include <gtkmm/stock.h>
+#include <obby/format_string.hpp>
 #include "common.hpp"
 #include "chat.hpp"
 
@@ -75,12 +76,16 @@ void Gobby::Chat::obby_end()
 
 void Gobby::Chat::obby_user_join(obby::user& user)
 {
-	m_log_chat.log(user.get_name() + " has joined", "blue");
+	obby::format_string str(_("%0 has joined") );
+	str << user.get_name();
+	m_log_chat.log(str.str(), "blue");
 }
 
 void Gobby::Chat::obby_user_part(obby::user& user)
 {
-	m_log_chat.log(user.get_name() + " has left", "blue");
+	obby::format_string str(_("%0 has left") );
+	str << user.get_name();
+	m_log_chat.log(str.str(), "blue");
 }
 
 void Gobby::Chat::obby_document_insert(obby::local_document_info& document)
