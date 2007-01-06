@@ -31,6 +31,7 @@
 #include "entrydialog.hpp"
 #include "window.hpp"
 #include "features.hpp"
+#include "icon.hpp"
 
 Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
@@ -242,6 +243,7 @@ void Gobby::Window::on_about()
 	dlg.set_version(PACKAGE_VERSION);
 	dlg.set_comments("A collaborative text editor");
 	dlg.set_copyright("Copyright (C) 2005 0x539 dev group <crew@0x539.de>");
+	dlg.set_logo(Gdk::Pixbuf::create_from_inline(512 * 128, Icon::gobby) );
 
 	std::deque<Glib::ustring> authors;
 	authors.push_back("Armin Burgmeier <armin@0x539.de>");

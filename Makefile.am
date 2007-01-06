@@ -33,6 +33,7 @@ noinst_HEADERS += inc/window.hpp
 if WITH_GTKSOURCEVIEW
 noinst_HEADERS += inc/gtksourceview.hpp
 endif
+noinst_HEADERS += inc/icon.hpp
 
 gobby_SOURCES =  src/config.cpp
 gobby_SOURCES += src/buffer_wrapper.cpp
@@ -56,4 +57,4 @@ gobby_SOURCES += src/main.cpp
 if WITH_GTKSOURCEVIEW
 gobby_SOURCES += src/gtksourceview.cpp
 endif
-
+gobby_SOURCES += src/icon.cpp
