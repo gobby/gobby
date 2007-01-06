@@ -1,9 +1,29 @@
-Discuss the use of exceptions for error handling instead of denial
-Scroll to the cursor if anotherone changed the document
-Initialise size of paned widgets
-Opening large documents is _really_ slow on win32's timer-implementation
-Save document dialog should contain buffer document filename
-Highlighting of own nickname in chat window (Glib::ustring::find)
-Statusbar with: Cursor position, current highlighting scheme, current sync state
-configure guckt automagisch, ob gtk_source_view da ist
-Menu, um aktuelle Sprache umzustellen
+Gobby
+=====
+
+Serious:
+ * Opening large documents is _really_ slow on win32's timer implementation
+
+Important:
+ * Compensate changes made by others by scrolling appropriately, the current
+   position should not change
+
+Normal:
+ * Menu to switch the syntax colouring scheme.
+ * Initialise size of paned widgets
+ * configure should detect the presence of gtksourceview automatically
+ * Implement a statusbar
+   - Cursor position
+   - Current highlighting scheme
+   - Current syncronisation state 
+
+Minor:
+ * Highlighting of own nickname in chat window (Glib::ustring::find)
+ * Save document dialog should contain buffer document filename
+ * Change the colour of the labels on the notebooks to red if something
+   has changed and the document is not active and possibly to grey when
+   the document is not yet syncronised (which would depend on sync-on-request
+   within libobby)
+
+Wishlist:
+
