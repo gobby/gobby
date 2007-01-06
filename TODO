@@ -2,3 +2,5 @@ Discuss the use of exceptions for error handling instead of denial
 Scroll to the cursor if anotherone changed the document
 Initialise size of paned widgets
 Opening large documents is _really_ slow on win32's timer-implementation
+Statusbar with: Cursor position, current highlighting scheme, current sync state
+configure guckt automagisch, ob gtk_source_view da ist
