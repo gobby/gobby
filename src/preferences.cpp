@@ -86,6 +86,20 @@ void Gobby::Preferences::Appearance::serialise(Config::Entry& entry) const
 	entry["windows"]["remember"].set(remember);
 }
 
+Gobby::Preferences::Font::Font()
+{
+}
+
+Gobby::Preferences::Font::Font(Config::Entry& entry):
+	desc(entry["desc"].get<Glib::ustring>("Monospace 10") )
+{
+}
+
+void Gobby::Preferences::Font::serialise(Config::Entry& entry) const
+{
+	entry["desc"].set(desc.to_string());
+}
+
 Gobby::Preferences::FileList::iterator::iterator(const base_iterator iter):
 	m_iter(iter)
 {
@@ -277,6 +291,7 @@ Gobby::Preferences::Preferences(Config& config, const LangManager& lang_mgr):
 	editor(config["editor"]),
 	view(config["view"]),
 	appearance(config["appearance"]),
+	font(config["font"]),
 	files(config["files"], lang_mgr)
 {
 }
@@ -287,5 +302,6 @@ void Gobby::Preferences::serialise(Config& config) const
 	editor.serialise(config["editor"]);
 	view.serialise(config["view"]);
 	appearance.serialise(config["appearance"]);
+	font.serialise(config["font"]);
 	files.serialise(config["files"]);
 }

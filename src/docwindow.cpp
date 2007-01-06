@@ -59,10 +59,6 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	// TODO: This belongs to document
 	buf->begin_not_undoable_action();
 
-	Pango::FontDescription desc;
-	desc.set_family("Monospace");
-	m_view.modify_font(desc);
-
 	// Set source language by filename
 	buf->set_highlight(false);
 
@@ -275,6 +271,8 @@ void Gobby::DocWindow::apply_preferences()
 	m_view.get_buffer()->set_check_brackets(
 		m_preferences.view.bracket_highlight
 	);
+
+	m_view.modify_font(m_preferences.font.desc);
 
 	// Cursor position may have changed because of new tab width
 	// TODO: Only emit if the position really changed

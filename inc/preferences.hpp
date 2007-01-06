@@ -87,6 +87,16 @@ public:
 		bool remember;
 	};
 
+	class Font
+	{
+	public:
+		Font();
+		Font(Config::Entry& entry);
+		void serialise(Config::Entry& entry) const;
+
+		Pango::FontDescription desc;
+	};
+
 	class FileList
 	{
 	public:
@@ -136,6 +146,7 @@ public:
 	Editor editor;
 	View view;
 	Appearance appearance;
+	Font font;
 	FileList files;
 };
 

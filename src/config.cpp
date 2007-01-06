@@ -165,9 +165,16 @@ void Gobby::Config::Entry::load(const xmlpp::Element& element)
 	for(iter = list.begin(); iter != list.end(); ++ iter)
 	{
 		xmlpp::Element* child = dynamic_cast<xmlpp::Element*>(*iter);
-		if(!child) continue;
-		
-		m_table[child->get_name()].load(*child);
+		xmlpp::TextNode* text = dynamic_cast<xmlpp::TextNode*>(*iter);
+
+		if(child != NULL)
+		{
+			m_table[child->get_name()].load(*child);
+		}
+		/*else if(text != NULL)
+		{
+			m_value = text->get_content();
+		}*/
 	}
 }
 

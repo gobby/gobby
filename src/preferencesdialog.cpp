@@ -260,6 +260,30 @@ void Gobby::PreferencesDialog::Appearance::
 	appearance.remember = m_btn_remember.get_active();
 }
 
+Gobby::PreferencesDialog::Font::Font(const Preferences& preferences)
+{
+	// Call to set_font_name does not work before realization of the
+	// font selection widget
+	m_font_sel.signal_realize().connect(
+		sigc::hide_return(
+			sigc::bind(
+				sigc::mem_fun(
+					m_font_sel,
+					&Gtk::FontSelection::set_font_name
+				),
+				preferences.font.desc.to_string()
+			)
+		)
+	);
+
+	add(m_font_sel);
+}
+
+void Gobby::PreferencesDialog::Font::set(Preferences::Font& font) const
+{
+	font.desc = Pango::FontDescription(m_font_sel.get_font_name());
+}
+
 Gobby::PreferencesDialog::FileList::LanguageColumns::LanguageColumns()
 {
 	add(language);
@@ -585,13 +609,15 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
                                             bool local)
  : Gtk::Dialog(_("Preferences"), parent, true),
    m_page_editor(preferences, m_tooltips), m_page_view(preferences),
-   m_page_appearance(preferences), m_page_files(*this, preferences, lang_mgr)
+   m_page_appearance(preferences), m_page_font(preferences),
+   m_page_files(*this, preferences, lang_mgr)
 {
 	m_notebook.append_page(m_page_editor, _("Editor") );
 	m_notebook.append_page(m_page_view, _("View") );
 
 	// Appearance only affects the global Gobby window
 	if(!local) m_notebook.append_page(m_page_appearance, _("Appearance") );
+	m_notebook.append_page(m_page_font, _("Font") );
 	if(!local) m_notebook.append_page(m_page_files, _("Files") );
 
 	get_vbox()->set_spacing(5);
@@ -612,25 +638,6 @@ void Gobby::PreferencesDialog::set(Preferences& preferences) const
 	m_page_editor.set(preferences.editor);
 	m_page_view.set(preferences.view);
 	m_page_appearance.set(preferences.appearance);
+	m_page_font.set(preferences.font);
 	m_page_files.set(preferences.files);
 }
-
-#if 0
-const Gobby::PreferencesDialog::Editor&
-Gobby::PreferencesDialog::editor() const
-{
-	return m_page_editor;
-}
-
-const Gobby::PreferencesDialog::View&
-Gobby::PreferencesDialog::view() const
-{
-	return m_page_view;
-}
-
-const Gobby::PreferencesDialog::Appearance&
-Gobby::PreferencesDialog::appearance() const
-{
-	return m_page_appearance;
-}
-#endif

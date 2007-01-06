@@ -47,7 +47,12 @@ template<typename T> T from_string(const Glib::ustring& val)
 	str >> t;
 	return t;
 }
-	
+
+template<> inline Glib::ustring from_string(const Glib::ustring& val)
+{
+	return val;
+}
+
 class Config
 {
 public:

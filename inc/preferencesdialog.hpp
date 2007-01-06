@@ -33,6 +33,7 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/cellrenderercombo.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/fontselection.h>
 #include "preferences.hpp"
 
 namespace Gobby
@@ -130,6 +131,16 @@ public:
 
 		Gtk::VBox m_box_windows;
 		Gtk::CheckButton m_btn_remember;
+	};
+
+	class Font: public Page
+	{
+	public:
+		Font(const Preferences& preferences);
+		void set(Preferences::Font& font) const;
+
+	protected:
+		Gtk::FontSelection m_font_sel;
 	};
 
 	class FileList: public Page
@@ -247,6 +258,7 @@ protected:
 	Editor m_page_editor;
 	View m_page_view;
 	Appearance m_page_appearance;
+	Font m_page_font;
 	FileList m_page_files;
 };
 
