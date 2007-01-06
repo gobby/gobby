@@ -43,6 +43,9 @@ namespace {
 		"      <menuitem action=\"SessionDocumentClose\" />"
 		"    </menu>"
 		"    <menu action=\"MenuEdit\">"
+		"      <menuitem action=\"EditSearch\" />"
+		"      <menuitem action=\"EditSearchReplace\" />"
+		"      <separator />"
 		"      <menuitem action=\"EditPreferences\" />"
 		"    </menu>"
 		"    <menu action=\"MenuUser\">"
@@ -259,6 +262,24 @@ Gobby::Header::Header():
 
 	action_edit(Gtk::Action::create("MenuEdit", _("Edit")) ),
 
+	action_edit_search(
+		Gtk::Action::create(
+			"EditSearch",
+			Gtk::Stock::FIND,
+			_("Find..."),
+			_("Search for text in the a document")
+		)
+	),
+
+	action_edit_search_replace(
+		Gtk::Action::create(
+			"EditSearchReplace",
+			Gtk::Stock::FIND_AND_REPLACE,
+			_("Find and replace..."),
+			_("Search for text and replace it with another one")
+		)
+	),
+
 	action_edit_preferences(
 		Gtk::Action::create(
 			"EditPreferences",
@@ -355,6 +376,8 @@ Gobby::Header::Header():
 	group_session->add(action_session_document_close);
 
 	group_edit->add(action_edit);
+	group_edit->add(action_edit_search);
+	group_edit->add(action_edit_search_replace);
 	group_edit->add(action_edit_preferences);
 
 	group_user->add(action_user);

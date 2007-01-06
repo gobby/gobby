@@ -28,6 +28,7 @@
 #include "header.hpp"
 #include "docwindow.hpp"
 #include "folder.hpp"
+#include "finddialog.hpp"
 #include "userlist.hpp"
 #include "documentlist.hpp"
 #include "chat.hpp"
@@ -46,7 +47,7 @@ public:
 	Window(const IconManager& icon_mgr, Config& config);
 	~Window();
 
-        Document& get_current_document();
+	Document* get_current_document();
 protected:
 	// Gtk::Window overrides
 	virtual void on_realize();
@@ -67,6 +68,8 @@ protected:
 	void on_document_save_as();
 	void on_document_close();
 
+	void on_edit_search();
+	void on_edit_search_replace();
 	void on_edit_preferences();
 
 	void on_user_set_password();
@@ -128,6 +131,7 @@ protected:
 	Gtk::Frame m_frame_text;
 
 	Header m_header;
+	FindDialog m_finddialog;
 	UserList m_userlist;
 	DocumentList m_documentlist;
 

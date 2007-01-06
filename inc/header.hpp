@@ -100,6 +100,8 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_session_document_close;
 
 	const Glib::RefPtr<Gtk::Action> action_edit;
+	const Glib::RefPtr<Gtk::Action> action_edit_search;
+	const Glib::RefPtr<Gtk::Action> action_edit_search_replace;
 	const Glib::RefPtr<Gtk::Action> action_edit_preferences;
 
 	const Glib::RefPtr<Gtk::Action> action_user;
