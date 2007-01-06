@@ -17,6 +17,7 @@
  */
 
 #include <sstream>
+#include <gtkmm/separator.h>
 #include <obby/format_string.hpp>
 #include <obby/local_buffer.hpp>
 #include "common.hpp"
@@ -29,11 +30,13 @@ Gobby::StatusBar::StatusBar(const Folder& folder)
    m_revision("", Gtk::ALIGN_LEFT),
    m_position("", Gtk::ALIGN_LEFT)
 {
-	m_box.pack_start(m_language);
-	m_box.pack_start(m_sync);
-	m_box.pack_start(m_revision);
-	m_box.pack_start(m_position);
-	m_box.set_homogeneous(true);
+	m_box.pack_start(m_language, Gtk::PACK_SHRINK);
+	m_box.pack_start(*Gtk::manage(new Gtk::VSeparator), Gtk::PACK_SHRINK);
+	m_box.pack_start(m_sync, Gtk::PACK_SHRINK);
+	m_box.pack_start(*Gtk::manage(new Gtk::VSeparator), Gtk::PACK_SHRINK);
+	m_box.pack_start(m_revision, Gtk::PACK_SHRINK);
+	m_box.pack_end(m_position, Gtk::PACK_SHRINK, 2);
+	m_box.set_spacing(5);
 
 	add(m_box);
 	set_shadow_type(Gtk::SHADOW_OUT);
@@ -90,7 +93,7 @@ void Gobby::StatusBar::update_cursor(Document& document)
 	unsigned int row, col;
 	document.get_cursor_position(row, col);
 
-	obby::format_string str("Line: %0 Column: %1");
+	obby::format_string str("Line: %0, Column: %1");
 	str << (row + 1) << (col + 1);
 	m_position.set_text(str.str() );
 }
