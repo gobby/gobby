@@ -562,6 +562,13 @@ void Gobby::Window::on_user_set_colour()
 {
 	// Simple ColorSelectionDialog
 	ColorSelectionDialog dlg;
+	obby::user& user = m_buffer->get_self();
+	Gdk::Color color;
+
+	color.set_red(user.get_red() * 65535 / 255);
+	color.set_green(user.get_green() * 65535 / 255);
+	color.set_blue(user.get_blue() * 65535 / 255);
+	dlg.get_colorsel()->set_current_color(color);
 
 	// Run it
 	if(dlg.run() == Gtk::RESPONSE_OK)
