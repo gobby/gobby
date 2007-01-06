@@ -39,6 +39,8 @@ int main(int argc, char* argv[]) try
 	textdomain(GETTEXT_PACKAGE);
 
 	Gtk::Main kit(argc, argv);
+	Glib::thread_init();
+
 	Gobby::Window wnd;
 	wnd.show_all();
 	kit.run(wnd);
