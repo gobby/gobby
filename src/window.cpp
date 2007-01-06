@@ -57,8 +57,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
 #endif
    m_header(),
    m_finddialog(*this),
-   m_userlist(*this, m_header, config),
-   m_documentlist(*this, m_header, config),
+   m_userlist(*this, m_header, m_preferences, config["windows"]),
+   m_documentlist(*this, m_header, m_preferences, config["windows"]),
    m_folder(m_header, m_preferences),
    m_statusbar(m_header, m_folder)
 {
@@ -164,14 +164,14 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
 	if(m_preferences.appearance.remember)
 	{
 		// Restore the window's position from the configuration
-        	const int x = config["window"]["x"].get<int>(0);
-	        const int y = config["window"]["y"].get<int>(0);
-		const int w = config["window"]["width"].get<int>(0);
-		const int h = config["window"]["height"].get<int>(0);
+        	const int x = config["windows"]["main"]["x"].get<int>(0);
+	        const int y = config["windows"]["main"]["y"].get<int>(0);
+		const int w = config["windows"]["main"]["width"].get<int>(0);
+		const int h = config["windows"]["main"]["height"].get<int>(0);
 		const int s_w = config["screen"]["width"].get<int>(0);
 		const int s_h = config["screen"]["height"].get<int>(0);
-		const bool first_run = (x == 0) && (y == 0)
-		       	&& (w == 0) && (h == 0);
+		bool first_run = (x == 0 && y == 0 && w == 0 && h == 0);
+
 		Glib::RefPtr<Gdk::Screen> screen(get_screen() );
 		if((screen->get_width() >= s_w && screen->get_height() >= s_h)
 			&& !first_run)
@@ -179,8 +179,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
 			move(x, y);
 			resize(w, h);
 		}
-		else
-			set_position(Gtk::WIN_POS_CENTER);
 	}
 }
 
@@ -197,25 +195,13 @@ Gobby::Window::~Window()
 		int x, y, w, h;
 		get_position(x, y); get_size(w, h);
 		Glib::RefPtr<Gdk::Screen> screen(get_screen() );
-		m_config["window"]["x"].set(x);
-		m_config["window"]["y"].set(y);
-		m_config["window"]["width"].set(w);
-		m_config["window"]["height"].set(h);
+
+		m_config["windows"]["main"]["x"].set(x);
+		m_config["windows"]["main"]["y"].set(y);
+		m_config["windows"]["main"]["width"].set(w);
+		m_config["windows"]["main"]["height"].set(h);
 		m_config["screen"]["width"].set(screen->get_width() );
 		m_config["screen"]["height"].set(screen->get_height() );
-	}
-}
-
-void Gobby::Window::on_show()
-{
-	Gtk::Window::on_show();
-
-	if(m_preferences.appearance.remember)
-	{
-		if(m_config["userlist"]["visible"].get<bool>(false) )
-			m_userlist.show();
-		if(m_config["documentlist"]["visible"].get<bool>(false) )
-			m_documentlist.show();
 	}
 }
 

@@ -24,16 +24,15 @@
 #include <gtkmm/treestore.h>
 #include <obby/user.hpp>
 #include <obby/local_buffer.hpp>
-#include "toolwindow.hpp"
+#include "togglewindow.hpp"
 #include "header.hpp"
-#include "config.hpp"
 
 namespace Gobby
 {
 
 /** List showing users that are participating in the obby session.
  */
-class UserList: public ToolWindow
+class UserList: public ToggleWindow
 {
 public:
 	class Columns: public Gtk::TreeModel::ColumnRecord
@@ -46,8 +45,10 @@ public:
 		// TODO: Column with pointer that holds reference to obby::user?
 	};
 
-	UserList(Gtk::Window& parent, Header& header, Config& config);
-	~UserList();
+	UserList(Gtk::Window& parent,
+	         Header& header,
+		 const Preferences& preferences,
+		 Config::Entry& config_entry);
 
 	// Calls from the window
 	// TODO: Replace them by signal handlers from buf

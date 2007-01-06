@@ -23,16 +23,15 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
 #include <obby/local_buffer.hpp>
-#include "toolwindow.hpp"
+#include "togglewindow.hpp"
 #include "header.hpp"
-#include "config.hpp"
 
 namespace Gobby
 {
 
-/** List showing users that are participating in the obby session.
+/** List showing documents that are available in the session.
  */
-class DocumentList: public ToolWindow
+class DocumentList: public ToggleWindow
 {
 public:
 	class Columns: public Gtk::TreeModel::ColumnRecord
@@ -46,7 +45,10 @@ public:
 		Gtk::TreeModelColumn<void*> data;
 	};
 
-	DocumentList(Gtk::Window& parent, Header& header, Config& config);
+	DocumentList(Gtk::Window& parent,
+	             Header& header,
+		     const Preferences& preferences,
+		     Config::Entry& config_entry);
 
 	// Calls from the window
 	// TODO: Replace them by signal handlers from buf

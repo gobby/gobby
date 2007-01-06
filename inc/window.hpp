@@ -64,7 +64,6 @@ public:
 	void save_local_file(Document& doc, const Glib::ustring& file);
 protected:
 	// Gtk::Window overrides
-	virtual void on_show();
 	virtual void on_realize();
 	virtual bool on_delete_event(GdkEventAny* event);
 

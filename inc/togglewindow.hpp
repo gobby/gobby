@@ -16,22 +16,39 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_TOOLWINDOW_HPP_
-#define _GOBBY_TOOLWINDOW_HPP_
+#ifndef _GOBBY_TOGGLEWINDOW_HPP_
+#define _GOBBY_TOGGLEWINDOW_HPP_
 
-#include <gtkmm/window.h>
+#include <gtkmm/toggleaction.h>
+#include "config.hpp"
+#include "preferences.hpp"
+#include "toolwindow.hpp"
 
 namespace Gobby
 {
 
-/** Popup window that stays in top of the main application window.
+/** Tool window whose visibility may be toggled via a Gtk::ToggleAction.
  */
-class ToolWindow: public Gtk::Window
+class ToggleWindow: public ToolWindow
 {
 public:
-	ToolWindow(Gtk::Window& parent);
+	ToggleWindow(Gtk::Window& parent,
+	             const Glib::RefPtr<Gtk::ToggleAction>& action,
+	             const Preferences& preferences,
+		     Config::Entry& config_entry);
+	~ToggleWindow();
+
+protected:
+	virtual void on_activate();
+
+	virtual void on_show();
+	virtual void on_hide();
+
+	Glib::RefPtr<Gtk::ToggleAction> m_action;
+	const Preferences& m_preferences;
+	Config::Entry& m_config_entry;
 };
 
 } // namespace obby
 
-#endif // _GOBBY_TOOLWINDOW_HPP_
+#endif // _GOBBY_TOGGLEWINDOW_HPP_

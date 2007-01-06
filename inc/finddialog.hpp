@@ -29,7 +29,7 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/frame.h>
 
-#include "defaultdialog.hpp"
+#include "toolwindow.hpp"
 #include "regex.hpp"
 
 namespace Gobby
@@ -37,7 +37,7 @@ namespace Gobby
 
 class Window;
 
-class FindDialog: public Gtk::Window
+class FindDialog: public ToolWindow
 {
 public:
 	FindDialog(Gobby::Window& parent);

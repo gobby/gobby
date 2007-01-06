@@ -38,6 +38,7 @@ namespace
 }
 
 Gobby::FindDialog::FindDialog(Gobby::Window& parent):
+	ToolWindow(parent),
 	m_gobby(parent),
 	m_label_find(_("Find what:"), Gtk::ALIGN_LEFT),
 	m_label_replace(_("Replace with:"), Gtk::ALIGN_LEFT),

@@ -64,9 +64,16 @@ Gobby::UserList::Columns::Columns()
 	add(text);
 }
 
-Gobby::UserList::UserList(Gtk::Window& parent, Header& header, Config& config):
-	ToolWindow(parent, _("User list"), header.action_window_userlist,
-		config, "userlist"),
+Gobby::UserList::UserList(Gtk::Window& parent,
+                          Header& header,
+                          const Preferences& m_preferences,
+			  Config::Entry& config_entry):
+	ToggleWindow(
+		parent,
+		header.action_window_userlist,
+		m_preferences,
+		config_entry["userlist"]
+	),
 	m_header(header)
 {
 	m_tree_data = Gtk::TreeStore::create(m_tree_cols);
@@ -105,14 +112,12 @@ Gobby::UserList::UserList(Gtk::Window& parent, Header& header, Config& config):
 	m_scrolled_wnd.set_sensitive(false);
 
 	add(m_scrolled_wnd);
-	show_all_children();
 
 	set_default_size(200, 400);
+	set_title(_("User list") );
 	set_border_width(10);
-}
 
-Gobby::UserList::~UserList()
-{
+	show_all_children();
 }
 
 void Gobby::UserList::obby_start(obby::local_buffer& buf)

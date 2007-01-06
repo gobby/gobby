@@ -39,13 +39,13 @@ Gobby::DocumentList::Columns::Columns()
 
 Gobby::DocumentList::DocumentList(Gtk::Window& parent,
                                   Header& header,
-				  Config& config):
-	ToolWindow(
+                                  const Preferences& preferences,
+				  Config::Entry& config_entry):
+	ToggleWindow(
 		parent,
-		_("Document list"),
 		header.action_window_documentlist,
-		config,
-		"documentlist"
+		preferences,
+		config_entry["documentlist"]
 	),
 	m_btn_subscribe(_("Subscribe") ),
 	m_header(header)
@@ -96,10 +96,12 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 	m_mainbox.set_spacing(10);
 
 	add(m_mainbox);
-	show_all_children();
 
 	set_default_size(200, 400);
+	set_title(_("Document list") );
 	set_border_width(10);
+
+	show_all_children();
 }
 
 void Gobby::DocumentList::obby_start(obby::local_buffer& buf)
