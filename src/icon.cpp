@@ -1,15 +1,20 @@
 /* GdkPixbuf RGBA C-Source image dump */
 
+#include <glib/gtypes.h>
 #include "icon.hpp"
 
+#ifndef WITH_GNOME
+namespace
+{
+
 #ifdef __SUNPRO_C
-#pragma align 4 (Gobby::Icon::gobby)
+#pragma align 4 (icon_gobby)
 #endif
 
 #ifdef __GNUC__
-const guint8 Gobby::Icon::gobby[] __attribute__ ((__aligned__ (4))) = 
+const guint8 icon_gobby[] __attribute__ ((__aligned__ (4))) =
 #else
-const guint8 Gobby::Icon::gobby[] = 
+const guint8 icon_gobby[] =
 #endif
 { ""
   /* Pixbuf magic (0x47646b50) */
@@ -2426,4 +2431,14 @@ const guint8 Gobby::Icon::gobby[] =
   "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
   "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};
 
+} // Anonymous namespace
+#endif // !WITH_GNOME
 
+Gobby::IconManager::IconManager():
+#ifdef WITH_GNOME
+	gobby(Gdk::Pixbuf::create_from_file(PIXMAPS_DIR"/gobby.png") )
+#else
+	gobby(Gdk::Pixbuf::create_from_inline(512 * 128, icon_gobby) )
+#endif
+{
+}

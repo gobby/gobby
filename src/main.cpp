@@ -42,15 +42,15 @@ int main(int argc, char* argv[]) try
 	Gtk::Main kit(argc, argv);
 	Glib::thread_init();
 
+	Gobby::IconManager icon_mgr;
+
 	// Set default icon
 	std::list<Glib::RefPtr<Gdk::Pixbuf> > icon_list;
-	icon_list.push_back(
-		Gdk::Pixbuf::create_from_inline(512 * 128, Gobby::Icon::gobby)
-	);
+	icon_list.push_back(icon_mgr.gobby);
 
 	Gtk::Window::set_default_icon_list(icon_list);
 
-	Gobby::Window wnd;
+	Gobby::Window wnd(icon_mgr);
 	wnd.show_all();
 	kit.run(wnd);
 	return 0;

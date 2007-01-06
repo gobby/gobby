@@ -19,17 +19,19 @@
 #ifndef _GOBBY_ICON_HPP_
 #define _GOBBY_ICON_HPP_
 
-#include <glib/gtypes.h>
+#include <gdkmm/pixbuf.h>
 
 namespace Gobby
 {
-	namespace Icon
+	class IconManager
 	{
-		/** The Gobby Icon as inline xpm data.
-		 */
-		extern const guint8 gobby[];
-	}
+	public:
+		IconManager();
+
+		const Glib::RefPtr<Gdk::Pixbuf> gobby;
+		// TODO: Userlist icon
+		//const Glib::RefPtr<Gdk::Pixbuf> userlist;
+	};
 }
 
 #endif // _GOBBY_ICON_HPP_
-

@@ -47,10 +47,11 @@
 #include "icon.hpp"
 #include "colorsel.hpp"
 
-Gobby::Window::Window()
- : Gtk::Window(Gtk::WINDOW_TOPLEVEL), 
+Gobby::Window::Window(const IconManager& icon_mgr)
+ : Gtk::Window(Gtk::WINDOW_TOPLEVEL),
    m_config(Glib::get_home_dir() + "/.gobby/config.xml"),
-   m_preferences(m_config), m_buffer(NULL),
+   m_preferences(m_config), m_icon_mgr(icon_mgr),
+   m_buffer(NULL),
 #ifdef WITH_HOWL
    m_zeroconf(NULL),
 #endif
@@ -433,12 +434,7 @@ void Gobby::Window::on_about()
 	dlg.set_version(PACKAGE_VERSION);
 	dlg.set_comments(_("A collaborative text editor"));
 	dlg.set_copyright("Copyright (C) 2005 0x539 dev group <crew@0x539.de>");
-#ifndef WITH_GNOME
-	dlg.set_logo(Gdk::Pixbuf::create_from_inline(512 * 128, Icon::gobby) );
-#else
-	dlg.set_logo(Gdk::Pixbuf::create_from_file(
-		PIXMAPS_DIR"/gobby.png") );
-#endif
+	dlg.set_logo(m_icon_mgr.gobby);
 
 	std::deque<Glib::ustring> authors;
 	authors.push_back("Developers:");

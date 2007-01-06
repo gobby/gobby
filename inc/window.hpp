@@ -22,8 +22,8 @@
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
-#include <obby/error.hpp>
 #include <obby/local_buffer.hpp>
+#include "icon.hpp"
 #include "config.hpp"
 #include "header.hpp"
 #include "docwindow.hpp"
@@ -42,7 +42,7 @@ namespace Gobby
 class Window : public Gtk::Window
 {
 public:
-	Window();
+	Window(const IconManager& icon_mgr);
 	~Window();
 
         Document& get_current_document();
@@ -81,10 +81,6 @@ protected:
 	void on_about();
 	void on_quit();
 
-#if 0
-	void on_chat(const Glib::ustring& message);
-#endif
-
 	// Drag and drop
 	virtual void on_drag_data_received(
 		const Glib::RefPtr<Gdk::DragContext>& context,
@@ -102,11 +98,6 @@ protected:
 	void on_obby_document_insert(obby::document_info& document);
 	void on_obby_document_remove(obby::document_info& document);
 
-#if 0
-	void on_obby_server_chat(const Glib::ustring& message);
-	void on_obby_chat(const obby::user& user, const Glib::ustring& message);
-#endif
-
 	// Helper functions
 	void apply_preferences();
 	void update_title_bar();
@@ -119,6 +110,7 @@ protected:
 	// Config
 	Config m_config;
 	Preferences m_preferences;
+	const IconManager& m_icon_mgr;
 
 	// Paths
 	std::string m_last_path;

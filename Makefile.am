@@ -15,6 +15,7 @@ endif
 
 noinst_HEADERS = inc/io/main_connection.hpp
 noinst_HEADERS += inc/io/buffer_wrapper.hpp
+noinst_HEADERS += inc/icon.hpp
 noinst_HEADERS += inc/atomic.hpp
 noinst_HEADERS += inc/config.hpp
 noinst_HEADERS += inc/common.hpp
@@ -51,7 +52,6 @@ noinst_HEADERS += inc/sourceview/private/sourceview_p.hpp
 noinst_HEADERS += inc/sourceview/private/sourcebuffer_p.hpp
 noinst_HEADERS += inc/sourceview/private/sourcelanguage_p.hpp
 noinst_HEADERS += inc/sourceview/private/sourcelanguagesmanager_p.hpp
-noinst_HEADERS += inc/icon.hpp
 
 if WIN32
 win32/gobby.res: win32/gobby.rc
@@ -65,6 +65,7 @@ else
 gobby_SOURCES = src/io/main_connection_generic.cpp
 endif
 gobby_SOURCES += src/io/buffer_wrapper.cpp
+gobby_SOURCES += src/icon.cpp
 gobby_SOURCES += src/atomic.cpp
 gobby_SOURCES += src/config.cpp
 gobby_SOURCES += src/encoding.cpp
@@ -97,9 +98,6 @@ gobby_SOURCES += src/sourceview/sourceview.cpp
 gobby_SOURCES += src/sourceview/sourcebuffer.cpp
 gobby_SOURCES += src/sourceview/sourcelanguage.cpp
 gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
-if ! WITH_GNOME
-gobby_SOURCES += src/icon.cpp
-endif
 
 if WITH_GNOME
 # GNOME-specific installation.
