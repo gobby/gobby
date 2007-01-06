@@ -104,4 +104,4 @@ when loading one from a file.
 We should transmit error codes instead of error strings in net6. The client 
 may build a (localised, see #14) string out of it.
 
-22: 
+22: Repaint o
