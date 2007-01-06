@@ -855,7 +855,7 @@ void Gobby::Window::on_edit_preferences()
 	PreferencesDialog dlg(*this, m_preferences, m_lang_manager, false);
 
 	// Info label
-	Gtk::Label m_lbl_info(_(
+	Gtk::Label lbl_info(_(
 		"Click on \"Apply\" to apply the new settings to documents "
 		"that are currently open. \"OK\" will just store the values "
 		"to use them with newly created documents."
@@ -864,10 +864,13 @@ void Gobby::Window::on_edit_preferences()
 	// Show info label and apply button if documents are open
 	if(m_buffer.get() && m_buffer->document_count() > 0)
 	{
-		m_lbl_info.set_line_wrap(true);
-		dlg.get_vbox()->pack_start(m_lbl_info, Gtk::PACK_SHRINK);
+		// TODO: How to get the label to use all available space?
+		lbl_info.set_line_wrap(true);
+		lbl_info.set_alignment(Gtk::ALIGN_LEFT);
+
+		dlg.get_vbox()->pack_start(lbl_info, Gtk::PACK_SHRINK);
 		dlg.add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
-		m_lbl_info.show();
+		lbl_info.show();
 	}
 
 	int result = dlg.run();
@@ -969,13 +972,16 @@ void Gobby::Window::on_view_preferences()
 	str << doc->get_info().get_suffixed_title();
 
 	// Info label
-	Gtk::Label m_lbl_info(str.str() );
-	m_lbl_info.set_line_wrap(true);
+	Gtk::Label lbl_info(str.str() );
+
+	// TODO: How to get the label to use all available space?
+	lbl_info.set_line_wrap(true);
+	lbl_info.set_alignment(Gtk::ALIGN_LEFT);
 
 	// Add it into the dialog
-	dlg.get_vbox()->pack_start(m_lbl_info, Gtk::PACK_SHRINK);
-	dlg.get_vbox()->reorder_child(m_lbl_info, 0); // Push to top of dialog
-	m_lbl_info.show();
+	dlg.get_vbox()->pack_start(lbl_info, Gtk::PACK_SHRINK);
+	dlg.get_vbox()->reorder_child(lbl_info, 0); // Push to top of dialog
+	lbl_info.show();
 
 	// Show the dialog
 	if(dlg.run() == Gtk::RESPONSE_OK)
