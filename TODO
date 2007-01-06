@@ -19,6 +19,7 @@ Normal:
   * Strive for Gnome HIG compilance (#32)
   * Recognise command line parameters (#33)
   * Colour presets (#36)
+  * Write a good README for Gobby (#51)
 
 Minor:
 
@@ -131,6 +132,13 @@ values):
 <span style="background-color:#fdbedd;">#fdbedd</span>
 <span style="background-color:#f6abab;">#f6abab</span>
 }}}
+
+51: Write a good README for Gobby
+---------------------------------
+Gobby needs some documentation. The starting point should be the addition 
+of README content. The file is currently present, but empty. It should 
+contain at least a description of it, the dependency and a short 
+installation guide for *nix systems. More could follow later.
 
 6: Highlighting of own nickname in chat window
 ----------------------------------------------
