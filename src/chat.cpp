@@ -16,10 +16,51 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <obby/client_buffer.hpp>
+
 #include <gtkmm/stock.h>
 #include <obby/format_string.hpp>
 #include "common.hpp"
 #include "chat.hpp"
+
+namespace
+{
+	// Checks if name is highlightend in text.
+	bool is_highlighted(const Glib::ustring& text,
+	                    const Glib::ustring& name)
+	{
+		Glib::ustring::size_type pos = 0;
+		while( (pos = text.find(name, pos)) != Glib::ustring::npos)
+		{
+			// Check that the found position is not part of another
+			// word ('ck' should not be found in 'luck' and such).
+			if(pos > 0 && Glib::Unicode::isalnum(text[pos - 1]) )
+				{ ++ pos; continue; }
+
+			if(pos + name.length() < text.length() &&
+			   Glib::Unicode::isalnum(text[pos + name.length()]))
+				{ ++ pos; continue; }
+
+			// Found occurence
+			return true;
+		}
+
+		return false;
+	}
+
+	void each_line(const std::string& text,
+	               const sigc::slot<void, const std::string&> func)
+	{
+		std::string::size_type prev = 0, pos = 0;
+		while( (pos = text.find('\n', pos)) != Glib::ustring::npos)
+		{
+			func(text.substr(prev, pos - prev) );
+			prev = ++pos;
+		}
+
+		func(text.substr(prev) );
+	}
+}
 
 Gobby::Chat::Chat()
  : Gtk::VBox(), m_buffer(NULL),
@@ -53,10 +94,10 @@ Gobby::Chat::~Chat()
 {
 }
 
-Gobby::Chat::signal_chat_type Gobby::Chat::chat_event() const
+/*Gobby::Chat::signal_chat_type Gobby::Chat::chat_event() const
 {
 	return m_signal_chat;
-}
+}*/
 
 void Gobby::Chat::obby_start(obby::local_buffer& buf)
 {
@@ -67,6 +108,15 @@ void Gobby::Chat::obby_start(obby::local_buffer& buf)
 	m_btn_chat.set_sensitive(true);
 
 	set_sensitive(true);
+
+	const obby::chat& chat = buf.get_chat();
+	chat.message_event().connect(
+		sigc::mem_fun(*this, &Chat::on_message) );
+
+	for(obby::chat::message_iterator iter = chat.message_begin();
+	    iter != chat.message_end();
+	    ++ iter)
+		on_message(*iter);
 }
 
 void Gobby::Chat::obby_end()
@@ -80,19 +130,19 @@ void Gobby::Chat::obby_end()
 
 void Gobby::Chat::obby_user_join(const obby::user& user)
 {
-	if(~user.get_flags() & obby::user::flags::CONNECTED)
+	/*if(~user.get_flags() & obby::user::flags::CONNECTED)
 		return;
 
 	obby::format_string str(_("%0% has joined") );
 	str << user.get_name();
-	m_log_chat.log(str.str(), "blue");
+	m_log_chat.log(str.str(), "blue");*/
 }
 
 void Gobby::Chat::obby_user_part(const obby::user& user)
 {
-	obby::format_string str(_("%0% has left") );
+/*	obby::format_string str(_("%0% has left") );
 	str << user.get_name();
-	m_log_chat.log(str.str(), "blue");
+	m_log_chat.log(str.str(), "blue");*/
 }
 
 void Gobby::Chat::obby_document_insert(obby::local_document_info& document)
@@ -103,6 +153,7 @@ void Gobby::Chat::obby_document_remove(obby::local_document_info& document)
 {
 }
 
+#if 0
 void Gobby::Chat::obby_message(const obby::user& user,
                                const Glib::ustring& message)
 {
@@ -153,20 +204,103 @@ void Gobby::Chat::obby_server_message(const Glib::ustring& message)
 {
 	m_log_chat.log(message, "forest green");
 }
+#endif
 
 void Gobby::Chat::on_chat()
 {
+	if(m_buffer == NULL)
+		throw std::logic_error("Gobby::Chat::on_chat");
+
 	Glib::ustring message = m_ent_chat.get_text();
 	if(message.empty() ) return;
 	m_ent_chat.set_text("");
 
 	// Send each line separately
-	Glib::ustring::size_type prev = 0, pos = 0;
-	while( (pos = message.find('\n', pos)) != Glib::ustring::npos)
-	{
-		m_signal_chat.emit(message.substr(prev, pos - prev) );
-		prev = ++pos;
-	}
-	m_signal_chat.emit(message.substr(prev) );
+	each_line(
+		message,
+		sigc::mem_fun(*this, &Gobby::Chat::send_line)
+	);
+}
+
+void Gobby::Chat::on_message(const obby::chat::message& message)
+{
+	const obby::chat::user_message* user_message =
+		dynamic_cast<const obby::chat::user_message*>(&message);
+	const obby::chat::server_message* server_message =
+		dynamic_cast<const obby::chat::server_message*>(&message);
+	const obby::chat::system_message* system_message =
+		dynamic_cast<const obby::chat::system_message*>(&message);
+
+	if(user_message != NULL)
+		on_user_message(*user_message);
+	else if(server_message != NULL)
+		on_server_message(*server_message);
+	else if(system_message != NULL)
+		on_system_message(*system_message);
+	else
+		throw std::logic_error("Gobby::Chat::on_message");
+}
+
+void Gobby::Chat::on_user_message(const obby::chat::user_message& message)
+{
+	// Split received message up into lines
+	each_line(
+		message.get_text(),
+		sigc::bind(
+			sigc::mem_fun(*this, &Gobby::Chat::recv_user_line),
+			sigc::ref(message)
+		)
+	);
+}
+
+void Gobby::Chat::on_server_message(const obby::chat::server_message& message)
+{
+	// Split received message up into lines
+	each_line(
+		message.get_text(),
+		sigc::bind(
+			sigc::mem_fun(*this, &Gobby::Chat::recv_server_line),
+			sigc::ref(message)
+		)
+	);
+}
+
+void Gobby::Chat::on_system_message(const obby::chat::system_message& message)
+{
+	each_line(
+		message.get_text(),
+		sigc::bind(
+			sigc::mem_fun(*this, &Gobby::Chat::recv_system_line),
+			sigc::ref(message)
+		)
+	);
+}
+
+void Gobby::Chat::send_line(const std::string& line)
+{
+	m_buffer->send_message(line);
+}
+
+void Gobby::Chat::recv_user_line(const std::string& line,
+                                 const obby::chat::user_message& message)
+{
+	// Check each line for highlighting occurence
+	Glib::ustring colour = "black";
+	if(is_highlighted(line, m_buffer->get_self().get_name()) )
+		colour = "darkred";
+
+	m_log_chat.log(message.repr(), colour, message.get_timestamp() );
+}
+
+void Gobby::Chat::recv_server_line(const std::string& line,
+                                   const obby::chat::server_message& message)
+{
+	m_log_chat.log(message.repr(), "forest green", message.get_timestamp());
+}
+
+void Gobby::Chat::recv_system_line(const std::string& line,
+                                   const obby::chat::system_message& message)
+{
+	m_log_chat.log(message.repr(), "blue", message.get_timestamp() );
 }
 

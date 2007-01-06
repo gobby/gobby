@@ -103,8 +103,8 @@ Gobby::Window::Window()
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
-	m_chat.chat_event().connect(
-		sigc::mem_fun(*this, &Window::on_chat) );
+	//m_chat.chat_event().connect(
+	//	sigc::mem_fun(*this, &Window::on_chat) );
 
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
@@ -190,10 +190,10 @@ void Gobby::Window::obby_start()
 	m_buffer->document_remove_event().connect(
 		sigc::mem_fun(*this, &Window::on_obby_document_remove) );
 
-	m_buffer->message_event().connect(
+	/*m_buffer->message_event().connect(
 		sigc::mem_fun(*this, &Window::on_obby_chat) );
 	m_buffer->server_message_event().connect(
-		sigc::mem_fun(*this, &Window::on_obby_server_chat) );
+		sigc::mem_fun(*this, &Window::on_obby_server_chat) );*/
 
 	// Accept drag and drop of files into the gobby window
 	std::list<Gtk::TargetEntry> targets;
@@ -672,11 +672,13 @@ void Gobby::Window::on_quit()
 	Gtk::Main::quit();
 }
 
+#if 0
 void Gobby::Window::on_chat(const Glib::ustring& message)
 {
 	// Send chat message via obby
 	m_buffer->send_message(message);
 }
+#endif
 
 /* Drag and Drop */
 void Gobby::Window::on_drag_data_received(
@@ -721,6 +723,7 @@ void Gobby::Window::on_obby_close()
 	on_session_quit();
 }
 
+#if 0
 void Gobby::Window::on_obby_chat(const obby::user& user,
                                  const Glib::ustring& message)
 {
@@ -733,6 +736,7 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 	// Got server chat message
 	m_chat.obby_server_message(message);
 }
+#endif
 
 void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
@@ -995,4 +999,5 @@ void Gobby::Window::display_error(const Glib::ustring& message,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
 }
+
 

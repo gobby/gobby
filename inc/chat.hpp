@@ -33,15 +33,13 @@
 namespace Gobby
 {
 
-class Chat : public Gtk::VBox
+class Chat: public Gtk::VBox
 {
 public:
-	typedef sigc::signal<void, const Glib::ustring&> signal_chat_type;
-
 	Chat();
 	virtual ~Chat();
 
-	signal_chat_type chat_event() const;
+//	signal_chat_type chat_event() const;
 
 	// Calls from the window
 	void obby_start(obby::local_buffer& buf);
@@ -51,15 +49,28 @@ public:
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
 
-	void obby_message(const obby::user& user, const Glib::ustring& message);
-	void obby_server_message(const Glib::ustring& message);
+	//void obby_message(const obby::user& user, const Glib::ustring& message);
+	//void obby_server_message(const Glib::ustring& message);
 protected:
-	void add_line(const obby::user& user, const Glib::ustring& message);
+	//void add_line(const obby::user& user, const Glib::ustring& message);
 	void on_chat();
+
+	void on_message(const obby::chat::message& message);
+	void on_user_message(const obby::chat::user_message& message);
+	void on_server_message(const obby::chat::server_message& message);
+	void on_system_message(const obby::chat::system_message& message);
+
+	void send_line(const std::string& line);
+	void recv_user_line(const std::string& line,
+	                    const obby::chat::user_message& message);
+	void recv_server_line(const std::string& line,
+	                      const obby::chat::server_message& message);
+	void recv_system_line(const std::string& line,
+	                      const obby::chat::system_message& message);
 
 	obby::local_buffer* m_buffer;
 
-	signal_chat_type m_signal_chat;
+//	signal_chat_type m_signal_chat;
 
 	Gtk::Image m_img_btn;
 	Gtk::HBox m_box_chat;

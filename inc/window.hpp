@@ -45,6 +45,7 @@ public:
 	Window();
 	~Window();
 
+        Document& get_current_document();
 protected:
 	// Gtk::Window overrides
 	virtual void on_realize();
@@ -80,7 +81,9 @@ protected:
 	void on_about();
 	void on_quit();
 
+#if 0
 	void on_chat(const Glib::ustring& message);
+#endif
 
 	// Drag and drop
 	virtual void on_drag_data_received(
@@ -99,11 +102,12 @@ protected:
 	void on_obby_document_insert(obby::document_info& document);
 	void on_obby_document_remove(obby::document_info& document);
 
+#if 0
 	void on_obby_server_chat(const Glib::ustring& message);
 	void on_obby_chat(const obby::user& user, const Glib::ustring& message);
+#endif
 
 	// Helper functions
-	Document& get_current_document();
 	void apply_preferences();
 	void update_title_bar(const Document& doc);
 	void open_local_file(const Glib::ustring& file);
@@ -148,3 +152,5 @@ protected:
 }
 
 #endif // _GOBBY_WINDOW_HPP_
+
+
