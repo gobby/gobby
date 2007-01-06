@@ -6,7 +6,7 @@ gobby_LDADD    = $(gobby_LIBS)
 gobby_CPPFLAGS = $(gobby_CFLAGS) -I../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\"
 
 if WIN32
-gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc
+gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows
 endif
 
 if WITH_GTKSOURCEVIEW
