@@ -1,6 +1,10 @@
 gobby
 =====
 
+Version 0.1.1:
+ * Bugfix release: Include contrib/gobby.desktop to fix the non-working build
+   when configured ``--with-gnome''.
+
 Version 0.1.0:
 
  * Initial release.
