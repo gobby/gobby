@@ -30,7 +30,11 @@ namespace
 		Glib::RefPtr<Gdk::Pixbuf> pixbuf =
 			Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, 16,
 				16);
-		pixbuf->fill( (colour.get_red() << 24) | (colour.get_green() << 16) | (colour.get_blue() << 8) );
+		pixbuf->fill(
+			(colour.get_red() << 24) |
+		       	(colour.get_green() << 16) |
+		       	(colour.get_blue() << 8)
+			);
 
 		// Border around the color
 		guint8* pixels = pixbuf->get_pixels();
@@ -168,6 +172,13 @@ void Gobby::UserList::obby_user_join(const obby::user& user)
 				)
 			);
 		}
+	}
+
+	if(&user == &m_buffer->get_self() )
+	{
+		// Open the "Online" node
+		Gtk::TreePath online(*m_iter_online);
+		m_tree_view.expand_row(online, false);
 	}
 }
 
