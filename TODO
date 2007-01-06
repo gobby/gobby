@@ -3,6 +3,10 @@ Gobby
 
 Serious:
  * Opening large documents is _really_ slow on win32's timer implementation
+v v v v v v v
+*************
+ * On connection loss: give a chance to save everything
+^ ^ ^ ^ ^ ^ ^
 
 Important:
  * Compensate changes made by others by scrolling appropriately; the current
@@ -19,7 +23,17 @@ Minor:
    has changed and the document is not active and possibly to grey when
    the document is not yet syncronised (which would depend on sync-on-request
    within libobby)
+v v v v v v v
+*************
+ * Option to disable line numbers with GtkSourceView per document
+ * Switch to tabs newly opened by self
+^ ^ ^ ^ ^ ^ ^
 
 Wishlist:
  * Default to save files to the location they were loaded from
    (or save the directory of the last save)
+v v v v v v v
+*************
+ * Request confirmation before closing (sessions with) unsaved documents
+
+^ ^ ^ ^ ^ ^ ^

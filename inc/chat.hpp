@@ -51,6 +51,7 @@ public:
 	void obby_message(obby::user& user, const Glib::ustring& message);
 	void obby_server_message(const Glib::ustring& message);
 protected:
+	void add_line(obby::user& user, const Glib::ustring& message);
 	void on_chat();
 
 	signal_chat_type m_signal_chat;

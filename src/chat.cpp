@@ -93,12 +93,11 @@ void Gobby::Chat::obby_document_remove(obby::document& document)
 
 void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
 {
-	m_log_chat.log("<" + user.get_name() + "> " + message, "black");
+  m_log_chat.log("<" + user.get_name() + "> " + message, "black");
 }
 
-void Gobby::Chat::obby_server_message(const Glib::ustring& message)
-{
-	m_log_chat.log(message, "forest green");
+void Gobby::Chat::obby_server_message(const Glib::ustring& message) {
+  m_log_chat.log(message, "forest green");
 }
 
 void Gobby::Chat::on_chat()
@@ -115,4 +114,6 @@ void Gobby::Chat::on_chat()
 		prev = ++pos;
 	}
 	m_signal_chat.emit(message.substr(prev) );
+
+	m_signal_chat.emit(message);
 }
