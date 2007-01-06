@@ -15,6 +15,7 @@ Version 0.2.0:
    - Auto indentation
    - Drag'n'drop of documents into the session
    - Create document works without a delay
+   - Better Win32 network handling
  * Changes in the build system:
    - It is now required to provide `gtksourceview-1.0', the depedency is no
      more optional.
