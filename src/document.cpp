@@ -282,12 +282,12 @@ Gobby::Document::get_slice(obby::position from, obby::position len) const
 	const obby::user* author = author_at_iter(pos);
 	Glib::RefPtr<const Gtk::TextTag> any_tag(NULL);
 
-	while(len > 0 && pos != m_buffer->end() )
+	while( (len > 0 || len == obby::text::npos) && pos != m_buffer->end())
 	{
 		const obby::user* new_author = forward_chunk(pos);
 		obby::position diff = diff_bytes(prev, pos);
 
-		if(diff > len)
+		if(len != obby::text::npos && diff > len)
 		{
 			pos = prev;
 			diff = len;
@@ -296,12 +296,14 @@ Gobby::Document::get_slice(obby::position from, obby::position len) const
 
 		result.append(prev.get_slice(pos), author);
 
-		len -= diff;
+		if(len != obby::text::npos)
+			len -= diff;
+
 		prev = pos;
 		author = new_author;
 	}
 
-	if(pos == m_buffer->end() && len > 0)
+	if(len != obby::text::npos && pos == m_buffer->end() && len > 0)
 	{
 		throw std::logic_error(
 			"Gobby::Document::get_slice:\n"
@@ -356,7 +358,11 @@ void Gobby::Document::erase(obby::position pos, obby::position len)
 	Gtk::TextIter begin = get_iter(pos);
 	Gtk::TextIter end = begin;
 
-	forward_bytes(end, len);
+	if(len == obby::text::npos)
+		end = m_buffer->end();
+	else
+		forward_bytes(end, len);
+
 	m_buffer->erase(begin, end);
 }
 
