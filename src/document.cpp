@@ -184,18 +184,11 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 	}
 }
 
-void Gobby::Document::set_selection(size_type begin, size_type end,
-                                    bool cursor_in_front)
+void Gobby::Document::set_selection(const Gtk::TextIter& begin,
+                                    const Gtk::TextIter& end)
 {
-	Gtk::TextBuffer::iterator begin_it =
-		get_buffer()->get_iter_at_offset(begin);
-	Gtk::TextBuffer::iterator end_it =
-		get_buffer()->get_iter_at_offset(end);
-
-	if(cursor_in_front)
-		get_buffer()->select_range(begin_it, end_it);
-	else
-		get_buffer()->select_range(end_it, begin_it);
+        get_buffer()->select_range(begin, end);
+        scroll_to(get_buffer()->get_insert(), 0.1);
 }
 
 unsigned int Gobby::Document::get_unsynced_changes_count() const
@@ -803,4 +796,5 @@ void Gobby::Document::update_tag_colour(const obby::user& user)
 	// Set/Update color
 	tag->property_background_gdk() = color;
 }
+
 

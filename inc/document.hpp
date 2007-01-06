@@ -55,12 +55,10 @@ public:
 	 */
 	unsigned int get_unsynced_changes_count() const;
 
-	/** Selects the given region and places the cursor in front of the
-	 * selection if <em>cursor_in_front</em> is true, otherwise behind
-	 * the selection.
+	/** Selects the given region and scrolls to the selected text.
 	 */
-	void set_selection(size_type begin, size_type len,
-	                   bool cursor_in_front = false);
+	void set_selection(const Gtk::TextIter& begin,
+	                   const Gtk::TextIter& end);
 
 	/** Returns the current document revision.
 	 */
