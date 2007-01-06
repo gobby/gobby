@@ -2,13 +2,12 @@
 # Copyright (C) 2005 0x539 dev group
 # Philipp Kern <phil@0x539.de>, 2005.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Gobby 0.1.0\n"
+"Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-06-23 22:54+0200\n"
-"PO-Revision-Date: 2005-06-09 16:04+0200\n"
+"PO-Revision-Date: 2005-06-24 09:57+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
@@ -22,12 +21,12 @@ msgstr "Abschicken"
 #: src/chat.cpp:79
 #, c-format
 msgid "%0 has joined"
-msgstr ""
+msgstr " %0 hat die Sitzung betreten"
 
 #: src/chat.cpp:86
 #, c-format
 msgid "%0 has left"
-msgstr ""
+msgstr "%0 hat die Sitzung verlassen"
 
 #. App menu
 #: src/header.cpp:129
@@ -110,12 +109,11 @@ msgstr "Ansicht"
 
 #: src/header.cpp:253
 msgid "Word wrapping"
-msgstr ""
+msgstr "Zeilenumbruch"
 
 #: src/header.cpp:254
-#, fuzzy
 msgid "Whether to wrap the text to the document's width"
-msgstr "Anzeige von Zeilennummern"
+msgstr "Automatisches Umbrechen von Wörtern am Dokumentrand"
 
 #: src/header.cpp:267
 msgid "Line numbers"
@@ -127,18 +125,18 @@ msgstr "Anzeige von Zeilennummern"
 
 #: src/header.cpp:299
 msgid "None"
-msgstr ""
+msgstr "Keine"
 
 #: src/header.cpp:300
 #, fuzzy
 msgid "Unselects the current language"
-msgstr "Ausgewählte Sprache: "
+msgstr ""
 
 #. Build description string
 #: src/header.cpp:320
-#, fuzzy, c-format
+#, c-format
 msgid "Selects %0 as language"
-msgstr "Ausgewählte Sprache: "
+msgstr "Wählt %0 als Sprache aus"
 
 #. Help menu
 #: src/header.cpp:357
@@ -206,9 +204,8 @@ msgid "Connection lost"
 msgstr "Verbindung verloren"
 
 #: src/statusbar.cpp:66
-#, fuzzy
 msgid "Selected language: %0"
-msgstr "Ausgewählte Sprache: "
+msgstr "Ausgewählte Sprache: %0"
 
 #: src/statusbar.cpp:72
 msgid "No language selected"
@@ -216,29 +213,26 @@ msgstr "Keine Sprache ausgewählt"
 
 #. TODO: ngettext
 #: src/statusbar.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "%0 pending change(s)"
-msgstr " ausstehende Änderungen"
+msgstr "%0 ausstehende Änderung(en)"
 
 #: src/statusbar.cpp:87
-#, fuzzy
 msgid "Revision: %0"
-msgstr "Revision: "
+msgstr "Revision: %0"
 
 #: src/buffer_wrapper.cpp:175
-#, fuzzy
 msgid "Peer %0 (%1) not found in peer list"
-msgstr ") wurde nicht in der Verbindungsliste gefunden"
+msgstr "Partner %0 (%1) wurde nicht in der Verbindungsliste gefunden"
 
 #: src/document.cpp:37
 msgid "Subscribe"
 msgstr ""
 
-#. TODO: Localise...
 #: src/document.cpp:290
 #, c-format
 msgid "User %0 is not connected"
-msgstr ""
+msgstr "Benutzer %0 ist nicht verbunden"
 
 #: src/document.cpp:618
 msgid ""
@@ -249,20 +243,3 @@ msgid ""
 "\n"
 msgstr ""
 
-#~ msgid "Selects "
-#~ msgstr "Wählt "
-
-#~ msgid " as language"
-#~ msgstr " als Sprache"
-
-#~ msgid "Line: "
-#~ msgstr "Zeile: "
-
-#~ msgid " Column: "
-#~ msgstr " Spalte: "
-
-#~ msgid "Peer "
-#~ msgstr "Benutzer "
-
-#~ msgid "("
-#~ msgstr "("
