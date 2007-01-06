@@ -170,7 +170,7 @@ void Gobby::Host::on_connect(net6::host::peer& new_peer)
 	m_peer_map[&new_peer] = conn;
 		
 	// Call base function
-	net6::host::on_join(new_peer);
+	net6::host::on_connect(new_peer);
 }
 
 void Gobby::Host::on_send_event(const net6::packet& pack,
