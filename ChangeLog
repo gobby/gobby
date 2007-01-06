@@ -1,3 +1,374 @@
+Fri Jul 29 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jul 28 19:46:07 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Updated German translation
+
+Thu Jul 28 15:56:00 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Updates from `make update-po'
+
+Thu Jul 28 12:20:14 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Win32 build fix
+
+Wed Jul 27 21:16:11 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Some fixes for buffer_wrappers
+
+Wed Jul 27 18:21:59 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed POTFILES.in for new io/ subdir
+
+Wed Jul 27 18:06:58 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Emit content_changed signal in insert/erase_after [fixes #64]
+
+Wed Jul 27 18:01:13 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Queried the cached subscribe value instead of requesting it from obby::document_info [fixes #63]
+
+Wed Jul 27 17:53:58 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Moved buffer_wrapper to io/ subdir, enhanced portabaility
+
+Wed Jul 27 17:02:13 UTC 2005  Philipp Kern <phil@0x539.de>
+  * The last missing French string
+
+Wed Jul 27 16:55:06 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Updated French translation by Peer Janssen
+
+Wed Jul 27 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Tue Jul 26 23:08:14 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Better Win32 network handling announced
+
+Tue Jul 26 23:03:57 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added a readme and an installation guide [fixes #51]
+
+Tue Jul 26 20:59:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Initialise the colour selection dialog with the current user colour
+
+Tue Jul 26 17:25:00 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Column returns the real column of the text not just the nth character
+
+Tue Jul 26 15:18:17 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * User highlighting when name is mentioned in chat [fixes #6]
+
+Tue Jul 26 15:01:45 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Prompt before closing modified documents
+
+Tue Jul 26 14:46:17 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Save host/port settings into new config keys
+
+Tue Jul 26 14:45:55 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Switch to tabs newly opened [fixes #27]
+
+Tue Jul 26 14:24:50 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Connected/Subscribed flags in user list (fixes #12)
+
+Mon Jul 25 12:07:30 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Check for valid UTF-8 after converting
+
+Mon Jul 25 10:10:55 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Try to convert files with other encodings to UTF-8 [fixes #43]
+
+Mon Jul 25 09:54:46 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Colourised tab labels [fixes #59]
+
+Mon Jul 25 08:34:15 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Merged host and join dialog data just again, with separated ports and hostnames
+
+Mon Jul 25 08:07:24 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added more dots to the menu items
+
+Mon Jul 25 07:40:59 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Format string adjustments
+
+Mon Jul 25 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Sun Jul 24 22:39:33 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Depend on obby's 0.2.x API
+
+Sun Jul 24 22:35:50 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Improved the Zeroconf handling
+
+Sun Jul 24 21:36:07 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added Window::get_current_document
+
+Sun Jul 24 21:26:53 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Do not allow empty document names
+
+Sun Jul 24 20:35:48 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Removed useless preferences_changed delegate
+
+Sun Jul 24 20:20:48 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Update cursor position display in statusbar by remote changes
+
+Sun Jul 24 17:24:20 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Modified flag [fixes #25]
+
+Sun Jul 24 14:58:20 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Translation roundup
+
+Sun Jul 24 13:11:48 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added PasswordDialog
+
+Sun Jul 24 11:56:52 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Corrections to file handling
+
+Sun Jul 24 09:46:00 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added toolbar settings into preferences [fixes #32]
+
+Sat Jul 23 22:59:35 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added some release notes directly to the sources
+
+Sat Jul 23 22:40:29 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Adjusted the Zeroconf usage
+
+Sat Jul 23 20:52:11 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * First attempt to allow opening files by dropping them on a document, doesn't work.
+
+Sat Jul 23 19:25:58 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Drag+Drop of files into open Gobby session
+
+Sat Jul 23 15:53:08 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Set colour implemented
+
+Thu Jul 21 15:53:39 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  UNDO: Use 'session' config key for both client and host
+
+Sat Jul 23 14:59:15 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * No fixed size for the send button
+
+Sat Jul 23 16:02:02 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Removed debug log
+
+Sat Jul 23 16:01:48 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Colour presets [fixes #36] Thanks tom! :D
+
+Sat Jul 23 11:41:46 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Use a tooltip instead of an expanded label
+
+Sat Jul 23 10:22:56 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Smart home/end preference
+
+Sat Jul 23 09:09:45 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Re-arranged status bar
+
+Fri Jul 22 21:53:10 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Some more preferences
+
+Sat Jul 23 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Fri Jul 22 17:54:45 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * typo in preferences dialog fixed
+
+Fri Jul 22 17:46:19 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Local preferences, syntax submenu
+
+Fri Jul 22 14:54:44 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed some messup
+
+Fri Jul 22 12:57:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Fixed just another conflict
+
+Fri Jul 22 12:56:25 UTC 2005  Philipp Kern <phil@0x539.de>
+  * A cleanup patch to fix hundreds of conflicts
+
+Fri Jul 22 12:32:10 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Changed the GtkSourceView dependency to a hard one
+
+Fri Jul 22 14:12:02 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed conflict caused by phil's security page
+
+Fri Jul 22 14:04:54 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Introduced working preferences, some are missing
+
+Fri Jul 22 05:54:23 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added a Security stub to the preferences dialog sources
+
+Thu Jul 21 21:36:26 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Changes to the About dialog
+
+Thu Jul 21 20:39:38 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Small UI fixes
+
+Thu Jul 21 19:40:40 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * First preferences dialog approach
+
+Thu Jul 21 17:39:20 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Used ngettext one time, updated templates a bit
+
+Thu Jul 21 16:55:14 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Changes by libtool
+
+Thu Jul 21 15:53:39 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Use 'session' config key for both client and host
+
+Thu Jul 21 15:46:22 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Use the right directory to look for pixmaps
+
+Thu Jul 21 14:53:59 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Small adjustments to net6 API change
+
+Thu Jul 21 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Wed Jul 20 19:04:42 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Connect synchoniously to the server, would cause too much trouble otherwise
+
+Wed Jul 20 17:07:58 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Gtk::manage dynamically allocated widgets
+
+Wed Jul 20 16:15:07 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixed SEGV on connection error
+
+Wed Jul 20 13:56:57 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Initialize Threading system in main()
+
+Wed Jul 20 13:55:50 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Close icons in tab labels [ref #32]
+
+Wed Jul 20 11:30:28 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Display current document in title bar
+
+Tue Jul 19 20:02:03 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Progress dialogs
+
+Mon Jul 18 20:31:10 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added dependency on gthread-2.0, versioned one on net6
+
+Sun Jul 17 13:17:52 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * User authentication stuff
+
+Fri Jul 15 14:19:23 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Global password
+
+Fri Jul 15 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Sun Jul  3 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Fri Jul  1 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jun 30 19:36:36 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Highlight chat messages with the own nickname [fixes #6]
+
+Thu Jun 30 19:36:00 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Pass the current session buffer to all client widgets
+
+Sat Jun 25 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Fri Jun 24 21:44:18 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Removed two unnecessary includes from src/buffer_wrapper.cpp
+
+Fri Jun 24 21:03:49 UTC 2005  Philipp Kern <phil@0x539.de>
+  * French translation reviewed by Mohammed Adnene Trojette <adn@diwi.org>
+
+Fri Jun 24 20:19:58 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Updated translation files
+
+Fri Jun 24 07:59:56 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Updated German translation, still not fully completed
+
+Thu Jun 23 21:00:12 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Catch-all update of the gettext stuff
+
+Thu Jun 23 20:57:47 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added French translation of Peer Janssen <peer@baden-online.de> [fixes #50]
+
+Thu Jun 23 20:12:00 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Fixes for changed obby record API
+
+Fri Jun 17 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Thu Jun 16 20:34:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Removed autogen.sh, it is superseded by autoreconf
+
+Thu Jun 16 19:54:59 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Return a const char pointer from gettext
+
+Wed Jun 15 13:38:45 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added word wrapping
+
+Wed Jun 15 16:11:54 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Replace all non-ascii characters in UI XML [fixes #44]
+
+Tue Jun 14 21:44:02 UTC 2005  Philipp Kern <phil@0x539.de>
+  * One new string to translate, updated debconf template
+
+Tue Jun 14 21:29:58 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added missing conditionals related to GtkSourceView
+
+Tue Jun 14 21:18:23 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Gobby depends on obby 0.2.0 or higher
+
+Tue Jun 14 17:44:41 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Using obby::format_string instead of std::stringstream
+
+Tue Jun 14 16:26:27 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Enable highlighting when subscribed
+
+Tue Jun 14 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Mon Jun 13 20:20:09 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Adjustments for synchronisation on request.
+  
+  The core feature seems to work. The user interface, however, may be discussed and changed later on. This is just a first try to test the feature and to make Gobby compile with it.
+
+Mon Jun 13 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Sun Jun 12 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Fri Jun 10 07:52:53 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Preliminary, but working Zeroconf support [ref #17]
+
+Thu Jun  9 14:06:45 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Revised the German translation
+
+Thu Jun  9 14:04:47 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Corrected AE color to BE colour
+
+Thu Jun  9 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Wed Jun  8 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Tue Jun  7 21:26:10 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Adjusted code for changes user flags in libobby
+
+Tue Jun  7 18:24:33 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Modified history by adding the missing 0.1.1 NEWS entry
+
+Tue Jun  7 18:23:45 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added dependency on Automake 1.9; added missing NEWS check
+
+Tue Jun  7 03:00:02 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Mon Jun  6 20:56:12 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Ship gobby.desktop in the distribution
+
+Mon Jun  6 16:29:45 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Adjusted for net6's error code transmission (#16)
+
+Mon Jun  6 14:35:57 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Better win32 network implementation [fixes #2]
+
+Sun Jun  5 03:00:01 UTC 2005  Trac <trac@darcs.0x539.de>
+  * TODO updated
+
+Sat Jun  4 22:05:05 UTC 2005  Philipp Kern <phil@0x539.de>
+  tagged gobby-0.1.0
+
+Sat Jun  4 22:04:56 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Updated ChangeLog for release
+
 Sat Jun  4 19:48:53 UTC 2005  Armin Burgmeier <armin@0x539.de>
   * Fixed a segfault which occured sometimes when closing documents
 
@@ -292,17 +663,11 @@ Sun Apr 17 15:31:15 UTC 2005  Philipp Kern <phil@0x539.de>
 Sun Apr 17 14:59:06 UTC 2005  Armin Burgmeier <armin@0x539.de>
   * Win32 buffer_wrappers using a timer
 
-Fri Apr 15 21:48:03 UTC 2005  Armin Burgmeier <armin@0x539.de>
-  * Added inline gobby icon
-
-Fri Apr 15 14:10:38 UTC 2005  Armin Burgmeier <armin@0x539.de>
-  * Added some first wrapper code for GtkSourceView -- disfunctional
-
-Fri Apr 15 14:09:48 UTC 2005  Philipp Kern <phil@0x539.de>
-  * Added framework to use SourceView instead of TextView
-
 Fri Apr 15 21:48:28 UTC 2005  Armin Burgmeier <armin@0x539.de>
   * Added tom as artist
+
+Fri Apr 15 21:48:03 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added inline gobby icon
 
 Fri Apr 15 21:09:41 UTC 2005  Philipp Kern <phil@0x539.de>
   * Added artwork credits
@@ -315,6 +680,12 @@ Fri Apr 15 20:16:30 UTC 2005  Armin Burgmeier <armin@0x539.de>
 
 Fri Apr 15 20:00:12 UTC 2005  Armin Burgmeier <armin@0x539.de>
   * Adjusted buffer_wrapper for net6 API corrections
+
+Fri Apr 15 14:10:38 UTC 2005  Armin Burgmeier <armin@0x539.de>
+  * Added some first wrapper code for GtkSourceView -- disfunctional
+
+Fri Apr 15 14:09:48 UTC 2005  Philipp Kern <phil@0x539.de>
+  * Added framework to use SourceView instead of TextView
 
 Thu Apr 14 17:38:34 UTC 2005  Philipp Kern <phil@0x539.de>
   tagged stable 2005-04-14
