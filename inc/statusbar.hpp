@@ -57,15 +57,8 @@ public:
 protected:
 	Header& m_header;
 
-	//Gtk::HBox m_box;
-	guint m_message_noconn;
-	guint m_message_state;
-
-	Gtk::Frame m_frm_language;
-	Gtk::Label m_lbl_language;
-
-	Gtk::Frame m_frm_position;
-	Gtk::Label m_lbl_position;
+	Gtk::Statusbar m_bar_language;
+	Gtk::Statusbar m_bar_position;
 };
 
 }

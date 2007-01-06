@@ -24,26 +24,18 @@
 #include "statusbar.hpp"
 
 Gobby::StatusBar::StatusBar(Header& header, const Folder& folder):
-	m_header(header), m_message_noconn(0), m_message_state(0),
-	m_lbl_language("", Gtk::ALIGN_LEFT),
-	m_lbl_position("", Gtk::ALIGN_LEFT)
+	m_header(header)
 {
-	Gtk::ShadowType shadow_type;
-	get_style_property("shadow-type", shadow_type);
+	pack_end(m_bar_position, Gtk::PACK_SHRINK);
+	pack_end(m_bar_language, Gtk::PACK_SHRINK);
 
-	m_frm_language.add(m_lbl_language);
-	m_frm_position.add(m_lbl_position);
+	m_bar_position.set_size_request(200, -1);
+	m_bar_language.set_size_request(200, -1);
 
-	m_frm_language.set_shadow_type(shadow_type);
-	m_frm_position.set_shadow_type(shadow_type);
+	set_has_resize_grip(false);
+	m_bar_language.set_has_resize_grip(false);
 
-	pack_start(m_frm_language, Gtk::PACK_EXPAND_WIDGET);
-	pack_start(m_frm_position, Gtk::PACK_SHRINK);
-	set_spacing(0);
-
-	m_lbl_language.set_ellipsize(Pango::ELLIPSIZE_END);
-
-	m_message_noconn = push(_("Not connected"));
+	push(_("Not connected"));
 
 	folder.document_cursor_moved_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_cursor) );
@@ -56,15 +48,16 @@ Gobby::StatusBar::StatusBar(Header& header, const Folder& folder):
 void Gobby::StatusBar::update_language(DocWindow& wnd)
 {
 	// Selected language
+	m_bar_language.pop();
 	if(wnd.get_language() )
 	{
 		obby::format_string str(_("Selected language: %0%") );
 		str << wnd.get_language()->get_name().raw();
-		m_lbl_language.set_text(str.str() );
+		m_bar_language.push(str.str() );
 	}
 	else
 	{
-		m_lbl_language.set_text(_("No language selected") );
+		m_bar_language.push(_("No language selected") );
 	}
 }
 
@@ -73,9 +66,10 @@ void Gobby::StatusBar::update_cursor(DocWindow& wnd)
 	unsigned int row, col;
 	wnd.get_cursor_position(row, col);
 
+	m_bar_position.pop();
 	obby::format_string str("Line: %0%, Column: %1%");
 	str << (row + 1) << (col + 1);
-	m_lbl_position.set_text(str.str() );
+	m_bar_position.push(str.str() );
 }
 
 void Gobby::StatusBar::update_from_document(DocWindow& wnd)
@@ -87,7 +81,8 @@ void Gobby::StatusBar::update_from_document(DocWindow& wnd)
 void Gobby::StatusBar::update_connection(const Glib::ustring& str)
 {
 	// TODO: Do this in obby_start!
-	m_message_state = push(str);
+	pop();
+	push(str);
 }
 
 void Gobby::StatusBar::obby_start(LocalBuffer& buf)
@@ -96,11 +91,11 @@ void Gobby::StatusBar::obby_start(LocalBuffer& buf)
 
 void Gobby::StatusBar::obby_end()
 {
-	m_lbl_language.set_text("");
-	remove_message(m_message_state);
-	m_message_state = 0;
+	pop();
+	m_bar_language.pop();
+	m_bar_position.pop();
 
-	m_lbl_position.set_text("");
+	push(_("Not connected"));
 }
 
 void Gobby::StatusBar::obby_user_join(const obby::user& user)
@@ -121,8 +116,8 @@ void Gobby::StatusBar::obby_document_remove(LocalDocumentInfo& document)
 	if(document.get_buffer().document_count() == 1)
 	{
 		// Clear document-related statusbar items
-		m_lbl_language.set_text("");
-		m_lbl_position.set_text("");
+		m_bar_language.pop();
+		m_bar_position.pop();
 	}
 }
 
