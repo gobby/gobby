@@ -69,7 +69,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		config.get_root()["windows"]
 	),
 	m_finddialog(*this), m_gotodialog(*this),
-	m_folder(m_header, m_preferences), m_statusbar(m_header, m_folder)
+	m_folder(m_header, m_preferences), m_chat(*this),
+	m_statusbar(m_header, m_folder)
 {
 	// Header
 	m_header.action_app_session_create->signal_activate().connect(
@@ -411,67 +412,7 @@ void Gobby::Window::on_session_create()
 
 void Gobby::Window::on_session_join()
 {
-	if(m_join_dlg.get() == NULL)
-	{
-#ifndef WITH_ZEROCONF
-		m_join_dlg.reset(
-			new JoinDialog(*this, m_config.get_root()["session"])
-		);
-#else
-		m_join_dlg.reset(
-			new JoinDialog(
-				*this,
-				m_config.get_root()["session"],
-				m_zeroconf.get()
-			)
-		);
-#endif
-	}
-
-	while(m_join_dlg->run() == Gtk::RESPONSE_OK)
-	{
-		// Read settings
-		Glib::ustring host = m_join_dlg->get_host();
-		unsigned int port = m_join_dlg->get_port();
-		Glib::ustring name = m_join_dlg->get_name();
-		Gdk::Color color = m_join_dlg->get_color();
-
-		JoinProgressDialog prgdlg(
-			*this,
-			m_config.get_root()["session"],
-			host,
-			port,
-			name,
-			color
-		);
-
-		if(prgdlg.run() == Gtk::RESPONSE_OK)
-		{
-			prgdlg.hide();
-
-			// Get buffer
-			std::auto_ptr<ClientBuffer> buffer =
-				prgdlg.get_buffer();
-
-			buffer->set_enable_keepalives(true);
-
-			buffer->close_event().connect(
-				sigc::mem_fun(*this, &Window::on_obby_close) );
-
-			obby::format_string str(_("Connected to %0%:%1%") );
-			str << host << port;
-			m_statusbar.update_connection(str.str() );
-
-			// Start session
-			m_buffer = buffer;
-			obby_start();
-
-			// Session is open, no need to reshow join dialog
-			break;
-		}
-	}
-
-	m_join_dlg->hide();
+	session_join(true);
 }
 
 void Gobby::Window::on_session_save()
@@ -1203,6 +1144,54 @@ namespace
 	}
 }
 
+bool Gobby::Window::session_join(bool initial_dialog)
+{
+	if(m_buffer.get() && m_buffer->is_open() )
+	{
+		throw std::logic_error(
+			"Gobby::Window::session_join:\n"
+			"Buffer is already open"
+		);
+	}
+
+	if(m_join_dlg.get() == NULL)
+	{
+#ifndef WITH_ZEROCONF
+		m_join_dlg.reset(
+			new JoinDialog(*this, m_config.get_root()["session"])
+		);
+#else
+		m_join_dlg.reset(
+			new JoinDialog(
+				*this,
+				m_config.get_root()["session"],
+				m_zeroconf.get()
+			)
+		);
+#endif
+	}
+
+	int response = Gtk::RESPONSE_OK;
+	if(initial_dialog) response = m_join_dlg->run();
+
+	while(response == Gtk::RESPONSE_OK)
+	{
+		// Read settings
+		Glib::ustring host = m_join_dlg->get_host();
+		unsigned int port = m_join_dlg->get_port();
+		Glib::ustring name = m_join_dlg->get_name();
+		Gdk::Color color = m_join_dlg->get_color();
+
+		if(session_join_impl(host, port, name, color) )
+			break;
+		else
+			response = m_join_dlg->run();
+	}
+
+	m_join_dlg->hide();
+	return (m_buffer.get() && m_buffer->is_open() );
+}
+
 bool Gobby::Window::session_open(bool initial_dialog)
 {
 	if(m_buffer.get() && m_buffer->is_open() )
@@ -1251,6 +1240,49 @@ bool Gobby::Window::session_open(bool initial_dialog)
 	}
 
 	return (m_buffer.get() && m_buffer->is_open() );
+}
+
+bool Gobby::Window::session_join_impl(const Glib::ustring& host,
+                                      unsigned int port,
+                                      const Glib::ustring& name,
+                                      const Gdk::Color& color)
+{
+	JoinProgressDialog prgdlg(
+		*this,
+		m_config.get_root()["session"],
+		host,
+		port,
+		name,
+		color
+	);
+
+	if(prgdlg.run() == Gtk::RESPONSE_OK)
+	{
+		prgdlg.hide();
+
+		// Get buffer
+		std::auto_ptr<ClientBuffer> buffer = prgdlg.get_buffer();
+
+		buffer->set_enable_keepalives(true);
+
+		buffer->close_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_close) );
+
+		obby::format_string str(_("Connected to %0%:%1%") );
+		str << host << port;
+		m_statusbar.update_connection(str.str() );
+
+		// Start session
+		m_buffer = buffer;
+		obby_start();
+
+		// Session is open, no need to reshow join dialog
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 bool Gobby::Window::session_open_impl(unsigned int port,

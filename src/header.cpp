@@ -204,6 +204,7 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 	return static_cast<Code>(gobject_->code);
 }
 
+#include <iostream>
 Gobby::Header::Header(const ApplicationState& state,
                       const LangManager& lang_mgr):
 	group_app(Gtk::ActionGroup::create("MenuApp") ),
@@ -616,8 +617,8 @@ Gobby::Header::Header(const ApplicationState& state,
 	// Gtk::SourceLanguage::sourcelanguage_class_.init() is called.
 	// See the TODO item in Glib::wrap(GtkSourceLanguage*, bool) in
 	// sourcelanguage.cpp
-	GtkSourceLanguage* lang = NULL;
-	Glib::wrap(lang, false);
+	//GtkSourceLanguage* lang = NULL;
+	//Glib::wrap(lang, false);
 
 	// Get available languages
 	std::list<Glib::RefPtr<Gtk::SourceLanguage> > lang_list =
@@ -654,7 +655,8 @@ Gobby::Header::Header(const ApplicationState& state,
 
 		// Build description string
 		obby::format_string str(_("Selects %0% as language") );
-		str << language->get_name().raw();
+		Glib::ustring name = language->get_name();
+		str << name.raw();
 
 		// Add language to action group
 		remove_dangerous_xml(language_xml_name);

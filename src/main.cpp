@@ -19,6 +19,9 @@
 #include <iostream>
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
+#include <glibmm/optionentry.h>
+#include <glibmm/optiongroup.h>
+#include <glibmm/optioncontext.h>
 #include "common.hpp"
 #include "ipc.hpp"
 #include "icon.hpp"
@@ -26,6 +29,11 @@
 #include "encoding_selector.hpp"
 #include "window.hpp"
 #include "features.hpp"
+
+#include "sourceview/private/sourcelanguage_p.hpp"
+#include "sourceview/private/sourcelanguagesmanager_p.hpp"
+#include "sourceview/private/sourcebuffer_p.hpp"
+#include "sourceview/private/sourceview_p.hpp"
 
 #ifdef WITH_GNOME
 # include <libgnomevfs/gnome-vfs-init.h>
@@ -41,23 +49,29 @@ void handle_exception(const Glib::ustring& message)
 
 std::auto_ptr<Gobby::Ipc::RemoteConnection>
 open_files(Gobby::Window& wnd,
-           const std::vector<std::string>& files)
+           const std::vector<std::string>& files,
+           bool disable_ipc,
+           bool do_join)
 {
 	std::auto_ptr<Gobby::Ipc::RemoteConnection> conn;
 
-	try
+	// Neither do NPC when we want to join a session
+	if(!disable_ipc && !do_join)
 	{
-		// Try to connect to other gobby instance
-		Gobby::Ipc::RemoteInstance instance;
+		try
+		{
+			// Try to connect to other gobby instance
+			Gobby::Ipc::RemoteInstance instance;
 
-		conn.reset(
-			new Gobby::Ipc::RemoteConnection(instance)
-		);
-	}
-	catch(Gobby::Ipc::Error& e)
-	{
-		if(e.code() != Gobby::Ipc::Error::NO_REMOTE_INSTANCE)
-			throw e;
+			conn.reset(
+				new Gobby::Ipc::RemoteConnection(instance)
+			);
+		}
+		catch(Gobby::Ipc::Error& e)
+		{
+			if(e.code() != Gobby::Ipc::Error::NO_REMOTE_INSTANCE)
+				throw e;
+		}
 	}
 
 	if(conn.get() != NULL)
@@ -79,8 +93,12 @@ open_files(Gobby::Window& wnd,
 		// No other gobby found, so open the files locally
 		wnd.show();
 
+		bool result = do_join ?
+			wnd.session_join(false) :
+			wnd.session_open(false);
+
 		// First, open a session with default settings
-		if(wnd.session_open(false) )
+		if(result)
 		{
 			// And pass files
 			for(std::vector<std::string>::const_iterator iter =
@@ -105,9 +123,47 @@ int main(int argc, char* argv[]) try
 	net6::gettext_package gobby_package(GETTEXT_PACKAGE, LOCALE_DIR);
 	Gobby::init_gettext(gobby_package);
 
-	// TODO: Options to disable IPC
+	bool disable_ipc;
+	Glib::ustring join;
 
-	Gtk::Main kit(argc, argv);
+	Glib::OptionGroup opt_group_gobby("gobby", "Gobby options", "Options related directly to gobby");
+	Glib::OptionEntry opt_disable_ipc;
+	opt_disable_ipc.set_short_name('d');
+	opt_disable_ipc.set_long_name("disable-ipc");
+	opt_disable_ipc.set_description(
+		"Do not try to contact already running gobby instance"
+	);
+
+	Glib::OptionEntry opt_join;
+	opt_join.set_short_name('j');
+	opt_join.set_long_name("join");
+	opt_join.set_arg_description("HOST:PORT");
+	opt_join.set_description("Join a session on the given host");
+
+	opt_group_gobby.add_entry(opt_disable_ipc, disable_ipc);
+	opt_group_gobby.add_entry(opt_join, join);
+
+	Glib::OptionContext opt_ctx("[file1] [file2] [...]");
+	opt_ctx.set_help_enabled(true);
+	opt_ctx.set_ignore_unknown_options(false);
+
+	opt_ctx.set_main_group(opt_group_gobby);
+
+	// I would rather like to have Gtk::Main on the stack, but I see
+	// no other chance to catch exceptions from the command line option
+	// parsing. armin.
+	std::auto_ptr<Gtk::Main> kit;
+
+	try
+	{
+		kit.reset(new Gtk::Main(argc, argv, opt_ctx));
+	}
+	catch(Glib::Exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	net6::main netkit;
 
 	if(!Glib::thread_supported())
@@ -116,6 +172,11 @@ int main(int argc, char* argv[]) try
 #ifdef WITH_GNOME
 	gnome_vfs_init();
 #endif
+
+	Glib::wrap_register(gtk_source_language_get_type(), &Gtk::SourceLanguage_Class::wrap_new);
+	Glib::wrap_register(gtk_source_languages_manager_get_type(), &Gtk::SourceLanguagesManager_Class::wrap_new);
+	Glib::wrap_register(gtk_source_buffer_get_type(), &Gtk::SourceBuffer_Class::wrap_new);
+	Glib::wrap_register(gtk_source_view_get_type(), &Gtk::SourceView_Class::wrap_new);
 
 	// Get files to open
 	std::vector<std::string> files(argc - 1);
@@ -139,6 +200,29 @@ int main(int argc, char* argv[]) try
 	// Read the configuration
 	Gobby::Config config(Glib::get_home_dir() + "/.gobby/config.xml");
 
+	// Set join parameters if we want to join a session
+	if(!join.empty())
+	{
+		Glib::ustring::size_type pos = join.rfind(':');
+		if(pos == std::string::npos) pos = join.length();
+
+		Gobby::Config::ParentEntry& entry =
+			config.get_root()["session"];
+
+		entry.set_value("join_host", join.substr(0, pos));
+		if(pos < join.length())
+		{
+			entry.set_value(
+				"join_port",
+				std::strtoul(
+					join.substr(pos + 1).c_str(),
+					NULL,
+					10
+				)
+			);
+		}
+	}
+
 	// Create window
 	Gobby::Window wnd(icon_mgr, config);
 
@@ -147,16 +231,21 @@ int main(int argc, char* argv[]) try
 	// Gobby::Ipc::RemoteConnection's destructor.
 	std::auto_ptr<Gobby::Ipc::RemoteConnection> rem_conn;
 	if(!files.empty() )
-		rem_conn = open_files(wnd, files);
+		rem_conn = open_files(wnd, files, disable_ipc, !join.empty());
 	else
+	{
 		wnd.show();
+
+		if(!join.empty())
+			wnd.session_join(false);
+	}
 
 	// Cannot use just kit.run(wnd) since this would show wnd. If we
 	// are just sending some data to theother gobby, we do not want
 	// the window to be shown.
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
 
-	kit.run();
+	kit->run();
 
 #ifdef WITH_GNOME
 	//gnome_vfs_shutdown(); // Prints error messages.

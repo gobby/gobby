@@ -280,6 +280,12 @@ Gobby::Config::Config(const Glib::ustring& file):
 	}
 
 	xmlpp::Document* document = parser.get_document();
+	if(document == NULL)
+	{
+		m_root.reset(new ParentEntry("gobby_config") );
+		return;
+	}
+
 	xmlpp::Element* root = document->get_root_node();
 
 	// Config is present, but contains no root node

@@ -76,6 +76,18 @@ public:
 	 */
 	bool session_open(bool initial_dialog);
 
+	/** @brief Joins a session with the current default settings.
+	 *
+	 * If initial_dialog is true a dialog to turn the join parameters is
+	 * opened, otherwise the default settings are used.
+	 *
+	 * If the session join failed, a dialog appears where the user
+	 * might adjust settings or abort.
+	 *
+	 * This function must not be called when a buffer is already open.
+	 */
+	bool session_join(bool initial_dialog);
+
 	/** Opens a document containing the content of a file mounted on the
 	 * local filesystem.
 	 */
@@ -153,6 +165,12 @@ protected:
 	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message,
 	                   const Gtk::MessageType type = Gtk::MESSAGE_ERROR);
+
+	bool session_join_impl(const Glib::ustring& host,
+	                       unsigned int port,
+	                       const Glib::ustring& name,
+	                       const Gdk::Color& color);
+
 	bool session_open_impl(unsigned int port,
 	                       const Glib::ustring& name,
 	                       const Gdk::Color& color,
