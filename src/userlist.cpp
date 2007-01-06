@@ -145,7 +145,8 @@ void Gobby::UserList::obby_user_join(const obby::user& user)
 	else
 	{
 		// Update connected flag
-		(*iter)[m_list_cols.connected] = true;
+		(*iter)[m_list_cols.connected] =
+			user.get_flags() & obby::user::flags::CONNECTED;
 	}
 }
 
@@ -255,7 +256,8 @@ void Gobby::UserList::add_user(const obby::user& user)
 
 	row[m_list_cols.name] = user.get_name();
 	row[m_list_cols.colour] = create_coloured_pixbuf(red, green, blue);
-	row[m_list_cols.connected] = true;
+	row[m_list_cols.connected] =
+		user.get_flags() & obby::user::flags::CONNECTED;
 
 	if(m_info != NULL)
 		row[m_list_cols.subscribed] = m_info->is_subscribed(user);
