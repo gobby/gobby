@@ -19,6 +19,7 @@
 #ifndef _GOBBY_DOCUMENT_HPP_
 #define _GOBBY_DOCUMENT_HPP_
 
+#include <obby/document.hpp>
 #include <obby/local_document_info.hpp>
 
 #include "preferences.hpp"
