@@ -6,6 +6,7 @@ Blocker:
 Critical:
 
 Major:
+  * Bug: Crashes on files with encodings not being UTF-8 (#43)
 
 Normal:
   * Implement support for Zeroconf (#17)
@@ -28,6 +29,14 @@ Enhancement:
   * Auto indentation (#23)
   * Focus the text-widget after having created/joined a session (#35)
 
+
+43: Bug: Crashes on files with encodings not being UTF-8
+--------------------------------------------------------
+Gobby should not crash with a segmentation fault when one tries to open 
+files not encoded in UTF-8. Instead it should either check the document for 
+UTF-8 validity and prompt the user for the right encoding if it does not 
+match, and translate it appropriately, or just refuse to open it (but the 
+former would be more acceptable than the latter).
 
 17: Implement support for Zeroconf
 ----------------------------------
