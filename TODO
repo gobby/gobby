@@ -8,6 +8,7 @@ Critical:
 Major:
   * High CPU load while writing (#45)
   * Bug: High load (and blocking X11) when opening big text file (#48)
+  * Gobby adds additional newline on load  (#91)
 
 Normal:
   * Chat command infrastructure (#31)
@@ -37,6 +38,7 @@ Enhancement:
   * Remote document browsing support (#75)
   * Session Management (#76)
   * Hyperlinks on chat sessions (#80)
+  * Chat enhancements (#90)
 
 
 45: High CPU load while writing
@@ -53,6 +55,14 @@ Opening a 6.7MB large ChangeLog file in gobby produces 100% load and blocks
 gobby completely. Even other windows, like a ssh screen session in an aterm 
 did not respond any more. Gobby had to be killed to get the screen session 
 working again.
+
+91: Gobby adds additional newline on load 
+------------------------------------------
+Gobby adds an additional newline to the end of the document when a document 
+is loaded from the disk. At a first glance only ''Glib::file_get_contents'' 
+and ''convert_to_utf8'' are called, so I don't understand where this 
+newline is coming from. This happens with stock 0.2.0 and with the current 
+development tree, it should also be fixed for the upcoming bugfix release.
 
 31: Chat command infrastructure
 -------------------------------
@@ -214,4 +224,10 @@ later on with the changes made by each user retained.
 -------------------------------
 Links on chat could be transformed to hyperlinks and sent to the O.S. to be 
 opened by the default browser.
+
+90: Chat enhancements
+---------------------
+ * The background of lines in the chat box should be colour-coded with the 
+colour of the user who wrote them.
+ * Timestamps should be added to the chat box.
 
