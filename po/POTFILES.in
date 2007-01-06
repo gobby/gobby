@@ -1,20 +1,20 @@
 # source files
 
 src/io/buffer_wrapper.cpp
+src/icon.cpp
 src/encoding.cpp
-src/chat.cpp
 src/header.cpp
-src/preferencesdialog.cpp
-src/hostdialog.cpp
-src/joindialog.cpp
-src/finddialog.cpp
-src/gotodialog.cpp
+src/statusbar.cpp
 src/userlist.cpp
 src/documentlist.cpp
-src/window.cpp
-src/statusbar.cpp
-src/document.cpp
-src/progressdialog.cpp
-src/hostprogressdialog.cpp
-src/joinprogressdialog.cpp
+src/chat.cpp
+src/preferencesdialog.cpp
 src/passworddialog.cpp
+src/hostdialog.cpp
+src/joindialog.cpp
+src/progressdialog.cpp
+src/joinprogressdialog.cpp
+src/hostprogressdialog.cpp
+src/finddialog.cpp
+src/gotodialog.cpp
+src/window.cpp
