@@ -23,11 +23,6 @@
 #include "document.hpp"
 #include "folder.hpp"
 
-#ifdef WITH_GTKSOURCEVIEW
-const Gobby::Document::MimeMap& Gobby::Document::m_mime_map =
-	Gobby::Document::create_mime_map();
-#endif
-
 Gobby::Document::Document(obby::document& doc, const Folder& folder)
  : Gtk::ScrolledWindow(), m_doc(doc), m_folder(folder), m_editing(true)
 #ifdef WITH_GTKSOURCEVIEW
@@ -48,35 +43,16 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 
 
 #ifdef WITH_GTKSOURCEVIEW
-	// Set source language by file extension
-	Glib::ustring title = doc.get_title();
-	Glib::ustring::size_type pos = title.rfind('.');
-	if(pos != Glib::ustring::npos)
+	// Set SourceLanguage by file extension
+	Glib::ustring mime_type =
+		folder.get_mime_map().get_mime_type_by_file(doc.get_title() );
+	if(!mime_type.empty() )
 	{
-		Glib::ustring extension = title.substr(pos + 1);
-		MimeMap::const_iterator iter = m_mime_map.find(extension);
-		if(iter != m_mime_map.end() )
+		Glib::RefPtr<Gtk::SourceLanguage> language = 
+			m_lang_manager->get_language_from_mime_type(mime_type);
+		if(language)
 		{
-			Glib::ustring mime = iter->second;
-			Glib::RefPtr<Gtk::SourceLanguage> language = 
-				m_lang_manager->get_language_from_mime_type(
-					mime
-				);
-			if(language)
-			{
-				buf->set_language(language);
-			}
-			else
-			{
-				g_warning("Could not find syntax file for file "
-				          "extension %s (mime-type %s)",
-				          extension.c_str(), mime.c_str() );
-			}
-		}
-		else
-		{
-			g_warning("Could not detect file type of file "
-			          "extension '%s'", extension.c_str() );
+			buf->set_language(language);
 		}
 	}
 
@@ -263,52 +239,3 @@ void Gobby::Document::on_cursor_changed(
 		m_signal_update.emit();
 }
 
-#ifdef WITH_GTKSOURCEVIEW
-const Gobby::Document::MimeMap& Gobby::Document::create_mime_map()
-{
-	static MimeMap map;
-
-	// Translates file extension to mime type
-	map["ada"] = "text/x-ada";
-	map["c"] = "text/x-c";
-	map["h"] = "text/x-c++";
-	map["hh"] = "text/x-c++";
-	map["cpp"] = "text/x-c++";
-	map["hpp"] = "text/x-c++";
-	map["cc"] = "text/x-c++";
-	map["css"] = "text/css";
-	map["cs"] = "text/x-csharp";
-	map["diff"] = "text/x-diff";
-	map["f"] = "text/x-fortran";
-	map["f77"] = "text/x-fortran";
-	map["hs"] = "text/x-haskell";
-	map["htm"] = "text/html";
-	map["html"] = "text/html";
-	map["xhtml"] = "text/html";
-	// Wi geth IDL?
-	map["java"] = "text/x-java";
-	map["js"] = "text/x-javascript";
-	map["tex"] = "text/x-tex";
-	map["latex"] = "text/x-tex";
-	map["lua"] = "text/x-lua";
-	// Wi geth MSIL?
-	map["dpr"] = "text/x-pascal";
-	map["pas"] = "text/x-pascal";
-	map["pl"] = "text/x-perl";
-	map["pm"] = "text/x-perl";
-	map["php"] = "text/x-php";
-	map["php3"] = "text/x-php";
-	map["php4"] = "text/x-php";
-	map["php5"] = "text/x-php";
-	map["po"] = "text/x-gettext-translation";
-	map["py"] = "text/x-python";
-	map["rb"] = "text/x-ruby";
-	map["sql"] = "text/x-sql";
-	// Wi geth texinfo?
-	// Wi geth vb.NET?
-	// Wi geth verilog?
-	map["xml"] = "text/xml";
-
-	return map;
-}
-#endif

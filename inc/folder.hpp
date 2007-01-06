@@ -23,8 +23,13 @@
 #include <gtkmm/notebook.h>
 #include <obby/user.hpp>
 #include <obby/document.hpp>
+
 #include "document.hpp"
 #include "sourceview/sourcelanguage.hpp"
+
+#ifdef WITH_GTKSOURCEVIEW
+# include "mimemap.hpp"
+#endif
 
 namespace Gobby
 {
@@ -39,6 +44,9 @@ public:
 
 	Folder();
 	~Folder();
+
+	// Access to the mime map
+	const MimeMap& get_mime_map() const;
 
 	// Calls from the window
 	void obby_start();
@@ -56,6 +64,10 @@ protected:
 	virtual void on_document_update(Document& document);
 
 	signal_document_update_type m_signal_document_update;
+
+#ifdef WITH_GTKSOURCEVIEW
+	MimeMap m_mime_map;
+#endif
 };
 
 }

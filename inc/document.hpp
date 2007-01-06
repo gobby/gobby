@@ -37,7 +37,6 @@ class Folder;
 class Document : public Gtk::ScrolledWindow
 {
 public:
-	typedef std::map<Glib::ustring, Glib::ustring> MimeMap;
 	typedef sigc::signal<void> signal_update_type;
 
 	Document(obby::document& doc, const Folder& folder);
@@ -86,15 +85,16 @@ protected:
 #else
 	Gtk::TextView m_view;
 #endif
+	/** Variable to prevent event functions from endless recursion. After
+	 * an obby insert or textbuffer insert has occured, this variable is
+	 * set to true, after the event has been handled, to false. If an
+	 * obby event arrives and we insert the newly written text into the
+	 * buffer, a textbuffer-insert event would occur. But if m_editing is
+	 * true, the event is ignored.
+	 */
 	bool m_editing;
 	
 	signal_update_type m_signal_update;
-
-public:
-#ifdef WITH_GTKSOURCEVIEW
-	static const MimeMap& create_mime_map();
-	static const MimeMap& m_mime_map;
-#endif
 };
 
 }

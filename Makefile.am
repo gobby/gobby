@@ -22,6 +22,9 @@ noinst_HEADERS += inc/buffer_wrapper_win32.hpp
 else
 noinst_HEADERS += inc/buffer_wrapper_generic.hpp
 endif
+if WITH_GTKSOURCEVIEW
+noinst_HEADERS += inc/mimemap.hpp
+endif
 noinst_HEADERS += inc/historyentry.hpp
 noinst_HEADERS += inc/logview.hpp
 noinst_HEADERS += inc/document.hpp
@@ -52,6 +55,9 @@ if WIN32
 gobby_SOURCES += src/buffer_wrapper_win32.cpp
 else
 gobby_SOURCES += src/buffer_wrapper_generic.cpp
+endif
+if WITH_GTKSOURCEVIEW
+gobby_SOURCES += src/mimemap.cpp
 endif
 gobby_SOURCES += src/historyentry.cpp
 gobby_SOURCES += src/logview.cpp

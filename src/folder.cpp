@@ -31,6 +31,11 @@ Gobby::Folder::~Folder()
 		delete get_nth_page(i);
 }
 
+const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
+{
+	return m_mime_map;
+}
+
 void Gobby::Folder::obby_start()
 {
 	// Remove existing pages
