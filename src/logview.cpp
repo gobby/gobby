@@ -16,6 +16,8 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <ctime>
+#include <sstream>
 #include "logview.hpp"
 
 Gobby::LogView::LogView()
@@ -42,6 +44,19 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
 	Glib::RefPtr<Gtk::TextTag> tag = buffer->get_tag_table()->lookup(color);
 
+	Glib::ustring ins_text = text;
+	if(ins_text[ins_text.length() - 1] != '\n') ins_text += "\n";
+
+	struct std::tm cur_time;
+	time_t cur_time_t = std::time(NULL);
+	localtime_r(&cur_time_t, &cur_time);
+
+	std::stringstream timestream;
+	timestream.width(2); // Ging so %.2d?
+	timestream << "[" << cur_time.tm_hour << ":" << cur_time.tm_min << ":"
+	           << cur_time.tm_sec << "] ";
+	ins_text = timestream.str() + ins_text;
+
 	if(!tag)
 	{
 		tag = Gtk::TextTag::create();
@@ -49,9 +64,7 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 		buffer->get_tag_table()->add(tag);
 	}
 
-	buffer->insert_with_tag(buffer->end(), text, tag);
-	if(text.length() && text[text.length() - 1] != '\n')
-		buffer->insert_with_tag(buffer->end(), "\n", tag);
+	buffer->insert_with_tag(buffer->end(), ins_text, tag);
 
 	scroll_to_mark(m_end_mark, 0.0f);
 }
