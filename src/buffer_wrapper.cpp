@@ -17,8 +17,6 @@
  */
 
 #include <cassert>
-#include <obby/client_user_table.hpp>
-#include <obby/host_user_table.hpp>
 #include <obby/format_string.hpp>
 #include "common.hpp"
 #include "buffer_wrapper.hpp"
