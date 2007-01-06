@@ -44,6 +44,8 @@ public:
 	std::auto_ptr<obby::client_buffer> get_buffer();
 
 private:
+	virtual bool on_idle();
+
 	virtual void on_thread();
 	virtual void on_done();
 

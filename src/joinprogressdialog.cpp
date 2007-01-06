@@ -35,6 +35,8 @@ Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
 	obby::format_string str("Connecting to %0%...");
 	str << hostname;
 	set_status_text(str.str() );
+
+	m_thread = NULL;
 }
 
 Gobby::JoinProgressDialog::~JoinProgressDialog()
@@ -69,7 +71,7 @@ void Gobby::JoinProgressDialog::on_thread()
 void Gobby::JoinProgressDialog::on_done()
 {
 	// Call base function joining the thread
-	ProgressDialog::on_done();
+	//ProgressDialog::on_done();
 
 	try
 	{
@@ -194,5 +196,11 @@ bool Gobby::JoinProgressDialog::prompt_password(const Glib::ustring& label,
 	{
 		return false;
 	}
+}
+
+bool Gobby::JoinProgressDialog::on_idle()
+{
+	on_done();
+	return false;
 }
 

@@ -56,8 +56,8 @@ protected:
 	Gtk::Window& m_parent;
 
 	int m_quit;
+	virtual bool on_idle();
 private:
-	bool on_idle();
 	void thread_entry();
 };
 
