@@ -2,6 +2,7 @@ Gobby
 =====
 
 Blocker:
+  * Application not initialized correctly (0xc000001d) exception when loading Gobby on Windows XP (#74)
 
 Critical:
 
@@ -28,6 +29,18 @@ Trivial:
 
 Enhancement:
 
+
+74: Application not initialized correctly (0xc000001d) exception when loading Gobby on Windows XP
+-------------------------------------------------------------------------------------------------
+  I have installed Gobby setup package and gtkmm package also. These were 
+not enough for libatk was not loading correctly. So I installed gtk for 
+windows. So far this is what I could do on the program. Every time I try to 
+run it, I have a dialog throwing this exception: "Application not 
+initialized correctly (0xc000001d)" twice when loading Gobby on Windows XP 
+without service packs.
+
+I have tryed to download the files directly from darcs repository, but the 
+same problem is happening with these also.
 
 45: High CPU load while writing
 -------------------------------
