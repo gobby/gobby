@@ -210,7 +210,9 @@ msgstr "Zeigt eine Liste der Dokumente in der aktuellen Sitzung"
 
 #: src/header.cpp:408
 msgid "Shows up a chat to talk to other people in the session"
-msgstr "Zeigt einen Chat an, um sich mit anderen Teilnehmern dieser Sitzung zu unterhalten"
+msgstr ""
+"Zeigt einen Chat an, um sich mit anderen Teilnehmern dieser Sitzung zu "
+"unterhalten"
 
 #: src/header.cpp:413
 msgid "_Help"
