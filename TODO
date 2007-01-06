@@ -4,31 +4,31 @@ Gobby
 Blocker:
 
 Critical:
-  * Excited to try it but libatk-1.6-1.dll just not found (#100) [libatkmm-1.6-1.dll]
+  * Excited to try it but libatk-1.6-1.dll just not found (#100) [win32]
 
 Major:
-  * High CPU load while writing (#45) []
-  * Bug: High load (and blocking X11) when opening big text file (#48) [bug]
-  * Gobby adds additional newline on load  (#91) []
+  * High CPU load while writing (#45)
+  * High load (and blocking X11) when opening big text file (#48) [bug]
+  * Gobby adds additional newline on load  (#91)
 
 Normal:
-  * Chat command infrastructure (#31) []
-  * Recognise command line parameters (#33) []
-  * Show the cursors and selections of all participants (#53) []
+  * Chat command infrastructure (#31)
+  * Recognise command line parameters (#33)
+  * Show the cursors and selections of all participants (#53)
   * Documentation (#54) [doc]
-  * Encoding should be preserved (#65) []
-  * automatic scroll if the end of a document is looked at (#70) []
-  * Win32 Drag'n'Drop (#71) []
-  * Newly joined documents are flagged as unchanged (#72) []
-  * Visualise connected / subscribed using an extender (#73) []
-  * Search, Replace and Goto Line features (#79) []
-  * Windows install doesn't work (missing intl.dll) (#81) []
-  * Central directory support (#82) []
-  * UI: Closing documents should not close them for other people (#83) []
-  * End-of-document cursor position behaves weirdly. (#84) []
-  * Gobby should save backups (#87) []
-  * obby:// protocol handler (#88) []
-  * "Quit" should confirm (#93) []
+  * Encoding should be preserved (#65)
+  * automatic scroll if the end of a document is looked at (#70)
+  * Win32 Drag'n'Drop (#71)
+  * Newly joined documents are flagged as unchanged (#72)
+  * Visualise connected / subscribed using an extender (#73)
+  * Search, Replace and Goto Line features (#79)
+  * Windows install doesn't work (missing intl.dll) (#81)
+  * Central directory support (#82)
+  * UI: Closing documents should not close them for other people (#83)
+  * End-of-document cursor position behaves weirdly. (#84)
+  * Gobby should save backups (#87)
+  * obby:// protocol handler (#88)
+  * "Quit" should confirm (#93)
   * Make it harder to lose document changes (#96) [usability]
 
 Minor:
@@ -37,14 +37,14 @@ Minor:
 Trivial:
 
 Enhancement:
-  * Indicate activity by changing tab colour to the user colour (#66) []
-  * Remote document browsing support (#75) []
-  * Session Management (#76) []
-  * Hyperlinks on chat sessions (#80) []
-  * Server exit causes clients to exit (#85) []
-  * Chat background filled with user colours (#90) []
-  * Locate participants (#95) [locate]
-  * Automatic live storage of documents and chat logs  (#98) []
+  * Indicate activity by changing tab colour to the user colour (#66)
+  * Remote document browsing support (#75)
+  * Session Management (#76)
+  * Hyperlinks on chat sessions (#80)
+  * Server exit causes clients to exit (#85)
+  * Chat background filled with user colours (#90)
+  * Locate participants (#95)
+  * Automatic live storage of documents and chat logs  (#98)
 
 
 100: Excited to try it but libatk-1.6-1.dll just not found
@@ -67,8 +67,8 @@ severe issue in either the design or implementation to me.
 
 Can be reproduced on Windows and FreeBSD.
 
-48: Bug: High load (and blocking X11) when opening big text file
-----------------------------------------------------------------
+48: High load (and blocking X11) when opening big text file
+-----------------------------------------------------------
 Opening a 6.7MB large ChangeLog file in gobby produces 100% load and blocks 
 gobby completely. Even other windows, like a ssh screen session in an aterm 
 did not respond any more. Gobby had to be killed to get the screen session 
