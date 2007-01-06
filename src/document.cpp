@@ -88,9 +88,9 @@ Gobby::Document::Document(obby::document& doc)
 		sigc::mem_fun(*this, &Document::on_erase), false);
 
 	// Obby signal handlers
-	doc.insert_event().connect(
+	doc.insert_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_insert) );
-	doc.delete_event().connect(
+	doc.delete_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_delete) );
 
 	// Set initial text
@@ -121,31 +121,71 @@ void Gobby::Document::on_insert(const Gtk::TextBuffer::iterator& begin,
                                 int bytes)
 {
 	if(m_editing) return;
-	m_doc.insert(begin.get_offset(), text);
+	m_editing = true;
+	
+	m_doc.insert(
+		m_doc.coord_to_position(
+			begin.get_line(),
+			begin.get_line_index()
+		),
+		text
+	);
+
+	m_editing = false;
 }
 
 void Gobby::Document::on_erase(const Gtk::TextBuffer::iterator& begin,
                                const Gtk::TextBuffer::iterator& end)
 {
 	if(m_editing) return;
-	m_doc.erase(begin.get_offset(), end.get_offset() );
+	m_editing = true;
+
+	m_doc.erase(
+		m_doc.coord_to_position(
+			begin.get_line(),
+			begin.get_line_index()
+		),
+		m_doc.coord_to_position(
+			end.get_line(),
+			end.get_line_index()
+		)
+	);
+
+	m_editing = false;
 }
 
 void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 {
+	if(m_editing) return;
 	m_editing = true;
+
 	Glib::RefPtr<Gtk::TextBuffer> buffer = m_view.get_buffer();
-	buffer->insert(buffer->get_iter_at_offset(record.get_position()),
-	               record.get_text() );
+
+	unsigned int row, col;
+	m_doc.position_to_coord(record.get_position(), row, col);
+	buffer->insert(
+		buffer->get_iter_at_line_index(row, col),
+		record.get_text()
+	);
+
 	m_editing = false;
 }
 
 void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 {
+	if(m_editing) return;
 	m_editing = true;
+
 	Glib::RefPtr<Gtk::TextBuffer> buffer = m_view.get_buffer();
-	buffer->erase(buffer->get_iter_at_offset(record.get_begin()),
-	              buffer->get_iter_at_offset(record.get_end()) );
+
+	unsigned int brow, bcol, erow, ecol;
+	m_doc.position_to_coord(record.get_begin(), brow, bcol);
+	m_doc.position_to_coord(record.get_end(), erow, ecol);
+
+	buffer->erase(
+		buffer->get_iter_at_line_index(brow, bcol),
+		buffer->get_iter_at_line_index(erow, ecol)
+	);
 	m_editing = false;
 }
 
