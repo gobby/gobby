@@ -286,7 +286,7 @@ obby::io::server_buffer::server_buffer(Gtk::Window& window, unsigned int port)
 #else
 obby::io::server_buffer::server_buffer(unsigned int port)
 #endif
- : obby::buffer(), obby::server_buffer(port)
+ : obby::buffer(), obby::server_buffer()
 {
 #ifdef WIN32
 	net6::server* server = new io::server(window, port, false);

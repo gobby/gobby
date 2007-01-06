@@ -21,7 +21,9 @@
 
 #include <map>
 #include <glibmm/ustring.h>
-#include <gtkmm/window.h>
+#ifdef WIN32
+# include <gtkmm/window.h>
+#endif
 #include <obby/client_buffer.hpp>
 #include <obby/server_buffer.hpp>
 #include <obby/host_buffer.hpp>
