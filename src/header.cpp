@@ -215,10 +215,10 @@ Gobby::Header::Header()
 
 	if(m_menubar == NULL)
 		throw Error(Error::MENUBAR_MISSING,
-			_("XML UI definition lacks menubar") );
+			"XML UI definition lacks menubar" );
 	if(m_toolbar == NULL)
 		throw Error(Error::TOOLBAR_MISSING,
-			_("XML UI definition lacks toolbar") );
+			"XML UI definition lacks toolbar" );
 
 	pack_start(*m_menubar, Gtk::PACK_SHRINK);
 	pack_start(*m_toolbar, Gtk::PACK_SHRINK);
