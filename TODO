@@ -20,6 +20,7 @@ Normal:
   * Newly joined documents are flagged as unchanged (#72)
   * Visualise connected / subscribed using an extender (#73)
   * Search, Replace and Goto Line features (#79)
+  * Windows install doesn't work (missing intl.dll) (#81)
 
 Minor:
 
@@ -124,6 +125,12 @@ to be converted to a TreeView to realise this, though.
 ------------------------------------------
 It would be interesting to have Search, Replace and Goto Line features in 
 Gobby.
+
+81: Windows install doesn't work (missing intl.dll)
+---------------------------------------------------
+"The application has failed to start because intl.dll was not found."
+
+Brand new install of 0.2.1.
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
