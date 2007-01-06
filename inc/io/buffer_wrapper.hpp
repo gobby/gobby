@@ -83,8 +83,8 @@ public:
 		Code code() const;
 	};
 
-	typedef std::map<const net6::server::peer*, main_connection*>
-		peer_map_type;
+	typedef std::map<const net6::user*, main_connection*>
+		user_map_type;
 
 	/** Constructs a new server object. Note that you have to perform a call
 	 * to reopen() to accept incoming connections.
@@ -116,36 +116,40 @@ public:
 	 */
 	virtual void reopen(unsigned int port);
 
-	/** Sends a packet to the given peer.
+	/** Sends a packet to all currently connected users.
 	 */
-	virtual void send(const net6::packet& pack, net6::host::peer& to);
+	virtual void send(const net6::packet& pack);
+
+	/** Sends a packet to the given user.
+	 */
+	virtual void send(const net6::packet& pack, const net6::user& to);
 
 protected:
-	/** Called when a new peer has connected to the server. This callback
-	 * is used to create a new main_connection for this peer and storing it
-	 * in the peer map.
+	/** Called when a new user has connected to the server. This callback
+	 * is used to create a new main_connection for this user and storing it
+	 * in the user map.
 	 */
-	virtual void on_connect(net6::host::peer& new_peer);
+	virtual void on_connect(const net6::user& new_user);
 
 	/** Called when a all data in the send queue of a client connection has
 	 * been sent. This is used to remove the IO_OUT flag.
 	 */
-	virtual void on_send_event(net6::host::peer& to);
+	virtual void on_send_event(net6::user& to);
 
 	/** Deletes the main_connection on connection loss.
 	 */
-	virtual void remove_client(net6::host::peer* client);
+	virtual void remove_client(const net6::user* client);
 
-	/** Returns the iterator for the given peer. If this peer is not present
-	 * in the map (which should never occur), host::Error is thrown.
+	/** Returns the iterator for the given user. If this user is not present
+	 * in the map (which should never occur), server::Error is thrown.
 	 */
-	peer_map_type::iterator get_peer_iter(const net6::server::peer& peer);
+	user_map_type::iterator get_user_iter(const net6::user& user);
 
 #ifdef WIN32
 	Gtk::Window& m_window;
 #endif
 	std::auto_ptr<main_connection> m_serv_connection;
-	peer_map_type m_peer_map;
+	user_map_type m_user_map;
 private:
 	void shutdown_impl();
 	void reopen_impl(unsigned int port);
@@ -153,7 +157,7 @@ private:
 
 /** The host is bit tricky:
  * We derive from io::server to get all the IO handling and from net6::host to
- * get the underlaying host with its local peer.
+ * get the underlaying host with its local user.
  */
 
 class host : virtual public net6::host,
@@ -184,15 +188,19 @@ public:
 #endif
 	virtual ~host();
 
-	/** Sends a packet to the given peer. No packet will be send if to
+	/** Sends a packet to all connected users.
+	 */
+	virtual void send(const net6::packet& pack);
+
+	/** Sends a packet to the given user. No packet will be sent if to
 	 * is the local user.
 	 */
-	virtual void send(const net6::packet& pack, net6::host::peer& to);
+	virtual void send(const net6::packet& pack, const net6::user& to);
 protected:
 	/** Called when a all data in the send queue of a client connection has
 	 * been sent. This is used to remove the IO_OUT flag.
 	 */
-	virtual void on_send_event(net6::host::peer& to);
+	virtual void on_send_event(net6::user& to);
 };
 
 /** A obby::client_buffer derived class that uses io::client.

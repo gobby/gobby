@@ -659,7 +659,9 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	// the next event that refreshes the current line. I tried appending
 	// queue_draw() after the apply_tag call, but it did not help
 	// - Armin
-	for(int i = 0; i < 2; ++ i)
+//	for(int i = 0; i < 2; ++ i)
+//	// Applying once seems to work now?
+//	// - Armin (29.07.2005)
 		buffer->apply_tag(tag, begin, end);
 }
 

@@ -95,8 +95,8 @@ obby::io::server::~server()
 	shutdown_impl();
 
 	// Remove client main_connections
-	peer_map_type::iterator iter;
-	for(iter = m_peer_map.begin(); iter != m_peer_map.end(); ++ iter)
+	user_map_type::iterator iter;
+	for(iter = m_user_map.begin(); iter != m_user_map.end(); ++ iter)
 		delete iter->second;
 }
 
@@ -116,38 +116,44 @@ void obby::io::server::reopen(unsigned int port)
 	reopen_impl(port);
 }
 
-void obby::io::server::send(const net6::packet& pack, net6::server::peer& to)
+void obby::io::server::send(const net6::packet& pack)
+{
+	// Call base function
+	net6::server::send(pack);
+}
+
+void obby::io::server::send(const net6::packet& pack, const net6::user& to)
 {
 	// Add Glib::IO_OUT event
-	peer_map_type::iterator iter = get_peer_iter(to);
+	user_map_type::iterator iter = get_user_iter(to);
 	iter->second->add_events(main_connection::IO_OUT);
 
 	// Call base function
 	net6::server::send(pack, to);
 }
 
-void obby::io::server::on_connect(net6::server::peer& new_peer)
+void obby::io::server::on_connect(const net6::user& new_user)
 {
 	// Build main_connection
 	main_connection* conn = new main_connection(
 #ifdef WIN32
 		m_window,
 #endif
-		new_peer.get_socket(),
+		new_user.get_connection().get_socket(),
 		main_connection::IO_IN | main_connection::IO_ERROR
 	);
 
-	// Insert into peer map
-	m_peer_map[&new_peer] = conn;
+	// Insert into user map
+	m_user_map[&new_user] = conn;
 
 	// Call base function
-	net6::server::on_connect(new_peer);
+	net6::server::on_connect(new_user);
 }
 
-void obby::io::server::on_send_event(net6::server::peer& to)
+void obby::io::server::on_send_event(net6::user& to)
 {
-	// Find peer in peer map
-	peer_map_type::iterator iter = get_peer_iter(to);
+	// Find user in user map
+	user_map_type::iterator iter = get_user_iter(to);
 	main_connection* conn = iter->second;
 
 	// Remove IO_OUT flag because there is no data to be sent anymore
@@ -157,33 +163,33 @@ void obby::io::server::on_send_event(net6::server::peer& to)
 	net6::server::on_send_event(to);
 }
 
-void obby::io::server::remove_client(net6::server::peer* peer)
+void obby::io::server::remove_client(const net6::user* user)
 {
-	// Find peer in peer map
-	peer_map_type::iterator iter = get_peer_iter(*peer);
+	// Find user in user map
+	user_map_type::iterator iter = get_user_iter(*user);
 
 	// Remove main_connection
 	delete iter->second;
-	m_peer_map.erase(iter);
+	m_user_map.erase(iter);
 
 	// Call base function
-	net6::server::remove_client(peer);
+	net6::server::remove_client(user);
 }
 
-obby::io::server::peer_map_type::iterator
-obby::io::server::get_peer_iter(const net6::server::peer& peer)
+obby::io::server::user_map_type::iterator
+obby::io::server::get_user_iter(const net6::user& user)
 {
-	// Find peer
-	peer_map_type::iterator iter = m_peer_map.find(&peer);
+	// Find user
+	user_map_type::iterator iter = m_user_map.find(&user);
 
 	// Not found?
-	if(iter == m_peer_map.end() )
+	if(iter == m_user_map.end() )
 	{
 		// Should not happen...
-		obby::format_string str(
-			_("Peer %0% (%1%) not found in peer list") );
-		str << peer.get_name() << peer.get_address().get_name();
-		throw Error(Error::PEER_NOT_FOUND, str.str() );
+		throw Error(
+			Error::PEER_NOT_FOUND,
+			"obby::io::server::get_user_iter"
+		);
 	}
 
 	return iter;
@@ -237,7 +243,13 @@ obby::io::host::~host()
 {
 }
 
-void obby::io::host::send(const net6::packet& pack, net6::host::peer& to)
+void obby::io::host::send(const net6::packet& pack)
+{
+	// Call base function from server
+	server::send(pack);
+}
+
+void obby::io::host::send(const net6::packet& pack, const net6::user& to)
 {
 	// Prevent from sendint packets to ourselves
 	if(&to == self) return;
@@ -245,7 +257,7 @@ void obby::io::host::send(const net6::packet& pack, net6::host::peer& to)
 	server::send(pack, to);
 }
 
-void obby::io::host::on_send_event(net6::host::peer& to)
+void obby::io::host::on_send_event(net6::user& to)
 {
 	// Prevent from sending packets to ourselves
 	if(&to == self) return;
@@ -326,8 +338,7 @@ obby::io::host_buffer::host_buffer(unsigned int port,
 #endif
 	m_server = host;
 
-	assert(host->get_self() != NULL);
-	m_self = m_usertable.add_user(*host->get_self(), red, green, blue);
+	m_self = m_usertable.add_user(host->get_self(), red, green, blue);
 	register_signal_handlers();
 }
 
