@@ -280,7 +280,8 @@ void Gobby::Window::on_document_open()
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		m_buffer->create_document(
-			Glib::path_get_basename(dlg.get_filename()) );
+			Glib::path_get_basename(dlg.get_filename()),
+			Glib::file_get_contents(dlg.get_filename()) );
 	}
 }
 
