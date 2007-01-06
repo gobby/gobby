@@ -208,7 +208,7 @@ namespace
 
 	Gobby::Unix::Address make_gobby_addr()
 	{
-		serialise::context<pid_t> ctx;
+		serialise::default_context_to<pid_t> ctx;
 		std::string file = Glib::build_filename(
 			Glib::get_tmp_dir(),
 			"gobby_" + ctx.to_string(getpid()) + ".sock"
