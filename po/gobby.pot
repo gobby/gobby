@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-04 18:31+0200\n"
+"POT-Creation-Date: 2005-06-04 20:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,6 +164,10 @@ msgstr ""
 msgid "A collaborative text editor"
 msgstr ""
 
+#: src/window.cpp:314
+msgid "Enter document name"
+msgstr ""
+
 #: src/window.cpp:323
 msgid "Open new document"
 msgstr ""
@@ -174,4 +178,28 @@ msgstr ""
 
 #: src/window.cpp:454
 msgid "Connection lost"
+msgstr ""
+
+#: src/statusbar.cpp:64
+msgid "Selected language: "
+msgstr ""
+
+#: src/statusbar.cpp:68
+msgid "No language selected"
+msgstr ""
+
+#: src/statusbar.cpp:76
+msgid " unsynced change(s)"
+msgstr ""
+
+#: src/statusbar.cpp:83
+msgid "Revision: "
+msgstr ""
+
+#: src/statusbar.cpp:94
+msgid "Line: "
+msgstr ""
+
+#: src/statusbar.cpp:94
+msgid " Column: "
 msgstr ""

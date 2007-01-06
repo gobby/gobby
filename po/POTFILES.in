@@ -6,4 +6,5 @@ src/hostdialog.cpp
 src/joindialog.cpp
 src/userlist.cpp
 src/window.cpp
+src/statusbar.cpp
 

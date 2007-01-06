@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-04 18:31+0200\n"
-"PO-Revision-Date: 2005-06-04 18:40+0200\n"
+"POT-Creation-Date: 2005-06-04 20:01+0200\n"
+"PO-Revision-Date: 2005-06-04 20:24+0200\n"
 "Last-Translator: Philipp Kern <phil@0x539.de>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
 "MIME-Version: 1.0\n"
@@ -163,6 +163,10 @@ msgstr "Name"
 msgid "A collaborative text editor"
 msgstr "Ein Gemeinschaftseditor"
 
+#: src/window.cpp:314
+msgid "Enter document name"
+msgstr "Geben Sie bitte einen Namen für das Dokument ein."
+
 #: src/window.cpp:323
 msgid "Open new document"
 msgstr "Neues dokument öffnen"
@@ -174,3 +178,27 @@ msgstr "Aktuelles Dokument speichern"
 #: src/window.cpp:454
 msgid "Connection lost"
 msgstr "Verbindung verloren"
+
+#: src/statusbar.cpp:64
+msgid "Selected language: "
+msgstr "Ausgewählte Sprache: "
+
+#: src/statusbar.cpp:68
+msgid "No language selected"
+msgstr "Keine Sprache ausgewählt"
+
+#: src/statusbar.cpp:76
+msgid " unsynced change(s)"
+msgstr " ausstehende Änderungen"
+
+#: src/statusbar.cpp:83
+msgid "Revision: "
+msgstr "Revision: "
+
+#: src/statusbar.cpp:94
+msgid "Line: "
+msgstr "Zeile: "
+
+#: src/statusbar.cpp:94
+msgid " Column: "
+msgstr " Spalte: "

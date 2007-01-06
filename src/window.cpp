@@ -311,7 +311,7 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_document_create()
 {
-	EntryDialog dlg(*this, _("Create document"), "Enter document name");
+	EntryDialog dlg(*this, _("Create document"), _("Enter document name"));
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		m_buffer->create_document(dlg.get_text() );
