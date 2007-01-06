@@ -16,19 +16,21 @@ Normal:
   * Show the cursors and selections of all participants (#53)
   * Documentation (#54)
   * Encoding should be preserved (#65)
-  * color change for indicating activity of a document not upfront (#66)
   * automatic scroll if the end of a document is looked at (#70)
   * Win32 Drag'n'Drop (#71)
   * Newly joined documents are flagged as unchanged (#72)
   * Visualise connected / subscribed using an extender (#73)
+  * Search, Replace and Goto Line features (#79)
 
 Minor:
 
 Trivial:
 
 Enhancement:
+  * Indicate activity by changing tab colour to the user colour (#66)
   * Remote document browsing support (#75)
   * Session Management (#76)
+  * Hyperlinks on chat sessions (#80)
 
 
 74: Application not initialized correctly (0xc000001d) exception when loading Gobby on Windows XP
@@ -97,19 +99,6 @@ The incoming encoding from what it is converted should be saved internally
 on the host which opened them, so that the save function results in a file 
 with the original one.
 
-66: color change for indicating activity of a document not upfront
-------------------------------------------------------------------
-Several document windows is a standard on tings. At least a _talk for the 
-talk and a _document page for the summary / the condensed wisdom. In 
-moon-edit I used to open two windows, a third of the scree above for for 
-_document, two thirds of the screen below for the talk. I wonder if in 
-gobby one couldn't die the Reiter (?) above telling the document's name in 
-the color of the person last editing this document. Like that you could see 
-who is editing a document and if it's active without having it upfront. 
-Active documents with several people writing on it would change the color 
-pretty fast. If someone alone is editing the document maybe there should be 
-a blinking dot on it or so. 
-
 70: automatic scroll if the end of a document is looked at
 ----------------------------------------------------------
 Someone writes new text (usually at the end of the page), but as you don't 
@@ -144,6 +133,19 @@ The connected / subscribed flag should be visualised through a nested
 GtkExtender instead of the flags shown up in the ListView. Perhaps it needs 
 to be converted to a TreeView to realise this, though.
 
+79: Search, Replace and Goto Line features
+------------------------------------------
+It would be interesting to have Search, Replace and Goto Line features in 
+Gobby.
+
+66: Indicate activity by changing tab colour to the user colour
+---------------------------------------------------------------
+The tabs of documents not active should flash with the colour of the user 
+who did the last edit, either temporarily or permanent. This should be 
+customisable. When many user edit the document, the tab colour might change 
+pretty fast and if someone is editing the document alone there could be a 
+blinking dot to indicate the changes.
+
 75: Remote document browsing support
 ------------------------------------
 It would be great if there were a checkbox on the file tab (besides the 
@@ -159,4 +161,9 @@ I noticed there is a revision number displayed in gobby, there should be a
 way of managing gobby sessions, like loading old revisions and undoing 
 changes based on revision as well as saving sessions so they can be loaded 
 later on with the changes made by each user retained.
+
+80: Hyperlinks on chat sessions
+-------------------------------
+Links on chat could be transformed to hyperlinks and sent to the O.S. to be 
+opened by the default browser.
 
