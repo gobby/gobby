@@ -189,8 +189,8 @@ void Gobby::JoinDialog::on_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_OK)
 	{
-		m_config["session"]["host"].set(get_host() );
-		m_config["session"]["port"].set(get_port() );
+		m_config["session"]["join_host"].set(get_host() );
+		m_config["session"]["join_port"].set(get_port() );
 		m_config["session"]["name"].set(get_name() );
 		m_config["session"]["color"].set(get_color() );
 	}

@@ -129,7 +129,7 @@ void Gobby::HostDialog::on_response(int response_id)
 	if(response_id == Gtk::RESPONSE_OK)
 	{
 		// Write new values into config
-		m_config["session"]["port"].set(get_port() );
+		m_config["session"]["host_port"].set(get_port() );
 		m_config["session"]["name"].set(get_name() );
 		m_config["session"]["color"].set(get_color() );
 	}
