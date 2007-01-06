@@ -181,6 +181,11 @@ void Gobby::Window::on_session_join() try
 		m_buffer->remove_document_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_remove));
 
+		m_buffer->message_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_chat) );
+		m_buffer->server_message_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_server_chat) );
+
 		if(!m_timer_conn.connected() )
 			m_timer_conn = Glib::signal_timeout().connect(
 				sigc::mem_fun(*this, &Window::on_timer), 400);
