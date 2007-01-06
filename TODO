@@ -21,6 +21,11 @@ Normal:
   * Visualise connected / subscribed using an extender (#73)
   * Search, Replace and Goto Line features (#79)
   * Windows install doesn't work (missing intl.dll) (#81)
+  * Central directory support (#82)
+  * UI: Closing documents should not close them for other people (#83)
+  * End-of-document cursor position behaves weirdly. (#84)
+  * Server exit causes clients to exit (#85)
+  * Gobby should save backups (#87)
 
 Minor:
 
@@ -131,6 +136,40 @@ Gobby.
 "The application has failed to start because intl.dll was not found."
 
 Brand new install of 0.2.1.
+
+82: Central directory support
+-----------------------------
+Gobby should support a central directory of Sobby servers.
+
+83: UI: Closing documents should not close them for other people
+----------------------------------------------------------------
+Presently, if one person closes a document, it closes for all other users, 
+even if they haven't saved copies. 
+
+Instead, the set of open documents should be a server feature, and each 
+client should be able to choose which documents they're subscribed to.
+
+84: End-of-document cursor position behaves weirdly.
+----------------------------------------------------
+Scenario:
+
+Person A is appending to the end of the document.  Person B wants to add 
+something below what person A is now typing.  So, person B positions their 
+cursor at the end of the document, and hits enter.  This inserts a newline, 
+and causes person A's cursor to go to the position after the newline.  
+Instead, person A's cursor should remain before the newline, so that they 
+can continue typing on their portion of the document.
+
+85: Server exit causes clients to exit
+--------------------------------------
+When a server disconnects, clients shouldn't exit (potentially losing 
+text).  Instead, they should just indicate to the user that they are 
+disconnected, and allow them to save and continue editing text.  If the 
+server comes back online, everyone's changes can be sent in.
+
+87: Gobby should save backups
+-----------------------------
+Gobby should save local backups in case of crashes.  
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
