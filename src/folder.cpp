@@ -46,6 +46,12 @@ Gobby::Folder::TabLabel::~TabLabel()
 {
 }
 
+Gobby::Folder::TabLabel::close_signal_type
+Gobby::Folder::TabLabel::close_event() 
+{
+	return m_button.signal_clicked();
+}
+
 Gobby::Folder::Folder()
  : Gtk::Notebook(), m_running(false)
 #ifdef WITH_GTKSOURCEVIEW
@@ -56,18 +62,6 @@ Gobby::Folder::Folder()
 
 Gobby::Folder::~Folder()
 {
-	// Delete documents
-	for(int i = 0; i < get_n_pages(); ++ i)
-	{
-		delete get_tab_label(*get_nth_page(i) );
-		delete get_nth_page(i);
-	}
-}
-
-Gobby::Folder::TabLabel::close_signal_type
-Gobby::Folder::TabLabel::close_event() 
-{
-	return m_button.signal_clicked();
 }
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -85,12 +79,8 @@ Gobby::Folder::get_lang_manager() const
 
 void Gobby::Folder::obby_start(obby::local_buffer& buf)
 {
-	// Remove existing pages
 	while(get_n_pages() )
-	{
-		delete get_nth_page(0);
 		remove_page(0);
-	}
 
 	set_sensitive(true);
 	m_running = true;
@@ -125,7 +115,7 @@ void Gobby::Folder::obby_user_part(obby::user& user)
 void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 {
 	// Create new document
-	DocWindow* new_wnd = new DocWindow(document, *this);
+	DocWindow* new_wnd = Gtk::manage(new DocWindow(document, *this) );
 	Document& new_doc = new_wnd->get_document();
 
 	// Watch update signal to emit document_updated signal if a document
@@ -160,7 +150,7 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 #endif
 
 	// Create label for the tab
-	TabLabel* label = new TabLabel(document.get_title() );
+	TabLabel* label = Gtk::manage(new TabLabel(document.get_title() ));
 
 	// Connect close event
 	label->close_event().connect(
@@ -190,13 +180,6 @@ void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
 		{
 			// Remove page
 			remove_page(*doc);
-
-			// Delete tab label assigned to the document
-			delete get_tab_label(*doc);
-
-			// Delete document itself
-			delete doc;
-
 			break;
 		}
 	}

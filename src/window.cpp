@@ -581,8 +581,6 @@ void Gobby::Window::close_document(DocWindow& document)
 		// Buffer does not exist: Maybe the connection has been lost
 		// or something: Just remove the document from the folder.
 		m_folder.remove_page(document);
-		delete m_folder.get_tab_label(document);
-		delete &document;
 
 		// If there are no more documents, disable
 		// save and close buttons in header

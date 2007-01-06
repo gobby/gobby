@@ -39,6 +39,8 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder)
 #ifdef WITH_GTKSOURCEVIEW
 	set_show_line_numbers(true);
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
+	// Prevent from GTK sourceview's undo 
+	buf->begin_not_undoable_action();
 #else
 	Glib::RefPtr<Gtk::TextBuffer> buf = get_buffer();
 #endif
