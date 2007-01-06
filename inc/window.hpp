@@ -111,8 +111,8 @@ protected:
 	void on_obby_user_part(const obby::user& user);
 	void on_obby_user_colour(const obby::user& user);
 	void on_obby_user_colour_failed();
-	void on_obby_document_insert(obby::document_info& document);
-	void on_obby_document_remove(obby::document_info& document);
+	void on_obby_document_insert(obby::basic_document_info<obby::document, net6::selector>& document);
+	void on_obby_document_remove(obby::basic_document_info<obby::document, net6::selector>& document);
 
 	// Helper functions
 	void apply_preferences();

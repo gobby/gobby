@@ -571,7 +571,7 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
-	const obby::document_info& document =
+	const obby::basic_document_info<obby::document, net6::selector>& document =
 		window.get_document().get_document();
 
 	// Set the path from which this document was opened, if we opened that
@@ -947,7 +947,7 @@ void Gobby::Window::on_obby_user_colour_failed()
 	display_error(_("Colour change failed: Colour already in use") );
 }
 
-void Gobby::Window::on_obby_document_insert(obby::document_info& document)
+void Gobby::Window::on_obby_document_insert(obby::basic_document_info<obby::document, net6::selector>& document)
 {
 	obby::local_document_info& local_doc =
 		dynamic_cast<obby::local_document_info&>(document);
@@ -959,7 +959,7 @@ void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 	m_statusbar.obby_document_insert(local_doc);
 }
 
-void Gobby::Window::on_obby_document_remove(obby::document_info& document)
+void Gobby::Window::on_obby_document_remove(obby::basic_document_info<obby::document, net6::selector>& document)
 {
 	obby::local_document_info& local_doc =
 		dynamic_cast<obby::local_document_info&>(document);
