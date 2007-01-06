@@ -31,10 +31,11 @@
 #include <obby/host_buffer.hpp>
 
 #include "common.hpp"
-#include "buffer_wrapper.hpp"
 #include "docwindow.hpp"
-#include "hostdialog.hpp"
 #include "joindialog.hpp"
+#include "hostdialog.hpp"
+#include "joinprogressdialog.hpp"
+#include "hostprogressdialog.hpp"
 #include "entrydialog.hpp"
 #include "window.hpp"
 #include "features.hpp"
@@ -48,6 +49,7 @@ Gobby::Window::Window()
 #endif
    m_running(false), m_header(m_folder), m_statusbar(m_folder)
 {
+	// Connect UI signals
 	m_header.session_create_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
 	m_header.session_join_event().connect(
@@ -81,6 +83,7 @@ Gobby::Window::Window()
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
+	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
 	m_chat.chat_event().connect(
@@ -113,7 +116,7 @@ Gobby::Window::Window()
 
 Gobby::Window::~Window()
 {
-	on_session_quit();
+	obby_end();
 }
 
 void Gobby::Window::on_realize()
@@ -131,176 +134,145 @@ void Gobby::Window::on_realize()
 	m_mainpaned.set_position(mainmin + (mainmax - mainmin) * 3 / 4);
 }
 
-void Gobby::Window::on_session_create() try
+void Gobby::Window::obby_start()
 {
+	// Connect to obby events
+	m_buffer->user_join_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_user_join) );
+	m_buffer->user_part_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_user_part) );
+	m_buffer->document_insert_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_document_insert));
+	m_buffer->document_remove_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_document_remove));
+
+	m_buffer->message_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_chat) );
+	m_buffer->server_message_event().connect(
+		sigc::mem_fun(*this, &Window::on_obby_server_chat) );
+
+	// Delegate start of obby session
+	m_header.obby_start(*m_buffer);
+	m_folder.obby_start(*m_buffer);
+	m_userlist.obby_start(*m_buffer);
+	m_chat.obby_start(*m_buffer);
+	m_statusbar.obby_start(*m_buffer);
+
+	// Forward user joins for users that are connected 
+	const obby::user_table& user_table = m_buffer->get_user_table();
+	for(obby::user_table::user_iterator<obby::user::CONNECTED> iter =
+		user_table.user_begin<obby::user::CONNECTED>();
+	    iter != user_table.user_end<obby::user::CONNECTED>();
+	    ++ iter)
+	{
+		on_obby_user_join(*iter);
+	}
+
+	// Send documents to components
+	obby::buffer::document_iterator iter = m_buffer->document_begin();
+	for(; iter != m_buffer->document_end(); ++ iter)
+		on_obby_document_insert(*iter);
+
+	// Set last page as active one because it is currently shown anyway.
+	if(m_buffer->document_count() > 0)
+		m_folder.set_current_page(m_buffer->document_count() - 1);
+}
+
+void Gobby::Window::obby_end()
+{
+	// Nothing to do if no buffer is open
+	if(!m_buffer.get() ) return;
+
+	// Tell GUI components that the session ended
+	m_header.obby_end();
+	m_folder.obby_end();
+	m_userlist.obby_end();
+	m_chat.obby_end();
+	m_statusbar.obby_end();
+
+	// Delete buffer and zeroconf
+	m_buffer.reset();
+#ifdef WITH_HOWL
+	delete m_zeroconf;
+	m_zeroconf = NULL;
+#endif
+}
+
+void Gobby::Window::on_session_create()
+{
+	// Show up host dialog
 	HostDialog dlg(*this, m_config);
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		dlg.hide();
+
+		// Read setting
 		unsigned int port = dlg.get_port();
 		Glib::ustring name = dlg.get_name();
 		Gdk::Color color = dlg.get_color();	
 		Glib::ustring password = dlg.get_password();
 
-		unsigned int red = color.get_red() * 255 / 65535;
-		unsigned int green = color.get_green() * 255 / 65535;
-		unsigned int blue = color.get_blue() * 255 / 65535;
+		// Set up host with hostprogressdialog
+		HostProgressDialog prgdlg(*this, m_config, port, name, color);
+		if(prgdlg.run() == Gtk::RESPONSE_OK)
+		{
+			prgdlg.hide();
 
-		// Create new buffer
-		obby::host_buffer* buffer =
-			new HostBuffer(*this, port, name, red, green, blue);
+			// Get buffer
+			std::auto_ptr<obby::host_buffer> buffer =
+				prgdlg.get_buffer();
 
+			// Set password
+			buffer->set_global_password(password);
 #ifdef WITH_HOWL
-		m_zeroconf = new obby::zeroconf();
-		// Publish the newly created session via ZeroConf
-		m_zeroconf->publish(name, port);
+			// Publish the newly created session via ZeroConf
+			m_zeroconf = new obby::zeroconf();
+			m_zeroconf->publish(name, port);
 #endif
 
-		buffer->set_global_password(password);
-
-		// Delete existing buffer, take new one
-		delete m_buffer;
-		m_buffer = buffer;
-
-		m_buffer->user_join_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_user_join) );
-		m_buffer->user_part_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_user_part) );
-		m_buffer->document_insert_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_document_insert));
-		m_buffer->document_remove_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_document_remove));
-
-		m_buffer->message_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_chat) );
-		m_buffer->server_message_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_server_chat) );
-
-		// Running
-		m_running = true;
-		
-		// Delegate start of obby session
-		m_header.obby_start(*m_buffer);
-		m_folder.obby_start(*m_buffer);
-		m_userlist.obby_start(*m_buffer);
-		m_chat.obby_start(*m_buffer);
-		m_statusbar.obby_start(*m_buffer);
-
-		// Let the local user join
-		on_obby_user_join(buffer->get_self() );
-	}
-	else
-	{
-		// Delete existing buffer, if any
-		delete m_buffer;
-		m_buffer = NULL;
+			// Start session
+			m_buffer = buffer;
+			obby_start();
+		}
 	}
 }
-catch(Glib::Exception& e)
-{
-	display_error(e.what() );
-	on_session_create();
-}
-catch(std::exception& e)
-{
-	display_error(e.what() );
-	on_session_create();
-}
 
-void Gobby::Window::on_session_join() try
+void Gobby::Window::on_session_join()
 {
 	JoinDialog dlg(*this, m_config);
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		dlg.hide();
+
+		// Read settings
 		Glib::ustring host = dlg.get_host();
 		unsigned int port = dlg.get_port();
 		Glib::ustring name = dlg.get_name();
 		Gdk::Color color = dlg.get_color();
 
-		unsigned int red = color.get_red() * 255 / 65535;
-		unsigned int green = color.get_green() * 255 / 65535;
-		unsigned int blue = color.get_blue() * 255 / 65535;
+		JoinProgressDialog prgdlg(
+			*this, m_config, host, port, name, color);
+		if(prgdlg.run() == Gtk::RESPONSE_OK)
+		{
+			prgdlg.hide();
 
-		// TODO: Keep existing connection if host and port did not
-		// change
-		obby::client_buffer* buffer =
-			new ClientBuffer(*this, host, port);
+			// Get buffer
+			std::auto_ptr<obby::client_buffer> buffer =
+				prgdlg.get_buffer();
 
-		delete m_buffer;
-		m_buffer = buffer;
+			buffer->close_event().connect(
+				sigc::mem_fun(*this, &Window::on_obby_close) );
 
-		buffer->login_failed_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_login_failed) );
-		buffer->global_password_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_global_password));
-		buffer->user_password_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_user_password) );
-		buffer->close_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_close) );
-		buffer->sync_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_sync) );
-
-		/* TODO: Add password entry widget in join dialog */
-		/* TODO: Add password entry widget in host dialog */
-
-		m_buffer->user_join_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_user_join) );
-		m_buffer->user_part_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_user_part) );
-		m_buffer->document_insert_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_document_insert));
-		m_buffer->document_remove_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_document_remove));
-
-		m_buffer->message_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_chat) );
-		m_buffer->server_message_event().connect(
-			sigc::mem_fun(*this, &Window::on_obby_server_chat) );
-
-		buffer->login(name, red, green, blue);
+			// Start session
+			m_buffer = buffer;
+			obby_start();
+		}
 	}
-	else
-	{
-		delete m_buffer;
-		m_buffer = NULL;
-	}
-}
-catch(Glib::Exception& e)
-{
-	display_error(e.what());
-	on_session_join();
-}
-catch(std::exception& e)
-{
-	display_error(e.what());
-	on_session_join();
 }
 
 void Gobby::Window::on_session_quit()
 {
-	if(m_buffer)
-	{
-		if(m_running)
-		{
-			m_header.obby_end();
-			m_folder.obby_end();
-			m_userlist.obby_end();
-			m_chat.obby_end();
-			m_statusbar.obby_end();
-
-			m_running = false;
-		}
-
-		delete m_buffer;
-		m_buffer = NULL;
-	}
-
-#ifdef WITH_HOWL
-	if(m_zeroconf)
-	{
-		delete m_zeroconf;
-		m_zeroconf = NULL;
-	}
-#endif
+	obby_end();
 }
 
 void Gobby::Window::on_about()
@@ -398,7 +370,7 @@ void Gobby::Window::on_document_save()
 
 void Gobby::Window::on_document_close()
 {
-	if(m_buffer)
+	if(m_buffer.get() != NULL)
 	{
 		// Get current page
 		Widget* page = m_folder.get_nth_page(
@@ -443,7 +415,7 @@ void Gobby::Window::on_user_set_password()
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		dynamic_cast<obby::client_buffer*>(m_buffer)->set_password(
+		dynamic_cast<obby::client_buffer*>(m_buffer.get() )->set_password(
 			dlg.get_text() );
 	}
 }
@@ -495,18 +467,10 @@ void Gobby::Window::on_quit()
 	Gtk::Main::quit();
 }
 
-void Gobby::Window::on_chat(const Glib::ustring& message) {
-	if (m_running)
-		m_buffer->send_message(message);
-	else
-		throw std::runtime_error("tried to send chat message while not connected");
-}
-
-/*void Gobby::Window::on_document_update(Document& document)
+void Gobby::Window::on_chat(const Glib::ustring& message)
 {
-	// Update statusbar
-	m_statusbar.update(document);
-}*/
+	m_buffer->send_message(message);
+}
 
 void Gobby::Window::on_obby_login_failed(obby::login::error error)
 {
@@ -597,21 +561,6 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 
 void Gobby::Window::on_obby_user_join(obby::user& user)
 {
-	// Send obby start to GUI components if this is a join command for the
-	// local user. The host does not emit such a signal (well it does, but
-	// in its constructor - no signal handler could have been connected),
-	// so it is only done for the client upon successful login
-	if(&m_buffer->get_self() == &user)
-	{
-		m_header.obby_start(*m_buffer);
-		m_folder.obby_start(*m_buffer);
-		m_userlist.obby_start(*m_buffer);
-		m_chat.obby_start(*m_buffer);
-		m_statusbar.obby_start(*m_buffer);
-
-		m_running = true;
-	}
-
 	// Tell user join to components
 	m_header.obby_user_join(user);
 	m_folder.obby_user_join(user);

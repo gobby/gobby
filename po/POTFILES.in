@@ -9,3 +9,6 @@ src/window.cpp
 src/statusbar.cpp
 src/buffer_wrapper.cpp
 src/document.cpp
+src/progressdialog.cpp
+src/hostprogressdialog.cpp
+src/joinprogressdialog.cpp

@@ -48,6 +48,10 @@ protected:
 	// Gtk::Window overrides
 	virtual void on_realize();
 
+	// Start/End obby session
+	void obby_start();
+	void obby_end();
+
 	// UI handler
 	void on_session_create();
 	void on_session_join();
@@ -112,7 +116,7 @@ protected:
 	StatusBar m_statusbar;
 
 	// obby
-	obby::local_buffer* m_buffer;
+	std::auto_ptr<obby::local_buffer> m_buffer;
 #ifdef WITH_HOWL
 	obby::zeroconf* m_zeroconf;
 #endif
