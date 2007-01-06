@@ -98,7 +98,7 @@ public:
 	virtual void send(const net6::packet& pack);
 
 protected:
-	virtual void on_client_send(const net6::packet& pack);
+	virtual void on_send_event(const net6::packet& pack);
 
 	IOConnection m_ioconn;
 };
@@ -157,9 +157,9 @@ public:
 	virtual void send(const net6::packet& pack, net6::host::peer& to);
 
 protected:
-	virtual void on_join(net6::host::peer& new_peer);
-	virtual void on_client_send(const net6::packet& pack,
-	                            net6::host::peer& to);
+	virtual void on_connect(net6::host::peer& new_peer);
+	virtual void on_send_event(const net6::packet& pack,
+	                           net6::host::peer& to);
 	virtual void remove_client(net6::host::peer* client);
 
 	peer_map_type::iterator get_peer_iter(const net6::host::peer& peer);

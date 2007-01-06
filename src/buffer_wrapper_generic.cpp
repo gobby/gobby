@@ -64,13 +64,13 @@ bool Gobby::IOConnection::on_io(Glib::IOCondition condition)
 	net6::socket& sock = const_cast<net6::socket&>(m_sock);
 
 	if(condition & (Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL) )
-		sock.error_event().emit(sock, net6::socket::IOERROR);
+		sock.io_event().emit(net6::socket::IOERROR);
 
 	if(condition & (Glib::IO_IN) )
-		sock.read_event().emit(sock, net6::socket::INCOMING);
+		sock.io_event().emit(net6::socket::INCOMING);
 
 	if(condition & (Glib::IO_OUT) )
-		sock.write_event().emit(sock, net6::socket::OUTGOING);
+		sock.io_event().emit(net6::socket::OUTGOING);
 
 	return true;
 }
@@ -91,11 +91,11 @@ void Gobby::Client::send(const net6::packet& pack)
 	net6::client::send(pack);
 }
 
-void Gobby::Client::on_client_send(const net6::packet& pack)
+void Gobby::Client::on_send_event(const net6::packet& pack)
 {
 	if(conn.send_queue_size() == 0)
 		m_ioconn.remove_connect(Glib::IO_OUT);
-	net6::client::on_client_send(pack);
+	net6::client::on_send_event(pack);
 }
 
 Gobby::Host::Error::Error(Code error_code, const Glib::ustring& error_message)
@@ -158,7 +158,7 @@ void Gobby::Host::send(const net6::packet& pack, net6::host::peer& to)
 	net6::host::send(pack, to);
 }
 
-void Gobby::Host::on_join(net6::host::peer& new_peer)
+void Gobby::Host::on_connect(net6::host::peer& new_peer)
 {
 	// Build IOConnection
 	IOConnection* conn = new IOConnection(
@@ -173,8 +173,8 @@ void Gobby::Host::on_join(net6::host::peer& new_peer)
 	net6::host::on_join(new_peer);
 }
 
-void Gobby::Host::on_client_send(const net6::packet& pack,
-                                 net6::host::peer& to)
+void Gobby::Host::on_send_event(const net6::packet& pack,
+                                net6::host::peer& to)
 {
 	// Find peer in peer map
 	peer_map_type::iterator iter = get_peer_iter(to);
@@ -185,7 +185,7 @@ void Gobby::Host::on_client_send(const net6::packet& pack,
 		iter->second->remove_connect(Glib::IO_OUT);
 
 	// Call base function
-	net6::host::on_client_send(pack, to);
+	net6::host::on_send_event(pack, to);
 }
 
 void Gobby::Host::remove_client(net6::host::peer* peer)
