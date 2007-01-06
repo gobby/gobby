@@ -145,7 +145,7 @@ protected:
 	 */
 	void update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	                        const Gtk::TextBuffer::iterator& end,
-				const obby::user& user);
+				const obby::user* user);
 
 	obby::document& m_doc;
 	const Folder& m_folder;

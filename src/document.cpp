@@ -16,14 +16,14 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <iostream>
+#include <obby/user_table.hpp>
 #include <obby/client_document.hpp>
 #include <obby/host_document.hpp>
 #include <obby/client_buffer.hpp>
 #include <obby/host_buffer.hpp>
 #include "document.hpp"
 #include "folder.hpp"
-
-#include <cassert>
 
 Gobby::Document::Document(obby::document& doc, const Folder& folder)
 #ifdef WITH_GTKSOURCEVIEW
@@ -69,10 +69,11 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 
 	// Insert users from user table to insert users that have already
 	// left the obby session.
-	const obby::buffer& obbybuf = doc.get_buffer();
+//	const obby::buffer& obbybuf = doc.get_buffer();
 	const obby::user_table& user_table = doc.get_buffer().get_user_table();
-	for(obby::user_table::user_iterator iter = user_table.user_begin();
-	    iter != user_table.user_end();
+	for(obby::user_table::user_iterator<obby::user::NONE> iter =
+		user_table.user_begin<obby::user::NONE>();
+	    iter != user_table.user_end<obby::user::NONE>();
 	    ++ iter)
 	{
 		// Create new tag
@@ -128,9 +129,11 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 		for(++ cur; prev != line.author_end(); ++ cur)
 		{
 			// Get current user
-			const obby::user_table::user* user = prev->author;
-			// user should never be NULL...
-			if(user == NULL) continue;
+			const obby::user* user = prev->author;
+
+			// user can be NULL (server insert event, but then
+			// we do not have to apply a tag or so).
+			if(user == NULL) { prev = cur; continue; }
 
 			// Get the range to highlight
 			obby::line::size_type endpos;
@@ -302,8 +305,18 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 	m_doc.position_to_coord(record.get_position(), row, col);
 
 	// Find obby::user that inserted the text
-	obby::user* user = m_doc.get_buffer().find_user(record.get_from() );
-	assert(user != NULL);
+	const obby::user* user = m_doc.get_buffer().get_user_table().find_user<
+		obby::user::CONNECTED
+	>(record.get_from() );
+
+	// user may be NULL if the server (which has no user) inserted the text
+	if(user == NULL && record.get_from() != 0)
+	{
+		// TODO: Localise...
+		std::cerr << "Gobby::Document::on_obby_insert: "
+	                  << "User " << record.get_from() << " is not connected"
+		          << std::endl;
+	}
 
 	// Insert text
 	Gtk::TextBuffer::iterator end = buffer->insert(
@@ -314,7 +327,7 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 	// Colourize new text
 	Gtk::TextBuffer::iterator begin = end;
 	begin.backward_chars(record.get_text().length() );
-	update_user_colour(begin, end, *user);
+	update_user_colour(begin, end, user);
 
 	m_editing = false;
 }
@@ -407,7 +420,7 @@ void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& end,
 		// on_tag_apply below for more information on why this is
 		// necessary.
 		m_editing = true;
-		update_user_colour(pos, end, user);
+		update_user_colour(pos, end, &user);
 		m_editing = false;
 
 		// Content has changed
@@ -452,18 +465,10 @@ void Gobby::Document::on_apply_tag_after(const Glib::RefPtr<Gtk::TextTag>& tag,
 				break;
 		--iter;
 
-		// Refresh. iter->author->get_user() may result in a NULL
-		// pointer if the user who wrote the original text has left
-		// the obby session. This will be automatically fixed as soon
-		// as #8 is fixed.
-		if(iter->author->get_user() != NULL)
-		{
-			m_editing = true;
-			update_user_colour(
-				begin, end, *iter->author->get_user()
-			);
-			m_editing = false;
-		}
+		// Refresh.
+		m_editing = true;
+		update_user_colour(begin, end, iter->author);
+		m_editing = false;
 	}
 }
 
@@ -482,7 +487,7 @@ void Gobby::Document::on_mark_set(
 
 void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
                                          const Gtk::TextBuffer::iterator& end,
-                                         const obby::user& user)
+                                         const obby::user* user)
 {
 	// Remove other user tags in that range
 	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
@@ -500,9 +505,13 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 		)
 	);
 
+	// If user is NULL (the server wrote this text), we have not to apply
+	// any user tags.
+	if(user == NULL) return;
+
 	// Insert new user tag to the given range
 	Glib::RefPtr<Gtk::TextTag> tag =
-		tag_table->lookup("gobby_user_" + user.get_name() );
+		tag_table->lookup("gobby_user_" + user->get_name() );
 
 	// Apply tag twice to show it up immediately. I do not know why this
 	// is necessary but if we do only apply it once, we have to wait for

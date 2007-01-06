@@ -212,8 +212,6 @@ Gobby::ClientBuffer::ClientBuffer(Gtk::Window& window,
 		net6::ipv4_address::create_from_hostname(hostname, port) );
 
 	m_client = new Client(window, addr);
-	m_usertable = new obby::client_user_table(*m_client, *this);
-
 	register_signal_handlers();
 }
 
@@ -234,11 +232,8 @@ Gobby::HostBuffer::HostBuffer(Gtk::Window& window, unsigned int port,
 	net6::host* host = new Host(window, port, username, false);
 	m_server = host;
 
-	m_usertable = new obby::host_user_table(*host, *this);
-
 	assert(host->get_self() != NULL);
-	m_self = add_user(*host->get_self(), red, green, blue);
-
+	m_self = m_usertable.add_user(*host->get_self(), red, green, blue);
 	register_signal_handlers();
 }
 
