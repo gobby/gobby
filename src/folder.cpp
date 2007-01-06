@@ -490,7 +490,8 @@ bool Gobby::Folder::on_key_press_event(GdkEventKey* event)
 	}
 
 	// Is already used by GtkTextTextView...
-	if( (event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+	if( (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) ==
+	    (GDK_CONTROL_MASK | GDK_MOD1_MASK))
 	{
 		int offset = 0;
 		if(event->keyval == GDK_Page_Up) offset = -1;
