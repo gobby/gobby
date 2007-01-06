@@ -393,7 +393,7 @@ Gobby::Header::Header(const ApplicationState& state,
 	action_window_documentlist(
 		Gtk::ToggleAction::create(
 			"WindowDocumentList",
-			Gtk::Stock::EDIT,
+			IconManager::STOCK_DOCLIST,
 			_("Document list"),
 			_("Shows up a list of documents within the "
 			  "current session")

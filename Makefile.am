@@ -127,6 +127,7 @@ gobby_CPPFLAGS += -DPIXMAPS_DIR=\""$(datadir)/pixmaps"\"
 appicondir = $(datadir)/pixmaps
 appicon_DATA  = contrib/artwork/gobby.png
 appicon_DATA += contrib/artwork/userlist.png
+appicon_DATA += contrib/artwork/doclist.png
 appicon_DATA += contrib/artwork/chat.png
 desktopdir = $(datadir)/applications
 desktop_DATA = contrib/gobby.desktop
