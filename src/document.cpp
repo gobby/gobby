@@ -500,7 +500,14 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	// Insert new user tag to the given range
 	Glib::RefPtr<Gtk::TextTag> tag =
 		tag_table->lookup("gobby_user_" + user.get_name() );
-	buffer->apply_tag(tag, begin, end);
+
+	// Apply tag twice to show it up immediately. I do not know why this
+	// is necessary but if we do only apply it once, we have to wait for
+	// the next event that refreshes the current line. I tried appending
+	// queue_draw() after the apply_tag call, but it did not help
+	// - Armin
+	for(int i = 0; i < 2; ++ i)
+		buffer->apply_tag(tag, begin, end);
 }
 
 void
