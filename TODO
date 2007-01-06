@@ -8,6 +8,7 @@ Critical:
 Major:
   * High CPU load while writing (#45)
   * High load (and blocking X11) when opening big text file (#48) [bug]
+  * Uniquely identify different files with same names (#111)
 
 Normal:
   * Chat command infrastructure (#31)
@@ -17,6 +18,7 @@ Normal:
   * Central directory support (#82)
   * Gobby should save backups (#87)
   * obby:// protocol handler (#88)
+  * Allow emoting in chat (#113)
 
 Minor:
 
@@ -32,6 +34,8 @@ Enhancement:
   * Automatic live storage of documents and chat logs  (#98)
   * RPM's and MacOS installer (#102)
   * Wiki style reverts (#104)
+  * Allow Alt-<num> and Ctrl-PgUp/PgDn to switch tabs (#112)
+  * Have a shared-visible "output" type (#114)
 
 
 45: High CPU load while writing
@@ -48,6 +52,11 @@ Opening a 6.7MB large ChangeLog file in gobby produces 100% load and blocks
 gobby completely. Even other windows, like a ssh screen session in an aterm 
 did not respond any more. Gobby had to be killed to get the screen session 
 working again.
+
+111: Uniquely identify different files with same names
+------------------------------------------------------
+If you have 2 files open called "foo.txt", both appear in the Document list 
+as "foo.txt" even though the contents are different.
 
 31: Chat command infrastructure
 -------------------------------
@@ -95,6 +104,13 @@ Gobby should save local backups in case of crashes.
 ----------------------------
 Gobby should register itself as a handler for the obby:// protocol. Like 
 this sites could link to obby servers for live sessions.
+
+113: Allow emoting in chat
+--------------------------
+IRC allows one to use "/me" at the beginning of the text, and the text 
+after it is used as an emote.
+
+E.g., "/me smiles" -> "ivazquez smiles".
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
@@ -171,4 +187,15 @@ drag your mouse over them.
  * Delete text "/* Gnarly comment */"
 
 
+
+112: Allow Alt-<num> and Ctrl-PgUp/PgDn to switch tabs
+------------------------------------------------------
+Many apps under Linux allow you use Alt-<num> to switch between at least 
+the first 9 tabs, and use Ctrl-PgUp/PgDn to rotate between tabs.
+
+114: Have a shared-visible "output" type
+----------------------------------------
+It would be handy to have a document type which shows the output of 
+commands run on a user's system, but only the user whose system it is can 
+actually run commands.
 
