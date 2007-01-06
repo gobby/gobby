@@ -237,7 +237,7 @@ bool Gobby::Window::on_delete_event(GdkEventAny* event)
 	);
 
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	dlg.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_YES);
+	dlg.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_YES)->grab_focus();
 
 	return dlg.run() != Gtk::RESPONSE_YES;
 }
