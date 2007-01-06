@@ -923,7 +923,7 @@ void Gobby::Window::on_user_set_password()
 void Gobby::Window::on_user_set_colour()
 {
 	// Simple ColorSelectionDialog
-	ColorSelectionDialog dlg;
+	ColorSelectionDialog dlg(m_config.get_root() );
 	const obby::user& user = m_buffer->get_self();
 	Gdk::Color color;
 

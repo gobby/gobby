@@ -30,6 +30,7 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent,
 	m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT),
 	m_lbl_password(_("Password:"), Gtk::ALIGN_RIGHT),
 	m_lbl_session(_("Restore session:"), Gtk::ALIGN_RIGHT),
+	m_btn_color(config_entry),
 	m_ent_session(*this, _("Restore session") )
 {
 	m_ent_port.set_range(1024, 65535);

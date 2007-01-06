@@ -149,6 +149,7 @@ void Gobby::JoinProgressDialog::NamePrompt::on_change()
 
 Gobby::JoinProgressDialog::ColorPrompt::
 	ColorPrompt(Gtk::Window& parent,
+	            Config::ParentEntry& config_entry,
 	            const Gdk::Color& initial_color):
 	Prompt(
 		parent,
@@ -156,7 +157,8 @@ Gobby::JoinProgressDialog::ColorPrompt::
 		_("Colour is already in use. You may choose another colour or "
 		  "cancel the connection."),
 		Gtk::Stock::DIALOG_QUESTION
-	)
+	),
+	m_button(config_entry)
 {
 	m_button.set_color(initial_color);
 	m_button.show_all();
@@ -489,7 +491,7 @@ bool Gobby::JoinProgressDialog::on_prompt_name(connection_settings& settings)
 
 bool Gobby::JoinProgressDialog::on_prompt_colour(connection_settings& settings)
 {
-	ColorPrompt prompt(*this, m_color);
+	ColorPrompt prompt(*this, m_config_entry, m_color);
 	if(prompt.run() == Gtk::RESPONSE_OK)
 	{
 		settings.colour = gdk_to_obby(prompt.get_color() );

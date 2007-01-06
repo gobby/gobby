@@ -44,10 +44,11 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
    m_lbl_host(_("Host:"), Gtk::ALIGN_RIGHT),
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
-   m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
+   m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT),
 #ifdef WITH_ZEROCONF
-   , m_ep_discover(_("Local network")), m_zeroconf(zeroconf)
+   m_ep_discover(_("Local network")), m_zeroconf(zeroconf),
 #endif
+   m_btn_color(config_entry)
 {
 	// TODO: Read default color as random one from tom's color map
 	Gdk::Color default_color;

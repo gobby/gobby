@@ -22,6 +22,7 @@
 #include <gtkmm/table.h>
 #include <gtkmm/colorselection.h>
 #include <gtkmm/colorbutton.h>
+#include "config.hpp"
 
 namespace Gobby
 {
@@ -32,8 +33,11 @@ namespace Gobby
 class ColorSelection : public Gtk::ColorSelection
 {
 public:
-	ColorSelection();
+	ColorSelection(Config::ParentEntry& config_entry);
 	~ColorSelection();
+
+protected:
+	Config::ParentEntry& m_config_entry;
 };
 
 /** ColorSelectionDialog with custom palette.
@@ -41,9 +45,13 @@ public:
 class ColorSelectionDialog : public Gtk::ColorSelectionDialog
 {
 public:
-	ColorSelectionDialog();
-	ColorSelectionDialog(const Glib::ustring& title);
+	ColorSelectionDialog(Config::ParentEntry& config_entry);
+	ColorSelectionDialog(Config::ParentEntry& config_entry,
+	                     const Glib::ustring& title);
 	~ColorSelectionDialog();
+
+protected:
+	Config::ParentEntry& m_config_entry;
 };
 
 /** ColorButton with custom palette.
@@ -51,12 +59,15 @@ public:
 class ColorButton : public Gtk::ColorButton
 {
 public:
-	ColorButton();
-	ColorButton(const Gdk::Color& color);
+	ColorButton(Config::ParentEntry& config_entry);
+	ColorButton(Config::ParentEntry& config_entry,
+	            const Gdk::Color& color);
 	~ColorButton();
 
 protected:
 	virtual void on_clicked();
+
+	Config::ParentEntry& m_config_entry;
 };
 
 }

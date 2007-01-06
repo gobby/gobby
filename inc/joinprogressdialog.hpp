@@ -84,6 +84,7 @@ private:
 	{
 	public:
 		ColorPrompt(Gtk::Window& parent,
+		            Config::ParentEntry& config_entry,
 		            const Gdk::Color& initial_color);
 
 		Gdk::Color get_color() const;
