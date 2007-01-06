@@ -45,9 +45,16 @@ public:
 	const obby::document& get_document() const;
 	obby::document& get_document();
 
-	// Statusbar information
+	/** Writes the current cursor position into row and col.
+	 */
 	void get_cursor_position(unsigned int& row, unsigned int& col);
+
+	/** Returns the amount of unsynced operations in this document.
+	 */
 	unsigned int get_unsynced_changes_count() const;
+
+	/** Returns the currently selected Gtk::SourceLanguage.
+	 */
 #ifdef WITH_GTKSOURCEVIEW
 	Glib::RefPtr<Gtk::SourceLanguage> get_language() const;
 #endif
@@ -57,24 +64,41 @@ public:
 	 */
 	signal_update_type update_event() const;
 
+	/** Calls from the folder.
+	 */
+	void obby_user_join(obby::user& user);
+	void obby_user_part(obby::user& user);
+
 protected:
+	/** Obby signal handlers.
+	 */
+	void on_obby_insert(const obby::insert_record& record);
+	void on_obby_delete(const obby::delete_record& record);
+
+	/** TextBuffer signal handlers.
+	 */
 	void on_insert_before(const Gtk::TextBuffer::iterator& begin,
 	                      const Glib::ustring& text,
 		              int bytes);
 	void on_erase_before(const Gtk::TextBuffer::iterator& begin,
 	                     const Gtk::TextBuffer::iterator& end);
 
-	void on_obby_insert(const obby::insert_record& record);
-	void on_obby_delete(const obby::delete_record& record);
-
-	void on_insert_after(const Gtk::TextBuffer::iterator& begin,
+	void on_insert_after(const Gtk::TextBuffer::iterator& end,
 	                     const Glib::ustring& text,
 			     int bytes);
 	void on_erase_after(const Gtk::TextBuffer::iterator& begin,
 	                    const Gtk::TextBuffer::iterator& end);
 
+	/** Cursor position changed signal hanlder.
+	 */
 	void on_cursor_changed(const Gtk::TextBuffer::iterator& location,
 	                       const Glib::RefPtr<Gtk::TextBuffer::Mark>& mark);
+
+	/** Marks the given part of the text as written by <em>user</em>.
+	 */
+	void update_user_colour(const Gtk::TextBuffer::iterator& begin,
+	                        const Gtk::TextBuffer::iterator& end,
+				const obby::user& user);
 
 	obby::document& m_doc;
 	const Folder& m_folder;
@@ -94,6 +118,14 @@ protected:
 	bool m_editing;
 	
 	signal_update_type m_signal_update;
+private:
+	/** Handler for update_user_colour(): It removes the given tag in
+	 * the given range if it is a gobby-user-tag.
+	 */
+	void on_remove_user_colour(Glib::RefPtr<Gtk::TextBuffer::Tag> tag,
+	                           const Gtk::TextBuffer::iterator& begin,
+	                           const Gtk::TextBuffer::iterator& end);
+
 };
 
 }

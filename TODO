@@ -4,11 +4,12 @@ Gobby
 Serious:
  * Opening large documents is _really_ slow on win32's timer implementation
  * On connection loss: give a chance to save everything
- * User colourising 
+ * Gobby sometimes segfaults on exit
 
 Important:
  * Compensate changes made by others by scrolling appropriately; the current
    position should not change
+ * User colourising does not always repaint correctly
 
 Normal:
  * Menu to switch the syntax colouring scheme.
