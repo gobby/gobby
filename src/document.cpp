@@ -472,8 +472,11 @@ void Gobby::Document::on_mark_set(
 	const Glib::RefPtr<Gtk::TextBuffer::Mark>& mark
 )
 {
+	// Mark was deleted or something
+	if(!mark) return;
+
 	// Insert mark changed position: Cursor position change
-	if(mark == get_buffer()->get_insert() )//->get_name() == "insert")
+	if(mark == get_buffer()->get_insert() )
 		m_signal_cursor_moved.emit();
 }
 
