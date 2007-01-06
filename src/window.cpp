@@ -253,7 +253,12 @@ void Gobby::Window::on_about()
 	dlg.set_version(PACKAGE_VERSION);
 	dlg.set_comments(_("A collaborative text editor"));
 	dlg.set_copyright("Copyright (C) 2005 0x539 dev group <crew@0x539.de>");
+#ifndef WITH_GNOME
 	dlg.set_logo(Gdk::Pixbuf::create_from_inline(512 * 128, Icon::gobby) );
+#else
+	dlg.set_logo(Gdk::Pixbuf::create_from_file(
+		"/usr/share/pixmaps/gobby.png") );
+#endif
 
 	std::deque<Glib::ustring> authors;
 	authors.push_back("Armin Burgmeier <armin@0x539.de>");

@@ -84,7 +84,9 @@ gobby_SOURCES += src/sourceview/sourcebuffer.cpp
 gobby_SOURCES += src/sourceview/sourcelanguage.cpp
 gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
 endif
+if ! WITH_GNOME
 gobby_SOURCES += src/icon.cpp
+endif
 
 if WITH_GNOME
 # GNOME-specific installation.

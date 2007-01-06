@@ -37,6 +37,10 @@ AC_ARG_WITH([gnome],
             [ac_cv_with_gnome=$withval], [ac_cv_with_gnome=no])
 AC_CACHE_CHECK([whether to integrate into the GNOME desktop environment],
                [ac_cv_with_gnome], [ac_cv_with_gnome=no])
+if test "x$ac_cv_with_gnome" = "xyes" ; then
+  AC_DEFINE([WITH_GNOME], 1,
+    [Define whether to integrate into the GNOME desktop environment.])
+fi
 AM_CONDITIONAL(WITH_GNOME, test x$ac_cv_with_gnome != xno)
 
 # Checks for libraries.
@@ -44,7 +48,7 @@ PKG_CHECK_MODULES([gobby], [libxml++-2.6 gtkmm-2.4 >= 2.6.0 net6-1.0 obby-1.0])
 
 # Let the user choose if he wants to use gtksourceview or simple text buffers.
 AC_ARG_WITH([gtksourceview],
-            AS_HELP_STRING([--with-gtksourceview],
+            AS_HELP_STRING([--without-gtksourceview],
                [use GtkSourceView instead of TextView [[default=auto]]]),
 	    [ac_cv_use_gtksourceview=$withval], [ac_cv_use_gtksourceview=auto])
 AC_CACHE_CHECK([whether to use GtkSourceView], [ac_cv_use_gtksourceview],
