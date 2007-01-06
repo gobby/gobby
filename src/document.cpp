@@ -274,8 +274,9 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 	if(user == NULL && record.get_from() != 0)
 	{
 		// TODO: Localise...
-		std::cerr << "Gobby::Document::on_obby_insert: "
-	                  << "User " << record.get_from() << " is not connected"
+		obby::format_string str(_("User %0 is not connected"));
+		str << record.get_from();
+		std::cerr << "Gobby::Document::on_obby_insert: " << str.str()
 		          << std::endl;
 	}
 
