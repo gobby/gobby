@@ -4,8 +4,23 @@ Gobby
 Version 0.3.0:
  * This release depends on net6 1.2.0 and obby 0.3.0, it is *not* backwards-
    compatible protocol-wise to the 0.2.x series.
- * Modified according to the changes in obby in relation to the new Jupiter
-   merging algorithm
+ * No more pending changes due to the new merging algorithm
+ * Cursor is left-gravity now, which relieves some problems with newlines
+ * Joins are now threaded and thus abortable
+ * Connection status is displayed in the status bar
+ * Lines in the chat log are now wrapped to the display width
+ * Session serialisation and restore
+ * Name and colour could be changed directly when they are already in use
+ * User and document list are now separate windows, their position and state
+   is preserved by default
+ * Close document now just unsubscribes from the document
+ * Scrollable document folder
+ * Search and replace
+ * New translations:
+   - Swedish (complete)
+   - Catalan (partial)
+   - Chinese (partial)
+   - Spanish (almost complete)
 
 Version 0.2.2:
  * Gobby no longer crashes when a document is closed after quitting a
