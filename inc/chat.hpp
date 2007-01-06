@@ -52,6 +52,9 @@ protected:
 	void on_query_failed(const obby::command_query& query);
 	void on_help(const std::string& name, const std::string& desc);
 
+	void on_remove_result(const obby::command_query& query,
+	                      const obby::command_result& result);
+
 	void on_message(const obby::chat::message& message);
 	void on_user_message(const obby::chat::user_message& message);
 	void on_server_message(const obby::chat::server_message& message);

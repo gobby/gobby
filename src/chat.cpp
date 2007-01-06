@@ -112,6 +112,10 @@ void Gobby::Chat::obby_start(LocalBuffer& buf)
 		sigc::mem_fun(*this, &Chat::on_help)
 	);
 
+	buf.get_command_queue().result_event("remove").connect(
+		sigc::mem_fun(*this, &Chat::on_remove_result)
+	);
+
 	const obby::chat& chat = buf.get_chat();
 	chat.message_event().connect(
 		sigc::mem_fun(*this, &Chat::on_message) );
@@ -160,12 +164,20 @@ void Gobby::Chat::on_chat()
 	if(message[0] == '/')
 	{
 		Glib::ustring::size_type pos = message.find_first_of(" \n\v\t");
-		obby::command_query query(
-			message.substr(1, pos - 1),
-			message.substr(pos + 1)
-		);
+		if(pos != Glib::ustring::npos)
+		{
+			obby::command_query query(
+				message.substr(1, pos - 1),
+				message.substr(pos + 1)
+			);
 
-		m_buffer->send_command(query);
+			m_buffer->send_command(query);
+		}
+		else
+		{
+			obby::command_query query(message.substr(1), "");
+			m_buffer->send_command(query);
+		}
 	}
 	else
 	{
@@ -196,6 +208,24 @@ void Gobby::Chat::on_help(const std::string& name, const std::string& desc)
 
 	str << name << desc;
 	m_log_chat.log(str.str(), "black", std::time(NULL) );
+}
+
+void Gobby::Chat::on_remove_result(const obby::command_query& query,
+                                   const obby::command_result& result)
+{
+	if(result.get_type() != obby::command_result::REPLY) return;
+
+	if(result.get_reply() == "doc_not_found")
+	{
+		obby::format_string str(_("Document %0% does not exist") );
+		str << query.get_paramlist();
+		m_log_chat.log(str.str(), "red", std::time(NULL) );
+	}
+	else if(result.get_reply() == "no_doc_given")
+	{
+		Glib::ustring str(_("Usage: /remove <document>") );
+		m_log_chat.log(str, "red", std::time(NULL) );
+	}
 }
 
 void Gobby::Chat::on_message(const obby::chat::message& message)
