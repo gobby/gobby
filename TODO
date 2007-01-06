@@ -4,7 +4,6 @@ Gobby
 Blocker:
 
 Critical:
-  * Excited to try it but libatk-1.6-1.dll just not found (#100) [win32]
 
 Major:
   * High CPU load while writing (#45)
@@ -16,12 +15,9 @@ Normal:
   * Recognise command line parameters (#33)
   * Documentation (#54) [doc]
   * automatic scroll if the end of a document is looked at (#70)
-  * Win32 Drag'n'Drop (#71)
-  * Search, Replace and Goto Line features (#79)
   * Central directory support (#82)
   * Gobby should save backups (#87)
   * obby:// protocol handler (#88)
-  * Make it harder to lose document changes (#96) [usability]
 
 Minor:
 
@@ -38,18 +34,6 @@ Enhancement:
   * RPM's and MacOS installer (#102)
   * Wiki style reverts (#104)
 
-
-100: Excited to try it but libatk-1.6-1.dll just not found
-----------------------------------------------------------
-I've tried glade32, different versions of GTK+, I cannot get past the 
-error:
-
-The (dll) libatkmm-1.6-1.dll could not be found in the specified path 
-(insert my very long and yes includes all the GTK paths)
-
-Can someone conclusively help on this?  Email me at:  edward@itguy.com
-
-Thanks!
 
 45: High CPU load while writing
 -------------------------------
@@ -106,17 +90,6 @@ the page is scrolled to the end and new lines are added there it should
 automatically scroll down. If you are further up and looking or working on 
 something else it shouldn't do so.
 
-71: Win32 Drag'n'Drop
----------------------
-The Drag+Drop implementation to drop files into the Gobby window seems not 
-to work with  files dragged from the win32 shell (explorer). It does not 
-seem that GTK supports this, so we need a raw OLE-based implementation.
-
-79: Search, Replace and Goto Line features
-------------------------------------------
-It would be interesting to have Search, Replace and Goto Line features in 
-Gobby.
-
 82: Central directory support
 -----------------------------
 Gobby should support a central directory of Sobby servers.
@@ -129,17 +102,6 @@ Gobby should save local backups in case of crashes.
 ----------------------------
 Gobby should register itself as a handler for the obby:// protocol. Like 
 this sites could link to obby servers for live sessions.
-
-96: Make it harder to lose document changes
--------------------------------------------
-Currently one gets the following message when clicking on 'close document': 
-"The document.. has been changed since it was saved to disk. Are you sure 
-that you want to close it?" The default user operation of clicking ok now 
-loses data! Notepad's "Save changes? Yes/no/cancel" dialog is prob what we 
-should stay consistent with.
-
-Trying to exit gobby is even worse; no check for unsaved data is performed. 
-This is related to #93.
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
