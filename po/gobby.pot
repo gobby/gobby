@@ -1,0 +1,154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2005-05-05 19:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/chat.cpp:26
+msgid "Send"
+msgstr ""
+
+#. App menu
+#: src/header.cpp:74
+msgid "Gobby"
+msgstr ""
+
+#: src/header.cpp:81
+msgid "Create session"
+msgstr ""
+
+#: src/header.cpp:82
+msgid "Opens a new obby session"
+msgstr ""
+
+#: src/header.cpp:95
+msgid "Join session"
+msgstr ""
+
+#: src/header.cpp:96
+msgid "Join an existing obby session"
+msgstr ""
+
+#: src/header.cpp:109
+msgid "Quit session"
+msgstr ""
+
+#: src/header.cpp:110
+msgid "Leaves the currently running obby session"
+msgstr ""
+
+#: src/header.cpp:123
+msgid "Quit"
+msgstr ""
+
+#: src/header.cpp:124
+msgid "Quits the application"
+msgstr ""
+
+#. Session menu
+#: src/header.cpp:133
+msgid "Session"
+msgstr ""
+
+#: src/header.cpp:140 src/window.cpp:279
+msgid "Create document"
+msgstr ""
+
+#: src/header.cpp:141
+msgid "Creates a new document"
+msgstr ""
+
+#: src/header.cpp:154
+msgid "Open document"
+msgstr ""
+
+#: src/header.cpp:155
+msgid "Loads a file into a new document"
+msgstr ""
+
+#: src/header.cpp:168
+msgid "Save document"
+msgstr ""
+
+#: src/header.cpp:169
+msgid "Saves a document into a file"
+msgstr ""
+
+#: src/header.cpp:182
+msgid "Close document"
+msgstr ""
+
+#: src/header.cpp:183
+msgid "Closes an open document"
+msgstr ""
+
+#. Help menu
+#: src/header.cpp:192
+msgid "Help"
+msgstr ""
+
+#: src/header.cpp:199
+msgid "About"
+msgstr ""
+
+#: src/header.cpp:200
+msgid "Shows Gobby's copyright and credits"
+msgstr ""
+
+#: src/hostdialog.cpp:24
+msgid "Create obby session"
+msgstr ""
+
+#: src/hostdialog.cpp:26 src/joindialog.cpp:27
+msgid "Port:"
+msgstr ""
+
+#: src/hostdialog.cpp:27 src/joindialog.cpp:28
+msgid "Name:"
+msgstr ""
+
+#: src/hostdialog.cpp:28 src/joindialog.cpp:29
+msgid "Color:"
+msgstr ""
+
+#: src/joindialog.cpp:24
+msgid "Join obby session"
+msgstr ""
+
+#: src/joindialog.cpp:26
+msgid "Host:"
+msgstr ""
+
+#: src/userlist.cpp:37
+msgid "Color"
+msgstr ""
+
+#: src/userlist.cpp:38
+msgid "Name"
+msgstr ""
+
+#: src/window.cpp:247
+msgid "A collaborative text editor"
+msgstr ""
+
+#: src/window.cpp:288
+msgid "Open new document"
+msgstr ""
+
+#: src/window.cpp:305
+msgid "Save current document"
+msgstr ""
+
+#: src/window.cpp:346
+msgid "Connection lost"
+msgstr ""

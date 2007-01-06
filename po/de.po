@@ -1,0 +1,154 @@
+# Gobby i18n German Translation
+# Copyright (C) 2005 0x539 dev group
+# Philipp Kern <phil@0x539.de>, 2005.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Gobby 0.1.0\n"
+"POT-Creation-Date: 2005-05-05 19:11+0200\n"
+"PO-Revision-Date: 2005-05-05 18:59+0200\n"
+"Last-Translator: Philipp Kern <phil@0x539.de>\n"
+"Language-Team: German Translation Team <crew@0x539.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/chat.cpp:26
+msgid "Send"
+msgstr "Abschicken"
+
+#. App menu
+#: src/header.cpp:74
+msgid "Gobby"
+msgstr ""
+
+#: src/header.cpp:81
+msgid "Create session"
+msgstr "Sitzung eröffnen"
+
+#: src/header.cpp:82
+msgid "Opens a new obby session"
+msgstr ""
+
+#: src/header.cpp:95
+msgid "Join session"
+msgstr "Sitzung beitreten"
+
+#: src/header.cpp:96
+msgid "Join an existing obby session"
+msgstr "Tritt einer bestehenden obby Sitzung bei"
+
+#: src/header.cpp:109
+msgid "Quit session"
+msgstr "Sitzung verlassen"
+
+#: src/header.cpp:110
+msgid "Leaves the currently running obby session"
+msgstr "Verlässt die aktuell laufende obby Sitzung"
+
+#: src/header.cpp:123
+msgid "Quit"
+msgstr "Beenden"
+
+#: src/header.cpp:124
+msgid "Quits the application"
+msgstr "Beendet die Anwendung"
+
+#. Session menu
+#: src/header.cpp:133
+msgid "Session"
+msgstr "Sitzung"
+
+#: src/header.cpp:140 src/window.cpp:279
+msgid "Create document"
+msgstr "Dokument erstellen"
+
+#: src/header.cpp:141
+msgid "Creates a new document"
+msgstr "Erstellt ein neues Dokument"
+
+#: src/header.cpp:154
+msgid "Open document"
+msgstr "Dokument öffnen"
+
+#: src/header.cpp:155
+msgid "Loads a file into a new document"
+msgstr "Lädt eine Datei in ein neues Dokument"
+
+#: src/header.cpp:168
+msgid "Save document"
+msgstr "Dokument speichern"
+
+#: src/header.cpp:169
+msgid "Saves a document into a file"
+msgstr "Speichert ein Dokument in eine Datei"
+
+#: src/header.cpp:182
+msgid "Close document"
+msgstr "Dokument schließen"
+
+#: src/header.cpp:183
+msgid "Closes an open document"
+msgstr "Schließt ein geöffnetes Dokument"
+
+#. Help menu
+#: src/header.cpp:192
+msgid "Help"
+msgstr "Hilfe"
+
+#: src/header.cpp:199
+msgid "About"
+msgstr "Über Gobby"
+
+#: src/header.cpp:200
+msgid "Shows Gobby's copyright and credits"
+msgstr ""
+
+#: src/hostdialog.cpp:24
+msgid "Create obby session"
+msgstr ""
+
+#: src/hostdialog.cpp:26 src/joindialog.cpp:27
+msgid "Port:"
+msgstr ""
+
+#: src/hostdialog.cpp:27 src/joindialog.cpp:28
+msgid "Name:"
+msgstr "Name:"
+
+#: src/hostdialog.cpp:28 src/joindialog.cpp:29
+msgid "Color:"
+msgstr "Farbe:"
+
+#: src/joindialog.cpp:24
+msgid "Join obby session"
+msgstr ""
+
+#: src/joindialog.cpp:26
+msgid "Host:"
+msgstr ""
+
+#: src/userlist.cpp:37
+msgid "Color"
+msgstr "Farbe"
+
+#: src/userlist.cpp:38
+msgid "Name"
+msgstr "Name"
+
+#: src/window.cpp:247
+msgid "A collaborative text editor"
+msgstr ""
+
+#: src/window.cpp:288
+msgid "Open new document"
+msgstr "Neues dokument öffnen"
+
+#: src/window.cpp:305
+msgid "Save current document"
+msgstr "Aktuelles Dokument speichern"
+
+#: src/window.cpp:346
+msgid "Connection lost"
+msgstr "Verbindung verloren"

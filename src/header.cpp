@@ -17,6 +17,7 @@
  */
 
 #include <gtkmm/stock.h>
+#include "common.hpp"
 #include "header.hpp"
 
 namespace {
@@ -70,15 +71,15 @@ Gobby::Header::Header()
    m_group_session(Gtk::ActionGroup::create() )
 {
 	// App menu
-	m_group_app->add(Gtk::Action::create("MenuApp", "Gobby") );
+	m_group_app->add(Gtk::Action::create("MenuApp", _("Gobby")) );
 
 	// Create session
 	m_group_app->add(
 		Gtk::Action::create(
 			"CreateSession",
 			Gtk::Stock::NETWORK,
-			"Create session",
-			"Opens a new obby session"
+			_("Create session"),
+			_("Opens a new obby session")
 		),
 		sigc::mem_fun(
 			*this,
@@ -91,8 +92,8 @@ Gobby::Header::Header()
 		Gtk::Action::create(
 			"JoinSession",
 			Gtk::Stock::CONNECT,
-			"Join session",
-			"Join an existing obby session"
+			_("Join session"),
+			_("Join an existing obby session")
 		),
 		sigc::mem_fun(
 			*this,
@@ -105,8 +106,8 @@ Gobby::Header::Header()
 		Gtk::Action::create(
 			"QuitSession",
 			Gtk::Stock::DISCONNECT,
-			"Quit session",
-			"Leaves the currently running obby session"
+			_("Quit session"),
+			_("Leaves the currently running obby session")
 		),
 		sigc::mem_fun(
 			*this,
@@ -119,8 +120,8 @@ Gobby::Header::Header()
 		Gtk::Action::create(
 			"Quit",
 			Gtk::Stock::QUIT,
-			"Quit",
-			"Quits the application"
+			_("Quit"),
+			_("Quits the application")
 		),
 		sigc::mem_fun(
 			*this,
@@ -129,15 +130,15 @@ Gobby::Header::Header()
 	);
 
 	// Session menu
-	m_group_app->add(Gtk::Action::create("MenuSession", "Session") );
+	m_group_app->add(Gtk::Action::create("MenuSession", _("Session")) );
 
 	// Create document
 	m_group_app->add(
 		Gtk::Action::create(
 			"CreateDocument",
 			Gtk::Stock::NEW,
-			"Create document",
-			"Creates a new document"
+			_("Create document"),
+			_("Creates a new document")
 		),
 		sigc::mem_fun(
 			*this,
@@ -150,8 +151,8 @@ Gobby::Header::Header()
 		Gtk::Action::create(
 			"OpenDocument",
 			Gtk::Stock::OPEN,
-			"Open document",
-			"Loads a file into a new document"
+			_("Open document"),
+			_("Loads a file into a new document")
 		),
 		sigc::mem_fun(
 			*this,
@@ -164,8 +165,8 @@ Gobby::Header::Header()
 		Gtk::Action::create(
 			"SaveDocument",
 			Gtk::Stock::SAVE,
-			"Save document",
-			"Saves a document into a file"
+			_("Save document"),
+			_("Saves a document into a file")
 		),
 		sigc::mem_fun(
 			*this,
@@ -178,8 +179,8 @@ Gobby::Header::Header()
 		Gtk::Action::create(
 			"CloseDocument",
 			Gtk::Stock::CLOSE,
-			"Close document",
-			"Closes an open document"
+			_("Close document"),
+			_("Closes an open document")
 		),
 		sigc::mem_fun(
 			*this,
@@ -188,15 +189,15 @@ Gobby::Header::Header()
 	);
 
 	// Help menu
-	m_group_app->add(Gtk::Action::create("MenuHelp", "Help") );
+	m_group_app->add(Gtk::Action::create("MenuHelp", _("Help")) );
 
 	// Display about dialog
 	m_group_app->add(
 		Gtk::Action::create(
 			"About",
 			Gtk::Stock::ABOUT,
-			"About",
-			"Shows Gobby's copyright and credits"
+			_("About"),
+			_("Shows Gobby's copyright and credits")
 		),
 		sigc::mem_fun(
 			*this,

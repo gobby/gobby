@@ -17,15 +17,16 @@
  */
 
 #include <gtkmm/stock.h>
+#include "common.hpp"
 #include "joindialog.hpp"
 
 Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
- : Gtk::Dialog("Join obby session", parent, true, true), m_config(config),
+ : Gtk::Dialog(_("Join obby session"), parent, true, true), m_config(config),
    m_table(4, 2),
-   m_lbl_host("Host:", Gtk::ALIGN_RIGHT),
-   m_lbl_port("Port:", Gtk::ALIGN_RIGHT),
-   m_lbl_name("Name:", Gtk::ALIGN_RIGHT),
-   m_lbl_color("Color:", Gtk::ALIGN_RIGHT)
+   m_lbl_host(_("Host:"), Gtk::ALIGN_RIGHT),
+   m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
+   m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
+   m_lbl_color(_("Color:"), Gtk::ALIGN_RIGHT)
 {
 	Glib::ustring host =
 		config["join"]["host"].get(Glib::ustring("localhost") );

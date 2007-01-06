@@ -17,12 +17,13 @@
  */
 
 #include <gtkmm/stock.h>
+#include "common.hpp"
 #include "chat.hpp"
 
 Gobby::Chat::Chat()
  : Gtk::VBox(), m_img_btn(Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON)
 {
-	m_btn_chat.set_label("Send");
+	m_btn_chat.set_label(_("Send"));
 	m_btn_chat.set_image(m_img_btn);
 
 	m_btn_chat.set_size_request(100, -1);

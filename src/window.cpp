@@ -26,6 +26,7 @@
 #include <gtkmm/stock.h>
 #include <obby/client_buffer.hpp>
 #include <obby/host_buffer.hpp>
+#include "common.hpp"
 #include "buffer_wrapper.hpp"
 #include "document.hpp"
 #include "hostdialog.hpp"
@@ -243,7 +244,7 @@ void Gobby::Window::on_about()
 	Gtk::AboutDialog dlg;
 	dlg.set_name("Gobby");
 	dlg.set_version(PACKAGE_VERSION);
-	dlg.set_comments("A collaborative text editor");
+	dlg.set_comments(_("A collaborative text editor"));
 	dlg.set_copyright("Copyright (C) 2005 0x539 dev group <crew@0x539.de>");
 	dlg.set_logo(Gdk::Pixbuf::create_from_inline(512 * 128, Icon::gobby) );
 
@@ -275,7 +276,7 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_document_create()
 {
-	EntryDialog dlg(*this, "Create document", "Enter document name");
+	EntryDialog dlg(*this, _("Create document"), "Enter document name");
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		m_buffer->create_document(dlg.get_text() );
@@ -284,7 +285,7 @@ void Gobby::Window::on_document_create()
 
 void Gobby::Window::on_document_open()
 {
-	Gtk::FileChooserDialog dlg(*this, "Open new document");
+	Gtk::FileChooserDialog dlg(*this, _("Open new document"));
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
@@ -301,7 +302,7 @@ void Gobby::Window::on_document_save()
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
 	obby::document& doc = static_cast<Document*>(page)->get_document();
 
-	Gtk::FileChooserDialog dlg(*this, "Save current document",
+	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
 			Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dlg.set_current_name(doc.get_title() );
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -342,7 +343,7 @@ void Gobby::Window::on_obby_login_failed(const std::string& reason)
 
 void Gobby::Window::on_obby_close()
 {
-	display_error("Connection lost");
+	display_error(_("Connection lost"));
 	on_session_quit();
 }
 

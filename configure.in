@@ -55,7 +55,15 @@ if test "x$ac_cv_lib_obby_obby_has_howl" = "xyes" ; then
 	AC_DEFINE([WITH_HOWL], 1, [Define whether to use howl support])
 fi
 AM_CONDITIONAL(WITH_HOWL, test x$ac_cv_lib_obby_obby_has_howl = xyes)
-	
+
+# Glib i18n/gettext support.
+ALL_LINGUAS="de"
+AM_GLIB_GNU_GETTEXT
+
+GETTEXT_PACKAGE=$PACKAGE
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
+
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
+AC_OUTPUT([po/Makefile.in])
 

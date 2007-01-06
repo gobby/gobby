@@ -1,7 +1,9 @@
+SUBDIRS = . po
+
 bin_PROGRAMS = gobby
 
 gobby_LDADD    = $(gobby_LIBS)
-gobby_CPPFLAGS = $(gobby_CFLAGS) -I../inc/
+gobby_CPPFLAGS = $(gobby_CFLAGS) -I../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\"
 
 if WIN32
 gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc
@@ -13,6 +15,7 @@ gobby_LDADD    += $(gtksourceview_LIBS)
 endif
 
 noinst_HEADERS =  inc/config.hpp
+noinst_HEADERS +=  inc/common.hpp
 noinst_HEADERS += inc/buffer_wrapper.hpp
 if WIN32
 noinst_HEADERS += inc/buffer_wrapper_win32.hpp

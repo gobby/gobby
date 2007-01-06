@@ -1,0 +1,9 @@
+# source files
+
+src/chat.cpp
+src/header.cpp
+src/hostdialog.cpp
+src/joindialog.cpp
+src/userlist.cpp
+src/window.cpp
+
