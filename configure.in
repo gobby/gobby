@@ -49,6 +49,12 @@ PKG_CHECK_MODULES([gobby],
                    net6-1.2 obby-0.3])
 AC_CACHE_SAVE
 
+# Check for the Gtkmm version available (either 2.6 or 2.8).
+PKG_CHECK_GTKMM
+if test "x$GTKMM" = "x28" ; then
+  AC_DEFINE([GTKMM_IS_28], 1, [Defined if Gtkmm's version is 2.8 or greater])
+fi
+
 # Check for howl in libobby.
 AC_CHECK_LIB(obby, obby_has_howl)
 if test "x$ac_cv_lib_obby_obby_has_howl" = "xyes" ; then

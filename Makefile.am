@@ -1,4 +1,7 @@
-SUBDIRS = . po
+SUBDIRS = m4 . po
+
+# Tell aclocal where to find `.m4' files.
+ACLOCAL_AMFLAGS = -I m4
 
 bin_PROGRAMS = gobby
 

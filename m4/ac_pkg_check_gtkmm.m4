@@ -1,0 +1,13 @@
+AC_DEFUN(PKG_CHECK_GTKMM, [
+
+  GTKMM_VER=0
+  PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.8.0,
+  [
+    GTKMM_VER=28
+  ],
+  [
+    PKG_CHECK_MODULES(GTKMM, gtkmm-2.4 >= 2.6.0)
+    GTKMM_VER=26
+  ])
+  AC_SUBST(GTKMM_VER)
+])
