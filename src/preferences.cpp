@@ -106,6 +106,18 @@ Gobby::Preferences::FileList::iterator::operator++(int)
 	return temp;
 }
 
+bool Gobby::Preferences::FileList::iterator::
+	operator==(const iterator& other) const
+{
+	return m_iter == other.m_iter;
+}
+
+bool Gobby::Preferences::FileList::iterator::
+	operator!=(const iterator& other) const
+{
+	return m_iter != other.m_iter;
+}
+
 const Glib::ustring& Gobby::Preferences::FileList::iterator::pattern() const
 {
 	return m_iter->first;
@@ -146,7 +158,6 @@ Gobby::Preferences::FileList::FileList(Config::Entry& entry,
 	else
 	{
 		// Default list
-		add_by_mime_type("*.ada", "text/x-ada", lang_mgr);
 		add_by_mime_type("*.ada", "text/x-ada", lang_mgr);
 		add_by_mime_type("*.c", "text/x-c", lang_mgr);
 		add_by_mime_type("*.h", "text/x-c++", lang_mgr);
@@ -197,7 +208,7 @@ Gobby::Preferences::FileList::FileList(Config::Entry& entry,
 			lang_mgr
 		);
 		add_by_mime_type("*.tcl", "text/x-tcl", lang_mgr);
-		add_by_mime_type("Makefile", "text/x-Maxefile", lang_mgr);
+		add_by_mime_type("Makefile", "text/x-makefile", lang_mgr);
 	}
 }
 

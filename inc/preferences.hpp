@@ -103,6 +103,9 @@ public:
 			iterator& operator++();
 			iterator operator++(int);
 
+			bool operator==(const iterator& other) const;
+			bool operator!=(const iterator& other) const;
+
 			const Glib::ustring& pattern() const;
 			const Language& language() const;
 		private:

@@ -16,6 +16,8 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <glibmm/pattern.h>
+
 #include "preferences.hpp"
 #include "docwindow.hpp"
 
@@ -61,8 +63,20 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	desc.set_family("Monospace");
 	m_view.modify_font(desc);
 
-	// TODO: Set source language by filename
+	// Set source language by filename
 	buf->set_highlight(false);
+
+	for(Preferences::FileList::iterator iter = preferences.files.begin();
+	    iter != preferences.files.end();
+	    ++ iter)
+	{
+		Glib::PatternSpec spec(iter.pattern());
+		if(spec.match(info.get_title()) )
+		{
+			buf->set_language(iter.language() );
+			buf->set_highlight(true);
+		}
+	}
 
 	buf->signal_mark_set().connect(
 		sigc::mem_fun(*this, &DocWindow::on_mark_set)
@@ -99,7 +113,7 @@ void Gobby::DocWindow::get_cursor_position(unsigned int& row,
 
 	// Row is trivial
 	row = iter.get_line(); col = 0;
-	unsigned int chars = iter.get_line_offset();
+	int chars = iter.get_line_offset();
 
 	// Tab characters expand to more than one column
 	unsigned int tabs = m_preferences.editor.tab_width;
@@ -160,6 +174,7 @@ void Gobby::DocWindow::
 	set_language(const Glib::RefPtr<Gtk::SourceLanguage>& language)
 {
 	m_view.get_buffer()->set_language(language);
+	m_view.get_buffer()->set_highlight(language);
 	m_signal_language_changed.emit();
 }
 

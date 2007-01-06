@@ -844,7 +844,7 @@ void Gobby::Window::on_edit_goto_line()
 
 void Gobby::Window::on_edit_preferences()
 {
-	PreferencesDialog dlg(*this, m_preferences, false);
+	PreferencesDialog dlg(*this, m_preferences, m_lang_manager, false);
 
 	// Info label
 	Gtk::Label m_lbl_info(_(
@@ -866,7 +866,9 @@ void Gobby::Window::on_edit_preferences()
 	if(result == Gtk::RESPONSE_OK || result == Gtk::RESPONSE_APPLY)
 	{
 		// Use new preferences
-		m_preferences = dlg.preferences();
+		Preferences prefs;
+		dlg.set(prefs);
+		m_preferences = prefs;
 
 		// Apply window preferences
 		apply_preferences();
@@ -942,7 +944,11 @@ void Gobby::Window::on_view_preferences()
 	}
 
 	// Add preferences dialog
-	PreferencesDialog dlg(*this, doc->get_preferences(), true);
+	PreferencesDialog dlg(*this,
+		doc->get_preferences(),
+		m_lang_manager,
+		true
+	);
 
 	// Label text
 	obby::format_string str(_(
@@ -967,7 +973,9 @@ void Gobby::Window::on_view_preferences()
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		// Apply new preferences to the document
-		doc->set_preferences(dlg.preferences() );
+		Preferences prefs;
+		dlg.set(prefs);
+		doc->set_preferences(prefs);
 	}
 }
 

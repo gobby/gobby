@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005, 2006 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -29,6 +29,10 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/tooltips.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/cellrenderercombo.h>
+#include <gtkmm/scrolledwindow.h>
 #include "preferences.hpp"
 
 namespace Gobby
@@ -37,28 +41,24 @@ namespace Gobby
 class PreferencesDialog : public Gtk::Dialog
 {
 public:
-	class Page : public Gtk::Frame
+	typedef Glib::RefPtr<Gtk::SourceLanguagesManager> LangManager;
+
+	class Page: public Gtk::Frame
 	{
 	public:
-		Page(const Preferences& preferences);
+		Page();
 
 	protected:
-		const Preferences& m_preferences;
 	};
 
-	class Editor : public Page
+	class Editor: public Page
 	{
 	public:
 		Editor(const Preferences& preferences,
 		       Gtk::Tooltips& tooltips);
-		~Editor();
 
-		unsigned int get_tab_width() const;
-		bool get_tab_spaces() const;
+		void set(Preferences::Editor& editor) const;
 
-		bool get_indentation_auto() const;
-
-		bool get_homeend_smart() const;
 	protected:
 		Gtk::VBox m_box;
 		Gtk::Frame m_frame_tab;
@@ -78,23 +78,12 @@ public:
 		Gtk::CheckButton m_btn_homeend_smart;
 	};
 
-	class View : public Page
+	class View: public Page
 	{
 	public:
 		View(const Preferences& preferences);
-		~View();
+		void set(Preferences::View& view) const;
 
-		bool get_wrap_text() const;
-		bool get_wrap_words() const;
-
-		bool get_linenum_display() const;
-
-		bool get_curline_highlight() const;
-
-		bool get_margin_display() const;
-		unsigned int get_margin_pos() const;
-
-		bool get_bracket_highlight() const;
 	protected:
 		virtual void on_margin_display_toggled();
 
@@ -125,15 +114,12 @@ public:
 		Gtk::CheckButton m_btn_bracket_highlight;
 	};
 
-	class Appearance : public Page
+	class Appearance: public Page
 	{
 	public:
 		Appearance(const Preferences& preferences);
-		~Appearance();
+		void set(Preferences::Appearance& appearance) const;
 
-		Gtk::ToolbarStyle get_toolbar_style() const;
-
-		bool get_remember() const;
 	protected:
 		Gtk::VBox m_box;
 		Gtk::Frame m_frame_toolbar;
@@ -146,30 +132,113 @@ public:
 		Gtk::CheckButton m_btn_remember;
 	};
 
-	class Security : public Page
+	class FileList: public Page
 	{
 	public:
-		Security(const Preferences& preferences);
-		~Security();
+		typedef Glib::RefPtr<Gtk::SourceLanguage> Language;
 
-		// Fetch the key components
+		// List of languages. TODO: Should be somewhere else
+		class LanguageColumns: public Gtk::TreeModel::ColumnRecord
+		{
+		public:
+			LanguageColumns();
+
+			Gtk::TreeModelColumn<Language> language;
+			Gtk::TreeModelColumn<Glib::ustring> language_name;
+		};
+
+		class FileColumns: public Gtk::TreeModel::ColumnRecord
+		{
+		public:
+			FileColumns();
+
+			Gtk::TreeModelColumn<Glib::ustring> pattern;
+			Gtk::TreeModelColumn<Glib::ustring> mime_type;
+			Gtk::TreeModelColumn<Gtk::TreeIter> language;
+		};
+
+		FileList(Gtk::Window& parent,
+		         const Preferences& preferences,
+		         const LangManager& lang_mgr);
+
+		void set(Preferences::FileList& files) const;
+
+		const LanguageColumns lang_columns;
+		const FileColumns file_columns;
+
 	protected:
-		Gtk::VBox m_box;
+		struct LangCompare
+		{
+			bool operator()(const Language& first,
+			                const Language& second)
+			{
+				return first->gobj() < second->gobj();
+			}
+		};
 
-		Gtk::VBox m_box_key;
-		// Display the current public key ID and let the user the
-		// opportunity to regenerate it.
+		typedef std::map<
+			Glib::RefPtr<Gtk::SourceLanguage>,
+			Gtk::TreeIter,
+			LangCompare
+		> map_type;
+
+		void cell_data_file_language(Gtk::CellRenderer* renderer,
+		                             const Gtk::TreeIter& iter);
+
+		void on_pattern_edited(const Glib::ustring& path,
+		                       const Glib::ustring& new_text);
+		void on_mimetype_edited(const Glib::ustring& path,
+		                        const Glib::ustring& new_text);
+		void on_language_edited(const Glib::ustring& path,
+		                        const Glib::ustring& new_text);
+
+		void on_selection_changed();
+
+		void on_file_add();
+		void on_file_remove();
+
+		void set_language(const Gtk::TreeIter& row,
+		                  const Language& lang);
+
+		Gtk::Window& m_parent;
+		const LangManager& m_lang_mgr;
+
+		Gtk::CellRendererText* m_renderer_pattern;
+		Gtk::CellRendererCombo m_renderer_lang;
+		Gtk::CellRendererText* m_renderer_mimetype;
+
+		Gtk::TreeViewColumn m_viewcol_pattern;
+		Gtk::TreeViewColumn m_viewcol_lang;
+		Gtk::TreeViewColumn m_viewcol_mimetype;
+
+		Gtk::VBox m_vbox;
+		Gtk::Label m_intro;
+		Gtk::ScrolledWindow m_wnd;
+		Gtk::TreeView m_view;
+
+		Gtk::HButtonBox m_hbox;
+		Gtk::Button m_btn_add;
+		Gtk::Button m_btn_remove;
+
+		// Map for better access to iterators to the language list
+		map_type m_lang_map;
+
+		Glib::RefPtr<Gtk::ListStore> m_lang_list;
+		Glib::RefPtr<Gtk::ListStore> m_file_list;
 	};
 
-	PreferencesDialog(Gtk::Window& parent, const Preferences& preferences,
+	PreferencesDialog(Gtk::Window& parent,
+	                  const Preferences& preferences,
+	                  const LangManager& lang_mgr,
 	                  bool local);
-	~PreferencesDialog();
 
-	Preferences preferences() const;
+	void set(Preferences& preferences) const;
 
+#if 0
 	const Editor& editor() const;
 	const View& view() const;
 	const Appearance& appearance() const;
+#endif
 
 protected:
 	Gtk::Notebook m_notebook;
@@ -178,6 +247,7 @@ protected:
 	Editor m_page_editor;
 	View m_page_view;
 	Appearance m_page_appearance;
+	FileList m_page_files;
 };
 
 }
