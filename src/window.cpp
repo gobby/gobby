@@ -367,7 +367,7 @@ void Gobby::Window::on_session_create()
 {
 	// Show up host dialog
 	HostDialog dlg(*this, m_config);
-	if(dlg.run() == Gtk::RESPONSE_OK)
+	while(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		dlg.hide();
 
@@ -408,6 +408,8 @@ void Gobby::Window::on_session_create()
 			obby_start();
 			// Remember session file
 			m_prev_session = Glib::filename_from_utf8(session);
+			// Session is open, no need to reshow host dialog
+			break;
 		}
 	}
 }
@@ -420,7 +422,7 @@ void Gobby::Window::on_session_join()
 	JoinDialog dlg(*this, m_config, m_zeroconf.get() );
 #endif
 
-	if(dlg.run() == Gtk::RESPONSE_OK)
+	while(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		dlg.hide();
 
@@ -454,6 +456,9 @@ void Gobby::Window::on_session_join()
 			// Start session
 			m_buffer = buffer;
 			obby_start();
+
+			// Session is open, no need to reshow join dialog
+			break;
 		}
 	}
 }
