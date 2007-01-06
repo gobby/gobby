@@ -35,8 +35,9 @@ public:
 	DefaultDialog(const Glib::ustring& title, bool modal = false,
 	              bool use_separator = false);
 	DefaultDialog();
-protected:
+
 	void set_response_sensitive(int response_id, bool sensitive);
+protected:
 	virtual bool on_key_press_event(GdkEventKey* event);
 
 	bool m_ok_sensitive;

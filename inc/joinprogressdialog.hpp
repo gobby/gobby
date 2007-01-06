@@ -27,7 +27,7 @@
 namespace Gobby
 {
 
-class JoinProgressDialog : public ProgressDialog
+class JoinProgressDialog: public ProgressDialog
 {
 public:
 	JoinProgressDialog(Gtk::Window& parent, Config& config,
@@ -43,20 +43,40 @@ public:
 	std::auto_ptr<obby::client_buffer> get_buffer();
 
 private:
+	typedef obby::client_buffer::connection_settings connection_settings;
+
+	class Prompt: public DefaultDialog
+	{
+	public:
+		Prompt(Gtk::Window& parent,
+		       const Glib::ustring& title,
+		       const Glib::ustring& info,
+		       Gtk::Widget& widget,
+		       const Gtk::StockID& icon);
+	protected:
+		Gtk::Table m_table;
+		Gtk::Label m_info;
+		Gtk::Image m_icon;
+	};
+
 	virtual void on_thread(Thread& thread);
 	virtual void on_done();
 
 	void on_welcome();
 	void on_login_failed(obby::login::error error);
-	bool on_global_password(std::string& password);
-	bool on_user_password(std::string& password);
+
+	bool on_prompt_name(connection_settings& settings);
+	bool on_prompt_colour(connection_settings& settings);
+	bool on_prompt_global_password(connection_settings& settings);
+	bool on_prompt_user_password(connection_settings& settings);
+
 	void on_sync_init(unsigned int count);
 	void on_sync_final();
 	void on_close();
 
 	void display_error(const Glib::ustring& message);
-	bool prompt_password(const Glib::ustring& label,
-	                     std::string& password);
+
+	virtual void on_response(int response_id);
 
 	Config& m_config;
 
