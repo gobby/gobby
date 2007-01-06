@@ -16,7 +16,9 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifdef WITH_GTKSOURCEVIEW
 #include "sourceview/sourcelanguagesmanager.hpp"
+#endif
 #include "document.hpp"
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -25,8 +27,10 @@ const Gobby::Document::MimeMap& Gobby::Document::m_mime_map =
 #endif
 
 Gobby::Document::Document(obby::document& doc)
- : Gtk::ScrolledWindow(), m_doc(doc), m_editing(true),
-   m_lang_manager(Gtk::SourceLanguagesManager::create() )
+ : Gtk::ScrolledWindow(), m_doc(doc), m_editing(true)
+#ifdef WITH_GTKSOURCEVIEW
+   ,m_lang_manager(Gtk::SourceLanguagesManager::create() )
+#endif
 {
 #ifdef WITH_GTKSOURCEVIEW
 	m_view.set_show_line_numbers(true);
