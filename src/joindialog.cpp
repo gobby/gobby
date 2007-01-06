@@ -122,7 +122,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 	get_vbox()->pack_start(m_vbox);
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+	add_button(Gtk::Stock::CONNECT, Gtk::RESPONSE_OK);
 
 	show_all();
 	set_border_width(10);
