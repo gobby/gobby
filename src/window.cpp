@@ -1153,7 +1153,8 @@ namespace
 	{
 		for(std::string::size_type i = 0; i < str.length(); ++ i)
 			// Convert DOS CRLF to a single LF
-			if(str[i] == '\r' && str[i+1] == '\n')
+			if(i < str.length() - 1 &&
+			   str[i] == '\r' && str[i+1] == '\n')
 				str.erase(i, 1);
 			// Convert Macintosh CR to LF
 			else if(str[i] == '\r')
