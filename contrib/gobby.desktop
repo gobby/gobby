@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Gobby
+Name=Gobby Collaborative Editor
+Name[de]=Gobby-Gemeinschaftseditor
 Comment=Edit text files collaboratively
 Comment[de]=Gemeinschaftliches Editieren von Textdateien
 Exec=gobby
