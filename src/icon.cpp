@@ -1,19 +1,59 @@
-/* GdkPixbuf RGBA C-Source image dump */
+/* IconZZzzzzzzzzz */
 
 #include <glib/gtypes.h>
 #include <gtkmm/stockitem.h>
 #include "common.hpp"
 #include "icon.hpp"
 
+#ifdef _WIN32
+# include <windows.h>
+#endif
+
+namespace
+{
+	Glib::RefPtr<Gdk::Pixbuf> load_pixbuf(const char* dir, const char* file)
+	{
+		try
+		{
+			return Gdk::Pixbuf::create_from_file(
+				Glib::build_filename(dir, file)
+			);
+		}
+		catch(Glib::FileError& e)
+		{
+			/* Not installed */
+#ifdef _WIN32
+			TCHAR path[MAX_PATH];
+			if(!GetModuleFileName(NULL, path, MAX_PATH))
+				throw e;
+
+			return Gdk::Pixbuf::create_from_file(
+				Glib::build_filename(
+					Glib::build_filename(
+						Glib::path_get_dirname(path),
+						"pixmaps"
+					),
+					file
+				)
+			);
+#else
+			return Gdk::Pixbuf::create_from_file(
+				Glib::build_filename("pixmaps", file)
+			);
+#endif
+		}
+	}
+}
+
 Gtk::StockID Gobby::IconManager::STOCK_USERLIST("gobby-userlist");
 Gtk::StockID Gobby::IconManager::STOCK_DOCLIST("gobby-doclist");
 Gtk::StockID Gobby::IconManager::STOCK_CHAT("gobby-chat");
 
 Gobby::IconManager::IconManager():
-	gobby(Gdk::Pixbuf::create_from_file(APPICON_DIR"/gobby.png") ),
-	userlist(Gdk::Pixbuf::create_from_file(PIXMAPS_DIR"/userlist.png") ),
-	doclist(Gdk::Pixbuf::create_from_file(PIXMAPS_DIR"/doclist.png") ),
-	chat(Gdk::Pixbuf::create_from_file(PIXMAPS_DIR"/chat.png") ),
+	gobby(load_pixbuf(APPICON_DIR, "gobby.png") ),
+	userlist(load_pixbuf(PIXMAPS_DIR, "userlist.png") ),
+	doclist(load_pixbuf(PIXMAPS_DIR, "doclist.png") ),
+	chat(load_pixbuf(PIXMAPS_DIR, "chat.png") ),
 	m_is_userlist(userlist),
 	m_is_doclist(doclist),
 	m_is_chat(chat),
