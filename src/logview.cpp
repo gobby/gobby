@@ -56,7 +56,7 @@ void Gobby::LogView::log(const Glib::ustring& text,
 	Glib::ustring ins_text = text;
 	if(ins_text[ins_text.length() - 1] != '\n') ins_text += "\n";
 
-	const char* formatter = "%T";
+	const char* formatter = "%X";
 	std::time_t cur_time_t = std::time(NULL);
 	std::tm cur_time_tm = *std::localtime(&cur_time_t);
 	std::tm given_time_tm = *std::localtime(&timestamp);
@@ -65,7 +65,7 @@ void Gobby::LogView::log(const Glib::ustring& text,
 	if(cur_time_tm.tm_yday != given_time_tm.tm_yday ||
 	   cur_time_tm.tm_year != given_time_tm.tm_year)
 	{
-		formatter = "%x %T";
+		formatter = "%x %X";
 	}
 
 	char buf[0x7f];
