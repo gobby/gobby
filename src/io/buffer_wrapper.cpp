@@ -338,9 +338,9 @@ obby::io::server_buffer::net_type*
 obby::io::server_buffer::new_net(unsigned int port)
 {
 #ifdef WIN32
-	return new io::server(m_window, port);
+	return new io::server(m_window, port, false);
 #else
-	return new io::server(port);
+	return new io::server(port, false);
 #endif
 }
 
@@ -365,9 +365,9 @@ obby::io::host_buffer::net_type*
 obby::io::host_buffer::new_net(unsigned int port)
 {
 #ifdef WIN32
-	return new net_type(window, port, m_username);
+	return new net_type(window, port, m_username, false);
 #else
-	return new net_type(port, m_username);
+	return new net_type(port, m_username, false);
 #endif
 }
 
