@@ -18,7 +18,16 @@
 
 #include <iostream>
 #include <gtkmm/main.h>
+#include <gtkmm/messagedialog.h>
 #include "window.hpp"
+
+void handle_exception(const Glib::ustring& message)
+{
+	Gtk::MessageDialog dlg("Unhandled exception: " + message, false,
+		Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+	dlg.run();
+	std::cerr << "Unhandled exception: " << message << std::endl;
+}
 
 int main(int argc, char* argv[]) try
 {
@@ -30,10 +39,10 @@ int main(int argc, char* argv[]) try
 }
 catch(Glib::Exception& e)
 {
-	// TODO: Gtk::MessageDialog
-	std::cerr << e.what() << std::endl;
+	handle_exception(e.what() );
 }
 catch(std::exception& e)
 {
-	std::cerr << e.what() << std::endl;
+	handle_exception(e.what() );
 }
+
