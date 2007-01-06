@@ -366,7 +366,7 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 
 	// Create label for the tab
 	TabLabel* label = Gtk::manage(
-		new TabLabel(escapehtml(info.get_title()))
+		new TabLabel(escapehtml(info.get_suffixed_title()))
 	);
 
 	label->set_use_markup(true);

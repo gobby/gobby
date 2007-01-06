@@ -794,7 +794,7 @@ void Gobby::Window::on_document_save_as()
 			dlg.set_current_folder(m_last_path);
 
 		// Set current title as proposed file name
-		dlg.set_current_name(doc->get_title() );
+		dlg.set_current_name(doc->get_info().get_title() );
 	}
 
 	// Add buttons to close the dialog
@@ -958,7 +958,7 @@ void Gobby::Window::on_view_preferences()
 	) );
 
 	// Get title
-	str << doc->get_title().raw();
+	str << doc->get_info().get_suffixed_title();
 
 	// Info label
 	Gtk::Label m_lbl_info(str.str() );
@@ -1100,7 +1100,7 @@ void Gobby::Window::update_title_bar()
 	// Get currently active document
 	const DocWindow& window = *get_current_document();
 	// Get title of current document
-	const Glib::ustring& file = window.get_title();
+	const Glib::ustring& file = window.get_info().get_suffixed_title();
 	// Get path of current document
 	Glib::ustring path = m_document_settings.get_path(window.get_info() );
 
@@ -1272,7 +1272,7 @@ void Gobby::Window::close_document(DocWindow& window)
 			);
 		}
 
-		primary_str << window.get_title();
+		primary_str << window.get_info().get_suffixed_title();
 
 		// Setup dialog
 		Gtk::MessageDialog dlg(*this, primary_str.str(), false,

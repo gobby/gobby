@@ -127,7 +127,7 @@ public:
 private:
 	void on_document_insert(DocumentInfo& info);
 	void on_document_remove(DocumentInfo& info);
-	void on_document_rename(DocumentInfo& info);
+	void on_document_rename(LocalDocumentInfo& info);
 
 	void on_subscribe(const obby::user& user,
 	                  LocalDocumentInfo& info);

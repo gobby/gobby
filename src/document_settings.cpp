@@ -74,8 +74,6 @@ void Gobby::DocumentSettings::obby_start(LocalBuffer& buf)
 		sigc::mem_fun(*this, &DocumentSettings::on_document_insert) );
 	buf.document_remove_event().connect(
 		sigc::mem_fun(*this, &DocumentSettings::on_document_remove) );
-	buf.document_rename_event().connect(
-		sigc::mem_fun(*this, &DocumentSettings::on_document_rename) );
 }
 
 void Gobby::DocumentSettings::obby_end()
@@ -147,6 +145,18 @@ void Gobby::DocumentSettings::on_document_insert(DocumentInfo& info)
 {
 	LocalDocumentInfo& local_info = dynamic_cast<LocalDocumentInfo&>(info);
 
+	local_info.rename_event().connect(
+		sigc::hide(
+			sigc::bind(
+				sigc::mem_fun(
+					*this,
+					&DocumentSettings::on_document_rename
+				),
+				sigc::ref(local_info)
+			)
+		)
+	);
+
 	local_info.subscribe_event().connect(
 		sigc::bind(
 			sigc::mem_fun(
@@ -171,7 +181,7 @@ void Gobby::DocumentSettings::on_document_insert(DocumentInfo& info)
 	(*iter)[columns.info] = &local_info;
 	(*iter)[columns.icon] = m_icon;
 	(*iter)[columns.color] = document_color(local_info);
-	(*iter)[columns.title] = local_info.get_title();
+	(*iter)[columns.title] = local_info.get_suffixed_title();
 
 	m_map[&local_info] = iter;
 
@@ -197,10 +207,9 @@ void Gobby::DocumentSettings::on_document_remove(DocumentInfo& info)
 	m_map.erase(iter);
 }
 
-void Gobby::DocumentSettings::on_document_rename(DocumentInfo& info)
+void Gobby::DocumentSettings::on_document_rename(LocalDocumentInfo& info)
 {
-	LocalDocumentInfo& local_info = dynamic_cast<LocalDocumentInfo&>(info);
-	(*get_iter(local_info))[columns.title] = local_info.get_title();
+	(*get_iter(info))[columns.title] = info.get_suffixed_title();
 }
 
 void Gobby::DocumentSettings::on_subscribe(const obby::user& user,
