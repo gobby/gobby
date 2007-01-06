@@ -3,9 +3,10 @@ Gobby
 
 Serious:
  * Opening large documents is _really_ slow on win32's timer implementation
+ * On connection loss: give a chance to save everything
 
 Important:
- * Compensate changes made by others by scrolling appropriately, the current
+ * Compensate changes made by others by scrolling appropriately; the current
    position should not change
 
 Normal:
@@ -16,14 +17,19 @@ Normal:
    - Cursor position
    - Current highlighting scheme
    - Current syncronisation state 
+ * Prompt before overwriting existing files when explicitly choosing path
+ * Chat command infrastructure (/me, /ignore)
 
 Minor:
  * Highlighting of own nickname in chat window (Glib::ustring::find)
- * Save document dialog should contain buffer document filename
  * Change the colour of the labels on the notebooks to red if something
    has changed and the document is not active and possibly to grey when
    the document is not yet syncronised (which would depend on sync-on-request
    within libobby)
+ * Option to disable line numbers with GtkSourceView per document
+ * Keyboard shortcuts
 
 Wishlist:
+ * Default to save files to the location they were loaded from
+   (or save the directory of the last save)
 
