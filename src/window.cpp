@@ -39,8 +39,8 @@ Gobby::Window::Window()
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
-  m_chat.chat_event().connect(
-    sigc::mem_fun(*this, &Window::on_chat) );
+	m_chat.chat_event().connect(
+		sigc::mem_fun(*this, &Window::on_chat) );
 
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
@@ -101,10 +101,10 @@ void Gobby::Window::on_session_create() try
 		m_buffer->remove_document_event().connect(
 			sigc::mem_fun(*this, &Window::on_obby_document_remove));
 
-    m_buffer->message_event().connect(
-      sigc::mem_fun(*this, &Window::on_obby_chat) );
-    m_buffer->server_message_event().connect(
-      sigc::mem_fun(*this, &Window::on_obby_server_chat) );
+		m_buffer->message_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_chat) );
+		m_buffer->server_message_event().connect(
+			sigc::mem_fun(*this, &Window::on_obby_server_chat) );
 
 
 		if(!m_timer_conn.connected() )
@@ -236,10 +236,10 @@ void Gobby::Window::on_quit()
 }
 
 void Gobby::Window::on_chat(const Glib::ustring& message) {
-  if (m_running)
-    m_buffer->send_message(message);
-  else
-    throw std::runtime_error("tried to send chat message while not connected");
+	if (m_running)
+		m_buffer->send_message(message);
+	else
+		throw std::runtime_error("tried to send chat message while not connected");
 }
 
 void Gobby::Window::on_obby_login_failed(const std::string& reason)
@@ -277,12 +277,12 @@ void Gobby::Window::on_obby_sync()
 
 void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)
 {
-  m_chat.obby_message(user, message);
+	m_chat.obby_message(user, message);
 }
 
 void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 {
-  m_chat.obby_server_message(message);
+	m_chat.obby_server_message(message);
 }
 
 

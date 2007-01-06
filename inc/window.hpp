@@ -44,7 +44,7 @@ protected:
 	void on_session_quit();
 	void on_quit();
 
-  void on_chat(const Glib::ustring& message);
+	void on_chat(const Glib::ustring& message);
 
 	// Obby signal handlers
 	void on_obby_login_failed(const std::string& reason);
@@ -56,8 +56,8 @@ protected:
 	void on_obby_document_insert(obby::document& document);
 	void on_obby_document_remove(obby::document& document);
 
-  void on_obby_server_chat(const Glib::ustring& message);
-  void on_obby_chat(obby::user& user, const Glib::ustring& message);
+	void on_obby_server_chat(const Glib::ustring& message);
+	void on_obby_chat(obby::user& user, const Glib::ustring& message);
 
 	bool on_timer();
 
