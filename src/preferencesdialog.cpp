@@ -233,12 +233,48 @@ void Gobby::PreferencesDialog::View::on_margin_display_toggled()
 
 Gobby::PreferencesDialog::Appearance::Appearance(
 	const Gobby::Preferences& preferences)
- : Page(preferences)
+ : Page(preferences),
+   m_frame_toolbar(_("Toolbar") )
 {
+	Gtk::ToolbarStyle style = preferences.appearance.toolbar_show;
+
+	m_cmb_toolbar_style.append_text(_("Show text only") );
+	m_cmb_toolbar_style.append_text(_("Show icons only") );
+	m_cmb_toolbar_style.append_text(_("Show both icons and text") );
+
+	switch(style)
+	{
+	case Gtk::TOOLBAR_TEXT: m_cmb_toolbar_style.set_active(0); break;
+	case Gtk::TOOLBAR_ICONS: m_cmb_toolbar_style.set_active(1); break;
+	case Gtk::TOOLBAR_BOTH: m_cmb_toolbar_style.set_active(2); break;
+	}
+
+	m_box_toolbar.set_spacing(5);
+	m_box_toolbar.set_border_width(5);
+	m_box_toolbar.pack_start(m_cmb_toolbar_style, Gtk::PACK_SHRINK);
+
+	m_frame_toolbar.add(m_box_toolbar);
+
+	m_box.set_spacing(5);
+	m_box.pack_start(m_frame_toolbar, Gtk::PACK_SHRINK);
+
+	set_border_width(10);
+	add(m_box);
 }
 
 Gobby::PreferencesDialog::Appearance::~Appearance()
 {
+}
+
+Gtk::ToolbarStyle
+Gobby::PreferencesDialog::Appearance::get_toolbar_style() const
+{
+	switch(m_cmb_toolbar_style.get_active_row_number() )
+	{
+	case 0: return Gtk::TOOLBAR_TEXT;
+	case 1: return Gtk::TOOLBAR_ICONS;
+	case 2: default: return Gtk::TOOLBAR_BOTH;
+	}
 }
 
 Gobby::PreferencesDialog::Security::Security(const Preferences& preferences)
@@ -251,14 +287,17 @@ Gobby::PreferencesDialog::Security::~Security()
 }
 
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
-                                            const Preferences& preferences)
+                                            const Preferences& preferences,
+                                            bool local)
  : Gtk::Dialog(_("Preferences"), parent, true),
    m_page_editor(preferences, m_tooltips), m_page_view(preferences),
    m_page_appearance(preferences)
 {
 	m_notebook.append_page(m_page_editor, _("Editor") );
 	m_notebook.append_page(m_page_view, _("View") );
-//	m_notebook.append_page(m_page_appearance, _("Appearance") );
+
+	// Appearance only affects the global Gobby window
+	if(!local) m_notebook.append_page(m_page_appearance, _("Appearance") );
 
 	get_vbox()->set_spacing(5);
 	get_vbox()->pack_start(m_notebook, Gtk::PACK_EXPAND_WIDGET);
@@ -295,6 +334,9 @@ Gobby::Preferences Gobby::PreferencesDialog::preferences() const
 	preferences.view.margin_pos = m_page_view.get_margin_pos();
 	preferences.view.bracket_highlight =
 		m_page_view.get_bracket_highlight();
+
+	preferences.appearance.toolbar_show =
+		m_page_appearance.get_toolbar_style();
 
 	return preferences;
 }

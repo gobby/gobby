@@ -72,6 +72,10 @@ public:
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
 	Glib::RefPtr<const Gtk::AccelGroup> get_accel_group() const;
 
+	// Access to toolbar & menubar
+	Gtk::MenuBar& get_menubar();
+	Gtk::Toolbar& get_toolbar();
+
 	// Disables actions that deal with documents. The windowscalls this
 	// after all remaining documents have been closed after a connection
 	// loss.

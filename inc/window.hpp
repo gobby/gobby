@@ -101,6 +101,7 @@ protected:
 	void on_obby_chat(obby::user& user, const Glib::ustring& message);
 
 	// Helper functions
+	void apply_preferences();
 	void open_local_file(const Glib::ustring& file);
 	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message);

@@ -26,6 +26,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/comboboxtext.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/tooltips.h>
 #include "preferences.hpp"
@@ -130,13 +131,13 @@ public:
 		Appearance(const Preferences& preferences);
 		~Appearance();
 
-		// Fetch the font
+		Gtk::ToolbarStyle get_toolbar_style() const;
 	protected:
 		Gtk::VBox m_box;
+		Gtk::Frame m_frame_toolbar;
 
-		Gtk::Frame m_frame_font;
-
-		// Font chooser
+		Gtk::VBox m_box_toolbar;
+		Gtk::ComboBoxText m_cmb_toolbar_style;
 	};
 
 	class Security : public Page
@@ -154,7 +155,8 @@ public:
 		// opportunity to regenerate it.
 	};
 
-	PreferencesDialog(Gtk::Window& parent, const Preferences& preferences);
+	PreferencesDialog(Gtk::Window& parent, const Preferences& preferences,
+	                  bool local);
 	~PreferencesDialog();
 
 	Preferences preferences() const;

@@ -120,6 +120,9 @@ Gobby::Window::Window()
 
 	add(m_mainbox);
 
+	// Apply initial preferences
+	apply_preferences();
+
 	set_title("Gobby");
 	set_default_size(640, 480);
 }
@@ -456,7 +459,7 @@ void Gobby::Window::on_document_close()
 
 void Gobby::Window::on_edit_preferences()
 {
-	PreferencesDialog dlg(*this, m_preferences);
+	PreferencesDialog dlg(*this, m_preferences, false);
 
 	// Info label
 	Gtk::Label m_lbl_info(_(
@@ -479,6 +482,9 @@ void Gobby::Window::on_edit_preferences()
 	{
 		// Use new preferences
 		m_preferences = dlg.preferences();
+
+		// Apply window preferences
+		apply_preferences();
 
 		// Apply preferences to open documents.
 		if(result == Gtk::RESPONSE_APPLY)
@@ -534,7 +540,11 @@ void Gobby::Window::on_view_preferences()
 		m_folder.get_nth_page(m_folder.get_current_page()) );
 
 	// Add preferences dialog
-	PreferencesDialog dlg(*this, doc.get_document().get_preferences() );
+	PreferencesDialog dlg(
+		*this,
+		doc.get_document().get_preferences(),
+		true
+	);
 
 	// Label text
 	obby::format_string str(_(
@@ -705,6 +715,12 @@ void Gobby::Window::on_obby_document_remove(obby::document_info& document)
 	// Reset title if last document has been closed
 	if(m_buffer->document_count() == 1)
 		set_title("Gobby");
+}
+
+void Gobby::Window::apply_preferences()
+{
+	m_header.get_toolbar().set_toolbar_style(
+		m_preferences.appearance.toolbar_show);
 }
 
 void Gobby::Window::open_local_file(const Glib::ustring& file)

@@ -46,6 +46,12 @@ Gobby::Preferences::Preferences(Config& config)
 		config["view"]["margin"]["pos"].get<unsigned int>(80);
 	view.bracket_highlight =
 		config["view"]["bracket"]["highlight"].get<bool>(true);
+
+	appearance.toolbar_show = static_cast<Gtk::ToolbarStyle>(
+		config["appearance"]["toolbar"]["show"].get<int>(
+			static_cast<int>(Gtk::TOOLBAR_BOTH)
+		)
+	);
 }
 
 Gobby::Preferences::Preferences(const Preferences& other)
@@ -70,14 +76,18 @@ void Gobby::Preferences::serialise(Config& config)
 	config["view"]["linenum"]["display"].set(view.linenum_display);
 	config["view"]["curline"]["highlight"].set(view.curline_highlight);
 	config["view"]["margin"]["display"].set(view.margin_display);
-	config["view"]["margin"]["pos"].get(view.margin_pos);
-	config["view"]["bracket"]["highlight"].get(view.bracket_highlight);
+	config["view"]["margin"]["pos"].set(view.margin_pos);
+	config["view"]["bracket"]["highlight"].set(view.bracket_highlight);
+
+	config["appearance"]["toolbar"]["show"].set(
+		static_cast<int>(appearance.toolbar_show) );
 }
 
 Gobby::Preferences& Gobby::Preferences::operator=(const Preferences& other)
 {
 	editor = other.editor;
 	view = other.view;
+	appearance = other.appearance;
 
 	return *this;
 }

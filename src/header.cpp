@@ -461,6 +461,16 @@ Glib::RefPtr<const Gtk::AccelGroup> Gobby::Header::get_accel_group() const
 	return m_ui_manager->get_accel_group();
 }
 
+Gtk::MenuBar& Gobby::Header::get_menubar()
+{
+	return *m_menubar;
+}
+
+Gtk::Toolbar& Gobby::Header::get_toolbar()
+{
+	return *m_toolbar;
+}
+
 void Gobby::Header::disable_document_actions()
 {
 	m_group_app->get_action("SaveDocument")->set_sensitive(false);

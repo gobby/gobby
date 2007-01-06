@@ -19,6 +19,7 @@
 #ifndef _GOBBY_PREFERENCES_HPP_
 #define _GOBBY_PREFERENCES_HPP_
 
+#include <gtkmm/toolbar.h>
 #include "config.hpp"
 
 namespace Gobby
@@ -66,6 +67,11 @@ public:
 		unsigned int margin_pos;
 		bool bracket_highlight;
 	} view;
+
+	struct
+	{
+		Gtk::ToolbarStyle toolbar_show;
+	} appearance;
 };
 
 }
