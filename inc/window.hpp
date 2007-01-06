@@ -46,7 +46,7 @@
 #include "chat.hpp"
 #include "statusbar.hpp"
 #include "dragdrop.hpp"
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 #include <obby/zeroconf.hpp>
 #endif
 
@@ -210,7 +210,7 @@ protected:
 
 	// obby
 	std::auto_ptr<LocalBuffer> m_buffer;
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	std::auto_ptr<obby::zeroconf> m_zeroconf;
 #endif
 	sigc::connection m_timer_conn;

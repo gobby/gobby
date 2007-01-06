@@ -49,7 +49,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
 	m_lang_manager(Gtk::SourceLanguagesManager::create() ),
 	m_preferences(m_config, m_lang_manager), m_icon_mgr(icon_mgr),
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	m_zeroconf(NULL),
 #endif
 	m_application_state(APPLICATION_NONE),
@@ -170,7 +170,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	set_title("Gobby");
 	set_default_size(640, 480);
 
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	// Initialise Zeroconf
 	try
 	{
@@ -398,7 +398,7 @@ void Gobby::Window::obby_end()
 	m_chat.obby_end();
 	m_statusbar.obby_end();
 
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	if(m_zeroconf.get() )
 		m_zeroconf->unpublish_all();
 #endif
@@ -413,7 +413,7 @@ void Gobby::Window::on_session_join()
 {
 	if(m_join_dlg.get() == NULL)
 	{
-#ifndef WITH_HOWL
+#ifndef WITH_ZEROCONF
 		m_join_dlg.reset(
 			new JoinDialog(*this, m_config.get_root()["session"])
 		);
@@ -1273,7 +1273,7 @@ bool Gobby::Window::session_open_impl(unsigned int port,
 		// Set password
 		buffer->set_global_password(password);
 		buffer->set_enable_keepalives(true);
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 		// Publish the newly created session via Zeroconf
 		// if Howl is not deactivated
 		if(m_zeroconf.get() )

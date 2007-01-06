@@ -21,7 +21,7 @@
 #include "common.hpp"
 #include "joindialog.hpp"
 
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 Gobby::JoinDialog::Columns::Columns()
 {
 	add(name);
@@ -30,7 +30,7 @@ Gobby::JoinDialog::Columns::Columns()
 }
 #endif
 
-#ifndef WITH_HOWL
+#ifndef WITH_ZEROCONF
 Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
                               Config::ParentEntry& config_entry):
 #else
@@ -45,7 +45,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
    m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
    , m_ep_discover(_("Local network")), m_zeroconf(zeroconf)
 #endif
 {
@@ -110,7 +110,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 	m_vbox.set_spacing(5);
 	m_vbox.pack_start(m_table);
 
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	if(m_zeroconf)
 	{
 		m_session_list = Gtk::ListStore::create(m_session_cols);
@@ -149,7 +149,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 
 Gobby::JoinDialog::~JoinDialog()
 {
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	if(m_timer_connection.connected() )
 		m_timer_connection.disconnect();
 #endif
@@ -208,7 +208,7 @@ void Gobby::JoinDialog::on_response(int response_id)
 	Gtk::Dialog::on_response(response_id);
 }
 
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 Gtk::TreeModel::iterator
 Gobby::JoinDialog::find_entry(const std::string& name) const
 {

@@ -27,7 +27,7 @@
 #include "config.hpp"
 #include "features.hpp"
 #include "colorsel.hpp"
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 #include <gtkmm/box.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/treeview.h>
@@ -43,7 +43,7 @@ namespace Gobby
 class JoinDialog: public Gtk::Dialog
 {
 public:
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	class Columns: public Gtk::TreeModel::ColumnRecord
 	{
 	public:
@@ -55,7 +55,7 @@ public:
 	};
 #endif
 
-#ifndef WITH_HOWL
+#ifndef WITH_ZEROCONF
 	JoinDialog(Gtk::Window& parent,
 	           Config::ParentEntry& config_entry);
 #else
@@ -78,7 +78,7 @@ public:
 protected:
 	virtual void on_response(int response_id);
 
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	Gtk::TreeModel::iterator find_entry(const std::string& name) const;
 	virtual bool on_timer();
 	virtual void on_discover(const std::string& name,
@@ -97,7 +97,7 @@ protected:
 
 	Gtk::VBox m_vbox;
 
-#ifdef WITH_HOWL
+#ifdef WITH_ZEROCONF
 	Gtk::Expander m_ep_discover;
 	Gtk::TreeView m_session_view;
 	Glib::RefPtr<Gtk::ListStore> m_session_list;
