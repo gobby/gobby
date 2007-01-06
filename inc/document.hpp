@@ -160,6 +160,15 @@ protected:
 	 */
 	void on_gui_subscribe();
 
+#if 0
+	/** Drag+Drop.
+	 */
+	virtual bool on_drag_motion(
+		const Glib::RefPtr<Gdk::DragContext>& context,
+		int x, int y, guint32 time
+	);
+#endif
+
 	/** TextBuffer signal handlers.
 	 */
 	void on_insert_before(const Gtk::TextBuffer::iterator& begin,

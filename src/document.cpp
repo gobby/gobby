@@ -99,6 +99,15 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 	doc.unsubscribe_event().connect(
 		sigc::mem_fun(*this, &Document::on_obby_user_unsubscribe) );
 
+#if 0
+	// Allow drag+drop of uri-lists and plaintext. uri-list is forwarded to
+	// the window while plaintext will be inserted into the document.
+	std::list<Gtk::TargetEntry> targets;
+	targets.push_back(Gtk::TargetEntry("text/uri-list") );
+	targets.push_back(Gtk::TargetEntry("text/plain") );
+	drag_dest_set(targets);
+#endif
+
 	// GUI signal handlers
 	m_btn_subscribe.signal_clicked().connect(
 		sigc::mem_fun(*this, &Document::on_gui_subscribe) );
@@ -414,6 +423,29 @@ void Gobby::Document::on_gui_subscribe()
 	// Deactivate the subscribe button since the request has been sent
 	m_btn_subscribe.set_sensitive(false);
 }
+
+#if 0
+// Hack to allow to drop files on a document. They will be opened as new
+// documents if the contained data is an uri list, inserted into this document
+// if its text.
+bool Gobby::Document::on_drag_motion(
+	const Glib::RefPtr<Gdk::DragContext>& context,
+	int x, int y, guint32 time
+)
+{
+	// Check available targets
+	std::vector<std::string> targets = context->get_targets();
+	for(unsigned int i = 0; i < targets.size(); ++ i)
+		// Is one of them uri-lists?
+		if(targets[i] == "text/uri-list")
+			// Yes so stop here to not show the insertion marker
+			// The event will be delayed to
+			return false;
+
+	// Call base function otherwise
+	return Gtk::SourceView::on_drag_motion(context, x, y, time);
+}
+#endif
 
 void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
                                        const Glib::ustring& text,

@@ -595,6 +595,7 @@ void Gobby::Window::on_drag_data_received(
 	{
 		// Get files by dragdata
 		std::vector<std::string> files = data.get_uris();
+		//std::unique(files.begin(), files.end() );
 
 		// Open all of them
 		for(std::vector<std::string>::iterator iter = files.begin();
@@ -676,6 +677,15 @@ void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 	m_userlist.obby_document_insert(local_doc);
 	m_chat.obby_document_insert(local_doc);
 	m_statusbar.obby_document_insert(local_doc);
+
+#if 0
+	// Get last page (the newly inserted one)
+	DocWindow* doc = static_cast<DocWindow*>(
+		m_folder.get_nth_page(m_folder.get_n_pages() - 1) );
+
+	doc->get_document().signal_drag_data_received().connect(
+		sigc::mem_fun(*this, &Window::on_drag_data_received) );
+#endif
 }
 
 void Gobby::Window::on_obby_document_remove(obby::document_info& document)
