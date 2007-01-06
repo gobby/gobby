@@ -18,27 +18,29 @@
 
 // Contributed by Benjamin Herr, <ben@0x539.de>. Not used for now.
 
+#if 0
 #include <glib/gunicode.h>
 #include <regex.h>
+#endif
 #include "regex.hpp"
 
 const regex::compile_options regex::compile_options::NONE
 	= regex::compile_options(0);
 const regex::compile_options regex::compile_options::EXTENDED
-	= regex::compile_options(REG_EXTENDED);
+	= regex::compile_options(0x01); //REG_EXTENDED);
 const regex::compile_options regex::compile_options::IGNORE_CASE
-	= regex::compile_options(REG_ICASE);
+	= regex::compile_options(0x02); //REG_ICASE);
 const regex::compile_options regex::compile_options::NO_OFFSETS
-	= regex::compile_options(REG_NOSUB);
+	= regex::compile_options(0x04); //REG_NOSUB);
 const regex::compile_options regex::compile_options::NEWLINE
-	= regex::compile_options(REG_NEWLINE);
+	= regex::compile_options(0x08); //REG_NEWLINE);
 
 const regex::match_options regex::match_options::NONE
 	= regex::match_options(0);
 const regex::match_options regex::match_options::NOT_BOL
-	= regex::match_options(REG_NOTBOL);
+	= regex::match_options(0x01); //REG_NOTBOL);
 const regex::match_options regex::match_options::NOT_EOL
-	= regex::match_options(REG_NOTEOL);
+	= regex::match_options(0x02); //REG_NOTEOL);
 
 /* It would be fun if these were actually useful,
  * but I really do not know what to do with them.
