@@ -66,33 +66,39 @@ namespace {
 		"  </toolbar>"
 		"</ui>";
 
-	void replace_string(Glib::ustring& string,
-	                    const Glib::ustring& find,
-	                    const Glib::ustring& replace)
+	/** Replaces dangerous characters for an XML attribute by their
+	 * Unicode value.
+	 */
+	void remove_dangerous_xml(Glib::ustring& string)
 	{
-		Glib::ustring::size_type pos = 0;
-		while((pos = string.find(find, pos)) != Glib::ustring::npos)
+		for(Glib::ustring::iterator iter = string.begin();
+		    iter != string.end();
+		    ++ iter)
 		{
-			string.replace(pos, find.length(), replace);
-			pos += replace.length();
-		}
-	}
-	
-	void remove_entities(Glib::ustring& string)
-	{
-		// Note that this file needs to be UTF-8 encoded!
-		replace_string(string, "ä", "auml");
-		replace_string(string, "Ä", "Auml");
-		replace_string(string, "ö", "ouml");
-		replace_string(string, "Ö", "Ouml");
-		replace_string(string, "ü", "uuml");
-		replace_string(string, "Ü", "Uuml");
-		replace_string(string, "ß", "szlig");
-		replace_string(string, "<", "lt");
-		replace_string(string, ">", "gt");
-		replace_string(string, "\"", "quot");
+			// Get current character
+			gunichar c = *iter;
 
-		// TODO: Remove some more dangerous characters
+			// Not an ASCII character, or a dangerous one?
+			if(c == '<' || c == '>' || c == '\"' || c > 0x7f)
+			{
+				// Get next iter to find the end position
+				Glib::ustring::iterator next = iter;
+				++ next;
+
+				// Build value string
+				std::stringstream value_stream;
+				value_stream << c;
+
+				// Erase dangerous character
+				iter = string.erase(iter, next);
+
+				// Insert string char by char to keep the
+				// iterator valid.
+				char cval;
+				while(value_stream >> cval)
+					iter = string.insert(iter, cval);
+			}
+		}
 	}
 }
 
@@ -297,10 +303,10 @@ Gobby::Header::Header(const Folder& folder)
 
 		// Build description string
 		obby::format_string str(_("Selects %0 as language") );
-		str << language->get_name();
+		str << language->get_name().raw();
 
 		// Add language to action group
-		remove_entities(language_xml_name);
+		remove_dangerous_xml(language_xml_name);
 		m_group_app->add(
 			Gtk::RadioAction::create(
 				m_lang_group,
@@ -621,7 +627,7 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 	// Set current language
 	Glib::ustring langname = document.get_language() ?
 		document.get_language()->get_name() : "None";
-	remove_entities(langname);
+	remove_dangerous_xml(langname);
 	Glib::RefPtr<Gtk::RadioAction>::cast_static<Gtk::Action>(
 		m_group_app->get_action("ViewLanguage" + langname)
 	)->set_active();

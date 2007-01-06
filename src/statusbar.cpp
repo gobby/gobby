@@ -57,13 +57,14 @@ Gobby::StatusBar::~StatusBar()
 }
 
 #ifdef WITH_GTKSOURCEVIEW
+#include <iostream>
 void Gobby::StatusBar::update_language(Document& document)
 {
 	// Selected language
 	if(document.get_language() )
 	{
 		obby::format_string str(_("Selected language: %0") );
-		str << document.get_language()->get_name();
+		str << document.get_language()->get_name().raw();
 		m_language.set_text(str.str() );
 	}
 	else

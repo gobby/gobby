@@ -51,6 +51,7 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 	time_t cur_time_t = std::time(NULL);
 	cur_time = localtime(&cur_time_t);
 
+	// TODO: Use strftime
 	std::stringstream timestream;
 	timestream << "[";
 	timestream.width(2); timestream.fill('0');
