@@ -34,7 +34,7 @@ namespace
 
 	// Amount of encodings we have
 	unsigned int encoding_count = sizeof(encodings) / sizeof(encodings[0]);
-};
+}
 
 Gobby::Encoding::Encoding(const Glib::ustring& name, Charset charset)
  : m_name(name), m_charset(charset)
