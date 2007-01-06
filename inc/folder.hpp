@@ -31,7 +31,6 @@
 #include "docwindow.hpp"
 #include "document.hpp"
 #include "buffer_def.hpp"
-#include "mimemap.hpp"
 #include "header.hpp"
 
 namespace Gobby
@@ -84,9 +83,6 @@ public:
 		signal_tab_switched_type;
 
 	Folder(Header& header, const Preferences& preferences);
-
-	// Access to the mime map
-	const MimeMap& get_mime_map() const;
 
 #if 0
 	Glib::RefPtr<const Gtk::SourceLanguagesManager>
@@ -195,8 +191,6 @@ protected:
 	/** Connection to the unsubscribe signal.
 	 */
 	sigc::connection m_conn_unsubscribe;
-
-	MimeMap m_mime_map;
 };
 
 }
