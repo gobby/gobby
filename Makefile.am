@@ -86,6 +86,14 @@ gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
 endif
 gobby_SOURCES += src/icon.cpp
 
+if WITH_GNOME
+# GNOME-specific installation.
+appicondir = $(datadir)/pixmaps
+appicon_DATA = contrib/artwork/gobby.png
+desktopdir = $(datadir)/applications
+desktop_DATA = contrib/gobby.desktop
+fi
+
 EXTRA_DIST =  contrib/artwork/CREDITS
 EXTRA_DIST += contrib/artwork/gobby.png
 EXTRA_DIST += contrib/artwork/gobby.svg

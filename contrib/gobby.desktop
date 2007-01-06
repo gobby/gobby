@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Gobby
+Comment=Edit text files collaboratively
+Comment[de]=Gemeinschaftliches Editieren von Textdateien
+Exec=gobby
+Terminal=false
+Type=Application
+Icon=gobby.png
+Categories=Application;TextEditor;Network;
+StartupNotify=true
+MimeType=text/plain;
