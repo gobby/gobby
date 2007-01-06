@@ -206,13 +206,13 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 
 Gobby::Header::Header(const ApplicationState& state,
                       const LangManager& lang_mgr):
-	group_app(Gtk::ActionGroup::create() ),
-	group_session(Gtk::ActionGroup::create() ),
-	group_edit(Gtk::ActionGroup::create() ),
-	group_user(Gtk::ActionGroup::create() ),
-	group_view(Gtk::ActionGroup::create() ),
-	group_window(Gtk::ActionGroup::create() ),
-	group_help(Gtk::ActionGroup::create() ),
+	group_app(Gtk::ActionGroup::create("MenuApp") ),
+	group_session(Gtk::ActionGroup::create("MenuSession") ),
+	group_edit(Gtk::ActionGroup::create("MenuEdit") ),
+	group_user(Gtk::ActionGroup::create("MenuUser") ),
+	group_view(Gtk::ActionGroup::create("MenuView") ),
+	group_window(Gtk::ActionGroup::create("MenuWindow") ),
+	group_help(Gtk::ActionGroup::create("MenuHelp") ),
 
 	action_app(Gtk::Action::create("MenuApp", "_Gobby") ),
 	action_app_session_create(
@@ -589,7 +589,11 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_edit->add(action_edit);
 	group_edit->add(action_edit_search);
 	group_edit->add(action_edit_search_replace);
-	group_edit->add(action_edit_goto_line, Gtk::AccelKey("<control>I") );
+	group_edit->add(
+		action_edit_goto_line,
+		Gtk::AccelKey("<control>I", "<Actions>/MenuEdit/EditGotoLine")
+	);
+
 	group_edit->add(action_edit_preferences);
 
 	group_user->add(action_user);
