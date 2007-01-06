@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005, 2006 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -20,7 +20,13 @@
 #define _GOBBY_LOGVIEW_HPP_
 
 #include <list>
+#include <gdkmm/cursor.h>
 #include <gtkmm/textview.h>
+#include "features.hpp"
+
+#if defined(WITH_GNOME) || defined(WIN32)
+# define HAVE_SHOW_URL
+#endif
 
 namespace Gobby
 {
@@ -34,7 +40,6 @@ class LogView: public Gtk::TextView
 {
 public:
 	LogView();
-	virtual ~LogView();
 
 	void clear();
 	void log(const Glib::ustring& text,
@@ -44,9 +49,24 @@ public:
 		 const std::time_t timestamp);
 
 protected:
+#ifdef HAVE_SHOW_URL
+	void set_url_tag(const Gtk::TextIter& begin,
+	                 const Gtk::TextIter& end);
+
+	bool on_motion_notify(GdkEventMotion* event);
+	void on_event_after(GdkEvent* event);
+#endif
+
 	Glib::RefPtr<Gtk::TextMark> m_end_mark;
+
+#ifdef HAVE_SHOW_URL
+	Glib::RefPtr<Gtk::TextTag> m_tag_link;
+	Gdk::Cursor m_default;
+	Gdk::Cursor m_hand;
+	bool m_hovering;
+#endif
 };
-	
-}
-	
+
+} // namespace Gobby
+
 #endif // _GOBBY_LOGVIEW_HPP_
