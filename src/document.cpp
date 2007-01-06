@@ -16,7 +16,6 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <iostream>
 #include <obby/format_string.hpp>
 #include <obby/user_table.hpp>
 #include "common.hpp"
@@ -367,6 +366,13 @@ void Gobby::Document::on_obby_user_unsubscribe(const obby::user& user)
 
 void Gobby::Document::on_obby_self_subscribe()
 {
+	if(m_subscribed)
+	{
+		throw std::logic_error(
+			"Gobby::Document::on_obby_self_subscribe"
+		);
+	}
+
 	// We are subscribed
 	m_subscribed = true;
 
@@ -456,6 +462,13 @@ void Gobby::Document::on_obby_self_subscribe()
 
 void Gobby::Document::on_obby_self_unsubscribe()
 {
+	if(!m_subscribed)
+	{
+		throw std::logic_error(
+			"Gobby::Document::on_obby_self_unsubscribe"
+		);
+	}
+
 	// We are not subscribed anymore
 	m_subscribed = false;
 	// Prevent from execution of signal handlers
