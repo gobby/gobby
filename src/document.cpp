@@ -17,17 +17,11 @@
  */
 
 #include <obby/client_document.hpp>
-#ifdef WITH_GTKSOURCEVIEW
-#include "sourceview/sourcelanguagesmanager.hpp"
-#endif
 #include "document.hpp"
 #include "folder.hpp"
 
 Gobby::Document::Document(obby::document& doc, const Folder& folder)
  : Gtk::ScrolledWindow(), m_doc(doc), m_folder(folder), m_editing(true)
-#ifdef WITH_GTKSOURCEVIEW
-   ,m_lang_manager(Gtk::SourceLanguagesManager::create() )
-#endif
 {
 #ifdef WITH_GTKSOURCEVIEW
 	m_view.set_show_line_numbers(true);
@@ -48,12 +42,13 @@ Gobby::Document::Document(obby::document& doc, const Folder& folder)
 		folder.get_mime_map().get_mime_type_by_file(doc.get_title() );
 	if(!mime_type.empty() )
 	{
+		Glib::RefPtr<Gtk::SourceLanguagesManager> manager =
+			folder.get_lang_manager();
 		Glib::RefPtr<Gtk::SourceLanguage> language = 
-			m_lang_manager->get_language_from_mime_type(mime_type);
+			manager->get_language_from_mime_type(mime_type);
+
 		if(language)
-		{
 			buf->set_language(language);
-		}
 	}
 
 	buf->set_highlight(true);

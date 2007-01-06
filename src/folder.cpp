@@ -21,6 +21,9 @@
 
 Gobby::Folder::Folder()
  : Gtk::Notebook()
+#ifdef WITH_GTKSOURCEVIEW
+   , m_lang_manager(Gtk::SourceLanguagesManager::create() )
+#endif
 {
 }
 
@@ -35,6 +38,14 @@ const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
 {
 	return m_mime_map;
 }
+
+#ifdef WITH_GTKSOURCEVIEW
+Glib::RefPtr<Gtk::SourceLanguagesManager>
+Gobby::Folder::get_lang_manager() const
+{
+	return m_lang_manager;
+}
+#endif
 
 void Gobby::Folder::obby_start()
 {

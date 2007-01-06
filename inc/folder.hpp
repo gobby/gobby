@@ -25,9 +25,10 @@
 #include <obby/document.hpp>
 
 #include "document.hpp"
-#include "sourceview/sourcelanguage.hpp"
 
 #ifdef WITH_GTKSOURCEVIEW
+# include "sourceview/sourcelanguage.hpp"
+# include "sourceview/sourcelanguagesmanager.hpp"
 # include "mimemap.hpp"
 #endif
 
@@ -48,6 +49,10 @@ public:
 	// Access to the mime map
 	const MimeMap& get_mime_map() const;
 
+#ifdef WITH_GTKSOURCEVIEW
+	Glib::RefPtr<Gtk::SourceLanguagesManager> get_lang_manager() const;
+#endif
+
 	// Calls from the window
 	void obby_start();
 	void obby_end();
@@ -66,6 +71,7 @@ protected:
 	signal_document_update_type m_signal_document_update;
 
 #ifdef WITH_GTKSOURCEVIEW
+	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 	MimeMap m_mime_map;
 #endif
 };
