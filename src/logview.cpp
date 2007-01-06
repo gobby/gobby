@@ -71,7 +71,7 @@ void Gobby::LogView::log(const Glib::ustring& text,
 	char buf[0x7f];
 	std::strftime(buf, 0x7f, formatter, &given_time_tm);
 	obby::format_string str("[%0%] %1%");
-	str << buf << ins_text;
+	str << buf << ins_text.raw();
 
 	if(!tag)
 	{
