@@ -24,7 +24,7 @@ namespace
 	bool on_io(Glib::IOCondition condition,
 	           const obby::io::main_connection& connection)
 	{
-		const net6::socket& /*const_*/sock = connection.get_socket();
+		const net6::socket/*&*/ /*const_*/sock = connection.get_socket();
 //		net6::socket& sock = const_cast<net6::socket&>(const_sock);
 
 		if(condition & (Glib::IO_ERR | Glib::IO_HUP | Glib::IO_NVAL) )
