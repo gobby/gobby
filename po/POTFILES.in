@@ -7,6 +7,8 @@ src/header.cpp
 src/preferencesdialog.cpp
 src/hostdialog.cpp
 src/joindialog.cpp
+src/finddialog.cpp
+src/gotodialog.cpp
 src/userlist.cpp
 src/window.cpp
 src/statusbar.cpp
