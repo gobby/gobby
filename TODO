@@ -14,18 +14,13 @@ Major:
 Normal:
   * Chat command infrastructure (#31)
   * Recognise command line parameters (#33)
-  * Show the cursors and selections of all participants (#53)
   * Documentation (#54) [doc]
-  * Encoding should be preserved (#65)
   * automatic scroll if the end of a document is looked at (#70)
   * Win32 Drag'n'Drop (#71)
-  * Newly joined documents are flagged as unchanged (#72)
-  * Visualise connected / subscribed using an extender (#73)
   * Search, Replace and Goto Line features (#79)
   * Central directory support (#82)
   * Gobby should save backups (#87)
   * obby:// protocol handler (#88)
-  * "Quit" should confirm (#93)
   * Make it harder to lose document changes (#96) [usability]
 
 Minor:
@@ -35,7 +30,6 @@ Trivial:
 Enhancement:
   * Indicate activity by changing tab colour to the user colour (#66)
   * Remote document browsing support (#75)
-  * Session Management (#76)
   * Hyperlinks on chat sessions (#80)
   * Server exit causes clients to exit (#85)
   * Chat background filled with user colours (#90)
@@ -93,16 +87,8 @@ currently active Gobby session (to use ''Open With'' in your favourite
 desktop environment). However this will get complicated when more than one 
 Gobby is open.
 
-53: Show the cursors and selections of all participants
--------------------------------------------------------
-I think that being able to see the cursors and selections of all the 
-participants would help me get a sense for where the other participants 
-are, and what they're doing.  I think this would make collaboration a 
-little bit easier and more comfortable.
-
-Also, once gobby knows where everyone else is, I think it would be great to 
-be able to click on someone's name in the Name List to jump their 
-cursor/selection into view.
+We could use X properties on X11 for interprocess communication and some 
+WinAPI calls on Windows.
 
 54: Documentation
 -----------------
@@ -110,12 +96,6 @@ Gobby should get a normal manual just like other projects. Docbook format
 is preferred. There should be a short introduction with an overview about 
 Gobby, an installation guide, some basics about the usage and some 
 documentation about the algorithms used.
-
-65: Encoding should be preserved
---------------------------------
-The incoming encoding from what it is converted should be saved internally 
-on the host which opened them, so that the save function results in a file 
-with the original one.
 
 70: automatic scroll if the end of a document is looked at
 ----------------------------------------------------------
@@ -131,25 +111,6 @@ something else it shouldn't do so.
 The Drag+Drop implementation to drop files into the Gobby window seems not 
 to work with  files dragged from the win32 shell (explorer). It does not 
 seem that GTK supports this, so we need a raw OLE-based implementation.
-
-72: Newly joined documents are flagged as unchanged
----------------------------------------------------
-This can lead to closing unsaved documents without a warning.  Imagine that 
-I join a sobby session, and create and edit a new file.  Now if another 
-person joins, they will initially have the file flagged as unchanged.  So 
-now if the 2nd person closes the file, they (and I!!!) will lose it without 
-warning.
-
-Maybe closing a file shouldn't delete it, but instead should just 
-unsubscribe you from it?  (It seems kind of bad that someone else can close 
-their file that I'm also currently working on, and even if they get a 
-warning, I will not.)
-
-73: Visualise connected / subscribed using an extender
-------------------------------------------------------
-The connected / subscribed flag should be visualised through a nested 
-GtkExtender instead of the flags shown up in the ListView. Perhaps it needs 
-to be converted to a TreeView to realise this, though.
 
 79: Search, Replace and Goto Line features
 ------------------------------------------
@@ -168,11 +129,6 @@ Gobby should save local backups in case of crashes.
 ----------------------------
 Gobby should register itself as a handler for the obby:// protocol. Like 
 this sites could link to obby servers for live sessions.
-
-93: "Quit" should confirm
--------------------------
-When you close a session, Gobby should warn if you try to close unsaved 
-documents.
 
 96: Make it harder to lose document changes
 -------------------------------------------
@@ -203,13 +159,6 @@ This way, one would be able to show document parts to the others without
 hassle and pair programming with gobby would be improved.
 
 (Depends on #53)
-
-76: Session Management
-----------------------
-I noticed there is a revision number displayed in gobby, there should be a 
-way of managing gobby sessions, like loading old revisions and undoing 
-changes based on revision as well as saving sessions so they can be loaded 
-later on with the changes made by each user retained.
 
 80: Hyperlinks on chat sessions
 -------------------------------
