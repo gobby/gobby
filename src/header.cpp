@@ -267,7 +267,7 @@ Gobby::Header::Header():
 			"EditSearch",
 			Gtk::Stock::FIND,
 			_("Find..."),
-			_("Search for text in the a document")
+			_("Search for a text in the current document")
 		)
 	),
 
@@ -276,7 +276,7 @@ Gobby::Header::Header():
 			"EditSearchReplace",
 			Gtk::Stock::FIND_AND_REPLACE,
 			_("Find and replace..."),
-			_("Search for text and replace it with another one")
+			_("Search for a text and replace it with another one")
 		)
 	),
 
@@ -305,7 +305,7 @@ Gobby::Header::Header():
 			"UserSetColour",
 			Gtk::Stock::SELECT_COLOR,
 			_("Set colour..."),
-			_("Setsa new colour for this user")
+			_("Sets a new colour for this user")
 		)
 	),
 
