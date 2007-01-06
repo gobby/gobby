@@ -310,6 +310,8 @@ void Gobby::Document::on_obby_change_after()
 {
 	// Document changed
 	m_signal_content_changed.emit();
+	// Cursor may have moved
+	m_signal_cursor_moved.emit();
 }
 
 void Gobby::Document::on_obby_user_subscribe(const obby::user& user)
