@@ -20,6 +20,7 @@ Normal:
   * obby:// protocol handler (#88)
   * Allow emoting in chat (#113)
   * Avahi support (#116)
+  * Port entry improvement (#117) [usability]
 
 Minor:
 
@@ -122,6 +123,14 @@ higher with Howl than with Avahi.
 Avahi would also allow Zeroconf support to be activated on both Debian and 
 Ubuntu, where Howl is not in main due to licensing issues with the Apple 
 Public Source Licence.
+
+117: Port entry improvement
+---------------------------
+Gobby's numeric edit field used for port entries should also accept values 
+set with the up and down buttons, it must not require the user to press tab 
+first to set the right value. If a new value is set through up and down and 
+if then Ok is pressed without focussing other fields, the old value is 
+passed to the connect handler.
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
