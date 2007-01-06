@@ -25,13 +25,10 @@
 Gobby::Client::Client(const net6::address& addr)
  : net6::client(addr)
 {
+#ifndef WIN32
 	net6::socket::socket_type sock = conn.get_socket().cobj();
 
-#ifdef WIN32
-	m_io_channel = Glib::IOChannel::create_from_win32_socket(sock);
-#else
 	m_io_channel = Glib::IOChannel::create_from_fd(sock);
-#endif
 
 	m_io_condition = Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP;
 	m_io_connection = Glib::signal_io().connect(
@@ -39,14 +36,24 @@ Gobby::Client::Client(const net6::address& addr)
 		m_io_channel,
 		m_io_condition
 	);
+#else
+	m_timer_connection = Glib::signal_timeout().connect(
+		sigc::mem_fun(*this, &Client::on_timer), 400);
+#endif
 }
 
 Gobby::Client::~Client()
 {
+#ifndef WIN32
 	if(m_io_connection.connected() )
 		m_io_connection.disconnect();
+#else
+	if(m_timer_connection.connected() )
+		m_timer_connection.disconnect();
+#endif
 }
 
+#ifndef WIN32
 void Gobby::Client::send(const net6::packet& pack)
 {
 	if(~m_io_condition & Glib::IO_OUT)
@@ -63,7 +70,9 @@ void Gobby::Client::send(const net6::packet& pack)
 
 	net6::client::send(pack);
 }
+#endif
 
+#ifndef WIN32
 void Gobby::Client::on_client_send(const net6::packet& pack)
 {
 	if(conn.send_queue_size() == 0)
@@ -80,7 +89,9 @@ void Gobby::Client::on_client_send(const net6::packet& pack)
 
 	net6::client::on_client_send(pack);
 }
+#endif
 
+#ifndef WIN32
 bool Gobby::Client::on_io(Glib::IOCondition condition)
 {
 	net6::tcp_client_socket& sock =
@@ -97,6 +108,23 @@ bool Gobby::Client::on_io(Glib::IOCondition condition)
 
 	return true;
 }
+#endif
+
+#ifdef WIN32
+bool Gobby::Client::on_timer()
+{
+	unsigned int conn_queue_size, new_queue_size;
+
+	do
+	{
+		conn_queue_size = conn.send_queue_size();
+		select(0);
+		new_queue_size = conn.send_queue_size();
+	} while(conn_queue_size > new_queue_size);
+
+	return true;
+}
+#endif
 
 Gobby::ClientBuffer::ClientBuffer()
 {
@@ -155,6 +183,7 @@ void Gobby::Host::reopen(unsigned int port)
 	reopen_impl(port);
 }
 
+#ifndef WIN32
 void Gobby::Host::send(const net6::packet& pack, net6::host::peer& to)
 {
 	// Prevent from sending packets to ourselves
@@ -190,7 +219,9 @@ void Gobby::Host::send(const net6::packet& pack, net6::host::peer& to)
 		net6::host::send(pack, to);
 	}
 }
+#endif
 
+#ifndef WIN32
 void Gobby::Host::on_join(net6::host::peer& new_peer)
 {
 	// Register peer_data
@@ -198,11 +229,7 @@ void Gobby::Host::on_join(net6::host::peer& new_peer)
 	net6::socket::socket_type sock = new_peer.get_socket().cobj();
 
 	// Create IO channel
-#ifdef WIN32
-	data->io_channel = Glib::IOChannel::create_from_win32_socket(sock);
-#else
 	data->io_channel = Glib::IOChannel::create_from_fd(sock);
-#endif
 
 	// Connection to signal_io
 	data->io_condition = Glib::IO_IN | Glib::IO_ERR | Glib::IO_HUP;
@@ -217,7 +244,9 @@ void Gobby::Host::on_join(net6::host::peer& new_peer)
 	// Call base function
 	net6::host::on_join(new_peer);
 }
+#endif
 
+#ifndef WIN32
 void Gobby::Host::on_client_send(const net6::packet& pack,
                                  net6::host::peer& from)
 {
@@ -251,7 +280,9 @@ void Gobby::Host::on_client_send(const net6::packet& pack,
 		net6::host::on_client_send(pack, from);
 	}
 }
+#endif
 
+#ifndef WIN32
 void Gobby::Host::remove_client(net6::host::peer* peer)
 {
 	std::map<net6::host::peer*, peer_data*>::iterator iter =
@@ -273,7 +304,9 @@ void Gobby::Host::remove_client(net6::host::peer* peer)
 		net6::host::remove_client(peer);
 	}
 }
+#endif
 
+#ifndef WIN32
 bool Gobby::Host::on_server_io(Glib::IOCondition condition)
 {
 	if(condition & (Glib::IO_ERR | Glib::IO_HUP ) )
@@ -290,7 +323,9 @@ bool Gobby::Host::on_server_io(Glib::IOCondition condition)
 
 	return true;
 }
+#endif
 
+#ifndef WIN32
 bool Gobby::Host::on_io(Glib::IOCondition condition, net6::host::peer* peer)
 {
 	std::map<net6::host::peer*, peer_data*>::iterator iter =
@@ -320,9 +355,41 @@ bool Gobby::Host::on_io(Glib::IOCondition condition, net6::host::peer* peer)
 
 	return true;
 }
+#endif
+
+#ifdef WIN32
+bool Gobby::Host::on_timer()
+{
+	std::map<net6::host::peer*, unsigned int> queue_sizes;
+	std::list<net6::host::peer*>::iterator iter;
+	for(iter = peers.begin(); iter != peers.end(); ++ iter)
+		queue_sizes[*iter] = (*iter)->send_queue_size();
+
+	bool re_select = true;
+	while(re_select)
+	{
+		re_select = false;
+		select(0);
+		
+		for(iter = peers.begin(); iter != peers.end(); ++ iter)
+		{
+			std::map<net6::host::peer*, unsigned int>::iterator
+				map_iter = queue_sizes.find(*iter);
+			if(map_iter == queue_sizes.end() ) continue;
+
+			if(map_iter->second > (*iter)->send_queue_size() )
+				re_select = true;
+			queue_sizes[*iter] = (*iter)->send_queue_size();
+		}
+	}
+
+	return true;
+}
+#endif
 
 void Gobby::Host::shutdown_impl()
 {
+#ifndef WIN32
 	// Disconnect from signal_io
 	if(m_io_connection.connected() )
 		m_io_connection.disconnect();
@@ -339,19 +406,20 @@ void Gobby::Host::shutdown_impl()
 		delete iter->second;
 	}
 	m_peer_map.clear();
+#else
+	if(m_timer_connection.connected() )
+		m_timer_connection.disconnect();
+#endif
 }
 
 void Gobby::Host::reopen_impl(unsigned int port)
 {
+#ifndef WIN32
 	// Get C socket object
 	net6::socket::socket_type sock = serv_sock->cobj();
 
 	// Build IO Channel
-#ifdef WIN32
-	m_io_channel = Glib::IOChannel::create_from_win32_socket(sock);
-#else
 	m_io_channel = Glib::IOChannel::create_from_fd(sock);
-#endif
 
 	// Connect to signal_io()
 	m_io_connection = Glib::signal_io().connect(
@@ -359,6 +427,10 @@ void Gobby::Host::reopen_impl(unsigned int port)
 		m_io_channel,
 		Glib::IO_IN
 	);
+#else
+	m_timer_connection = Glib::signal_timeout().connect(
+		sigc::mem_fun(*this, &Host::on_timer), 400);
+#endif
 }
 
 Gobby::HostBuffer::HostBuffer()

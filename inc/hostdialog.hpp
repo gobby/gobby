@@ -16,8 +16,8 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_CREATEDIALOG_HPP_
-#define _GOBBY_CREATEDIALOG_HPP_
+#ifndef _GOBBY_HOSTDIALOG_HPP_
+#define _GOBBY_HOSTDIALOG_HPP_
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/table.h>
@@ -30,11 +30,11 @@
 namespace Gobby
 {
 
-class CreateDialog : public Gtk::Dialog
+class HostDialog : public Gtk::Dialog
 {
 public:
-	CreateDialog(Gtk::Window& parent, Config& config);
-	virtual ~CreateDialog();
+	HostDialog(Gtk::Window& parent, Config& config);
+	virtual ~HostDialog();
 
 	unsigned int get_port() const;
 	Glib::ustring get_name() const;
@@ -61,4 +61,4 @@ protected:
 
 }
 
-#endif // _GOBBY_CREATEDIALOG_HPP_
+#endif // _GOBBY_HOSTDIALOG_HPP_

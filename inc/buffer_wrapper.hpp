@@ -39,24 +39,38 @@ namespace Gobby
 
 /** Client: Just use a Glib::IOChannel for the connection and an IOCondition
  * to store the conditions we are currently watching for.
+ * Use a timer on WIN32 because it does not allow to reconnect to
+ * Glib::signal::io().
+ * TODO: Another solution would be to run select() in another thread and
+ * control this thread via a UDP socket.
  */
-	
+
 class Client : public net6::client
 {
 public:
 	Client(const net6::address& addr);
 	virtual ~Client();
 
+#ifndef WIN32
 	virtual void send(const net6::packet& pack);
+#endif
 
 protected:
+#ifndef WIN32
 	virtual void on_client_send(const net6::packet& pack);
 
 	virtual bool on_io(Glib::IOCondition condition);
+#else
+	virtual bool on_timer();
+#endif
 
+#ifndef WIN32
 	Glib::RefPtr<Glib::IOChannel> m_io_channel;
 	Glib::IOCondition m_io_condition;
 	sigc::connection m_io_connection;
+#else
+	sigc::connection m_timer_connection;
+#endif
 };
 	
 class ClientBuffer : public obby::client_buffer
@@ -87,9 +101,12 @@ public:
 	virtual void shutdown();
 	virtual void reopen(unsigned int port);
 
+#ifndef WIN32
 	virtual void send(const net6::packet& pack, net6::host::peer& to);
+#endif
 
 protected:
+#ifndef WIN32
 	struct peer_data
 	{
 		Glib::RefPtr<Glib::IOChannel> io_channel;
@@ -104,10 +121,17 @@ protected:
 
 	virtual bool on_server_io(Glib::IOCondition condition);
 	virtual bool on_io(Glib::IOCondition condition, net6::host::peer* peer);
+#else
+	virtual bool on_timer();
+#endif
 
+#ifndef WIN32
 	Glib::RefPtr<Glib::IOChannel> m_io_channel;
 	sigc::connection m_io_connection;
 	std::map<net6::host::peer*, peer_data*> m_peer_map;
+#else
+	sigc::connection m_timer_connection;
+#endif
 private:
 	void shutdown_impl();
 	void reopen_impl(unsigned int port);
@@ -125,5 +149,5 @@ protected:
 };
 
 }
-	
+
 #endif // _GOBBY_BUFFER_WRAPPER_HPP_

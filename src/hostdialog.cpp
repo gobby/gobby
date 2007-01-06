@@ -17,9 +17,9 @@
  */
 
 #include <gtkmm/stock.h>
-#include "createdialog.hpp"
+#include "hostdialog.hpp"
 
-Gobby::CreateDialog::CreateDialog(Gtk::Window& parent, Config& config)
+Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
  : Gtk::Dialog("Create obby session", parent, true, true), m_config(config),
    m_table(3, 2),
    m_lbl_port("Port:", Gtk::ALIGN_RIGHT),
@@ -66,41 +66,41 @@ Gobby::CreateDialog::CreateDialog(Gtk::Window& parent, Config& config)
 	set_resizable(false);
 }
 
-Gobby::CreateDialog::~CreateDialog()
+Gobby::HostDialog::~HostDialog()
 {
 }
 
-unsigned int Gobby::CreateDialog::get_port() const
+unsigned int Gobby::HostDialog::get_port() const
 {
 	return static_cast<unsigned int>(m_ent_port.get_value() );
 }
 
-Glib::ustring Gobby::CreateDialog::get_name() const
+Glib::ustring Gobby::HostDialog::get_name() const
 {
 	return m_ent_name.get_text();
 }
 
-Gdk::Color Gobby::CreateDialog::get_color() const
+Gdk::Color Gobby::HostDialog::get_color() const
 {
 	return m_btn_color.get_color();
 }
 
-void Gobby::CreateDialog::set_port(unsigned int port)
+void Gobby::HostDialog::set_port(unsigned int port)
 {
 	m_ent_port.set_value(static_cast<double>(port) );
 }
 
-void Gobby::CreateDialog::set_name(const Glib::ustring& name)
+void Gobby::HostDialog::set_name(const Glib::ustring& name)
 {
 	m_ent_name.set_text(name);
 }
 
-void Gobby::CreateDialog::set_color(const Gdk::Color& color)
+void Gobby::HostDialog::set_color(const Gdk::Color& color)
 {
 	m_btn_color.set_color(color);
 }
 
-void Gobby::CreateDialog::on_response(int response_id)
+void Gobby::HostDialog::on_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_OK)
 	{

@@ -28,7 +28,7 @@ gobby_SOURCES = \
 	src/folder.cpp \
 	src/userlist.cpp \
 	src/chat.cpp \
-	src/createdialog.cpp \
+	src/hostdialog.cpp \
 	src/joindialog.cpp \
 	src/entrydialog.cpp \
 	src/window.cpp \

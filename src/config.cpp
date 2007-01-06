@@ -16,10 +16,16 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// For mkdir / CreateDirectory
+#ifdef WIN32
+#include <windows.h>
+#else
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <cstring>
 #include <cerrno>
+#endif
+
+#include <cstring>
 #include <stdexcept>
 
 #include <glibmm/miscutils.h>
@@ -30,6 +36,50 @@
 #include <libxml++/exceptions/exception.h>
 
 #include "config.hpp"
+
+namespace
+{
+	// Creates a new directory
+	void create_directory(const char* path)
+	{
+#ifdef WIN32
+		if(CreateDirectory(path, NULL) == FALSE)
+		{
+			LPVOID msgbuf;
+			DWORD err = GetLastError();
+
+			FormatMessage(
+				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+				FORMAT_MESSAGE_FROM_SYSTEM,
+				NULL,
+				err,
+				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+				reinterpret_cast<LPTSTR>(&msgbuf),
+				0,
+				NULL
+			);
+
+			std::string error_message = static_cast<LPTSTR>(msgbuf);
+			LocalFree(msgbuf);
+
+			throw Gobby::Config::Error(
+				Gobby::Config::Error::PATH_CREATION_FAILED,
+				"Could not create directory " +
+				std::string(path) + ": " + error_message
+			);
+		}
+#else
+		if(mkdir(path, 0755) == -1)
+		{
+			throw Gobby::Config::Error(
+				Gobby::Config::Error::PATH_CREATION_FAILED,
+				"Could not create directory " +
+				std::string(path) + ": " + strerror(errno)
+			);
+		}
+#endif
+	}
+}
 
 Gobby::Config::Error::Error(Code error_code, const Glib::ustring& error_message)
  : Glib::Error(g_quark_from_static_string("GOBBY_CONFIG_ERROR"),
@@ -177,10 +227,7 @@ void Gobby::Config::create_path_to(const Glib::ustring& to)
 	create_path_to(path_to);
 
 	// Create new directory
-	if(mkdir(to.c_str(), 0755) == -1)
-		throw Error(Error::PATH_CREATION_FAILED,
-		            "Could not create directory " + to + ": " +
-		            strerror(errno) );
+	create_directory(to.c_str() );
 }
 
 std::ostream& Gobby::operator<<(std::ostream& out, const Gdk::Color& color)

@@ -25,7 +25,7 @@
 #include <libobby/client_buffer.hpp>
 #include <libobby/host_buffer.hpp>
 #include "buffer_wrapper.hpp"
-#include "createdialog.hpp"
+#include "hostdialog.hpp"
 #include "joindialog.hpp"
 #include "entrydialog.hpp"
 #include "window.hpp"
@@ -89,7 +89,7 @@ Gobby::Window::~Window()
 
 void Gobby::Window::on_session_create() try
 {
-	CreateDialog dlg(*this, m_config);
+	HostDialog dlg(*this, m_config);
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		unsigned int port = dlg.get_port();
