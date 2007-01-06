@@ -13,7 +13,7 @@
       <menuitem action="OpenDocument" />
       <menuitem action="CloseDocument" />
     </menu>
-    <menu action="Help">
+    <menu action="MenuHelp">
       <menuitem action="About" />
     </menu>
   </menubar>

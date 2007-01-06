@@ -80,6 +80,20 @@ Gobby::Header::Header()
 		)
 	);
 
+	// Quit application
+	m_group_app->add(
+		Gtk::Action::create(
+			"Quit",
+			Gtk::Stock::QUIT,
+			"Quit",
+			"Quits the application"
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_quit
+		)
+	);
+
 	// Session menu
 	m_group_app->add(Gtk::Action::create("MenuSession", "Session") );
 
@@ -126,7 +140,7 @@ Gobby::Header::Header()
 	);
 
 	// Help menu
-	m_group_app->add(Gtk::Action::create("Help", "Help") );
+	m_group_app->add(Gtk::Action::create("MenuHelp", "Help") );
 
 	// Display about dialog
 	m_group_app->add(
@@ -139,20 +153,6 @@ Gobby::Header::Header()
 		sigc::mem_fun(
 			*this,
 			&Header::on_app_about
-		)
-	);
-
-	// Quit application
-	m_group_app->add(
-		Gtk::Action::create(
-			"Quit",
-			Gtk::Stock::QUIT,
-			"Quit",
-			"Quits the application"
-		),
-		sigc::mem_fun(
-			*this,
-			&Header::on_app_quit
 		)
 	);
 
