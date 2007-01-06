@@ -10,10 +10,11 @@ if WIN32
 gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows win32/gobby.res
 endif
 
-noinst_HEADERS =  inc/config.hpp
+noinst_HEADERS = inc/io/main_connection.hpp
+noinst_HEADERS += inc/io/buffer_wrapper.hpp
+noinst_HEADERS += inc/config.hpp
 noinst_HEADERS += inc/common.hpp
 noinst_HEADERS += inc/encoding.hpp
-noinst_HEADERS += inc/buffer_wrapper.hpp
 noinst_HEADERS += inc/mimemap.hpp
 noinst_HEADERS += inc/defaultdialog.hpp
 noinst_HEADERS += inc/historyentry.hpp
@@ -52,14 +53,14 @@ win32/gobby.res: win32/gobby.rc
 BUILT_SOURCES = win32/gobby.res
 endif
 
-gobby_SOURCES =  src/config.cpp
-gobby_SOURCES += src/encoding.cpp
-gobby_SOURCES += src/buffer_wrapper.cpp
 if WIN32
-gobby_SOURCES += src/io_connection_win32.cpp
+gobby_SOURCES = src/io/main_connection_win32.cpp
 else
-gobby_SOURCES += src/io_connection_generic.cpp
+gobby_SOURCES = src/io/main_connection_generic.cpp
 endif
+gobby_SOURCES += src/io/buffer_wrapper.cpp
+gobby_SOURCES += src/config.cpp
+gobby_SOURCES += src/encoding.cpp
 gobby_SOURCES += src/mimemap.cpp
 gobby_SOURCES += src/defaultdialog.cpp
 gobby_SOURCES += src/historyentry.cpp

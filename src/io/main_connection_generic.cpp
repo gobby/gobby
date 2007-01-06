@@ -16,13 +16,13 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "buffer_wrapper.hpp"
+#include "io/main_connection.hpp"
 
 namespace
 {
 	// Glib callback
 	bool on_io(Glib::IOCondition condition,
-	           const Gobby::MainConnection& connection)
+	           const obby::io::main_connection& connection)
 	{
 		const net6::socket& /*const_*/sock = connection.get_socket();
 //		net6::socket& sock = const_cast<net6::socket&>(const_sock);
@@ -40,24 +40,23 @@ namespace
 	}
 }
 
-Gobby::MainConnection::MainConnection(Gtk::Window& window,
-                                      const net6::socket& sock,
-                                      Condition condition)
- : m_window(window), m_socket(sock),
-   m_condition(static_cast<MainConnection::Condition>(0) )
+obby::io::main_connection::main_connection(const net6::socket& sock,
+                                           Condition condition)
+ : m_socket(sock),
+   m_condition(static_cast<main_connection::Condition>(0) )
 {
 	net6::socket::socket_type fd = sock.cobj();
 	m_channel = Glib::IOChannel::create_from_fd(fd);
 	set_events(condition);
 }
 
-Gobby::MainConnection::~MainConnection()
+obby::io::main_connection::~main_connection()
 {
 	if(m_connection.connected() )
 		m_connection.disconnect();
 }
 
-void Gobby::MainConnection::set_events(Condition condition)
+void obby::io::main_connection::set_events(Condition condition)
 {
 	// Do only do something if we shall watch for other conditions
 	if(m_condition != condition)
@@ -93,12 +92,12 @@ void Gobby::MainConnection::set_events(Condition condition)
 	}
 }
 
-void Gobby::MainConnection::add_events(Condition condition)
+void obby::io::main_connection::add_events(Condition condition)
 {
 	set_events(m_condition | condition);
 }
 
-void Gobby::MainConnection::remove_events(Condition condition)
+void obby::io::main_connection::remove_events(Condition condition)
 {
 	set_events(m_condition & ~condition);
 }

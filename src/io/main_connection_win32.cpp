@@ -19,29 +19,30 @@
 #include <windows.h>
 #include <gdk/gdkwin32.h>
 #include <net6/error.hpp>
-#include "buffer_wrapper.hpp"
+#include "io/main_connection.hpp"
 
 #include <iostream>
+
 namespace
 {
 	// Note that this is not threadsafe, but we do not need threading here
-	// anyways: We register all existing MainConnections in a map that
+	// anyways: We register all existing main_connections in a map that
 	// associates their socket to the connection to regain the
-	// MainConnection object in the event handler.
-	typedef std::map<net6::socket::socket_type, Gobby::MainConnection*>
+	// main_connection object in the event handler.
+	typedef std::map<net6::socket::socket_type, obby::io::main_connection*>
 		connmap_type;
 
-	// The map of MainConnections
+	// The map of main_connections
 	connmap_type connmap;
 
-	// Registers a new MainConnection
-	void register_connection(Gobby::MainConnection& conn)
+	// Registers a new main_connection
+	void register_connection(obby::io::main_connection& conn)
 	{
 		connmap[conn.get_socket().cobj()] = &conn;
 	}
 
-	// Unregisters a MainConnection
-	void unregister_connection(Gobby::MainConnection& conn)
+	// Unregisters a main_connection
+	void unregister_connection(obby::io::main_connection& conn)
 	{
 		connmap_type::iterator iter =
 			connmap.find(conn.get_socket().cobj() );
@@ -50,8 +51,9 @@ namespace
 			connmap.erase(iter);
 	}
 
-	// Returns the MainConnection for a given socket
-	Gobby::MainConnection* get_connection(net6::socket::socket_type socket)
+	// Returns the main_connection for a given socket
+	obby::io::main_connection*
+	get_connection(net6::socket::socket_type socket)
 	{
 		connmap_type::iterator iter = connmap.find(socket);
 
@@ -91,8 +93,9 @@ namespace
 			error = WSAGETSELECTERROR(msg->lParam);
 			event = WSAGETSELECTEVENT(msg->lParam);
 
-			// Get MainConnection, if any
-			Gobby::MainConnection* conn = get_connection(c_socket);
+			// Get main_connection, if any
+			obby::io::main_connection* conn =
+				get_connection(c_socket);
 			if(conn == NULL) return GDK_FILTER_REMOVE;
 			const net6::socket& sock = conn->get_socket();
 
@@ -100,7 +103,7 @@ namespace
 			if(error != 0)
 			{
 				if(conn->get_events() &
-				   Gobby::MainConnection::IO_ERROR)
+				   obby::io::main_connection::IO_ERROR)
 					sock.io_event().emit(
 						net6::socket::IOERROR
 					);
@@ -121,6 +124,9 @@ namespace
 					// in case of a close or accept event.
 					do
 					{
+						// TODO: On connection loss, 0
+						// bytes are read -> we run into
+						// an endless loop.
 						sock.io_event().emit(
 							net6::socket::INCOMING
 						);
@@ -146,7 +152,7 @@ namespace
 					// until there is nothing to write
 					// anymore.
 					while(conn->get_events() &
-					      Gobby::MainConnection::IO_OUT)
+					      obby::io::main_connection::IO_OUT)
 					{
 						sock.io_event().emit(
 							net6::socket::OUTGOING
@@ -172,11 +178,11 @@ namespace
 	}
 }
 
-Gobby::MainConnection::MainConnection(Gtk::Window& window,
-                                      const net6::socket& sock,
-                                      Condition condition)
+obby::io::main_connection::main_connection(Gtk::Window& window,
+                                           const net6::socket& sock,
+                                           Condition condition)
  : m_window(window), m_socket(sock),
-   m_condition(static_cast<MainConnection::Condition>(0) )
+   m_condition(static_cast<main_connection::Condition>(0) )
 {
 	// Add filter if there is none set
 	if(connmap.size() == 0)
@@ -189,7 +195,7 @@ Gobby::MainConnection::MainConnection(Gtk::Window& window,
 	set_events(condition);
 }
 
-Gobby::MainConnection::~MainConnection()
+obby::io::main_connection::~main_connection()
 {
 	// Unregister object
 	unregister_connection(*this);
@@ -210,7 +216,7 @@ Gobby::MainConnection::~MainConnection()
 	// Throwing exceptions in destructors is evil.
 }
 
-void Gobby::MainConnection::set_events(Condition condition)
+void obby::io::main_connection::set_events(Condition condition)
 {
 	// Do only do something if we shall watch for other conditions
 //	if(m_condition != condition)
@@ -238,12 +244,12 @@ void Gobby::MainConnection::set_events(Condition condition)
 	}
 }
 
-void Gobby::MainConnection::add_events(Condition condition)
+void obby::io::main_connection::add_events(Condition condition)
 {
 	set_events(m_condition | condition);
 }
 
-void Gobby::MainConnection::remove_events(Condition condition)
+void obby::io::main_connection::remove_events(Condition condition)
 {
 	set_events(m_condition & ~condition);
 }

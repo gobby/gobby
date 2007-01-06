@@ -18,8 +18,8 @@
 
 #include <gtkmm/messagedialog.h>
 #include <obby/format_string.hpp>
+#include "io/buffer_wrapper.hpp"
 #include "common.hpp"
-#include "buffer_wrapper.hpp"
 #include "passworddialog.hpp"
 #include "joinprogressdialog.hpp"
 
@@ -59,8 +59,10 @@ void Gobby::JoinProgressDialog::on_done()
 	{
 		// Create buffer
 		m_buffer.reset(
-			new ClientBuffer(
+			new obby::io::client_buffer(
+#ifdef WIN32
 				*static_cast<Gtk::Window*>(get_parent()),
+#endif
 				m_hostname,
 				m_port
 			)

@@ -17,8 +17,8 @@
  */
 
 #include <gtkmm/messagedialog.h>
+#include "io/buffer_wrapper.hpp"
 #include "common.hpp"
-#include "buffer_wrapper.hpp"
 #include "hostprogressdialog.hpp"
 
 Gobby::HostProgressDialog::HostProgressDialog(Gtk::Window& parent,
@@ -52,8 +52,10 @@ void Gobby::HostProgressDialog::on_thread()
 	{
 		// Create buffer
 		m_buffer.reset(
-			new HostBuffer(
+			new obby::io::host_buffer(
+#ifdef WIN32
 				*static_cast<Gtk::Window*>(get_parent()),
+#endif
 				m_port, m_username,
 				red, green, blue
 			)
