@@ -271,7 +271,7 @@ Gobby::Header::Header(const Folder& folder)
 			"EditPreferences",
 			Gtk::Stock::PREFERENCES,
 			_("Preferences"),
-			_("Shows up a dialog to set up gobby to your needs")
+			_("Shows up a dialog to customise Gobby for your needs")
 		),
 		sigc::mem_fun(
 			*this,

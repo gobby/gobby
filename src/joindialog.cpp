@@ -40,7 +40,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
    m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
 #ifdef WITH_HOWL
-   , m_ep_discover("Local network"),
+   , m_ep_discover(_("Local network")),
      m_zeroconf(*static_cast<obby::zeroconf*>(zeroconf))
 #endif
 {
@@ -91,9 +91,9 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 #ifdef WITH_HOWL
 	m_session_list = Gtk::ListStore::create(m_session_cols);
 	m_session_view.set_model(m_session_list);
-	m_session_view.append_column("User", m_session_cols.name);
-	m_session_view.append_column("Host", m_session_cols.host);
-	m_session_view.append_column("Port", m_session_cols.port);
+	m_session_view.append_column(_("User"), m_session_cols.name);
+	m_session_view.append_column(_("Host"), m_session_cols.host);
+	m_session_view.append_column(_("Port"), m_session_cols.port);
 	m_session_view.get_selection()->set_mode(
 		Gtk::SELECTION_SINGLE);
 	m_session_view.get_selection()->signal_changed().connect(
