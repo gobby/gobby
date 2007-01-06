@@ -117,6 +117,10 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
 	m_folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &Window::on_folder_tab_switched) );
 
+	// Settings
+	m_document_settings.document_insert_event().connect(
+		sigc::mem_fun(*this, &Window::on_settings_document_insert) );
+
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
@@ -595,25 +599,6 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
-	const DocumentInfo& document = window.get_info();
-
-	// Set the path from which this document was opened, if we opened that
-	// file.
-	if(document.get_owner() == &m_buffer->get_self() &&
-	   !m_local_file_path.empty() )
-	{
-		// " " is newly created, so we do not need a path
-		if(m_local_file_path != " ")
-		{
-			window.set_path(m_local_file_path);
-			// TODO: Set document's encoding to m_local_encoding
-			// in document settings
-		}
-
-		// Clear local path
-		m_local_file_path.clear();
-	}
-
 	// Select newly created page
 	m_folder.set_current_page(m_folder.page_num(window) );
 	window.grab_focus(); // TODO: Grab focus to sourceview...
@@ -648,6 +633,36 @@ void Gobby::Window::on_folder_tab_switched(DocWindow& window)
 	update_title_bar();
 }
 
+void Gobby::Window::on_settings_document_insert(const LocalDocumentInfo& info)
+{
+	// Set the path from which this document was opened,
+	// if we opened that file.
+	if(info.get_owner() == &m_buffer->get_self() &&
+	   !m_local_file_path.empty() )
+	{
+		// " " is newly created, so we do not need a path
+		if(m_local_file_path != " ")
+		{
+			m_document_settings.set_path(info, m_local_file_path);
+		}
+
+		m_document_settings.set_original_encoding(
+			info,
+			m_local_encoding
+		);
+
+		// Clear local path
+		m_local_file_path.clear();
+		m_local_encoding.clear();
+	}
+	else
+	{
+		// File was opened remotely, so we do not know anything
+		// about the original encoding, so assume it's UTF-8.
+		m_document_settings.set_original_encoding(info, "UTF-8");
+	}
+}
+
 void Gobby::Window::on_document_create()
 {
 	EntryDialog dlg(*this, _("Create document"), _("Enter document name"));
@@ -657,6 +672,7 @@ void Gobby::Window::on_document_create()
 	{
 		// " " means a newly created file
 		m_local_file_path = " ";
+		m_local_encoding = "UTF-8";
 		// Create new document
 		m_buffer->document_create(dlg.get_text(), "UTF-8", "");
 	}
@@ -716,13 +732,23 @@ void Gobby::Window::on_document_save()
 	}
 
 	// Is there already a path for this document?
-	if(!doc->get_path().empty() )
+	std::string path = m_document_settings.get_path(doc->get_info() );
+	if(!path.empty() )
+	{
 		// Yes, so save the document there
-		// TODO: Lookup document's encoding
-		save_local_file(*doc, doc->get_path(), "UTF-8");
+		save_local_file(
+			*doc,
+			path,
+			m_document_settings.get_original_encoding(
+				doc->get_info()
+			)
+		);
+	}
 	else
+	{
 		// Open save as dialog otherwise
 		on_document_save_as();
+	}
 }
 
 void Gobby::Window::on_document_save_as()
@@ -745,23 +771,28 @@ void Gobby::Window::on_document_save_as()
 	);
 
 	// TODO: Preselect document's encoding
-	dlg.get_selector().set_encoding("UTF-8");
+	dlg.get_selector().set_encoding(
+		m_document_settings.get_original_encoding(doc->get_info())
+	);
 
 #ifdef GTKMM_GEQ_28
 	dlg.set_do_overwrite_confirmation(true);
 #endif
 
+	std::string path = m_document_settings.get_path(doc->get_info() );
+
 	// Does the document have already a path?
-	if(!doc->get_path().empty() )
+	if(!path.empty() )
 	{
 		// Yes, so set it as filename
-		dlg.set_filename(doc->get_path() );
+		dlg.set_filename(path);
 	}
 	else
 	{
 		// No, so use the last path a filesel dialog was closed with
 		if(!m_last_path.empty() )
 			dlg.set_current_folder(m_last_path);
+
 		// Set current title as proposed file name
 		dlg.set_current_name(doc->get_title() );
 	}
@@ -1062,7 +1093,7 @@ void Gobby::Window::update_title_bar()
 	// Get title of current document
 	const Glib::ustring& file = window.get_title();
 	// Get path of current document
-	Glib::ustring path = window.get_path();
+	Glib::ustring path = m_document_settings.get_path(window.get_info() );
 
 	// Show path in title, if we know it
 	if(!path.empty() )
@@ -1179,8 +1210,13 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 		stream << conv_content;
 		stream.close();
 
-		// Set path of document
-		doc.set_path(file);
+		m_document_settings.set_path(doc.get_info(), file);
+
+		m_document_settings.set_original_encoding(
+			doc.get_info(),
+			encoding
+		);
+
 		// Update title bar according to new path
 		update_title_bar();
 		// Unset modifified flag

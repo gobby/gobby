@@ -140,16 +140,6 @@ const Glib::ustring& Gobby::DocWindow::get_title() const
 	return m_title;
 }
 
-const Glib::ustring& Gobby::DocWindow::get_path() const
-{
-	return m_path;
-}
-
-void Gobby::DocWindow::set_path(const Glib::ustring& new_path)
-{
-	m_path = new_path;
-}
-
 bool Gobby::DocWindow::get_modified() const
 {
 	return m_view.get_buffer()->get_modified();

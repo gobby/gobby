@@ -49,6 +49,11 @@ public:
 
 	DocumentSettings(Window& wnd);
 
+	typedef sigc::signal<void, const LocalDocumentInfo&>
+		signal_document_insert_type;
+	typedef sigc::signal<void, const LocalDocumentInfo&>
+		signal_document_remove_type;
+
 	/** @brief Called by the window when a new session has been opened.
 	 *
 	 * TODO: Window should provide a signal.
@@ -97,6 +102,19 @@ public:
 	 */
 	Glib::RefPtr<const Gtk::ListStore> get_list() const;
 
+	/** @brief Signal that is emitted when a document has been added to
+	 * the document settings.
+	 */
+	signal_document_insert_type document_insert_event() const;
+
+	/** @brief Signal that is emitted when a document will be removed from
+	 * the document settings.
+	 *
+	 * The signal is emitted before the entry is actually removed, so
+	 * signal handlers may still query document path or encoding.
+	 */
+	signal_document_remove_type document_remove_event() const;
+
 private:
 	void on_document_insert(DocumentInfo& info);
 	void on_document_remove(DocumentInfo& info);
@@ -118,6 +136,9 @@ private:
 
 	// Map for faster access
 	map_type m_map;
+
+	signal_document_insert_type m_signal_document_insert;
+	signal_document_remove_type m_signal_document_remove;
 };
 
 } // namespace Gobby

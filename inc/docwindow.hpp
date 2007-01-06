@@ -70,17 +70,6 @@ public:
 	 */
 	const Glib::ustring& get_title() const; // TODO: Remove this as soon as the obby buffers stay available after session has been closed
 
-	/** @brief Returns the path where the document is saved to on the
-	 * local disk.
-	 */
-	const Glib::ustring& get_path() const;
-
-	/** @brief Sets the path where the document is locally saved.
-	 *
-	 * TODO: Replace this by a whole save() function?
-	 */
-	void set_path(const Glib::ustring& new_path);
-
 	/** @brief Returns whether the document has been modified since it
 	 * has been saved to disk.
 	 *
@@ -177,7 +166,6 @@ protected:
 	Preferences m_preferences;
 	bool m_editing;
 	Glib::ustring m_title; // TODO: Remove this as soon as the obby buffers stay available after session has been closed
-	Glib::ustring m_path;
 
 	signal_cursor_moved_type m_signal_cursor_moved;
 	signal_content_changed_type m_signal_content_changed;

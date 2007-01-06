@@ -109,6 +109,18 @@ Glib::RefPtr<const Gtk::ListStore> Gobby::DocumentSettings::get_list() const
 	return m_data;
 }
 
+Gobby::DocumentSettings::signal_document_insert_type
+Gobby::DocumentSettings::document_insert_event() const
+{
+	return m_signal_document_insert;
+}
+
+Gobby::DocumentSettings::signal_document_remove_type
+Gobby::DocumentSettings::document_remove_event() const
+{
+	return m_signal_document_remove;
+}
+
 void Gobby::DocumentSettings::on_document_insert(DocumentInfo& info)
 {
 	LocalDocumentInfo& local_info = dynamic_cast<LocalDocumentInfo&>(info);
@@ -119,9 +131,11 @@ void Gobby::DocumentSettings::on_document_insert(DocumentInfo& info)
 	(*iter)[m_cols.color] = (local_info.is_subscribed() ?
 		COLOR_SUBSCRIBED : COLOR_UNSUBSCRIBED);
 	(*iter)[m_cols.title] = local_info.get_title();
-	(*iter)[m_cols.original_encoding] = "UTF-8";
+	//(*iter)[m_cols.original_encoding] = "UTF-8";
 
 	m_map[&local_info] = iter;
+
+	m_signal_document_insert.emit(local_info);
 }
 
 void Gobby::DocumentSettings::on_document_remove(DocumentInfo& info)
@@ -136,6 +150,8 @@ void Gobby::DocumentSettings::on_document_remove(DocumentInfo& info)
 			"Document info not found in iterator map"
 		);
 	}
+
+	m_signal_document_remove.emit(local_info);
 
 	m_data->erase(iter->second);
 	m_map.erase(iter);
