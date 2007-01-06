@@ -34,6 +34,7 @@
 \.la$
 \.log$
 \.status$
+\.cache$
 ^stamp-h1$
 ^libtool$
 Makefile$
@@ -48,3 +49,9 @@ stamp-h1$
 (^|/)autom4te\.cache($|/)
 ^inc/features\.hpp
 ^gobby$
+^build$
+\.mode1$
+\.pbxuser$
+\.gmo$
+\.in\.in$
+^po/POTFILES$
