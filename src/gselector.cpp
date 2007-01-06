@@ -45,6 +45,11 @@ namespace
 	}
 }
 
+Gobby::GSelector::GSelector():
+	m_mutex(new Glib::Mutex)
+{
+}
+
 Gobby::GSelector::~GSelector()
 {
 	// Should already be performed by sigc::trackable...
@@ -54,6 +59,7 @@ Gobby::GSelector::~GSelector()
 
 net6::io_condition Gobby::GSelector::get(const net6::socket& sock) const
 {
+	Glib::Mutex::Lock lock(*m_mutex);
 	map_type::const_iterator iter = m_map.find(&sock);
 
 	if(iter == m_map.end() )
@@ -76,6 +82,9 @@ void Gobby::GSelector::add_socket(const net6::socket& sock,
 		Glib::IOChannel::create_from_fd(fd);
 #endif
 
+	sel.sock = &sock;
+	sel.cond = cond;
+
 	sel.conn = Glib::signal_io().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &GSelector::on_io),
@@ -84,9 +93,6 @@ void Gobby::GSelector::add_socket(const net6::socket& sock,
 		sel.chan,
 		gcond(cond)
 	);
-
-	sel.sock = &sock;
-	sel.cond = cond;
 }
 
 void Gobby::GSelector::modify_socket(map_type::iterator iter,
@@ -117,6 +123,15 @@ void Gobby::GSelector::delete_socket(map_type::iterator iter)
 
 void Gobby::GSelector::set(const net6::socket& sock, net6::io_condition cond)
 {
+	// Lock mutex - required for connection establishment which happens
+	// in a different thread for the GUI to remain responsive.
+
+	// After the connection to Glib::signal_io() the main thread may be
+	// woken up immediately by incoming data and call GSelector::set to
+	// send out some data even before the assignment to the
+	// sigc::connection in the connecting thread has been finished!
+	Glib::Mutex::Lock lock(*m_mutex);
+
 	map_type::iterator iter = m_map.find(&sock);
 
 	if(cond != net6::IO_NONE)

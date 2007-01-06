@@ -20,14 +20,16 @@
 #define _GOBBY_GSELECTOR_HPP_
 
 #include <map>
+#include <memory>
 #include <sigc++/connection.h>
 #include <glibmm/iochannel.h>
+#include <glibmm/thread.h>
 #include <net6/socket.hpp>
 
 namespace Gobby
 {
 
-class GSelector: public sigc::trackable
+class GSelector: private net6::non_copyable, public sigc::trackable
 {
 public:
 	struct SelectedSocket {
@@ -37,6 +39,7 @@ public:
 		net6::io_condition cond;
 	};
 
+	GSelector();
 	~GSelector();
 
 	net6::io_condition get(const net6::socket& sock) const;
@@ -53,8 +56,10 @@ protected:
 
 	bool on_io(Glib::IOCondition cond, const net6::socket* sock) const;
 
-
 	map_type m_map;
+
+	// Is a auto ptr to allow locking in const get function
+	std::auto_ptr<Glib::Mutex> m_mutex;
 };
 
 } // namespace Gobby

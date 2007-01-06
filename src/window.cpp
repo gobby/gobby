@@ -455,7 +455,7 @@ void Gobby::Window::on_session_join()
 			buffer->close_event().connect(
 				sigc::mem_fun(*this, &Window::on_obby_close) );
 
-			buffer->request_encryption();
+			//buffer->request_encryption();
 
 			obby::format_string str(_("Connected to %0%:%1%") );
 			str << host << port;
