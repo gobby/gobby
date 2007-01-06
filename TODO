@@ -19,6 +19,7 @@ Normal:
   * Gobby should save backups (#87)
   * obby:// protocol handler (#88)
   * Allow emoting in chat (#113)
+  * Avahi support (#116)
 
 Minor:
 
@@ -111,6 +112,16 @@ IRC allows one to use "/me" at the beginning of the text, and the text
 after it is used as an emote.
 
 E.g., "/me smiles" -> "ivazquez smiles".
+
+116: Avahi support
+------------------
+Gobby should support Avahi natively, as a complement to Howl, not as a 
+replacement. The chances to see Zeroconf working on Windows are currently 
+higher with Howl than with Avahi.
+
+Avahi would also allow Zeroconf support to be activated on both Debian and 
+Ubuntu, where Howl is not in main due to licensing issues with the Apple 
+Public Source Licence.
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
