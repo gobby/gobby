@@ -43,6 +43,8 @@ public:
 protected:
 	bool m_show_automatic;
 
+	void remove_text(const Glib::ustring& text);
+
 	bool row_sep_func(const Glib::RefPtr<Gtk::TreeModel>& model,
 	                  const Gtk::TreeIter& iter);
 };

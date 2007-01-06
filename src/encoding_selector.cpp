@@ -16,6 +16,9 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdexcept>
+#include <gtkmm/liststore.h>
+
 #include "common.hpp"
 #include "encoding.hpp"
 #include "encoding_selector.hpp"
@@ -68,6 +71,34 @@ void Gobby::EncodingSelector::set_show_automatic(bool show_automatic)
 bool Gobby::EncodingSelector::get_show_automatic() const
 {
 	return m_show_automatic;
+}
+
+void Gobby::EncodingSelector::remove_text(const Glib::ustring& text)
+{
+	Glib::RefPtr<Gtk::ListStore> list =
+		Glib::RefPtr<Gtk::ListStore>::cast_dynamic(get_model());
+
+	if(!list)
+	{
+		throw std::logic_error(
+			"Gobby::EncodingSelector::remove_text:\n"
+			"Underlaying TreeModel is not a liststore"
+		);
+	}
+
+	Gtk::TreeNodeChildren children = list->children();
+
+	Gtk::TreeIter next_iter;
+	for(Gtk::TreeIter iter = children.begin();
+	    iter != children.end();
+	    iter = next_iter)
+	{
+		next_iter = iter;
+		++ next_iter;
+
+		if( (*iter)[m_text_columns.m_column] == text)
+			iter = list->erase(iter);
+	}
 }
 
 bool Gobby::EncodingSelector::
