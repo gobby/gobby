@@ -353,6 +353,8 @@ Gobby::Preferences Gobby::PreferencesDialog::preferences() const
 
 	preferences.appearance.toolbar_show =
 		m_page_appearance.get_toolbar_style();
+	preferences.appearance.remember =
+		m_page_appearance.get_remember();
 
 	return preferences;
 }
