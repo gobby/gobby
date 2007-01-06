@@ -22,6 +22,455 @@
 #include "document.hpp"
 #include "folder.hpp"
 
+namespace
+{
+	Gdk::Color user_color(const obby::user& user)
+	{
+		const obby::colour& col = user.get_colour();
+		Gdk::Color gdk_col;
+
+		gdk_col.set_red(col.get_red() * 0xffff / 0xff);
+		gdk_col.set_green(col.get_green() * 0xffff / 0xff);
+		gdk_col.set_blue(col.get_blue() * 0xffff / 0xff);
+
+		return gdk_col;
+	}
+
+	void forward_bytes(Gtk::TextIter& iter, std::size_t bytes)
+	{
+		while(bytes > 0)
+		{
+			std::size_t remaining_bytes =
+				iter.get_bytes_in_line() -
+				iter.get_line_index();
+
+			if(remaining_bytes >= bytes)
+			{
+				iter.set_line_index(
+					iter.get_line_index() +
+					remaining_bytes
+				);
+
+				remaining_bytes = bytes;
+			}
+			else
+			{
+				iter.forward_line();
+			}
+
+			bytes -= remaining_bytes;
+		}
+	}
+
+	std::size_t diff_bytes(const Gtk::TextIter& begin,
+	                       const Gtk::TextIter& end)
+	{
+		std::size_t bytes = 0;
+		Gtk::TextIter iter = begin;
+
+		while(iter != end)
+		{
+			std::size_t line_bytes;
+			if(iter.get_line() == end.get_line() )
+			{
+				line_bytes =
+					end.get_line_index() -
+					iter.get_line_index();
+
+				iter = end;
+			}
+			else
+			{
+				line_bytes =
+					iter.get_bytes_in_line() -
+					iter.get_line_index();
+
+				iter.forward_line();
+			}
+
+			bytes += line_bytes;
+		}
+
+		return bytes;
+	}
+
+}
+
+// TODO: Apply tags to self-written text
+
+Gobby::Document::chunk_iterator::chunk_iterator(const Document& doc,
+                                                const Gtk::TextIter& begin):
+	m_doc(doc), m_author(doc.author_at_iter(begin) ), m_iter_begin(begin),
+	m_iter_end(begin)
+{
+	proceed_end();
+}
+
+const obby::user* Gobby::Document::chunk_iterator::get_author() const
+{
+	return m_author;
+}
+
+std::string Gobby::Document::chunk_iterator::get_text() const
+{
+	return m_iter_begin.get_slice(m_iter_end).raw();
+}
+
+Gobby::Document::chunk_iterator& Gobby::Document::chunk_iterator::operator++()
+{
+	m_iter_begin = m_iter_end;
+	proceed_end();
+}
+
+Gobby::Document::chunk_iterator Gobby::Document::chunk_iterator::operator++(int)
+{
+	chunk_iterator temp(*this);
+	operator++();
+	return temp;
+}
+
+bool
+Gobby::Document::chunk_iterator::operator==(const chunk_iterator& other) const
+{
+	return m_iter_begin == other.m_iter_begin;
+}
+
+bool
+Gobby::Document::chunk_iterator::operator!=(const chunk_iterator& other) const
+{
+	return m_iter_begin != other.m_iter_begin;
+}
+
+void Gobby::Document::chunk_iterator::proceed_end()
+{
+	m_author = m_next_author;
+	m_next_author = m_doc.forward_chunk(m_iter_end);
+}
+
+Gobby::Document::template_type::template_type():
+	m_user_table(NULL)
+{
+}
+
+Gobby::Document::template_type::
+	template_type(const obby::user_table& user_table):
+	m_user_table(&user_table)
+{
+}
+
+const obby::user_table& Gobby::Document::template_type::get_user_table() const
+{
+	if(m_user_table == NULL)
+	{
+		throw std::logic_error(
+			"Gobby::Document::template_type::get_user_table:\n"
+			"Invalid template, no user table present"
+		);
+	}
+
+	return *m_user_table;
+}
+
+Gobby::Document::Document(const template_type& tmpl):
+	m_buffer(Gtk::SourceBuffer::create() )
+{
+	const obby::user_table& table = tmpl.get_user_table();
+	for(obby::user_table::iterator iter =
+		table.begin(obby::user::flags::NONE, obby::user::flags::NONE);
+	    iter != table.end(obby::user::flags::NONE, obby::user::flags::NONE);
+	    ++ iter)
+	{
+		on_user_join(*iter);
+	}
+
+	// TODO: Connect to user table's signal handler - as soon as it
+	// has some...
+/*	buf.user_join_event().connect(
+		sigc::mem_fun(*this, &Document::on_user_join) );
+	buf.user_colour_event().connect(
+		sigc::mem_fun(*this, &Document::on_user_color) );*/
+}
+
+bool Gobby::Document::empty() const
+{
+	return m_buffer->begin() == m_buffer->end();
+}
+
+obby::position Gobby::Document::size() const
+{
+	obby::position cur_size = 0;
+
+	for(Gtk::TextIter iter = m_buffer->begin();
+	    iter != m_buffer->end();
+	    iter.forward_line() )
+	{
+		cur_size += iter.get_bytes_in_line();
+	}
+
+	return cur_size;
+}
+
+obby::text
+Gobby::Document::get_slice(obby::position from, obby::position len) const
+{
+	obby::text result;
+
+	Gtk::TextIter pos = get_iter(from);
+	Gtk::TextIter prev = pos;
+
+	// Initial author
+	const obby::user* author = author_at_iter(pos);
+	Glib::RefPtr<const Gtk::TextTag> any_tag(NULL);
+
+	while(len > 0 && pos != m_buffer->end() )
+	{
+		const obby::user* new_author = forward_chunk(pos);
+		obby::position diff = diff_bytes(prev, pos);
+
+		if(diff > len)
+		{
+			pos = prev;
+			diff = len;
+			forward_bytes(pos, diff);
+		}
+
+		result.append(prev.get_slice(pos), author);
+
+		len -= diff;
+		prev = pos;
+		author = new_author;
+	}
+
+	if(pos == m_buffer->end() && len > 0)
+	{
+		throw std::logic_error(
+			"Gobby::Document::get_slice:\n"
+			"len exceeds size of buffer"
+		);
+	}
+}
+
+Gobby::Document::chunk_iterator Gobby::Document::chunk_begin() const
+{
+	return chunk_iterator(*this, m_buffer->begin() );
+}
+
+Gobby::Document::chunk_iterator Gobby::Document::chunk_end() const
+{
+	return chunk_iterator(*this, m_buffer->end() );
+}
+
+void Gobby::Document::insert(obby::position pos,
+                             const obby::text& str)
+{
+	Gtk::TextIter iter = get_iter(pos);
+	insert_impl(iter, str);
+}
+
+void Gobby::Document::insert(obby::position pos,
+                             const std::string& str,
+                             const obby::user* author)
+{
+	Gtk::TextIter iter = get_iter(pos);
+	insert_impl(iter, str, author);
+}
+
+void Gobby::Document::erase(obby::position pos, obby::position len)
+{
+	Gtk::TextIter begin = get_iter(pos);
+	Gtk::TextIter end = begin;
+
+	forward_bytes(end, len);
+	m_buffer->erase(begin, end);
+}
+
+void Gobby::Document::append(const obby::text& str)
+{
+	insert_impl(m_buffer->end(), str);
+}
+
+void Gobby::Document::append(const std::string& str,
+                             const obby::user* author)
+{
+	insert_impl(m_buffer->end(), str, author);
+}
+
+Glib::RefPtr<Gtk::SourceBuffer> Gobby::Document::get_buffer() const
+{
+	return m_buffer;
+}
+
+void Gobby::Document::on_user_join(const obby::user& user)
+{
+	map_user_type::iterator user_it = m_map_user.find(&user);
+
+	if(user_it == m_map_user.end() )
+	{
+		Glib::RefPtr<Gtk::TextTag> tag = Gtk::TextTag::create();
+		tag->property_background_gdk() = user_color(user);
+		m_buffer->get_tag_table()->add(tag);
+
+		m_map_user[&user] = tag;
+		m_map_tag[tag] = &user;
+	}
+	else
+	{
+		// User may already be in map if he rejoins
+		user_it->second->property_background_gdk() = user_color(user);
+	}
+}
+
+void Gobby::Document::on_user_color(const obby::user& user)
+{
+	map_user_type::iterator user_it = m_map_user.find(&user);
+
+	if(user_it == m_map_user.end() )
+	{
+		throw std::logic_error(
+			"Gobby::Document::on_user_color:\n"
+			"User is not in user tag map"
+		);
+	}
+
+	user_it->second->property_background_gdk() = user_color(user);
+}
+
+Gtk::TextIter Gobby::Document::get_iter(obby::position at) const
+{
+	Gtk::TextIter pos;
+	for(pos = m_buffer->begin();
+	    at > 0 && pos != m_buffer->end();
+	    pos.forward_line() )
+	{
+		obby::position new_bytes = pos.get_bytes_in_line();
+		if(new_bytes > at)
+		{
+			pos.set_line_index(at);
+			return pos;
+		}
+
+		at -= new_bytes;
+	}
+
+	if(pos == m_buffer->end() && at > 0)
+	{
+		throw std::logic_error(
+			"Gobby::Document::get_iter:\n"
+			"at exceeds size of document"
+		);
+	}
+
+	return m_buffer->end();
+}
+
+const obby::user*
+Gobby::Document::author_in_list(const tag_list_type& list) const
+{
+	for(tag_list_type::const_iterator iter = list.begin();
+	    iter != list.end();
+	    ++ iter)
+	{
+		map_tag_type::const_iterator tag_it = m_map_tag.find(*iter);
+		if(tag_it != m_map_tag.end() ) return tag_it->second;
+	}
+
+	return false;
+}
+
+const obby::user*
+Gobby::Document::author_at_iter(const Gtk::TextIter& pos) const
+{
+	return author_in_list(pos.get_tags() );
+}
+
+bool Gobby::Document::author_toggle(const Gtk::TextIter& at,
+                                    const obby::user*& to) const
+{
+	const obby::user* new_author = author_in_list(
+		at.get_toggled_tags(true)
+	);
+
+	if(new_author == NULL)
+	{
+		const obby::user* old_author = author_in_list(
+			at.get_toggled_tags(false)
+		);
+
+		if(old_author == NULL)
+			return false;
+	}
+
+	to = new_author;
+	return true;
+}
+
+const obby::user* Gobby::Document::forward_chunk(Gtk::TextIter& iter) const
+{
+	Glib::RefPtr<Gtk::TextTag> any_tag(NULL);
+
+	for(iter.forward_to_tag_toggle(any_tag);
+	    iter != m_buffer->end();
+	    iter.forward_to_tag_toggle(any_tag))
+	{
+		const obby::user* new_author;
+		if(!author_toggle(iter, new_author) )
+			continue;
+
+		return new_author;
+	}
+
+	return NULL;
+}
+
+Gtk::TextIter Gobby::Document::insert_impl(const Gtk::TextIter& iter,
+                                           const std::string& str,
+                                           const obby::user* author)
+{
+	if(author != NULL)
+	{
+		map_user_type::const_iterator user_it =
+			m_map_user.find(author);
+
+		if(user_it == m_map_user.end() )
+		{
+			throw std::logic_error(
+				"Gobby::Document::insert_impl:\n"
+				"User is not in user tag map"
+			);
+		}
+
+		// TODO: Remove all other tags.
+		// TODO: on_apply_tag_after
+		return m_buffer->insert_with_tag(iter, str, user_it->second);
+	}
+	else
+	{
+		// TODO: Remove all other tags.
+		// TODO: on_apply_tag_after
+		return m_buffer->insert(iter, str);
+	}
+}
+
+Gtk::TextIter Gobby::Document::insert_impl(const Gtk::TextIter& iter,
+                                           const obby::text& str)
+{
+	Gtk::TextIter pos = iter;
+
+	for(obby::text::chunk_iterator chunk_it = str.chunk_begin();
+	    chunk_it != str.chunk_end();
+	    ++ chunk_it)
+	{
+		pos = insert_impl(
+			pos,
+			chunk_it->get_text(),
+			chunk_it->get_author()
+		);
+	}
+
+	return pos;
+}
+#if 0
+
 Gobby::Document::Document(LocalDocumentInfo& doc, const Folder& folder,
                           const Preferences& preferences)
  : Gtk::SourceView(),
@@ -612,3 +1061,4 @@ void Gobby::Document::update_tag_colour(const obby::user& user)
 	// Set/Update color
 	tag->property_background_gdk() = color;
 }
+#endif

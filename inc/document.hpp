@@ -19,17 +19,230 @@
 #ifndef _GOBBY_DOCUMENT_HPP_
 #define _GOBBY_DOCUMENT_HPP_
 
-#include <obby/document.hpp>
-
-#include "preferences.hpp"
-#include "features.hpp"
-#include "buffer_def.hpp"
-#include "sourceview/sourcelanguagesmanager.hpp"
-#include "sourceview/sourceview.hpp"
+#include <map>
+#include <obby/position.hpp>
+#include <obby/user_table.hpp>
+#include <obby/text.hpp>
+#include "sourceview/sourcebuffer.hpp"
 
 namespace Gobby
 {
 
+/** @brief Implementation of gobby documents for the obby buffer templates.
+ *
+ * This class stores a complete obby document in a Gtk::SourceBuffer. This
+ * has the advantage that the buffer can simply be displayed in a
+ * Gtk::SourceView.
+ *
+ * Note that all positions the document refers to are given in byte indizes
+ * rather than character offsets.
+ */
+class Document: private net6::non_copyable
+{
+public:
+	/** @brief Iterator class to iterate over chunks of the text.
+	 *
+	 * A chunk is a piece of text that is written by a single user.
+	 */
+	class chunk_iterator
+	{
+	public:
+		/** @brief Constructor, used by the Document class.
+		 */
+		chunk_iterator(const Document& doc,
+		               const Gtk::TextIter& begin);
+
+		/** @brief Returns the author of this chunk.
+		 */
+		const obby::user* get_author() const;
+
+		/** @brief Returns the content of this chunk.
+		 */
+		std::string get_text() const;
+
+		/** @brief Advances to the next chunk in the document.
+		 */
+		chunk_iterator& operator++();
+
+		/** @brief Advances to the next chunk in the document.
+		 */
+		chunk_iterator operator++(int);
+
+		/** @brief Simple comparison.
+		 */
+		bool operator==(const chunk_iterator& other) const;
+
+		/** @brief Simple comparison.
+		 */
+		bool operator!=(const chunk_iterator& other) const;
+	protected:
+		/** @brief Internal function that sets m_iter_end to the end
+		 * of the current chunk.
+		 */
+		void proceed_end();
+
+		const Document& m_doc;
+
+		const obby::user* m_author;
+		const obby::user* m_next_author;
+
+		Gtk::TextIter m_iter_begin;
+		Gtk::TextIter m_iter_end;
+	};
+
+	class template_type
+	{
+	public:
+		template_type(); // Default ctor, needed by obby, invalid
+		template_type(const obby::user_table& user_table);
+
+		const obby::user_table& get_user_table() const;
+
+	protected:
+		const obby::user_table* m_user_table;
+	};
+
+	/** @brief Creates a new document that belongs to the given buffer.
+	 */
+	Document(const template_type& tmpl);
+
+	/** @brief Returns TRUE when the document is empty e.g. does not
+	 * contain any text.
+	 */
+	bool empty() const;
+
+	/** @brief Returns the amount of bytes in the document.
+	 */
+	obby::position size() const;
+
+	/** @brief Extracts a part from the document.
+	 */
+	obby::text get_slice(obby::position from,
+	                     obby::position len) const;
+
+	/** @brief Returns an iterator pointing to the first chunk of the
+	 * document.
+	 */
+	chunk_iterator chunk_begin() const;
+
+	/** @brief Returns an iterator that points past the last chunk of the
+	 * document.
+	 */
+	chunk_iterator chunk_end() const;
+
+	/** @brief Inserts the given text at the given position in the
+	 * document.
+	 */
+	void insert(obby::position pos,
+	            const obby::text& str);
+
+	/** @brief Inserts text written by <em>author</em> at the given
+	 * position.
+	 */
+	void insert(obby::position pos,
+	            const std::string& str,
+	            const obby::user* author);
+
+	/** @brief Erases text from the document.
+	 */
+	void erase(obby::position pos,
+	           obby::position len);
+
+	/** @brief Inserts the given text at the end of the document.
+	 */
+	void append(const obby::text& str);
+
+	/** @brief Inserts text written by <em>author</em> at the end
+	 * of the document.
+	 */
+	void append(const std::string& str,
+	            const obby::user* author);
+
+	/** @brief Returns the underlaying Gtk::SourceBuffer.
+	 */
+	Glib::RefPtr<Gtk::SourceBuffer> get_buffer() const;
+protected:
+	typedef std::list<Glib::RefPtr<const Gtk::TextTag> > tag_list_type;
+
+	/** @brief Callback to adjust the buffer's tag table when a new
+	 * user joins.
+	 */
+	void on_user_join(const obby::user& user);
+
+	/** @brief Callback to adjust the buffer's tag table when a user
+	 * has changed its color.
+	 */
+	void on_user_color(const obby::user& user);
+
+	/** @brief Returns an iterator that points at the given position.
+	 */
+	Gtk::TextIter get_iter(obby::position at) const;
+
+	/** @brief Checks whether a tag in the given tag list is a
+	 * user tag.
+	 */
+	const obby::user* author_in_list(const tag_list_type& list) const;
+
+	/** @brief Returns the user that wrote the text the iterator points to.
+	 */
+	const obby::user* author_at_iter(const Gtk::TextIter& pos) const;
+
+	/** @brief Returns whether an author is toggled at the given position.
+	 *
+	 * The new author is stored in <em>to</em>.
+	 */
+	bool author_toggle(const Gtk::TextIter& at,
+	                   const obby::user*& to) const;
+
+	/** @brief Moves the iter to the beginning of the next chunk that
+	 * was written by the returned user.
+	 */
+	const obby::user* forward_chunk(Gtk::TextIter& iter) const;
+
+	/** @brief Inserts text at the given position.
+	 */
+	Gtk::TextIter insert_impl(const Gtk::TextIter& pos,
+	                          const obby::text& str);
+
+	/** @brief Inserts text written by <em>author</em> at the given
+	 * position.
+	 */
+	Gtk::TextIter insert_impl(const Gtk::TextIter& pos,
+	                          const std::string& str,
+	                          const obby::user* author);
+
+	/** @brief Helper class to use Glib::RefPtr<Gtk::TextTag> as index
+	 * of a std::map<>.
+	 */
+	struct TagCompare
+	{
+		typedef Glib::RefPtr<const Gtk::TextTag> compare_type;
+		inline bool operator()(const compare_type& first,
+		                       const compare_type& second) const
+		{
+			return first->gobj() < second->gobj();
+		}
+	};
+
+	typedef std::map<
+		const obby::user*,
+		Glib::RefPtr<Gtk::TextTag>
+	> map_user_type;
+
+	typedef std::map<
+		Glib::RefPtr<const Gtk::TextTag>,
+		const obby::user*,
+		TagCompare
+	> map_tag_type;
+
+	// Mapping from user to tag and vice versa
+	map_user_type m_map_user;
+	map_tag_type m_map_tag;
+
+	Glib::RefPtr<Gtk::SourceBuffer> m_buffer;
+};
+
+#if 0
 class Folder;
 
 class Document : public Gtk::SourceView
@@ -229,6 +442,7 @@ private:
 
 	void update_tag_colour(const obby::user& user);
 };
+#endif
 
 }
 

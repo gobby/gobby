@@ -82,11 +82,11 @@ void Gobby::GotoDialog::on_show()
 {
 	m_ent_line.grab_focus();
 
-	Gobby::Document* document = m_window.get_current_document();
-	if(document != NULL)
+	Gobby::DocWindow* window = m_window.get_current_document();
+	if(window != NULL)
 	{
-		Gtk::TextIter cursor =
-			document->get_buffer()->get_insert()->get_iter();
+		Gtk::TextIter cursor = window->get_document().get_buffer()->
+			get_insert()->get_iter();
 
 		m_ent_line.set_value(cursor.get_line() + 1);
 	}
@@ -96,12 +96,12 @@ void Gobby::GotoDialog::on_show()
 
 void Gobby::GotoDialog::on_goto()
 {
-	Gobby::Document* document = m_window.get_current_document();
-	if(document != NULL)
+	Gobby::DocWindow* window = m_window.get_current_document();
+	if(window != NULL)
 	{
 		int value = m_ent_line.get_value_as_int();
-		Glib::RefPtr<Gtk::TextBuffer> buffer = document->get_buffer();
-		Gtk::TextIter begin = buffer->get_iter_at_line(value - 1);
-		document->set_selection(begin, begin);
+		Gtk::TextIter begin = window->get_document().get_buffer()->
+			get_iter_at_line(value - 1);
+		window->set_selection(begin, begin);
 	}
 }

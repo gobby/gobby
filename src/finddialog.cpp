@@ -169,10 +169,10 @@ void Gobby::FindDialog::on_find()
 	if(m_check_regex.get_active() && m_regex_changed)
 		compile_regex();
 
-	Document* doc = get_document();
+	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
-	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_document().get_buffer();
 
 	bool result = search_sel(buf->get_insert()->get_iter() );
 	if(!result)
@@ -201,13 +201,13 @@ void Gobby::FindDialog::on_replace()
 	if(m_check_regex.get_active() && m_regex_changed)
 		compile_regex();
 
-	Document* doc = get_document();
+	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
-	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_document().get_buffer();
 
 	// Get selected string
-	Glib::ustring sel_str = doc->get_selection_text();
+	Glib::ustring sel_str = doc->get_selected_text();
 	Glib::ustring find_str = m_entry_find.get_text();
 
 	// Lowercase both if we are comparing insensitive
@@ -239,10 +239,10 @@ void Gobby::FindDialog::on_replace_all()
 	if(m_check_regex.get_active() && m_regex_changed)
 		compile_regex();
 
-	Document* doc = get_document();
+	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
-	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_document().get_buffer();
 	Gtk::TextIter begin = buf->begin();
 
 	unsigned int replace_count = 0;
@@ -286,11 +286,11 @@ void Gobby::FindDialog::on_replace_all()
 	dlg.run();
 }
 
-Gobby::Document* Gobby::FindDialog::get_document()
+Gobby::DocWindow* Gobby::FindDialog::get_document()
 {
-	Document* doc = m_gobby.get_current_document();
+	DocWindow* doc = m_gobby.get_current_document();
 
-	if (doc == NULL)
+	if(doc == NULL)
 	{
 		Gtk::MessageDialog dlg(
 			*this,
@@ -309,7 +309,7 @@ Gobby::Document* Gobby::FindDialog::get_document()
 
 bool Gobby::FindDialog::search_sel(const Gtk::TextIter& from)
 {
-	Document* doc = get_document();
+	DocWindow* doc = get_document();
 	if(doc == NULL) return false;
 
 	Gtk::TextIter match_start, match_end;

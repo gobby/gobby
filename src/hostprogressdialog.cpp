@@ -77,6 +77,12 @@ void Gobby::HostProgressDialog::on_thread(Thread& thread)
 			)
 		);
 
+		buffer->set_document_template(
+			HostBuffer::document_type::template_type(
+				buffer->get_user_table()
+			)
+		);
+
 		work(thread);
 
 		// Open the server on the given port

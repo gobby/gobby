@@ -39,9 +39,9 @@ public:
 	StatusBar(Header& header, const Folder& folder);
 	virtual ~StatusBar();
 
-	void update_language(Document& document);
-	void update_cursor(Document& document);
-	void update_from_document(Document& document);
+	void update_language(DocWindow& wnd);
+	void update_cursor(DocWindow& wnd);
+	void update_from_document(DocWindow& wnd);
 
 	void update_connection(const Glib::ustring& str);
 

@@ -53,7 +53,7 @@ protected:
 	/** Returns the current document or NULL if none has been opened. An
 	 * error message is shown in this case.
 	 */
-	Document* get_document();
+	DocWindow* get_document();
 
 	/** Searches for an occurence in the document and selects the text
 	 * in the docmuent if one has been found.

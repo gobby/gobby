@@ -53,7 +53,7 @@ public:
 	/** Offers a pointer to the currently visible document. If the user
 	 * is not subscribed to a document, NULL is returned.
 	 */
-	Document* get_current_document();
+	DocWindow* get_current_document();
 
 	/** Opens a document containing the content of a file mounted on the
 	 * local filesystem.
@@ -62,7 +62,7 @@ public:
 
 	/** Saves an existing document to the given path.
 	 */
-	void save_local_file(Document& doc, const Glib::ustring& file);
+	void save_local_file(DocWindow& doc, const Glib::ustring& file);
 protected:
 	// Gtk::Window overrides
 	virtual void on_realize();
@@ -98,8 +98,8 @@ protected:
 	// Folder UI handler
 	void on_folder_document_add(DocWindow& window);
 	void on_folder_document_remove(DocWindow& window);
-	void on_folder_document_close_request(Document& document);
-	void on_folder_tab_switched(Document& document);
+	void on_folder_document_close_request(DocWindow& window);
+	void on_folder_tab_switched(DocWindow& window);
 
 	void on_about();
 	void on_quit();

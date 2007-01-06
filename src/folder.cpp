@@ -133,9 +133,7 @@ void Gobby::Folder::obby_end()
 	// Insensitive just the text editor to allow to scroll and tab between
 	// the documents
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<DocWindow*>(
-			get_nth_page(i)
-		)->get_document().set_sensitive(false);
+		static_cast<DocWindow*>(get_nth_page(i) )->disable(); //get_document().set_sensitive(false);
 
 	// Disable some items, but let save and close still active.
 	// Disable all if the last document has been closed.
@@ -146,23 +144,23 @@ void Gobby::Folder::obby_end()
 void Gobby::Folder::obby_user_join(const obby::user& user)
 {
 	// Pass user join event to documents
-	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_join(user);
+	//for(unsigned int i = 0; i < get_n_pages(); ++ i)
+	//	static_cast<DocWindow*>(get_nth_page(i) )->obby_user_join(user);
 }
 
 void Gobby::Folder::obby_user_part(const obby::user& user)
 {
 	// Pass user part event to documents
-	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<DocWindow*>(get_nth_page(i) )->obby_user_part(user);
+	//for(unsigned int i = 0; i < get_n_pages(); ++ i)
+	//	static_cast<DocWindow*>(get_nth_page(i) )->obby_user_part(user);
 }
 
 void Gobby::Folder::obby_user_colour(const obby::user& user)
 {
 	// Pass user colour event to documents
-	for(unsigned int i = 0; i < get_n_pages(); ++ i)
-		static_cast<DocWindow*>(
-			get_nth_page(i) )->obby_user_colour(user);
+	//for(unsigned int i = 0; i < get_n_pages(); ++ i)
+	//	static_cast<DocWindow*>(
+	//		get_nth_page(i) )->obby_user_colour(user);
 }
 
 namespace
@@ -291,11 +289,11 @@ void Gobby::Folder::on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>&
 	Gtk::Widget* wnd = get_nth_page(get_current_page() );
 
 	// wnd should not be NULL because the language radio items are only
-	// enabled if
+	// enabled if windows are open
 	if(wnd == NULL)
 		throw std::logic_error("Gobby::Folder::on_language_changed");
 
-	static_cast<DocWindow*>(wnd)->get_document().set_language(language);
+	static_cast<DocWindow*>(wnd)->set_language(language);
 	m_block_language = false;
 }
 
@@ -303,14 +301,13 @@ void Gobby::Folder::on_document_modified_changed(DocWindow& window)
 {
 	// Get tab label for this document
 	TabLabel& label = *static_cast<TabLabel*>(get_tab_label(window) );
-	Document& doc = window.get_document();
 	// Show asterisk as the document's title if it has been modified
-	label.set_modified(doc.get_buffer()->get_modified() );
+	label.set_modified(window.get_modified() );
 }
 
-void Gobby::Folder::on_document_close(Document& document)
+void Gobby::Folder::on_document_close(DocWindow& window)
 {
-	m_signal_document_close_request.emit(document);
+	m_signal_document_close_request.emit(window);
 }
 
 void Gobby::Folder::on_document_subscribe(const obby::user& user,
@@ -324,19 +321,18 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 {
 	// Create new document
 	DocWindow* new_wnd =
-		Gtk::manage(new DocWindow(info, *this, m_preferences) );
-	Document& new_doc = new_wnd->get_document();
+		Gtk::manage(new DocWindow(info, m_preferences) );
 
 	// Watch update signal to emit document_updated signal if a document
 	// has been updated.
-	new_doc.cursor_moved_event().connect(
+	new_wnd->cursor_moved_event().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_document_cursor_moved),
-			sigc::ref(new_doc)
+			sigc::ref(*new_wnd)
 		)
 	);
 
-	new_doc.content_changed_event().connect(
+	new_wnd->content_changed_event().connect(
 		sigc::bind(
 			sigc::mem_fun(
 				*this,
@@ -346,17 +342,17 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 		)
 	);
 
-	new_doc.language_changed_event().connect(
+	new_wnd->language_changed_event().connect(
 		sigc::bind(
 			sigc::mem_fun(
 				*this,
 				&Folder::on_document_language_changed
 			),
-			sigc::ref(new_doc)
+			sigc::ref(*new_wnd)
 		)
 	);
 
-	new_doc.get_buffer()->signal_modified_changed().connect(
+	new_wnd->get_document().get_buffer()->signal_modified_changed().connect(
 		sigc::bind(
 			sigc::mem_fun(
 				*this,
@@ -372,13 +368,13 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 	);
 
 	label->set_use_markup(true);
-	label->set_modified(new_doc.get_modified() );
+	label->set_modified(new_wnd->get_modified() );
 
 	// Connect close event
 	label->close_event().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_document_close),
-			sigc::ref(new_doc)
+			sigc::ref(*new_wnd)
 		)
 	);
 
@@ -409,7 +405,7 @@ void Gobby::Folder::on_self_unsubscribe(LocalDocumentInfo& info)
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)
 	{
 		DocWindow* cur_wnd = static_cast<DocWindow*>(get_nth_page(i) );
-		if(&cur_wnd->get_document().get_document() == &info)
+		if(&cur_wnd->get_info() == &info)
 		{
 			wnd = cur_wnd;
 			break;
@@ -449,8 +445,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 
 	// However, if the obby session has been closed the statusbar is empty,
 	// there is no need to update anything.
-	Glib::RefPtr<Gtk::SourceLanguage> language =
-		window.get_document().get_language();
+	Glib::RefPtr<Gtk::SourceLanguage> language = window.get_language();
 
 	// Set correct menu item
 	if(!m_block_language)
@@ -471,7 +466,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	if(m_buffer != NULL)
 	{
 		// Another document has been selected: Emit tabswitched
-		m_signal_tab_switched.emit(window.get_document() );
+		m_signal_tab_switched.emit(window);
 	}
 
 	// TODO: We should put flags into the labels which specify if the
@@ -482,12 +477,12 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	set_tab_colour(window, "#000000");
 }
 
-void Gobby::Folder::on_document_cursor_moved(Document& document)
+void Gobby::Folder::on_document_cursor_moved(DocWindow& window)
 {
 	// Update in the currently visible document? Cursor position has moved.
 	Gtk::Widget* wnd = get_nth_page(get_current_page() );
-	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
-		m_signal_document_cursor_moved.emit(document);
+	if(wnd == &window)
+		m_signal_document_cursor_moved.emit(window);
 }
 
 void Gobby::Folder::on_document_content_changed(DocWindow& window)
@@ -496,7 +491,7 @@ void Gobby::Folder::on_document_content_changed(DocWindow& window)
 	if(wnd == &window)
 	{
 		// Update in the currently visible document? Update statusbar.
-		m_signal_document_content_changed.emit(window.get_document());
+		m_signal_document_content_changed.emit(window);
 	}
 	else
 	{
@@ -506,10 +501,10 @@ void Gobby::Folder::on_document_content_changed(DocWindow& window)
 	}
 }
 
-void Gobby::Folder::on_document_language_changed(Document& document)
+void Gobby::Folder::on_document_language_changed(DocWindow& window)
 {
 	// Update in the currently visible document? Update statusbar.
 	Gtk::Widget* wnd = get_nth_page(get_current_page() );
-	if(&static_cast<DocWindow*>(wnd)->get_document() == &document)
-		m_signal_document_language_changed.emit(document);
+	if(wnd == &window)
+		m_signal_document_language_changed.emit(window);
 }

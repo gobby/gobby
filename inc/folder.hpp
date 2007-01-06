@@ -70,15 +70,17 @@ public:
 		signal_document_add_type;
 	typedef sigc::signal<void, DocWindow&>
 		signal_document_remove_type;
-	typedef sigc::signal<void, Document&>
+
+	typedef sigc::signal<void, DocWindow&>
 		signal_document_close_request_type;
-	typedef sigc::signal<void, Document&>
+	typedef sigc::signal<void, DocWindow&>
 		signal_document_cursor_moved_type;
-	typedef sigc::signal<void, Document&>
+	typedef sigc::signal<void, DocWindow&>
 		signal_document_content_changed_type;
-	typedef sigc::signal<void, Document&>
+	typedef sigc::signal<void, DocWindow&>
 		signal_document_language_changed_type;
-	typedef sigc::signal<void, Document&>
+
+	typedef sigc::signal<void, DocWindow&>
 		signal_tab_switched_type;
 
 	Folder(Header& header, const Preferences& preferences);
@@ -165,11 +167,11 @@ protected:
 	void on_self_unsubscribe(LocalDocumentInfo& info);
 
 	void on_document_modified_changed(DocWindow& window);
-	void on_document_close(Document& document);
+	void on_document_close(DocWindow& window);
 
-	void on_document_cursor_moved(Document& document);
+	void on_document_cursor_moved(DocWindow& window);
 	void on_document_content_changed(DocWindow& window);
-	void on_document_language_changed(Document& document);
+	void on_document_language_changed(DocWindow& window);
 
 	signal_document_add_type
 		m_signal_document_add;

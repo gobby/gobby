@@ -52,36 +52,37 @@ Gobby::StatusBar::~StatusBar()
 {
 }
 
-void Gobby::StatusBar::update_language(Document& document)
+void Gobby::StatusBar::update_language(DocWindow& wnd)
 {
 	// Selected language
-	if(document.get_language() )
+	if(wnd.get_language() )
 	{
 		obby::format_string str(_("Selected language: %0%") );
-		str << document.get_language()->get_name().raw();
+		str << wnd.get_language()->get_name().raw();
 		m_language.set_text(str.str() );
 	}
 	else
 	{
 		m_language.set_text(_("No language selected") );
 	}
+
 	m_sep.show();
 }
 
-void Gobby::StatusBar::update_cursor(Document& document)
+void Gobby::StatusBar::update_cursor(DocWindow& wnd)
 {
 	unsigned int row, col;
-	document.get_cursor_position(row, col);
+	wnd.get_cursor_position(row, col);
 
 	obby::format_string str("Line: %0%, Column: %1%");
 	str << (row + 1) << (col + 1);
 	m_position.set_text(str.str() );
 }
 
-void Gobby::StatusBar::update_from_document(Document& document)
+void Gobby::StatusBar::update_from_document(DocWindow& wnd)
 {
-	update_language(document);
-	update_cursor(document);
+	update_language(wnd);
+	update_cursor(wnd);
 }
 
 void Gobby::StatusBar::update_connection(const Glib::ustring& str)

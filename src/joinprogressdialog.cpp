@@ -23,6 +23,7 @@
 #include "defaultdialog.hpp"
 #include "colorsel.hpp"
 #include "passworddialog.hpp"
+#include "document.hpp"
 #include "joinprogressdialog.hpp"
 
 namespace {
@@ -126,6 +127,12 @@ void Gobby::JoinProgressDialog::on_thread(Thread& thread)
 	try
 	{
 		buffer.reset(new ClientBuffer);
+
+		buffer->set_document_template(
+			ClientBuffer::document_type::template_type(
+				buffer->get_user_table()
+			)
+		);
 
 		// Install signal handlers (notice that those are called within
 		// the main thread)

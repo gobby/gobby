@@ -274,7 +274,7 @@ void Gobby::Window::obby_start()
 	m_header.action_app_session_join->set_sensitive(false);
 
 	m_header.action_user_set_password->set_sensitive(
-		dynamic_cast<obby::client_buffer*>(m_buffer.get()) != NULL
+		dynamic_cast<ClientBuffer*>(m_buffer.get()) != NULL
 	);
 
 	// Delegate start of obby session
@@ -575,7 +575,7 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
-	const DocumentInfo& document = window.get_document().get_document();
+	const DocumentInfo& document = window.get_info();
 
 	// Set the path from which this document was opened, if we opened that
 	// file.
@@ -584,7 +584,7 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 	{
 		// " " is newly created, so we do not need a path
 		if(m_local_file_path != " ")
-			window.get_document().set_path(m_local_file_path);
+			window.set_path(m_local_file_path);
 
 		// Crear local path
 		m_local_file_path.clear();
@@ -592,7 +592,7 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 
 	// Select newly created page
 	m_folder.set_current_page(m_folder.page_num(window) );
-	window.get_document().grab_focus();
+	window.grab_focus(); // TODO: Grab focus to sourceview...
 }
 
 void Gobby::Window::on_folder_document_remove(DocWindow& window)
@@ -613,22 +613,12 @@ void Gobby::Window::on_folder_document_remove(DocWindow& window)
 	}
 }
 
-void Gobby::Window::on_folder_document_close_request(Document& document)
+void Gobby::Window::on_folder_document_close_request(DocWindow& window)
 {
-	// TODO: Folder should emit signal with DocWindow
-	for(int i = 0; i < m_folder.get_n_pages(); ++ i)
-	{
-		Gtk::Widget* doc = m_folder.get_nth_page(i);
-		if(&static_cast<DocWindow*>(doc)->get_document() == &document)
-		{
-			// Close this document
-			close_document(*static_cast<DocWindow*>(doc));
-			break;
-		}
-	}
+	close_document(window);
 }
 
-void Gobby::Window::on_folder_tab_switched(Document& document)
+void Gobby::Window::on_folder_tab_switched(DocWindow& window)
 {
 	// Update title bar
 	update_title_bar();
@@ -681,9 +671,14 @@ void Gobby::Window::on_document_open()
 void Gobby::Window::on_document_save()
 {
 	// Get page
-	Document* doc = get_current_document();
+	DocWindow* doc = get_current_document();
 	if(doc == NULL)
-		throw std::logic_error("Gobby::Window::on_document_save");
+	{
+		throw std::logic_error(
+			"Gobby::Window::on_document_save:\n"
+			"No document opened"
+		);
+	}
 
 	// Is there already a path for this document?
 	if(!doc->get_path().empty() )
@@ -697,9 +692,14 @@ void Gobby::Window::on_document_save()
 void Gobby::Window::on_document_save_as()
 {
 	// Get page
-	Document* doc = get_current_document();
+	DocWindow* doc = get_current_document();
 	if(doc == NULL)
-		throw std::logic_error("Gobby::Window::on_document_save_as");
+	{
+		throw std::logic_error(
+			"Gobby::Window::on_document_save_as:\n"
+			"No document opened"
+		);
+	}
 
 	// Setup dialog
 	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
@@ -801,8 +801,7 @@ void Gobby::Window::on_edit_preferences()
 			{
 				DocWindow& doc = *static_cast<DocWindow*>(
 					m_folder.get_nth_page(i) );
-				doc.get_document().set_preferences(
-					m_preferences);
+				doc.set_preferences(m_preferences);
 			}
 		}
 	}
@@ -821,7 +820,7 @@ void Gobby::Window::on_user_set_password()
 	// Run it
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		dynamic_cast<obby::client_buffer*>(
+		dynamic_cast<ClientBuffer*>(
 			m_buffer.get() )->set_password(dlg.get_password() );
 	}
 }
@@ -856,9 +855,14 @@ void Gobby::Window::on_user_set_colour()
 void Gobby::Window::on_view_preferences()
 {
 	// Get current page
-	Document* doc = get_current_document();
+	DocWindow* doc = get_current_document();
 	if(doc == NULL)
-		throw std::logic_error("Gobby::Window::on_view_preferences");
+	{
+		throw std::logic_error(
+			"Gobby::Window::on_view_preferences:\n"
+			"No window opened"
+		);
+	}
 
 	// Add preferences dialog
 	PreferencesDialog dlg(*this, doc->get_preferences(), true);
@@ -871,7 +875,7 @@ void Gobby::Window::on_view_preferences()
 	) );
 
 	// Get title
-	str << doc->get_title();
+	str << doc->get_title().raw();
 
 	// Info label
 	Gtk::Label m_lbl_info(str.str() );
@@ -894,9 +898,14 @@ void
 Gobby::Window::on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang)
 {
 	// Set language of current document
-	Document* doc = get_current_document();
+	DocWindow* doc = get_current_document();
 	if(doc == NULL)
-		throw std::logic_error("Gobby::Window::on_view_language");
+	{
+		throw std::logic_error(
+			"Gobby::Window::on_view_language:\n"
+			"No window opened"
+		);
+	}
 
 	doc->set_language(lang);
 }
@@ -979,15 +988,12 @@ void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
 	m_statusbar.obby_document_remove(local_doc);
 }
 
-Gobby::Document* Gobby::Window::get_current_document()
+Gobby::DocWindow* Gobby::Window::get_current_document()
 {
-	// No document open
 	if(m_folder.get_n_pages() == 0) return NULL;
 
-	// Get currently selected page
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	// Convert to document
-	return &static_cast<DocWindow*>(page)->get_document();
+	return static_cast<DocWindow*>(page);
 }
 
 void Gobby::Window::apply_preferences()
@@ -1006,11 +1012,11 @@ void Gobby::Window::update_title_bar()
 	}
 
 	// Get currently active document
-	const Document& document = *get_current_document();
+	const DocWindow& window = *get_current_document();
 	// Get title of current document
-	const Glib::ustring& file = document.get_title();
+	const Glib::ustring& file = window.get_title();
 	// Get path of current document
-	Glib::ustring path = document.get_path();
+	Glib::ustring path = window.get_path();
 
 	// Show path in title, if we know it
 	if(!path.empty() )
@@ -1074,7 +1080,7 @@ void Gobby::Window::open_local_file(const Glib::ustring& file)
 	}
 }
 
-void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
+void Gobby::Window::save_local_file(DocWindow& doc, const Glib::ustring& file)
 {
 	// Open stream to file
 	std::ofstream stream(file.c_str() );
@@ -1099,7 +1105,7 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 		// Update title bar according to new path
 		update_title_bar();
 		// Unset modifified flag
-		doc.get_buffer()->set_modified(false);
+		doc.get_document().get_buffer()->set_modified(false);
 	}
 	catch(std::exception& e)
 	{
@@ -1107,10 +1113,10 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 	}
 }
 
-void Gobby::Window::close_document(DocWindow& document)
+void Gobby::Window::close_document(DocWindow& window)
 {
 	// Check for the document being modified
-	if(document.get_document().get_modified() )
+	if(window.get_modified() )
 	{
 		// Setup confirmation strings
 		obby::format_string primary_str(
@@ -1123,7 +1129,7 @@ void Gobby::Window::close_document(DocWindow& document)
 			  "document.")
 		);
 
-		primary_str << document.get_document().get_title();
+		primary_str << window.get_title();
 
 		// Setup dialog
 		Gtk::MessageDialog dlg(*this, primary_str.str(), false,
@@ -1148,7 +1154,7 @@ void Gobby::Window::close_document(DocWindow& document)
 			break;
 		case Gtk::RESPONSE_ACCEPT:
 			/* Save the document before closing it */
-			m_folder.set_current_page(m_folder.page_num(document) );
+			m_folder.set_current_page(m_folder.page_num(window) );
 			// TODO: Do not close the document if the user cancells
 			// the save dialog.
 			on_document_save();
@@ -1167,14 +1173,14 @@ void Gobby::Window::close_document(DocWindow& document)
 	if(m_buffer.get() != NULL)
 	{
 		// Unsubscribe from document
-		document.get_document().get_document().unsubscribe();
+		window.get_info().unsubscribe();
 	}
 	else
 	{
 		// Buffer does not exist: Maybe the connection has been lost
 		// or something: Just remove the document from the folder.
-		m_folder.remove_page(document);
-		on_folder_document_remove(document);
+		m_folder.remove_page(window);
+		on_folder_document_remove(window);
 	}
 }
 

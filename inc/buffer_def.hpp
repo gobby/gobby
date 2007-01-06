@@ -20,6 +20,7 @@
 #define _GOBBY_BUFFER_DEF_HPP_
 
 #include "gselector.hpp"
+#include "document.hpp"
 #include <obby/host_buffer.hpp>
 #include <obby/server_buffer.hpp>
 #include <obby/client_buffer.hpp>
@@ -30,16 +31,15 @@
 #include <obby/client_document_info.hpp>
 #include <obby/local_document_info.hpp>
 #include <obby/document_info.hpp>
-#include <obby/document.hpp>
 
 namespace Gobby
 {
 
-typedef obby::basic_buffer<obby::document, GSelector> Buffer;
-typedef obby::basic_local_buffer<obby::document, GSelector> LocalBuffer;
-typedef obby::basic_client_buffer<obby::document, GSelector> ClientBuffer;
-typedef obby::basic_server_buffer<obby::document, GSelector> ServerBuffer;
-typedef obby::basic_host_buffer<obby::document, GSelector> HostBuffer;
+typedef obby::basic_buffer<Document, GSelector> Buffer;
+typedef obby::basic_local_buffer<Document, GSelector> LocalBuffer;
+typedef obby::basic_client_buffer<Document, GSelector> ClientBuffer;
+typedef obby::basic_server_buffer<Document, GSelector> ServerBuffer;
+typedef obby::basic_host_buffer<Document, GSelector> HostBuffer;
 
 typedef Buffer::document_info_type DocumentInfo;
 typedef LocalBuffer::document_info_type LocalDocumentInfo;
@@ -47,6 +47,6 @@ typedef ClientBuffer::document_info_type ClientDocumentInfo;
 typedef ServerBuffer::document_info_type ServerDocumentInfo;
 typedef HostBuffer::document_info_type HostDocumentInfo;
 
-} // namespace obby
+} // namespace Gobby
 
 #endif // _GOBBY_BUFFER_DEF_HPP_
