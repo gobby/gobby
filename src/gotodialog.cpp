@@ -90,6 +90,7 @@ void Gobby::GotoDialog::on_show()
 			get_insert()->get_iter();
 
 		m_ent_line.set_value(cursor.get_line() + 1);
+		m_ent_line.select_region(0, m_ent_line.get_text().length());
 	}
 
 	ToolWindow::on_show();
