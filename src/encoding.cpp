@@ -54,6 +54,7 @@ Gobby::Encoding& Gobby::Encoding::operator=(const Encoding& other)
 {
 	m_name = other.m_name;
 	m_charset = other.m_charset;
+	return *this;
 }
 
 const Glib::ustring& Gobby::Encoding::get_name() const
