@@ -205,13 +205,17 @@ void Gobby::UserList::on_folder_tab_switched(Document& document)
 	// Clear current data
 	m_list_data->clear();
 	// Get user table
-	const obby::user_table& user_table =
+	const obby::user_table& table =
 		info->get_buffer().get_user_table();
 	// Add all users in user table
-	for(obby::user_table::iterator iter = user_table.begin();
-	    iter != user_table.end();
+	for(obby::user_table::iterator iter =
+		table.begin(obby::user::flags::NONE, obby::user::flags::NONE);
+	    iter !=
+		table.end(obby::user::flags::NONE, obby::user::flags::NONE);
 	    ++ iter)
+	{
 		add_user(*iter);
+	}
 }
 
 void Gobby::UserList::on_user_subscribe(const obby::user& user,

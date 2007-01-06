@@ -207,11 +207,11 @@ void Gobby::Window::obby_start()
 	m_chat.obby_start(*m_buffer);
 	m_statusbar.obby_start(*m_buffer);
 
-	// Forward user joins for users that are connected 
-	const obby::user_table& user_table = m_buffer->get_user_table();
+	// Forward user joins
+	const obby::user_table& table = m_buffer->get_user_table();
 	for(obby::user_table::iterator iter =
-		user_table.begin(obby::user::flags::NONE);//CONNECTED);
-	    iter != user_table.end(obby::user::flags::NONE);//CONNECTED);
+		table.begin(obby::user::flags::NONE, obby::user::flags::NONE);
+	    iter != table.end(obby::user::flags::NONE, obby::user::flags::NONE);
 	    ++ iter)
 	{
 		on_obby_user_join(*iter);
