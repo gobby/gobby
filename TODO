@@ -30,6 +30,7 @@ Normal:
   * Gobby starting similar to LiveHelp irc on wikicities (#88)
 
 Minor:
+  * Title bar (#92)
 
 Trivial:
 
@@ -195,6 +196,14 @@ Armin:
  * uff, that takes reimplementing libobby completely in Java, building a 
 Client around it.
  * probably registering a obby://-protocoll at the system
+
+92: Title bar
+-------------
+There is a problem with the title bar on the Windows version of gobby 
+related to document titles.
+When you connect to one server and open a document and disconnect from that 
+server, and possibly connecting to another server, then the titlebar still 
+shows the old document name from the previous server.
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
