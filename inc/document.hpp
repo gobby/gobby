@@ -36,10 +36,20 @@ public:
 	obby::document& get_document();
 
 protected:
+	void on_insert(const Gtk::TextBuffer::iterator& begin,
+	               const Glib::ustring& text,
+		       int foo);
+	void on_erase(const Gtk::TextBuffer::iterator& begin,
+	              const Gtk::TextBuffer::iterator& end);
+
+	void on_obby_insert(const obby::insert_record& record);
+	void on_obby_delete(const obby::delete_record& record);
+
 	obby::document& m_doc;
 	Gtk::TextView m_view;
+	bool m_editing;
 };
-	
+
 }
-	
+
 #endif // _GOBBY_DOCUMENT_HPP_
