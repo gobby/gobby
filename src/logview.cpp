@@ -28,6 +28,7 @@ Gobby::LogView::LogView()
 	);
 
 	set_editable(false);
+	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
 }
 
 Gobby::LogView::~LogView()
