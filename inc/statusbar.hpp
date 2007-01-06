@@ -16,29 +16,26 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_FOLDER_HPP_
-#define _GOBBY_FOLDER_HPP_
+#ifndef _GOBBY_STATUSBAR_HPP_
+#define _GOBBY_STATUSBAR_HPP_
 
-#include <sigc++/signal.h>
-#include <gtkmm/notebook.h>
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+#include <gtkmm/frame.h>
 #include <obby/user.hpp>
 #include <obby/document.hpp>
 #include "document.hpp"
-#include "sourceview/sourcelanguage.hpp"
 
 namespace Gobby
 {
 
-/** Thing containing multiple documents.
- */
-	
-class Folder : public Gtk::Notebook
+class StatusBar : public Gtk::Frame
 {
 public:
-	typedef sigc::signal<void, Document&> signal_document_update_type;
+	StatusBar();
+	virtual ~StatusBar();
 
-	Folder();
-	~Folder();
+	void update(Document& document);
 
 	// Calls from the window
 	void obby_start();
@@ -48,16 +45,13 @@ public:
 	void obby_document_insert(obby::document& document);
 	void obby_document_remove(obby::document& document);
 
-	signal_document_update_type document_update_event() const;
-
 protected:
-	// Signal handlers
-	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
-	virtual void on_document_update(Document& document);
-
-	signal_document_update_type m_signal_document_update;
+	Gtk::HBox m_box;
+	Gtk::Label m_language;
+	Gtk::Label m_sync;
+	Gtk::Label m_position;
 };
 
 }
 
-#endif // _GOBBY_FOLDER_HPP_
+#endif // _GOBBY_STATUSBAR_HPP_

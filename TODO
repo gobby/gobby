@@ -13,10 +13,6 @@ Normal:
  * Menu to switch the syntax colouring scheme.
  * Initialise size of paned widgets
  * configure should detect the presence of gtksourceview automatically
- * Implement a statusbar
-   - Cursor position
-   - Current highlighting scheme
-   - Current syncronisation state 
  * Prompt before overwriting existing files when explicitly choosing path
  * Chat command infrastructure (/me, /ignore)
 

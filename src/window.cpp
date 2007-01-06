@@ -64,6 +64,8 @@ Gobby::Window::Window()
 
 	m_chat.chat_event().connect(
 		sigc::mem_fun(*this, &Window::on_chat) );
+	m_folder.document_update_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_update) );
 
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
@@ -82,6 +84,7 @@ Gobby::Window::Window()
 
 	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);
 	m_mainbox.pack_start(m_mainpaned, Gtk::PACK_EXPAND_WIDGET);
+	m_mainbox.pack_start(m_statusbar, Gtk::PACK_SHRINK);
 
 	add(m_mainbox);
 
@@ -137,6 +140,7 @@ void Gobby::Window::on_session_create() try
 		m_folder.obby_start();
 		m_userlist.obby_start();
 		m_chat.obby_start();
+		m_statusbar.obby_start();
 
 		// Let the local user join
 		on_obby_user_join(buffer->get_self() );
@@ -230,6 +234,7 @@ void Gobby::Window::on_session_quit()
 			m_folder.obby_end();
 			m_userlist.obby_end();
 			m_chat.obby_end();
+			m_statusbar.obby_end();
 
 			m_running = false;
 		}
@@ -335,6 +340,12 @@ void Gobby::Window::on_chat(const Glib::ustring& message) {
 		throw std::runtime_error("tried to send chat message while not connected");
 }
 
+void Gobby::Window::on_document_update(Document& document)
+{
+	// Update statusbar
+	m_statusbar.update(document);
+}
+
 void Gobby::Window::on_obby_login_failed(const std::string& reason)
 {
 	display_error(reason);
@@ -351,7 +362,7 @@ void Gobby::Window::on_obby_sync()
 {
 	// Send documents to components
 	obby::buffer::document_iterator iter = m_buffer->document_begin();
-	for(iter; iter != m_buffer->document_end(); ++ iter)
+	for(; iter != m_buffer->document_end(); ++ iter)
 		on_obby_document_insert(*iter);
 }
 
@@ -378,6 +389,7 @@ void Gobby::Window::on_obby_user_join(obby::user& user)
 			m_folder.obby_start();
 			m_userlist.obby_start();
 			m_chat.obby_start();
+			m_statusbar.obby_start();
 
 			m_running = true;
 		}
@@ -388,6 +400,7 @@ void Gobby::Window::on_obby_user_join(obby::user& user)
 	m_folder.obby_user_join(user);
 	m_userlist.obby_user_join(user);
 	m_chat.obby_user_join(user);
+	m_statusbar.obby_user_join(user);
 }
 
 void Gobby::Window::on_obby_user_part(obby::user& user)
@@ -397,6 +410,7 @@ void Gobby::Window::on_obby_user_part(obby::user& user)
 	m_folder.obby_user_part(user);
 	m_userlist.obby_user_part(user);
 	m_chat.obby_user_part(user);
+	m_statusbar.obby_user_part(user);
 }
 
 void Gobby::Window::on_obby_document_insert(obby::document& document)
@@ -405,6 +419,7 @@ void Gobby::Window::on_obby_document_insert(obby::document& document)
 	m_folder.obby_document_insert(document);
 	m_userlist.obby_document_insert(document);
 	m_chat.obby_document_insert(document);
+	m_statusbar.obby_document_insert(document);
 }
 
 void Gobby::Window::on_obby_document_remove(obby::document& document)
@@ -413,6 +428,7 @@ void Gobby::Window::on_obby_document_remove(obby::document& document)
 	m_folder.obby_document_remove(document);
 	m_userlist.obby_document_remove(document);
 	m_chat.obby_document_remove(document);
+	m_statusbar.obby_document_remove(document);
 }
 
 void Gobby::Window::display_error(const Glib::ustring& message)

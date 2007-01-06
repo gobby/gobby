@@ -28,6 +28,11 @@ const Glib::Class& Gtk::SourceLanguage_Class::init()
 	{
 		class_init_func_ = &SourceLanguage_Class::class_init_function;
 		register_derived_type(gtk_source_language_get_type() );
+
+		Glib::wrap_register(
+			GTK_TYPE_SOURCE_LANGUAGE,
+			&Gtk::SourceLanguage_Class::wrap_new
+		);
 	}
 
 	return *this;
@@ -145,12 +150,11 @@ void Gtk::SourceLanguage::set_mime_types(
 Glib::RefPtr<Gtk::SourceLanguage>
 Glib::wrap(GtkSourceLanguage* object, bool take_copy)
 {
-	// The Code below does not work - don't know why
-	return Glib::RefPtr<Gtk::SourceLanguage>(new Gtk::SourceLanguage(GTK_SOURCE_LANGUAGE( (GObject*)(object))));
-/*	return Glib::RefPtr<Gtk::SourceLanguage>(
+	Gtk::SourceLanguage::sourcelanguage_class_.init();
+	return Glib::RefPtr<Gtk::SourceLanguage>(
 		dynamic_cast<Gtk::SourceLanguage*>(Glib::wrap_auto(
 			reinterpret_cast<GObject*>(object),
 			take_copy
 		) )
-	);*/
+	);
 }

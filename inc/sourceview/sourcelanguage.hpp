@@ -46,7 +46,6 @@ public:
 
 private:
 	friend class SourceLanguage_Class;
-	static CppClassType sourcelanguage_class_;
 
 	// noncopyable
 	SourceLanguage(const SourceLanguage& other);
@@ -56,6 +55,7 @@ private:
 // TODO: SourceLanguage() is needed by Glib::wrap(), but should be protected,
 // though...
 public:
+	static CppClassType sourcelanguage_class_;
 	SourceLanguage();
 	explicit SourceLanguage(const Glib::ConstructParams& construct_params);
 	explicit SourceLanguage(GtkSourceLanguage* castitem);

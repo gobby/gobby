@@ -60,7 +60,14 @@ void Gobby::Folder::obby_user_part(obby::user& user)
 
 void Gobby::Folder::obby_document_insert(obby::document& document)
 {
-	Document* new_doc = new Document(document);
+	Document* new_doc = new Document(document, *this);
+	new_doc->update_event().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &Folder::on_document_update),
+			sigc::ref(*new_doc)
+		)
+	);
+
 	append_page(*new_doc, document.get_title());
 	new_doc->show_all();
 }
@@ -77,5 +84,25 @@ void Gobby::Folder::obby_document_remove(obby::document& document)
 			break;
 		}
 	}
+}
+
+Gobby::Folder::signal_document_update_type
+Gobby::Folder::document_update_event() const
+{
+	return m_signal_document_update;
+}
+
+void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
+{
+	m_signal_document_update.emit(
+		*static_cast<Document*>(get_nth_page(page_num))
+	);
+	Gtk::Notebook::on_switch_page(page, page_num);
+}
+
+void Gobby::Folder::on_document_update(Document& document)
+{
+	if(get_current_page() == page_num(document) )
+		m_signal_document_update.emit(document);
 }
 

@@ -32,28 +32,54 @@
 namespace Gobby
 {
 
+class Folder;
+
 class Document : public Gtk::ScrolledWindow
 {
 public:
 	typedef std::map<Glib::ustring, Glib::ustring> MimeMap;
+	typedef sigc::signal<void> signal_update_type;
 
-	Document(obby::document& doc);
+	Document(obby::document& doc, const Folder& folder);
 	virtual ~Document();
 
 	const obby::document& get_document() const;
 	obby::document& get_document();
 
+	// Statusbar information
+	void get_cursor_position(unsigned int& row, unsigned int& col);
+	unsigned int get_unsynced_changes_count() const;
+#ifdef WITH_GTKSOURCEVIEW
+	Glib::RefPtr<Gtk::SourceLanguage> get_language() const;
+#endif
+
+	/** Signal which will be emitted if the document gets updated in a way
+	 * that is interesting for the status bar.
+	 */
+	signal_update_type update_event() const;
+
 protected:
-	void on_insert(const Gtk::TextBuffer::iterator& begin,
-	               const Glib::ustring& text,
-		       int bytes);
-	void on_erase(const Gtk::TextBuffer::iterator& begin,
-	              const Gtk::TextBuffer::iterator& end);
+	void on_insert_before(const Gtk::TextBuffer::iterator& begin,
+	                      const Glib::ustring& text,
+		              int bytes);
+	void on_erase_before(const Gtk::TextBuffer::iterator& begin,
+	                     const Gtk::TextBuffer::iterator& end);
 
 	void on_obby_insert(const obby::insert_record& record);
 	void on_obby_delete(const obby::delete_record& record);
 
+	void on_insert_after(const Gtk::TextBuffer::iterator& begin,
+	                     const Glib::ustring& text,
+			     int bytes);
+	void on_erase_after(const Gtk::TextBuffer::iterator& begin,
+	                    const Gtk::TextBuffer::iterator& end);
+
+	void on_cursor_changed(const Gtk::TextBuffer::iterator& location,
+	                       const Glib::RefPtr<Gtk::TextBuffer::Mark>& mark);
+
 	obby::document& m_doc;
+	const Folder& m_folder;
+
 #ifdef WITH_GTKSOURCEVIEW
 	Gtk::SourceView m_view;
 	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
@@ -61,13 +87,14 @@ protected:
 	Gtk::TextView m_view;
 #endif
 	bool m_editing;
+	
+	signal_update_type m_signal_update;
 
 public:
 #ifdef WITH_GTKSOURCEVIEW
 	static const MimeMap& create_mime_map();
 	static const MimeMap& m_mime_map;
 #endif
-
 };
 
 }

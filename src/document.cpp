@@ -16,18 +16,20 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <obby/client_document.hpp>
 #ifdef WITH_GTKSOURCEVIEW
 #include "sourceview/sourcelanguagesmanager.hpp"
 #endif
 #include "document.hpp"
+#include "folder.hpp"
 
 #ifdef WITH_GTKSOURCEVIEW
 const Gobby::Document::MimeMap& Gobby::Document::m_mime_map =
 	Gobby::Document::create_mime_map();
 #endif
 
-Gobby::Document::Document(obby::document& doc)
- : Gtk::ScrolledWindow(), m_doc(doc), m_editing(true)
+Gobby::Document::Document(obby::document& doc, const Folder& folder)
+ : Gtk::ScrolledWindow(), m_doc(doc), m_folder(folder), m_editing(true)
 #ifdef WITH_GTKSOURCEVIEW
    ,m_lang_manager(Gtk::SourceLanguagesManager::create() )
 #endif
@@ -83,9 +85,15 @@ Gobby::Document::Document(obby::document& doc)
 
 	// Textbuffer signal handlers
 	buf->signal_insert().connect(
-		sigc::mem_fun(*this, &Document::on_insert), false);
+		sigc::mem_fun(*this, &Document::on_insert_before), false);
 	buf->signal_erase().connect(
-		sigc::mem_fun(*this, &Document::on_erase), false);
+		sigc::mem_fun(*this, &Document::on_erase_before), false);
+	buf->signal_insert().connect(
+		sigc::mem_fun(*this, &Document::on_insert_after), true);
+	buf->signal_erase().connect(
+		sigc::mem_fun(*this, &Document::on_erase_after), true);
+	buf->signal_mark_set().connect(
+		sigc::mem_fun(*this, &Document::on_cursor_changed) );
 
 	// Obby signal handlers
 	doc.insert_event().before().connect(
@@ -116,9 +124,50 @@ obby::document& Gobby::Document::get_document()
 	return m_doc;
 }
 
-void Gobby::Document::on_insert(const Gtk::TextBuffer::iterator& begin,
-                                const Glib::ustring& text,
-                                int bytes)
+Gobby::Document::signal_update_type Gobby::Document::update_event() const
+{
+	return m_signal_update;
+}
+	
+void Gobby::Document::get_cursor_position(unsigned int& row,
+                                          unsigned int& col)
+{
+	// Get insert mark
+	Glib::RefPtr<Gtk::TextBuffer::Mark> mark =
+		m_view.get_buffer()->get_mark("insert");
+
+	// Get corresponding iterator
+	// Gtk::TextBuffer::Mark::get_iter is not const. Why not? It prevents
+	// this function from being const.
+	const Gtk::TextBuffer::iterator iter = mark->get_iter();
+
+	// Read line and column
+	row = iter.get_line();
+	col = iter.get_line_offset();
+}
+
+unsigned int Gobby::Document::get_unsynced_changes_count() const
+{
+	obby::client_document* doc = 
+		dynamic_cast<obby::client_document*>(&m_doc);
+
+	// Changes in Server/Host documents are always synced
+	if(doc == NULL)
+		return 0;
+
+	return doc->get_unsynced_changes_count();
+}
+
+#ifdef WITH_GTKSOURCEVIEW
+Glib::RefPtr<Gtk::SourceLanguage> Gobby::Document::get_language() const
+{
+	return m_view.get_buffer()->get_language();
+}
+#endif
+
+void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
+                                       const Glib::ustring& text,
+                                       int bytes)
 {
 	if(m_editing) return;
 	m_editing = true;
@@ -134,8 +183,8 @@ void Gobby::Document::on_insert(const Gtk::TextBuffer::iterator& begin,
 	m_editing = false;
 }
 
-void Gobby::Document::on_erase(const Gtk::TextBuffer::iterator& begin,
-                               const Gtk::TextBuffer::iterator& end)
+void Gobby::Document::on_erase_before(const Gtk::TextBuffer::iterator& begin,
+                                      const Gtk::TextBuffer::iterator& end)
 {
 	if(m_editing) return;
 	m_editing = true;
@@ -189,6 +238,31 @@ void Gobby::Document::on_obby_delete(const obby::delete_record& record)
 	m_editing = false;
 }
 
+void Gobby::Document::on_insert_after(const Gtk::TextBuffer::iterator& begin,
+                                      const Glib::ustring& text,
+                                      int bytes)
+{
+	// Document changed: Update statusbar
+	m_signal_update.emit();
+}
+
+void Gobby::Document::on_erase_after(const Gtk::TextBuffer::iterator& begin,
+                                     const Gtk::TextBuffer::iterator& end)
+{
+	// Document changed: Update statusbar
+	m_signal_update.emit();
+}
+
+void Gobby::Document::on_cursor_changed(
+	const Gtk::TextBuffer::iterator& location,
+	const Glib::RefPtr<Gtk::TextBuffer::Mark>& mark
+)
+{
+	// Insert mark changed position: Update status bar
+	if(mark->get_name() == "insert")
+		m_signal_update.emit();
+}
+
 #ifdef WITH_GTKSOURCEVIEW
 const Gobby::Document::MimeMap& Gobby::Document::create_mime_map()
 {
@@ -203,6 +277,7 @@ const Gobby::Document::MimeMap& Gobby::Document::create_mime_map()
 	map["hpp"] = "text/x-c++";
 	map["cc"] = "text/x-c++";
 	map["css"] = "text/css";
+	map["cs"] = "text/x-csharp";
 	map["diff"] = "text/x-diff";
 	map["f"] = "text/x-fortran";
 	map["f77"] = "text/x-fortran";

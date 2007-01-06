@@ -524,9 +524,11 @@ void Gtk::SourceBuffer::set_max_undo_levels(gint max_undo_levels)
 
 Glib::RefPtr<Gtk::SourceLanguage> Gtk::SourceBuffer::get_language() const
 {
-	return Glib::wrap(gtk_source_buffer_get_language(
-		const_cast<GtkSourceBuffer*>(gobj())
-	) );
+	GtkSourceBuffer* self = const_cast<GtkSourceBuffer*>(gobj() );
+	if(gtk_source_buffer_get_language(self) == NULL)
+		return Glib::RefPtr<Gtk::SourceLanguage>(NULL);
+
+	return Glib::wrap(gtk_source_buffer_get_language(self), true);
 }
 
 void
