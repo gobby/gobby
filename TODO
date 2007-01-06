@@ -1,3 +1,4 @@
 Discuss the use of exceptions for error handling instead of denial
 Scroll to the cursor if anotherone changed the document
-Segfault nach 'Connection lost'
+Initialize size of paned widgets
+Connect to Glib::signal_io() with network connections instead of using a timer

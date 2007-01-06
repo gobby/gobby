@@ -357,11 +357,9 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 
 bool Gobby::Window::on_timer()
 {
-	// TODO: Connection lost segfaultet hier..?
-//	if(!m_buffer) return true;
-
 	for(int i = 0; i < 15; ++ i)
 	{
+		if(!m_buffer) break;
 		m_buffer->select(0);
 
 		// See comment in Window::on_obby_login_failed
