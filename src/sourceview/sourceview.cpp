@@ -49,6 +49,10 @@ Glib::ObjectBase* Gtk::SourceView_Class::wrap_new(GObject* o)
 Gtk::SourceView::SourceView()
  : Gtk::TextView(Glib::ConstructParams(sourceview_class_.init()))
 {
+	// gtkmm-magic creates a GtkTextBuffer instead of a GtkSourceBuffer
+	// I could not figure out why, but this line fixes this issue...
+	// - armin
+	set_buffer(SourceBuffer::create() );
 }
 
 Gtk::SourceView::SourceView(const Glib::ConstructParams& construct_params)
@@ -61,15 +65,14 @@ Gtk::SourceView::SourceView(GtkSourceView* castitem)
 {
 }
 
-/*Gtk::SourceView::SourceView(const Glib::RefPtr<SourceBuffer>& buffer)
-   Gtk::TextView(Glib::ConstructParams(sourceview_class_.init(), (char*)0))
+Gtk::SourceView::SourceView(const Glib::RefPtr<SourceBuffer>& buffer)
+ : Gtk::TextView(Glib::ConstructParams(sourceview_class_.init(), (char*)0))
 {
 	set_buffer(buffer);
-}*/
+}
 
 Gtk::SourceView::~SourceView()
 {
-	// TODO: TextView-dtor calls destroy_ as well...
 	destroy_();
 }
 
@@ -83,13 +86,41 @@ GType Gtk::SourceView::get_base_type()
 	return gtk_source_view_get_type();
 }
 
-/*Glib::RefPtr<Gtk::SourceBuffer> Gtk::SourceView::get_buffer()
+Glib::RefPtr<Gtk::SourceBuffer> Gtk::SourceView::get_buffer()
 {
-	return Glib::RefPtr<Gtk::SourceBuffer>::cast_static(Gtk::TextView::get_buffer() );
+	return Glib::RefPtr<Gtk::SourceBuffer>
+		::cast_static(Gtk::TextView::get_buffer() );
 }
 
 Glib::RefPtr<const Gtk::SourceBuffer> Gtk::SourceView::get_buffer() const
 {
-	return Glib::RefPtr<Gtk::SourceBuffer>::cast_static(Gtk::TextView::get_buffer() );
+	return Glib::RefPtr<const Gtk::SourceBuffer>
+		::cast_static(Gtk::TextView::get_buffer() );
 }
-*/
+
+void Gtk::SourceView::set_buffer(const Glib::RefPtr<SourceBuffer> buffer)
+{
+	Gtk::TextView::set_buffer(buffer);
+}
+
+bool Gtk::SourceView::get_show_line_numbers() const
+{
+	return gtk_source_view_get_show_line_numbers(
+		GTK_SOURCE_VIEW(gobject_) ) == TRUE;
+}
+
+void Gtk::SourceView::set_show_line_numbers(bool show_line_numbers)
+{
+	gtk_source_view_set_show_line_numbers(
+		gobj(),
+		show_line_numbers ? TRUE : FALSE
+	);
+}
+
+Gtk::SourceView* Glib::wrap(GtkSourceView* object, bool take_copy)
+{
+	return dynamic_cast<Gtk::SourceView*>(Glib::wrap_auto(
+		reinterpret_cast<GObject*>(object),
+		take_copy
+	) );
+}

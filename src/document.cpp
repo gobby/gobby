@@ -21,6 +21,10 @@
 Gobby::Document::Document(obby::document& doc)
  : Gtk::ScrolledWindow(), m_doc(doc), m_editing(true)
 {
+#ifdef WITH_GTKSOURCEVIEW
+	m_view.set_show_line_numbers(true);
+#endif
+
 	Glib::RefPtr<Gtk::TextBuffer> buf = m_view.get_buffer();
 
 	// Textbuffer signal handlers

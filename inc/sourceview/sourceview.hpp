@@ -24,6 +24,7 @@
 
 #include <gtkmm/textview.h>
 #include <gtksourceview/gtksourceview.h>
+#include "sourceview/sourcebuffer.hpp"
 
 typedef struct _GtkSourceView GtkSourceView;
 typedef struct _GtkSourceViewClass GtkSourceViewClass;
@@ -69,11 +70,15 @@ protected:
 	// ...
 public:
 	SourceView();
-//	explicit SourceView(const Glib::RefPtr<SourceBuffer>& buffer);
+	explicit SourceView(const Glib::RefPtr<SourceBuffer>& buffer);
 
-//	Glib::RefPtr<SourceBuffer> get_buffer();
-//	Glib::RefPtr<const SourceBuffer> get_buffer() const;
-	
+	Glib::RefPtr<SourceBuffer> get_buffer();
+	Glib::RefPtr<const SourceBuffer> get_buffer() const;
+	void set_buffer(const Glib::RefPtr<SourceBuffer> buffer);
+
+	// TODO: Properties fuer das Zeug und so(?)
+	bool get_show_line_numbers() const;
+	void set_show_line_numbers(bool show_line_numbers);
 };
 
 }
