@@ -25,6 +25,7 @@ endif
 if WITH_GTKSOURCEVIEW
 noinst_HEADERS += inc/mimemap.hpp
 endif
+noinst_HEADERS += inc/defaultdialog.hpp
 noinst_HEADERS += inc/historyentry.hpp
 noinst_HEADERS += inc/logview.hpp
 noinst_HEADERS += inc/document.hpp
@@ -66,6 +67,7 @@ endif
 if WITH_GTKSOURCEVIEW
 gobby_SOURCES += src/mimemap.cpp
 endif
+gobby_SOURCES += src/defaultdialog.cpp
 gobby_SOURCES += src/historyentry.cpp
 gobby_SOURCES += src/logview.cpp
 gobby_SOURCES += src/document.cpp

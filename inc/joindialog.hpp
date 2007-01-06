@@ -19,18 +19,18 @@
 #ifndef _GOBBY_JOINDIALOG_HPP_
 #define _GOBBY_JOINDIALOG_HPP_
 
-#include <gtkmm/dialog.h>
 #include <gtkmm/table.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/colorbutton.h>
+#include "defaultdialog.hpp"
 #include "config.hpp"
 
 namespace Gobby
 {
 
-class JoinDialog : public Gtk::Dialog
+class JoinDialog : public DefaultDialog
 {
 public:
 	JoinDialog(Gtk::Window& parent, Gobby::Config& config);

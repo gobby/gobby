@@ -20,8 +20,10 @@
 
 #include "entrydialog.hpp"
 
-Gobby::EntryDialog::EntryDialog(Gtk::Window& parent, const Glib::ustring& title, const Glib::ustring& label) 
- : Gtk::Dialog(title, parent, true, true),
+Gobby::EntryDialog::EntryDialog(Gtk::Window& parent,
+                                const Glib::ustring& title,
+                                const Glib::ustring& label)
+ : DefaultDialog(title, parent, true, true),
    m_label(label),
    m_box(false, 5)
 {
@@ -30,6 +32,8 @@ Gobby::EntryDialog::EntryDialog(Gtk::Window& parent, const Glib::ustring& title,
 
 	get_vbox()->set_spacing(5);
 	get_vbox()->pack_start(m_box);
+
+	set_default_response(Gtk::RESPONSE_OK);
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);

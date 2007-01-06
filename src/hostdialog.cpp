@@ -21,7 +21,8 @@
 #include "hostdialog.hpp"
 
 Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
- : Gtk::Dialog(_("Create obby session"), parent, true, true), m_config(config),
+ : DefaultDialog(_("Create obby session"), parent, true, true),
+   m_config(config),
    m_table(3, 2),
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),

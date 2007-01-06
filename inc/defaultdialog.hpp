@@ -16,34 +16,29 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_ENTRYDIALOG_HPP_
-#define _GOBBY_ENTRYDIALOG_HPP_
+#ifndef _GOBBY_DEFAULTDIALOG_HPP_
+#define _GOBBY_DEFAULTDIALOG_HPP_
 
-#include <gtkmm/label.h>
-#include <gtkmm/entry.h>
-#include "defaultdialog.hpp"
+#include <gtkmm/dialog.h>
 
 namespace Gobby
 {
 
-class EntryDialog : public DefaultDialog
+/** A dialog that emits RESPONSE_OK on Enter and RESPONSE_CANCEL on Escape.
+ */
+
+class DefaultDialog : public Gtk::Dialog
 {
 public:
-	EntryDialog(Gtk::Window& parent,
-	            const Glib::ustring& title,
-	            const Glib::ustring& label);
-	virtual ~EntryDialog();
-
-	Glib::ustring get_text() const;
-
-	void set_text(const Glib::ustring& text);
-
+	DefaultDialog(const Glib::ustring& title, Gtk::Window& parent,
+	              bool modal = false, bool use_separator = false);
+	DefaultDialog(const Glib::ustring& title, bool modal = false,
+	              bool use_separator = false);
+	DefaultDialog();
 protected:
-	Gtk::Entry m_entry;
-	Gtk::Label m_label;
-	Gtk::VBox  m_box;
+	virtual bool on_key_press_event(GdkEventKey* event);
 };
 
 }
 
-#endif // _GOBBY_ENTRYDIALOG_HPP_
+#endif // _GOBBY_DEFAULTDIALOG_HPP_

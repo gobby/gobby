@@ -21,7 +21,8 @@
 #include "joindialog.hpp"
 
 Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
- : Gtk::Dialog(_("Join obby session"), parent, true, true), m_config(config),
+ : DefaultDialog(_("Join obby session"), parent, true, true),
+   m_config(config),
    m_table(4, 2),
    m_lbl_host(_("Host:"), Gtk::ALIGN_RIGHT),
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),

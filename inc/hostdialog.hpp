@@ -19,18 +19,18 @@
 #ifndef _GOBBY_HOSTDIALOG_HPP_
 #define _GOBBY_HOSTDIALOG_HPP_
 
-#include <gtkmm/dialog.h>
 #include <gtkmm/table.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/colorbutton.h>
+#include "defaultdialog.hpp"
 #include "config.hpp"
 
 namespace Gobby
 {
 
-class HostDialog : public Gtk::Dialog
+class HostDialog : public DefaultDialog
 {
 public:
 	HostDialog(Gtk::Window& parent, Config& config);
