@@ -4,11 +4,13 @@ Gobby
 Blocker:
 
 Critical:
+  * Excited to try it but libatk-1.6-1.dll just not found (#100)
 
 Major:
   * High CPU load while writing (#45)
   * Bug: High load (and blocking X11) when opening big text file (#48)
   * Gobby adds additional newline on load  (#91)
+  * Special characters in title (#101)
 
 Normal:
   * Chat command infrastructure (#31)
@@ -32,6 +34,7 @@ Normal:
 
 Minor:
   * Title bar (#92)
+  * Word-wrap in chat (#99)
 
 Trivial:
 
@@ -45,6 +48,18 @@ Enhancement:
   * Locate participants (#95)
   * Automatic live storage of documents and chat logs  (#98)
 
+
+100: Excited to try it but libatk-1.6-1.dll just not found
+----------------------------------------------------------
+I've tried glade32, different versions of GTK+, I cannot get past the 
+error:
+
+The (dll) libatkmm-1.6-1.dll could not be found in the specified path 
+(insert my very long and yes includes all the GTK paths)
+
+Can someone conclusively help on this?  Email me at:  edward@itguy.com
+
+Thanks!
 
 45: High CPU load while writing
 -------------------------------
@@ -68,6 +83,13 @@ is loaded from the disk. At a first glance only ''Glib::file_get_contents''
 and ''convert_to_utf8'' are called, so I don't understand where this 
 newline is coming from. This happens with stock 0.2.0 and with the current 
 development tree, it should also be fixed for the upcoming bugfix release.
+
+101: Special characters in title
+--------------------------------
+If you name your document using (HTML) special characters like &, <, > 
+etc., the tab is named "<span foreground="#000000"><span 
+foreground="#666666">true & name</span></span>". However, the name of the 
+document is correctly displayed in the title bar.
 
 31: Chat command infrastructure
 -------------------------------
@@ -208,6 +230,13 @@ related to document titles.
 When you connect to one server and open a document and disconnect from that 
 server, and possibly connecting to another server, then the titlebar still 
 shows the old document name from the previous server.
+
+99: Word-wrap in chat
+---------------------
+The chat window has no word-wrap. Well... I think it should.
+The only thing where word-wrap might be annoying is when you try to draw 
+ASCII-art in chat. But nobody would do it in the chat when there is a big 
+canvas just above it :)
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
