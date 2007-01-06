@@ -299,9 +299,9 @@ void Gobby::Window::obby_start()
 
 	// Delegate start of obby session
 	m_folder.obby_start(*m_buffer);
+	m_documentlist.obby_start(*m_buffer);
 	m_document_settings.obby_start(*m_buffer);
 	m_userlist.obby_start(*m_buffer);
-	m_documentlist.obby_start(*m_buffer);
 	m_chat.obby_start(*m_buffer);
 	m_statusbar.obby_start(*m_buffer);
 
@@ -425,6 +425,8 @@ void Gobby::Window::on_session_join()
 			// Get buffer
 			std::auto_ptr<ClientBuffer> buffer =
 				prgdlg.get_buffer();
+
+			buffer->set_enable_keepalives(true);
 
 			buffer->close_event().connect(
 				sigc::mem_fun(*this, &Window::on_obby_close) );
@@ -1228,6 +1230,7 @@ bool Gobby::Window::session_open_impl(unsigned int port,
 
 		// Set password
 		buffer->set_global_password(password);
+		buffer->set_enable_keepalives(true);
 #ifdef WITH_HOWL
 		// Publish the newly created session via Zeroconf
 		// if Howl is not deactivated

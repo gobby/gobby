@@ -33,10 +33,15 @@ class GSelector: private net6::non_copyable, public sigc::trackable
 {
 public:
 	struct SelectedSocket {
-		sigc::connection conn;
 		const net6::socket* sock;
-		Glib::RefPtr<Glib::IOChannel> chan;
 		net6::io_condition cond;
+
+		Glib::RefPtr<Glib::IOChannel> io_chan;
+		sigc::connection io_conn;
+
+		Glib::TimeVal timeout_begin;
+		unsigned long timeout;
+		sigc::connection time_conn;
 	};
 
 	GSelector();
@@ -44,9 +49,9 @@ public:
 
 	net6::io_condition get(const net6::socket& sock) const;
 	void set(const net6::socket& sock, net6::io_condition cond);
-	net6::io_condition check(const net6::socket& sock,
-	                         net6::io_condition mask) const;
 
+	unsigned long get_timeout(const net6::socket& sock) const;
+	void set_timeout(const net6::socket& sock, unsigned long timeout);
 protected:
 	typedef std::map<const net6::socket*, SelectedSocket> map_type;
 
@@ -54,12 +59,13 @@ protected:
 	void modify_socket(map_type::iterator iter, net6::io_condition cond);
 	void delete_socket(map_type::iterator iter);
 
-	bool on_io(Glib::IOCondition cond, const net6::socket* sock) const;
+	bool on_io(Glib::IOCondition cond, const net6::socket* sock);
+	bool on_timeout(const net6::socket* sock);
 
 	map_type m_map;
 
 	// Is a auto ptr to allow locking in const get function
-	std::auto_ptr<Glib::Mutex> m_mutex;
+	std::auto_ptr<Glib::RecMutex> m_mutex;
 };
 
 } // namespace Gobby
