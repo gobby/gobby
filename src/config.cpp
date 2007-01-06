@@ -48,7 +48,7 @@ namespace
 			DWORD err = GetLastError();
 
 			FormatMessageA(
-				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+				FORMAT_MESSAGE_ALLOCATE_BUFFER |
 				FORMAT_MESSAGE_FROM_SYSTEM,
 				NULL,
 				err,

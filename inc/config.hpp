@@ -237,8 +237,10 @@ public:
 		DataType supply_value(
 			const Glib::ustring& name,
 			const DataType& default_value = DataType(),
-			const serialise::context_base_from<DataType>& ctx =
+			const serialise::context_base_from<DataType>& ctx_from =
 				serialise::default_context_from<DataType>()
+			const serialise::context_base_from<DataType>& ctx_to =
+				serialise::default_context_to<DataType>()
 		);
 
 		/** @brief Creates a new child ValueEntry with the given name
@@ -408,12 +410,13 @@ template<typename DataType>
 DataType Config::ParentEntry::
 	supply_value(const Glib::ustring& name,
 	             const DataType& default_value,
-	             const serialise::context_base_from<DataType>& ctx)
+	             const serialise::context_base_from<DataType>& ctx_from,
+	             const serialise::context_base_to<DataType>& ctx_to)
 {
 	ValueEntry* entry = get_value_child(name);
-	if(entry != NULL) return entry->get(ctx);
+	if(entry != NULL) return entry->get(ctx_from);
 
-	set_value(name, default_value, ctx);
+	set_value(name, default_value, ctx_to);
 	return default_value;
 }
 
