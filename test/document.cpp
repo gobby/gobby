@@ -180,7 +180,6 @@ namespace
 		}
 	};
 
-#if 0
 	struct AppendTest {
 		static const char* NAME;
 
@@ -196,6 +195,7 @@ namespace
 		}
 	};
 
+#if 0
 	struct PrependTest {
 		static const char* NAME;
 
@@ -215,8 +215,8 @@ namespace
 	const char* InsertTest::NAME = "insert";
 	const char* SubstrTest::NAME = "substr";
 	const char* EraseTest::NAME = "erase";
-#if 0
 	const char* AppendTest::NAME = "append";
+#if 0
 	const char* PrependTest::NAME = "prepend";
 #endif
 
@@ -288,7 +288,6 @@ namespace
 		{ "[1]foo[2]bar", 2, obby::text::npos, "[1]fo" }
 	};
 
-#if 0
        AppendTest APPEND_TESTS[] = {
 		{ "", "", "" },
 		{ "", "[1]bar", "[1]bar" },
@@ -297,6 +296,7 @@ namespace
 		{ "[1]foo[2]bar", "[2]bar[1]foo", "[1]foo[2]barbar[1]foo" }
 	};
 
+#if 0
 	PrependTest PREPEND_TESTS[] = {
 		{ "", "", "" },
 		{ "", "[1]bar", "[1]bar" },
@@ -398,9 +398,15 @@ int main(int argc, char* argv[])
 	test.open(6522); // I wish I could get rid of this call :( - armin
 
 	bool result = true;
-	result = test_suite(INSERT_TESTS, ARRAY_SIZE(INSERT_TESTS), test) && result;
-	result = test_suite(SUBSTR_TESTS, ARRAY_SIZE(SUBSTR_TESTS), test) && result;
-	result = test_suite(ERASE_TESTS, ARRAY_SIZE(ERASE_TESTS), test) && result;
+
+	result = test_suite(INSERT_TESTS, ARRAY_SIZE(INSERT_TESTS), test) &&
+		result;
+	result = test_suite(SUBSTR_TESTS, ARRAY_SIZE(SUBSTR_TESTS), test) &&
+		result;
+	result = test_suite(ERASE_TESTS, ARRAY_SIZE(ERASE_TESTS), test) &&
+		result;
+	result = test_suite(APPEND_TESTS, ARRAY_SIZE(APPEND_TESTS), test) &&
+		result;
 
 	return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }
