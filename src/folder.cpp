@@ -20,7 +20,6 @@
 #include <gtkmm/stock.h>
 
 #include "document.hpp"
-#include "docwindow.hpp"
 #include "folder.hpp"
 
 Gobby::Folder::TabLabel::TabLabel(const Glib::ustring& label)
@@ -44,6 +43,11 @@ Gobby::Folder::TabLabel::TabLabel(const Glib::ustring& label)
 
 Gobby::Folder::TabLabel::~TabLabel()
 {
+}
+
+void Gobby::Folder::TabLabel::set_label(const Glib::ustring& label)
+{
+	m_label.set_text(label);
 }
 
 Gobby::Folder::TabLabel::close_signal_type
@@ -169,6 +173,16 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 		)
 	);
 
+	new_doc.get_buffer()->signal_modified_changed().connect(
+		sigc::bind(
+			sigc::mem_fun(
+				*this,
+				&Folder::on_document_modified_changed
+			),
+			sigc::ref(*new_wnd)
+		)
+	);
+
 	// Create label for the tab
 	TabLabel* label = Gtk::manage(new TabLabel(document.get_title() ));
 
@@ -207,7 +221,6 @@ void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
 
 void Gobby::Folder::obby_preferences_changed(const Preferences& preferences)
 {
-	// TODO: Tell documents about new preferences
 }
 
 // Signals
@@ -239,6 +252,18 @@ Gobby::Folder::signal_tab_switched_type
 Gobby::Folder::tab_switched_event() const
 {
 	return m_signal_tab_switched;
+}
+
+void Gobby::Folder::on_document_modified_changed(DocWindow& window)
+{
+	// Get tab label for this document
+	TabLabel& label = *static_cast<TabLabel*>(get_tab_label(window) );
+	Document& doc = window.get_document();
+	// Show asterisk as the document's title if it has been modified
+	if(doc.get_buffer()->get_modified() )
+		label.set_label(doc.get_title() + " *");
+	else
+		label.set_label(doc.get_title() );
 }
 
 void Gobby::Folder::on_document_close(Document& document)

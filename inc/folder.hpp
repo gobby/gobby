@@ -30,6 +30,7 @@
 #include <obby/local_buffer.hpp>
 
 #include "preferences.hpp"
+#include "docwindow.hpp"
 #include "document.hpp"
 
 #include "sourceview/sourcelanguage.hpp"
@@ -52,6 +53,8 @@ public:
 
 		TabLabel(const Glib::ustring& label);
 		~TabLabel();
+
+		void set_label(const Glib::ustring& label);
 
 		close_signal_type close_event();
 	protected:
@@ -101,6 +104,7 @@ protected:
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
 
 	// Signal handlers
+	void on_document_modified_changed(DocWindow& window);
 	void on_document_close(Document& document);
 
 	void on_document_cursor_moved(Document& document);

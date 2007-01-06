@@ -358,6 +358,9 @@ void Gobby::Document::on_obby_self_subscribe()
 	// Enable highlighting
 	buf->set_highlight(true);
 
+	// Not modified when subscribed
+	buf->set_modified(false);
+
 	// Set initial authors
 	for(unsigned int i = 0; i < doc.get_line_count(); ++ i)
 	{
@@ -632,6 +635,9 @@ void Gobby::Document::set_intro_text()
 
 	// TODO: Add people that are currently subscribed
 	set_editable(false);
+
+	// Intro text is not modified
+	get_buffer()->set_modified(false);
 
 	// Do not highlight anything until the user subscribed
 	buf->set_highlight(false);

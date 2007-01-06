@@ -806,6 +806,8 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 		doc.set_path(file);
 		// Update title bar according to new path
 		update_title_bar(doc);
+		// Unset modifified flag
+		doc.get_buffer()->set_modified(false);
 	}
 	else
 	{
