@@ -108,7 +108,8 @@ protected:
 	void open_local_file(const Glib::ustring& file);
 	void save_local_file(Document& doc, const Glib::ustring& file);
 	void close_document(DocWindow& doc);
-	void display_error(const Glib::ustring& message);
+	void display_error(const Glib::ustring& message,
+	                   const Gtk::MessageType type = Gtk::MESSAGE_ERROR);
 
 	// Config
 	Config m_config;
@@ -138,7 +139,7 @@ protected:
 	// obby
 	std::auto_ptr<obby::local_buffer> m_buffer;
 #ifdef WITH_HOWL
-	obby::zeroconf m_zeroconf;
+	std::auto_ptr<obby::zeroconf> m_zeroconf;
 #endif
 	sigc::connection m_timer_conn;
 };

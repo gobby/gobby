@@ -30,8 +30,12 @@ Gobby::JoinDialog::Columns::Columns()
 }
 #endif
 
+#ifndef WITH_HOWL
+Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config)
+#else
 Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
-                              void* zeroconf)
+                              obby::zeroconf* zeroconf)
+#endif
  : DefaultDialog(_("Join obby session"), parent, true, true),
    m_config(config),
    m_table(4, 2),
@@ -40,8 +44,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
    m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
 #ifdef WITH_HOWL
-   , m_ep_discover(_("Local network")),
-     m_zeroconf(*static_cast<obby::zeroconf*>(zeroconf))
+   , m_ep_discover(_("Local network")), m_zeroconf(zeroconf)
 #endif
 {
 	// TODO: Read default color as random one from tom's color map
@@ -89,29 +92,38 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent, Gobby::Config& config,
 	m_table.set_spacings(5);
 
 #ifdef WITH_HOWL
-	m_session_list = Gtk::ListStore::create(m_session_cols);
-	m_session_view.set_model(m_session_list);
-	m_session_view.append_column(_("User"), m_session_cols.name);
-	m_session_view.append_column(_("Host"), m_session_cols.host);
-	m_session_view.append_column(_("Port"), m_session_cols.port);
-	m_session_view.get_selection()->set_mode(
-		Gtk::SELECTION_SINGLE);
-	m_session_view.get_selection()->signal_changed().connect(
-		sigc::mem_fun(*this, &JoinDialog::on_change) );
-	m_ep_discover.add(m_session_view);
+	if(m_zeroconf)
+	{
+		m_session_list = Gtk::ListStore::create(m_session_cols);
+		m_session_view.set_model(m_session_list);
+		m_session_view.append_column(_("User"), m_session_cols.name);
+		m_session_view.append_column(_("Host"), m_session_cols.host);
+		m_session_view.append_column(_("Port"), m_session_cols.port);
+		m_session_view.get_selection()->set_mode(
+			Gtk::SELECTION_SINGLE);
+		m_session_view.get_selection()->signal_changed().connect(
+			sigc::mem_fun(*this, &JoinDialog::on_change) );
+		m_ep_discover.add(m_session_view);
 
-	m_zeroconf.discover_event().connect(sigc::mem_fun(*this,
-	                                    &JoinDialog::on_discover) );
-	m_zeroconf.leave_event().connect(sigc::mem_fun(*this,
-	                                 &JoinDialog::on_leave) );
-	m_zeroconf.discover();
-	m_timer_connection = Glib::signal_timeout().connect(
-		sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
+		m_zeroconf->discover_event().connect(
+			sigc::mem_fun(*this, &JoinDialog::on_discover));
+		m_zeroconf->leave_event().connect(
+			sigc::mem_fun(*this, &JoinDialog::on_leave) );
+		m_zeroconf->discover();
+		m_timer_connection = Glib::signal_timeout().connect(
+			sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
 
-	m_vbox.set_spacing(5);
-	m_vbox.pack_start(m_table);
-	m_vbox.pack_start(m_ep_discover);
-	get_vbox()->pack_start(m_vbox);
+		m_vbox.set_spacing(5);
+		m_vbox.pack_start(m_table);
+		m_vbox.pack_start(m_ep_discover);
+		get_vbox()->pack_start(m_vbox);
+	}
+	else
+	{
+		// Howl is deactivated
+		get_vbox()->set_spacing(5);
+		get_vbox()->pack_start(m_table);
+	}
 #else
 	get_vbox()->set_spacing(5);
 	get_vbox()->pack_start(m_table);
@@ -199,7 +211,7 @@ Gobby::JoinDialog::find_entry(const std::string& name) const
 
 bool Gobby::JoinDialog::on_timer()
 {
-	m_zeroconf.select(0);
+	m_zeroconf->select(0);
 	return true;
 }
 

@@ -49,7 +49,7 @@ Gobby::Window::Window()
    m_config(Glib::get_home_dir() + "/.gobby/config.xml"),
    m_preferences(m_config), m_buffer(NULL),
 #ifdef WITH_HOWL
-   m_zeroconf(),
+   m_zeroconf(NULL),
 #endif
    m_folder(m_preferences), m_header(m_folder), m_statusbar(m_folder)
 {
@@ -128,6 +128,22 @@ Gobby::Window::Window()
 
 	set_title("Gobby");
 	set_default_size(640, 480);
+
+#ifdef WITH_HOWL
+	// Initialise Zeroconf
+	try
+	{
+		m_zeroconf.reset(new obby::zeroconf);
+	}
+	catch(std::runtime_error&)
+	{
+		display_error(_("Howl initialisation failed. Probably you need "
+			"to run mDNSResponder as root prior to Gobby. "
+			"Zeroconf support is deactivated for this session."),
+			Gtk::MESSAGE_WARNING);
+		m_zeroconf.reset();
+	}
+#endif
 }
 
 Gobby::Window::~Window()
@@ -222,10 +238,11 @@ void Gobby::Window::obby_end()
 	m_chat.obby_end();
 	m_statusbar.obby_end();
 
-	// Delete buffer and zeroconf
+	// Delete buffer
 	m_buffer.reset();
+
 #ifdef WITH_HOWL
-	m_zeroconf.unpublish_all();
+	m_zeroconf->unpublish_all();
 #endif
 }
 
@@ -256,8 +273,10 @@ void Gobby::Window::on_session_create()
 			// Set password
 			buffer->set_global_password(password);
 #ifdef WITH_HOWL
-			// Publish the newly created session via ZeroConf
-			m_zeroconf.publish(name, port);
+			// Publish the newly created session via Zeroconf
+			// if Howl is not deactivated
+			if(m_zeroconf.get() )
+				m_zeroconf->publish(name, port);
 #endif
 
 			// Start session
@@ -272,7 +291,7 @@ void Gobby::Window::on_session_join()
 #ifndef WITH_HOWL
 	JoinDialog dlg(*this, m_config);
 #else
-	JoinDialog dlg(*this, m_config, &m_zeroconf);
+	JoinDialog dlg(*this, m_config, m_zeroconf.get() );
 #endif
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
@@ -849,9 +868,10 @@ void Gobby::Window::close_document(DocWindow& document)
 	}
 }
 
-void Gobby::Window::display_error(const Glib::ustring& message)
+void Gobby::Window::display_error(const Glib::ustring& message,
+                                  const Gtk::MessageType type)
 {
-	Gtk::MessageDialog dlg(*this, message, false, Gtk::MESSAGE_ERROR,
+	Gtk::MessageDialog dlg(*this, message, false, type,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
 }
