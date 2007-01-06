@@ -4,7 +4,6 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
- * x
  * version 2 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -30,6 +29,12 @@
  * the signal connection without establishing a new one. Therefore, we try the
  * following:
  *
+ * We use a timer with a timeout of 400 milliseconds that performs a non-
+ * blocking select until the send_queue_size does not change anymore (so all
+ * data that is available and can be written, will be written). Another idea
+ * without a timer would be the following, but it is more complex and harder
+ * to code:
+ * 
  * We start a new Thread which blocks in a net6::select(). If some events
  * arrive we send a notification through a UDP socket to the main event loop.
  * Then, we wait until the main event loop has processed these events and
