@@ -27,6 +27,7 @@
 #include "defaultdialog.hpp"
 #include "colorsel.hpp"
 #include "config.hpp"
+#include "fileentry.hpp"
 
 namespace Gobby
 {
@@ -41,11 +42,13 @@ public:
 	Glib::ustring get_name() const;
 	Gdk::Color get_color() const;
 	Glib::ustring get_password() const;
+	Glib::ustring get_session() const;
 
 	void set_port(unsigned int port);
 	void set_name(const Glib::ustring& name);
 	void set_color(const Gdk::Color& color);
 	void set_password(const Glib::ustring& password);
+	void set_session(const Glib::ustring& session);
 
 protected:
 	virtual void on_response(int response_id);
@@ -57,11 +60,13 @@ protected:
 	Gtk::Label m_lbl_name;
 	Gtk::Label m_lbl_color;
 	Gtk::Label m_lbl_password;
+	Gtk::Label m_lbl_session;
 
 	Gtk::SpinButton m_ent_port;
 	Gtk::Entry m_ent_name;
 	ColorButton m_btn_color;
 	Gtk::Entry m_ent_password;
+	FileEntry m_ent_session;
 };
 
 }

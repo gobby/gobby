@@ -25,9 +25,11 @@ Gobby::HostProgressDialog::HostProgressDialog(Gtk::Window& parent,
                                               Config& config,
                                               unsigned int port,
                                               const Glib::ustring& username,
-                                              const Gdk::Color& color)
- : ProgressDialog(_("Opening obby session..."), parent), m_config(config),
-   m_port(port), m_username(username), m_color(color), m_error("")
+                                              const Gdk::Color& color,
+                                              const Glib::ustring& session):
+	ProgressDialog(_("Opening obby session..."), parent), m_config(config),
+	m_port(port), m_username(username), m_color(color), m_session(session),
+	m_error("")
 {
 	set_status_text("Generating RSA key...");
 }
@@ -56,6 +58,9 @@ void Gobby::HostProgressDialog::on_thread(Thread& thread)
 	unsigned int green = m_color.get_green() * 255 / 65535;
 	unsigned int blue = m_color.get_blue() * 255 / 65535;
 
+	// Session to restore
+	Glib::ustring session = m_session;
+
 	// Dialog may now be closed
 	unlock(thread);
 
@@ -78,9 +83,12 @@ void Gobby::HostProgressDialog::on_thread(Thread& thread)
 		work(thread);
 
 		// Open the server on the given port
-		buffer->open(port);
+		if(session.empty() )
+			buffer->open(port);
+		else
+			buffer->open(session, port);
 	}
-	catch(net6::error& e)
+	catch(std::exception& e)
 	{
 		// Store error, if one occured
 		error = e.what();

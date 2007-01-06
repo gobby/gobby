@@ -20,14 +20,16 @@
 #include "common.hpp"
 #include "hostdialog.hpp"
 
-Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
- : DefaultDialog(_("Create obby session"), parent, true, true),
-   m_config(config),
-   m_table(3, 2),
-   m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
-   m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
-   m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT),
-   m_lbl_password(_("Password:"), Gtk::ALIGN_RIGHT)
+Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
+	DefaultDialog(_("Create obby session"), parent, true, true),
+	m_config(config),
+	m_table(4, 2),
+	m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
+	m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
+	m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT),
+	m_lbl_password(_("Password:"), Gtk::ALIGN_RIGHT),
+	m_lbl_session(_("Restore session:"), Gtk::ALIGN_RIGHT),
+	m_ent_session(*this, _("Restore session") )
 {
 	m_ent_port.set_range(1024, 65535);
 	m_ent_port.set_value(config["session"]["host_port"].get(6522) );
@@ -57,6 +59,8 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 	m_table.attach(m_lbl_password, 0, 1, 3, 4,
 		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
+	m_table.attach(m_lbl_session, 0, 1, 4, 5,
+		Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 
 	m_table.attach(m_ent_port, 1, 2, 0, 1,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
@@ -65,6 +69,8 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
 	m_table.attach(m_btn_color, 1, 2, 2, 3,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 	m_table.attach(m_ent_password, 1, 2, 3, 4,
+		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+	m_table.attach(m_ent_session, 1, 2, 4, 5,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 
 	m_table.set_spacings(5);
@@ -104,6 +110,11 @@ Glib::ustring Gobby::HostDialog::get_password() const
 	return m_ent_password.get_text();
 }
 
+Glib::ustring Gobby::HostDialog::get_session() const
+{
+	return m_ent_session.get_text();
+}
+
 void Gobby::HostDialog::set_port(unsigned int port)
 {
 	m_ent_port.set_value(static_cast<double>(port) );
@@ -124,6 +135,11 @@ void Gobby::HostDialog::set_password(const Glib::ustring& password)
 	m_ent_password.set_text(password);
 }
 
+void Gobby::HostDialog::set_session(const Glib::ustring& session)
+{
+	m_ent_session.set_text(session);
+}
+
 void Gobby::HostDialog::on_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_OK)
@@ -136,5 +152,4 @@ void Gobby::HostDialog::on_response(int response_id)
 
 	Gtk::Dialog::on_response(response_id);
 }
-
 

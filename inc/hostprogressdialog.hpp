@@ -32,7 +32,8 @@ public:
 	HostProgressDialog(Gtk::Window& parent, Config& config,
 	                   unsigned int port,
 	                   const Glib::ustring& username,
-	                   const Gdk::Color& color);
+	                   const Gdk::Color& color,
+	                   const Glib::ustring& session);
 
 	/** Never call this function twice because the auto_ptr of the
 	 * HostDialog will be reset to NULL after having transferred the data
@@ -51,6 +52,7 @@ private:
 	unsigned int m_port;
 	Glib::ustring m_username;
 	Gdk::Color m_color;
+	Glib::ustring m_session;
 
 	Glib::ustring m_error;
 

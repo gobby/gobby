@@ -208,8 +208,8 @@ void Gobby::Window::obby_start()
 	// Forward user joins for users that are connected 
 	const obby::user_table& user_table = m_buffer->get_user_table();
 	for(obby::user_table::iterator iter =
-		user_table.begin(obby::user::flags::CONNECTED);
-	    iter != user_table.end(obby::user::flags::CONNECTED);
+		user_table.begin(obby::user::flags::NONE);//CONNECTED);
+	    iter != user_table.end(obby::user::flags::NONE);//CONNECTED);
 	    ++ iter)
 	{
 		on_obby_user_join(*iter);
@@ -261,9 +261,11 @@ void Gobby::Window::on_session_create()
 		Glib::ustring name = dlg.get_name();
 		Gdk::Color color = dlg.get_color();	
 		Glib::ustring password = dlg.get_password();
+		Glib::ustring session = dlg.get_session();
 
 		// Set up host with hostprogressdialog
-		HostProgressDialog prgdlg(*this, m_config, port, name, color);
+		HostProgressDialog prgdlg(
+			*this, m_config, port, name, color, session);
 		if(prgdlg.run() == Gtk::RESPONSE_OK)
 		{
 			prgdlg.hide();
