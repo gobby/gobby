@@ -18,6 +18,8 @@ Normal:
   * Encoding should be preserved (#65)
   * color change for indicating activity of a document not upfront (#66)
   * automatic scroll if the end of a document is looked at (#70)
+  * Win32 Drag'n'Drop (#71)
+  * Newly joined documents are flagged as unchanged (#72)
 
 Minor:
 
@@ -111,4 +113,23 @@ the end of the page was and do not get that new text is added to it. So: If
 the page is scrolled to the end and new lines are added there it should 
 automatically scroll down. If you are further up and looking or working on 
 something else it shouldn't do so.
+
+71: Win32 Drag'n'Drop
+---------------------
+The Drag+Drop implementation to drop files into the Gobby window seems not 
+to work with  files dragged from the win32 shell (explorer). It does not 
+seem that GTK supports this, so we need a raw OLE-based implementation.
+
+72: Newly joined documents are flagged as unchanged
+---------------------------------------------------
+This can lead to closing unsaved documents without a warning.  Imagine that 
+I join a sobby session, and create and edit a new file.  Now if another 
+person joins, they will initially have the file flagged as unchanged.  So 
+now if the 2nd person closes the file, they (and I!!!) will lose it without 
+warning.
+
+Maybe closing a file shouldn't delete it, but instead should just 
+unsubscribe you from it?  (It seems kind of bad that someone else can close 
+their file that I'm also currently working on, and even if they get a 
+warning, I will not.)
 
