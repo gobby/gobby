@@ -10,6 +10,7 @@ gobby_CPPFLAGS  = $(gobby_CFLAGS) $(gtksourceview_CFLAGS)
 gobby_CPPFLAGS += -I../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\"
 
 if WIN32
+gobby_LDADD += -lole32 -luuid
 gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows win32/gobby.res
 endif
 
