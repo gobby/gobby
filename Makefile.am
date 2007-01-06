@@ -26,7 +26,6 @@ if WIN32
 else
 noinst_HEADERS += inc/unix.hpp
 endif
-noinst_HEADERS += inc/atomic.hpp
 noinst_HEADERS += inc/gselector.hpp
 noinst_HEADERS += inc/ipc.hpp
 noinst_HEADERS += inc/config.hpp
@@ -84,7 +83,6 @@ if WIN32
 else
 gobby_SOURCES += src/unix.cpp
 endif
-gobby_SOURCES += src/atomic.cpp
 gobby_SOURCES += src/gselector.cpp
 gobby_SOURCES += src/ipc.cpp
 gobby_SOURCES += src/config.cpp
