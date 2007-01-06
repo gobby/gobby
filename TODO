@@ -20,6 +20,9 @@ Normal:
   * Recognise command line parameters (#33)
   * Colour presets (#36)
   * Write a good README for Gobby (#51)
+  * Allow opening files as unowned text (#52)
+  * Show the cursors and selections of all participants (#53)
+  * Documentation (#54)
 
 Minor:
 
@@ -139,6 +142,34 @@ Gobby needs some documentation. The starting point should be the addition
 of README content. The file is currently present, but empty. It should 
 contain at least a description of it, the dependency and a short 
 installation guide for *nix systems. More could follow later.
+
+52: Allow opening files as unowned text
+---------------------------------------
+I think that the default way to open a file should be to open in as 
+unhilighted/unowned text, so that changes made to the file are more 
+visible.
+
+Possibly there could be something like an "Open file as unhilighted/unowned 
+text" checkbox in the open dialog for this?  (Not sure quite how to word 
+that to be most understandable by end-user types...)
+
+53: Show the cursors and selections of all participants
+-------------------------------------------------------
+I think that being able to see the cursors and selections of all the 
+participants would help me get a sense for where the other participants 
+are, and what they're doing.  I think this would make collaboration a 
+little bit easier and more comfortable.
+
+Also, once gobby knows where everyone else is, I think it would be great to 
+be able to click on someone's name in the Name List to jump their 
+cursor/selection into view.
+
+54: Documentation
+-----------------
+Gobby should get a normal manual just like other projects. Docbook format 
+is preferred. There should be a short introduction with an overview about 
+Gobby, an installation guide, some basics about the usage and some 
+documentation about the algorithms used.
 
 6: Highlighting of own nickname in chat window
 ----------------------------------------------
