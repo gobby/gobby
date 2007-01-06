@@ -22,7 +22,7 @@
 #include <glibmm/ustring.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
-#include <gtkmm/frame.h>
+#include <gtkmm/statusbar.h>
 #include <gtkmm/separator.h>
 #include <obby/user.hpp>
 #include "document.hpp"
@@ -33,11 +33,10 @@
 namespace Gobby
 {
 
-class StatusBar: public Gtk::Frame
+class StatusBar: public Gtk::Statusbar
 {
 public:
 	StatusBar(Header& header, const Folder& folder);
-	virtual ~StatusBar();
 
 	void update_language(DocWindow& wnd);
 	void update_cursor(DocWindow& wnd);
@@ -58,12 +57,12 @@ public:
 protected:
 	Header& m_header;
 
-	Gtk::HBox m_box;
-	Gtk::Label m_language;
-	Gtk::Label m_connection;
-	Gtk::Label m_position;
+	//Gtk::HBox m_box;
+	guint m_context_noconn;
+	guint m_context_state;
 
-	Gtk::VSeparator m_sep;
+	Gtk::Label m_language;
+	Gtk::Label m_position;
 };
 
 }

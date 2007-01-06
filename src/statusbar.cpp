@@ -23,22 +23,20 @@
 #include "common.hpp"
 #include "statusbar.hpp"
 
-Gobby::StatusBar::StatusBar(Header& header, const Folder& folder)
- : Frame(),
-   m_header(header),
-   m_language("", Gtk::ALIGN_LEFT),
-   m_connection("Not connected", Gtk::ALIGN_LEFT),
-   m_position("", Gtk::ALIGN_LEFT)
+Gobby::StatusBar::StatusBar(Header& header, const Folder& folder):
+	m_header(header), m_context_noconn(0), m_context_state(0),
+	m_language("", Gtk::ALIGN_LEFT), m_position("", Gtk::ALIGN_LEFT)
+	//m_connection("Not connected", Gtk::ALIGN_LEFT),
 {
-	m_box.pack_start(m_language, Gtk::PACK_SHRINK);
-	m_box.pack_start(m_sep, Gtk::PACK_SHRINK);
-	m_box.pack_start(m_connection, Gtk::PACK_SHRINK);
-	m_box.pack_end(m_position, Gtk::PACK_SHRINK, 2);
-	m_box.set_spacing(5);
+	pack_start(m_language, Gtk::PACK_EXPAND_WIDGET);
+	pack_end(m_position, Gtk::PACK_SHRINK);
+	set_spacing(10);
 
-	m_sep.hide();
-	add(m_box);
-	set_shadow_type(Gtk::SHADOW_OUT);
+	m_language.set_ellipsize(Pango::ELLIPSIZE_END);
+
+	//set_shadow_type(Gtk::SHADOW_OUT);
+
+	m_context_noconn = push(_("Not connected"));
 
 	folder.document_cursor_moved_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_cursor) );
@@ -46,10 +44,6 @@ Gobby::StatusBar::StatusBar(Header& header, const Folder& folder)
 		sigc::mem_fun(*this, &StatusBar::update_language) );
 	folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &StatusBar::update_from_document) );
-}
-
-Gobby::StatusBar::~StatusBar()
-{
 }
 
 void Gobby::StatusBar::update_language(DocWindow& wnd)
@@ -66,7 +60,7 @@ void Gobby::StatusBar::update_language(DocWindow& wnd)
 		m_language.set_text(_("No language selected") );
 	}
 
-	m_sep.show();
+	//m_sep.show();
 }
 
 void Gobby::StatusBar::update_cursor(DocWindow& wnd)
@@ -87,7 +81,8 @@ void Gobby::StatusBar::update_from_document(DocWindow& wnd)
 
 void Gobby::StatusBar::update_connection(const Glib::ustring& str)
 {
-	m_connection.set_text(str);
+	// TODO: Do this in obby_start!
+	m_context_state = push(str);
 }
 
 void Gobby::StatusBar::obby_start(LocalBuffer& buf)
@@ -97,8 +92,7 @@ void Gobby::StatusBar::obby_start(LocalBuffer& buf)
 void Gobby::StatusBar::obby_end()
 {
 	m_language.set_text("");
-	m_sep.hide();
-	m_connection.set_text("Not connected");
+	pop(m_context_state); m_context_state = 0;
 	m_position.set_text("");
 }
 
@@ -121,14 +115,14 @@ void Gobby::StatusBar::obby_document_remove(LocalDocumentInfo& document)
 	{
 		// Clear document-related statusbar items
 		m_language.set_text("");
-		m_sep.hide();
+		//m_sep.hide();
 		m_position.set_text("");
 	}
 }
 
 void Gobby::StatusBar::on_show()
 {
-	Gtk::Frame::on_show();
-	m_sep.hide();
+	Gtk::Statusbar::on_show();
+	//m_sep.hide();
 }
 
