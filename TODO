@@ -16,7 +16,6 @@ Important:
 Normal:
  * Menu to switch the syntax colouring scheme.
  * Initialise size of paned widgets
- * configure should detect the presence of gtksourceview automatically
  * Prompt before overwriting existing files when explicitly choosing path
  * Chat command infrastructure (/me, /ignore)
 
