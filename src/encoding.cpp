@@ -68,7 +68,15 @@ Gobby::Encoding::Charset Gobby::Encoding::get_charset() const
 
 Glib::ustring Gobby::Encoding::convert_to_utf8(const std::string& str)
 {
-	return Glib::convert(str, "UTF-8", m_name);
+	Glib::ustring utf8 = Glib::convert(str, "UTF-8", m_name);
+	if(!utf8.validate() )
+	{
+		throw Glib::ConvertError(
+			Glib::ConvertError::NO_CONVERSION,
+			"Couldn't convert to UTF_8"
+		);
+	}
+	return utf8;
 }
 
 Glib::ustring Gobby::convert_to_utf8(const std::string& str)
