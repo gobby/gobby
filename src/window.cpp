@@ -17,6 +17,8 @@
  */
 
 #include <stdexcept>
+#include <fstream>
+#include <ostream>
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/messagedialog.h>
@@ -296,6 +298,9 @@ void Gobby::Window::on_document_open()
 
 void Gobby::Window::on_document_save()
 {
+	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
+	obby::document& doc = static_cast<Document*>(page)->get_document();
+
 	Gtk::FileChooserDialog dlg(*this, "Save current document",
 			Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -303,6 +308,8 @@ void Gobby::Window::on_document_save()
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		std::ofstream stream(dlg.get_filename().c_str() );
+		stream << doc.get_whole_buffer() << std::endl;
 	}
 }
 
