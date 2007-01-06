@@ -211,6 +211,19 @@ Glib::ustring Gobby::Document::get_content()
 	return get_buffer()->get_text();
 }
 
+bool Gobby::Document::get_word_wrapping() const
+{
+	return get_wrap_mode() != Gtk::WRAP_NONE;
+}
+
+void Gobby::Document::set_word_wrapping(bool wrap)
+{
+	if(wrap)
+		set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+	else
+		set_wrap_mode(Gtk::WRAP_NONE);
+}
+
 #ifdef WITH_GTKSOURCEVIEW
 bool Gobby::Document::get_show_line_numbers() const
 {
@@ -363,7 +376,6 @@ void Gobby::Document::on_obby_self_subscribe()
 
 	// Make the document editable
 	set_editable(true);
-	set_wrap_mode(Gtk::WRAP_NONE);
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Enable highlighting
@@ -626,7 +638,7 @@ void Gobby::Document::set_intro_text()
 	// TODO: Add people that are currently subscribed
 
 	set_editable(false);
-	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+	set_word_wrapping(true);
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Do not highlight anything until the user subscribed

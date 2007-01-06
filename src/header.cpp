@@ -43,13 +43,14 @@ namespace {
 		"      <menuitem action=\"SaveDocument\" />"
 		"      <menuitem action=\"CloseDocument\" />"
 		"    </menu>"
-#ifdef WITH_GTKSOURCEVIEW
 		"    <menu action=\"MenuView\">"
+		"      <menuitem action=\"ViewWordWrap\" />"
+#ifdef WITH_GTKSOURCEVIEW
 		"      <menuitem action=\"ViewLineNumbers\" />"
 		"      <separator />"
 		"      <menuitem action=\"ViewLanguageNone\" />"
-		"    </menu>"
 #endif
+		"    </menu>"
 		"    <menu action=\"MenuHelp\">"
 		"      <menuitem action=\"About\" />"
 		"    </menu>"
@@ -115,7 +116,8 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 
 Gobby::Header::Header(const Folder& folder)
  : m_ui_manager(Gtk::UIManager::create() ),
-   m_group_app(Gtk::ActionGroup::create() )
+   m_group_app(Gtk::ActionGroup::create() ),
+   m_toggle_word_wrap(false)
 #ifdef WITH_GTKSOURCEVIEW
    , m_toggle_language(false), m_toggle_line_numbers(false)
 #endif
@@ -241,10 +243,23 @@ Gobby::Header::Header(const Folder& folder)
 		)
 	);
 
-#ifdef WITH_GTKSOURCEVIEW
 	// Documents menu
 	m_group_app->add(Gtk::Action::create("MenuView", _("View")) );
 
+	// Toggle word wrapping
+	m_group_app->add(
+		Gtk::ToggleAction::create(
+			"ViewWordWrap",
+			_("Word wrapping"),
+			_("Whether to wrap the text to the document's width")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_document_word_wrap
+		)
+	);
+
+#ifdef WITH_GTKSOURCEVIEW
 	// Show line numbers
 	m_group_app->add(
 		Gtk::ToggleAction::create(
@@ -453,6 +468,12 @@ Gobby::Header::document_close_event() const
 	return m_signal_document_close;
 }
 
+Gobby::Header::signal_document_word_wrap_type
+Gobby::Header::document_word_wrap_event() const
+{
+	return m_signal_document_word_wrap;
+}
+
 #ifdef WITH_GTKSOURCEVIEW
 Gobby::Header::signal_document_line_numbers_type
 Gobby::Header::document_line_numbers_event() const
@@ -581,6 +602,12 @@ void Gobby::Header::on_app_document_close()
 	m_signal_document_close.emit();
 }
 
+void Gobby::Header::on_app_document_word_wrap()
+{
+	if(!m_toggle_word_wrap)
+		m_signal_document_word_wrap.emit();
+}
+
 #ifdef WITH_GTKSOURCEVIEW
 void Gobby::Header::on_app_document_line_numbers()
 {
@@ -614,11 +641,19 @@ void Gobby::Header::on_app_quit()
 
 void Gobby::Header::on_folder_tab_switched(Document& document)
 {
+	// We are toggling some flags
+	m_toggle_word_wrap = true;
 #ifdef WITH_GTKSOURCEVIEW
-	// We are toggling line numbers
 	m_toggle_line_numbers = true;
 	m_toggle_language = true;
+#endif
 
+	// Set current word wrapping state
+	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
+		m_group_app->get_action("ViewWordWrap")
+	)->set_active(document.get_word_wrapping() );
+
+#ifdef WITH_GTKSOURCEVIEW
 	// Set current line number state
 	Glib::RefPtr<Gtk::ToggleAction>::cast_static<Gtk::Action>(
 		m_group_app->get_action("ViewLineNumbers")
@@ -636,6 +671,7 @@ void Gobby::Header::on_folder_tab_switched(Document& document)
 	m_toggle_line_numbers = false;
 	m_toggle_language = false;
 #endif
+	m_toggle_word_wrap = false;
 }
 
 #ifdef WITH_GTKSOURCEVIEW

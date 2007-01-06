@@ -63,6 +63,8 @@ Gobby::Window::Window()
 	m_header.document_close_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
 
+	m_header.document_word_wrap_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_word_wrap) );
 #ifdef WITH_GTKSOURCEVIEW
 	m_header.document_line_numbers_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_line_numbers) );
@@ -412,6 +414,19 @@ void Gobby::Window::on_document_close()
 		if(!m_folder.get_n_pages() )
 			m_header.disable_document_actions();
 	}
+}
+
+void Gobby::Window::on_document_word_wrap()
+{
+	// Get current page
+	DocWindow& doc_wnd = *static_cast<DocWindow*>(
+		m_folder.get_nth_page(m_folder.get_current_page() )
+	);
+
+	// Toggle word wrapping flag
+	doc_wnd.get_document().set_word_wrapping(
+		!doc_wnd.get_document().get_word_wrapping()
+	);
 }
 
 #ifdef WITH_GTKSOURCEVIEW

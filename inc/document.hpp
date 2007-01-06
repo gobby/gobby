@@ -86,6 +86,15 @@ public:
 	 */
 	Glib::ustring get_content();
 
+	/** Returns whether the document is displayed with the words wrapped
+	 * to the window's width.
+	 */
+	bool get_word_wrapping() const;
+
+	/** Sets whether the words should be wrapped to the window's width.
+	 */
+	void set_word_wrapping(bool wrap);
+
 #ifdef WITH_GTKSOURCEVIEW
 	/** Returns whether line numbers are currently shown for this document.
 	 */

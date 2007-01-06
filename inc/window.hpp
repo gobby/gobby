@@ -58,6 +58,7 @@ protected:
 	void on_document_save();
 	void on_document_close();
 
+	void on_document_word_wrap();
 #ifdef WITH_GTKSOURCEVIEW
 	void on_document_line_numbers();
 	void on_document_language(

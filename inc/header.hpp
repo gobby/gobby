@@ -54,6 +54,7 @@ public:
 	typedef sigc::signal<void> signal_document_open_type;
 	typedef sigc::signal<void> signal_document_save_type;
 	typedef sigc::signal<void> signal_document_close_type;
+	typedef sigc::signal<void> signal_document_word_wrap_type;
 #ifdef WITH_GTKSOURCEVIEW
 	typedef sigc::signal<void> signal_document_line_numbers_type;
 	typedef sigc::signal<void, const Glib::RefPtr<Gtk::SourceLanguage>&>
@@ -81,6 +82,7 @@ public:
 	signal_document_open_type document_open_event() const;
 	signal_document_save_type document_save_event() const;
 	signal_document_close_type document_close_event() const;
+	signal_document_word_wrap_type document_word_wrap_event() const;
 #ifdef WITH_GTKSOURCEVIEW
 	signal_document_line_numbers_type document_line_numbers_event() const;
 	signal_document_language_type document_language_event() const;
@@ -104,6 +106,7 @@ protected:
 	void on_app_document_open();
 	void on_app_document_save();
 	void on_app_document_close();
+	void on_app_document_word_wrap();
 #ifdef WITH_GTKSOURCEVIEW
 	void on_app_document_line_numbers();
 	void on_app_document_language(Glib::RefPtr<Gtk::SourceLanguage> lang);
@@ -121,13 +124,14 @@ protected:
 
 #ifdef WITH_GTKSOURCEVIEW
 	Gtk::RadioButtonGroup m_lang_group;
-		
+
 	/** Boolean variable whether we are currently toggling line numbers to
 	 * prevent recursion.
 	 */
 	bool m_toggle_language;
 	bool m_toggle_line_numbers;
 #endif
+	bool m_toggle_word_wrap;
 
 #ifdef WITH_GTKSOURCEVIEW
 	// Callback for sorting
@@ -144,6 +148,7 @@ protected:
 	signal_document_open_type m_signal_document_open;
 	signal_document_save_type m_signal_document_save;
 	signal_document_close_type m_signal_document_close;
+	signal_document_word_wrap_type m_signal_document_word_wrap;
 #ifdef WITH_GTKSOURCEVIEW
 	signal_document_line_numbers_type m_signal_document_line_numbers;
 	signal_document_language_type m_signal_document_language;
