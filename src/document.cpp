@@ -364,8 +364,10 @@ void Gobby::Document::on_obby_self_subscribe()
 	set_editable(true);
 	set_wrap_mode(Gtk::WRAP_NONE);
 
+#ifdef WITH_GTKSOURCEVIEW
 	// Enable highlighting
 	buf->set_highlight(true);
+#endif
 
 	// TODO: Do this in an idle handler? *kA*
 
@@ -625,8 +627,10 @@ void Gobby::Document::set_intro_text()
 	set_editable(false);
 	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
 
+#ifdef WITH_GTKSOURCEVIEW
 	// Do not highlight anything until the user subscribed
 	buf->set_highlight(false);
+#endif
 }
 
 void
