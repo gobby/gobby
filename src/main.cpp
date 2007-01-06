@@ -36,9 +36,8 @@ void handle_exception(const Glib::ustring& message)
 int main(int argc, char* argv[]) try
 {
 	setlocale(LC_ALL, "");
-	bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
-	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-	textdomain(GETTEXT_PACKAGE);
+	net6::gettext_package gobby_package(GETTEXT_PACKAGE, LOCALE_DIR);
+	Gobby::init_gettext(gobby_package);
 
 	Gtk::Main kit(argc, argv);
 	Glib::thread_init();

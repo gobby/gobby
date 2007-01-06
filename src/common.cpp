@@ -16,30 +16,26 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_COMMON_HPP_
-#define _GOBBY_COMMON_HPP_
+#include "common.hpp"
 
-#include "net6/gettext_package.hpp"
-
-namespace Gobby
+namespace
 {
-
-/** Initalises gettext for usage with Gobby. Translations a looked up in the
- * given catalog.
- */
-void init_gettext(net6::gettext_package& package);
-
-/** Translates a message from the gobby catalog.
- */
-const char* _(const char* msgid);
-
-/** Translate pluralised message from the gobby catalog.
- */
-const char* ngettext(const char* msgid,
-                     const char* msgid_plural,
-                     unsigned long int n);
-
+	net6::gettext_package* local_package;
 }
 
-#endif // _GOBBY_COMMON_HPP_
+void Gobby::init_gettext(net6::gettext_package& package)
+{
+	local_package = &package;
+}
 
+const char* Gobby::_(const char* msgid)
+{
+	return local_package->gettext(msgid);
+}
+
+const char* Gobby::ngettext(const char* msgid,
+                            const char* msgid_plural,
+                            unsigned long int n)
+{
+	return local_package->ngettext(msgid, msgid_plural, n);
+}

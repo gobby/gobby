@@ -75,6 +75,7 @@ gobby_SOURCES += src/io/buffer_wrapper.cpp
 gobby_SOURCES += src/icon.cpp
 gobby_SOURCES += src/atomic.cpp
 gobby_SOURCES += src/config.cpp
+gobby_SOURCES += src/common.cpp
 gobby_SOURCES += src/encoding.cpp
 gobby_SOURCES += src/mimemap.cpp
 gobby_SOURCES += src/regex.cpp
