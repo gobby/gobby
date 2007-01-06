@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005, 2006 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -20,7 +20,7 @@
 #define _GOBBY_JOINPROGRESSDIALOG_HPP_
 
 #include <obby/error.hpp>
-#include <obby/client_buffer.hpp>
+#include "buffer_def.hpp"
 #include "progressdialog.hpp"
 #include "config.hpp"
 
@@ -40,10 +40,10 @@ public:
 	 * JoinDialog will be reset to NULL after having transferred the data
 	 * to the caller.
 	 */
-	std::auto_ptr<obby::client_buffer> get_buffer();
+	std::auto_ptr<ClientBuffer> get_buffer();
 
 private:
-	typedef obby::client_buffer::connection_settings connection_settings;
+	typedef ClientBuffer::connection_settings connection_settings;
 
 	class Prompt: public DefaultDialog
 	{
@@ -87,7 +87,7 @@ private:
 
 	Glib::ustring m_error;
 
-	std::auto_ptr<obby::client_buffer> m_buffer;
+	std::auto_ptr<ClientBuffer> m_buffer;
 
 	// Got done signal from connection thread
 	bool m_got_done;
@@ -95,6 +95,6 @@ private:
 	bool m_got_welcome;
 };
 
-}
+} // namespace Gobby
 
 #endif // _GOBBY_JOINPROGRESSDIALOG_HPP_

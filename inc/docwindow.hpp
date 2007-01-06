@@ -20,10 +20,10 @@
 #define _GOBBY_DOCWINDOW_HPP_
 
 #include <gtkmm/scrolledwindow.h>
-#include <obby/local_document_info.hpp>
 
 #include "features.hpp"
 #include "document.hpp"
+#include "buffer_def.hpp"
 
 namespace Gobby
 {
@@ -39,7 +39,7 @@ public:
 	typedef Document::signal_language_changed_type
 		signal_language_changed_type;
 
-	DocWindow(obby::basic_local_document_info<obby::document, net6::selector>& doc, const Folder& folder,
+	DocWindow(LocalDocumentInfo& doc, const Folder& folder,
 	          const Preferences& preferences);
 	virtual ~DocWindow();
 

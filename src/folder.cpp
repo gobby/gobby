@@ -113,7 +113,7 @@ Gobby::Folder::get_lang_manager() const
 	return m_header.get_lang_manager();
 }
 
-void Gobby::Folder::obby_start(obby::local_buffer& buf)
+void Gobby::Folder::obby_start(LocalBuffer& buf)
 {
 	// Remove existing pages from older session
 	while(get_n_pages() )
@@ -193,7 +193,7 @@ namespace
 	}
 }
 
-void Gobby::Folder::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document)
+void Gobby::Folder::obby_document_insert(LocalDocumentInfo& document)
 {
 	// Document subscription handling
 	document.subscribe_event().connect(
@@ -211,7 +211,7 @@ void Gobby::Folder::obby_document_insert(obby::basic_local_document_info<obby::d
 	);
 }
 
-void Gobby::Folder::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document)
+void Gobby::Folder::obby_document_remove(LocalDocumentInfo& document)
 {
 	// Nothing to do, the unsubscription signal handler has already removed
 	// the page from the notebook.
@@ -314,13 +314,13 @@ void Gobby::Folder::on_document_close(Document& document)
 }
 
 void Gobby::Folder::on_document_subscribe(const obby::user& user,
-                                          obby::basic_local_document_info<obby::document, net6::selector>& info)
+                                          LocalDocumentInfo& info)
 {
 	if(&info.get_buffer().get_self() == &user)
 		on_self_subscribe(info);
 }
 
-void Gobby::Folder::on_self_subscribe(obby::basic_local_document_info<obby::document, net6::selector>& info)
+void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 {
 	// Create new document
 	DocWindow* new_wnd =
@@ -397,13 +397,13 @@ void Gobby::Folder::on_self_subscribe(obby::basic_local_document_info<obby::docu
 }
 
 void Gobby::Folder::on_document_unsubscribe(const obby::user& user,
-                                            obby::basic_local_document_info<obby::document, net6::selector>& info)
+                                            LocalDocumentInfo& info)
 {
 	if(&info.get_buffer().get_self() == &user)
 		on_self_unsubscribe(info);
 }
 
-void Gobby::Folder::on_self_unsubscribe(obby::basic_local_document_info<obby::document, net6::selector>& info)
+void Gobby::Folder::on_self_unsubscribe(LocalDocumentInfo& info)
 {
 	DocWindow* wnd = NULL;
 	for(unsigned int i = 0; i < get_n_pages(); ++ i)

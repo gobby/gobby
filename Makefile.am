@@ -14,10 +14,9 @@ gobby_LDADD += -lole32 -luuid
 gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows win32/gobby.res
 endif
 
-noinst_HEADERS = inc/io/main_connection.hpp
-noinst_HEADERS += inc/io/buffer_wrapper.hpp
-noinst_HEADERS += inc/icon.hpp
+noinst_HEADERS = inc/icon.hpp
 noinst_HEADERS += inc/atomic.hpp
+noinst_HEADERS += inc/gselector.hpp
 noinst_HEADERS += inc/config.hpp
 noinst_HEADERS += inc/common.hpp
 noinst_HEADERS += inc/encoding.hpp
@@ -34,6 +33,7 @@ noinst_HEADERS += inc/togglewindow.hpp
 noinst_HEADERS += inc/header.hpp
 noinst_HEADERS += inc/statusbar.hpp
 noinst_HEADERS += inc/document.hpp
+noinst_HEADERS += inc/buffer_def.hpp
 noinst_HEADERS += inc/docwindow.hpp
 noinst_HEADERS += inc/folder.hpp
 noinst_HEADERS += inc/userlist.hpp
@@ -66,14 +66,9 @@ win32/gobby.res: win32/gobby.rc
 BUILT_SOURCES = win32/gobby.res
 endif
 
-if WIN32
-gobby_SOURCES = src/io/main_connection_win32.cpp
-else
-gobby_SOURCES = src/io/main_connection_generic.cpp
-endif
-gobby_SOURCES += src/io/buffer_wrapper.cpp
-gobby_SOURCES += src/icon.cpp
+gobby_SOURCES = src/icon.cpp
 gobby_SOURCES += src/atomic.cpp
+gobby_SOURCES += src/gselector.cpp
 gobby_SOURCES += src/config.cpp
 gobby_SOURCES += src/common.cpp
 gobby_SOURCES += src/encoding.cpp

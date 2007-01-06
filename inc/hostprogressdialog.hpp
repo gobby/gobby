@@ -19,9 +19,9 @@
 #ifndef _GOBBY_HOSTPROGRESSDIALOG_HPP_
 #define _GOBBY_HOSTPROGRESSDIALOG_HPP_
 
-#include <obby/host_buffer.hpp>
 #include "progressdialog.hpp"
 #include "config.hpp"
+#include "buffer_def.hpp"
 
 namespace Gobby
 {
@@ -39,7 +39,7 @@ public:
 	 * HostDialog will be reset to NULL after having transferred the data
 	 * to the caller.
 	 */
-	std::auto_ptr<obby::host_buffer> get_buffer();
+	std::auto_ptr<HostBuffer> get_buffer();
 
 private:
 	virtual void on_thread(Thread& thread);
@@ -56,7 +56,7 @@ private:
 
 	Glib::ustring m_error;
 
-	std::auto_ptr<obby::host_buffer> m_buffer;
+	std::auto_ptr<HostBuffer> m_buffer;
 };
 
 }

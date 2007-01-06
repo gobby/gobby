@@ -104,7 +104,7 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 	show_all_children();
 }
 
-void Gobby::DocumentList::obby_start(obby::local_buffer& buf)
+void Gobby::DocumentList::obby_start(LocalBuffer& buf)
 {
 	m_scrolled_wnd.set_sensitive(true);
 }
@@ -127,7 +127,7 @@ void Gobby::DocumentList::obby_user_colour(const obby::user& user)
 {
 }
 
-void Gobby::DocumentList::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& info)
+void Gobby::DocumentList::obby_document_insert(LocalDocumentInfo& info)
 {
 	info.subscribe_event().connect(
 		sigc::bind(
@@ -158,7 +158,7 @@ void Gobby::DocumentList::obby_document_insert(obby::basic_local_document_info<o
 	(*new_doc)[m_tree_cols.data] = static_cast<void*>(&info);
 }
 
-void Gobby::DocumentList::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& info)
+void Gobby::DocumentList::obby_document_remove(LocalDocumentInfo& info)
 {
 	Gtk::TreeIter iter = find_iter(info);
 	if(iter == m_tree_data->children().end() )
@@ -173,7 +173,7 @@ void Gobby::DocumentList::obby_document_remove(obby::basic_local_document_info<o
 
 void
 Gobby::DocumentList::on_user_subscribe(const obby::user& user,
-                                       const obby::basic_local_document_info<obby::document, net6::selector>& info)
+                                       const LocalDocumentInfo& info)
 {
 	if(&user == &info.get_buffer().get_self() )
 	{
@@ -188,7 +188,7 @@ Gobby::DocumentList::on_user_subscribe(const obby::user& user,
 
 void
 Gobby::DocumentList::on_user_unsubscribe(const obby::user& user,
-                                         const obby::basic_local_document_info<obby::document, net6::selector>& info)
+                                         const LocalDocumentInfo& info)
 {
 	if(&user == &info.get_buffer().get_self() )
 	{
@@ -202,7 +202,7 @@ Gobby::DocumentList::on_user_unsubscribe(const obby::user& user,
 }
 
 Gtk::TreeIter
-Gobby::DocumentList::find_iter(const obby::basic_local_document_info<obby::document, net6::selector>& info) const
+Gobby::DocumentList::find_iter(const LocalDocumentInfo& info) const
 {
 	const Gtk::TreeNodeChildren& list = m_tree_data->children();
 	for(Gtk::TreeIter iter = list.begin(); iter != list.end(); ++ iter)
@@ -227,8 +227,8 @@ void Gobby::DocumentList::on_subscribe()
 	    ++ iter)
 	{
 		Gtk::TreeIter tree_iter = m_tree_data->get_iter(*iter);
-		obby::basic_local_document_info<obby::document, net6::selector>* info =
-			static_cast<obby::basic_local_document_info<obby::document, net6::selector>*>(
+		LocalDocumentInfo* info =
+			static_cast<LocalDocumentInfo*>(
 				static_cast<void*>(
 					(*tree_iter)[m_tree_cols.data]
 				)
@@ -248,8 +248,8 @@ void Gobby::DocumentList::on_selection_changed()
 	    ++ iter)
 	{
 		Gtk::TreeIter tree_iter = m_tree_data->get_iter(*iter);
-		const obby::basic_local_document_info<obby::document, net6::selector>* info =
-			static_cast<const obby::basic_local_document_info<obby::document, net6::selector>*>(
+		const LocalDocumentInfo* info =
+			static_cast<const LocalDocumentInfo*>(
 				static_cast<const void*>(
 					(*tree_iter)[m_tree_cols.data]
 				)

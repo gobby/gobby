@@ -17,7 +17,6 @@
  */
 
 #include <gtkmm/messagedialog.h>
-#include "io/buffer_wrapper.hpp"
 #include "common.hpp"
 #include "hostprogressdialog.hpp"
 
@@ -34,7 +33,7 @@ Gobby::HostProgressDialog::HostProgressDialog(Gtk::Window& parent,
 	set_status_text("Generating RSA key...");
 }
 
-std::auto_ptr<obby::host_buffer> Gobby::HostProgressDialog::get_buffer()
+std::auto_ptr<Gobby::HostBuffer> Gobby::HostProgressDialog::get_buffer()
 {
 	return m_buffer;
 }
@@ -64,7 +63,7 @@ void Gobby::HostProgressDialog::on_thread(Thread& thread)
 	// Dialog may now be closed
 	unlock(thread);
 
-	std::auto_ptr<obby::host_buffer> buffer; // Resulting obby buffer
+	std::auto_ptr<HostBuffer> buffer; // Resulting obby buffer
 	Glib::ustring error; // Error message
 
 	// Try to open the server.
@@ -72,11 +71,9 @@ void Gobby::HostProgressDialog::on_thread(Thread& thread)
 	{
 		// Create buffer, compute RSA key and stuff
 		buffer.reset(
-			new obby::io::host_buffer(
-#ifdef WIN32
-				parent,
-#endif
-				username, obby::colour(red, green, blue)
+			new HostBuffer(
+				username,
+				obby::colour(red, green, blue)
 			)
 		);
 

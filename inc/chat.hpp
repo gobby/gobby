@@ -24,11 +24,10 @@
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
 #include <obby/user.hpp>
-#include <obby/local_document_info.hpp>
-#include <obby/local_buffer.hpp>
 #include "preferences.hpp"
 #include "historyentry.hpp"
 #include "logview.hpp"
+#include "buffer_def.hpp"
 
 namespace Gobby
 {
@@ -39,18 +38,14 @@ public:
 	Chat();
 	virtual ~Chat();
 
-//	signal_chat_type chat_event() const;
-
 	// Calls from the window
-	void obby_start(obby::local_buffer& buf);
+	void obby_start(LocalBuffer& buf);
 	void obby_end();
 	void obby_user_join(const obby::user& user);
 	void obby_user_part(const obby::user& user);
-	void obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document);
-	void obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document);
+	void obby_document_insert(LocalDocumentInfo& document);
+	void obby_document_remove(LocalDocumentInfo& document);
 
-	//void obby_message(const obby::user& user, const Glib::ustring& message);
-	//void obby_server_message(const Glib::ustring& message);
 protected:
 	//void add_line(const obby::user& user, const Glib::ustring& message);
 	void on_chat();
@@ -68,9 +63,7 @@ protected:
 	void recv_system_line(const std::string& line,
 	                      const obby::chat::system_message& message);
 
-	obby::local_buffer* m_buffer;
-
-//	signal_chat_type m_signal_chat;
+	LocalBuffer* m_buffer;
 
 	Gtk::Image m_img_btn;
 	Gtk::HBox m_box_chat;

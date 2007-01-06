@@ -25,9 +25,8 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/separator.h>
 #include <obby/user.hpp>
-#include <obby/local_document_info.hpp>
-#include <obby/local_buffer.hpp>
 #include "document.hpp"
+#include "buffer_def.hpp"
 #include "header.hpp"
 #include "folder.hpp"
 
@@ -47,12 +46,12 @@ public:
 	void update_connection(const Glib::ustring& str);
 
 	// Calls from the window
-	void obby_start(obby::local_buffer& buf);
+	void obby_start(LocalBuffer& buf);
 	void obby_end();
 	void obby_user_join(const obby::user& user);
 	void obby_user_part(const obby::user& user);
-	void obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document);
-	void obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document);
+	void obby_document_insert(LocalDocumentInfo& document);
+	void obby_document_remove(LocalDocumentInfo& document);
 
 	virtual void on_show();
 

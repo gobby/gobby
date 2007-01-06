@@ -99,7 +99,7 @@ Gobby::Chat::~Chat()
 	return m_signal_chat;
 }*/
 
-void Gobby::Chat::obby_start(obby::local_buffer& buf)
+void Gobby::Chat::obby_start(LocalBuffer& buf)
 {
 	m_buffer = &buf;
 
@@ -145,11 +145,11 @@ void Gobby::Chat::obby_user_part(const obby::user& user)
 	m_log_chat.log(str.str(), "blue");*/
 }
 
-void Gobby::Chat::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document)
+void Gobby::Chat::obby_document_insert(LocalDocumentInfo& document)
 {
 }
 
-void Gobby::Chat::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document)
+void Gobby::Chat::obby_document_remove(LocalDocumentInfo& document)
 {
 }
 

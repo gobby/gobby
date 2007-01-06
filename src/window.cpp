@@ -295,7 +295,7 @@ void Gobby::Window::obby_start()
 	}
 
 	// Send documents to components
-	obby::buffer::document_iterator iter = m_buffer->document_begin();
+	Buffer::document_iterator iter = m_buffer->document_begin();
 	for(; iter != m_buffer->document_end(); ++ iter)
 		on_obby_document_insert(*iter);
 
@@ -373,7 +373,7 @@ void Gobby::Window::on_session_create()
 			prgdlg.hide();
 
 			// Get buffer
-			std::auto_ptr<obby::host_buffer> buffer =
+			std::auto_ptr<HostBuffer> buffer =
 				prgdlg.get_buffer();
 
 			// Set password
@@ -424,7 +424,7 @@ void Gobby::Window::on_session_join()
 			prgdlg.hide();
 
 			// Get buffer
-			std::auto_ptr<obby::client_buffer> buffer =
+			std::auto_ptr<ClientBuffer> buffer =
 				prgdlg.get_buffer();
 
 			buffer->close_event().connect(
@@ -571,8 +571,7 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
-	const obby::basic_document_info<obby::document, net6::selector>& document =
-		window.get_document().get_document();
+	const DocumentInfo& document = window.get_document().get_document();
 
 	// Set the path from which this document was opened, if we opened that
 	// file.
@@ -947,10 +946,10 @@ void Gobby::Window::on_obby_user_colour_failed()
 	display_error(_("Colour change failed: Colour already in use") );
 }
 
-void Gobby::Window::on_obby_document_insert(obby::basic_document_info<obby::document, net6::selector>& document)
+void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
 {
-	obby::basic_local_document_info<obby::document, net6::selector>& local_doc =
-		dynamic_cast<obby::basic_local_document_info<obby::document, net6::selector>&>(document);
+	LocalDocumentInfo& local_doc =
+		dynamic_cast<LocalDocumentInfo&>(document);
 
 	m_folder.obby_document_insert(local_doc);
 	m_userlist.obby_document_insert(local_doc);
@@ -959,10 +958,10 @@ void Gobby::Window::on_obby_document_insert(obby::basic_document_info<obby::docu
 	m_statusbar.obby_document_insert(local_doc);
 }
 
-void Gobby::Window::on_obby_document_remove(obby::basic_document_info<obby::document, net6::selector>& document)
+void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
 {
-	obby::basic_local_document_info<obby::document, net6::selector>& local_doc =
-		dynamic_cast<obby::basic_local_document_info<obby::document, net6::selector>&>(document);
+	LocalDocumentInfo& local_doc =
+		dynamic_cast<LocalDocumentInfo&>(document);
 
 	m_folder.obby_document_remove(local_doc);
 	m_userlist.obby_document_remove(local_doc);

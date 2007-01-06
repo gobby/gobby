@@ -23,12 +23,12 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/messagedialog.h>
-#include <obby/local_buffer.hpp>
 #include "features.hpp"
 #include "icon.hpp"
 #include "config.hpp"
 #include "header.hpp"
 #include "docwindow.hpp"
+#include "buffer_def.hpp"
 #include "userlist.hpp"
 #include "documentlist.hpp"
 #include "finddialog.hpp"
@@ -111,8 +111,8 @@ protected:
 	void on_obby_user_part(const obby::user& user);
 	void on_obby_user_colour(const obby::user& user);
 	void on_obby_user_colour_failed();
-	void on_obby_document_insert(obby::basic_document_info<obby::document, net6::selector>& document);
-	void on_obby_document_remove(obby::basic_document_info<obby::document, net6::selector>& document);
+	void on_obby_document_insert(DocumentInfo& document);
+	void on_obby_document_remove(DocumentInfo& document);
 
 	// Helper functions
 	void apply_preferences();
@@ -154,7 +154,7 @@ protected:
 	std::auto_ptr<DragDrop> m_dnd;
 
 	// obby
-	std::auto_ptr<obby::local_buffer> m_buffer;
+	std::auto_ptr<LocalBuffer> m_buffer;
 #ifdef WITH_HOWL
 	std::auto_ptr<obby::zeroconf> m_zeroconf;
 #endif

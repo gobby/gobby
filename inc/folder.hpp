@@ -26,12 +26,11 @@
 #include <gtkmm/button.h>
 #include <gtkmm/notebook.h>
 #include <obby/user.hpp>
-#include <obby/document.hpp>
-#include <obby/local_buffer.hpp>
 
 #include "preferences.hpp"
 #include "docwindow.hpp"
 #include "document.hpp"
+#include "buffer_def.hpp"
 #include "mimemap.hpp"
 #include "header.hpp"
 
@@ -93,13 +92,13 @@ public:
 	// Calls from the window
 	// TODO: Replace the last 5 of these functions by direct signal
 	// connections to obby::local_buffer
-	void obby_start(obby::local_buffer& buf);
+	void obby_start(LocalBuffer& buf);
 	void obby_end();
 	void obby_user_join(const obby::user& user);
 	void obby_user_part(const obby::user& user);
 	void obby_user_colour(const obby::user& user);
-	void obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document);
-	void obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document);
+	void obby_document_insert(LocalDocumentInfo& document);
+	void obby_document_remove(LocalDocumentInfo& document);
 
 	/** Signal which will be emitted if a document has been added to the
 	 * folder.
@@ -156,14 +155,14 @@ protected:
 	void on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language);
 
 	void on_document_subscribe(const obby::user& user,
-	                           obby::basic_local_document_info<obby::document, net6::selector>& info);
+	                           LocalDocumentInfo& info);
 	void on_document_unsubscribe(const obby::user& user,
-	                             obby::basic_local_document_info<obby::document, net6::selector>& info);
+	                             LocalDocumentInfo& info);
 
 	// Called by on_document_subscribe/unsubscribe if the (un)subscribing
 	// user is the local one.
-	void on_self_subscribe(obby::basic_local_document_info<obby::document, net6::selector>& info);
-	void on_self_unsubscribe(obby::basic_local_document_info<obby::document, net6::selector>& info);
+	void on_self_subscribe(LocalDocumentInfo& info);
+	void on_self_unsubscribe(LocalDocumentInfo& info);
 
 	void on_document_modified_changed(DocWindow& window);
 	void on_document_close(Document& document);
@@ -201,7 +200,7 @@ protected:
 
 	/** Contains a pointer to the current active obby buffer.
 	 */
-	obby::local_buffer* m_buffer;
+	LocalBuffer* m_buffer;
 
 	/** Connection to the unsubscribe signal.
 	 */

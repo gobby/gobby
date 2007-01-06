@@ -23,8 +23,8 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
 #include <obby/user.hpp>
-#include <obby/local_buffer.hpp>
 #include "togglewindow.hpp"
+#include "buffer_def.hpp"
 #include "header.hpp"
 
 namespace Gobby
@@ -52,26 +52,26 @@ public:
 
 	// Calls from the window
 	// TODO: Replace them by signal handlers from buf
-	virtual void obby_start(obby::local_buffer& buf);
+	virtual void obby_start(LocalBuffer& buf);
 	virtual void obby_end();
 	virtual void obby_user_join(const obby::user& user);
 	virtual void obby_user_part(const obby::user& user);
 	virtual void obby_user_colour(const obby::user& user);
-	virtual void obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& info);
-	virtual void obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& info);
+	virtual void obby_document_insert(LocalDocumentInfo& info);
+	virtual void obby_document_remove(LocalDocumentInfo& info);
 protected:
 	Gtk::TreeIter find_iter(const Gtk::TreeIter& parent,
 	                        const Glib::ustring& text) const;
 	void remove_children(const Gtk::TreeIter& parent);
 
 	void on_user_subscribe(const obby::user& user,
-	                       const obby::basic_local_document_info<obby::document, net6::selector>& info);
+	                       const LocalDocumentInfo& info);
 	void on_user_unsubscribe(const obby::user& user,
-	                         const obby::basic_local_document_info<obby::document, net6::selector>& info);
+	                         const LocalDocumentInfo& info);
 
 	Header& m_header;
 
-	obby::local_buffer* m_buffer;
+	LocalBuffer* m_buffer;
 
 	/** GUI components.
 	 */

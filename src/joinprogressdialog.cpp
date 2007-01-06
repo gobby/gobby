@@ -19,7 +19,6 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/stock.h>
 #include <obby/format_string.hpp>
-#include "io/buffer_wrapper.hpp"
 #include "common.hpp"
 #include "defaultdialog.hpp"
 #include "colorsel.hpp"
@@ -100,7 +99,7 @@ Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
 	// TODO: Write new username and colour (if any) to config, on destruction!
 }
 
-std::auto_ptr<obby::client_buffer> Gobby::JoinProgressDialog::get_buffer()
+std::auto_ptr<Gobby::ClientBuffer> Gobby::JoinProgressDialog::get_buffer()
 {
 	return m_buffer;
 }
@@ -120,19 +119,13 @@ void Gobby::JoinProgressDialog::on_thread(Thread& thread)
 	// Dialog may be closed now
 	unlock(thread);
 
-	std::auto_ptr<obby::client_buffer> buffer; // Resulting buffer
+	std::auto_ptr<ClientBuffer> buffer; // Resulting buffer
 	Glib::ustring error; // Error message
 
 	// Establish connection
 	try
 	{
-		buffer.reset(
-			new obby::io::client_buffer(
-#ifdef WIN32
-				parent
-#endif
-			)
-		);
+		buffer.reset(new ClientBuffer);
 
 		// Install signal handlers (notice that those are called within
 		// the main thread)

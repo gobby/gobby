@@ -20,10 +20,10 @@
 #define _GOBBY_DOCUMENT_HPP_
 
 #include <obby/document.hpp>
-#include <obby/local_document_info.hpp>
 
 #include "preferences.hpp"
 #include "features.hpp"
+#include "buffer_def.hpp"
 #include "sourceview/sourcelanguagesmanager.hpp"
 #include "sourceview/sourceview.hpp"
 
@@ -41,11 +41,11 @@ public:
 	typedef sigc::signal<void> signal_content_changed_type;
 	typedef sigc::signal<void> signal_language_changed_type;
 
-	Document(obby::basic_local_document_info<obby::document, net6::selector>& doc, const Folder& folder,
+	Document(LocalDocumentInfo& doc, const Folder& folder,
 	         const Preferences& preferences);
 
-	const obby::basic_local_document_info<obby::document, net6::selector>& get_document() const;
-	obby::basic_local_document_info<obby::document, net6::selector>& get_document();
+	const LocalDocumentInfo& get_document() const;
+	LocalDocumentInfo& get_document();
 
 	/** Writes the current cursor position into row and col.
 	 */
@@ -193,7 +193,7 @@ protected:
 
 	/** The underlaying obby document info.
 	 */
-	obby::basic_local_document_info<obby::document, net6::selector>& m_doc;
+	LocalDocumentInfo& m_doc;
 
 	/** Preferences for this document.
 	 */

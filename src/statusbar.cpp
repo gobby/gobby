@@ -89,7 +89,7 @@ void Gobby::StatusBar::update_connection(const Glib::ustring& str)
 	m_connection.set_text(str);
 }
 
-void Gobby::StatusBar::obby_start(obby::local_buffer& buf)
+void Gobby::StatusBar::obby_start(LocalBuffer& buf)
 {
 }
 
@@ -109,11 +109,11 @@ void Gobby::StatusBar::obby_user_part(const obby::user& user)
 {
 }
 
-void Gobby::StatusBar::obby_document_insert(obby::basic_local_document_info<obby::document, net6::selector>& document)
+void Gobby::StatusBar::obby_document_insert(LocalDocumentInfo& document)
 {
 }
 
-void Gobby::StatusBar::obby_document_remove(obby::basic_local_document_info<obby::document, net6::selector>& document)
+void Gobby::StatusBar::obby_document_remove(LocalDocumentInfo& document)
 {
 	// Last document that is closed?
 	if(document.get_buffer().document_count() == 1)
