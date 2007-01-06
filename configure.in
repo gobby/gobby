@@ -44,7 +44,8 @@ fi
 AM_CONDITIONAL(WITH_GNOME, test x$ac_cv_with_gnome != xno)
 
 # Checks for libraries.
-PKG_CHECK_MODULES([gobby], [libxml++-2.6 gtkmm-2.4 >= 2.6.0 net6-1.0 obby-1.0])
+PKG_CHECK_MODULES([gobby],
+                  [libxml++-2.6 gtkmm-2.4 >= 2.6.0 net6-1.0 obby-1.0 >= 0.2.0])
 
 # Let the user choose if he wants to use gtksourceview or simple text buffers.
 AC_ARG_WITH([gtksourceview],
