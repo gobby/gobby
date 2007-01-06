@@ -38,7 +38,7 @@ public:
 	void set_info(const Glib::ustring& info);
 	Glib::ustring get_password() const;
 protected:
-	virtual void on_response(int response_id);
+	void on_password_changed();
 
 	bool m_request;
 

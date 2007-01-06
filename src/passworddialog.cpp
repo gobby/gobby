@@ -63,6 +63,24 @@ Gobby::PasswordDialog::PasswordDialog(Gtk::Window& parent,
 		m_lbl_conf_password.hide();
 		m_ent_conf_password.hide();
 	}
+	else
+	{
+		m_ent_password.signal_changed().connect(
+			sigc::mem_fun(
+				*this,
+				&PasswordDialog::on_password_changed
+			)
+		);
+
+		m_ent_conf_password.signal_changed().connect(
+			sigc::mem_fun(
+				*this,
+				&PasswordDialog::on_password_changed
+			)
+		);
+	}
+
+	set_response_sensitive(Gtk::RESPONSE_OK, false);
 	
 	set_resizable(false);
 	set_border_width(10);
@@ -88,26 +106,12 @@ Glib::ustring Gobby::PasswordDialog::get_password() const
 	return m_ent_password.get_text();
 }
 
-void Gobby::PasswordDialog::on_response(int response_id)
+void Gobby::PasswordDialog::on_password_changed()
 {
-	if(response_id == Gtk::RESPONSE_OK && !m_request)
-	{
-		if(m_ent_conf_password.get_text() != m_ent_password.get_text() )
-		{
-			Gtk::MessageDialog dlg(
-				*this,
-				_("Passwords do not match"),
-				false,
-				Gtk::MESSAGE_ERROR,
-				Gtk::BUTTONS_OK,
-				true
-			);
-
-			dlg.run();
-			return;
-		}
-	}
-
-	Gtk::Dialog::on_response(response_id);
+	if(m_ent_password.get_text().empty() )
+		set_response_sensitive(Gtk::RESPONSE_OK, false);
+	else if(m_ent_password.get_text() != m_ent_conf_password.get_text() )
+		set_response_sensitive(Gtk::RESPONSE_OK, false);
+	else
+		set_response_sensitive(Gtk::RESPONSE_OK, true);
 }
-
