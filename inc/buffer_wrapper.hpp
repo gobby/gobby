@@ -40,8 +40,8 @@
  */
 
 #include <glibmm/ustring.h>
-#include <libobby/client_buffer.hpp>
-#include <libobby/host_buffer.hpp>
+#include <obby/client_buffer.hpp>
+#include <obby/host_buffer.hpp>
 
 #ifdef WIN32
 # include "buffer_wrapper_win32.hpp"

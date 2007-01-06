@@ -22,8 +22,8 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/liststore.h>
-#include <libobby/user.hpp>
-#include <libobby/document.hpp>
+#include <obby/user.hpp>
+#include <obby/document.hpp>
 
 namespace Gobby
 {

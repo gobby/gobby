@@ -22,7 +22,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
-#include <libobby/buffer.hpp>
+#include <obby/buffer.hpp>
 #include "config.hpp"
 #include "header.hpp"
 #include "folder.hpp"

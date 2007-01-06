@@ -23,8 +23,8 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/button.h>
 #include <gtkmm/image.h>
-#include <libobby/user.hpp>
-#include <libobby/document.hpp>
+#include <obby/user.hpp>
+#include <obby/document.hpp>
 #include "historyentry.hpp"
 #include "logview.hpp"
 

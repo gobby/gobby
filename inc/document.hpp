@@ -21,7 +21,7 @@
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
-#include <libobby/document.hpp>
+#include <obby/document.hpp>
 
 namespace Gobby
 {

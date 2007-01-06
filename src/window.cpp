@@ -22,8 +22,8 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/stock.h>
-#include <libobby/client_buffer.hpp>
-#include <libobby/host_buffer.hpp>
+#include <obby/client_buffer.hpp>
+#include <obby/host_buffer.hpp>
 #include "buffer_wrapper.hpp"
 #include "document.hpp"
 #include "hostdialog.hpp"

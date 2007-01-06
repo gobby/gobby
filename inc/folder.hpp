@@ -20,8 +20,8 @@
 #define _GOBBY_FOLDER_HPP_
 
 #include <gtkmm/notebook.h>
-#include <libobby/user.hpp>
-#include <libobby/document.hpp>
+#include <obby/user.hpp>
+#include <obby/document.hpp>
 
 namespace Gobby
 {

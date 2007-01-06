@@ -17,8 +17,8 @@
  */
 
 #include <cassert>
-#include <libobby/client_user_table.hpp>
-#include <libobby/host_user_table.hpp>
+#include <obby/client_user_table.hpp>
+#include <obby/host_user_table.hpp>
 #include "buffer_wrapper.hpp"
 
 Gobby::ClientBuffer::ClientBuffer()
