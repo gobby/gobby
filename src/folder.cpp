@@ -34,12 +34,12 @@ Gobby::Folder::~Folder()
 		delete get_nth_page(i);
 }
 
+#ifdef WITH_GTKSOURCEVIEW
 const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
 {
 	return m_mime_map;
 }
 
-#ifdef WITH_GTKSOURCEVIEW
 Glib::RefPtr<Gtk::SourceLanguagesManager>
 Gobby::Folder::get_lang_manager() const
 {

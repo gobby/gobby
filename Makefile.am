@@ -87,8 +87,8 @@ endif
 gobby_SOURCES += src/icon.cpp
 
 EXTRA_DIST =  contrib/artwork/CREDITS
-EXTRA_DIST += contrib/artwork/gobby.ico
 EXTRA_DIST += contrib/artwork/gobby.png
 EXTRA_DIST += contrib/artwork/gobby.svg
+EXTRA_DIST += win32/gobby.ico
 EXTRA_DIST += win32/gobby.rc
 

@@ -46,10 +46,10 @@ public:
 	Folder();
 	~Folder();
 
+#ifdef WITH_GTKSOURCEVIEW
 	// Access to the mime map
 	const MimeMap& get_mime_map() const;
 
-#ifdef WITH_GTKSOURCEVIEW
 	Glib::RefPtr<Gtk::SourceLanguagesManager> get_lang_manager() const;
 #endif
 
