@@ -259,7 +259,7 @@ void Gobby::Window::on_realize()
 	// Create new IPC instance
 	try
 	{
-		m_ipc.reset(new Ipc::LocalInstance(*this) );
+		m_ipc.reset(new Ipc::LocalInstance);
 		m_ipc->file_event().connect(
 			sigc::mem_fun(*this, &Window::on_ipc_file)
 		);

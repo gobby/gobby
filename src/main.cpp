@@ -47,7 +47,7 @@ open_files(Gobby::Window& wnd,
 		Gobby::Ipc::RemoteInstance instance;
 
 		conn.reset(
-			new Gobby::Ipc::RemoteConnection(wnd, instance)
+			new Gobby::Ipc::RemoteConnection(instance)
 		);
 	}
 	catch(Gobby::Ipc::Error& e)

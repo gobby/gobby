@@ -29,6 +29,7 @@
 # include "gselector.hpp"
 #endif
 
+#include <net6/non_copyable.hpp>
 #include <gtkmm/window.h>
 
 namespace Gobby
@@ -47,6 +48,7 @@ public:
 	enum Code {
 		NO_REMOTE_INSTANCE, // No remote instance found
 		SERVER_ERROR, // Error occured on server socket
+		WINDOW_CREATION_FAILED, // Failed to create hidden window
 
 		FAILED
 	};
@@ -54,6 +56,28 @@ public:
 	Error(Code error_code, const Glib::ustring& error_message);
 	Code code() const;
 };
+
+#ifdef WIN32
+/** Hidden message-only window to send and receive messages from/to other
+ * windows.
+ */
+class HiddenWindow
+{
+public:
+	typedef sigc::signal<LRESULT, UINT, WPARAM, LPARAM> signal_message_type;
+
+	HiddenWindow(const char* title);
+	~HiddenWindow();
+
+	HWND get_hwnd() const { return m_hwnd; }
+
+	signal_message_type message_event() const;
+protected:
+	HWND m_hwnd;
+
+	signal_message_type m_signal_message;
+};
+#endif
 
 /** @brief Represents a remote gobby instance.
  *
@@ -92,13 +116,8 @@ public:
 	typedef sigc::signal<void> signal_done_type;
 
 	/** @brief Creates a connection to a remote gobby instance.
-	 *
-	 *  WM_COPYDATA (IPC implementation on Win32) needs the source
-	 *  window from which the message is sent, so we need a window
-	 *  reference here.
 	 */
-	RemoteConnection(Gtk::Window& window,
-	                 const RemoteInstance& to);
+	RemoteConnection(const RemoteInstance& to);
 
 	/** @brief Sends a file to open by the remote instance.
 	 */
@@ -110,7 +129,7 @@ public:
 	signal_done_type done_event() const;
 private:
 #ifdef WIN32
-	HWND m_local_hwnd;
+	HiddenWindow m_local_hwnd;
 	HWND m_remote_hwnd;
 #else
 	GSelector m_selector;
@@ -127,7 +146,7 @@ class LocalInstance: public sigc::trackable, private net6::non_copyable
 public:
 	typedef sigc::signal<void, const std::string&> signal_file_type;
 
-	LocalInstance(Gtk::Window& window);
+	LocalInstance();
 	~LocalInstance();
 
 	/** @brief Signal that is emitted when another instance sent a file
@@ -136,14 +155,9 @@ public:
 	signal_file_type file_event() const;
 private:
 #ifdef WIN32
-	HWND m_hwnd;
-	Gtk::Window& m_window;
+	HiddenWindow m_hwnd;
 
-	static GdkFilterReturn on_filter_cb(GdkXEvent* xevent,
-	                                    GdkEvent* event,
-	                                    gpointer data);
-
-	GdkFilterReturn on_filter(MSG* msg);
+	LRESULT on_message(UINT msg, WPARAM wparam, LPARAM lparam);
 #else
 	GSelector m_selector;
 
