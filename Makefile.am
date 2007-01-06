@@ -31,7 +31,8 @@ noinst_HEADERS += inc/joindialog.hpp
 noinst_HEADERS += inc/entrydialog.hpp
 noinst_HEADERS += inc/window.hpp 
 if WITH_GTKSOURCEVIEW
-noinst_HEADERS += inc/gtksourceview.hpp
+noinst_HEADERS += inc/sourceview/sourceview.hpp
+noinst_HEADERS += inc/sourceview/private/sourceview_p.hpp
 endif
 noinst_HEADERS += inc/icon.hpp
 
@@ -55,6 +56,6 @@ gobby_SOURCES += src/entrydialog.cpp
 gobby_SOURCES += src/window.cpp
 gobby_SOURCES += src/main.cpp
 if WITH_GTKSOURCEVIEW
-gobby_SOURCES += src/gtksourceview.cpp
+gobby_SOURCES += src/sourceview/sourceview.cpp
 endif
 gobby_SOURCES += src/icon.cpp

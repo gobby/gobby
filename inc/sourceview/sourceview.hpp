@@ -1,3 +1,27 @@
+/* gobby - A GTKmm driven libobby client
+ * Copyright (C) 2005 0x539 dev group
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#ifndef _GOBBY_SOURCEVIEW_SOURCEVIEW_HPP_
+#define _GOBBY_SOURCEVIEW_SOURCEVIEW_HPP_
+
+/** C++ Wrapper for GtkSourceView.
+ */
+
 #include <gtkmm/textview.h>
 #include <gtksourceview/gtksourceview.h>
 
@@ -6,11 +30,8 @@ typedef struct _GtkSourceViewClass GtkSourceViewClass;
 
 namespace Gtk
 {
-	class SourceView_Class;
-}
 
-namespace Gtk
-{
+class SourceView_Class;
 
 class SourceView : public TextView
 {
@@ -61,3 +82,5 @@ namespace Glib
 {
 	Gtk::SourceView* wrap(GtkSourceView* object, bool take_copy = false);
 }
+
+#endif // _GOBBY_SOURCEVIEW_SOURCEVIEW_HPP_

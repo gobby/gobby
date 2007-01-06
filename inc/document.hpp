@@ -25,7 +25,7 @@
 
 #include "features.hpp"
 #ifdef WITH_GTKSOURCEVIEW
-#include "gtksourceview.hpp"
+#include "sourceview/sourceview.hpp"
 #endif
 
 namespace Gobby
