@@ -35,6 +35,11 @@ void show_url(const char* url)
 {
 	ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNA);
 }
+#elif defined(OSX)
+void show_url(const char* url)
+{
+	Glib::spawn_command_line_async("open " + std::string(url) );
+}
 #endif
 
 Gobby::LogView::LogView():

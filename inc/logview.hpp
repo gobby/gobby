@@ -24,7 +24,7 @@
 #include <gtkmm/textview.h>
 #include "features.hpp"
 
-#if defined(WITH_GNOME) || defined(WIN32)
+#if defined(WITH_GNOME) || defined(WIN32) || defined(OSX)
 # define HAVE_SHOW_URL
 #endif
 
