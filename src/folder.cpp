@@ -350,9 +350,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	// TODO: We should put flags into the labels which specify if the
 	// current document is subscribed and/or modified.
 	DocWindow& window = *static_cast<DocWindow*>(get_nth_page(page_num));
-	obby::local_document_info& docinfo =
-		window.get_document().get_document();
-	if(docinfo.is_subscribed(docinfo.get_buffer().get_self() ))
+	if(window.get_document().is_subscribed() )
 		set_tab_colour(window, "#000000");
 	Gtk::Notebook::on_switch_page(page, page_num);
 }
