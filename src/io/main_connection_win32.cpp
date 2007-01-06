@@ -16,6 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <winsock2.h>
 #include <windows.h>
 #include <gdk/gdkwin32.h>
 #include <net6/error.hpp>
