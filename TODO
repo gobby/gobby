@@ -28,6 +28,7 @@ Normal:
   * Server exit causes clients to exit (#85)
   * Gobby should save backups (#87)
   * Gobby starting similar to LiveHelp irc on wikicities (#88)
+  * "quit" should confirm (#93)
 
 Minor:
   * Title bar (#92)
@@ -196,6 +197,11 @@ Armin:
  * uff, that takes reimplementing libobby completely in Java, building a 
 Client around it.
  * probably registering a obby://-protocoll at the system
+
+93: "quit" should confirm
+-------------------------
+When you close a session, you should need to confirm so you don't lose your 
+work.
 
 92: Title bar
 -------------
