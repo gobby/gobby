@@ -127,18 +127,15 @@ protected:
 
 	// GUI
 	Gtk::VBox m_mainbox;
-
 	Gtk::VPaned m_mainpaned;
-	Gtk::HPaned m_subpaned;
 
 	Gtk::Frame m_frame_chat;
-	Gtk::Frame m_frame_list;
 	Gtk::Frame m_frame_text;
 
 	Header m_header;
+	UserList m_userlist;
 
 	Folder m_folder;
-	UserList m_userlist;
 	Chat m_chat;
 	StatusBar m_statusbar;
 

@@ -55,8 +55,8 @@ Gobby::Window::Window()
    m_zeroconf(NULL),
 #endif
    m_header(),
-   m_folder(m_header, m_preferences),
    m_userlist(*this, m_header),
+   m_folder(m_header, m_preferences),
    m_statusbar(m_header, m_folder)
 {
 	// Header
@@ -92,8 +92,6 @@ Gobby::Window::Window()
 	
 	m_header.action_view_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_view_preferences) );
-	/*m_header.view_language_event().connect(
-		sigc::mem_fun(*this, &Window::on_view_language) );*/
 
 	m_header.action_help_about->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_about) );
@@ -115,18 +113,13 @@ Gobby::Window::Window()
 	m_header.action_app_session_quit->set_sensitive(false);
 
 	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
-	m_frame_list.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
 
 	m_frame_chat.add(m_chat);
-	//m_frame_list.add(m_userlist);
 	m_frame_text.add(m_folder);
 
-	m_subpaned.pack1(m_frame_text, true, false);
-	m_subpaned.pack2(m_frame_list, true, false);
-
 	m_mainpaned.set_border_width(10);
-	m_mainpaned.pack1(m_subpaned, true, false);
+	m_mainpaned.pack1(m_frame_text, true, false);
 	m_mainpaned.pack2(m_frame_chat, true, false);
 
 	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);
@@ -172,12 +165,9 @@ void Gobby::Window::on_realize()
 
 	// Initialize paned sizes. This cannot be done in the constructor
 	// because the widget's sizes are not known.
-	int submin = m_subpaned.property_min_position();
-	int submax = m_subpaned.property_max_position();
 	int mainmin = m_mainpaned.property_min_position();
 	int mainmax = m_mainpaned.property_max_position();
 
-	m_subpaned.set_position(submin + (submax - submin) * 4 / 5);
 	m_mainpaned.set_position(mainmin + (mainmax - mainmin) * 3 / 4);
 }
 
@@ -197,11 +187,6 @@ void Gobby::Window::obby_start()
 		sigc::mem_fun(*this, &Window::on_obby_document_insert) );
 	m_buffer->document_remove_event().connect(
 		sigc::mem_fun(*this, &Window::on_obby_document_remove) );
-
-	/*m_buffer->message_event().connect(
-		sigc::mem_fun(*this, &Window::on_obby_chat) );
-	m_buffer->server_message_event().connect(
-		sigc::mem_fun(*this, &Window::on_obby_server_chat) );*/
 
 	// Accept drag and drop of files into the gobby window
 	std::list<Gtk::TargetEntry> targets;
@@ -773,14 +758,6 @@ void Gobby::Window::on_quit()
 	Gtk::Main::quit();
 }
 
-#if 0
-void Gobby::Window::on_chat(const Glib::ustring& message)
-{
-	// Send chat message via obby
-	m_buffer->send_message(message);
-}
-#endif
-
 /* Drag and Drop */
 void Gobby::Window::on_drag_data_received(
 	const Glib::RefPtr<Gdk::DragContext>& context,
@@ -823,21 +800,6 @@ void Gobby::Window::on_obby_close()
 	display_error(_("Connection lost"));
 	on_session_quit();
 }
-
-#if 0
-void Gobby::Window::on_obby_chat(const obby::user& user,
-                                 const Glib::ustring& message)
-{
-	// Got chat message
-	m_chat.obby_message(user, message);
-}
-
-void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
-{
-	// Got server chat message
-	m_chat.obby_server_message(message);
-}
-#endif
 
 void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
@@ -898,11 +860,6 @@ void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 		// Crear local path
 		m_local_file_path.clear();
 	}
-
-#if 0
-	doc->get_document().signal_drag_data_received().connect(
-		sigc::mem_fun(*this, &Window::on_drag_data_received) );
-#endif
 }
 
 void Gobby::Window::on_obby_document_remove(obby::document_info& document)
