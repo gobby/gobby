@@ -1,4 +1,4 @@
-.TH GOBBY 1 "April 19, 2006"
+.TH GOBBY 1 "August 17, 2006"
 .\" Please adjust this date whenever revising the manpage.
 .\" For manpage-specific macros: see man(7).
 .SH NAME
@@ -6,7 +6,8 @@
 \- a collaborative text editor
 .SH SYNOPSIS
 .B gobby
-[file(s)]
+.RI [ options ]
+.RI [ file(s) ]
 .SH DESCRIPTION
 .B gobby
 is an editor which allows to edit text documents and source files
@@ -15,14 +16,17 @@ instantly to the other clients.
 .PP
 .SH OPTIONS
 .TP
+\fB\-j\fR, \fB\-\-join\fR=\fIHOST\fR:\fIPORT\fR
+Joins the obby session on the specified host.
+.TP
+\fB\-n\fR, \fB\-\-new\-instance\fR
+Forces a new instance of Gobby to be created.
+.TP
 .B file(s)
-Files passed on the command line will be opened within Gobby. The first
-open session will be used to open the files in, if none is present a new
-hosted one will be created.
+Files passed on the command line will be opened within Gobby. If there is
+already a Gobby instance running they will be opened therein, otherwise
+a new hosted session will be created automatically.
 .PP
 .SH AUTHOR
 .B gobby
 was written by the 0x539 dev group <crew@0x539.de>.
-.PP
-This manual page was written by Philipp Kern <pkern@debian.org>,
-for the Debian project (but may be used by others).
