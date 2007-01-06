@@ -401,6 +401,9 @@ void Gobby::Window::on_document_create()
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		// " " means a newly created file
+		m_local_file_path = " ";
+		// Create new document
 		m_buffer->create_document(dlg.get_text() );
 	}
 }
@@ -732,8 +735,20 @@ void Gobby::Window::on_obby_document_insert(obby::document_info& document)
 
 	// Set the path from which this document was opened, if we opened that
 	// file.
-	if(document.get_owner() == &m_buffer->get_self() )
-		doc->get_document().set_path(m_local_file_path);
+	if(document.get_owner() == &m_buffer->get_self() &&
+	   !m_local_file_path.empty() )
+	{
+		// Select newly created page
+		m_folder.set_current_page(m_folder.get_n_pages() - 1);
+		doc->get_document().grab_focus();
+
+		// " " is newly created, so we do not need a path
+		if(m_local_file_path != " ")
+			doc->get_document().set_path(m_local_file_path);
+
+		// Crear local path
+		m_local_file_path.clear();
+	}
 
 #if 0
 	doc->get_document().signal_drag_data_received().connect(

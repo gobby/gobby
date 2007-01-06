@@ -404,6 +404,11 @@ void Gobby::Document::on_obby_self_subscribe()
 		}
 	}
 
+	// Cursor moved because the introduction text has been deleted
+	m_signal_cursor_moved.emit();
+	// Content changed because the introduction text has been deleted
+	m_signal_content_changed.emit();
+
 	m_editing = false;
 }
 
