@@ -279,19 +279,7 @@ void Gobby::Document::on_obby_insert(const obby::insert_record& record)
 		record.get_position(), row, col);
 
 	// Find obby::user that inserted the text
-	const obby::user* user = m_doc.get_buffer().get_user_table().find_user<
-		obby::user::CONNECTED
-	>(record.get_from() );
-
-	// user may be NULL if the server (which has no user) inserted the text
-	if(user == NULL && record.get_from() != 0)
-	{
-		// TODO: Localise...
-		obby::format_string str(_("User %0 is not connected"));
-		str << record.get_from();
-		std::cerr << "Gobby::Document::on_obby_insert: " << str.str()
-		          << std::endl;
-	}
+	const obby::user* user = record.get_user();
 
 	// Insert text
 	Gtk::TextBuffer::iterator end = buffer->insert(
