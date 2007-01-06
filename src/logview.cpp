@@ -47,20 +47,20 @@ void Gobby::LogView::log(const Glib::ustring& text, const Glib::ustring& color)
 	Glib::ustring ins_text = text;
 	if(ins_text[ins_text.length() - 1] != '\n') ins_text += "\n";
 
-	struct std::tm cur_time;
+	struct std::tm* cur_time;
 	time_t cur_time_t = std::time(NULL);
-	localtime_r(&cur_time_t, &cur_time);
+	cur_time = localtime(&cur_time_t);
 
 	std::stringstream timestream;
 	timestream << "[";
 	timestream.width(2); timestream.fill('0');
-	timestream << cur_time.tm_hour;
+	timestream << cur_time->tm_hour;
 	timestream << ":";
 	timestream.width(2); timestream.fill('0');
-	timestream << cur_time.tm_min;
+	timestream << cur_time->tm_min;
 	timestream << ":";
 	timestream.width(2); timestream.fill('0');
-	timestream << cur_time.tm_sec;
+	timestream << cur_time->tm_sec;
 	timestream << "] ";
 	ins_text = timestream.str() + ins_text;
 
