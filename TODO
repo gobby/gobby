@@ -4,7 +4,6 @@ Gobby
 Serious:
  * Opening large documents is _really_ slow on win32's timer implementation
  * On connection loss: give a chance to save everything
- * Gobby sometimes segfaults on exit
 
 Important:
  * Compensate changes made by others by scrolling appropriately; the current

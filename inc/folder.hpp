@@ -70,6 +70,10 @@ protected:
 
 	signal_document_update_type m_signal_document_update;
 
+	/** Signals whether the obby session is running.
+	 */
+	bool m_running;
+
 #ifdef WITH_GTKSOURCEVIEW
 	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 	MimeMap m_mime_map;

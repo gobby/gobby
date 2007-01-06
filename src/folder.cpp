@@ -20,7 +20,7 @@
 #include "folder.hpp"
 
 Gobby::Folder::Folder()
- : Gtk::Notebook()
+ : Gtk::Notebook(), m_running(false)
 #ifdef WITH_GTKSOURCEVIEW
    , m_lang_manager(Gtk::SourceLanguagesManager::create() )
 #endif
@@ -57,6 +57,7 @@ void Gobby::Folder::obby_start()
 	}
 
 	set_sensitive(true);
+	m_running = true;
 }
 
 void Gobby::Folder::obby_end()
@@ -64,6 +65,7 @@ void Gobby::Folder::obby_end()
 	// TODO: Just remove the editable-attribute to allow the user to still
 	// save the documents.
 	set_sensitive(false);
+	m_running = false;
 }
 
 void Gobby::Folder::obby_user_join(obby::user& user)
@@ -125,10 +127,21 @@ Gobby::Folder::document_update_event() const
 
 void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 {
-	// Another document has been selected: Update statusbar
-	m_signal_document_update.emit(
-		*static_cast<Document*>(get_nth_page(page_num))
-	);
+	// Do only update statusbar if an obby session is running. A switch_page
+	// event is triggered if the currently visible page is removed and
+	// anotherone is shown. This may be the case after the obby session
+	// has been closed. Therefore, the corresponding obby::documents do
+	// not exist anymore, and updating the statusbar accesses these.
+
+	// However, if the obby session has been closed the statusbar is empty,
+	// there is no need to update anything.
+	if(m_running)
+	{
+		// Another document has been selected: Update statusbar
+		m_signal_document_update.emit(
+			*static_cast<Document*>(get_nth_page(page_num))
+		);
+	}
 
 	Gtk::Notebook::on_switch_page(page, page_num);
 }
