@@ -19,33 +19,59 @@
 #ifndef _GOBBY_FINDDIALOG_HPP_
 #define _GOBBY_FINDDIALOG_HPP_
 
+#include <gtkmm/window.h>
+#include <gtkmm/separator.h>
+#include <gtkmm/box.h>
+#include <gtkmm/table.h>
+#include <gtkmm/label.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/radiobutton.h>
+#include <gtkmm/frame.h>
+
 #include "defaultdialog.hpp"
 #include "regex.hpp"
-
-#include <gtkmm.h>
 
 namespace Gobby
 {
 
 class Window;
 
-class FindDialog : public Gtk::Window
+class FindDialog: public Gtk::Window
 {
 public:
 	FindDialog(Gobby::Window& parent);
 
 	void set_search_only(bool search_only);
 protected:
-	// virtual void on_response(int response_id);
-	void on_find();
+	virtual void on_find();
+	virtual void on_replace();
+	virtual void on_replace_all();
 
-	bool find_in_line(Glib::ustring line,
-	                  std::pair<size_t, size_t>& pos);
+	/** Returns the current document or NULL if none has been opened. An
+	 * error message is shown in this case.
+	 */
+	Document* get_document();
 
-	bool search(const Gtk::TextIter& from,
-	            const Gtk::TextIter* to,
-	            Gtk::TextIter& match_start,
-	            Gtk::TextIter& match_end);
+	/** Searches for an occurence in the document and selects the text
+	 * in the docmuent if one has been found.
+	 */
+	bool search_sel(const Gtk::TextIter& from);
+
+	/** Searches for an occurence in the document from the beginning
+	 * position, wrapping around if the end (or beginning, if searching
+	 * backwards) has been reached.
+	 */
+	bool search_wrap(const Gtk::TextIter& from,
+	                 Gtk::TextIter& match_start,
+	                 Gtk::TextIter& match_end);
+
+	/** Searches for an occurence in the document within the given range.
+	 */
+	bool search_range(const Gtk::TextIter& from,
+	                  const Gtk::TextIter* to,
+	                  Gtk::TextIter& match_start,
+	                  Gtk::TextIter& match_end);
 
 	/** Searches for an occurence in the document, not looking at
 	 * whole word stuff.

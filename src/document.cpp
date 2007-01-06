@@ -239,6 +239,13 @@ void Gobby::Document::set_selection(const Gtk::TextIter& begin,
         scroll_to(get_buffer()->get_insert(), 0.1);
 }
 
+Glib::ustring Gobby::Document::get_selection_text() const
+{
+	Gtk::TextIter start, end;
+	get_buffer()->get_selection_bounds(start, end);
+	return start.get_slice(end);
+}
+
 const Glib::ustring& Gobby::Document::get_title() const
 {
 	return m_title;

@@ -55,6 +55,10 @@ public:
 	void set_selection(const Gtk::TextIter& begin,
 	                   const Gtk::TextIter& end);
 
+	/** Returns the currently selected text.
+	 */
+	Glib::ustring get_selection_text() const;
+
 	/** Returns the title of the file.
 	 */
 	const Glib::ustring& get_title() const;
@@ -66,10 +70,6 @@ public:
 	/** Changes the path to the file.
 	 */
 	void set_path(const Glib::ustring& new_path);
-
-	/** Returns whether the local user is subscribed to this document.
-	 */
-//	bool is_subscribed() const;
 
 	/** Whether this document has been modified since the last save.
 	 */
@@ -154,31 +154,6 @@ protected:
 	void on_obby_change_before();
 	void on_obby_change_after();
 
-#if 0
-	void on_obby_user_subscribe(const obby::user& user);
-	void on_obby_user_unsubscribe(const obby::user& user);
-
-	/** These are called by the on_obby_user_subscribe and
-	 * on_obby_user_unsubscribe if the user who (un)subscribed is
-	 * the local one.
-	 */
-	void on_obby_self_subscribe();
-	void on_obby_self_unsubscribe();
-#endif
-
-	/** GUI callbacks.
-	 */
-	//void on_gui_subscribe();
-
-#if 0
-	/** Drag+Drop.
-	 */
-	virtual bool on_drag_motion(
-		const Glib::RefPtr<Gdk::DragContext>& context,
-		int x, int y, guint32 time
-	);
-#endif
-
 	/** TextBuffer signal handlers.
 	 */
 	void on_insert_before(const Gtk::TextBuffer::iterator& begin,
@@ -219,17 +194,6 @@ protected:
 	 */
 	obby::local_document_info& m_doc;
 
-	/** Connections to obby's signals.
-	 */
-	/*sigc::connection m_conn_ins_before;
-	sigc::connection m_conn_ins_after;
-	sigc::connection m_conn_del_before;
-	sigc::connection m_conn_del_after;*/
-
-	/** Whether we are subscribed to this document.
-	 */
-	//bool m_subscribed;
-	
 	/** Preferences for this document.
 	 */
 	Preferences m_preferences;
@@ -242,10 +206,6 @@ protected:
 	 * true, the event is ignored.
 	 */
 	bool m_editing;
-
-	/** Button to subscribe to the document.
-	 */
-	//Gtk::Button m_btn_subscribe;
 
 	/** Document title (even available when connection has been lost).
 	 */
