@@ -95,6 +95,7 @@ endif
 
 if WITH_GNOME
 # GNOME-specific installation.
+gobby_CPPFLAGS += -DPIXMAPS_DIR=\""$(datadir)/pixmaps"\"
 appicondir = $(datadir)/pixmaps
 appicon_DATA = contrib/artwork/gobby.png
 desktopdir = $(datadir)/applications

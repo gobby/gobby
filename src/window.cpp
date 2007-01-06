@@ -292,7 +292,7 @@ void Gobby::Window::on_about()
 	dlg.set_logo(Gdk::Pixbuf::create_from_inline(512 * 128, Icon::gobby) );
 #else
 	dlg.set_logo(Gdk::Pixbuf::create_from_file(
-		"/usr/share/pixmaps/gobby.png") );
+		PIXMAPS_DIR"/gobby.png") );
 #endif
 
 	std::deque<Glib::ustring> authors;
