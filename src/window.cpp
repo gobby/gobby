@@ -55,6 +55,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
 #ifdef WITH_HOWL
    m_zeroconf(NULL),
 #endif
+   m_document_settings(*this),
    m_header(),
    m_userlist(*this, m_header, m_preferences, config["windows"]),
    m_documentlist(*this, m_header, m_preferences, config["windows"]),
@@ -279,6 +280,7 @@ void Gobby::Window::obby_start()
 
 	// Delegate start of obby session
 	m_folder.obby_start(*m_buffer);
+	m_document_settings.obby_start(*m_buffer);
 	m_userlist.obby_start(*m_buffer);
 	m_documentlist.obby_start(*m_buffer);
 	m_chat.obby_start(*m_buffer);
@@ -327,6 +329,7 @@ void Gobby::Window::obby_end()
 
 	// Tell GUI components that the session ended
 	m_folder.obby_end();
+	m_document_settings.obby_end();
 	m_userlist.obby_end();
 	m_documentlist.obby_end();
 	m_chat.obby_end();

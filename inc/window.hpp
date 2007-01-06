@@ -34,6 +34,7 @@
 #include "finddialog.hpp"
 #include "gotodialog.hpp"
 #include "folder.hpp"
+#include "document_settings.hpp"
 #include "chat.hpp"
 #include "statusbar.hpp"
 #include "dragdrop.hpp"
@@ -138,6 +139,8 @@ protected:
 
 	Gtk::Frame m_frame_chat;
 	Gtk::Frame m_frame_text;
+
+	DocumentSettings m_document_settings;
 
 	Header m_header;
 	UserList m_userlist;
