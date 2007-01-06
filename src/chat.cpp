@@ -106,5 +106,12 @@ void Gobby::Chat::on_chat()
 	if(message.empty() ) return;
 	m_ent_chat.set_text("");
 
-	m_signal_chat.emit(message);
+	// Send each line separately
+	Glib::ustring::size_type prev = 0, pos = 0;
+	while( (pos = message.find('\n', pos)) != Glib::ustring::npos)
+	{
+		m_signal_chat.emit(message.substr(prev, pos - prev) );
+		prev = ++pos;
+	}
+	m_signal_chat.emit(message.substr(prev) );
 }
