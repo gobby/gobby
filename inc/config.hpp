@@ -122,7 +122,7 @@ public:
 		virtual void save(xmlpp::Element& elem) const;
 	};
 
-	/** @brief Entry containing children entries.
+	/** @brief Entry containing child entries.
 	 */
 	class ParentEntry: public Entry
 	{
@@ -238,8 +238,8 @@ public:
 			const Glib::ustring& name,
 			const DataType& default_value = DataType(),
 			const serialise::context_base_from<DataType>& ctx_from =
-				serialise::default_context_from<DataType>()
-			const serialise::context_base_from<DataType>& ctx_to =
+				serialise::default_context_from<DataType>(),
+			const serialise::context_base_to<DataType>& ctx_to =
 				serialise::default_context_to<DataType>()
 		);
 
