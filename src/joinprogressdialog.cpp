@@ -83,6 +83,8 @@ void Gobby::JoinProgressDialog::on_done()
 		display_error(m_error);
 		// Close dialog
 		response(Gtk::RESPONSE_CANCEL);
+		// Ignore rest of function
+		return;
 	}
 
 	m_buffer->welcome_event().connect(
