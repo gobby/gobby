@@ -16,10 +16,12 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <cerrno>
 #include <stdexcept>
 #include <fstream>
 #include <ostream>
 
+#include <glibmm/miscutils.h>
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/messagedialog.h>
@@ -1000,15 +1002,39 @@ void Gobby::Window::open_local_file(const Glib::ustring& file)
 
 void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 {
-	// TODO: Replace the following by a call to obby?
-	// Build ofstream
-	std::ofstream stream(file.c_str() );
+	// Write into a temporary file, rename afterwards
+	std::list<std::string> list;
+	list.push_back(Glib::get_tmp_dir() );
+        list.push_back(Glib::path_get_basename(file) );
+	std::string temp_filename(Glib::build_filename(list) );
+	std::ofstream stream(temp_filename.c_str() );
 
 	// Could it be opened?
-	if(stream)
+	try
 	{
+		if(!stream)
+		{
+			obby::format_string str(
+				_("Could not open file '%0%' for writing")
+			);
+			str << temp_filename;
+			throw std::runtime_error(str.str() );
+		}
+
 		// Save content into file
-		stream << doc.get_content().raw() << std::endl;
+		stream << doc.get_content().raw();
+		stream.close();
+
+		// Rename file to destination path
+		if(std::rename(temp_filename.c_str(), file.c_str()) == -1)
+		{
+			obby::format_string str(
+				_("Could not save file '%0%': %1%")
+			);
+			str << file << std::strerror(errno);
+			throw std::runtime_error(str.str() );
+		}
+
 		// Set path of document
 		doc.set_path(file);
 		// Update title bar according to new path
@@ -1016,13 +1042,9 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 		// Unset modifified flag
 		doc.get_buffer()->set_modified(false);
 	}
-	else
+	catch(std::exception& e)
 	{
-		// File could not be opened
-		obby::format_string str(
-			"Could not open file '%0%' for writing");
-		str << file;
-		display_error(str.str() );
+		display_error(e.what() );
 	}
 }
 
