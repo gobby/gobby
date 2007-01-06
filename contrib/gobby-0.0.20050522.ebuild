@@ -13,6 +13,7 @@ EDARCS_GET_CMD="get --verbose --set-scripts-executable --partial"
 
 DEPEND=">=dev-cpp/gtkmm-2.6
         >=dev-libs/libsigc++-2.0
+        >=x11-libs/gtksourceview-1.2.0
 	net-libs/libobby"
 
 RDEPEND=""
@@ -21,7 +22,7 @@ inherit darcs
 
 src_compile() {
 	sh ./autogen.sh
-	econf || die "./configure failed"
+	econf --with-gnome || die "./configure failed"
 	emake || die "make failed"
 }
 
