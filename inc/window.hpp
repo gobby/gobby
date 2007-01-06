@@ -19,6 +19,9 @@
 #ifndef _GOBBY_WINDOW_HPP_
 #define _GOBBY_WINDOW_HPP_
 
+#include <queue>
+#include <memory>
+
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
@@ -28,11 +31,14 @@
 #include "icon.hpp"
 #include "config.hpp"
 #include "application_state.hpp"
+#include "ipc.hpp"
 #include "header.hpp"
 #include "docwindow.hpp"
 #include "buffer_def.hpp"
 #include "userlist.hpp"
 #include "documentlist.hpp"
+#include "hostdialog.hpp"
+#include "joindialog.hpp"
 #include "finddialog.hpp"
 #include "gotodialog.hpp"
 #include "folder.hpp"
@@ -58,6 +64,18 @@ public:
 	 */
 	DocWindow* get_current_document();
 
+	/** @brief Opens a session with the current default settings.
+	 *
+	 * If initial_dialog is true a dialog to turn the host parameters is
+	 * opened, otherwise the default settings are taken.
+	 *
+	 * If the session opening failed, a dialog appears where the user
+	 * might adjust settings or abort.
+	 *
+	 * This function must not be called when a buffer is already open.
+	 */
+	bool session_open(bool initial_dialog);
+
 	/** Opens a document containing the content of a file mounted on the
 	 * local filesystem.
 	 */
@@ -72,6 +90,8 @@ public:
 protected:
 	// Gtk::Window overrides
 	virtual bool on_delete_event(GdkEventAny* event);
+	virtual void on_realize();
+
 	void on_chat_realize();
 
 	// Start/End obby session
@@ -124,12 +144,20 @@ protected:
 	void on_obby_document_insert(DocumentInfo& document);
 	void on_obby_document_remove(DocumentInfo& document);
 
+	// IPC signal handlers
+	void on_ipc_file(const std::string& file);
+
 	// Helper functions
 	void apply_preferences();
 	void update_title_bar();
 	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message,
 	                   const Gtk::MessageType type = Gtk::MESSAGE_ERROR);
+	bool session_open_impl(unsigned int port,
+	                       const Glib::ustring& name,
+	                       const Gdk::Color& color,
+	                       const Glib::ustring& password,
+	                       const Glib::ustring& session);
 
 	// Config
 	Config& m_config;
@@ -147,8 +175,6 @@ protected:
 	// GUI
 	Gtk::VBox m_mainbox;
 	Gtk::VPaned m_mainpaned;
-
-	//Gtk::Frame m_frame_action;
 
 	Gtk::Frame m_frame_chat;
 	Gtk::Frame m_frame_text;
@@ -172,6 +198,15 @@ protected:
 	/** Drag+Drop handler
 	 */
 	std::auto_ptr<DragDrop> m_dnd;
+
+	/** Local IPC handler
+	 */
+	std::auto_ptr<Ipc::LocalInstance> m_ipc;
+	std::queue<std::string> m_file_queue;
+
+	// Dialogs
+	std::auto_ptr<HostDialog> m_host_dlg;
+	std::auto_ptr<JoinDialog> m_join_dlg;
 
 	// obby
 	std::auto_ptr<LocalBuffer> m_buffer;

@@ -39,8 +39,6 @@
 #include "passworddialog.hpp"
 #include "entrydialog.hpp"
 #include "preferencesdialog.hpp"
-#include "joindialog.hpp"
-#include "hostdialog.hpp"
 #include "joinprogressdialog.hpp"
 #include "hostprogressdialog.hpp"
 #include "window.hpp"
@@ -254,6 +252,25 @@ bool Gobby::Window::on_delete_event(GdkEventAny* event)
 	return dlg.run() != Gtk::RESPONSE_YES;
 }
 
+void Gobby::Window::on_realize()
+{
+	Gtk::Window::on_realize();
+
+	// Create new IPC instance
+	try
+	{
+		m_ipc.reset(new Ipc::LocalInstance(*this) );
+		m_ipc->file_event().connect(
+			sigc::mem_fun(*this, &Window::on_ipc_file)
+		);
+	}
+	catch(net6::error& e)
+	{
+		// Whatever...
+		display_error(e.what() );
+	}
+}
+
 void Gobby::Window::on_chat_realize()
 {
 	m_mainpaned.set_position(m_mainpaned.get_height() * 3 / 5);
@@ -375,72 +392,29 @@ void Gobby::Window::obby_end()
 
 void Gobby::Window::on_session_create()
 {
-	// Show up host dialog
-	HostDialog dlg(*this, m_config);
-	while(dlg.run() == Gtk::RESPONSE_OK)
-	{
-		dlg.hide();
-
-		// Read setting
-		unsigned int port = dlg.get_port();
-		Glib::ustring name = dlg.get_name();
-		Gdk::Color color = dlg.get_color();	
-		Glib::ustring password = dlg.get_password();
-		Glib::ustring session = dlg.get_session();
-
-		// Set up host with hostprogressdialog
-		HostProgressDialog prgdlg(
-			*this, m_config, port, name, color, session);
-		if(prgdlg.run() == Gtk::RESPONSE_OK)
-		{
-			prgdlg.hide();
-
-			// Get buffer
-			std::auto_ptr<HostBuffer> buffer =
-				prgdlg.get_buffer();
-
-			// Set password
-			buffer->set_global_password(password);
-#ifdef WITH_HOWL
-			// Publish the newly created session via Zeroconf
-			// if Howl is not deactivated
-			if(m_zeroconf.get() )
-				m_zeroconf->publish(name, port);
-#endif
-
-			obby::format_string str(_("Serving on port %0%") );
-			str << port;
-			m_statusbar.update_connection(str.str() );
-
-			m_buffer = buffer;
-
-			// Start session
-			obby_start();
-			// Remember session file
-			m_prev_session = Glib::filename_from_utf8(session);
-			// Session is open, no need to reshow host dialog
-			break;
-		}
-	}
+	session_open(true);
 }
 
 void Gobby::Window::on_session_join()
 {
-#ifndef WITH_HOWL
-	JoinDialog dlg(*this, m_config);
-#else
-	JoinDialog dlg(*this, m_config, m_zeroconf.get() );
-#endif
-
-	while(dlg.run() == Gtk::RESPONSE_OK)
+	if(m_join_dlg.get() == NULL)
 	{
-		dlg.hide();
+#ifndef WITH_HOWL
+		m_join_dlg.reset(new JoinDialog(*this, m_config) );
+#else
+		m_join_dlg.reset(
+			new JoinDialog(*this, m_config, m_zeroconf.get())
+		);
+#endif
+	}
 
+	while(m_join_dlg->run() == Gtk::RESPONSE_OK)
+	{
 		// Read settings
-		Glib::ustring host = dlg.get_host();
-		unsigned int port = dlg.get_port();
-		Glib::ustring name = dlg.get_name();
-		Gdk::Color color = dlg.get_color();
+		Glib::ustring host = m_join_dlg->get_host();
+		unsigned int port = m_join_dlg->get_port();
+		Glib::ustring name = m_join_dlg->get_name();
+		Gdk::Color color = m_join_dlg->get_color();
 
 		JoinProgressDialog prgdlg(
 			*this, m_config, host, port, name, color);
@@ -467,6 +441,8 @@ void Gobby::Window::on_session_join()
 			break;
 		}
 	}
+
+	m_join_dlg->hide();
 }
 
 void Gobby::Window::on_session_save()
@@ -1089,6 +1065,33 @@ void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
 	m_statusbar.obby_document_remove(local_doc);
 }
 
+void Gobby::Window::on_ipc_file(const std::string& file)
+{
+	// Open local file directly if buffer is open
+	if(m_buffer.get() != NULL && m_buffer->is_open() )
+	{
+		open_local_file(file, EncodingSelector::AUTO_DETECT);
+		return;
+	}
+
+	// Otherwise, push the file back into the file queue.
+	bool was_empty = m_file_queue.empty();
+	m_file_queue.push(file);
+
+	// If the file queue is empty, open a new session. The queue will
+	// be cleared either if the session has finished (either with success
+	// or not).
+
+	// TODO: Find a better condition for when the session is currently
+	// being opened. Checking whether the file queue is empty is not
+	// good because the user might manually open a session while an
+	// IPC file request comes in...
+	if(was_empty)
+	{
+		session_open(false);
+	}
+}
+
 Gobby::DocWindow* Gobby::Window::get_current_document()
 {
 	if(m_folder.get_n_pages() == 0) return NULL;
@@ -1157,6 +1160,98 @@ namespace
 			// Convert Macintosh CR to LF
 			else if(str[i] == '\r')
 				str[i] = '\n';
+	}
+}
+
+bool Gobby::Window::session_open(bool initial_dialog)
+{
+	if(m_buffer.get() && m_buffer->is_open() )
+	{
+		throw std::logic_error(
+			"Gobby::Window::session_open:\n"
+			"Buffer is already open"
+		);
+	}
+
+	if(m_host_dlg.get() == NULL)
+		m_host_dlg.reset(new HostDialog(*this, m_config) );
+
+	int response = Gtk::RESPONSE_OK;
+	if(initial_dialog) response = m_host_dlg->run();
+
+	while(response == Gtk::RESPONSE_OK)
+	{
+		// Read setting
+		unsigned int port = m_host_dlg->get_port();
+		Glib::ustring name = m_host_dlg->get_name();
+		Gdk::Color color = m_host_dlg->get_color();
+		Glib::ustring password = m_host_dlg->get_password();
+		Glib::ustring session = m_host_dlg->get_session();
+
+		if(session_open_impl(port, name, color, password, session) )
+			break;
+		else
+			response = m_host_dlg->run();
+	}
+
+	// Process file queue (files that have been queued for opening
+	// after session creation).
+	m_host_dlg->hide();
+	while(!m_file_queue.empty() )
+	{
+		std::string str = m_file_queue.front();
+		m_file_queue.pop();
+
+		if(m_buffer.get() && m_buffer->is_open() )
+			open_local_file(str, EncodingSelector::AUTO_DETECT);
+	}
+
+	return (m_buffer.get() && m_buffer->is_open() );
+}
+
+bool Gobby::Window::session_open_impl(unsigned int port,
+                                      const Glib::ustring& name,
+                                      const Gdk::Color& color,
+                                      const Glib::ustring& password,
+                                      const Glib::ustring& session)
+{
+	// Set up host with hostprogressdialog
+	HostProgressDialog prgdlg(*this, m_config, port, name, color, session);
+
+	if(prgdlg.run() == Gtk::RESPONSE_OK)
+	{
+		prgdlg.hide();
+
+		// Get buffer
+		std::auto_ptr<HostBuffer> buffer =
+			prgdlg.get_buffer();
+
+		// Set password
+		buffer->set_global_password(password);
+#ifdef WITH_HOWL
+		// Publish the newly created session via Zeroconf
+		// if Howl is not deactivated
+		if(m_zeroconf.get() )
+			m_zeroconf->publish(name, port);
+#endif
+
+		obby::format_string str(_("Serving on port %0%") );
+		str << port;
+		m_statusbar.update_connection(str.str() );
+
+		m_buffer = buffer;
+
+		// Start session
+		obby_start();
+		// Remember session file
+		m_prev_session = Glib::filename_from_utf8(session);
+		// Session is open, no need to reshow host dialog
+		return true;
+	}
+	else
+	{
+		// Session opening did not succeed
+		return false;
 	}
 }
 

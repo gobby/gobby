@@ -19,6 +19,7 @@
 #ifndef _GOBBY_JOINPROGRESSDIALOG_HPP_
 #define _GOBBY_JOINPROGRESSDIALOG_HPP_
 
+#include <gtkmm/colorbutton.h>
 #include <obby/error.hpp>
 #include "buffer_def.hpp"
 #include "progressdialog.hpp"

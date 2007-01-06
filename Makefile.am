@@ -15,8 +15,13 @@ gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows win32/gobby.res
 endif
 
 noinst_HEADERS = inc/icon.hpp
+if WIN32
+else
+noinst_HEADERS += inc/unix.hpp
+endif
 noinst_HEADERS += inc/atomic.hpp
 noinst_HEADERS += inc/gselector.hpp
+noinst_HEADERS += inc/ipc.hpp
 noinst_HEADERS += inc/config.hpp
 noinst_HEADERS += inc/common.hpp
 noinst_HEADERS += inc/encoding.hpp
@@ -68,8 +73,13 @@ BUILT_SOURCES = win32/gobby.res
 endif
 
 gobby_SOURCES = src/icon.cpp
+if WIN32
+else
+gobby_SOURCES += src/unix.cpp
+endif
 gobby_SOURCES += src/atomic.cpp
 gobby_SOURCES += src/gselector.cpp
+gobby_SOURCES += src/ipc.cpp
 gobby_SOURCES += src/config.cpp
 gobby_SOURCES += src/common.cpp
 gobby_SOURCES += src/encoding.cpp
