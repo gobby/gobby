@@ -27,18 +27,15 @@ Gobby::PreferencesDialog::Page::Page(const Preferences& preferences)
 	set_shadow_type(Gtk::SHADOW_NONE);
 }
 
-Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences)
+Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences,
+                                         Gtk::Tooltips& tooltips)
  : Page(preferences), m_frame_tab(_("Tab Stops") ),
    m_frame_indentation(_("Indentation") ),
    m_frame_homeend(_("Home/End behaviour") ),
    m_lbl_tab_width(_("Tab width:"), Gtk::ALIGN_RIGHT),
    m_btn_tab_spaces(_("Insert spaces instead of tabs") ),
    m_btn_indentation_auto(_("Enable automatic indentation") ),
-   m_btn_homeend_smart(_("Smart home/end") ),
-   m_ep_homeend_smart(_("What is this?") ),
-   m_lbl_homeend_smart(_("With smart Home/End enabled, Home/End keys move to "
-                         "first/last character before going to the start/end "
-                         "of the line."), Gtk::ALIGN_LEFT)
+   m_btn_homeend_smart(_("Smart home/end") )
 {
 	unsigned int tab_width = preferences.editor.tab_width;
 	bool tab_spaces = preferences.editor.tab_spaces;
@@ -49,8 +46,10 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences)
 	m_ent_tab_width.set_value(tab_width);
 	m_ent_tab_width.set_increments(1, 1);
 
-	m_lbl_homeend_smart.set_line_wrap(true);
-	m_ep_homeend_smart.add(m_lbl_homeend_smart);
+	// TODO: Improve this description
+	tooltips.set_tip(m_btn_homeend_smart,
+		_("With this option enabled, Home/End keys move to first/last "
+		  "character before going to the start/end of the line.") );
 
 	m_box_tab_width.set_spacing(5);
 	m_box_tab_width.pack_start(m_lbl_tab_width, Gtk::PACK_SHRINK);
@@ -72,7 +71,6 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences)
 	m_box_homeend.set_spacing(5);
 	m_box_homeend.set_border_width(5);
 	m_box_homeend.pack_start(m_btn_homeend_smart, Gtk::PACK_SHRINK);
-	m_box_homeend.pack_start(m_ep_homeend_smart, Gtk::PACK_SHRINK);
 
 	m_frame_tab.add(m_box_tab);
 	m_frame_indentation.add(m_box_indentation);
@@ -150,7 +148,6 @@ Gobby::PreferencesDialog::View::View(const Preferences& preferences)
 	m_box_margin_pos.set_spacing(5);
 	m_box_margin_pos.pack_start(m_lbl_margin_pos, Gtk::PACK_SHRINK);
 	m_box_margin_pos.pack_start(m_ent_margin_pos, Gtk::PACK_EXPAND_WIDGET);
-
 	m_box_wrap.set_spacing(5);
 	m_box_wrap.set_border_width(5);
 	m_box_wrap.pack_start(m_btn_wrap_text, Gtk::PACK_SHRINK);
@@ -256,7 +253,7 @@ Gobby::PreferencesDialog::Security::~Security()
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
                                             const Preferences& preferences)
  : Gtk::Dialog(_("Preferences"), parent, true),
-   m_page_editor(preferences), m_page_view(preferences),
+   m_page_editor(preferences, m_tooltips), m_page_view(preferences),
    m_page_appearance(preferences)
 {
 	m_notebook.append_page(m_page_editor, _("Editor") );

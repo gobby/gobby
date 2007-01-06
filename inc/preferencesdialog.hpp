@@ -27,6 +27,7 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/notebook.h>
+#include <gtkmm/tooltips.h>
 #include "preferences.hpp"
 
 namespace Gobby
@@ -47,7 +48,8 @@ public:
 	class Editor : public Page
 	{
 	public:
-		Editor(const Preferences& preferences);
+		Editor(const Preferences& preferences,
+		       Gtk::Tooltips& tooltips);
 		~Editor();
 
 		unsigned int get_tab_width() const;
@@ -73,8 +75,6 @@ public:
 
 		Gtk::VBox m_box_homeend;
 		Gtk::CheckButton m_btn_homeend_smart;
-		Gtk::Label m_lbl_homeend_smart;
-		Gtk::Expander m_ep_homeend_smart;
 	};
 
 	class View : public Page
@@ -165,6 +165,7 @@ public:
 
 protected:
 	Gtk::Notebook m_notebook;
+	Gtk::Tooltips m_tooltips;
 
 	Editor m_page_editor;
 	View m_page_view;
