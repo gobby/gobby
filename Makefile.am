@@ -92,7 +92,7 @@ appicondir = $(datadir)/pixmaps
 appicon_DATA = contrib/artwork/gobby.png
 desktopdir = $(datadir)/applications
 desktop_DATA = contrib/gobby.desktop
-fi
+endif
 
 EXTRA_DIST =  contrib/artwork/CREDITS
 EXTRA_DIST += contrib/artwork/gobby.png
