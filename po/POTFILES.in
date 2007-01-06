@@ -2,6 +2,7 @@
 
 src/chat.cpp
 src/header.cpp
+src/preferencesdialog.cpp
 src/hostdialog.cpp
 src/joindialog.cpp
 src/userlist.cpp

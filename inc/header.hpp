@@ -55,6 +55,7 @@ public:
 	typedef sigc::signal<void> signal_document_open_type;
 	typedef sigc::signal<void> signal_document_save_type;
 	typedef sigc::signal<void> signal_document_close_type;
+	typedef sigc::signal<void> signal_edit_preferences_type;
 	typedef sigc::signal<void> signal_user_set_password_type;
 	typedef sigc::signal<void> signal_document_word_wrap_type;
 #ifdef WITH_GTKSOURCEVIEW
@@ -84,6 +85,7 @@ public:
 	signal_document_open_type document_open_event() const;
 	signal_document_save_type document_save_event() const;
 	signal_document_close_type document_close_event() const;
+	signal_edit_preferences_type edit_preferences_event() const;
 	signal_user_set_password_type user_set_password_event() const;
 	signal_document_word_wrap_type document_word_wrap_event() const;
 #ifdef WITH_GTKSOURCEVIEW
@@ -109,6 +111,7 @@ protected:
 	void on_app_document_open();
 	void on_app_document_save();
 	void on_app_document_close();
+	void on_app_edit_preferences();
 	void on_app_user_set_password();
 	void on_app_document_word_wrap();
 #ifdef WITH_GTKSOURCEVIEW
@@ -152,6 +155,7 @@ protected:
 	signal_document_open_type m_signal_document_open;
 	signal_document_save_type m_signal_document_save;
 	signal_document_close_type m_signal_document_close;
+	signal_edit_preferences_type m_signal_edit_preferences;
 	signal_user_set_password_type m_signal_user_set_password;
 	signal_document_word_wrap_type m_signal_document_word_wrap;
 #ifdef WITH_GTKSOURCEVIEW

@@ -63,6 +63,8 @@ protected:
 	void on_document_save();
 	void on_document_close();
 
+	void on_edit_preferences();
+
 	void on_user_set_password();
 
 	void on_document_word_wrap();

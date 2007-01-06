@@ -44,6 +44,9 @@ namespace {
 		"      <menuitem action=\"SaveDocument\" />"
 		"      <menuitem action=\"CloseDocument\" />"
 		"    </menu>"
+		"    <menu action=\"MenuEdit\">"
+		"      <menuitem action=\"EditPreferences\" />"
+		"    </menu>"
 		"    <menu action=\"MenuUser\">"
 		"      <menuitem action=\"UserSetPassword\" />"
 		"    </menu>"
@@ -244,6 +247,23 @@ Gobby::Header::Header(const Folder& folder)
 		sigc::mem_fun(
 			*this,
 			&Header::on_app_document_close
+		)
+	);
+
+	// Edit menu
+	m_group_app->add(Gtk::Action::create("MenuEdit", _("Edit")) );
+
+	// Preferences
+	m_group_app->add(
+		Gtk::Action::create(
+			"EditPreferences",
+			Gtk::Stock::PREFERENCES,
+			_("Preferences"),
+			_("Shows up a dialog to set up gobby to your needs")
+		),
+		sigc::mem_fun(
+			*this,
+			&Header::on_app_edit_preferences
 		)
 	);
 
@@ -487,6 +507,12 @@ Gobby::Header::document_close_event() const
 	return m_signal_document_close;
 }
 
+Gobby::Header::signal_edit_preferences_type
+Gobby::Header::edit_preferences_event() const
+{
+	return m_signal_edit_preferences;
+}
+
 Gobby::Header::signal_user_set_password_type
 Gobby::Header::user_set_password_event() const
 {
@@ -633,6 +659,11 @@ void Gobby::Header::on_app_document_save()
 void Gobby::Header::on_app_document_close()
 {
 	m_signal_document_close.emit();
+}
+
+void Gobby::Header::on_app_edit_preferences()
+{
+	m_signal_edit_preferences.emit();
 }
 
 void Gobby::Header::on_app_user_set_password()

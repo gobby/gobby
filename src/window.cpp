@@ -32,6 +32,7 @@
 
 #include "common.hpp"
 #include "docwindow.hpp"
+#include "preferencesdialog.hpp"
 #include "joindialog.hpp"
 #include "hostdialog.hpp"
 #include "joinprogressdialog.hpp"
@@ -65,6 +66,9 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_document_save) );
 	m_header.document_close_event().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
+
+	m_header.edit_preferences_event().connect(
+		sigc::mem_fun(*this, &Window::on_edit_preferences) );
 
 	m_header.user_set_password_event().connect(
 		sigc::mem_fun(*this, &Window::on_user_set_password) );
@@ -424,6 +428,14 @@ void Gobby::Window::on_document_close()
 {
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
 	close_document(*static_cast<DocWindow*>(page) );
+}
+
+void Gobby::Window::on_edit_preferences()
+{
+	PreferencesDialog dlg(*this, m_config);
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+	}
 }
 
 void Gobby::Window::on_user_set_password()
