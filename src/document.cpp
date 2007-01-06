@@ -204,6 +204,11 @@ Glib::RefPtr<Gtk::SourceLanguage> Gobby::Document::get_language() const
 }
 #endif
 
+Glib::ustring Gobby::Document::get_content()
+{
+	return m_view.get_buffer()->get_text();
+}
+
 void Gobby::Document::obby_user_join(obby::user& user)
 {
 	// Build tag name for this user

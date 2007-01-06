@@ -59,6 +59,13 @@ public:
 	Glib::RefPtr<Gtk::SourceLanguage> get_language() const;
 #endif
 
+	/** Returns the document content. Equivalent to
+	 * get_document().get_whole_buffer(), but it may be used even if the
+	 * obby buffer does not exist anymore (in which case get_document()
+	 * returns an invalid reference!)
+	 */
+	Glib::ustring get_content();
+
 	/** Signal which will be emitted if the document gets updated in a way
 	 * that is interesting for the status bar.
 	 */

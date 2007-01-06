@@ -61,6 +61,10 @@ public:
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
 	Glib::RefPtr<const Gtk::AccelGroup> get_accel_group() const;
 
+	// Disables close and save buttons. The windows calls this after
+	// all remaining documents have been closed after a connection loss.
+	void disable_close_save();
+
 	signal_session_create_type session_create_event() const;
 	signal_session_join_type session_join_event() const;
 	signal_session_quit_type session_quit_event() const;

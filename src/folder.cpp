@@ -62,9 +62,13 @@ void Gobby::Folder::obby_start()
 
 void Gobby::Folder::obby_end()
 {
-	// TODO: Just remove the editable-attribute to allow the user to still
-	// save the documents.
-	set_sensitive(false);
+	// Insensitive just the text editor to allow to scroll and tab between
+	// the documents
+	for(unsigned int i = 0; i < get_n_pages(); ++ i)
+		static_cast<Document*>(
+			get_nth_page(i)
+		)->get_child()->set_sensitive(false);
+
 	m_running = false;
 }
 
@@ -108,7 +112,7 @@ void Gobby::Folder::obby_document_remove(obby::document& document)
 	// Find corresponding Document widget in notebook
 	for(int i = 0; i < get_n_pages(); ++ i)
 	{
-		Widget* doc = get_nth_page(i);
+		Gtk::Widget* doc = get_nth_page(i);
 		if(&static_cast<Document*>(doc)->get_document() == &document)
 		{
 			// Delete it.

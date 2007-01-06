@@ -248,6 +248,12 @@ Glib::RefPtr<const Gtk::AccelGroup> Gobby::Header::get_accel_group() const
 	return m_ui_manager->get_accel_group();
 }
 
+void Gobby::Header::disable_close_save()
+{
+	m_group_app->get_action("SaveDocument")->set_sensitive(false);
+	m_group_app->get_action("CloseDocument")->set_sensitive(false);
+}
+
 Gobby::Header::signal_session_create_type
 Gobby::Header::session_create_event() const
 {
@@ -329,8 +335,9 @@ void Gobby::Header::obby_end()
 	// Disable document buttons
 	m_group_app->get_action("CreateDocument")->set_sensitive(false);
 	m_group_app->get_action("OpenDocument")->set_sensitive(false);
-	m_group_app->get_action("SaveDocument")->set_sensitive(false);
-	m_group_app->get_action("CloseDocument")->set_sensitive(false);
+
+	// Leave SaveDocument and CloseDocument as they were to allow the user
+	// to save documents.
 }
 
 void Gobby::Header::obby_user_join(obby::user& user)

@@ -312,26 +312,63 @@ void Gobby::Window::on_document_open()
 void Gobby::Window::on_document_save()
 {
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	obby::document& doc = static_cast<Document*>(page)->get_document();
+	Document& doc = *static_cast<Document*>(page);
 
 	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
 			Gtk::FILE_CHOOSER_ACTION_SAVE);
-	dlg.set_current_name(doc.get_title() );
+	dlg.set_current_name(m_folder.get_tab_label_text(doc) );
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
 		std::ofstream stream(dlg.get_filename().c_str() );
-		stream << doc.get_whole_buffer() << std::endl;
+
+		if(stream)
+		{
+			stream << doc.get_content() << std::endl;
+		}
+		else
+		{
+			display_error(
+				"Could not open file " +
+				dlg.get_filename() +
+				" for writing"
+			);
+		}
 	}
 }
 
 void Gobby::Window::on_document_close()
 {
-	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
-	m_buffer->remove_document(
-		static_cast<Document*>(page)->get_document() );
+	if(m_buffer)
+	{
+		// Get current page
+		Widget* page = m_folder.get_nth_page(
+			m_folder.get_current_page()
+		);
+
+		// Send remove document request
+		m_buffer->remove_document(
+			static_cast<Document*>(page)->get_document()
+		);
+	}
+	else
+	{
+		// Buffer does not exist: Maybe the connection has been lost
+		// or something: Just remove the document from the folder.
+		Gtk::Widget* doc = m_folder.get_nth_page(
+			m_folder.get_current_page()
+		);
+
+		m_folder.remove_page(m_folder.get_current_page() );
+		delete doc;
+
+		// If there are no more documents disable
+		// save and close buttons in header
+		if(!m_folder.get_n_pages() )
+			m_header.disable_close_save();
+	}
 }
 
 void Gobby::Window::on_quit()
