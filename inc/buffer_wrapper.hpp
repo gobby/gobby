@@ -43,7 +43,7 @@
 #include <libobby/client_buffer.hpp>
 #include <libobby/host_buffer.hpp>
 
-#ifndef WIN32
+#ifdef WIN32
 # include "buffer_wrapper_win32.hpp"
 #else
 # include "buffer_wrapper_generic.hpp"
