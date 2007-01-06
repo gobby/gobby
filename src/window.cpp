@@ -19,13 +19,16 @@
 #include <stdexcept>
 #include <fstream>
 #include <ostream>
+
 #include <gtkmm/main.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/stock.h>
+
 #include <obby/client_buffer.hpp>
 #include <obby/host_buffer.hpp>
+
 #include "common.hpp"
 #include "buffer_wrapper.hpp"
 #include "document.hpp"
@@ -97,6 +100,21 @@ Gobby::Window::Window()
 Gobby::Window::~Window()
 {
 	on_session_quit();
+}
+
+void Gobby::Window::on_realize()
+{
+	Gtk::Window::on_realize();
+
+	// Initialize paned sizes. This cannot be done in the constructor
+	// because the widget's sizes are not known.
+	int submin = m_subpaned.property_min_position();
+	int submax = m_subpaned.property_max_position();
+	int mainmin = m_mainpaned.property_min_position();
+	int mainmax = m_mainpaned.property_max_position();
+
+	m_subpaned.set_position(submin + (submax - submin) * 4 / 5);
+	m_mainpaned.set_position(mainmin + (mainmax - mainmin) * 3 / 4);
 }
 
 void Gobby::Window::on_session_create() try
@@ -423,6 +441,10 @@ void Gobby::Window::on_obby_server_chat(const Glib::ustring& message)
 void Gobby::Window::on_obby_user_join(obby::user& user)
 {
 	// TODO: Something like is_client to prevent dynamic_cast?
+	// TODO: local_buffer should fix this issue because the host does not
+	// send a user_join for the local user (well, it does, but it does
+	// it in its constructor - no signal handler could have been
+	// connected at this time).
 	obby::client_buffer* buf = dynamic_cast<obby::client_buffer*>(m_buffer);
 	if(buf)
 	{

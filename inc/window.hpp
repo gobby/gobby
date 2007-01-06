@@ -40,6 +40,9 @@ public:
 	~Window();
 
 protected:
+	// Gtk::Window overrides
+	virtual void on_realize();
+
 	// UI handler
 	void on_session_create();
 	void on_session_join();
