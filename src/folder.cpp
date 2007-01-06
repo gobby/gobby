@@ -158,6 +158,34 @@ void Gobby::Folder::obby_user_colour(const obby::user& user)
 			get_nth_page(i) )->obby_user_colour(user);
 }
 
+namespace
+{
+	// Escape special HTML entities to prevent that the tab label gets
+	// messed
+	// TODO: I think this type signature is just plainly wrong -- phil
+	std::string escapehtml(std::string str)
+	{
+		std::string::size_type pos = 0;
+		while( (pos = str.find_first_of("&<>", pos))
+			!= std::string::npos)
+		{
+			switch(str[pos])
+			{
+			case '&':
+				str.replace(pos, 1, "&amp;");
+				break;
+			case '<':
+				str.replace(pos, 1, "&lt;");
+				break;
+			case '>':
+				str.replace(pos, 1, "&gt;");
+			}
+			++pos;
+		}
+		return str;
+	}
+}
+
 void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 {
 	// Create new document
@@ -206,8 +234,8 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 
 	// Create label for the tab
 	TabLabel* label = Gtk::manage(new TabLabel(
-		"<span foreground=\"#666666\">" + document.get_title()
-		+ "</span>"));
+		"<span foreground=\"#666666\">" +
+		escapehtml(document.get_title() ) + "</span>"));
 	label->set_use_markup();
 
 	// Connect close event
@@ -293,7 +321,7 @@ void Gobby::Folder::set_tab_colour(DocWindow& win, const Glib::ustring& colour)
 {
 	TabLabel& label = *static_cast<TabLabel*>(get_tab_label(win) );
 	label.set_label("<span foreground=\"" + colour + "\">" +
-		label.get_label() + "</span>");
+		escapehtml(label.get_label() ) + "</span>");
 	label.set_use_markup();	
 }
 
