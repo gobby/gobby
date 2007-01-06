@@ -87,6 +87,8 @@ Gobby::Folder::Folder(Header& header,
 	Gtk::Notebook(), m_header(header), m_preferences(preferences),
 	m_buffer(NULL), m_block_language(false)
 {
+	set_scrollable(true);
+
 	for(std::list<Header::LanguageWrapper>::const_iterator iter =
 		m_header.action_view_syntax_languages.begin();
 	    iter != m_header.action_view_syntax_languages.end();
