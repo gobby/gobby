@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-04 03:07+0200\n"
+"POT-Creation-Date: 2006-06-07 22:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,7 +156,7 @@ msgid "Preferences..."
 msgstr ""
 
 #: src/header.cpp:344
-msgid "Shows up a dialog to customise Gobby for your needs"
+msgid "Displays a dialog to customise Gobby for your needs"
 msgstr ""
 
 #: src/header.cpp:348
@@ -200,15 +200,15 @@ msgid "_Window"
 msgstr ""
 
 #: src/header.cpp:389
-msgid "Shows up a list of users that are currently joined"
+msgid "Displays a list of users that are currently joined"
 msgstr ""
 
 #: src/header.cpp:398
-msgid "Shows up a list of documents within the current session"
+msgid "Displays a list of documents within the current session"
 msgstr ""
 
 #: src/header.cpp:408
-msgid "Shows up a chat to talk to other people in the session"
+msgid "Displays a chat to talk to other people in the session"
 msgstr ""
 
 #: src/header.cpp:413

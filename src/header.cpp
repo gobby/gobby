@@ -341,7 +341,7 @@ Gobby::Header::Header(const ApplicationState& state,
 			"EditPreferences",
 			Gtk::Stock::PREFERENCES,
 			_("Preferences..."),
-			_("Shows up a dialog to customise Gobby for your needs")
+			_("Displays a dialog to customise Gobby for your needs")
 		)
 	),
 
@@ -386,7 +386,7 @@ Gobby::Header::Header(const ApplicationState& state,
 			"WindowUserList",
 			IconManager::STOCK_USERLIST,
 			_("User list"),
-			_("Shows up a list of users that are currently joined")
+			_("Displays a list of users that are currently joined")
 		)
 	),
 
@@ -395,7 +395,7 @@ Gobby::Header::Header(const ApplicationState& state,
 			"WindowDocumentList",
 			IconManager::STOCK_DOCLIST,
 			_("Document list"),
-			_("Shows up a list of documents within the "
+			_("Displays a list of documents within the "
 			  "current session")
 		)
 	),
@@ -405,7 +405,7 @@ Gobby::Header::Header(const ApplicationState& state,
 			"WindowChat",
 			IconManager::STOCK_CHAT,
 			_("Chat"),
-			_("Shows up a chat to talk to other people in "
+			_("Displays a chat to talk to other people in "
 			  "the session")
 		)
 	),
