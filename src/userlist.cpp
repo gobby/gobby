@@ -21,6 +21,8 @@
 
 namespace
 {
+	/** Creates a pixbuf representing a user's colour.
+	 */
 	Glib::RefPtr<Gdk::Pixbuf> create_coloured_pixbuf(int red, int green,
 	                                                 int blue)
 	{
@@ -45,6 +47,7 @@ namespace
 				pixels += 3;
 			}
 		}
+
 		return pixbuf;
 	}
 }
@@ -52,27 +55,59 @@ namespace
 
 Gobby::UserList::Columns::Columns()
 {
+	add(colour);
 	add(name);
-	add(color);
+	add(connected);
+	add(subscribed);
 }
 
 Gobby::UserList::Columns::~Columns()
 {
 }
 
-Gobby::UserList::UserList()
+Gobby::UserList::UserList(const Folder& folder)
+ : m_info(NULL)
 {
 	m_list_data = Gtk::ListStore::create(m_list_cols);
 	m_list_view.set_model(m_list_data);
 
-	m_list_view.append_column(_("Colour"), m_list_cols.color);
+	m_list_view.append_column(_("Colour"), m_list_cols.colour);
 	m_list_view.append_column(_("Name"), m_list_cols.name);
+	m_list_view.append_column(_("Connected"), m_list_cols.connected);
+	m_list_view.append_column(_("Subscribed"), m_list_cols.subscribed);
+
+	// Store TreeViewColumns
+	m_view_col_colour = m_list_view.get_column(0);
+	m_view_col_name = m_list_view.get_column(1);
+	m_view_col_connected = m_list_view.get_column(2);
+	m_view_col_subscribed = m_list_view.get_column(3);
+
+	// Let the user sort by these columns
+	m_view_col_name->set_sort_column(m_list_cols.name);
+	m_view_col_connected->set_sort_column(m_list_cols.connected);
+	m_view_col_subscribed->set_sort_column(m_list_cols.subscribed);
+
+	// Let the user reorder the columns
+	for(int i = 0; i < 4; ++ i)
+		m_list_view.get_column(i)->set_reorderable(true);
+
+	// No users can be selected
+	m_list_view.get_selection()->set_mode(Gtk::SELECTION_NONE);
+
+	// Hide subscription column until a document has been inserted
+	m_view_col_subscribed->set_visible(false);
 
 	set_shadow_type(Gtk::SHADOW_IN);
 	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	set_sensitive(false);
+
 	add(m_list_view);
 
-	set_sensitive(false);
+	// Connect tab_switched_event from folder to change subscribed flag
+	// according to current document.
+	folder.tab_switched_event().connect(
+		sigc::mem_fun(*this, &UserList::on_folder_tab_switched) );
+
 }
 
 Gobby::UserList::~UserList()
@@ -81,53 +116,122 @@ Gobby::UserList::~UserList()
 
 void Gobby::UserList::obby_start(obby::local_buffer& buf)
 {
+	// Enable list
 	set_sensitive(true);
 }
 
 void Gobby::UserList::obby_end()
 {
+	// Clear list
+	m_info = NULL;
 	m_list_data->clear();
+	// Hide subscription column
+	m_view_col_subscribed->set_visible(false);
+	// Disable list item
 	set_sensitive(false);
 }
 
 void Gobby::UserList::obby_user_join(obby::user& user)
 {
-	Gtk::TreeModel::Row row = *(m_list_data->append() );
-
-	unsigned int red = user.get_red();
-	unsigned int green = user.get_green();
-	unsigned int blue = user.get_blue();
-
-	row[m_list_cols.name] = user.get_name();
-	row[m_list_cols.color] = create_coloured_pixbuf(red, green, blue);
+	// Is there already such a user?
+	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
+	if(iter == m_list_data->children().end() )
+	{
+		// No, so add the user to the list
+		add_user(user);
+	}
+	else
+	{
+		// Update connected flag
+		(*iter)[m_list_cols.connected] = true;
+	}
 }
 
 void Gobby::UserList::obby_user_part(obby::user& user)
 {
+	// User is not anymore connceted
 	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
-	if(iter == m_list_data->children().end() ) return;
-
-	m_list_data->erase(iter);
+	(*iter)[m_list_cols.connected] = false;
 }
 
 void Gobby::UserList::obby_user_colour(obby::user& user)
 {
+	// Get user with this name
 	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
-
+	// Get new colour
 	unsigned int red = user.get_red();
 	unsigned int green = user.get_green();
 	unsigned int blue = user.get_blue();
-	
-	(*iter)[m_list_cols.color] = create_coloured_pixbuf(red, green, blue);
+	// Update it
+	(*iter)[m_list_cols.colour] = create_coloured_pixbuf(red, green, blue);
 }
 
-void Gobby::UserList::obby_document_insert(obby::local_document_info& document)
+void Gobby::UserList::obby_document_insert(obby::local_document_info& info)
 {
+	// Get notification when a user subscribed to this document
+	info.subscribe_event().connect(sigc::bind(
+		sigc::mem_fun(*this, &UserList::on_user_subscribe),
+			sigc::ref(info)) );
+
+	// Get notification when a user unsubscribed
+	info.unsubscribe_event().connect(sigc::bind(
+		sigc::mem_fun(*this, &UserList::on_user_unsubscribe),
+			sigc::ref(info)) );
 	
+	// There is at least one document: Show subscription column
+	m_view_col_subscribed->set_visible(true);
 }
 
 void Gobby::UserList::obby_document_remove(obby::local_document_info& document)
 {
+	// Is this the last document to be removed?
+	if(document.get_buffer().document_count() == 1)
+		// Hide subscription column then
+		m_view_col_subscribed->set_visible(false);
+}
+
+void Gobby::UserList::on_folder_tab_switched(Document& document)
+{
+	// No document open
+	if(!m_view_col_subscribed->get_visible() ) return;
+	// Update current info
+	obby::local_document_info* info = &document.get_document();
+	// Same document
+	if(info == m_info) return;
+	m_info = info;
+	// Clear current data
+	m_list_data->clear();
+	// Get user table
+	const obby::user_table& user_table =
+		info->get_buffer().get_user_table();
+	// Add all users in user table
+	for(obby::user_table::user_iterator<obby::user::NONE, false> iter =
+		user_table.user_begin<obby::user::NONE, false>();
+	    iter != user_table.user_end<obby::user::NONE, false>();
+	    ++ iter)
+		add_user(*iter);
+}
+
+void Gobby::UserList::on_user_subscribe(const obby::user& user,
+                                        obby::local_document_info& info)
+{
+	// Not current doc
+	if(&info != m_info) return;
+	// Find user
+	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
+	// Update subscribed flag
+	(*iter)[m_list_cols.subscribed] = true;
+}
+
+void Gobby::UserList::on_user_unsubscribe(const obby::user& user,
+                                          obby::local_document_info& info)
+{
+	// Not current doc
+	if(&info != m_info) return;
+	// Find user
+	Gtk::TreeModel::iterator iter = find_user(user.get_name() );
+	// Update subscribed flag
+	(*iter)[m_list_cols.subscribed] = false;
 }
 
 Gtk::TreeModel::iterator
@@ -140,3 +244,117 @@ Gobby::UserList::find_user(const Glib::ustring& name) const
 	return m_list_data->children().end();
 }
 
+void Gobby::UserList::add_user(const obby::user& user)
+{
+	Gtk::TreeModel::Row row = *(m_list_data->append() );
+
+	unsigned int red = user.get_red();
+	unsigned int green = user.get_green();
+	unsigned int blue = user.get_blue();
+
+	row[m_list_cols.name] = user.get_name();
+	row[m_list_cols.colour] = create_coloured_pixbuf(red, green, blue);
+	row[m_list_cols.connected] = true;
+
+	if(m_info != NULL)
+		row[m_list_cols.subscribed] = m_info->is_subscribed(user);
+}
+
+#if 0
+Gobby::UserListSession::UserListSession(const Folder& folder)
+ : UserList(folder)
+{
+	set_sensitive(false);
+}
+
+Gobby::UserListSession::~UserListSession()
+{
+}
+
+void Gobby::UserListSession::obby_start(obby::local_buffer& buf)
+{
+}
+
+void Gobby::UserListSession::obby_end()
+{
+}
+
+void Gobby::UserListSession::obby_user_join(obby::user& user)
+{
+	Gtk::TreeModel::Row row = *(m_list_data->append() );
+
+	unsigned int red = user.get_red();
+	unsigned int green = user.get_green();
+	unsigned int blue = user.get_blue();
+
+	row[m_list_cols.name] = user.get_name();
+	row[m_list_cols.connected] = true;
+	row[m_list_cols.color] = create_coloured_pixbuf(red, green, blue);
+}
+
+void Gobby::UserListSession::obby_user_part(obby::user& user)
+{
+	Gtk::TreeModel::iterator iter = m_list_data->children().begin();
+	(*iter)[m_list_cols.connected] = false;
+}
+
+Gobby::UserListDocument::UserListDocument(const Folder& folder)
+ : UserList(folder), m_info(NULL)
+{
+
+	// Show subscribed users, not connected ones
+	m_list_view.get_column(1)->set_title("Subscribed");
+	set_sensitive(false);
+}
+
+Gobby::UserListDocument::~UserListDocument()
+{
+}
+
+void Gobby::UserListDocument::obby_start(obby::local_buffer& buf)
+{
+}
+
+void Gobby::UserListDocument::obby_end()
+{
+	m_info = NULL;
+	m_list_data->clear();
+	m_list_view.get_column(2)->set_visible(false);
+	set_sensitive(false);
+}
+
+void Gobby::UserListDocument::obby_user_join(obby::user& user)
+{
+	// Are there open documents? So add the user.
+	if(m_info)
+		add_user(user);
+	{
+	}
+}
+
+void Gobby::UserListDocument::obby_user_part(obby::user& user)
+{
+}
+
+void Gobby::UserListDocument::obby_document_insert(
+	obby::local_document_info& info
+)
+{
+
+	// There is at least one document: Enable widget
+	set_sensitive(true);
+}
+
+void Gobby::UserListDocument::obby_document_remove(
+	obby::local_document_info& info
+)
+{
+	// Is this the last document that gets removed?
+	if(info.get_buffer().document_count() == 1)
+	{
+		m_info = NULL;
+		// Hide subcription column
+		m_list_view.get_column(2)->set_visible(false);
+	}
+}
+#endif

@@ -52,7 +52,8 @@ Gobby::Window::Window()
 #ifdef WITH_HOWL
    m_zeroconf(NULL),
 #endif
-   m_folder(m_preferences), m_header(m_folder), m_statusbar(m_folder)
+   m_folder(m_preferences), m_userlist(m_folder),
+   m_header(m_folder), m_statusbar(m_folder)
 {
 	// Header
 	m_header.session_create_event().connect(
