@@ -49,8 +49,11 @@ noinst_HEADERS += inc/sourceview/private/sourcelanguagesmanager_p.hpp
 endif
 noinst_HEADERS += inc/icon.hpp
 
-.rc.res:
-	windres -i $< --input-format=rc -o $@ -O coff
+if WIN32
+win32/gobby.res: win32/gobby.rc
+	windres -i win32/gobby.rc --input-format=rc -o win32/gobby.res -O coff
+BUILT_SOURCES = win32/gobby.res
+endif
 
 gobby_SOURCES =  src/config.cpp
 gobby_SOURCES += src/buffer_wrapper.cpp
@@ -82,14 +85,10 @@ gobby_SOURCES += src/sourceview/sourcelanguage.cpp
 gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
 endif
 gobby_SOURCES += src/icon.cpp
-if WIN32
-gobby_SOURCES += win32/gobby.rc
-endif
 
 EXTRA_DIST =  contrib/artwork/CREDITS
 EXTRA_DIST += contrib/artwork/gobby.ico
 EXTRA_DIST += contrib/artwork/gobby.png
 EXTRA_DIST += contrib/artwork/gobby.svg
-EXTRA_DIST += win32/Makefile
 EXTRA_DIST += win32/gobby.rc
 
