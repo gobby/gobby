@@ -100,6 +100,7 @@ void Gobby::Chat::obby_message(obby::user& user, const Glib::ustring& message)
 		add_line(user, message.substr(prev, pos - prev) );
 		prev = ++pos;
 	}
+	add_line(user, message.substr(prev));
 }
 
 void Gobby::Chat::add_line(obby::user& user, const Glib::ustring& message)
@@ -126,7 +127,5 @@ void Gobby::Chat::on_chat()
 		prev = ++pos;
 	}
 	m_signal_chat.emit(message.substr(prev) );
-
-	m_signal_chat.emit(message);
 }
 
