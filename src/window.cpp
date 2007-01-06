@@ -40,6 +40,16 @@ Gobby::Window::Window()
 		sigc::mem_fun(*this, &Window::on_session_join) );
 	m_header.session_quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_quit) );
+
+	m_header.document_create_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_create) );
+	m_header.document_open_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_open) );
+	m_header.document_close_event().connect(
+		sigc::mem_fun(*this, &Window::on_document_close) );
+
+	m_header.about_event().connect(
+		sigc::mem_fun(*this, &Window::on_about) );
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 

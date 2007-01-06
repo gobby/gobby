@@ -43,15 +43,12 @@ protected:
 	void on_session_create();
 	void on_session_join();
 	void on_session_quit();
-v v v v v v v
 
 	void on_document_create();
 	void on_document_open();
 	void on_document_close();
 
-*************
 	void on_about();
-^ ^ ^ ^ ^ ^ ^
 	void on_quit();
 
 	void on_chat(const Glib::ustring& message);
