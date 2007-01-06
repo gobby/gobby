@@ -155,7 +155,7 @@ Gobby::Config::~Config()
 	}
 	catch(std::exception& e)
 	{
-		g_warning("Could not write conifg file: %s", e.what() );
+		g_warning("Could not write config file: %s", e.what() );
 	}
 }
 

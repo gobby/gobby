@@ -38,6 +38,8 @@ Gobby::Header::Header()
 	// App menu
 	m_group_app->add(Gtk::Action::create("MenuApp", "Gobby") );
 
+	m_group_app->add(Gtk::Action::create("MenuSession", "Session") );
+
 	// Create session
 	m_group_app->add(
 		Gtk::Action::create(

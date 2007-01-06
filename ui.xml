@@ -8,6 +8,11 @@
       <separator />
       <menuitem action="Quit" />
     </menu>
+    <menu action="MenuSession">
+      <menuitem action="CreateDocument" />
+      <menuitem action="OpenDocument" />
+      <menuitem action="CloseDocument" />
+    </menu>
   </menubar>
   <toolbar name="ToolMainBar">
     <toolitem action="CreateSession" />
