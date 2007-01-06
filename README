@@ -56,9 +56,9 @@ Gobby: First Contact
 3.1. Dependencies
 
      * libsigc++ (>= 2.0.2)
-     * net6 (>= 1.1.0)
+     * net6 ( = 1.2.x)
      * howl (>= 0.9.8)
-     * obby (>= 0.2.0)
+     * obby ( = 0.3.x)
      * Glib (>= 2.6.0)
      * Gtk+ (>= 2.6.0)
      * GtkSourceView
