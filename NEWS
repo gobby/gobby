@@ -14,6 +14,12 @@ Version 0.4.0:
      document
    - Documents with the same name are suffixed with a number
    - Dialogs to host and join sessions are respawned if the attempt failed
+   - Application highlights itself on new chat messages
+   - Documents could be opened in an existing Gobby session by passing
+     their filename as a command-line argument to the application
+   - Sessions could be joined by passing the host and port via command-line
+     options
+   - User-modified colour palettes are now saved in the configuration
 
 Version 0.3.0:
  * This release depends on net6 1.2.0 and obby 0.3.0, it is *not* backwards-
