@@ -1,0 +1,243 @@
+# Gobby l10n French Translation
+# Copyright (C) 2005 0x539 dev group
+# This file is distributed under the same license as the Gobby package.
+# Peer Janssen <peer@baden-online.de>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gobby 0.2.0\n"
+"Report-Msgid-Bugs-To: http://darcs.0x539.de/trac/obby/\n"
+"POT-Creation-Date: 2005-06-14 23:42+0200\n"
+"PO-Revision-Date: 2005-06-23 22:21+0200\n"
+"Last-Translator: Peer Janssen <peer@baden-online.de>\n"
+"Language-Team: Peer Janssen <peer@baden-online.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/chat.cpp:27
+msgid "Send"
+msgstr "Envoyer"
+
+#: src/chat.cpp:79
+#, c-format
+msgid "%0 has joined"
+msgstr "%0 est arrivé(e)"
+
+#: src/chat.cpp:86
+#, c-format
+msgid "%0 has left"
+msgstr "$0 est parti(e)"
+
+#. App menu
+#: src/header.cpp:121
+msgid "Gobby"
+msgstr "Gobby"
+
+#: src/header.cpp:128
+msgid "Create session"
+msgstr "Créer une séance"
+
+#: src/header.cpp:129
+msgid "Opens a new obby session"
+msgstr "Ouvrir une nouvelle séance \"obby\"."
+
+#: src/header.cpp:142
+msgid "Join session"
+msgstr "Joindre séance"
+
+#: src/header.cpp:143
+msgid "Join an existing obby session"
+msgstr "Participer à une séance \"obby\" déjà en cours"
+
+#: src/header.cpp:156
+msgid "Quit session"
+msgstr "Quitter séance"
+
+#: src/header.cpp:157
+msgid "Leaves the currently running obby session"
+msgstr "Quitter la séance \"obby\" en cours"
+
+#: src/header.cpp:170
+msgid "Quit"
+msgstr "Quitter"
+
+#: src/header.cpp:171
+msgid "Quits the application"
+msgstr "Quitter cette application"
+
+#. Session menu
+#: src/header.cpp:180
+msgid "Session"
+msgstr "Séance"
+
+#: src/header.cpp:187 src/window.cpp:332
+msgid "Create document"
+msgstr "Créer document"
+
+#: src/header.cpp:188
+msgid "Creates a new document"
+msgstr "Créer un nouveau document"
+
+#: src/header.cpp:201
+msgid "Open document"
+msgstr "Ouvrir document"
+
+#: src/header.cpp:202
+msgid "Loads a file into a new document"
+msgstr "Charger un fichier dans un nouveau document"
+
+#: src/header.cpp:215
+msgid "Save document"
+msgstr "Enregistrer document"
+
+#: src/header.cpp:216
+msgid "Saves a document into a file"
+msgstr "Sauvegarde du document dans un fichier"
+
+#: src/header.cpp:229
+msgid "Close document"
+msgstr "Fermer document"
+
+#: src/header.cpp:230
+msgid "Closes an open document"
+msgstr "Fermer un document actuellement ouvert"
+
+#. Documents menu
+#: src/header.cpp:240
+msgid "View"
+msgstr "Affichage"
+
+#: src/header.cpp:246
+msgid "Line numbers"
+msgstr "Numérotation des lignes"
+
+#: src/header.cpp:247
+msgid "Whether to show line numbers for this document"
+msgstr "Afficher ou ne pas afficher les numéros des lignes de ce document"
+
+#: src/header.cpp:278
+msgid "None"
+msgstr "Aucune"
+
+#: src/header.cpp:279
+msgid "Unselects the current language"
+msgstr "Déselectionner la langue actuelle"
+
+#. Build description string
+#: src/header.cpp:299
+#, c-format
+msgid "Selects %0 as language"
+msgstr "Selectionner la langue $0"
+
+#. Help menu
+#: src/header.cpp:336
+msgid "Help"
+msgstr "Aide"
+
+#: src/header.cpp:343
+msgid "About"
+msgstr "Information"
+
+#: src/header.cpp:344
+msgid "Shows Gobby's copyright and credits"
+msgstr "Afficher les infos copyright et les remerciements concernant Gobby"
+
+#: src/hostdialog.cpp:24
+msgid "Create obby session"
+msgstr "Créer une séance \"obby\""
+
+#: src/hostdialog.cpp:27 src/joindialog.cpp:38
+msgid "Port:"
+msgstr "Port :"
+
+#: src/hostdialog.cpp:28 src/joindialog.cpp:39
+msgid "Name:"
+msgstr "Nom :"
+
+#: src/hostdialog.cpp:29 src/joindialog.cpp:40
+msgid "Colour:"
+msgstr "Couleur :"
+
+#: src/joindialog.cpp:34
+msgid "Join obby session"
+msgstr "Joindre une séance \"obby\""
+
+#: src/joindialog.cpp:37
+msgid "Host:"
+msgstr "Host :"
+
+#: src/userlist.cpp:37
+msgid "Colour"
+msgstr "Couleur"
+
+#: src/userlist.cpp:38
+msgid "Name"
+msgstr "Nom"
+
+#: src/window.cpp:295
+msgid "A collaborative text editor"
+msgstr "Un éditeur texte collaboratif"
+
+#: src/window.cpp:332
+msgid "Enter document name"
+msgstr "Entrer le nom du document"
+
+#: src/window.cpp:341
+msgid "Open new document"
+msgstr "Ouvrir un nouveau document"
+
+#: src/window.cpp:358
+msgid "Save current document"
+msgstr "Enregistrer le document actuel"
+
+#: src/window.cpp:472
+msgid "Connection lost"
+msgstr "Perte de la connexion"
+
+#: src/statusbar.cpp:65
+msgid "Selected language: %0"
+msgstr "Langue selectionnée : %0"
+
+#: src/statusbar.cpp:71
+msgid "No language selected"
+msgstr "Aucune langue selectionnée"
+
+#. TODO: ngettext
+#: src/statusbar.cpp:79
+#, c-format
+msgid "%0 pending change(s)"
+msgstr "%0 modification(s) en attente"
+
+#: src/statusbar.cpp:86
+msgid "Revision: %0"
+msgstr "Révision : %0"
+
+#: src/buffer_wrapper.cpp:175
+msgid "Peer %0 (%1) not found in peer list"
+msgstr "Copin(e) %0 (%1) n'est pas trouvable dans la liste des copin(e)s"
+
+#: src/document.cpp:37
+msgid "Subscribe"
+msgstr "Souscrire"
+
+#. TODO: Localise...
+#: src/document.cpp:277
+#, c-format
+msgid "User %0 is not connected"
+msgstr "Utilisateur %0 n'est pas connecté"
+
+#: src/document.cpp:606
+msgid ""
+"You are not subscribed to the document \"%0\".\n"
+"\n"
+"To view changes that others make or to edit the document yourself, you have "
+"to subscribe to this document. Use the following button to perform this.\n"
+"\n"
+msgstr ""
+"Vous n'êtes pas souscrit au document \"%0\".\n"
+"\n"
+"Pour voir les modifications des autres ou pour modifier vous-mêmes le "
+"le document, vous devez souscrire à ce document. "
+"À cet effet, utilisez le bouton suivant.\n"
+"\n"

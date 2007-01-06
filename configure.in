@@ -75,7 +75,7 @@ fi
 AM_CONDITIONAL(WITH_HOWL, test x$ac_cv_lib_obby_obby_has_howl = xyes)
 
 # Glib i18n/gettext support.
-ALL_LINGUAS="de"
+ALL_LINGUAS="de fr"
 AM_GLIB_GNU_GETTEXT
 
 GETTEXT_PACKAGE=$PACKAGE
