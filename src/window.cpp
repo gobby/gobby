@@ -551,6 +551,10 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 	m_folder.set_current_page(m_folder.page_num(window) );
 	window.grab_focus();
 
+	// Unset modifified flag when locally opened
+	if(!m_local_file_path.empty())
+		window.get_document().get_buffer()->set_modified(false);
+
 	if(m_folder.get_n_pages() == 1)
 	{
 		// There have not been any documents before
@@ -604,10 +608,6 @@ void Gobby::Window::on_settings_document_insert(const LocalDocumentInfo& info)
 			info,
 			m_local_encoding
 		);
-
-		// Clear local path
-		m_local_file_path.clear();
-		m_local_encoding.clear();
 	}
 	else
 	{
@@ -629,6 +629,10 @@ void Gobby::Window::on_document_create()
 		m_local_encoding = "UTF-8";
 		// Create new document
 		m_buffer->document_create(dlg.get_text(), "UTF-8", "");
+
+		// Clear local path
+		m_local_file_path.clear();
+		m_local_encoding.clear();
 	}
 }
 
@@ -1367,6 +1371,10 @@ void Gobby::Window::open_local_file(const Glib::ustring& file,
 		m_buffer->document_create(
 			Glib::path_get_basename(file), "UTF-8", utf8_content
 		);
+
+		// Clear local path
+		m_local_file_path.clear();
+		m_local_encoding.clear();
 	}
 	catch(Glib::Exception& e)
 	{
