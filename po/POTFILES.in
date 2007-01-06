@@ -10,6 +10,7 @@ src/joindialog.cpp
 src/finddialog.cpp
 src/gotodialog.cpp
 src/userlist.cpp
+src/documentlist.cpp
 src/window.cpp
 src/statusbar.cpp
 src/document.cpp
