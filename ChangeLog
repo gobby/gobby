@@ -1,3 +1,54 @@
+Wed Jun  7 16:17:44 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Fix SEGV caused by wrong usage of Gtk::AccelKey [fixes #163]
+
+Tue Jun  6 22:02:08 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Depend on obby >= 0.4.0rc2; bump version to 0.4.0rc2
+
+Sun Jun  4 03:16:41 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Translation roundup; new Catalan translation, thanks to Jordi Mallach
+
+Sun Jun  4 03:07:51 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Bumped gobby.pot to reflect the current source code locations
+
+Sun May  7 14:54:09 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Add document test to the `make check' testrunner
+
+Sun May  7 14:10:43 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Added append tests
+
+Sun May  7 14:10:15 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Added support for obby::text::npos to Document::erase and Document::get_slice
+
+Sun May  7 13:56:49 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Added Document test
+
+Sun May  7 13:54:08 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Added Document::clear()
+
+Mon Apr 24 17:51:49 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Added contrib/artwork/doclist.png to EXTRA_DIST [fixes #152]
+
+Sat May  6 12:29:34 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Check for substrings in Win32 detection
+
+Wed Apr 19 02:39:03 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Add a man page for Gobby
+
+Sun Apr 16 16:50:40 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Do not depend on JoinDialog creation on invokation
+
+Sun Apr 16 01:26:00 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Check for a generic zeroconf target in obby
+
+Sun Apr 16 00:18:13 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Expand the artists' credits
+
+Tue Apr 11 14:13:57 CEST 2006  Philipp Kern <phil@0x539.de>
+  tagged gobby-0.4.0rc1
+
+Tue Apr 11 14:13:45 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Updated ChangeLog for release
+
 Mon Apr 10 17:17:50 CEST 2006  Armin Burgmeier <armin@0x539.de>
   * src/gselector.cpp: Added idle call in timout handler.
   This is a workaround for a possible bug in glib: A connection to
@@ -12,11 +63,11 @@ Mon Apr 10 14:36:52 CEST 2006  Philipp Kern <phil@0x539.de>
 Mon Apr 10 14:31:47 CEST 2006  Philipp Kern <phil@0x539.de>
   * Little wrapping issue in translation
 
-Sun Apr  9 19:22:33 CEST 2006  Armin Burgmeier <armin@0x539.de>
-  * Use Gobby's color selection palette in JoinProgressDialog color prompt
-
 Mon Apr 10 12:18:35 CEST 2006  Philipp Kern <phil@0x539.de>
   * Reorder the PKG_CHECK_MODULES calls
+
+Sun Apr  9 19:22:33 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Use Gobby's color selection palette in JoinProgressDialog color prompt
 
 Sun Apr  9 14:44:50 CEST 2006  Armin Burgmeier <armin@0x539.de>
   * Fixed a thread-related issue that could cause a SEGV on connection loss
@@ -33,14 +84,14 @@ Fri Mar 31 12:29:52 CEST 2006  Philipp Kern <phil@0x539.de>
 Fri Mar 31 12:28:35 CEST 2006  Philipp Kern <phil@0x539.de>
   * Some kind of translation roundup, very limited
 
-Thu Mar 30 21:38:07 CEST 2006  Armin Burgmeier <armin@0x539.de>
-  * Align info labels in preferences dialog to the left
+Thu Mar 30 22:06:13 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Empty the TODO for now
 
 Fri Mar 31 11:45:05 CEST 2006  Philipp Kern <phil@0x539.de>
   * Updated README
 
-Thu Mar 30 22:06:13 CEST 2006  Philipp Kern <phil@0x539.de>
-  * Empty the TODO for now
+Thu Mar 30 21:38:07 CEST 2006  Armin Burgmeier <armin@0x539.de>
+  * Align info labels in preferences dialog to the left
 
 Thu Mar 30 20:40:43 CEST 2006  Armin Burgmeier <armin@0x539.de>
   * Set priority of user tags lower than GtkSourceView's bracket highlighting tag
@@ -59,6 +110,9 @@ Thu Mar 30 15:13:55 CEST 2006  Armin Burgmeier <armin@0x539.de>
 
 Wed Mar 29 20:53:58 CEST 2006  Armin Burgmeier <armin@0x539.de>
   * Fixed Config::ParentEntry::supply_value
+
+Wed Mar 29 18:53:30 CEST 2006  Philipp Kern <phil@0x539.de>
+  * Depend on gnome-vfs-2.0 when compiled with GNOME support
 
 Wed Mar 29 18:31:01 CEST 2006  Armin Burgmeier <armin@0x539.de>
   * Refactored Config class
@@ -93,9 +147,6 @@ Sat Mar 25 18:01:56 CET 2006  Armin Burgmeier <armin@0x539.de>
 Sat Mar 25 18:01:38 CET 2006  Armin Burgmeier <armin@0x539.de>
   * Changed another occurence of obby-0.3 in configure script
 
-Wed Mar 29 18:53:30 CEST 2006  Philipp Kern <phil@0x539.de>
-  * Depend on gnome-vfs-2.0 when compiled with GNOME support
-
 Sat Mar 25 13:51:36 CET 2006  Philipp Kern <phil@0x539.de>
   * Depend on net6-1.3 and obby-0.4
 
@@ -116,6 +167,9 @@ Fri Mar 24 17:37:14 CET 2006  Armin Burgmeier <armin@0x539.de>
 
 Fri Mar 24 15:43:31 CET 2006  Philipp Kern <phil@0x539.de>
   * Cosmetic changes to remove the references to RSA
+
+Wed Feb  8 05:58:47 CET 2006  Benjamin Herr <ben@0x539.de>
+  * fixed possible out-of-bounds condition in convert2unix
 
 Mon Mar 20 22:02:07 CET 2006  Armin Burgmeier <armin@0x539.de>
   * Protect GSelector by a mutex
@@ -230,9 +284,6 @@ Sun Feb 19 09:02:24 CET 2006  Armin Burgmeier <armin@0x539.de>
 
 Tue Feb 14 21:53:46 CET 2006  Philipp Kern <phil@0x539.de>
   * Experimental patch for client-initiated encryption
-
-Wed Feb  8 05:58:47 CET 2006  Benjamin Herr <ben@0x539.de>
-  * fixed possible out-of-bounds condition in convert2unix
 
 Mon Feb  6 19:22:11 CET 2006  Armin Burgmeier <armin@0x539.de>
   * Replaced buffer wrappers by GSelector
