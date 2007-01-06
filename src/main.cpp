@@ -23,7 +23,8 @@
 int main(int argc, char* argv[]) try
 {
 	Gtk::Main kit(argc, argv);
-	gobby::window wnd;
+	Gobby::Window wnd;
+	wnd.show_all();
 	kit.run(wnd);
 	return 0;
 }

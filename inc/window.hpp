@@ -19,18 +19,27 @@
 #ifndef _GOBBY_WINDOW_HPP_
 #define _GOBBY_WINDOW_HPP_
 
+#include "header.hpp"
 #include <gtkmm/window.h>
 
-namespace gobby
+namespace Gobby
 {
 
-class window : public Gtk::Window
+class Window : public Gtk::Window
 {
 public:
-	window();
-	~window();
+	Window();
+	~Window();
+
+protected:
+	void on_session_create();
+	void on_session_join();
+	void on_session_quit();
+	void on_quit();
+
+	Header m_header;
 };
-	
+
 }
 
-#endif
+#endif // _GOBBY_WINDOW_HPP_

@@ -16,14 +16,44 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <gtkmm/main.h>
 #include "window.hpp"
 
-gobby::window::window()
+Gobby::Window::Window()
  : Gtk::Window(Gtk::WINDOW_TOPLEVEL)
 {
+	m_header.session_create_event().connect(
+		sigc::mem_fun(*this, &Window::on_session_create) );
+	m_header.session_join_event().connect(
+		sigc::mem_fun(*this, &Window::on_session_join) );
+	m_header.session_quit_event().connect(
+		sigc::mem_fun(*this, &Window::on_session_quit) );
+	m_header.quit_event().connect(
+		sigc::mem_fun(*this, &Window::on_quit) );
+
+	add(m_header);
 	set_title("Gobby");
+	set_default_size(640, 480);
 }
 
-gobby::window::~window()
+Gobby::Window::~Window()
 {
 }
+
+void Gobby::Window::on_session_create()
+{
+}
+
+void Gobby::Window::on_session_join()
+{
+}
+
+void Gobby::Window::on_session_quit()
+{
+}
+
+void Gobby::Window::on_quit()
+{
+	Gtk::Main::quit();
+}
+
