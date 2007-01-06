@@ -80,6 +80,9 @@ void Gobby::Chat::obby_end()
 
 void Gobby::Chat::obby_user_join(const obby::user& user)
 {
+	if(~user.get_flags() & obby::user::flags::CONNECTED)
+		return;
+
 	obby::format_string str(_("%0% has joined") );
 	str << user.get_name();
 	m_log_chat.log(str.str(), "blue");
