@@ -248,7 +248,7 @@ msgid ""
 "going to the start/end of the line."
 msgstr ""
 "Wenn diese Option aktiviert ist, springen die Pos1/Ende Tasten zum ersten/"
-"letzten Zeichen bevor sie zur ersten/letzten Zeile springen."
+"letzten Zeichen bevor sie zur ersten/letzten Spalte springen."
 
 #: src/preferencesdialog.cpp:113
 msgid "Text wrapping"
