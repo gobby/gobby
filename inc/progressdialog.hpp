@@ -34,7 +34,8 @@ public:
 	public:
 		typedef sigc::slot<void, Thread&> entry_slot;
 
-		Thread();
+		Thread(Glib::Dispatcher& disp_done,
+		       Glib::Dispatcher& disp_work);
 		~Thread();
 
 		void launch(const entry_slot& entry_func);
@@ -74,8 +75,8 @@ public:
 		Glib::Mutex m_mutex;
 		Glib::Thread* m_thread;
 		entry_slot m_entry_func;
-		Glib::Dispatcher m_disp_done;
-		Glib::Dispatcher m_disp_work;
+		Glib::Dispatcher& m_disp_done;
+		Glib::Dispatcher& m_disp_work;
 		bool m_quit;
 	private:
 		void on_thread_entry();
@@ -120,6 +121,12 @@ protected:
 	Gtk::Window& m_parent;
 
 private:
+	sigc::connection m_conn_work;
+	sigc::connection m_conn_done;
+
+	Glib::Dispatcher m_disp_done;
+	Glib::Dispatcher m_disp_work;
+
 	bool on_idle();
 };
 

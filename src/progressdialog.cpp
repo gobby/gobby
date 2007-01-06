@@ -22,8 +22,10 @@
 #include "common.hpp"
 #include "progressdialog.hpp"
 
-Gobby::ProgressDialog::Thread::Thread()
- : m_thread(NULL), m_quit(false)
+Gobby::ProgressDialog::Thread::Thread(Glib::Dispatcher& done_disp,
+                                      Glib::Dispatcher& work_disp):
+	m_thread(NULL), m_quit(false), m_disp_done(done_disp),
+	m_disp_work(work_disp)
 {
 }
 
@@ -143,7 +145,12 @@ Gobby::ProgressDialog::~ProgressDialog()
 	// Tell the thread to terminate itself when the dialog has been closed
 	// before the thread has finsihed.
 	if(m_thread != NULL)
+	{
 		m_thread->quit();
+
+		m_conn_done.disconnect();
+		m_conn_work.disconnect();
+	}
 }
 
 void Gobby::ProgressDialog::set_status_text(const Glib::ustring& text)
@@ -201,6 +208,9 @@ void Gobby::ProgressDialog::on_work()
 
 void Gobby::ProgressDialog::on_done()
 {
+	m_conn_done.disconnect();
+	m_conn_work.disconnect();
+
 	// Delete thread on termination
 	delete m_thread;
 	m_thread = NULL;
@@ -223,12 +233,12 @@ void Gobby::ProgressDialog::on_response(int response_id)
 bool Gobby::ProgressDialog::on_idle()
 {
 	// Create the worker thread
-	m_thread = new Thread();
+	m_thread = new Thread(m_disp_done, m_disp_work);
 
 	// Connect dispatchers
-	m_thread->done_event().connect(
+	m_conn_done = m_thread->done_event().connect(
 		sigc::mem_fun(*this, &ProgressDialog::on_done) );
-	m_thread->work_event().connect(
+	m_conn_work = m_thread->work_event().connect(
 		sigc::mem_fun(*this, &ProgressDialog::on_work) );
 
 	// Launch the thread
