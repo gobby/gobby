@@ -32,44 +32,70 @@ Gobby::HostProgressDialog::HostProgressDialog(Gtk::Window& parent,
 	set_status_text("Generating RSA key...");
 }
 
-Gobby::HostProgressDialog::~HostProgressDialog()
-{
-}
-
 std::auto_ptr<obby::host_buffer> Gobby::HostProgressDialog::get_buffer()
 {
 	return m_buffer;
 }
 
-void Gobby::HostProgressDialog::on_thread()
+void Gobby::HostProgressDialog::on_thread(Thread& thread)
 {
-	// Get color components
+	// Lock the thread while retrieving data from the dialog because the
+	// dialog may no longer exist.
+	lock(thread);
+
+	// Put data that is stored with the dialog onto the stack to be
+	// allowed to use it without having locked the thread.
+#ifdef WIN32
+	Gtk::Window& parent = m_parent; // Parent window
+#endif
+	Glib::ustring username = m_username; // Local user name
+	unsigned int port = m_port; // Port to open the server on
+
+	// Local user colour
 	unsigned int red = m_color.get_red() * 255 / 65535;
 	unsigned int green = m_color.get_green() * 255 / 65535;
 	unsigned int blue = m_color.get_blue() * 255 / 65535;
 
+	// Dialog may now be closed
+	unlock(thread);
+
+	std::auto_ptr<obby::host_buffer> buffer; // Resulting obby buffer
+	Glib::ustring error; // Error message
+
+	// Try to open the server.
 	try
 	{
-		// Create buffer
-		m_buffer.reset(
+		// Create buffer, compute RSA key and stuff
+		buffer.reset(
 			new obby::io::host_buffer(
 #ifdef WIN32
-				m_parent,
+				parent,
 #endif
-				m_username,
-				red, green, blue
+				username, red, green, blue
 			)
 		);
 
-		//set_status_text("Creating session...");
+		work(thread);
 
-		m_buffer->open(m_port);
+		// Open the server on the given port
+		buffer->open(port);
 	}
 	catch(net6::error& e)
 	{
 		// Store error, if one occured
-		m_error = e.what();
+		error = e.what();
 	}
+
+	// Regain lock
+	lock(thread);
+	// Set resulting buffer
+	m_buffer = buffer;
+	// ... and error, if any
+	m_error = error;
+	// Unlock before exiting
+	unlock(thread);
+
+	// Resulting data has been transmitted, thread may exit
 }
 
 void Gobby::HostProgressDialog::on_work()
@@ -80,7 +106,7 @@ void Gobby::HostProgressDialog::on_work()
 
 void Gobby::HostProgressDialog::on_done()
 {
-	// Call base function (which joins the thread)
+	// Call base function (which removes references to the thread)
 	ProgressDialog::on_done();
 
 	// Show error, if there is one

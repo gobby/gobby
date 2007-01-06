@@ -16,15 +16,106 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdexcept>
 #include <gtkmm/stock.h>
 #include <gtkmm/main.h>
 #include "common.hpp"
 #include "progressdialog.hpp"
 
+Gobby::ProgressDialog::Thread::Thread()
+ : m_thread(NULL), m_quit(false)
+{
+}
+
+Gobby::ProgressDialog::Thread::~Thread()
+{
+}
+
+void Gobby::ProgressDialog::Thread::launch(const entry_slot& entry_func)
+{
+	// TODO: sigc::bind to on_thread_entry
+	m_entry_func = entry_func;
+	m_thread = Glib::Thread::create(
+		sigc::mem_fun(*this, &Thread::on_thread_entry),
+		false
+	);
+}
+
+void Gobby::ProgressDialog::Thread::quit()
+{
+	lock();
+	m_quit = true;
+	unlock();
+}
+
+bool Gobby::ProgressDialog::Thread::quitting()
+{
+	return m_quit;
+}
+
+void Gobby::ProgressDialog::Thread::assert_running() const
+{
+	if(Glib::Thread::self() != m_thread)
+	{
+		throw std::logic_error(
+			"Gobby::ProgressDialog::Thread::assert_running"
+		);
+	}
+}
+
+void Gobby::ProgressDialog::Thread::lock()
+{
+	m_mutex.lock();
+}
+
+void Gobby::ProgressDialog::Thread::unlock()
+{
+	m_mutex.unlock();
+}
+
+Glib::Dispatcher& Gobby::ProgressDialog::Thread::done_event()
+{
+	return m_disp_done;
+}
+
+Glib::Dispatcher& Gobby::ProgressDialog::Thread::work_event()
+{
+	return m_disp_work;
+}
+
+void Gobby::ProgressDialog::Thread::on_thread_entry()
+{
+	try
+	{
+		// Call working function
+		m_entry_func(*this);
+	}
+	catch(Glib::Thread::Exit& e)
+	{
+		// No need to throw e futher, the thread exits anyhow
+	}
+
+	// If the caller told us to quit we remove us silently, otherwise we
+	// tell the caller that we have done what we were supposed to.
+	if(m_quit)
+	{
+		// TODO: The dispatcher's destructor writes an odd message to
+		// stdout, how to supress it?
+		//  - armin, 10-04-2005
+		delete this;
+	}
+	else
+	{
+		m_thread = NULL; // ???
+		m_disp_done.emit();
+	}
+}
+
 Gobby::ProgressDialog::ProgressDialog(const Glib::ustring& title,
                                       Gtk::Window& parent)
  : Gtk::Dialog(title, parent, true, true), 
-   m_lbl_state("", Gtk::ALIGN_CENTER), m_parent(parent)
+   m_lbl_state("", Gtk::ALIGN_CENTER), m_thread(NULL),
+   m_parent(parent)
 {
 	get_vbox()->pack_start(m_lbl_state, Gtk::PACK_SHRINK);
 	get_vbox()->pack_start(m_progress, Gtk::PACK_SHRINK);
@@ -37,16 +128,16 @@ Gobby::ProgressDialog::ProgressDialog(const Glib::ustring& title,
 
 	Glib::signal_idle().connect(
 		sigc::mem_fun(*this, &ProgressDialog::on_idle) );
-	m_disp_work.connect(
-		sigc::mem_fun(*this, &ProgressDialog::on_work) );
-	m_disp_done.connect(
-		sigc::mem_fun(*this, &ProgressDialog::on_done) );
 
 	show_all();
 }
 
 Gobby::ProgressDialog::~ProgressDialog()
 {
+	// Tell the thread to terminate itself when the dialog has been closed
+	// before the thread has finsihed.
+	if(m_thread != NULL)
+		m_thread->quit();
 }
 
 void Gobby::ProgressDialog::set_status_text(const Glib::ustring& text)
@@ -64,16 +155,38 @@ void Gobby::ProgressDialog::progress_pulse()
 	m_progress.pulse();
 }
 
-void Gobby::ProgressDialog::work()
+void Gobby::ProgressDialog::work(Thread& thread)
 {
-	m_disp_work.emit();
+	// Make sure that the calling thread is the worker thread
+	thread.assert_running();
+	thread.work_event().emit();
 }
 
-void Gobby::ProgressDialog::on_thread()
+void Gobby::ProgressDialog::lock(Thread& thread)
 {
-	// Exit thread if we have to quit
-	if(g_atomic_int_get(&m_quit) != 0)
+	// Make sure that the calling thread is the worker thread, the main
+	// thread does not have to call this function because it is used by
+	// the worker thread before querieng data from the dialog. The only
+	// time the main thread is locking the mutex is when the user closes
+	// the dialog.
+	thread.assert_running();
+
+	thread.lock();
+	if(thread.quitting() )
+	{
+		// Exit from the thread if the dialog has been destroys, the
+		// user is no more interested in what we have done (otherwise,
+		// he would not have closed the dialog).
+		thread.unlock();
 		throw Glib::Thread::Exit();
+	}
+}
+
+void Gobby::ProgressDialog::unlock(Thread& thread)
+{
+	// Make sure that the calling thread is the worker thread.
+	thread.assert_running();
+	thread.unlock();
 }
 
 void Gobby::ProgressDialog::on_work()
@@ -82,26 +195,20 @@ void Gobby::ProgressDialog::on_work()
 
 void Gobby::ProgressDialog::on_done()
 {
-	m_thread->join();
+	// Delete thread on termination
+	delete m_thread;
 	m_thread = NULL;
 }
 
 void Gobby::ProgressDialog::on_response(int response_id)
 {
-	// Is the thread working?
-	if(m_thread)
+	// Tell the thread to terminate itself when the dialog has been closed
+	// before the thread has finsihed
+/*	if(m_thread != NULL)
 	{
-		// Set text
-		m_lbl_state.set_text(_("Waiting for thread to finish...") );
-		// Show text
-		while(Gtk::Main::events_pending() )
-			Gtk::Main::iteration();
-		// Tell thread to quit
-		g_atomic_int_add(&m_quit, 1);
-		// Wait for the thread
-		m_thread->join();
+		m_thread->quit();
 		m_thread = NULL;
-	}
+	}*/
 
 	// Response
 	Gtk::Dialog::on_response(response_id);
@@ -109,19 +216,17 @@ void Gobby::ProgressDialog::on_response(int response_id)
 
 bool Gobby::ProgressDialog::on_idle()
 {
-	// Launch the worker thread
-	m_quit = 0;
-	m_thread = Glib::Thread::create(
-		sigc::mem_fun(*this, &ProgressDialog::thread_entry),
-		true
-	);
+	// Create the worker thread
+	m_thread = new Thread();
 
+	// Connect dispatchers
+	m_thread->done_event().connect(
+		sigc::mem_fun(*this, &ProgressDialog::on_done) );
+	m_thread->work_event().connect(
+		sigc::mem_fun(*this, &ProgressDialog::on_work) );
+
+	// Launch the thread
+	m_thread->launch(sigc::mem_fun(*this, &ProgressDialog::on_thread) );
 	return false;
-}
-
-void Gobby::ProgressDialog::thread_entry()
-{
-	on_thread();
-	m_disp_done.emit();
 }
 

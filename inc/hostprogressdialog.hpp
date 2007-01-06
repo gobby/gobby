@@ -33,7 +33,6 @@ public:
 	                   unsigned int port,
 	                   const Glib::ustring& username,
 	                   const Gdk::Color& color);
-	~HostProgressDialog();
 
 	/** Never call this function twice because the auto_ptr of the
 	 * HostDialog will be reset to NULL after having transferred the data
@@ -42,7 +41,7 @@ public:
 	std::auto_ptr<obby::host_buffer> get_buffer();
 
 private:
-	virtual void on_thread();
+	virtual void on_thread(Thread& thread);
 
 	virtual void on_work();
 	virtual void on_done();

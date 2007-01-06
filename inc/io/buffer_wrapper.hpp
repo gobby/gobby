@@ -44,6 +44,15 @@ namespace io
 class client : virtual public net6::client
 {
 public:
+	/** Creates a new client object. A connection may be established
+	 * using the inherited connect() method.
+	 */
+#ifdef WIN32
+	client(Gtk::Window& window);
+#else
+	client();
+#endif
+
 	/** Establishes a new client connection to the given host.
 	 */
 #ifdef WIN32
@@ -53,6 +62,9 @@ public:
 #endif
 	virtual ~client();
 
+	virtual void connect(const net6::address& addr);
+	virtual void disconnect();
+
 	/** Sends a packet to the server.
 	 */
 	virtual void send(const net6::packet& pack);
@@ -60,7 +72,13 @@ public:
 protected:
 	virtual void on_send_event();
 
-	main_connection m_ioconn;
+	std::auto_ptr<main_connection> m_ioconn;
+#ifdef WIN32
+	Gtk::Window& m_window;
+#endif
+private:
+	void connect_impl(const net6::address& addr);
+	void disconnect_impl();
 };
 
 /** The server manages a std::map<> from a peer to its main_connection.
@@ -221,7 +239,7 @@ protected:
 #ifdef WIN32
 	Gtk::Window& m_window;
 #endif
-	virtual net_type* new_net(const std::string& host, unsigned int port);
+	virtual net_type* new_net();
 };
 
 /** A obby::server_buffer derived class that uses io::server.

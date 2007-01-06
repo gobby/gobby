@@ -35,7 +35,6 @@ public:
 	                   unsigned int port,
 	                   const Glib::ustring& username,
 	                   const Gdk::Color& color);
-	~JoinProgressDialog();
 
 	/** Never call this function twice because the auto_ptr of the
 	 * JoinDialog will be reset to NULL after having transferred the data
@@ -44,9 +43,7 @@ public:
 	std::auto_ptr<obby::client_buffer> get_buffer();
 
 private:
-	virtual bool on_idle();
-
-	virtual void on_thread();
+	virtual void on_thread(Thread& thread);
 	virtual void on_done();
 
 	void on_welcome();
@@ -68,7 +65,14 @@ private:
 	Glib::ustring m_username;
 	Gdk::Color m_color;
 
+	Glib::ustring m_error;
+
 	std::auto_ptr<obby::client_buffer> m_buffer;
+
+	// Got done signal from connection thread
+	bool m_got_done;
+	// Got welcome packet
+	bool m_got_welcome;
 };
 
 }

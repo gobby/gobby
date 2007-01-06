@@ -21,36 +21,76 @@
 #include "common.hpp"
 
 #ifdef WIN32
+obby::io::client::client(Gtk::Window& window)
+#else
+obby::io::client::client()
+#endif
+ : net6::client(), m_ioconn(NULL)
+#ifdef WIN32
+   , m_window(window)
+#endif
+{
+}
+
+#ifdef WIN32
 obby::io::client::client(Gtk::Window& window, const net6::address& addr)
 #else
 obby::io::client::client(const net6::address& addr)
 #endif
- : net6::client(addr),
-   m_ioconn(
+ : net6::client(addr), m_ioconn(NULL)
 #ifdef WIN32
-     window,
+   , m_window(window)
 #endif
-     conn->get_socket(),
-
-     main_connection::IO_IN | main_connection::IO_ERROR
-   )
 {
+	connect_impl(addr);
 }
 
 obby::io::client::~client()
 {
+	if(is_connected() )
+		disconnect_impl();
+}
+
+void obby::io::client::connect(const net6::address& addr)
+{
+	net6::client::connect(addr);
+	connect_impl(addr);
+}
+
+void obby::io::client::disconnect()
+{
+	disconnect_impl();
+	net6::client::disconnect();
 }
 
 void obby::io::client::send(const net6::packet& pack)
 {
-	m_ioconn.add_events(main_connection::IO_OUT);
+	m_ioconn->add_events(main_connection::IO_OUT);
 	net6::client::send(pack);
 }
 
 void obby::io::client::on_send_event()
 {
-	m_ioconn.remove_events(main_connection::IO_OUT);
+	m_ioconn->remove_events(main_connection::IO_OUT);
 	net6::client::on_send_event();
+}
+
+void obby::io::client::connect_impl(const net6::address& addr)
+{
+	m_ioconn.reset(
+		new main_connection(
+#ifdef WIN32
+			m_window,
+#endif
+			conn->get_socket(),
+			main_connection::IO_IN | main_connection::IO_ERROR
+		)
+	);
+}
+
+void obby::io::client::disconnect_impl()
+{
+	m_ioconn.reset(NULL);
 }
 
 obby::io::server::Error::Error(Code error_code, const Glib::ustring& error_message)
@@ -274,17 +314,12 @@ obby::io::client_buffer::client_buffer()
 {
 }
 
-obby::io::client_buffer::net_type*
-obby::io::client_buffer::new_net(const std::string& host, unsigned int port)
+obby::io::client_buffer::net_type* obby::io::client_buffer::new_net()
 {
-	net6::ipv4_address addr(
-		net6::ipv4_address::create_from_hostname(host, port)
-	);
-
 #ifdef WIN32
-	return new net_type(m_window, addr);
+	return new net_type(m_window);
 #else
-	return new net_type(addr);
+	return new net_type;
 #endif
 }
 

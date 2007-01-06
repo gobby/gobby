@@ -30,17 +30,12 @@ Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
                                               const Glib::ustring& username,
                                               const Gdk::Color& color)
  : ProgressDialog(_("Joining obby session..."), parent), m_config(config),
-   m_hostname(hostname), m_port(port), m_username(username), m_color(color)
+   m_hostname(hostname), m_port(port), m_username(username), m_color(color),
+   m_got_done(false), m_got_welcome(false)
 {
 	obby::format_string str("Connecting to %0%...");
 	str << hostname;
 	set_status_text(str.str() );
-
-	m_thread = NULL;
-}
-
-Gobby::JoinProgressDialog::~JoinProgressDialog()
-{
 }
 
 std::auto_ptr<obby::client_buffer> Gobby::JoinProgressDialog::get_buffer()
@@ -48,76 +43,133 @@ std::auto_ptr<obby::client_buffer> Gobby::JoinProgressDialog::get_buffer()
 	return m_buffer;
 }
 
-void Gobby::JoinProgressDialog::on_thread()
+void Gobby::JoinProgressDialog::on_thread(Thread& thread)
 {
-	/*try
+	// Get initial data from dialog
+	lock(thread);
+
+#ifdef WIN32
+	Gtk::Window& parent = m_parent;
+#endif
+	// Connection data
+	Glib::ustring hostname = m_hostname; // Remote host name
+	unsigned int port = m_port; // TCP port number
+
+	// Dialog may be closed now
+	unlock(thread);
+
+	std::auto_ptr<obby::client_buffer> buffer; // Resulting buffer
+	Glib::ustring error; // Error message
+
+	// Establish connection
+	try
 	{
-		m_buffer.reset(
+		buffer.reset(
 			new obby::io::client_buffer(
 #ifdef WIN32
-				m_parent,
+				parent
 #endif
-				m_hostname,
-				m_port
 			)
 		);
+
+		// Install signal handlers (notice that these get called within
+		// the main thread)
+		buffer->welcome_event().connect(
+			sigc::mem_fun(*this, &JoinProgressDialog::on_welcome) );
+
+		buffer->login_failed_event().connect(
+			sigc::mem_fun(
+				*this,
+				&JoinProgressDialog::on_login_failed
+			)
+		);
+
+		buffer->global_password_event().connect(
+			sigc::mem_fun(
+				*this,
+				&JoinProgressDialog::on_global_password
+			)
+		);
+
+		buffer->user_password_event().connect(
+			sigc::mem_fun(
+				*this,
+				&JoinProgressDialog::on_user_password
+			)
+		);
+
+		buffer->sync_init_event().connect(
+			sigc::mem_fun(
+				*this,
+				&JoinProgressDialog::on_sync_init
+			)
+		);
+
+		buffer->sync_final_event().connect(
+			sigc::mem_fun(
+				*this,
+				&JoinProgressDialog::on_sync_final
+			)
+		);
+
+		buffer->close_event().connect(
+			sigc::mem_fun(*this, &JoinProgressDialog::on_close) );
+
+		// Establish connection
+		buffer->connect(hostname, port);
 	}
 	catch(net6::error& e)
 	{
-		m_error = e.what();
-	}*/
+		// Store error message, if any
+		error = e.what();
+	}
+
+	// Regain lock
+	lock(thread);
+	// Set resulting buffer
+	m_buffer = buffer;
+	m_error = error;
+	// Unlock before exiting
+	unlock(thread);
+
+	// Thread may finish now
 }
 
 void Gobby::JoinProgressDialog::on_done()
 {
-	// Call base function joining the thread
-	//ProgressDialog::on_done();
+	ProgressDialog::on_done();
 
-	try
+	// Did we get an error while connecting?
+	if(!m_error.empty() )
 	{
-		// Create buffer
-		m_buffer.reset(
-			new obby::io::client_buffer(
-#ifdef WIN32
-				m_parent
-#endif
-			)
-		);
-
-		// Connect to remote host
-		m_buffer->connect(m_hostname, m_port);
-	}
-	catch(net6::error& e)
-	{
-		// Display error
-		display_error(e.what() );
-		// Return
+		// Display it
+		display_error(m_error);
+		// Bad response
 		response(Gtk::RESPONSE_CANCEL);
-		return;
 	}
 
-	m_buffer->welcome_event().connect(
-		sigc::mem_fun(*this, &JoinProgressDialog::on_welcome) );
-	m_buffer->login_failed_event().connect(
-		sigc::mem_fun(*this, &JoinProgressDialog::on_login_failed) );
-	m_buffer->global_password_event().connect(
-		sigc::mem_fun(*this, &JoinProgressDialog::on_global_password) );
-	m_buffer->user_password_event().connect(
-		sigc::mem_fun(*this, &JoinProgressDialog::on_user_password) );
-	m_buffer->sync_init_event().connect(
-		sigc::mem_fun(*this, &JoinProgressDialog::on_sync_init) );
-	m_buffer->sync_final_event().connect(
-		sigc::mem_fun(*this, &JoinProgressDialog::on_sync_final) );
-	m_buffer->close_event().connect(
-		sigc::mem_fun(*this, &JoinProgressDialog::on_close) );
-
-	// Wait for welcome packet
+	// Thread has established connection, wait for welcome packet
 	set_status_text(_("Waiting for welcome packet...") );
 	set_progress_fraction(1.0/4.0);
+	m_got_done = true;
+
+	// on_welcome may be called before on_done is called if the
+	// server replies faster then the thread dispatches, this happens
+	// especially with connections to localhost.
+	// Recall on_welcome in this case now
+	if(m_got_welcome)
+		on_welcome();
 }
 
 void Gobby::JoinProgressDialog::on_welcome()
 {
+	m_got_welcome = true;
+
+	// Do nothing if we have not already got the done signal from the
+	// thread.
+	if(!m_got_done)
+		return;
+
 	// TODO: Show key ID to user and allow him to deny connection
 	// Got welcome packet, send login packet now
 	unsigned int red = m_color.get_red() * 255 / 65535;
@@ -197,11 +249,5 @@ bool Gobby::JoinProgressDialog::prompt_password(const Glib::ustring& label,
 	{
 		return false;
 	}
-}
-
-bool Gobby::JoinProgressDialog::on_idle()
-{
-	on_done();
-	return false;
 }
 
