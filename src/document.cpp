@@ -430,8 +430,12 @@ void Gobby::Document::on_obby_self_subscribe()
 
 void Gobby::Document::on_obby_self_unsubscribe()
 {
+	// Prevet from execution of signal handlers
+	m_editing = true;
 	// Set introduction text
 	set_intro_text();
+	// Re-enable signal handlers
+	m_editing = false;
 }
 
 void Gobby::Document::on_gui_subscribe()

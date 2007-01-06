@@ -163,7 +163,7 @@ public:
 	virtual void send(const net6::packet& pack);
 
 protected:
-	virtual void on_send_event(const net6::packet& pack);
+	virtual void on_send_event();
 
 	MainConnection m_ioconn;
 };
@@ -230,11 +230,10 @@ protected:
 	 */
 	virtual void on_connect(net6::host::peer& new_peer);
 
-	/** Called when a packet has been sent to a client. The IO_OUT flag
-	 * will be removed if no packets follow.
+	/** Called when a all data in the send queue of a client connection has
+	 * been sent. This is used to remove the IO_OUT flag.
 	 */
-	virtual void on_send_event(const net6::packet& pack,
-	                           net6::host::peer& to);
+	virtual void on_send_event(net6::host::peer& to);
 
 	/** Deletes the IOConnection on connection loss.
 	 */

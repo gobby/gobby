@@ -41,12 +41,10 @@ void Gobby::Client::send(const net6::packet& pack)
 	net6::client::send(pack);
 }
 
-void Gobby::Client::on_send_event(const net6::packet& pack)
+void Gobby::Client::on_send_event()
 {
-	if(conn.send_queue_size() == 0)
-		m_ioconn.remove_events(MainConnection::IO_OUT);
-
-	net6::client::on_send_event(pack);
+	m_ioconn.remove_events(MainConnection::IO_OUT);
+	net6::client::on_send_event();
 }
 
 Gobby::Host::Error::Error(Code error_code, const Glib::ustring& error_message)
@@ -131,19 +129,17 @@ void Gobby::Host::on_connect(net6::host::peer& new_peer)
 	net6::host::on_connect(new_peer);
 }
 
-void Gobby::Host::on_send_event(const net6::packet& pack,
-                                net6::host::peer& to)
+void Gobby::Host::on_send_event(net6::host::peer& to)
 {
 	// Find peer in peer map
 	peer_map_type::iterator iter = get_peer_iter(to);
 	MainConnection* conn = iter->second;
 
-	// Remove IO_OUT if nothing to send
-	if(to.send_queue_size() == 0)
-		iter->second->remove_events(MainConnection::IO_OUT);
+	// Remove IO_OUT flag because there is no data to be sent anymore
+	iter->second->remove_events(MainConnection::IO_OUT);
 
 	// Call base function
-	net6::host::on_send_event(pack, to);
+	net6::host::on_send_event(to);
 }
 
 void Gobby::Host::remove_client(net6::host::peer* peer)
