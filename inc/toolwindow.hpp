@@ -21,6 +21,7 @@
 
 #include <gtkmm/window.h>
 #include <gtkmm/toggleaction.h>
+#include "config.hpp"
 
 namespace Gobby
 {
@@ -33,7 +34,10 @@ class ToolWindow: public Gtk::Window
 public:
 	ToolWindow(Gtk::Window& parent,
 	           const Glib::ustring& title,
-	           const Glib::RefPtr<Gtk::ToggleAction>& action);
+	           const Glib::RefPtr<Gtk::ToggleAction>& action,
+		   Config& config,
+		   const Glib::ustring& config_key);
+	~ToolWindow();
 
 protected:
 	virtual void on_activate();
@@ -42,6 +46,9 @@ protected:
 	virtual void on_hide();
 
 	Glib::RefPtr<Gtk::ToggleAction> m_action;
+
+	Config& m_config;
+	Glib::ustring m_config_key;
 };
 
 } // namespace obby

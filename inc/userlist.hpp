@@ -26,6 +26,7 @@
 #include <obby/local_buffer.hpp>
 #include "toolwindow.hpp"
 #include "header.hpp"
+#include "config.hpp"
 
 namespace Gobby
 {
@@ -45,8 +46,7 @@ public:
 		// TODO: Column with pointer that holds reference to obby::user?
 	};
 
-	UserList(Gtk::Window& parent,
-	         Header& header);
+	UserList(Gtk::Window& parent, Header& header, Config& config);
 	~UserList();
 
 	// Calls from the window
@@ -68,8 +68,6 @@ protected:
 	void on_user_unsubscribe(const obby::user& user,
 	                         const obby::local_document_info& info);
 
-	/** Reference to header.
-	 */
 	Header& m_header;
 
 	obby::local_buffer* m_buffer;

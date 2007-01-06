@@ -64,9 +64,9 @@ Gobby::UserList::Columns::Columns()
 	add(text);
 }
 
-Gobby::UserList::UserList(Gtk::Window& parent,
-                          Header& header):
-	ToolWindow(parent, _("User list"), header.action_window_userlist),
+Gobby::UserList::UserList(Gtk::Window& parent, Header& header, Config& config):
+	ToolWindow(parent, _("User list"), header.action_window_userlist,
+		config, "userlist"),
 	m_header(header)
 {
 	m_tree_data = Gtk::TreeStore::create(m_tree_cols);

@@ -132,12 +132,18 @@ public:
 		~Appearance();
 
 		Gtk::ToolbarStyle get_toolbar_style() const;
+
+		bool get_remember() const;
 	protected:
 		Gtk::VBox m_box;
 		Gtk::Frame m_frame_toolbar;
+		Gtk::Frame m_frame_windows;
 
 		Gtk::VBox m_box_toolbar;
 		Gtk::ComboBoxText m_cmb_toolbar_style;
+
+		Gtk::VBox m_box_windows;
+		Gtk::CheckButton m_btn_remember;
 	};
 
 	class Security : public Page

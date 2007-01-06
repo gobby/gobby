@@ -234,9 +234,12 @@ void Gobby::PreferencesDialog::View::on_margin_display_toggled()
 Gobby::PreferencesDialog::Appearance::Appearance(
 	const Gobby::Preferences& preferences)
  : Page(preferences),
-   m_frame_toolbar(_("Toolbar") )
+   m_frame_toolbar(_("Toolbar") ),
+   m_frame_windows(_("Windows") ),
+   m_btn_remember(_("Remember the positions and states") )
 {
 	Gtk::ToolbarStyle style = preferences.appearance.toolbar_show;
+	bool remember = preferences.appearance.remember;
 
 	m_cmb_toolbar_style.append_text(_("Show text only") );
 	m_cmb_toolbar_style.append_text(_("Show icons only") );
@@ -255,8 +258,16 @@ Gobby::PreferencesDialog::Appearance::Appearance(
 
 	m_frame_toolbar.add(m_box_toolbar);
 
+	m_box_windows.set_spacing(5);
+	m_box_windows.set_border_width(5);
+	m_btn_remember.set_active(remember);
+	m_box_windows.pack_start(m_btn_remember, Gtk::PACK_SHRINK);
+
+	m_frame_windows.add(m_box_windows);
+
 	m_box.set_spacing(5);
 	m_box.pack_start(m_frame_toolbar, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_frame_windows, Gtk::PACK_SHRINK);
 
 	set_border_width(10);
 	add(m_box);
@@ -275,6 +286,11 @@ Gobby::PreferencesDialog::Appearance::get_toolbar_style() const
 	case 1: return Gtk::TOOLBAR_ICONS;
 	case 2: default: return Gtk::TOOLBAR_BOTH;
 	}
+}
+
+bool Gobby::PreferencesDialog::Appearance::get_remember() const
+{
+	return m_btn_remember.get_active();
 }
 
 Gobby::PreferencesDialog::Security::Security(const Preferences& preferences)

@@ -25,6 +25,7 @@
 #include <obby/local_buffer.hpp>
 #include "toolwindow.hpp"
 #include "header.hpp"
+#include "config.hpp"
 
 namespace Gobby
 {
@@ -45,8 +46,7 @@ public:
 		Gtk::TreeModelColumn<void*> data;
 	};
 
-	DocumentList(Gtk::Window& parent,
-	             Header& header);
+	DocumentList(Gtk::Window& parent, Header& header, Config& config);
 
 	// Calls from the window
 	// TODO: Replace them by signal handlers from buf

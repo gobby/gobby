@@ -52,6 +52,8 @@ Gobby::Preferences::Preferences(Config& config)
 			static_cast<int>(Gtk::TOOLBAR_BOTH)
 		)
 	);
+	appearance.remember =
+		config["appearance"]["windows"]["remember"].get<bool>(true);
 }
 
 Gobby::Preferences::Preferences(const Preferences& other)
@@ -81,6 +83,7 @@ void Gobby::Preferences::serialise(Config& config)
 
 	config["appearance"]["toolbar"]["show"].set(
 		static_cast<int>(appearance.toolbar_show) );
+	config["appearance"]["windows"]["remember"].set(appearance.remember);
 }
 
 Gobby::Preferences& Gobby::Preferences::operator=(const Preferences& other)

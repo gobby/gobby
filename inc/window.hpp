@@ -50,6 +50,7 @@ public:
 	Document* get_current_document();
 protected:
 	// Gtk::Window overrides
+	virtual void on_show();
 	virtual void on_realize();
 
 	// Start/End obby session
@@ -114,7 +115,7 @@ protected:
 	                   const Gtk::MessageType type = Gtk::MESSAGE_ERROR);
 
 	// Config
-	Config m_config;
+	Config& m_config;
 	Preferences m_preferences;
 	const IconManager& m_icon_mgr;
 

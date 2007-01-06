@@ -20,11 +20,15 @@
 
 Gobby::ToolWindow::ToolWindow(Gtk::Window& parent,
                               const Glib::ustring& title,
-                              const Glib::RefPtr<Gtk::ToggleAction>& action):
-	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_action(action)
+                              const Glib::RefPtr<Gtk::ToggleAction>& action,
+			      Config& config,
+			      const Glib::ustring& config_key):
+	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
+	m_action(action),
+	m_config(config),
+	m_config_key(config_key)
 {
 	set_transient_for(parent);
-	set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
 	set_title(title);
 
 	set_skip_pager_hint(true);
@@ -34,6 +38,37 @@ Gobby::ToolWindow::ToolWindow(Gtk::Window& parent,
 		sigc::mem_fun(*this, &ToolWindow::on_activate) );
 
 	set_border_width(0);
+
+	if(config["appearance"]["windows"]["remember"].get<bool>(true) )
+	{
+		// Read the ToolWindow's last position from the configuration,
+		// relative to the parent window.
+		const int x = config[config_key]["x"].get<int>(0);
+		const int y = config[config_key]["y"].get<int>(0);
+		const int w = config[config_key]["width"].get<int>(0);
+		const int h = config[config_key]["height"].get<int>(0);
+		const bool visible = config[config_key]["visible"].get<bool>(false);
+		if((x != 0) || (y != 0))
+		{
+			move(x, y);
+			resize(w, h);
+		}
+	}
+}
+
+Gobby::ToolWindow::~ToolWindow()
+{
+	if(m_config["appearance"]["windows"]["remember"].get<bool>(true) )
+	{
+		int x, y, w, h;
+		get_position(x, y);
+		get_size(w, h);
+		m_config[m_config_key]["x"].set(x);
+		m_config[m_config_key]["y"].set(y);
+		m_config[m_config_key]["width"].set(w);
+		m_config[m_config_key]["height"].set(h);
+		m_config[m_config_key]["visible"].set(is_visible() );
+	}
 }
 
 void Gobby::ToolWindow::on_activate()
@@ -55,3 +90,4 @@ void Gobby::ToolWindow::on_hide()
 	m_action->set_active(false);
 	Gtk::Window::on_hide();
 }
+

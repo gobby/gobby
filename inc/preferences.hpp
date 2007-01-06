@@ -71,6 +71,7 @@ public:
 	struct
 	{
 		Gtk::ToolbarStyle toolbar_show;
+		bool remember;
 	} appearance;
 };
 

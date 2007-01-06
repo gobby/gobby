@@ -38,11 +38,14 @@ Gobby::DocumentList::Columns::Columns()
 }
 
 Gobby::DocumentList::DocumentList(Gtk::Window& parent,
-                                  Header& header):
+                                  Header& header,
+				  Config& config):
 	ToolWindow(
 		parent,
 		_("Document list"),
-		header.action_window_documentlist
+		header.action_window_documentlist,
+		config,
+		"documentlist"
 	),
 	m_btn_subscribe(_("Subscribe") ),
 	m_header(header)
