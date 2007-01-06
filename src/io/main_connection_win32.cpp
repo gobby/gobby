@@ -64,7 +64,7 @@ namespace
 	}
 
 	// Network message
-	const UINT WM_NETWORK = RegisterWindowMessage("GOBBY_NETWORK_EVENT");
+	const UINT WM_NETWORK = RegisterWindowMessageA("GOBBY_NETWORK_EVENT");
 
 	// Gets a HWND for a given Gtk::Window
 	HWND hwnd_from_window(Gtk::Window& window)

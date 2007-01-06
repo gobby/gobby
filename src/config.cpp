@@ -43,23 +43,23 @@ namespace
 	void create_directory(const char* path)
 	{
 #ifdef WIN32
-		if(CreateDirectory(path, NULL) == FALSE)
+		if(CreateDirectoryA(path, NULL) == FALSE)
 		{
 			LPVOID msgbuf;
 			DWORD err = GetLastError();
 
-			FormatMessage(
+			FormatMessageA(
 				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
 				FORMAT_MESSAGE_FROM_SYSTEM,
 				NULL,
 				err,
 				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-				reinterpret_cast<LPTSTR>(&msgbuf),
+				reinterpret_cast<LPSTR>(&msgbuf),
 				0,
 				NULL
 			);
 
-			std::string error_message = static_cast<LPTSTR>(msgbuf);
+			std::string error_message = static_cast<LPSTR>(msgbuf);
 			LocalFree(msgbuf);
 
 			throw Gobby::Config::Error(
