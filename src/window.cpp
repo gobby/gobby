@@ -225,6 +225,9 @@ void Gobby::Window::obby_start()
 	// Set last page as active one because it is currently shown anyway.
 	if(m_buffer->document_count() > 0)
 		m_folder.set_current_page(m_buffer->document_count() - 1);
+
+	// Clear location of previous session file, this is a new session
+	m_prev_session = "";
 }
 
 void Gobby::Window::obby_end()
@@ -289,9 +292,12 @@ void Gobby::Window::on_session_create()
 			str << port;
 			m_statusbar.update_connection(str.str() );
 
-			// Start session
 			m_buffer = buffer;
+
+			// Start session
 			obby_start();
+			// Remember session file
+			m_prev_session = Glib::filename_from_utf8(session);
 		}
 	}
 }
@@ -340,28 +346,62 @@ void Gobby::Window::on_session_join()
 
 void Gobby::Window::on_session_save()
 {
+	Gtk::CheckButton m_chk_default_ext(
+		_("Use default .obby extension if none is given")
+	);
+
 	Gtk::FileChooserDialog dlg(
 		*this,
 		_("Save obby session"),
 		Gtk::FILE_CHOOSER_ACTION_SAVE
 	);
 
-	// Use the last used path for this dialog, if we have any
-	if(!m_last_path.empty() )
-		dlg.set_current_folder(m_last_path);
+	m_chk_default_ext.set_active(true);
+	dlg.get_vbox()->pack_start(m_chk_default_ext, Gtk::PACK_SHRINK);
+	// This option confuses the overwrite confirmation :/
+//	m_chk_default_ext.show();
 
-	// TODO: Store previous location of a saved obby session?
+#ifdef GTKMM_GEQ_28
+	dlg.set_do_overwrite_confirmation(true);
+#endif
+
+	// Use the location of a previously saved session, if any
+	if(!m_prev_session.empty() )
+	{
+		dlg.set_filename(m_prev_session);
+	}
+	else
+	{
+		// Use the last used path for this dialog, if we have any
+		if(!m_last_path.empty() )
+			dlg.set_current_folder(m_last_path);
+	}
+
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		// TODO: Default extension (.obby)
-		// TODO: Overwrite confirmation
 		// Use current folder as standard folder for other dialogs
 		m_last_path = dlg.get_current_folder();
+		// Get selected filename
+		std::string filename = dlg.get_filename();
+
+		// Append .obby extension if none is given
+		/*if(m_chk_default_ext.get_active() )
+			if(filename.find('.') == std::string::npos)
+				filename += ".obby";*/
+
 		// Save document
-		m_buffer->serialise(dlg.get_filename() );
+		try
+		{
+			m_buffer->serialise(filename);
+			m_prev_session = filename;
+		}
+		catch(std::exception& e)
+		{
+			display_error(e.what() );
+		}
 	}
 }
 
@@ -499,6 +539,10 @@ void Gobby::Window::on_document_save_as()
 	// Setup dialog
 	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
 		Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+#ifdef GTKMM_GEQ_28
+	dlg.set_do_overwrite_confirmation(true);
+#endif
 
 	// Does the document have already a path?
 	if(!doc.get_path().empty() )
@@ -1001,5 +1045,3 @@ void Gobby::Window::display_error(const Glib::ustring& message,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
 }
-
-

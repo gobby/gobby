@@ -73,7 +73,17 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config):
 	m_table.attach(m_ent_session, 1, 2, 4, 5,
 		Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 
-	// TODO: .obby file filter for restore session dialog
+	// *.obby file filter for restore session dialog
+	Gtk::FileFilter obby_filter;
+	Gtk::FileFilter all_filter;
+
+	obby_filter.set_name(".obby files");
+	obby_filter.add_pattern("*.obby");
+	all_filter.set_name("All files");
+	all_filter.add_pattern("*");
+
+	m_ent_session.get_file_chooser().add_filter(obby_filter);
+	m_ent_session.get_file_chooser().add_filter(all_filter);
 
 	m_table.set_spacings(5);
   

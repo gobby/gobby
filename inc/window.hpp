@@ -121,8 +121,9 @@ protected:
 	Preferences m_preferences;
 
 	// Paths
-	Glib::ustring m_last_path;
-	Glib::ustring m_local_file_path;
+	std::string m_last_path;
+	std::string m_local_file_path;
+	std::string m_prev_session;
 
 	// GUI
 	Gtk::VBox m_mainbox;
