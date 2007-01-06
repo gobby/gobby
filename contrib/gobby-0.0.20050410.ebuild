@@ -29,6 +29,3 @@ src_install() {
 	make DESTDIR=${D} install || die
 }
 
-pkg_postinst() {
-	ewarn "ui.xml versagt immernoch :("
-}
