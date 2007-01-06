@@ -1,6 +1,20 @@
 Gobby
 =====
 
+Version 0.4.0:
+ * Session encryption through GNUTLS
+ * Reduced CPU usage and memory footprint through the removal of one
+   supplemental document copy
+ * Usability enhancements:
+   - New button to close the chat window
+   - Font types and sizes could now be set for the text editor from within Gobby
+   - Documents could now be switched using Ctrl-Alt-Page-Down and 
+     Ctrl-Alt-Page-Up
+   - Subscribe button is deactivated after it has been hit once for a
+     document
+   - Documents with the same name are suffixed with a number
+   - Dialogs to host and join sessions are respawned if the attempt failed
+
 Version 0.3.0:
  * This release depends on net6 1.2.0 and obby 0.3.0, it is *not* backwards-
    compatible protocol-wise to the 0.2.x series.
