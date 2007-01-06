@@ -19,7 +19,6 @@ Normal:
   * Strive for Gnome HIG compilance (#32)
   * Recognise command line parameters (#33)
   * Colour presets (#36)
-  * Format strings for texts to translate (#37)
 
 Minor:
 
@@ -134,12 +133,6 @@ values):
 <span style="background-color:#fdbedd;">#fdbedd</span>
 <span style="background-color:#f6abab;">#f6abab</span>
 }}}
-
-37: Format strings for texts to translate
------------------------------------------
-We should use format strings instead of just catting strings togeather to 
-permit translators to change word order. Maybe a wrapper around 
-''g_sprintf_strdup''.
 
 6: Highlighting of own nickname in chat window
 ----------------------------------------------
