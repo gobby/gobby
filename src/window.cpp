@@ -47,9 +47,9 @@ Gobby::Window::Window()
 #ifdef WITH_HOWL
    m_zeroconf(NULL),
 #endif
-   m_running(false), m_header(m_folder), m_statusbar(m_folder)
+   m_header(m_folder), m_statusbar(m_folder)
 {
-	// Connect UI signals
+	// Header
 	m_header.session_create_event().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
 	m_header.session_join_event().connect(
@@ -83,6 +83,9 @@ Gobby::Window::Window()
 	m_header.quit_event().connect(
 		sigc::mem_fun(*this, &Window::on_quit) );
 
+	// Folder
+	m_folder.document_close_event().connect(
+		sigc::mem_fun(*this, &Window::on_folder_document_close) );
 	m_folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &Window::on_folder_tab_switched) );
 
@@ -318,6 +321,19 @@ void Gobby::Window::on_about()
 	dlg.run();
 }
 
+void Gobby::Window::on_folder_document_close(Document& document)
+{
+	for(int i = 0; i < m_folder.get_n_pages(); ++ i)
+	{
+		Gtk::Widget* doc = m_folder.get_nth_page(i);
+		if(&static_cast<DocWindow*>(doc)->get_document() == &document)
+		{
+			close_document(*static_cast<DocWindow*>(doc));
+			break;
+		}
+	}
+}
+
 void Gobby::Window::on_folder_tab_switched(Document& document)
 {
 	const Glib::ustring& file = document.get_document().get_title();
@@ -370,9 +386,11 @@ void Gobby::Window::on_document_open()
 
 void Gobby::Window::on_document_save()
 {
+	// Get page
 	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
 	DocWindow& doc = *static_cast<DocWindow*>(page);
 
+	// Show dialog
 	Gtk::FileChooserDialog dlg(*this, _("Save current document"),
 			Gtk::FILE_CHOOSER_ACTION_SAVE);
 	dlg.set_current_name(m_folder.get_tab_label_text(doc) );
@@ -381,16 +399,19 @@ void Gobby::Window::on_document_save()
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
+		// Build ofstream
 		std::ofstream stream(dlg.get_filename().c_str() );
 
 		if(stream)
 		{
+			// Save content into file
 			stream << doc.get_document().get_content() << std::endl;
 			doc.get_document().set_path(dlg.get_filename() );
 			on_folder_tab_switched(doc.get_document() );
 		}
 		else
 		{
+			// File could not be opened
 			obby::format_string str("Could not open file "
 			                        "%0 for writing");
 			str << dlg.get_filename();
@@ -401,36 +422,8 @@ void Gobby::Window::on_document_save()
 
 void Gobby::Window::on_document_close()
 {
-	if(m_buffer.get() != NULL)
-	{
-		// Get current page
-		Widget* page = m_folder.get_nth_page(
-			m_folder.get_current_page()
-		);
-
-		// Send remove document request
-		m_buffer->remove_document(
-			static_cast<DocWindow*>(
-				page
-			)->get_document().get_document()
-		);
-	}
-	else
-	{
-		// Buffer does not exist: Maybe the connection has been lost
-		// or something: Just remove the document from the folder.
-		Gtk::Widget* doc_wnd = m_folder.get_nth_page(
-			m_folder.get_current_page()
-		);
-
-		m_folder.remove_page(m_folder.get_current_page() );
-		delete doc_wnd;
-
-		// If there are no more documents disable
-		// save and close buttons in header
-		if(!m_folder.get_n_pages() )
-			m_header.disable_document_actions();
-	}
+	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
+	close_document(*static_cast<DocWindow*>(page) );
 }
 
 void Gobby::Window::on_user_set_password()
@@ -446,8 +439,8 @@ void Gobby::Window::on_user_set_password()
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		dynamic_cast<obby::client_buffer*>(m_buffer.get() )->set_password(
-			dlg.get_text() );
+		dynamic_cast<obby::client_buffer*>(
+			m_buffer.get() )->set_password(dlg.get_text() );
 	}
 }
 
@@ -503,83 +496,11 @@ void Gobby::Window::on_chat(const Glib::ustring& message)
 	m_buffer->send_message(message);
 }
 
-/*
-void Gobby::Window::on_obby_login_failed(obby::login::error error)
-{
-	display_error(obby::login::errstring(error) );
-	on_session_join();
-}
-
-bool Gobby::Window::on_obby_global_password(std::string& password)
-{
-	// Prompt for password
-	EntryDialog dlg(
-		*this,
-		_("Password required"),
-		_("Enter session password")
-	);
-
-	// Disable view of typed characters (password input)
-	dlg.get_entry().set_visibility(false);
-	if(dlg.run() == Gtk::RESPONSE_OK)
-	{
-		// Use given text as password
-		password = dlg.get_text();
-		return true;
-	}
-	else
-	{
-		// Close connection otherwise
-		on_session_quit();
-		return false;
-	}
-}
-
-bool Gobby::Window::on_obby_user_password(std::string& password)
-{
-	obby::format_string str(_("Enter user password for user %0") );
-	str << m_buffer->get_name();
-
-	// Prompt for password
-	EntryDialog dlg(
-		*this,
-		_("Password required"),
-		str.str()
-	);
-
-	// Disable view of typed characters (password input)
-	dlg.get_entry().set_visibility(false);
-	if(dlg.run() == Gtk::RESPONSE_OK)
-	{
-		// Use given text as password
-		password = dlg.get_text();
-		return true;
-	}
-	else
-	{
-		// Close connection otherwise
-		on_session_quit();
-		return false;
-	}
-}*/
-
 void Gobby::Window::on_obby_close()
 {
 	display_error(_("Connection lost"));
 	on_session_quit();
 }
-
-/*void Gobby::Window::on_obby_sync()
-{
-	// Send documents to components
-	obby::buffer::document_iterator iter = m_buffer->document_begin();
-	for(; iter != m_buffer->document_end(); ++ iter)
-		on_obby_document_insert(*iter);
-
-	// Set last page as active one because it is currently shown anyway.
-	if(m_buffer->document_count() > 0)
-		m_folder.set_current_page(m_buffer->document_count() - 1);
-}*/
 
 void Gobby::Window::on_obby_chat(obby::user& user, const Glib::ustring& message)
 {
@@ -644,5 +565,29 @@ void Gobby::Window::display_error(const Glib::ustring& message)
 	Gtk::MessageDialog dlg(*this, message, false, Gtk::MESSAGE_ERROR,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
+}
+
+void Gobby::Window::close_document(DocWindow& document)
+{
+	if(m_buffer.get() != NULL)
+	{
+		// Send remove document request
+		m_buffer->remove_document(
+			document.get_document().get_document()
+		);
+	}
+	else
+	{
+		// Buffer does not exist: Maybe the connection has been lost
+		// or something: Just remove the document from the folder.
+		m_folder.remove_page(document);
+		delete m_folder.get_tab_label(document);
+		delete &document;
+
+		// If there are no more documents, disable
+		// save and close buttons in header
+		if(!m_folder.get_n_pages() )
+			m_header.disable_document_actions();
+	}
 }
 

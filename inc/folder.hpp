@@ -20,6 +20,10 @@
 #define _GOBBY_FOLDER_HPP_
 
 #include <sigc++/signal.h>
+#include <gtkmm/box.h>
+#include <gtkmm/image.h>
+#include <gtkmm/label.h>
+#include <gtkmm/button.h>
 #include <gtkmm/notebook.h>
 #include <obby/user.hpp>
 #include <obby/document.hpp>
@@ -42,6 +46,23 @@ namespace Gobby
 class Folder : public Gtk::Notebook
 {
 public:
+	class TabLabel : public Gtk::HBox
+	{
+	public:
+		typedef Glib::SignalProxy0<void> close_signal_type;
+
+		TabLabel(const Glib::ustring& label);
+		~TabLabel();
+
+		close_signal_type close_event();
+	protected:
+		Gtk::Image m_image;
+		Gtk::Label m_label;
+		Gtk::Button m_button;
+		Gtk::HBox m_box;
+	};
+
+	typedef sigc::signal<void, Document&> signal_document_close_type;
 	typedef sigc::signal<void, Document&> signal_document_cursor_moved_type;
 	typedef sigc::signal<void, Document&>
 		signal_document_content_changed_type;
@@ -69,6 +90,7 @@ public:
 	void obby_document_insert(obby::local_document_info& document);
 	void obby_document_remove(obby::local_document_info& document);
 
+	signal_document_close_type document_close_event() const;
 	signal_document_cursor_moved_type document_cursor_moved_event() const;
 	signal_document_content_changed_type
 		document_content_changed_event() const;
@@ -79,8 +101,11 @@ public:
 	signal_tab_switched_type tab_switched_event() const;
 
 protected:
-	// Signal handlers
+	// Overrides
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
+
+	// Signal handlers
+	void on_document_close(Document& document);
 
 	void on_document_cursor_moved(Document& document);
 	void on_document_content_changed(Document& document);
@@ -88,6 +113,7 @@ protected:
 	void on_document_language_changed(Document& document);
 #endif
 
+	signal_document_close_type m_signal_document_close;
 	signal_document_cursor_moved_type m_signal_document_cursor_moved;
 	signal_document_content_changed_type m_signal_document_content_changed;
 #ifdef WITH_GTKSOURCEVIEW

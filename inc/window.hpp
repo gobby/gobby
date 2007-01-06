@@ -26,6 +26,7 @@
 #include <obby/local_buffer.hpp>
 #include "config.hpp"
 #include "header.hpp"
+#include "docwindow.hpp"
 #include "folder.hpp"
 #include "userlist.hpp"
 #include "chat.hpp"
@@ -52,7 +53,7 @@ protected:
 	void obby_start();
 	void obby_end();
 
-	// UI handler
+	// Header UI handler
 	void on_session_create();
 	void on_session_join();
 	void on_session_quit();
@@ -72,6 +73,8 @@ protected:
 	);
 #endif
 
+	// Folder UI handler
+	void on_folder_document_close(Document& document);
 	void on_folder_tab_switched(Document& document);
 
 	void on_about();
@@ -91,6 +94,7 @@ protected:
 	void on_obby_chat(obby::user& user, const Glib::ustring& message);
 
 	// Helper functions
+	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message);
 
 	// Config
@@ -119,8 +123,6 @@ protected:
 	obby::zeroconf* m_zeroconf;
 #endif
 	sigc::connection m_timer_conn;
-	bool m_running; // m_running is set if the obby connection has been
-	                // established successfully.
 };
 
 }

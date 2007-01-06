@@ -16,9 +16,35 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <gtkmm/box.h>
+#include <gtkmm/stock.h>
+
 #include "document.hpp"
 #include "docwindow.hpp"
 #include "folder.hpp"
+
+Gobby::Folder::TabLabel::TabLabel(const Glib::ustring& label)
+ : m_image(Gtk::Stock::CLOSE, Gtk::ICON_SIZE_MENU), m_label(label)
+{
+	// Lookup icon size
+	int width, height;
+	Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
+
+	// Resize button to image's size
+	m_button.set_size_request(width + 4, height);
+	m_button.add(m_image);
+	m_button.set_relief(Gtk::RELIEF_NONE);
+
+	// Add box
+	set_spacing(5);
+	pack_start(m_label, Gtk::PACK_SHRINK);
+	pack_start(m_button, Gtk::PACK_SHRINK);
+	show_all();
+}
+
+Gobby::Folder::TabLabel::~TabLabel()
+{
+}
 
 Gobby::Folder::Folder()
  : Gtk::Notebook(), m_running(false)
@@ -32,7 +58,16 @@ Gobby::Folder::~Folder()
 {
 	// Delete documents
 	for(int i = 0; i < get_n_pages(); ++ i)
+	{
+		delete get_tab_label(*get_nth_page(i) );
 		delete get_nth_page(i);
+	}
+}
+
+Gobby::Folder::TabLabel::close_signal_type
+Gobby::Folder::TabLabel::close_event() 
+{
+	return m_button.signal_clicked();
 }
 
 #ifdef WITH_GTKSOURCEVIEW
@@ -124,8 +159,19 @@ void Gobby::Folder::obby_document_insert(obby::local_document_info& document)
 	);
 #endif
 
+	// Create label for the tab
+	TabLabel* label = new TabLabel(document.get_title() );
+
+	// Connect close event
+	label->close_event().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &Folder::on_document_close),
+			sigc::ref(new_doc)
+		)
+	);
+
 	// Append document's title as new page to the notebook
-	append_page(*new_wnd, document.get_title() );
+	append_page(*new_wnd, *label);
 
 	// Show child
 	new_wnd->show_all();
@@ -142,15 +188,27 @@ void Gobby::Folder::obby_document_remove(obby::local_document_info& document)
 
 		if(&obdoc == &document)
 		{
-			// Delete it.
-			remove_page(i);
+			// Remove page
+			remove_page(*doc);
+
+			// Delete tab label assigned to the document
+			delete get_tab_label(*doc);
+
+			// Delete document itself
 			delete doc;
+
 			break;
 		}
 	}
 }
 
 // Signals
+Gobby::Folder::signal_document_close_type
+Gobby::Folder::document_close_event() const
+{
+	return m_signal_document_close;
+}
+
 Gobby::Folder::signal_document_cursor_moved_type
 Gobby::Folder::document_cursor_moved_event() const
 {
@@ -175,6 +233,11 @@ Gobby::Folder::signal_tab_switched_type
 Gobby::Folder::tab_switched_event() const
 {
 	return m_signal_tab_switched;
+}
+
+void Gobby::Folder::on_document_close(Document& document)
+{
+	m_signal_document_close.emit(document);
 }
 
 void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
