@@ -28,11 +28,12 @@ Gobby::ToolWindow::ToolWindow(Gtk::Window& parent,
 	m_config(config),
 	m_config_key(config_key)
 {
+	set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);
 	set_transient_for(parent);
 	set_title(title);
 
-	set_skip_pager_hint(true);
-	set_skip_taskbar_hint(true);
+//	set_skip_pager_hint(true);
+//	set_skip_taskbar_hint(true);
 
 	action->signal_activate().connect(
 		sigc::mem_fun(*this, &ToolWindow::on_activate) );
