@@ -202,7 +202,8 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 	return static_cast<Code>(gobject_->code);
 }
 
-Gobby::Header::Header(const ApplicationState& state):
+Gobby::Header::Header(const ApplicationState& state,
+                      const LangManager& lang_mgr):
 	group_app(Gtk::ActionGroup::create() ),
 	group_session(Gtk::ActionGroup::create() ),
 	group_edit(Gtk::ActionGroup::create() ),
@@ -408,8 +409,7 @@ Gobby::Header::Header(const ApplicationState& state):
 		)
 	),
 
-	m_ui_manager(Gtk::UIManager::create() ),
-	m_lang_manager(Gtk::SourceLanguagesManager::create() )
+	m_ui_manager(Gtk::UIManager::create() )
 {
 	// Assign auto actions
 	set_action_auto(
@@ -599,7 +599,7 @@ Gobby::Header::Header(const ApplicationState& state):
 
 	// Get available languages
 	std::list<Glib::RefPtr<Gtk::SourceLanguage> > lang_list =
-		m_lang_manager->get_available_languages();
+		lang_mgr->get_available_languages();
 
 	// Sort languages by name
 	lang_list.sort(&language_sort_callback);
@@ -707,6 +707,7 @@ Glib::RefPtr<const Gtk::AccelGroup> Gobby::Header::get_accel_group() const
 	return m_ui_manager->get_accel_group();
 }
 
+#if 0
 Glib::RefPtr<Gtk::SourceLanguagesManager> Gobby::Header::get_lang_manager()
 {
 	return m_lang_manager;
@@ -717,6 +718,7 @@ Gobby::Header::get_lang_manager() const
 {
 	return m_lang_manager;
 }
+#endif
 
 Gtk::MenuBar& Gobby::Header::get_menubar()
 {

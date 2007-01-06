@@ -56,7 +56,7 @@ Gobby::DocumentSettings::Columns::Columns()
 Gobby::DocumentSettings::DocumentSettings(Window& window):
 	m_icon(window.render_icon(Gtk::Stock::EDIT, Gtk::ICON_SIZE_BUTTON))
 {
-	m_data = Gtk::ListStore::create(m_cols);
+	m_data = Gtk::ListStore::create(columns);
 }
 
 void Gobby::DocumentSettings::obby_start(LocalBuffer& buf)
@@ -87,39 +87,39 @@ void Gobby::DocumentSettings::obby_end()
 Glib::ustring Gobby::DocumentSettings::
 	get_original_encoding(const LocalDocumentInfo& info) const
 {
-	return (*get_iter(info))[m_cols.original_encoding];
+	return (*get_iter(info))[columns.original_encoding];
 }
 
 void Gobby::DocumentSettings::
 	set_original_encoding(const LocalDocumentInfo& info,
 	                      const Glib::ustring& encoding)
 {
-	(*get_iter(info))[m_cols.original_encoding] = encoding;
+	(*get_iter(info))[columns.original_encoding] = encoding;
 }
 
 Glib::ustring Gobby::DocumentSettings::
 	get_path(const LocalDocumentInfo& info) const
 {
-	return (*get_iter(info))[m_cols.path];
+	return (*get_iter(info))[columns.path];
 }
 
 void Gobby::DocumentSettings::set_path(const LocalDocumentInfo& info,
                                        const Glib::ustring& path)
 {
-	(*get_iter(info))[m_cols.path] = path;
+	(*get_iter(info))[columns.path] = path;
 }
 
 /*Gobby::DocumentSettings::Columns&
 Gobby::DocumentSettings::get_golumns()
 {
 	return m_columns;
-}*/
+}
 
 const Gobby::DocumentSettings::Columns&
 Gobby::DocumentSettings::get_columns() const
 {
-	return m_cols;
-}
+	return columns;
+}*/
 
 Glib::RefPtr<Gtk::ListStore> Gobby::DocumentSettings::get_list()
 {
@@ -168,10 +168,10 @@ void Gobby::DocumentSettings::on_document_insert(DocumentInfo& info)
 	);
 
 	Gtk::TreeIter iter = m_data->append();
-	(*iter)[m_cols.info] = &local_info;
-	(*iter)[m_cols.icon] = m_icon;
-	(*iter)[m_cols.color] = document_color(local_info);
-	(*iter)[m_cols.title] = local_info.get_title();
+	(*iter)[columns.info] = &local_info;
+	(*iter)[columns.icon] = m_icon;
+	(*iter)[columns.color] = document_color(local_info);
+	(*iter)[columns.title] = local_info.get_title();
 
 	m_map[&local_info] = iter;
 
@@ -200,21 +200,21 @@ void Gobby::DocumentSettings::on_document_remove(DocumentInfo& info)
 void Gobby::DocumentSettings::on_document_rename(DocumentInfo& info)
 {
 	LocalDocumentInfo& local_info = dynamic_cast<LocalDocumentInfo&>(info);
-	(*get_iter(local_info))[m_cols.title] = local_info.get_title();
+	(*get_iter(local_info))[columns.title] = local_info.get_title();
 }
 
 void Gobby::DocumentSettings::on_subscribe(const obby::user& user,
                                            LocalDocumentInfo& info)
 {
 	if(&user == &info.get_buffer().get_self() )
-		(*get_iter(info))[m_cols.color] = document_color(info);
+		(*get_iter(info))[columns.color] = document_color(info);
 }
 
 void Gobby::DocumentSettings::on_unsubscribe(const obby::user& user,
                                              LocalDocumentInfo& info)
 {
 	if(&user == &info.get_buffer().get_self() )
-		(*get_iter(info))[m_cols.color] = document_color(info);
+		(*get_iter(info))[columns.color] = document_color(info);
 }
 
 Gtk::TreeIter Gobby::DocumentSettings::

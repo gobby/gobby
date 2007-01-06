@@ -92,6 +92,44 @@ Gobby::Config::Error::Code Gobby::Config::Error::code() const
 	return static_cast<Code>(gobject_->code);
 }
 
+Gobby::Config::Entry::iterator::iterator(const base_type& base):
+	m_iter(base)
+{
+}
+
+Gobby::Config::Entry::iterator& Gobby::Config::Entry::iterator::operator++()
+{
+	++ m_iter;
+	return *this;
+}
+
+Gobby::Config::Entry::iterator Gobby::Config::Entry::iterator::operator++(int)
+{
+	iterator temp(*this);
+	++ *this;
+	return temp;
+}
+
+bool Gobby::Config::Entry::iterator::operator==(const iterator& other) const
+{
+	return m_iter == other.m_iter;
+}
+
+bool Gobby::Config::Entry::iterator::operator!=(const iterator& other) const
+{
+	return m_iter != other.m_iter;
+}
+
+const Glib::ustring& Gobby::Config::Entry::iterator::index() const
+{
+	return m_iter->first;
+}
+
+Gobby::Config::Entry& Gobby::Config::Entry::iterator::entry()
+{
+	return m_iter->second;
+}
+
 Gobby::Config::Entry::Entry()
 {
 }
@@ -145,10 +183,25 @@ void Gobby::Config::Entry::save(xmlpp::Element& element) const
 	}
 }
 
+bool Gobby::Config::Entry::has_entry(const Glib::ustring& index) const
+{
+	return m_table.find(index) != m_table.end();
+}
+
 Gobby::Config::Entry&
 Gobby::Config::Entry::operator[](const Glib::ustring& index)
 {
 	return m_table[index];
+}
+
+Gobby::Config::Entry::iterator Gobby::Config::Entry::begin()
+{
+	return iterator(m_table.begin() );
+}
+
+Gobby::Config::Entry::iterator Gobby::Config::Entry::end()
+{
+	return iterator(m_table.end() );
 }
 
 Gobby::Config::Config(const Glib::ustring& file)

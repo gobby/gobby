@@ -98,7 +98,7 @@ public:
 
 	/** @brief Returns the columns for the underlaying ListStore.
 	 */
-	const Columns& get_columns() const;
+//	const Columns& get_columns() const;
 
 	/** @brief Returns the underlaying list that may be displayed by
 	 * a Gtk::TreeView.
@@ -123,6 +123,7 @@ public:
 	 */
 	signal_document_remove_type document_remove_event() const;
 
+	const Columns columns;
 private:
 	void on_document_insert(DocumentInfo& info);
 	void on_document_remove(DocumentInfo& info);
@@ -138,7 +139,7 @@ private:
 	typedef std::map<const LocalDocumentInfo*, Gtk::TreeIter> map_type;
 
 	Glib::RefPtr<Gtk::ListStore> m_data;
-	Columns m_cols;
+	//Columns m_cols;
 
 	Glib::RefPtr<Gdk::Pixbuf> m_icon;
 

@@ -18,80 +18,263 @@
 
 #include "preferences.hpp"
 
+Gobby::Preferences::Editor::Editor()
+{
+}
+
+Gobby::Preferences::Editor::Editor(Config::Entry& entry):
+	tab_width(entry["tab"]["width"].get<unsigned int>(8)),
+	tab_spaces(entry["tab"]["spaces"].get<bool>(false)),
+	indentation_auto(entry["indentation"]["auto"].get<bool>(true)),
+	homeend_smart(entry["homeend"]["smart"].get<bool>(true) )
+{
+}
+
+void Gobby::Preferences::Editor::serialise(Config::Entry& entry) const
+{
+	entry["tab"]["width"].set(tab_width);
+	entry["tab"]["spaces"].set(tab_spaces);
+	entry["indentation"]["auto"].set(indentation_auto);
+	entry["homeend"]["smart"].set(homeend_smart);
+}
+
+Gobby::Preferences::View::View()
+{
+}
+
+Gobby::Preferences::View::View(Config::Entry& entry):
+	wrap_text(entry["wrap"]["text"].get<bool>(true) ),
+	wrap_words(entry["wrap"]["words"].get<bool>(true) ),
+	linenum_display(entry["linenum"]["display"].get<bool>(true) ),
+	curline_highlight(entry["curline"]["highlight"].get<bool>(true) ),
+	margin_display(entry["margin"]["display"].get<bool>(true) ),
+	margin_pos(entry["margin"]["pos"].get<unsigned int>(80) ),
+	bracket_highlight(entry["bracket"]["highlight"].get<bool>(true) )
+{
+}
+
+void Gobby::Preferences::View::serialise(Config::Entry& entry) const
+{
+	entry["wrap"]["text"].set(wrap_text);
+	entry["wrap"]["words"].set(wrap_words);
+	entry["linenum"]["display"].set(linenum_display);
+	entry["curline"]["highlight"].set(curline_highlight);
+	entry["margin"]["display"].set(margin_display);
+	entry["margin"]["pos"].set(margin_pos);
+	entry["bracket"]["highlight"].set(bracket_highlight);
+}
+
+Gobby::Preferences::Appearance::Appearance()
+{
+}
+
+Gobby::Preferences::Appearance::Appearance(Config::Entry& entry):
+	toolbar_show(
+		static_cast<Gtk::ToolbarStyle>(
+			entry["toolbar"]["show"].get<int>(
+				static_cast<int>(Gtk::TOOLBAR_BOTH)
+			)
+		)
+	),
+	remember(entry["windows"]["remember"].get<bool>(true) )
+{
+}
+
+void Gobby::Preferences::Appearance::serialise(Config::Entry& entry) const
+{
+	entry["toolbar"]["show"].set(static_cast<int>(toolbar_show) );
+	entry["windows"]["remember"].set(remember);
+}
+
+Gobby::Preferences::FileList::iterator::iterator(const base_iterator iter):
+	m_iter(iter)
+{
+}
+
+Gobby::Preferences::FileList::iterator&
+Gobby::Preferences::FileList::iterator::operator++()
+{
+	++ m_iter;
+	return *this;
+}
+
+Gobby::Preferences::FileList::iterator
+Gobby::Preferences::FileList::iterator::operator++(int)
+{
+	iterator temp(m_iter);
+	++ *this;
+	return temp;
+}
+
+const Glib::ustring& Gobby::Preferences::FileList::iterator::pattern() const
+{
+	return m_iter->first;
+}
+
+const Gobby::Preferences::Language&
+Gobby::Preferences::FileList::iterator::language() const
+{
+	return m_iter->second;
+}
+
+Gobby::Preferences::FileList::FileList()
+{
+}
+
+Gobby::Preferences::FileList::FileList(Config::Entry& entry,
+                                       const LangManager& lang_mgr)
+{
+	if(entry.begin() != entry.end() )
+	{
+		for(Config::Entry::iterator iter = entry.begin();
+		    iter != entry.end();
+		    ++ iter)
+		{
+			Config::Entry& ent = iter.entry();
+
+			Glib::ustring pattern =
+				ent["pattern"].get<Glib::ustring>("unknown");
+			Glib::ustring mime =
+				ent["mime_type"].get<Glib::ustring>("unknown");
+
+			Glib::RefPtr<Gtk::SourceLanguage> lang =
+				lang_mgr->get_language_from_mime_type(mime);
+
+			if(lang) m_files[pattern] = lang;
+		}
+	}
+	else
+	{
+		// Default list
+		add_by_mime_type("*.ada", "text/x-ada", lang_mgr);
+		add_by_mime_type("*.ada", "text/x-ada", lang_mgr);
+		add_by_mime_type("*.c", "text/x-c", lang_mgr);
+		add_by_mime_type("*.h", "text/x-c++", lang_mgr);
+		add_by_mime_type("*.hh", "text/x-c++", lang_mgr);
+		add_by_mime_type("*.cpp", "text/x-c++", lang_mgr);
+		add_by_mime_type("*.hpp", "text/x-c++", lang_mgr);
+		add_by_mime_type("*.cc", "text/x-c++", lang_mgr);
+		add_by_mime_type("*.cs", "text/x-csharp", lang_mgr);
+		add_by_mime_type("*.css", "text/css", lang_mgr);
+		add_by_mime_type("*.diff", "text/x-diff", lang_mgr);
+		add_by_mime_type("*.patch", "text/x-diff", lang_mgr);
+		add_by_mime_type("*.f", "text/x-fortran", lang_mgr);
+		add_by_mime_type("*.f77", "text/x-fortran", lang_mgr);
+		add_by_mime_type("*.hs", "text/x-haskell", lang_mgr);
+		add_by_mime_type("*.htm", "text/html", lang_mgr);
+		add_by_mime_type("*.html", "text/html", lang_mgr);
+		add_by_mime_type("*.xhtml", "text/html", lang_mgr);
+		add_by_mime_type("*.idl", "text/x-idl", lang_mgr);
+		add_by_mime_type("*.java", "text/x-java", lang_mgr);
+		add_by_mime_type("*.js", "text/x-javascript", lang_mgr);
+		add_by_mime_type("*.tex", "text/x-tex", lang_mgr);
+		add_by_mime_type("*.latex", "text/x-tex", lang_mgr);
+		add_by_mime_type("*.lua", "text/x-lua", lang_mgr);
+		add_by_mime_type("*.dpr", "text/x-pascal", lang_mgr);
+		add_by_mime_type("*.pas", "text/x-pascal", lang_mgr);
+		add_by_mime_type("*.pl", "text/x-perl", lang_mgr);
+		add_by_mime_type("*.pm", "text/x-perl", lang_mgr);
+		add_by_mime_type("*.php", "text/x-php", lang_mgr);
+		add_by_mime_type("*.php3", "text/x-php", lang_mgr);
+		add_by_mime_type("*.php4", "text/x-php", lang_mgr);
+		add_by_mime_type("*.php5", "text/x-php", lang_mgr);
+		add_by_mime_type(
+			"*.po",
+			"text/x-gettext-translation",
+			lang_mgr
+		);
+		add_by_mime_type("*.py", "text/x-python", lang_mgr);
+		add_by_mime_type("*.rb", "text/x-ruby", lang_mgr);
+		add_by_mime_type("*.sql", "text/x-sql", lang_mgr);
+		add_by_mime_type("*.texi", "text/x-texinfo", lang_mgr);
+		add_by_mime_type("*.bas", "text/x-vb", lang_mgr);
+		add_by_mime_type("*.vbs", "text/x-vb", lang_mgr);
+		add_by_mime_type("*.v", "text/x-verilog-src", lang_mgr);
+		add_by_mime_type("*.xml", "text/xml", lang_mgr);
+		add_by_mime_type(
+			"*.desktop",
+			"application/x-gnome-app-info",
+			lang_mgr
+		);
+		add_by_mime_type("*.tcl", "text/x-tcl", lang_mgr);
+		add_by_mime_type("Makefile", "text/x-Maxefile", lang_mgr);
+	}
+}
+
+void Gobby::Preferences::FileList::serialise(Config::Entry& entry) const
+{
+	int num = 0;
+
+	for(map_type::const_iterator iter = m_files.begin();
+	    iter != m_files.end();
+	    ++ iter)
+	{
+		std::stringstream stream;
+		stream << "file" << (++num);
+
+		std::list<Glib::ustring> mime_types =
+			iter->second->get_mime_types();
+
+		Config::Entry& main = entry[stream.str()];
+
+		main["pattern"].set(iter->first);
+		main["mime_type"].set(mime_types.front());
+	}
+}
+
+Gobby::Preferences::FileList::iterator
+Gobby::Preferences::FileList::add(const Glib::ustring& pattern,
+                                  const Language& lang)
+{
+	//map_type::iterator iter = m_files.find(pattern);
+	//if(iter != m_files.end() ) return iter;
+	return iterator(m_files.insert(std::make_pair(pattern, lang) ).first);
+}
+
+Gobby::Preferences::FileList::iterator
+Gobby::Preferences::FileList::add_by_mime_type(const Glib::ustring& pattern,
+                                               const Glib::ustring& mime_type,
+                                               const LangManager& lang_mgr)
+{
+	Glib::RefPtr<Gtk::SourceLanguage> lang =
+		lang_mgr->get_language_from_mime_type(mime_type);
+
+	if(lang)
+		return add(pattern, lang);
+	else
+		return iterator(m_files.end());
+}
+
+Gobby::Preferences::FileList::iterator
+Gobby::Preferences::FileList::begin() const
+{
+	return iterator(m_files.begin() );
+}
+
+Gobby::Preferences::FileList::iterator
+Gobby::Preferences::FileList::end() const
+{
+	return iterator(m_files.end() );
+}
+
 Gobby::Preferences::Preferences()
 {
 	// Uninitialised preferences
 }
 
-Gobby::Preferences::Preferences(Config& config)
-{
-	// Read preferences from config
-	editor.tab_width =
-		config["editor"]["tab"]["width"].get<unsigned int>(8);
-	editor.tab_spaces = config["editor"]["tab"]["spaces"].get<bool>(false);
-	editor.indentation_auto =
-		config["editor"]["indentation"]["auto"].get<bool>(true);
-	editor.homeend_smart =
-		config["editor"]["homeend"]["smart"].get<bool>(true);
-
-	view.wrap_text = config["view"]["wrap"]["text"].get<bool>(true);
-	view.wrap_words = config["view"]["wrap"]["words"].get<bool>(true);
-	view.linenum_display =
-		config["view"]["linenum"]["display"].get<bool>(true);
-	view.curline_highlight =
-		config["view"]["curline"]["highlight"].get<bool>(true);
-	view.margin_display =
-		config["view"]["margin"]["display"].get<bool>(true);
-	view.margin_pos =
-		config["view"]["margin"]["pos"].get<unsigned int>(80);
-	view.bracket_highlight =
-		config["view"]["bracket"]["highlight"].get<bool>(true);
-
-	appearance.toolbar_show = static_cast<Gtk::ToolbarStyle>(
-		config["appearance"]["toolbar"]["show"].get<int>(
-			static_cast<int>(Gtk::TOOLBAR_BOTH)
-		)
-	);
-	appearance.remember =
-		config["appearance"]["windows"]["remember"].get<bool>(true);
-}
-
-Gobby::Preferences::Preferences(const Preferences& other)
-{
-	*this = other;
-}
-
-Gobby::Preferences::~Preferences()
+Gobby::Preferences::Preferences(Config& config, const LangManager& lang_mgr):
+	editor(config["editor"]),
+	view(config["view"]),
+	appearance(config["appearance"]),
+	files(config["files"], lang_mgr)
 {
 }
 
-void Gobby::Preferences::serialise(Config& config)
+void Gobby::Preferences::serialise(Config& config) const
 {
 	// Serialise into config
-	config["editor"]["tab"]["width"].set(editor.tab_width);
-	config["editor"]["tab"]["spaces"].set(editor.tab_spaces);
-	config["editor"]["indentation"]["auto"].set(editor.indentation_auto);
-	config["editor"]["homeend"]["smart"].set(editor.homeend_smart);
-
-	config["view"]["wrap"]["text"].set(view.wrap_text);
-	config["view"]["wrap"]["words"].set(view.wrap_words);
-	config["view"]["linenum"]["display"].set(view.linenum_display);
-	config["view"]["curline"]["highlight"].set(view.curline_highlight);
-	config["view"]["margin"]["display"].set(view.margin_display);
-	config["view"]["margin"]["pos"].set(view.margin_pos);
-	config["view"]["bracket"]["highlight"].set(view.bracket_highlight);
-
-	config["appearance"]["toolbar"]["show"].set(
-		static_cast<int>(appearance.toolbar_show) );
-	config["appearance"]["windows"]["remember"].set(appearance.remember);
+	editor.serialise(config["editor"]);
+	view.serialise(config["view"]);
+	appearance.serialise(config["appearance"]);
+	files.serialise(config["files"]);
 }
-
-Gobby::Preferences& Gobby::Preferences::operator=(const Preferences& other)
-{
-	editor = other.editor;
-	view = other.view;
-	appearance = other.appearance;
-
-	return *this;
-}
-

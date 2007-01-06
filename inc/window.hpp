@@ -132,6 +132,7 @@ protected:
 
 	// Config
 	Config& m_config;
+	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 	Preferences m_preferences;
 	const IconManager& m_icon_mgr;
 

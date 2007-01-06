@@ -50,12 +50,14 @@
 
 Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
-	m_preferences(m_config), m_icon_mgr(icon_mgr),
+	m_lang_manager(Gtk::SourceLanguagesManager::create() ),
+	m_preferences(m_config, m_lang_manager), m_icon_mgr(icon_mgr),
 #ifdef WITH_HOWL
 	m_zeroconf(NULL),
 #endif
 	m_application_state(APPLICATION_NONE),
-	m_document_settings(*this), m_header(m_application_state),
+	m_document_settings(*this),
+	m_header(m_application_state, m_lang_manager),
 	m_userlist(*this, m_header, m_preferences, config["windows"]),
 	m_documentlist(
 		*this,
@@ -471,7 +473,7 @@ void Gobby::Window::on_session_save()
 	m_chk_default_ext.set_active(true);
 	dlg.get_vbox()->pack_start(m_chk_default_ext, Gtk::PACK_SHRINK);
 	// This option confuses the overwrite confirmation :/
-//	m_chk_default_ext.show();
+	//m_chk_default_ext.show();
 
 #ifdef GTKMM_GEQ_28
 	dlg.set_do_overwrite_confirmation(true);
@@ -528,7 +530,12 @@ void Gobby::Window::on_about()
 	dlg.set_name("Gobby");
 	dlg.set_version(PACKAGE_VERSION);
 	dlg.set_comments(_("A collaborative text editor"));
-	dlg.set_copyright("Copyright (C) 2005 0x539 dev group <crew@0x539.de>");
+
+	dlg.set_copyright(
+		"Copyright (C) 2005, 2006 0x539 dev "
+	        "group <crew@0x539.de>"
+	);
+
 	dlg.set_logo(m_icon_mgr.gobby);
 
 	std::deque<Glib::ustring> authors;
@@ -985,7 +992,8 @@ void Gobby::Window::on_quit()
 	if(on_delete_event(NULL) == false)
 	{
 		// Quit session
-		obby_end();
+		if(m_buffer.get() != NULL && m_buffer->is_open() )
+			obby_end();
 		// End program
 		Gtk::Main::quit();
 	}

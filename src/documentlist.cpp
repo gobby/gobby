@@ -47,8 +47,8 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 	m_settings(settings),
 	m_btn_subscribe(_("Subscribe") )
 {
-	m_view_col.pack_start(settings.get_columns().icon, false);
-	m_view_col.pack_start(settings.get_columns().title, false);
+	m_view_col.pack_start(settings.columns.icon, false);
+	m_view_col.pack_start(settings.columns.title, false);
 	m_view_col.set_spacing(5);
 
 	std::vector<Gtk::CellRenderer*> renderers =
@@ -67,10 +67,10 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 
 	m_view_col.add_attribute(
 		renderer->property_foreground_gdk(),
-		settings.get_columns().color
+		settings.columns.color
 	);
 
-	m_view_col.set_sort_column(settings.get_columns().title);
+	m_view_col.set_sort_column(settings.columns.title);
 
 	m_tree_view.add_events(Gdk::BUTTON_PRESS_MASK);
 	m_tree_view.signal_button_press_event().connect(
@@ -177,7 +177,7 @@ void Gobby::DocumentList::on_subscribe()
 			m_settings.get_list()->get_iter(*iter);
 
 		LocalDocumentInfo* info =
-			(*tree_iter)[m_settings.get_columns().info];
+			(*tree_iter)[m_settings.columns.info];
 
 		if(can_subscribe(*info) )
 			info->subscribe();
@@ -201,7 +201,7 @@ void Gobby::DocumentList::on_selection_changed()
 			m_settings.get_list()->get_iter(*iter);
 
 		LocalDocumentInfo* info =
-			(*tree_iter)[m_settings.get_columns().info];
+			(*tree_iter)[m_settings.columns.info];
 
 		if(can_subscribe(*info) )
 		{

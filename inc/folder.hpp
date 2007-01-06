@@ -88,8 +88,10 @@ public:
 	// Access to the mime map
 	const MimeMap& get_mime_map() const;
 
+#if 0
 	Glib::RefPtr<const Gtk::SourceLanguagesManager>
 		get_lang_manager() const;
+#endif
 
 	// Calls from the window
 	// TODO: Replace the last 5 of these functions by direct signal

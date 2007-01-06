@@ -22,43 +22,51 @@
 #include <gtkmm/toolbar.h>
 #include "config.hpp"
 
+#include "sourceview/sourcelanguage.hpp"
+#include "sourceview/sourcelanguagesmanager.hpp"
+
 namespace Gobby
 {
 
 class Preferences
 {
 public:
+	typedef Glib::RefPtr<Gtk::SourceLanguage> Language;
+	typedef Glib::RefPtr<Gtk::SourceLanguagesManager> LangManager;
+
 	/** Uninitialised preferences.
 	 */
 	Preferences();
 
-	/** Reads preferences values out of a config.
+	/** Reads preferences values out of a config, using default values
+	 * for values that do not exist in the config.
 	 */
-	Preferences(Config& m_config);
-
-	/** Copies preferences.
-	 */
-	Preferences(const Preferences& other);
-	~Preferences();
-
-	/** Copies preferences.
-	 */
-	Preferences& operator=(const Preferences& other);
+	Preferences(Config& m_config, const LangManager& lang_mgr);
 
 	/** Serialises preferences back to config.
 	 */
-	void serialise(Config& config);
+	void serialise(Config& config) const;
 
-	struct
+	class Editor
 	{
+	public:
+		Editor();
+		Editor(Config::Entry& entry);
+		void serialise(Config::Entry& entry) const;
+
 		unsigned int tab_width;
 		bool tab_spaces;
 		bool indentation_auto;
 		bool homeend_smart;
-	} editor;
+	};
 
-	struct
+	class View
 	{
+	public:
+		View();
+		View(Config::Entry& entry);
+		void serialise(Config::Entry& entry) const;
+
 		bool wrap_text;
 		bool wrap_words;
 		bool linenum_display;
@@ -66,13 +74,66 @@ public:
 		bool margin_display;
 		unsigned int margin_pos;
 		bool bracket_highlight;
-	} view;
+	};
 
-	struct
+	class Appearance
 	{
+	public:
+		Appearance();
+		Appearance(Config::Entry& entry);
+		void serialise(Config::Entry& entry) const;
+
 		Gtk::ToolbarStyle toolbar_show;
 		bool remember;
-	} appearance;
+	};
+
+	class FileList
+	{
+	public:
+		typedef std::map<Glib::ustring, Language> map_type;
+
+		class iterator
+		{
+		private:
+			typedef map_type::const_iterator base_iterator;
+
+		public:
+			iterator(base_iterator iter);
+
+			iterator& operator++();
+			iterator operator++(int);
+
+			const Glib::ustring& pattern() const;
+			const Language& language() const;
+		private:
+			base_iterator m_iter;
+		};
+
+		FileList();
+		FileList(Config::Entry& entry, const LangManager& lang_mgr);
+
+		void serialise(Config::Entry& entry) const;
+
+		// This function may also return an already existing iterator
+		// when pattern is already in the map. Compare lang to be sure
+		// that the entry actually has been inserted.
+		iterator add(const Glib::ustring& pattern,
+		             const Language& lang);
+
+		iterator begin() const;
+		iterator end() const;
+	protected:
+		iterator add_by_mime_type(const Glib::ustring& pattern,
+		                          const Glib::ustring& mime_type,
+		                          const LangManager& lang_mgr);
+
+		map_type m_files;
+	};
+
+	Editor editor;
+	View view;
+	Appearance appearance;
+	FileList files;
 };
 
 }

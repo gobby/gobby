@@ -144,11 +144,13 @@ const Gobby::MimeMap& Gobby::Folder::get_mime_map() const
 	return m_mime_map;
 }
 
+#if 0
 Glib::RefPtr<const Gtk::SourceLanguagesManager>
 Gobby::Folder::get_lang_manager() const
 {
 	return m_header.get_lang_manager();
 }
+#endif
 
 void Gobby::Folder::obby_start(LocalBuffer& buf)
 {

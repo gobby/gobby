@@ -62,7 +62,7 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	m_view.modify_font(desc);
 
 	// TODO: Set source language by filename
-	buf->set_highlight(true);
+	buf->set_highlight(false);
 
 	buf->signal_mark_set().connect(
 		sigc::mem_fun(*this, &DocWindow::on_mark_set)
@@ -147,6 +147,7 @@ bool Gobby::DocWindow::get_modified() const
 
 void Gobby::DocWindow::grab_focus()
 {
+	Gtk::ScrolledWindow::grab_focus();
 	m_view.grab_focus();
 }
 

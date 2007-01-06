@@ -113,16 +113,18 @@ public:
 		Language m_language;
 	};
 
-	Header(const ApplicationState& state);
+	typedef Glib::RefPtr<Gtk::SourceLanguagesManager> LangManager;
+
+	Header(const ApplicationState& state, const LangManager& lang_mgr);
 
 	// Access to accelerator groups of the ui manager
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
 	Glib::RefPtr<const Gtk::AccelGroup> get_accel_group() const;
 
-	Glib::RefPtr<Gtk::SourceLanguagesManager>
+	/*Glib::RefPtr<Gtk::SourceLanguagesManager>
 		get_lang_manager();
 	Glib::RefPtr<const Gtk::SourceLanguagesManager>
-		get_lang_manager() const;
+		get_lang_manager() const;*/
 
 	// Access to toolbar & menubar
 	Gtk::MenuBar& get_menubar();
@@ -179,7 +181,7 @@ protected:
 	                     ApplicationFlags exc_flags);
 
 	const Glib::RefPtr<Gtk::UIManager> m_ui_manager;
-	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
+	//Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 
 	Gtk::MenuBar* m_menubar;
 	Gtk::Toolbar* m_toolbar;

@@ -65,6 +65,28 @@ public:
 	class Entry
 	{
 	public:
+		class iterator
+		{
+		private:
+			typedef std::map<Glib::ustring, Entry>::iterator
+				base_type;
+
+		public:
+			iterator(const base_type& base);
+
+			iterator& operator++();
+			iterator operator++(int);
+
+			bool operator==(const iterator& other) const;
+			bool operator!=(const iterator& other) const;
+
+			const Glib::ustring& index() const;
+			Entry& entry();
+
+		private:
+			base_type m_iter;
+		};
+
 		Entry();
 		Entry(const Entry& other);
 		~Entry();
@@ -74,7 +96,11 @@ public:
 		void load(const xmlpp::Element& element);
 		void save(xmlpp::Element& element) const;
 
+		bool has_entry(const Glib::ustring& index) const;
 		Entry& operator[](const Glib::ustring& index);
+
+		iterator begin();
+		iterator end();
 
 		template<typename T> T get(const T& default_value = T()) const
 		{
