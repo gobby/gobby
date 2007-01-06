@@ -25,6 +25,7 @@
 #include <libobby/client_buffer.hpp>
 #include <libobby/host_buffer.hpp>
 #include "buffer_wrapper.hpp"
+#include "document.hpp"
 #include "hostdialog.hpp"
 #include "joindialog.hpp"
 #include "entrydialog.hpp"
@@ -285,7 +286,9 @@ void Gobby::Window::on_document_open()
 
 void Gobby::Window::on_document_close()
 {
-	m_folder.remove_current_document();
+	Widget* page = m_folder.get_nth_page(m_folder.get_current_page() );
+	m_buffer->remove_document(
+		static_cast<Document*>(page)->get_document() );
 }
 
 void Gobby::Window::on_quit()

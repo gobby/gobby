@@ -13,7 +13,7 @@ EDARCS_GET_CMD="get --verbose"
 
 DEPEND=">=dev-cpp/gtkmm-2.6
         >=dev-libs/libsigc++-2.0
-		net-libs/libobby"
+	net-libs/libobby"
 
 RDEPEND=""
 
