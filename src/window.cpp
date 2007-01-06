@@ -464,6 +464,30 @@ void Gobby::Window::on_about()
 	dlg.set_authors(authors);
 	dlg.set_artists(artists);
 
+	dlg.set_translator_credits(
+		"French translation:\n"
+		"  Peer Janssen <peer@baden-online.de>\n"
+		"  Mohammed Adnene Trojette <adn@diwi.org>\n"
+		"\n"
+		"Spanish translation:\n"
+		"  Mario Palomo Torrero <mpalomo@ihman.com>\n"
+		"\n"
+		"Swedish translation:\n"
+		"  Daniel Nylander <po@danielnylander.se>\n"
+		"\n"
+		"German translation:\n"
+		"  Philipp Kern <phil@0x539.de>\n"
+		"  Armin Burgmeier <armin@0x539.de>\n"
+		"\n"
+		"Please help in translating this release using Rosetta:\n"
+		"\n"
+		"After you create your account on https://launchpad.net\n"
+		"you could access the translation template on\n"
+		"https://launchpad.net/products/gobby/+series/0.3/+pots/gobby/"
+		"\nwhere you could translate it directly into your favourite\n"
+		"language. Your help is much appreciated!"
+		);
+
 	dlg.set_license(
 		"This program is free software; you can redistribute it\n"
 		"and/or modify it under the terms of the GNU General Public\n"
