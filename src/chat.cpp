@@ -328,8 +328,9 @@ void Gobby::Chat::recv_user_line(const std::string& line,
 {
 	// Check each line for highlighting occurence
 	Glib::ustring colour = "black";
-	if(is_highlighted(line, m_buffer->get_self().get_name()) )
-		colour = "darkred";
+	if(&message.get_user() != &m_buffer->get_self())
+		if(is_highlighted(line, m_buffer->get_self().get_name()) )
+			colour = "darkred";
 
 	m_log_chat.log(message.repr(), colour, message.get_timestamp() );
 }
