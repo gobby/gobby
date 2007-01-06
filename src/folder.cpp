@@ -78,3 +78,11 @@ void Gobby::Folder::obby_document_remove(obby::document& document)
 		}
 	}
 }
+
+void Gobby::Folder::remove_current_document()
+{
+	Widget* doc = get_nth_page(get_current_page() );
+	remove_page(get_current_page() );
+	delete doc;
+}
+

@@ -285,6 +285,7 @@ void Gobby::Window::on_document_open()
 
 void Gobby::Window::on_document_close()
 {
+	m_folder.remove_current_document();
 }
 
 void Gobby::Window::on_quit()

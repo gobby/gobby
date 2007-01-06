@@ -42,6 +42,8 @@ public:
 	void obby_user_part(obby::user& user);
 	void obby_document_insert(obby::document& document);
 	void obby_document_remove(obby::document& document);
+
+	void remove_current_document();
 protected:
 };
 
