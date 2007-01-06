@@ -16,7 +16,6 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <cassert>
 #include <obby/format_string.hpp>
 #include "io/buffer_wrapper.hpp"
 #include "common.hpp"
@@ -265,84 +264,75 @@ void obby::io::host::on_send_event(net6::user& to)
 }
 
 #ifdef WIN32
-obby::io::client_buffer::client_buffer(Gtk::Window& window,
-                                       const Glib::ustring& hostname,
-                                       unsigned int port)
+obby::io::client_buffer::client_buffer(Gtk::Window& window)
 #else
-obby::io::client_buffer::client_buffer(const Glib::ustring& hostname,
-                                       unsigned int port)
+obby::io::client_buffer::client_buffer()
 #endif
- : obby::client_buffer()
+#ifdef WIN32
+ : m_window(window)
+#endif
+{
+}
+
+obby::io::client_buffer::net_type*
+obby::io::client_buffer::new_net(const std::string& host, unsigned int port)
 {
 	net6::ipv4_address addr(
-		net6::ipv4_address::create_from_hostname(hostname, port) );
+		net6::ipv4_address::create_from_hostname(host, port)
+	);
 
 #ifdef WIN32
-	m_net.reset(new client(window, addr) );
+	return new net_type(m_window, addr);
 #else
-	m_net.reset(new client(addr) );
+	return new net_type(addr);
 #endif
-	register_signal_handlers();
 }
 
-obby::io::client_buffer::~client_buffer()
-{
-}
-
+#ifdef WIN32
+obby::io::server_buffer::server_buffer(Gtk::Window& window)
+#else
 obby::io::server_buffer::server_buffer()
-{
-}
-
-#ifdef WIN32
-obby::io::server_buffer::server_buffer(Gtk::Window& window, unsigned int port)
-#else
-obby::io::server_buffer::server_buffer(unsigned int port)
 #endif
- : obby::buffer(), obby::server_buffer()
-{
 #ifdef WIN32
-	net6::server* server = new io::server(window, port, false);
-#else
-	net6::server* server = new io::server(port, false);
+ : m_window(window)
 #endif
-	m_net.reset(server);
-
-	register_signal_handlers();
-}
-
-obby::io::server_buffer::~server_buffer()
 {
 }
 
-obby::io::host_buffer::host_buffer()
- : obby::host_buffer()
+obby::io::server_buffer::net_type*
+obby::io::server_buffer::new_net(unsigned int port)
 {
+#ifdef WIN32
+	return new io::server(m_window, port);
+#else
+	return new io::server(port);
+#endif
 }
 
 #ifdef WIN32
-obby::io::host_buffer::host_buffer(Gtk::Window& window, unsigned int port,
+obby::io::host_buffer::host_buffer(Gtk::Window& window,
                                    const Glib::ustring& username, int red,
                                    int green, int blue)
 #else
-obby::io::host_buffer::host_buffer(unsigned int port,
-                                   const Glib::ustring& username, int red,
+obby::io::host_buffer::host_buffer(const Glib::ustring& username, int red,
                                    int green, int blue)
 #endif
- : obby::host_buffer()
-{
+ : obby::host_buffer(username, red, green, blue),
 #ifdef WIN32
-	net6::host* host = new io::host(window, port, username, false);
+   server_buffer(window),
 #else
-	net6::host* host = new io::host(port, username, false);
+   server_buffer()
 #endif
-
-	m_net.reset(host);
-
-	m_self = m_user_table.add_user(host->get_self(), red, green, blue);
-	register_signal_handlers();
+{
 }
 
-obby::io::host_buffer::~host_buffer()
+obby::io::host_buffer::net_type*
+obby::io::host_buffer::new_net(unsigned int port)
 {
+#ifdef WIN32
+	return new net_type(window, port, m_username);
+#else
+	return new net_type(port, m_username);
+#endif
 }
 

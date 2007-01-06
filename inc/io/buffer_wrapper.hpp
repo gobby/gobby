@@ -209,15 +209,19 @@ protected:
 class client_buffer : virtual public obby::client_buffer
 {
 public:
+	typedef client net_type;
+
 #ifdef WIN32
-	client_buffer(Gtk::Window& window, const Glib::ustring& hostname,
-	             unsigned int port);
+	client_buffer(Gtk::Window& window);
 #else
-	client_buffer(const Glib::ustring& hostname, unsigned int port);
+	client_buffer();
 #endif
-	virtual ~client_buffer();
 
 protected:
+#ifdef WIN32
+	Gtk::Window& m_window;
+#endif
+	virtual net_type* new_net(const std::string& host, unsigned int port);
 };
 
 /** A obby::server_buffer derived class that uses io::server.
@@ -225,34 +229,40 @@ protected:
 class server_buffer : virtual public obby::server_buffer
 {
 public:
+	typedef server net_type;
+
 #ifdef WIN32
-	server_buffer(Gtk::Window& window, unsigned int port);
+	server_buffer(Gtk::Window& window);
 #else
-	server_buffer(unsigned int port);
+	server_buffer();
 #endif
-	virtual ~server_buffer();
 
 protected:
-	server_buffer();
+#ifdef WIN32
+	Gtk::Window& m_window;
+#endif
+	net_type* new_net(unsigned int port);
 };
 
 /** A obby::host_buffer derived class that uses io::host.
  */
 
-class host_buffer : virtual public obby::host_buffer
+class host_buffer : virtual public obby::host_buffer,
+                    virtual public server_buffer
 {
 public:
+	typedef host net_type;
+
 #ifdef WIN32
-	host_buffer(Gtk::Window& window, unsigned int port,
+	host_buffer(Gtk::Window& window
 	           const Glib::ustring& username, int red, int green, int blue);
 #else
-	host_buffer(unsigned int port, const Glib::ustring& username, int red,
+	host_buffer(const Glib::ustring& username, int red,
 	            int green, int blue);
 #endif
-	virtual ~host_buffer();
 
 protected:
-	host_buffer();
+	net_type* new_net(unsigned int port);
 };
 
 } // namespace io

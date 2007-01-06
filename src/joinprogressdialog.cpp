@@ -79,12 +79,13 @@ void Gobby::JoinProgressDialog::on_done()
 		m_buffer.reset(
 			new obby::io::client_buffer(
 #ifdef WIN32
-				m_parent,
+				m_parent
 #endif
-				m_hostname,
-				m_port
 			)
 		);
+
+		// Connect to remote host
+		m_buffer->connect(m_hostname, m_port);
 	}
 	catch(net6::error& e)
 	{

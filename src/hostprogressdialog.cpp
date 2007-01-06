@@ -56,10 +56,14 @@ void Gobby::HostProgressDialog::on_thread()
 #ifdef WIN32
 				m_parent,
 #endif
-				m_port, m_username,
+				m_username,
 				red, green, blue
 			)
 		);
+
+		//set_status_text("Creating session...");
+
+		m_buffer->open(m_port);
 	}
 	catch(net6::error& e)
 	{
