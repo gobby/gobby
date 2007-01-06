@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-27 18:52+0200\n"
+"POT-Creation-Date: 2005-10-07 16:12+0200\n"
 "PO-Revision-Date: 2005-08-14 17:39+0200\n"
 "Last-Translator: Mario Palomo Torrero <mpalomo@ihman.com>\n"
 "Language-Team: Mario Palomo Torrero <mpalomo@ihman.com>\n"
@@ -16,22 +16,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: src/encoding.cpp:103
+#: src/encoding.cpp:104
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
-msgstr "Error al convertir la entrada a UTF-8: La codificación es desconocida o se trata de datos binarios."
+msgstr ""
+"Error al convertir la entrada a UTF-8: La codificación es desconocida o se "
+"trata de datos binarios."
 
 #: src/chat.cpp:28
 msgid "Send"
 msgstr "Enviar"
 
-#: src/chat.cpp:83
+#: src/chat.cpp:86
 #, c-format
 msgid "%0% has joined"
 msgstr "%0% conectado"
 
-#: src/chat.cpp:90
+#: src/chat.cpp:93
 #, c-format
 msgid "%0% has left"
 msgstr "%0% desconectado"
@@ -132,7 +134,7 @@ msgid "Shows up a dialog to customise Gobby for your needs"
 msgstr "Muestra un diálogo para configurar Gobby con sus preferencias"
 
 #. User menu
-#: src/header.cpp:283 src/joindialog.cpp:99
+#: src/header.cpp:283 src/joindialog.cpp:101
 msgid "User"
 msgstr "Usuario"
 
@@ -163,7 +165,8 @@ msgstr "Preferencias del documento..."
 
 #: src/header.cpp:322
 msgid "Shows a preferences dialog that is just applied to this document"
-msgstr "Muestra un diálogo de preferencias que se aplicarán sólo a este documento"
+msgstr ""
+"Muestra un diálogo de preferencias que se aplicarán sólo a este documento"
 
 #. Syntax submenu
 #: src/header.cpp:332
@@ -229,7 +232,9 @@ msgstr "Inicio/Fin inteligente"
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
-msgstr "Con esta opción habilitada, las teclas Inicio/Fin se mueven al primer/último caracter antes de ir al inicio/fin de la línea."
+msgstr ""
+"Con esta opción habilitada, las teclas Inicio/Fin se mueven al primer/último "
+"caracter antes de ir al inicio/fin de la línea."
 
 #: src/preferencesdialog.cpp:113
 msgid "Text wrapping"
@@ -340,11 +345,11 @@ msgstr "Host:"
 msgid "Local network"
 msgstr "Red local"
 
-#: src/joindialog.cpp:100
+#: src/joindialog.cpp:102
 msgid "Host"
 msgstr "Host"
 
-#: src/joindialog.cpp:101
+#: src/joindialog.cpp:103
 msgid "Port"
 msgstr "Puerto"
 
@@ -368,103 +373,109 @@ msgstr "Subscrito"
 msgid ""
 "Howl initialisation failed. Probably you need to run mDNSResponder as root "
 "prior to Gobby. Zeroconf support is deactivated for this session."
-msgstr "Falló la inicialización Howl. Probablemente se necesite ejecutar mDNSResponder como root antes de ejecutar Gobby. El soporte Zeroconf está desactivado para esta sesión."
+msgstr ""
+"Falló la inicialización Howl. Probablemente se necesite ejecutar "
+"mDNSResponder como root antes de ejecutar Gobby. El soporte Zeroconf está "
+"desactivado para esta sesión."
 
-#: src/window.cpp:339
+#: src/window.cpp:284
+#, c-format
+msgid "Serving on port %0%"
+msgstr ""
+
+#: src/window.cpp:326
+#, fuzzy, c-format
+msgid "Connected to %0%:%1%"
+msgstr "Conectado"
+
+#: src/window.cpp:347
 msgid "A collaborative text editor"
 msgstr "Un editor de texto colaborativo"
 
-#: src/window.cpp:399
+#: src/window.cpp:407
 msgid "Create document"
 msgstr "Crear documento"
 
-#: src/window.cpp:399
+#: src/window.cpp:407
 msgid "Enter document name"
 msgstr "Introduce el nombre del documento"
 
 #. Create FileChooser
-#: src/window.cpp:414
+#: src/window.cpp:422
 msgid "Open new document"
 msgstr "Abrir nuevo documento"
 
 #. Setup dialog
-#: src/window.cpp:461
+#: src/window.cpp:469
 msgid "Save current document"
 msgstr "Guardar documento actual"
 
-#: src/window.cpp:506
+#: src/window.cpp:514
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
-msgstr "Pulse sobre \"Aplicar\" para aplicar las nuevas configuraciones a documentos que actualmente están abiertos. \"Aceptar\" guardará los valores para usarlos cuando se creen nuevos documentos."
+msgstr ""
+"Pulse sobre \"Aplicar\" para aplicar las nuevas configuraciones a documentos "
+"que actualmente están abiertos. \"Aceptar\" guardará los valores para "
+"usarlos cuando se creen nuevos documentos."
 
 #. Build password dialog with info
-#: src/window.cpp:546
+#: src/window.cpp:554
 msgid "Set user password"
 msgstr "Establecer contraseña de usuario"
 
-#: src/window.cpp:548
+#: src/window.cpp:556
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
-msgstr "Establezca la contraseña de usuario para su cuenta. Cuando intente acceder de nuevo con este usuario se le preguntará por su contraseña."
+msgstr ""
+"Establezca la contraseña de usuario para su cuenta. Cuando intente acceder "
+"de nuevo con este usuario se le preguntará por su contraseña."
 
-#: src/window.cpp:596
+#: src/window.cpp:604
 #, c-format
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
-msgstr "Estas preferencias sólo afectan al documento activo \"%0%\". Si se quiere cambiar las preferencias globales, utilice el submenú de preferencias en el menu \"Editar\"."
+msgstr ""
+"Estas preferencias sólo afectan al documento activo \"%0%\". Si se quiere "
+"cambiar las preferencias globales, utilice el submenú de preferencias en el "
+"menu \"Editar\"."
 
 #. Connection closed by remote site
-#: src/window.cpp:681 src/joinprogressdialog.cpp:151
+#: src/window.cpp:689 src/joinprogressdialog.cpp:224
 msgid "Connection lost"
 msgstr "Conexión perdida"
 
-#: src/window.cpp:725
+#: src/window.cpp:734
 msgid "Colour change failed: Colour already in use"
 msgstr "Error al cambiar de color: ese color ya se está usando"
 
-#: src/window.cpp:881
+#: src/window.cpp:909
 #, c-format
 msgid ""
 "The document \"%0%\" has been changed since it was saved to disk. Are you "
 "sure that you want to close it?"
-msgstr "El documento \"%0%\" ha cambiado desde la última vez que se guardó. ¿Seguro que quiere cerrarlo?"
+msgstr ""
+"El documento \"%0%\" ha cambiado desde la última vez que se guardó. ¿Seguro "
+"que quiere cerrarlo?"
 
-#: src/statusbar.cpp:65
+#: src/statusbar.cpp:59
 #, c-format
 msgid "Selected language: %0%"
 msgstr "Lenguaje seleccionado: %0%"
 
-#: src/statusbar.cpp:71
+#: src/statusbar.cpp:65
 msgid "No language selected"
 msgstr "Ningún lenguaje seleccionado"
 
-#: src/statusbar.cpp:79
-#, c-format
-msgid "%0% pending change"
-msgid_plural "%0% pending changes"
-msgstr[0] "%0% cambios pendientes"
-msgstr[1] "%0% cambios pendientes"
-
-#: src/statusbar.cpp:86
-#, c-format
-msgid "Revision: %0%"
-msgstr "Revisión: %0%"
-
-#: src/buffer_wrapper.cpp:169
-#, c-format
-msgid "Peer %0% (%1%) not found in peer list"
-msgstr "Equipo %0% (%1%) no encontrado en la lista"
-
-#: src/document.cpp:35
+#: src/document.cpp:30
 msgid "Subscribe"
 msgstr "Suscribir"
 
-#: src/document.cpp:667
+#: src/document.cpp:687
 #, c-format
 msgid ""
 "You are not subscribed to the document \"%0%\".\n"
@@ -475,13 +486,10 @@ msgid ""
 msgstr ""
 "No está suscrito al documento \"%0%\".\n"
 "\n"
-"Para ver los cambios que otros hacen o para editar el documento, es necesario suscribirse a este documento. Utilice el siguiente botón para hacer esto.\n"
+"Para ver los cambios que otros hacen o para editar el documento, es "
+"necesario suscribirse a este documento. Utilice el siguiente botón para "
+"hacer esto.\n"
 "\n"
-
-#. Set text
-#: src/progressdialog.cpp:95
-msgid "Waiting for thread to finish..."
-msgstr "Esperando que el thread termine..."
 
 #: src/hostprogressdialog.cpp:29
 msgid "Opening obby session..."
@@ -491,25 +499,25 @@ msgstr "Abriendo sesión obby..."
 msgid "Joining obby session..."
 msgstr "Uniéndose a sesión obby..."
 
-#. Wait for welcome packet
-#: src/joinprogressdialog.cpp:94
+#. Thread has established connection, wait for welcome packet
+#: src/joinprogressdialog.cpp:152
 msgid "Waiting for welcome packet..."
 msgstr "Esperando paquete de bienvenida..."
 
 #. Update status message
-#: src/joinprogressdialog.cpp:109
+#: src/joinprogressdialog.cpp:182
 msgid "Login packet sent, waiting for response..."
 msgstr "Paquete de ingreso enviado, esperando respuesta..."
 
-#: src/joinprogressdialog.cpp:122
+#: src/joinprogressdialog.cpp:195
 msgid "Enter session password"
 msgstr "Introducir contraseña de sesión"
 
-#: src/joinprogressdialog.cpp:129
+#: src/joinprogressdialog.cpp:202
 msgid "Enter user password"
 msgstr "Introducir contraseña de usuario"
 
-#: src/joinprogressdialog.cpp:138
+#: src/joinprogressdialog.cpp:211
 msgid "Logged in successfully, synchronising session..."
 msgstr "Ingreso correcto, sincronizando sesión..."
 
@@ -517,3 +525,16 @@ msgstr "Ingreso correcto, sincronizando sesión..."
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
+#~ msgid "%0% pending change"
+#~ msgid_plural "%0% pending changes"
+#~ msgstr[0] "%0% cambios pendientes"
+#~ msgstr[1] "%0% cambios pendientes"
+
+#~ msgid "Revision: %0%"
+#~ msgstr "Revisión: %0%"
+
+#~ msgid "Peer %0% (%1%) not found in peer list"
+#~ msgstr "Equipo %0% (%1%) no encontrado en la lista"
+
+#~ msgid "Waiting for thread to finish..."
+#~ msgstr "Esperando que el thread termine..."
