@@ -60,6 +60,10 @@ public:
 		bool wrap_text;
 		bool wrap_words;
 		bool linenum_display;
+		bool curline_highlight;
+		bool margin_display;
+		unsigned int margin_pos;
+		bool bracket_highlight;
 	} view;
 };
 

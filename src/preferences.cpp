@@ -36,6 +36,14 @@ Gobby::Preferences::Preferences(Config& config)
 	view.wrap_words = config["view"]["wrap"]["words"].get<bool>(true);
 	view.linenum_display =
 		config["view"]["linenum"]["display"].get<bool>(true);
+	view.curline_highlight =
+		config["view"]["curline"]["highlight"].get<bool>(true);
+	view.margin_display =
+		config["view"]["margin"]["display"].get<bool>(true);
+	view.margin_pos =
+		config["view"]["margin"]["pos"].get<unsigned int>(80);
+	view.bracket_highlight =
+		config["view"]["bracket"]["highlight"].get<bool>(true);
 }
 
 Gobby::Preferences::Preferences(const Preferences& other)
@@ -57,6 +65,10 @@ void Gobby::Preferences::serialise(Config& config)
 	config["view"]["wrap"]["text"].set(view.wrap_text);
 	config["view"]["wrap"]["words"].set(view.wrap_words);
 	config["view"]["linenum"]["display"].set(view.linenum_display);
+	config["view"]["curline"]["highlight"].set(view.curline_highlight);
+	config["view"]["margin"]["display"].set(view.margin_display);
+	config["view"]["margin"]["pos"].get(view.margin_pos);
+	config["view"]["bracket"]["highlight"].get(view.bracket_highlight);
 }
 
 Gobby::Preferences& Gobby::Preferences::operator=(const Preferences& other)

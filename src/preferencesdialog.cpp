@@ -91,32 +91,77 @@ bool Gobby::PreferencesDialog::Editor::get_indentation_auto() const
 Gobby::PreferencesDialog::View::View(const Preferences& preferences)
  : Page(preferences), m_frame_wrap(_("Text wrapping") ),
    m_frame_linenum(_("Line numbers") ),
+   m_frame_curline(_("Current line") ),
+   m_frame_margin(_("Right margin") ),
+   m_frame_bracket(_("Bracket matching") ),
    m_btn_wrap_text(_("Enable text wrapping") ),
    m_btn_wrap_words(_("Do not split words over two lines") ),
-   m_btn_linenum_display(_("Display line numbers") )
+   m_btn_linenum_display(_("Display line numbers") ),
+   m_btn_curline_highlight(_("Highlight current line") ),
+   m_btn_margin_display(_("Display right margin") ),
+   m_lbl_margin_pos(_("Right margin at column:") ),
+   m_btn_bracket_highlight(_("Highlight matching bracket") )
 {
 	bool wrap_text = preferences.view.wrap_text;
 	bool wrap_words = preferences.view.wrap_words;
 	bool linenum_display = preferences.view.linenum_display;
+	bool curline_highlight = preferences.view.curline_highlight;
+	bool margin_display = preferences.view.margin_display;
+	unsigned int margin_pos = preferences.view.margin_pos;
+	bool bracket_highlight = preferences.view.bracket_highlight;
+
+	m_btn_margin_display.signal_toggled().connect(
+		sigc::mem_fun(*this, &View::on_margin_display_toggled) );
+
+	m_ent_margin_pos.set_range(1, 1024);
+	m_ent_margin_pos.set_value(margin_pos);
+	m_ent_margin_pos.set_increments(1, 16);
 
 	m_btn_wrap_text.set_active(wrap_text);
 	m_btn_wrap_words.set_active(!wrap_words);
 	m_btn_linenum_display.set_active(linenum_display);
+	m_btn_curline_highlight.set_active(curline_highlight);
+	m_btn_margin_display.set_active(margin_display);
+	m_btn_bracket_highlight.set_active(bracket_highlight);
+
+	m_box_margin_pos.set_spacing(5);
+	m_box_margin_pos.pack_start(m_lbl_margin_pos, Gtk::PACK_SHRINK);
+	m_box_margin_pos.pack_start(m_ent_margin_pos, Gtk::PACK_EXPAND_WIDGET);
 
 	m_box_wrap.set_spacing(5);
 	m_box_wrap.set_border_width(5);
 	m_box_wrap.pack_start(m_btn_wrap_text, Gtk::PACK_SHRINK);
 	m_box_wrap.pack_start(m_btn_wrap_words, Gtk::PACK_SHRINK);
+
 	m_box_linenum.set_spacing(5);
 	m_box_linenum.set_border_width(5);
 	m_box_linenum.pack_start(m_btn_linenum_display, Gtk::PACK_SHRINK);
+
+	m_box_curline.set_spacing(5);
+	m_box_curline.set_border_width(5);
+	m_box_curline.pack_start(m_btn_curline_highlight, Gtk::PACK_SHRINK);
+
+	m_box_margin.set_spacing(5);
+	m_box_margin.set_border_width(5);
+	m_box_margin.pack_start(m_btn_margin_display, Gtk::PACK_SHRINK);
+	m_box_margin.pack_start(m_box_margin_pos, Gtk::PACK_SHRINK);
+
+	m_box_bracket.set_spacing(5);
+	m_box_bracket.set_border_width(5);
+	m_box_bracket.pack_start(m_btn_bracket_highlight, Gtk::PACK_SHRINK);
 	
 	m_frame_wrap.add(m_box_wrap);
 	m_frame_linenum.add(m_box_linenum);
+	m_frame_curline.add(m_box_curline);
+	m_frame_margin.add(m_box_margin);
+	m_frame_bracket.add(m_box_bracket);
 
 	m_box.set_spacing(5);
 	m_box.pack_start(m_frame_wrap, Gtk::PACK_SHRINK);
 	m_box.pack_start(m_frame_linenum, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_frame_curline, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_frame_margin, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_frame_bracket, Gtk::PACK_SHRINK);
 
 	set_border_width(10);
 	add(m_box);
@@ -139,6 +184,31 @@ bool Gobby::PreferencesDialog::View::get_wrap_words() const
 bool Gobby::PreferencesDialog::View::get_linenum_display() const
 {
 	return m_btn_linenum_display.get_active();
+}
+
+bool Gobby::PreferencesDialog::View::get_curline_highlight() const
+{
+	return m_btn_curline_highlight.get_active();
+}
+
+bool Gobby::PreferencesDialog::View::get_margin_display() const
+{
+	return m_btn_margin_display.get_active();
+}
+
+unsigned int Gobby::PreferencesDialog::View::get_margin_pos() const
+{
+	return static_cast<unsigned int>(m_ent_margin_pos.get_value() );
+}
+
+bool Gobby::PreferencesDialog::View::get_bracket_highlight() const
+{
+	return m_btn_bracket_highlight.get_active();
+}
+
+void Gobby::PreferencesDialog::View::on_margin_display_toggled()
+{
+	m_box_margin_pos.set_sensitive(m_btn_margin_display.get_active() );
 }
 
 Gobby::PreferencesDialog::Appearance::Appearance(
@@ -198,6 +268,12 @@ Gobby::Preferences Gobby::PreferencesDialog::preferences() const
 	preferences.view.wrap_text = m_page_view.get_wrap_text();
 	preferences.view.wrap_words = m_page_view.get_wrap_words();
 	preferences.view.linenum_display = m_page_view.get_linenum_display();
+	preferences.view.curline_highlight =
+		m_page_view.get_curline_highlight();
+	preferences.view.margin_display = m_page_view.get_margin_display();
+	preferences.view.margin_pos = m_page_view.get_margin_pos();
+	preferences.view.bracket_highlight =
+		m_page_view.get_bracket_highlight();
 
 	return preferences;
 }

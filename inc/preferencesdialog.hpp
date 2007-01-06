@@ -77,10 +77,22 @@ public:
 		bool get_wrap_words() const;
 
 		bool get_linenum_display() const;
+
+		bool get_curline_highlight() const;
+
+		bool get_margin_display() const;
+		unsigned int get_margin_pos() const;
+
+		bool get_bracket_highlight() const;
 	protected:
+		virtual void on_margin_display_toggled();
+
 		Gtk::VBox m_box;
 		Gtk::Frame m_frame_wrap;
 		Gtk::Frame m_frame_linenum;
+		Gtk::Frame m_frame_curline;
+		Gtk::Frame m_frame_margin;
+		Gtk::Frame m_frame_bracket;
 
 		Gtk::VBox m_box_wrap;
 		Gtk::CheckButton m_btn_wrap_text;
@@ -88,6 +100,18 @@ public:
 
 		Gtk::VBox m_box_linenum;
 		Gtk::CheckButton m_btn_linenum_display;
+
+		Gtk::VBox m_box_curline;
+		Gtk::CheckButton m_btn_curline_highlight;
+
+		Gtk::VBox m_box_margin;
+		Gtk::CheckButton m_btn_margin_display;
+		Gtk::HBox m_box_margin_pos;
+		Gtk::Label m_lbl_margin_pos;
+		Gtk::SpinButton m_ent_margin_pos;
+
+		Gtk::VBox m_box_bracket;
+		Gtk::CheckButton m_btn_bracket_highlight;
 	};
 
 	class Appearance : public Page

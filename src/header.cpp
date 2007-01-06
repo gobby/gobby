@@ -52,6 +52,7 @@ namespace {
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
 		"      <menuitem action=\"ViewPreferences\" />"
+		"      <separator />"
 		"      <menu action=\"MenuViewSyntax\">"
 		"        <menuitem action=\"ViewSyntaxLanguageNone\" />"
 		"      </menu>"

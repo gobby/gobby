@@ -650,6 +650,10 @@ void Gobby::Document::apply_preferences()
 	}
 
 	set_show_line_numbers(m_preferences.view.linenum_display);
+	set_highlight_current_line(m_preferences.view.curline_highlight);
+	set_show_margin(m_preferences.view.margin_display);
+	set_margin(m_preferences.view.margin_pos);
+	get_buffer()->set_check_brackets(m_preferences.view.bracket_highlight);
 }
 
 void
