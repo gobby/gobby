@@ -17,6 +17,8 @@
  */
 
 #include <gtkmm/main.h>
+#include "createdialog.hpp"
+#include "joindialog.hpp"
 #include "window.hpp"
 
 Gobby::Window::Window()
@@ -61,10 +63,18 @@ Gobby::Window::~Window()
 
 void Gobby::Window::on_session_create()
 {
+	CreateDialog dlg(*this);
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+	}
 }
 
 void Gobby::Window::on_session_join()
 {
+	JoinDialog dlg(*this);
+	if(dlg.run() == Gtk::RESPONSE_OK)
+	{
+	}
 }
 
 void Gobby::Window::on_session_quit()
