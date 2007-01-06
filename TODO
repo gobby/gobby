@@ -8,6 +8,7 @@ Critical:
 Major:
   * Bug: Crashes on files with encodings not being UTF-8 (#43)
   * Languages with non-ascii-characters crash (#44)
+  * High CPU load while writing (#45)
 
 Normal:
   * Implement support for Zeroconf (#17)
@@ -48,6 +49,14 @@ substitute such characters by there Unicode value or something (currently,
 only German umlauts are replaced by a another string). This XML is only 
 used for internal stuff and never shown to the user, so any other 
 identifiers would be OK.
+
+45: High CPU load while writing
+-------------------------------
+If I connect 2 Gobby's on localhost to each other, I see 100% CPU usage 
+while writing fast (in fact, punching onto the keys). This looks like a 
+severe issue in either the design or implementation to me.
+
+Can be reproduced on Windows and FreeBSD.
 
 17: Implement support for Zeroconf
 ----------------------------------
