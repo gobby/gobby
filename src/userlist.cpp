@@ -122,17 +122,15 @@ Gobby::UserList::UserList(Gtk::Window& parent,
 
 void Gobby::UserList::obby_start(LocalBuffer& buf)
 {
-	m_scrolled_wnd.set_sensitive(true);
+	remove_children(m_iter_offline);
+	remove_children(m_iter_online);
 
+	m_scrolled_wnd.set_sensitive(true);
 	m_buffer = &buf;
 }
 
 void Gobby::UserList::obby_end()
 {
-	m_scrolled_wnd.set_sensitive(false);
-
-	remove_children(m_iter_offline);
-	remove_children(m_iter_online);
 }
 
 void Gobby::UserList::obby_user_join(const obby::user& user)

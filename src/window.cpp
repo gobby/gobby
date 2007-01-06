@@ -187,7 +187,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
 
 Gobby::Window::~Window()
 {
-	obby_end();
+	if(m_buffer.get() && m_buffer->is_open() )
+		obby_end();
 
 	// Serialise preferences into config
 	m_preferences.serialise(m_config);
@@ -322,7 +323,25 @@ void Gobby::Window::obby_start()
 void Gobby::Window::obby_end()
 {
 	// Nothing to do if no buffer is open
-	if(!m_buffer.get() ) return;
+	if(m_buffer.get() == NULL)
+	{
+		throw std::logic_error(
+			"Gobby::Window::obby_end:\n"
+			"Buffer not available"
+		);
+	}
+
+	if(m_buffer->is_open() )
+	{
+		// TODO: Virtual close call in obby?
+		ClientBuffer* client_buf =
+			dynamic_cast<ClientBuffer*>(m_buffer.get());
+		HostBuffer* host_buf =
+			dynamic_cast<HostBuffer*>(m_buffer.get());
+
+		if(client_buf != NULL) client_buf->disconnect();
+		if(host_buf != NULL) host_buf->close();
+	}
 
 	// Remove DND handler
 	m_dnd.reset(NULL);
@@ -338,14 +357,11 @@ void Gobby::Window::obby_end()
 	m_header.action_session_document_create->set_sensitive(false);
 	m_header.action_session_document_open->set_sensitive(false);
 	m_header.group_user->set_sensitive(false);
-	m_header.action_app_session_save->set_sensitive(false);
+	//m_header.action_app_session_save->set_sensitive(false);
 	m_header.action_app_session_quit->set_sensitive(false);
 
 	m_header.action_app_session_create->set_sensitive(true);
 	m_header.action_app_session_join->set_sensitive(true);
-
-	// Delete buffer
-	m_buffer.reset();
 
 #ifdef WITH_HOWL
 	if(m_zeroconf.get() )
@@ -608,7 +624,7 @@ void Gobby::Window::on_folder_document_remove(DocWindow& window)
 
 		// TODO: This should be done automatically with flags for the
 		// menu items which specify when the entry is visible
-		if(m_buffer.get() == NULL)
+		if(m_buffer.get() == NULL || !m_buffer->is_open())
 		{
 			m_header.group_session->set_sensitive(false);
 			m_header.group_view->set_sensitive(false);
@@ -1126,11 +1142,26 @@ void Gobby::Window::close_document(DocWindow& window)
 			_("Save changes to document \"%0%\" before closing?")
 		);
 
-		obby::format_string secondary_str(
-			_("If you don't save, changes will be discarded, but "
-			  "may still be retrieved if you re-subscribe to the "
-			  "document.")
-		);
+		// TODO: Tell that resubscription is not possible when the
+		// session is closed (unless you are host).
+
+		std::string secondary_str;
+		if(m_buffer.get() != NULL && m_buffer->is_open() )
+		{
+			secondary_str = _(
+				"If you don't save, changes will be "
+				"discarded, but may still be retrieved if "
+				"you re-subscribe to the document as long "
+				"as the session remains open."
+			);
+		}
+		else
+		{
+			secondary_str = _(
+				"If you don't save, changes will be "
+				"discarded."
+			);
+		}
 
 		primary_str << window.get_title();
 
@@ -1139,7 +1170,7 @@ void Gobby::Window::close_document(DocWindow& window)
 			Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE, true);
 
 		// Set secondary text
-		dlg.set_secondary_text(secondary_str.str() );
+		dlg.set_secondary_text(secondary_str);
 
 		// Add button to allow the user to save the dialog
 		dlg.add_button(_("Close without saving"), Gtk::RESPONSE_REJECT);
@@ -1173,18 +1204,18 @@ void Gobby::Window::close_document(DocWindow& window)
 		}
 	}
 
-	if(m_buffer.get() != NULL)
-	{
+//	if(m_buffer.get() != NULL)
+//	{
 		// Unsubscribe from document
 		window.get_info().unsubscribe();
-	}
-	else
-	{
+//	}
+//	else
+//	{
 		// Buffer does not exist: Maybe the connection has been lost
 		// or something: Just remove the document from the folder.
-		m_folder.remove_page(window);
-		on_folder_document_remove(window);
-	}
+//		m_folder.remove_page(window);
+//		on_folder_document_remove(window);
+//	}
 }
 
 void Gobby::Window::display_error(const Glib::ustring& message,

@@ -57,6 +57,7 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 		config_entry["documentlist"]
 	),
 	m_header(header),
+	m_buffer(NULL),
 	m_btn_subscribe(_("Subscribe") )
 {
 	m_tree_data = Gtk::TreeStore::create(m_tree_cols);
@@ -115,13 +116,17 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 
 void Gobby::DocumentList::obby_start(LocalBuffer& buf)
 {
+	// Clear old data
+	m_tree_data->clear();
 	m_scrolled_wnd.set_sensitive(true);
+
+	m_buffer = &buf;
 }
 
 void Gobby::DocumentList::obby_end()
 {
-	m_scrolled_wnd.set_sensitive(false);
-	m_tree_data->clear();
+	// Subscription is no more possible
+	m_btn_subscribe.set_sensitive(false);
 }
 
 void Gobby::DocumentList::obby_user_join(const obby::user& user)
@@ -250,6 +255,10 @@ void Gobby::DocumentList::on_subscribe()
 
 void Gobby::DocumentList::on_selection_changed()
 {
+	// Cannot subscribe when session is closed
+	if(m_buffer == NULL || !m_buffer->is_open() )
+		return;
+
 	std::list<Gtk::TreePath> selected_entries =
 		m_tree_view.get_selection()->get_selected_rows();
 	for(std::list<Gtk::TreePath>::iterator iter = selected_entries.begin();
