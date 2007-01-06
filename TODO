@@ -19,6 +19,7 @@ Normal:
   * Gobby should save backups (#87)
   * obby:// protocol handler (#88)
   * Allow emoting in chat (#113)
+  * compiling error on Mac os X.3 (Panther) (#115)
 
 Minor:
 
@@ -111,6 +112,39 @@ IRC allows one to use "/me" at the beginning of the text, and the text
 after it is used as an emote.
 
 E.g., "/me smiles" -> "ivazquez smiles".
+
+115: compiling error on Mac os X.3 (Panther)
+--------------------------------------------
+Hi, I'm getting an error while compiling Gobby 0.3.0rc3.  All required 
+libraries are installed et configure script is OK.  But make return this 
+error :
+
+
+{{{
+then mv -f ".deps/gobby-sourceview.Tpo" ".deps/gobby-sourceview.Po"; else 
+rm -f ".deps/gobby-sourceview.Tpo"; exit 1; fi
+src/sourceview/sourceview.cpp: In member function `void 
+   Gtk::SourceView::set_highlight_current_line(bool)':
+src/sourceview/sourceview.cpp:176: error: `
+   gtk_source_view_set_highlight_current_line' undeclared (first use this 
+   function)
+src/sourceview/sourceview.cpp:176: error: (Each undeclared identifier is 
+   reported only once for each function it appears in.)
+src/sourceview/sourceview.cpp: In member function `bool 
+   Gtk::SourceView::get_highlight_current_line() const':
+src/sourceview/sourceview.cpp:182: error: `
+   gtk_source_view_get_highlight_current_line' undeclared (first use this 
+   function)
+make[2]: *** [gobby-sourceview.o] Error 1
+make[1]: *** [all-recursive] Error 1
+make: *** [all] Error 2
+}}}
+
+I'm using Mac os 10.3.9 with Xorg.  What should I do?
+
+Thanks for your help.
+
+PS : sorry for my bad english
 
 66: Indicate activity by changing tab colour to the user colour
 ---------------------------------------------------------------
