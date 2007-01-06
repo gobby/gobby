@@ -26,7 +26,7 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent, Config& config)
    m_table(3, 2),
    m_lbl_port(_("Port:"), Gtk::ALIGN_RIGHT),
    m_lbl_name(_("Name:"), Gtk::ALIGN_RIGHT),
-   m_lbl_color(_("Color:"), Gtk::ALIGN_RIGHT)
+   m_lbl_color(_("Colour:"), Gtk::ALIGN_RIGHT)
 {
 	m_ent_port.set_range(1024, 65535);
 	m_ent_port.set_value(config["create"]["port"].get(6522) );

@@ -34,7 +34,7 @@ Gobby::UserList::UserList()
 	m_list_data = Gtk::ListStore::create(m_list_cols);
 	m_list_view.set_model(m_list_data);
 
-	m_list_view.append_column(_("Color"), m_list_cols.color);
+	m_list_view.append_column(_("Colour"), m_list_cols.color);
 	m_list_view.append_column(_("Name"), m_list_cols.name);
 
 	set_shadow_type(Gtk::SHADOW_IN);
