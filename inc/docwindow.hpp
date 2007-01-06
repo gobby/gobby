@@ -147,29 +147,47 @@ protected:
 
 	/** @brief Callback when text has to be inserted.
 	 */
-	void on_insert(obby::position pos,
-	               const std::string& text);
+	void on_local_insert(obby::position pos,
+	                     const std::string& text);
 
 	/** @brief Callback when text has to be erased.
 	 */
-	void on_erase(obby::position pos,
-	              obby::position len);
+	void on_local_erase(obby::position pos,
+	                    obby::position len);
+
+	void on_remote_insert_before(obby::position pos,
+	                             const std::string& text);
+
+	void on_remote_erase_before(obby::position pos,
+	                            obby::position len);
+
+	void on_remote_insert_after(obby::position pos,
+	                            const std::string& text);
+
+	void on_remote_erase_after(obby::position pos,
+	                           obby::position len);
 
 	/** @brief Helper function that applies the preferences to the buffer.
 	 */
 	void apply_preferences();
+
+	void store_scroll();
+	void restore_scroll();
 
 	Gtk::SourceView m_view;
 	LocalDocumentInfo& m_info;
 	const Document& m_doc;
 
 	Preferences m_preferences;
-	bool m_editing;
+	//bool m_editing;
 	Glib::ustring m_title; // TODO: Remove this as soon as the obby buffers stay available after session has been closed
 
 	signal_cursor_moved_type m_signal_cursor_moved;
 	signal_content_changed_type m_signal_content_changed;
 	signal_language_changed_type m_signal_language_changed;
+
+	double m_scrolly;
+	bool m_scroll_restore;
 };
 
 }

@@ -42,8 +42,10 @@ namespace
 Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
                             const Preferences& preferences):
 	m_info(info), m_doc(info.get_content() ),
-	m_preferences(preferences), m_editing(false),
-	m_title(info.get_title() )
+	m_preferences(preferences), /*m_editing(false),*/
+	m_title(info.get_title() ),
+	m_scrolly(0.0),
+	m_scroll_restore(false)
 {
 	if(!info.is_subscribed() )
 	{
@@ -79,12 +81,28 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 		sigc::mem_fun(*this, &DocWindow::on_changed)
 	);
 
-	m_doc.insert_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_insert)
+	m_doc.local_insert_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_local_insert)
 	);
 
-	m_doc.erase_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_erase)
+	m_doc.local_erase_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_local_erase)
+	);
+
+	m_doc.remote_insert_before_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_remote_insert_before)
+	);
+
+	m_doc.remote_erase_before_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_remote_erase_before)
+	);
+
+	m_doc.remote_insert_after_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_remote_insert_after)
+	);
+
+	m_doc.remote_erase_after_event().connect(
+		sigc::mem_fun(*this, &DocWindow::on_remote_erase_after)
 	);
 
 	apply_preferences();
@@ -239,16 +257,40 @@ void Gobby::DocWindow::on_changed()
 	m_signal_content_changed.emit();
 }
 
-void Gobby::DocWindow::on_insert(obby::position pos,
-                                 const std::string& error)
+void Gobby::DocWindow::on_local_insert(obby::position pos,
+                                       const std::string& error)
 {
 	m_info.insert(pos, error);
 }
 
-void Gobby::DocWindow::on_erase(obby::position pos,
-                                obby::position len)
+void Gobby::DocWindow::on_local_erase(obby::position pos,
+                                      obby::position len)
 {
 	m_info.erase(pos, len);
+}
+
+void Gobby::DocWindow::on_remote_insert_before(obby::position,
+                                               const std::string& text)
+{
+	store_scroll();
+}
+
+void Gobby::DocWindow::on_remote_erase_before(obby::position pos,
+                                              obby::position len)
+{
+	store_scroll();
+}
+
+void Gobby::DocWindow::on_remote_insert_after(obby::position,
+                                              const std::string& text)
+{
+	restore_scroll();
+}
+
+void Gobby::DocWindow::on_remote_erase_after(obby::position pos,
+                                             obby::position len)
+{
+	restore_scroll();
 }
 
 void Gobby::DocWindow::apply_preferences()
@@ -274,4 +316,27 @@ void Gobby::DocWindow::apply_preferences()
 	// Cursor position may have changed because of new tab width
 	// TODO: Only emit if the position really changed
 	m_signal_cursor_moved.emit();
+}
+
+void Gobby::DocWindow::store_scroll()
+{
+	Gdk::Rectangle curs_rect;
+	int x, y;
+
+	m_view.get_iter_location(m_view.get_buffer()->get_insert()->get_iter(), curs_rect);
+	m_view.buffer_to_window_coords(Gtk::TEXT_WINDOW_WIDGET, curs_rect.get_x(), curs_rect.get_y(), x, y);
+
+	m_scrolly = y / static_cast<double>((m_view.get_height() - curs_rect.get_height()));
+	m_scroll_restore = true;
+}
+
+void Gobby::DocWindow::restore_scroll()
+{
+	if(m_scroll_restore)
+	{
+		if(m_scrolly >= 0.0 && m_scrolly <= 1.0)
+			m_view.scroll_to(m_view.get_buffer()->get_insert(), 0, 0, m_scrolly);
+
+		m_scroll_restore = false;
+	}
 }

@@ -336,7 +336,9 @@ void Gobby::Document::insert(obby::position pos,
 	editor edit(m_editing);
 
 	Gtk::TextIter iter = get_iter(pos);
+	m_signal_remote_insert_before.emit(pos, str);
 	insert_impl(iter, str);
+	m_signal_remote_insert_after.emit(pos, str);
 }
 
 void Gobby::Document::insert(obby::position pos,
@@ -347,7 +349,9 @@ void Gobby::Document::insert(obby::position pos,
 	editor edit(m_editing);
 
 	Gtk::TextIter iter = get_iter(pos);
+	m_signal_remote_insert_before.emit(pos, str);
 	insert_impl(iter, str, author);
+	m_signal_remote_insert_after.emit(pos, str);
 }
 
 void Gobby::Document::erase(obby::position pos, obby::position len)
@@ -363,7 +367,9 @@ void Gobby::Document::erase(obby::position pos, obby::position len)
 	else
 		forward_bytes(end, len);
 
+	m_signal_remote_erase_before.emit(pos, len);
 	m_buffer->erase(begin, end);
+	m_signal_remote_erase_after.emit(pos, len);
 }
 
 void Gobby::Document::append(const obby::text& str)
@@ -371,7 +377,10 @@ void Gobby::Document::append(const obby::text& str)
 	if(m_editing) return;
 	editor edit(m_editing);
 
+	obby::position doc_size = size();
+	m_signal_remote_insert_before.emit(doc_size, str);
 	insert_impl(m_buffer->end(), str);
+	m_signal_remote_insert_after.emit(doc_size, str);
 }
 
 void Gobby::Document::append(const std::string& str,
@@ -380,7 +389,10 @@ void Gobby::Document::append(const std::string& str,
 	if(m_editing) return;
 	editor edit(m_editing);
 
+	obby::position doc_size = size();
+	m_signal_remote_insert_before.emit(doc_size, str);
 	insert_impl(m_buffer->end(), str, author);
+	m_signal_remote_insert_after.emit(doc_size, str);
 }
 
 Glib::RefPtr<Gtk::SourceBuffer> Gobby::Document::get_buffer() const
@@ -388,14 +400,38 @@ Glib::RefPtr<Gtk::SourceBuffer> Gobby::Document::get_buffer() const
 	return m_buffer;
 }
 
-Gobby::Document::signal_insert_type Gobby::Document::insert_event() const
+Gobby::Document::signal_insert_type Gobby::Document::local_insert_event() const
 {
-	return m_signal_insert;
+	return m_signal_local_insert;
 }
 
-Gobby::Document::signal_erase_type Gobby::Document::erase_event() const
+Gobby::Document::signal_insert_type
+Gobby::Document::remote_insert_before_event() const
 {
-	return m_signal_erase;
+	return m_signal_remote_insert_before;
+}
+
+Gobby::Document::signal_insert_type
+Gobby::Document::remote_insert_after_event() const
+{
+	return m_signal_remote_insert_after;
+}
+
+Gobby::Document::signal_erase_type Gobby::Document::local_erase_event() const
+{
+	return m_signal_local_erase;
+}
+
+Gobby::Document::signal_erase_type
+Gobby::Document::remote_erase_before_event() const
+{
+	return m_signal_remote_erase_before;
+}
+
+Gobby::Document::signal_erase_type
+Gobby::Document::remote_erase_after_event() const
+{
+	return m_signal_remote_erase_after;
 }
 
 void Gobby::Document::on_user_join(const obby::user& user)
@@ -441,7 +477,7 @@ void Gobby::Document::on_insert_before(const Gtk::TextIter& iter,
 	if(m_editing) return;
 	editor edit(m_editing);
 
-	m_signal_insert.emit(diff_bytes(m_buffer->begin(), iter), text);
+	m_signal_local_insert.emit(diff_bytes(m_buffer->begin(), iter), text);
 }
 
 void Gobby::Document::on_insert_after(const Gtk::TextIter& iter,
@@ -463,7 +499,8 @@ void Gobby::Document::on_erase_before(const Gtk::TextIter& begin,
 	if(m_editing) return;
 
 	editor edit(m_editing);
-	m_signal_erase.emit(
+
+	m_signal_local_erase.emit(
 		diff_bytes(m_buffer->begin(), begin),
 		diff_bytes(begin, end)
 	);

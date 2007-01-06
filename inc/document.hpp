@@ -182,12 +182,23 @@ public:
 	/** @brief Signal that is emitted when the local user wants to insert
 	 * text.
 	 */
-	signal_insert_type insert_event() const;
+	signal_insert_type local_insert_event() const;
+
+	/** @brief Signal that is emitted when a remote user inserted text.
+	 */
+	signal_insert_type remote_insert_before_event() const;
+	signal_insert_type remote_insert_after_event() const;
 
 	/** @brief Signal that is emitted when the local user wants to erase
 	 * text.
 	 */
-	signal_erase_type erase_event() const;
+	signal_erase_type local_erase_event() const;
+
+	/** @brief Signal that is emitted when a remote user inserted text.
+	 */
+	signal_erase_type remote_erase_before_event() const;
+	signal_erase_type remote_erase_after_event() const;
+
 protected:
 	typedef std::list<Glib::RefPtr<const Gtk::TextTag> > tag_list_type;
 
@@ -302,8 +313,13 @@ protected:
 	bool m_editing;
 	Glib::RefPtr<Gtk::SourceBuffer> m_buffer;
 
-	signal_insert_type m_signal_insert;
-	signal_erase_type m_signal_erase;
+	signal_insert_type m_signal_local_insert;
+	signal_insert_type m_signal_remote_insert_before;
+	signal_insert_type m_signal_remote_insert_after;
+
+	signal_erase_type m_signal_local_erase;
+	signal_erase_type m_signal_remote_erase_before;
+	signal_erase_type m_signal_remote_erase_after;
 };
 
 }
