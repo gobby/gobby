@@ -7,8 +7,8 @@ Critical:
 
 Major:
   * Bug: Crashes on files with encodings not being UTF-8 (#43)
-  * Languages with non-ascii-characters crash (#44)
   * High CPU load while writing (#45)
+  * Bug: High load (and blocking X11) when opening big text file (#48)
 
 Normal:
   * Implement support for Zeroconf (#17)
@@ -29,6 +29,7 @@ Enhancement:
   * Multiple user lists (#12)
   * Auto indentation (#23)
   * Focus the text-widget after having created/joined a session (#35)
+  * tab width and tabs to space expanding (#49)
 
 
 43: Bug: Crashes on files with encodings not being UTF-8
@@ -39,16 +40,6 @@ UTF-8 validity and prompt the user for the right encoding if it does not
 match, and translate it appropriately, or just refuse to open it (but the 
 former would be more acceptable than the latter).
 
-44: Languages with non-ascii-characters crash
----------------------------------------------
-Languages with non-UTF-8 charactes cause Gobby to crash if such a character 
-is used by GtkSourceView. Gobby wants to insert these in the menu XML that 
-is created dynamically by reading the available languages. The idea is to 
-substitute such characters by there Unicode value or something (currently, 
-only German umlauts are replaced by a another string). This XML is only 
-used for internal stuff and never shown to the user, so any other 
-identifiers would be OK.
-
 45: High CPU load while writing
 -------------------------------
 If I connect 2 Gobby's on localhost to each other, I see 100% CPU usage 
@@ -56,6 +47,13 @@ while writing fast (in fact, punching onto the keys). This looks like a
 severe issue in either the design or implementation to me.
 
 Can be reproduced on Windows and FreeBSD.
+
+48: Bug: High load (and blocking X11) when opening big text file
+----------------------------------------------------------------
+Opening a 6.7MB large ChangeLog file in gobby produces 100% load and blocks 
+gobby completely. Even other windows, like a ssh screen session in an aterm 
+did not respond any more. Gobby had to be killed to get the screen session 
+working again.
 
 17: Implement support for Zeroconf
 ----------------------------------
@@ -160,4 +158,16 @@ option to enable or disable this feature.
 ---------------------------------------------------------------
 It would be nice, if one could just create/join a session and then start to 
 write without having to focus the editor widget.
+
+49: tab width and tabs to space expanding
+-----------------------------------------
+For using gobby on collaborative python coding (which could be one of our 
+favourite applications), we definitely need the TAB key to expand to 4 
+spaces.
+
+This is the usual python coding standard.
+Tab chars (0x09) or other tab widths are not acceptable.
+
+And hitting 4 times space for indenting obviously isn't nice either. ;)
+
 
