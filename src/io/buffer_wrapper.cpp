@@ -154,7 +154,6 @@ void obby::io::server::on_send_event(net6::user& to)
 {
 	// Find user in user map
 	user_map_type::iterator iter = get_user_iter(to);
-	main_connection* conn = iter->second;
 
 	// Remove IO_OUT flag because there is no data to be sent anymore
 	iter->second->remove_events(main_connection::IO_OUT);

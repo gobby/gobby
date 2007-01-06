@@ -19,10 +19,6 @@
 #include <iostream>
 #include <obby/format_string.hpp>
 #include <obby/user_table.hpp>
-#include <obby/client_document.hpp>
-#include <obby/host_document.hpp>
-#include <obby/client_buffer.hpp>
-#include <obby/host_buffer.hpp>
 #include "common.hpp"
 #include "document.hpp"
 #include "folder.hpp"
@@ -170,9 +166,9 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 	col = iter.get_line_offset();
 
 	// Add tab characters to col
-	if(m_doc.get_document() && is_subscribed() )
+	if(is_subscribed() )
 	{
-		const std::string& line = m_doc.get_document()->get_line(row);
+		const std::string& line = m_doc.get_content().get_line(row);
 		unsigned int tabs = m_preferences.editor.tab_width;
 
 		// col chars
@@ -192,6 +188,8 @@ void Gobby::Document::get_cursor_position(unsigned int& row,
 
 unsigned int Gobby::Document::get_unsynced_changes_count() const
 {
+	return 0;
+	/*
 	// Get document
 	obby::local_document* local_doc = m_doc.get_document();
 	// No document? Seems that we are not subscribed
@@ -202,17 +200,19 @@ unsigned int Gobby::Document::get_unsynced_changes_count() const
 	// No client document? Host is always synced
 	if(!client_doc) return 0;
 	// Document returns amount otherwise
-	return client_doc->unsynced_count();
+	return client_doc->unsynced_count();*/
 }
 
 unsigned int Gobby::Document::get_revision() const
 {
+	return 0;
+	/*
 	// Get document
 	obby::local_document* local_doc = m_doc.get_document();
 	// No document? Seems that we are not subscribed (-> no revision)
 	if(!local_doc) return 0;
 	// Get revision from obby document
-	return local_doc->get_revision();
+	return local_doc->get_revision();*/
 }
 
 const Glib::ustring& Gobby::Document::get_title() const
@@ -283,7 +283,9 @@ void Gobby::Document::obby_user_colour(const obby::user& user)
 	update_tag_colour(user);
 }
 
-void Gobby::Document::on_obby_insert_before(const obby::insert_record& record)
+void Gobby::Document::on_obby_insert_before(obby::position pos,
+                                            const std::string& text,
+                                            const obby::user* author)
 {
 	if(m_editing) return;
 	m_editing = true;
@@ -293,41 +295,43 @@ void Gobby::Document::on_obby_insert_before(const obby::insert_record& record)
 
 	// Translate position to row/column
 	unsigned int row, col;
-	m_doc.get_document()->position_to_coord(
-		record.get_position(), row, col);
-
-	// Find obby::user that inserted the text
-	const obby::user* user = record.get_user();
+	m_doc.get_content().position_to_coord(pos, row, col);
 
 	// Insert text
 	Gtk::TextBuffer::iterator end = buffer->insert(
-		buffer->get_iter_at_line_index(row, col),
-		record.get_text()
+		buffer->get_iter_at_line_index(row, col), text
 	);
 
 	// Colourize new text with that user's color
 	Gtk::TextBuffer::iterator begin = end;
-	begin.backward_chars(record.get_text().length() );
-	update_user_colour(begin, end, user);
+	begin.backward_chars(Glib::ustring(text).length() );
+	update_user_colour(begin, end, author);
 
 	m_editing = false;
 }
 
-void Gobby::Document::on_obby_insert_after(const obby::insert_record& record)
+void Gobby::Document::on_obby_insert_after(obby::position pos,
+                                           const std::string& text,
+                                           const obby::user* author)
 {
+	if(m_editing) return;
+
+	m_signal_cursor_moved.emit();
+	m_signal_content_changed.emit();
 }
 
-void Gobby::Document::on_obby_delete_before(const obby::delete_record& record)
+void Gobby::Document::on_obby_delete_before(obby::position pos,
+                                            obby::position len,
+                                            const obby::user* author)
 {
 	if(m_editing) return;
 	m_editing = true;
 
 	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
 	unsigned int brow, bcol, erow, ecol;
-	obby::local_document* doc = m_doc.get_document();
 
-	doc->position_to_coord(record.get_begin(), brow, bcol);
-	doc->position_to_coord(record.get_end(), erow, ecol);
+	m_doc.get_content().position_to_coord(pos, brow, bcol);
+	m_doc.get_content().position_to_coord(pos + len, erow, ecol);
 
 	buffer->erase(
 		buffer->get_iter_at_line_index(brow, bcol),
@@ -337,19 +341,12 @@ void Gobby::Document::on_obby_delete_before(const obby::delete_record& record)
 	m_editing = false;
 }
 
-void Gobby::Document::on_obby_delete_after(const obby::delete_record& record)
-{
-}
-
-void Gobby::Document::on_obby_change_before()
-{
-}
-
-void Gobby::Document::on_obby_change_after()
+void Gobby::Document::on_obby_delete_after(obby::position pos,
+                                           obby::position len,
+                                           const obby::user* author)
 {
 	if(m_editing) return;
 
-	// Content may have changed / cursor have been moved
 	m_signal_cursor_moved.emit();
 	m_signal_content_changed.emit();
 }
@@ -374,7 +371,7 @@ void Gobby::Document::on_obby_self_subscribe()
 	m_subscribed = true;
 
 	// Get document we subscribed to
-	obby::local_document& doc = *m_doc.get_document();
+	const obby::document& doc = m_doc.get_content();
 	Glib::RefPtr<Gtk::SourceBuffer> buf = get_buffer();
 
 	// Install signal handlers
@@ -386,10 +383,10 @@ void Gobby::Document::on_obby_self_subscribe()
 		sigc::mem_fun(*this, &Document::on_obby_delete_before) );
 	doc.delete_event().after().connect(
 		sigc::mem_fun(*this, &Document::on_obby_delete_after) );
-	doc.change_event().before().connect(
+	/*doc.change_event().before().connect(
 		sigc::mem_fun(*this, &Document::on_obby_change_before) );
 	doc.change_event().after().connect(
-		sigc::mem_fun(*this, &Document::on_obby_change_after) );
+		sigc::mem_fun(*this, &Document::on_obby_change_after) );*/
 
 	// Set initial text
 	m_editing = true;
@@ -461,7 +458,7 @@ void Gobby::Document::on_obby_self_unsubscribe()
 {
 	// We are not subscribed anymore
 	m_subscribed = false;
-	// Prevet from execution of signal handlers
+	// Prevent from execution of signal handlers
 	m_editing = true;
 	// Apply preferences (which may change for non-subscribed documents)
 	apply_preferences();
@@ -509,9 +506,8 @@ void Gobby::Document::on_insert_before(const Gtk::TextBuffer::iterator& begin,
 	if(m_editing) return;
 	m_editing = true;
 
-	obby::local_document* doc = m_doc.get_document();
-	doc->insert(
-		doc->coord_to_position(
+	m_doc.insert(
+		m_doc.get_content().coord_to_position(
 			begin.get_line(),
 			begin.get_line_index()
 		),
@@ -527,15 +523,17 @@ void Gobby::Document::on_erase_before(const Gtk::TextBuffer::iterator& begin,
 	if(m_editing) return;
 	m_editing = true;
 
-	obby::local_document* doc = m_doc.get_document();
-	doc->erase(
-		doc->coord_to_position(
+	m_doc.erase(
+		m_doc.get_content().coord_to_position(
 			begin.get_line(),
 			begin.get_line_index()
 		),
-		doc->coord_to_position(
+		m_doc.get_content().coord_to_position(
 			end.get_line(),
 			end.get_line_index()
+		) - m_doc.get_content().coord_to_position(
+			begin.get_line(),
+			begin.get_line_index()
 		)
 	);
 
@@ -597,8 +595,7 @@ void Gobby::Document::on_apply_tag_after(const Glib::RefPtr<Gtk::TextTag>& tag,
 		unsigned int num_col = begin.get_line_index();
 
 		// Find author of the text
-		obby::local_document* doc = m_doc.get_document();
-		const obby::line& line = doc->get_line(num_line);
+		const obby::line& line = m_doc.get_content().get_line(num_line);
 
 		obby::line::author_iterator iter = line.author_begin();
 		for(iter; iter != line.author_end(); ++ iter)
@@ -653,6 +650,10 @@ void Gobby::Document::update_user_colour(const Gtk::TextBuffer::iterator& begin,
 	// Insert new user tag to the given range
 	Glib::RefPtr<Gtk::TextTag> tag =
 		tag_table->lookup("gobby_user_" + user->get_name() );
+
+	// Make sure the tag exists
+	if(!tag)
+		throw std::logic_error("Gobby::Document::update_user_colour");
 
 	// Apply tag twice to show it up immediately. I do not know why this
 	// is necessary but if we do only apply it once, we have to wait for

@@ -404,7 +404,7 @@ void Gobby::Window::on_document_create()
 		// " " means a newly created file
 		m_local_file_path = " ";
 		// Create new document
-		m_buffer->document_create(dlg.get_text(), "", false);
+		m_buffer->document_create(dlg.get_text(), "");
 	}
 }
 
@@ -416,13 +416,6 @@ void Gobby::Window::on_document_open()
 	// Use the last used path for this dialog, if we have any
 	if(!m_last_path.empty() )
 		dlg.set_current_folder(m_last_path);
-
-	// Create open_as_edited toggle
-	Gtk::CheckButton open_as_edited_check_button(
-		_("Hilight documents to appear written by you") );
-	dlg.get_vbox()->pack_start(open_as_edited_check_button,
-		Gtk::PACK_SHRINK);
-	open_as_edited_check_button.show();
 
 	// Create buttons to close it
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -441,8 +434,7 @@ void Gobby::Window::on_document_open()
 		for(std::list<Glib::ustring>::iterator iter = list.begin();
 		    iter != list.end();
 		    ++ iter)
-			open_local_file(*iter,
-				open_as_edited_check_button.get_active() );
+			open_local_file(*iter);
 	}
 }
 
@@ -849,8 +841,7 @@ namespace
 	}
 }
 
-void Gobby::Window::open_local_file(const Glib::ustring& file,
-                                    bool open_as_edited)
+void Gobby::Window::open_local_file(const Glib::ustring& file)
 {
 	try
 	{
@@ -862,7 +853,7 @@ void Gobby::Window::open_local_file(const Glib::ustring& file,
 		convert2unix(content);
 
 		m_buffer->document_create(
-			Glib::path_get_basename(file), content, open_as_edited
+			Glib::path_get_basename(file), content
 		);
 	}
 	catch(Glib::Exception& e)
