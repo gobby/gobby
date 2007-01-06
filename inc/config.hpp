@@ -319,7 +319,7 @@ template<typename DataType>
 DataType Config::ValueEntry::
 	get(const serialise::context_base_from<DataType>& from) const
 {
-	return m_data.as<DataType>(from);
+	return m_data.::serialise::data::as<DataType>(from);
 }
 
 template<typename DataType>
@@ -403,7 +403,7 @@ DataType Config::ParentEntry::
 {
 	const ValueEntry* entry = get_value_child(name);
 	if(entry == NULL) return default_value;
-	return entry->get<DataType>(ctx);
+	return entry->ValueEntry::get<DataType>(ctx);
 }
 
 template<typename DataType>
