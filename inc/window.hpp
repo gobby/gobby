@@ -22,7 +22,9 @@
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
+#include <gtkmm/messagedialog.h>
 #include <obby/local_buffer.hpp>
+#include "features.hpp"
 #include "icon.hpp"
 #include "config.hpp"
 #include "header.hpp"
@@ -33,7 +35,7 @@
 #include "documentlist.hpp"
 #include "chat.hpp"
 #include "statusbar.hpp"
-#include "features.hpp"
+#include "dragdrop.hpp"
 #ifdef WITH_HOWL
 #include <obby/zeroconf.hpp>
 #endif
@@ -47,7 +49,19 @@ public:
 	Window(const IconManager& icon_mgr, Config& config);
 	~Window();
 
+	/** Offers a pointer to the currently visible document. If the user
+	 * is not subscribed to a document, NULL is returned.
+	 */
 	Document* get_current_document();
+
+	/** Opens a document containing the content of a file mounted on the
+	 * local filesystem.
+	 */
+	void open_local_file(const Glib::ustring& file);
+
+	/** Saves an existing document to the given path.
+	 */
+	void save_local_file(Document& doc, const Glib::ustring& file);
 protected:
 	// Gtk::Window overrides
 	virtual void on_show();
@@ -89,13 +103,6 @@ protected:
 	void on_about();
 	void on_quit();
 
-	// Drag and drop
-	virtual void on_drag_data_received(
-		const Glib::RefPtr<Gdk::DragContext>& context,
-		int x, int y, const Gtk::SelectionData& data,
-		guint info, guint time
-	);
-
 	// Obby signal handlers
 	void on_obby_close();
 
@@ -109,8 +116,6 @@ protected:
 	// Helper functions
 	void apply_preferences();
 	void update_title_bar();
-	void open_local_file(const Glib::ustring& file);
-	void save_local_file(Document& doc, const Glib::ustring& file);
 	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message,
 	                   const Gtk::MessageType type = Gtk::MESSAGE_ERROR);
@@ -140,6 +145,10 @@ protected:
 	Folder m_folder;
 	Chat m_chat;
 	StatusBar m_statusbar;
+
+	/** Drag+Drop handler
+	 */
+	std::auto_ptr<DragDrop> m_dnd;
 
 	// obby
 	std::auto_ptr<obby::local_buffer> m_buffer;

@@ -272,9 +272,7 @@ void Gobby::Window::obby_start()
 		sigc::mem_fun(*this, &Window::on_obby_document_remove) );
 
 	// Accept drag and drop of files into the gobby window
-	std::list<Gtk::TargetEntry> targets;
-	targets.push_back(Gtk::TargetEntry("text/uri-list") );
-	drag_dest_set(targets);
+	m_dnd.reset(new DragDrop(*this) );
 
 	m_header.group_session->set_sensitive(true);
 	m_header.action_session_document_create->set_sensitive(true);
@@ -333,11 +331,11 @@ void Gobby::Window::obby_start()
 
 void Gobby::Window::obby_end()
 {
-	// No drag and drop anymore
-	drag_dest_unset();
-
 	// Nothing to do if no buffer is open
 	if(!m_buffer.get() ) return;
+
+	// Remove DND handler
+	m_dnd.reset(NULL);
 
 	// Tell GUI components that the session ended
 	m_folder.obby_end();
@@ -914,43 +912,6 @@ void Gobby::Window::on_quit()
 		// End program
 		Gtk::Main::quit();
 	}
-}
-
-/* Drag and Drop */
-void Gobby::Window::on_drag_data_received(
-	const Glib::RefPtr<Gdk::DragContext>& context,
-	int x, int y, const Gtk::SelectionData& data,
-	guint info, guint time
-)
-{
-	// We only accept uri-lists as new files to open
-	if(data.get_target() == "text/uri-list")
-	{
-		// Get files by dragdata
-		std::vector<std::string> files = data.get_uris();
-		//std::unique(files.begin(), files.end() );
-
-		// Open all of them
-		for(std::vector<std::string>::iterator iter = files.begin();
-		    iter != files.end();
-		    ++ iter)
-		{
-			try
-			{
-				// Convert URI to filename
-				open_local_file(
-					Glib::filename_from_uri(*iter) );
-			}
-			catch(Glib::ConvertError& e)
-			{
-				// Show any errors while converting a file
-				display_error(e.what() );
-			}
-		}
-	}
-
-	// Call base function
-	Gtk::Window::on_drag_data_received(context, x, y, data, info, time);
 }
 
 void Gobby::Window::on_obby_close()
