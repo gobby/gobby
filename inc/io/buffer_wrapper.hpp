@@ -227,6 +227,7 @@ protected:
 class client_buffer : virtual public obby::client_buffer
 {
 public:
+	typedef net6::client base_net_type;
 	typedef client net_type;
 
 #ifdef WIN32
@@ -239,7 +240,7 @@ protected:
 #ifdef WIN32
 	Gtk::Window& m_window;
 #endif
-	virtual net_type* new_net();
+	virtual base_net_type* new_net();
 };
 
 /** A obby::server_buffer derived class that uses io::server.
@@ -247,6 +248,7 @@ protected:
 class server_buffer : virtual public obby::server_buffer
 {
 public:
+	typedef net6::server base_net_type;
 	typedef server net_type;
 
 #ifdef WIN32
@@ -259,7 +261,7 @@ protected:
 #ifdef WIN32
 	Gtk::Window& m_window;
 #endif
-	net_type* new_net(unsigned int port);
+	base_net_type* new_net(unsigned int port);
 };
 
 /** A obby::host_buffer derived class that uses io::host.
@@ -269,6 +271,7 @@ class host_buffer : virtual public obby::host_buffer,
                     virtual public server_buffer
 {
 public:
+	typedef net6::server base_net_type;
 	typedef host net_type;
 
 #ifdef WIN32
@@ -281,7 +284,7 @@ public:
 #endif
 
 protected:
-	net_type* new_net(unsigned int port);
+	base_net_type* new_net(unsigned int port);
 };
 
 } // namespace io
