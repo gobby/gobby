@@ -105,14 +105,16 @@ public:
 			return m_value;
 		}
 
-protected:
+	protected:
 		explicit match_options(unsigned int value) : m_value(value) { }
 
 		unsigned int m_value;
-};
+	};
 
-	class compile_error : public std::runtime_error {
+	class compile_error: public std::runtime_error
+	{
 	public:
+		explicit compile_error(void* regex, int value);
 		/* It would be fun if these were actually useful,
 		 * but I really do not know what to do with them.
 		static const compile_error BAD_BACKREF;
@@ -130,16 +132,6 @@ protected:
 		static const compile_error OUT_OF_MEMORY;
 		static const compile_error INVALID_SUBEXP_REF;
 		*/
-
-	protected:
-		explicit compile_error(void* regex, int value);
-		~compile_error() throw();
-		const char* make_message(void* regex, int value);
-
-		Glib::ustring m_message;
-		unsigned int m_value;
-
-		friend class regex;
 	};
 
 	typedef std::vector<std::pair<size_t, size_t> > match_positions;

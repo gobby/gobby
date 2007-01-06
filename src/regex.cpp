@@ -53,26 +53,31 @@ const regex::compile_error regex::compile_error::INVALID_SUBEXP_REF
 
 */
 
-#define regex_ static_cast<regex_t*>(m_regex)
+namespace
+{
+	std::string make_message(void* pregex, int value)
+	{
+		const regex_t * const regex = static_cast<regex_t*>(pregex);
 
-regex::compile_error::compile_error(void* regex, int value)
-	: runtime_error(make_message(regex, value)) {}
+		std::size_t bufsize = regerror(value, regex, 0, 0);
+		char* buf = new char[bufsize];
 
-regex::compile_error::~compile_error() throw() {}
+		regerror(value, regex, buf, bufsize);
+		std::string result = buf;
 
-const char* regex::compile_error::make_message(void* pregex, int value) {
-	const regex_t * const regex = static_cast<regex_t*>(pregex);
-	m_value = value;
-	std::vector<char> errbuf(regerror(value, regex, 0, 0));
-	regerror(value, regex, &errbuf[0], errbuf.size());
-	m_message = &errbuf[0];
+		delete[] buf;
+		return result;
+	}
+}
 
-	return m_message.c_str();
+regex::compile_error::compile_error(void* regex, int value):
+	runtime_error(make_message(regex, value) )
+{
 }
 
 regex::regex(const char* regex_string, compile_options cflags) {
 	m_regex = new regex_t;
-	int errcode = regcomp(regex_, regex_string, cflags.get_value());
+	int errcode = regcomp(static_cast<regex_t*>(m_regex), regex_string, cflags.get_value());
 	if (errcode != 0) {
 		this->~regex();
 		throw compile_error(m_regex, errcode);
@@ -80,27 +85,27 @@ regex::regex(const char* regex_string, compile_options cflags) {
 }
 
 regex::~regex() {
-	regfree(regex_);
-	delete regex_;
+	regfree(static_cast<regex_t*>(m_regex) );
+	delete static_cast<regex_t*>(m_regex);
 }
 
 void regex::reset(const char* regex_string, compile_options cflags) {
-	regfree(regex_);
-	int errcode = regcomp(regex_, regex_string, cflags.get_value());
+	regfree(static_cast<regex_t*>(m_regex) );
+	int errcode = regcomp(static_cast<regex_t*>(m_regex), regex_string, cflags.get_value());
 	if (errcode != 0) {
 		throw compile_error(m_regex, errcode);
 	}
 }
 
 bool regex::match(const char* string, match_options eflags) {
-	return regexec(regex_, string, 0, 0, eflags) == 0;
+	return regexec(static_cast<regex_t*>(m_regex), string, 0, 0, eflags) == 0;
 }
 
 bool regex::find(const char* string,
                  match_positions matches,
                  match_options eflags) {
 	std::vector<regmatch_t> pmatch(matches.size());
-	if (regexec(regex_, string, matches.size(), &pmatch[0], eflags) != 0)
+	if (regexec(static_cast<regex_t*>(m_regex), string, matches.size(), &pmatch[0], eflags) != 0)
 		return false;
 
 	std::vector<regmatch_t>::iterator j = pmatch.begin();
@@ -119,7 +124,7 @@ bool regex::find(const char* string,
 bool regex::find(const char* string, std::pair<size_t, size_t>& matchpos,
           regex::match_options eflags) {
 	regmatch_t pmatch;
-	if (regexec(regex_, string, 1, &pmatch, eflags) != 0)
+	if (regexec(static_cast<regex_t*>(m_regex), string, 1, &pmatch, eflags) != 0)
 		return false;
 
 	matchpos.first =

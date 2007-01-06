@@ -10,6 +10,17 @@
 #include "window.hpp"
 #include "finddialog.hpp"
 
+namespace
+{
+	typedef gboolean (*gtk_source_iter_search_func)(
+		const GtkTextIter*,
+		const gchar*,
+        	GtkSourceSearchFlags,
+		GtkTextIter*,
+                GtkTextIter*,
+		const GtkTextIter*
+	);
+}
 
 namespace Gobby { // TODO: Remove this
 
@@ -124,8 +135,9 @@ void FindDialog::on_find()
 		return;
 	}
 
-	// Begin at cursor's position
-	Gtk::TextIter start_pos(doc->get_buffer()->get_insert()->get_iter());
+	Glib::ustring find_str = m_entry_find.get_text();
+	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_buffer();
+	Gtk::TextIter start_pos(buf->get_insert()->get_iter());
 
 	Gtk::TextIter match_start, match_end;
 	bool result;
@@ -133,7 +145,7 @@ void FindDialog::on_find()
 	// TODO: Ein try fuer alles?
 	try
 	{
-		result = search(start_pos, match_start, match_end, NULL);
+		result = search(start_pos, NULL, match_start, match_end);
 	}
 	catch (regex::compile_error& e)
 	{
@@ -163,17 +175,27 @@ void FindDialog::on_find()
 	{
 		Gtk::TextIter restart_pos;
 		if (m_radio_down.get_active())
-			restart_pos = doc->get_buffer()->begin();
+			restart_pos = buf->begin();
 		else
-			restart_pos = doc->get_buffer()->end();
+			restart_pos = buf->end();
 
 		try
 		{
+			// Limit to search to: Normally the position where we
+			// started.
+			Gtk::TextIter* relimit = &start_pos;
+			if(m_radio_down.get_active() )
+			{
+				start_pos.forward_chars(find_str.length() );
+				if(start_pos == buf->end() )
+					relimit = NULL;
+			}
+
 			result = search(
 				restart_pos,
+				relimit,
 				match_start,
-				match_end,
-				&start_pos
+				match_end
 			);
 		}
 		catch (regex::compile_error& e)
@@ -215,130 +237,181 @@ void FindDialog::on_find()
 	dlg.run();
 }
 
-bool FindDialog::search(Gtk::TextIter start_pos,
+bool FindDialog::search(const Gtk::TextIter& from,
+                        const Gtk::TextIter* to,
                         Gtk::TextIter& match_start,
-                        Gtk::TextIter& match_end,
-                        const Gtk::TextIter* limit)
+                        Gtk::TextIter& match_end)
 {
-	if (m_check_regex.get_active())
+	Gtk::TextIter start_pos(from);
+	while(search_once(start_pos, to, match_start, match_end) )
 	{
-		if (m_regex_changed)
-			compile_regex();
-
-		Glib::RefPtr<Gtk::TextBuffer> buf = start_pos.get_buffer();
-		Gtk::TextIter my_limit(limit ? *limit : buf->end());
-
-		// lots of hack: regexes do not support reverse searching, so
-		//   we have to reverse the two-step search process manually
-		if (m_radio_up.get_active())
+		if(m_check_whole_word.get_active() )
 		{
-			if (limit)
+			if(!match_start.starts_word() || !match_end.ends_word())
 			{
-				start_pos = my_limit;
-				my_limit = buf->end();
-			}
-			else
-			{
-				my_limit = start_pos;
-				start_pos = buf->begin();
-			}
-		}
-
-		Gtk::TextIter last_match_start = buf->end();
-		Gtk::TextIter last_match_end;
-		for (;;)
-		{
-			if (limit && *limit >= start_pos)
-				break;
-			if (!limit && start_pos == buf->end())
-				break;
-
-			Gtk::TextIter next_line = start_pos;
-			next_line.forward_line();
-			Glib::ustring line =
-				start_pos.get_slice(next_line);
-
-			// GETH NICHT bei backward suche?
-			if (limit &&
-			    limit->get_line() == start_pos.get_line())
-				line.replace(limit->get_line_offset(),
-				             1, '\0');
-
-			std::pair<size_t, size_t> p;
-			if (m_regex.find(line.c_str(), p,
-			    start_pos.starts_line()
-			    ? regex::match_options::NONE
-			    : regex::match_options::NOT_BOL)
-			    | (limit && limit->ends_line()
-			       ? regex::match_options::NONE
-			       : regex::match_options::NOT_EOL))
-			{
-				match_start = match_end = start_pos;
-				match_start.set_line_index(p.first);
-				match_end.set_line_index(p.second);
-				if (m_radio_down.get_active())
-				{
-					return true;
-				}
+				if(m_radio_down.get_active() )
+					start_pos = match_end;
 				else
-				{
-					last_match_start = match_start;
-					last_match_end = match_end;
-				}
+					start_pos = match_start;
+
+				continue;
 			}
-
-			start_pos = next_line;
 		}
 
-		if (last_match_start != buf->end())
-		{
-			match_start = last_match_start;
-			match_end   = last_match_end;
-			return true;
-		}
-	}
-	else
-	{
-		GtkSourceSearchFlags flags = GTK_SOURCE_SEARCH_CASE_INSENSITIVE;
-		if(m_check_case.get_active() )
-			flags = GtkSourceSearchFlags(0);
-
-		GtkTextIter match_start_gtk, match_end_gtk;
-		gboolean (*search_func)(const GtkTextIter*, const gchar*,
-		                        GtkSourceSearchFlags, GtkTextIter*,
-		                        GtkTextIter*, const GtkTextIter*);
-
-		search_func = gtk_source_iter_forward_search;
-		if(m_radio_up.get_active() )
-			search_func = gtk_source_iter_backward_search;
-
-		const Glib::ustring& find_str = m_entry_find.get_text();
-		while (search_func(start_pos.gobj(), find_str.c_str(), flags,
-		                   &match_start_gtk, &match_end_gtk,
-		                   limit ? limit->gobj() : 0))
-		{
-			match_start = Gtk::TextIter(&match_start_gtk);
-			match_end   = Gtk::TextIter(&match_end_gtk);
-
-			if (m_check_whole_word.get_active())
-			{
-				if (!match_start.starts_word() ||
-				    !match_end.ends_word())
-				{
-					if(m_radio_down.get_active() )
-						start_pos = match_end;
-					else
-						start_pos = match_start;
-
-					continue;
-				}
-			}
-
-			return true;
-		}
+		return true;
 	}
 
 	return false;
+}
+
+bool FindDialog::search_once(const Gtk::TextIter& from,
+                             const Gtk::TextIter* to,
+                             Gtk::TextIter& match_start,
+                             Gtk::TextIter& match_end)
+{
+	if(m_check_regex.get_active() && m_regex_changed)
+		compile_regex();
+
+	if(m_check_regex.get_active() )
+	{
+		Glib::RefPtr<Gtk::TextBuffer> buf = from.get_buffer();
+
+		Gtk::TextIter start_pos, limit;
+		if(m_radio_up.get_active() )
+		{
+			limit = from;
+
+			if(to == NULL)
+				start_pos = buf->begin();
+			else
+				start_pos = *to;
+		}
+		else if(m_radio_down.get_active() )
+		{
+			start_pos = from;
+
+			if(to == NULL)
+				limit = buf->end();
+			else
+				limit = *to;
+		}
+
+		Gtk::TextIter begin = buf->end(), end = buf->end();
+		Gtk::TextIter cur_line = start_pos, next_line = start_pos;
+		for(;;)
+		{
+			next_line.forward_line();
+
+			// Get current line of text
+			Glib::ustring line = cur_line.get_slice(next_line);
+			std::cout << "Text from " << cur_line.get_offset() << " to " << next_line.get_offset() << ": " << line << std::endl;
+
+			// Trim trailing text after limit
+			if(limit.get_line() == cur_line.get_line() )
+			{
+				if(!limit.ends_line() )
+				{
+					line.erase(
+						limit.get_line_offset() -
+						cur_line.get_line_offset()
+					);
+				}
+			}
+
+			regex::match_options options =
+				regex::match_options::NONE;
+
+			if(!cur_line.starts_line() )
+				options |= regex::match_options::NOT_BOL;
+
+			if(cur_line.get_line() == limit.get_line() &&
+			   !limit.ends_line() )
+				options |= regex::match_options::NOT_EOL;
+
+			std::pair<std::size_t, std::size_t> pos;
+			bool result = m_regex.find(
+				line.c_str(),
+				pos,
+				options
+			);
+
+			if(result == true)
+			{
+				begin = end = cur_line;
+				begin.set_line_index(
+					begin.get_line_index() + pos.first
+				);
+
+				end.set_line_index(
+					end.get_line_index() + pos.second
+				);
+
+				// Match after limit
+				if(end > limit) break;
+
+				// First match is result if searching forward
+				if(m_radio_down.get_active() )
+				{
+					match_start = begin;
+					match_end = end;
+
+					return true;
+				}
+			}
+
+			cur_line = next_line;
+			if(cur_line > limit || cur_line == buf->end() )
+				break;
+		}
+
+		if(m_radio_up.get_active() )
+		{
+			// No match for backward search
+			if(begin == buf->end() && end == buf->end() )
+				return false;
+
+			match_start = begin;
+			match_end = end;
+
+			return true;
+		}
+
+		// No match for forward search
+		return false;
+	}
+	else
+	{
+		GtkSourceSearchFlags flags = GtkSourceSearchFlags(0);
+		if(!m_check_case.get_active() )
+			flags = GTK_SOURCE_SEARCH_CASE_INSENSITIVE;
+
+		gtk_source_iter_search_func search_func =
+			gtk_source_iter_forward_search;
+
+		if(m_radio_up.get_active() )
+			search_func = gtk_source_iter_backward_search;
+
+		Glib::ustring find_str = m_entry_find.get_text();
+		GtkTextIter match_start_gtk, match_end_gtk;
+		gboolean result = search_func(
+			from.gobj(),
+			find_str.c_str(),
+			flags,
+			&match_start_gtk,
+			&match_end_gtk,
+			to != NULL ? to->gobj() : NULL
+		);
+
+		if(result == TRUE)
+		{
+			match_start = Gtk::TextIter(&match_start_gtk);
+			match_end = Gtk::TextIter(&match_end_gtk);
+
+			return true;
+		}
+
+		return false;
+	}
 }
 
 void FindDialog::update_regex()

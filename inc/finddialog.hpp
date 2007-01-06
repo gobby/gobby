@@ -42,10 +42,18 @@ protected:
 	bool find_in_line(Glib::ustring line,
 	                  std::pair<size_t, size_t>& pos);
 
-	bool FindDialog::search(Gtk::TextIter start_pos,
-	                        Gtk::TextIter& match_start,
-	                        Gtk::TextIter& match_end,
-	                        const Gtk::TextIter* limit);
+	bool search(const Gtk::TextIter& from,
+	            const Gtk::TextIter* to,
+	            Gtk::TextIter& match_start,
+	            Gtk::TextIter& match_end);
+
+	/** Searches for an occurence in the document, not looking at
+	 * whole word stuff.
+	 */
+	bool search_once(const Gtk::TextIter& from,
+	                 const Gtk::TextIter* to,
+	                 Gtk::TextIter& match_start,
+	                 Gtk::TextIter& match_end);
 
 	void update_regex();
 	void compile_regex();
