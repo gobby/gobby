@@ -863,7 +863,7 @@ void Gobby::Window::save_local_file(Document& doc, const Glib::ustring& file)
 	if(stream)
 	{
 		// Save content into file
-		stream << doc.get_content() << std::endl;
+		stream << doc.get_content().raw() << std::endl;
 		// Set path of document
 		doc.set_path(file);
 		// Update title bar according to new path
@@ -946,5 +946,4 @@ void Gobby::Window::display_error(const Glib::ustring& message,
 	                       Gtk::BUTTONS_OK, true);
 	dlg.run();
 }
-
 
