@@ -105,6 +105,17 @@ Gobby should be more or less compilant to the Gnome Human Interface
 Guidelines when compiled ''--with-gnome''. This means at least that the 
 menu names have to be fixed and some other UI things tweaked a bit.
 
+A list of discovered flaws (details could possibly be found in the 
+attachment to this bug):
+ * Add filename to window title (fixed with [179])
+ * Add preferences dialog, e.g. for the following: font family/size, tab 
+indent, softtabs, autosave
+ * Move syntax highlighting schemata to an extra submenu, e.g. "syntax" 
+ * Reorganise the status bar to get more clearly arranged
+ * Support file drag'n'drop to open the file in a new tab
+ * Add a close-"x" on every tab (as in gedit) (fixed with [180])
+ * Toolbar view: icons only, text only, icons and text, system default
+
 33: Recognise command line parameters
 -------------------------------------
 Command line parameters should be parsed and processed. Especially it would 
