@@ -278,7 +278,7 @@ obby::io::client_buffer::client_buffer(const Glib::ustring& hostname,
 		net6::ipv4_address::create_from_hostname(hostname, port) );
 
 #ifdef WIN32
-	m_client = new client(window, addr);
+	m_net.reset(new client(window, addr) );
 #else
 	m_net.reset(new client(addr) );
 #endif
