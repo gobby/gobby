@@ -22,6 +22,42 @@
 #include "document.hpp"
 #include "folder.hpp"
 
+#if 0
+namespace
+{
+	extern "C"
+	{
+
+	/** Evil hack, deals with GTK+'s internals, but GTK+ provides no way
+	 * to change a mark's gravity.
+	 */
+	typedef struct _GtkTextLineSegmentClass GtkTextLineSegmentClass;
+
+	struct GtkTextLineSegment {
+		GtkTextLineSegmentClass* type;
+	};
+
+	extern GtkTextLineSegmentClass gtk_text_right_mark_type;
+	extern GtkTextLineSegmentClass gtk_text_left_mark_type;
+
+	void gtk_text_mark_set_gravity(GtkTextMark* mark, bool left_gravity)
+	{
+		if(left_gravity)
+		{
+			static_cast<GtkTextLineSegment*>(mark->segment)->type =
+				&gtk_text_left_mark_type;
+		}
+		else
+		{
+			static_cast<GtkTextLineSegment*>(mark->segment)->type =
+				&gtk_text_right_mark_type;
+		}
+	}
+
+	} // extern "C"
+}
+#endif
+
 Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
                           const Preferences& preferences)
  : Gtk::SourceView(),
@@ -100,6 +136,18 @@ Gobby::Document::Document(obby::local_document_info& doc, const Folder& folder,
 		sigc::mem_fun(*this, &Document::on_obby_user_subscribe) );
 	doc.unsubscribe_event().connect(
 		sigc::mem_fun(*this, &Document::on_obby_user_unsubscribe) );
+
+#if 0
+	gtk_text_mark_set_gravity(
+		get_buffer()->get_insert()->gobj(),
+		true
+	);
+
+	gtk_text_mark_set_gravity(
+		get_buffer()->get_selection_bound()->gobj(),
+		true
+	);
+#endif
 
 #if 0
 	// Allow drag+drop of uri-lists and plaintext. uri-list is forwarded to
@@ -315,9 +363,18 @@ void Gobby::Document::on_obby_insert_before(obby::position pos,
 		buffer->get_iter_at_line_index(row, col), text
 	);
 
-	// Colourize new text with that user's color
+	// Get iterator to beginning of inserted text
 	Gtk::TextBuffer::iterator begin = end;
 	begin.backward_chars(Glib::ustring(text).length() );
+
+	// Left gravity cursor ona remote inserts
+	if(end == buffer->get_insert()->get_iter() )
+		buffer->move_mark(buffer->get_insert(), begin);
+
+	if(end == buffer->get_selection_bound()->get_iter() )
+		buffer->move_mark(buffer->get_selection_bound(), begin);
+
+	// Colourize new text with that user's color
 	update_user_colour(begin, end, author);
 
 	m_editing = false;
@@ -805,5 +862,3 @@ void Gobby::Document::update_tag_colour(const obby::user& user)
 	// Set/Update color
 	tag->property_background_gdk() = color;
 }
-
-
