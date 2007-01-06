@@ -56,9 +56,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
    m_zeroconf(NULL),
 #endif
    m_header(),
-   m_finddialog(*this),
    m_userlist(*this, m_header, m_preferences, config["windows"]),
    m_documentlist(*this, m_header, m_preferences, config["windows"]),
+   m_finddialog(*this), m_gotodialog(*this),
    m_folder(m_header, m_preferences),
    m_statusbar(m_header, m_folder)
 {
@@ -89,6 +89,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config)
 		sigc::mem_fun(*this, &Window::on_edit_search) );
 	m_header.action_edit_search_replace->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_edit_search_replace) );
+	m_header.action_edit_goto_line->signal_activate().connect(
+		sigc::mem_fun(*this, &Window::on_edit_goto_line) );
 	m_header.action_edit_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_edit_preferences) );
 
@@ -752,6 +754,12 @@ void Gobby::Window::on_edit_search_replace()
 	m_finddialog.set_search_only(false);
 	m_finddialog.show();
 	m_finddialog.grab_focus();
+}
+
+void Gobby::Window::on_edit_goto_line()
+{
+	m_gotodialog.show();
+	m_gotodialog.grab_focus();
 }
 
 void Gobby::Window::on_edit_preferences()

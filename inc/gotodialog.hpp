@@ -16,12 +16,45 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef _GOBBY_GOTODIALOG_HPP_
+#define _GOBBY_GOTODIALOG_HPP_
+
+#include <gtkmm/separator.h>
+#include <gtkmm/box.h>
+#include <gtkmm/label.h>
+#include <gtkmm/spinbutton.h>
+
 #include "toolwindow.hpp"
 
-Gobby::ToolWindow::ToolWindow(Gtk::Window& parent):
-	Gtk::Window(Gtk::WINDOW_TOPLEVEL)
+namespace Gobby
 {
-	set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-	set_transient_for(parent);
-	set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
+
+class Window;
+
+class GotoDialog: public ToolWindow
+{
+public:
+	GotoDialog(Gobby::Window& parent);
+
+protected:
+	virtual void on_show();
+	virtual void on_goto();
+
+	Gobby::Window& m_window;
+
+	Gtk::VBox m_mainbox;
+	Gtk::HBox m_box_top;
+	Gtk::HBox m_box_bottom;
+
+	Gtk::Label m_lbl_info;
+	Gtk::SpinButton m_ent_line;
+
+	Gtk::HSeparator m_sep;
+
+	Gtk::Button m_btn_close;
+	Gtk::Button m_btn_goto;
+};
+
 }
+
+#endif // _GOBBY_GOTODIALOG_HPP_

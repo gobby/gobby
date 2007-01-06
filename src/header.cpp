@@ -46,6 +46,8 @@ namespace {
 		"      <menuitem action=\"EditSearch\" />"
 		"      <menuitem action=\"EditSearchReplace\" />"
 		"      <separator />"
+		"      <menuitem action=\"EditGotoLine\" />"
+		"      <separator />"
 		"      <menuitem action=\"EditPreferences\" />"
 		"    </menu>"
 		"    <menu action=\"MenuUser\">"
@@ -280,6 +282,15 @@ Gobby::Header::Header():
 		)
 	),
 
+	action_edit_goto_line(
+		Gtk::Action::create(
+			"EditGotoLine",
+			Gtk::Stock::JUMP_TO,
+			_("Go to line..."),
+			_("Move cursor to a specified line")
+		)
+	),
+
 	action_edit_preferences(
 		Gtk::Action::create(
 			"EditPreferences",
@@ -378,6 +389,7 @@ Gobby::Header::Header():
 	group_edit->add(action_edit);
 	group_edit->add(action_edit_search);
 	group_edit->add(action_edit_search_replace);
+	group_edit->add(action_edit_goto_line, Gtk::AccelKey("<control>I") );
 	group_edit->add(action_edit_preferences);
 
 	group_user->add(action_user);

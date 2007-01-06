@@ -44,6 +44,8 @@ public:
 
 	void set_search_only(bool search_only);
 protected:
+	virtual void on_show();
+
 	virtual void on_find();
 	virtual void on_replace();
 	virtual void on_replace_all();
@@ -122,4 +124,4 @@ protected:
 
 }
 
-#endif // _GOBBY_JOINDIALOG_HPP_
+#endif // _GOBBY_FINDDIALOG_HPP_

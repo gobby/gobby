@@ -102,6 +102,7 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_edit;
 	const Glib::RefPtr<Gtk::Action> action_edit_search;
 	const Glib::RefPtr<Gtk::Action> action_edit_search_replace;
+	const Glib::RefPtr<Gtk::Action> action_edit_goto_line;
 	const Glib::RefPtr<Gtk::Action> action_edit_preferences;
 
 	const Glib::RefPtr<Gtk::Action> action_user;

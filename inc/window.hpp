@@ -29,10 +29,11 @@
 #include "config.hpp"
 #include "header.hpp"
 #include "docwindow.hpp"
-#include "folder.hpp"
-#include "finddialog.hpp"
 #include "userlist.hpp"
 #include "documentlist.hpp"
+#include "finddialog.hpp"
+#include "gotodialog.hpp"
+#include "folder.hpp"
 #include "chat.hpp"
 #include "statusbar.hpp"
 #include "dragdrop.hpp"
@@ -85,6 +86,7 @@ protected:
 
 	void on_edit_search();
 	void on_edit_search_replace();
+	void on_edit_goto_line();
 	void on_edit_preferences();
 
 	void on_user_set_password();
@@ -137,9 +139,11 @@ protected:
 	Gtk::Frame m_frame_text;
 
 	Header m_header;
-	FindDialog m_finddialog;
 	UserList m_userlist;
 	DocumentList m_documentlist;
+
+	FindDialog m_finddialog;
+	GotoDialog m_gotodialog;
 
 	Folder m_folder;
 	Chat m_chat;

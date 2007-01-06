@@ -46,11 +46,11 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 	m_check_case(_("Match case")),
 	m_check_regex(_("Match as regular expression")),
 	m_frame_direction(_("Direction")),
-	m_radio_up(m_group_direction, _("Up")),
-	m_radio_down(m_group_direction, _("Down")),
+	m_radio_up(m_group_direction, _("_Up"), true),
+	m_radio_down(m_group_direction, _("_Down"), true),
 	m_btn_find(Gtk::Stock::FIND),
-	m_btn_replace(_("Replace") ),
-	m_btn_replace_all(_("Replace all") ),
+	m_btn_replace(_("_Replace") ),
+	m_btn_replace_all(_("Replace _all") ),
 	m_btn_close(Gtk::Stock::CLOSE),
 	m_regex("")
 {
@@ -92,6 +92,7 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 
 	m_hbox.pack_start(m_box_options);
 	m_hbox.pack_start(m_frame_direction, Gtk::PACK_SHRINK);
+	m_hbox.set_spacing(10);
 
 	m_box_options.pack_start(m_check_whole_word, Gtk::PACK_EXPAND_WIDGET);
 	m_box_options.pack_start(m_check_case, Gtk::PACK_EXPAND_WIDGET);
@@ -132,14 +133,12 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 	m_btn_replace_all.signal_clicked().connect(
 		sigc::mem_fun(*this, &FindDialog::on_replace_all) );
 
-	set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);
+	GTK_WIDGET_SET_FLAGS(m_btn_find.gobj(), GTK_CAN_DEFAULT);
+	set_default(m_btn_find);
+
 	set_border_width(16);
 
-//	set_skip_pager_hint(true);
-//	set_skip_taskbar_hint(true);
-
 	set_resizable(false);
-	set_transient_for(parent);
 	show_all_children();
 
 	m_check_regex.hide();
@@ -157,6 +156,12 @@ void Gobby::FindDialog::set_search_only(bool search_only)
 	sigc::bind(show_func, sigc::ref(m_btn_replace_all) )();
 
 	set_title(search_only ? _("Search") : _("Search and replace") );
+}
+
+void Gobby::FindDialog::on_show()
+{
+	ToolWindow::on_show();
+	m_entry_find.grab_focus();
 }
 
 void Gobby::FindDialog::on_find()
