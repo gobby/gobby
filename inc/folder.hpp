@@ -138,7 +138,7 @@ protected:
 		/** Enable only document items which are useful even if the
 		 * user is not subscribed to the document, disable others.
 		 */
-		//DOCUMENT_ITEMS_ENABLE_NOSUBSCRIBE = 1,
+		DOCUMENT_ITEMS_ENABLE_DISCONN = 1,
 
 		/** Enable all document items.
 		 */

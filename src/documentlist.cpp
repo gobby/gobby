@@ -70,6 +70,10 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 
 	m_view_col.set_sort_column(m_tree_cols.text);
 
+	m_tree_view.add_events(Gdk::BUTTON_PRESS_MASK);
+	m_tree_view.signal_button_press_event().connect(
+		sigc::mem_fun(*this, &DocumentList::on_tree_button_press) );
+
 	m_tree_view.set_model(m_tree_data);
 	m_tree_view.append_column(m_view_col);
 	m_tree_view.set_headers_visible(false);
@@ -77,10 +81,6 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 	m_tree_view.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
 	m_tree_view.get_selection()->signal_changed().connect(
 		sigc::mem_fun(*this, &DocumentList::on_selection_changed) );
-
-	m_tree_view.add_events(Gdk::BUTTON_PRESS_MASK);
-	m_tree_view.signal_button_press_event().connect(
-		sigc::mem_fun(*this, &DocumentList::on_button_press) );
 
 	m_scrolled_wnd.set_shadow_type(Gtk::SHADOW_IN);
 	m_scrolled_wnd.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -265,7 +265,7 @@ void Gobby::DocumentList::on_selection_changed()
 }
 
 #include <iostream>
-bool Gobby::DocumentList::on_button_press(GdkEventButton* event)
+bool Gobby::DocumentList::on_tree_button_press(GdkEventButton* event)
 {
 	std::cout << event->button << std::endl;
 

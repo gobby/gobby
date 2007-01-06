@@ -254,6 +254,8 @@ void Gobby::Window::obby_start()
 	drag_dest_set(targets);
 
 	m_header.group_session->set_sensitive(true);
+	m_header.action_session_document_create->set_sensitive(true);
+	m_header.action_session_document_open->set_sensitive(true);
 	m_header.group_user->set_sensitive(true);
 	m_header.group_view->set_sensitive(true);
 	m_header.action_app_session_save->set_sensitive(true);
@@ -321,9 +323,9 @@ void Gobby::Window::obby_end()
 	m_chat.obby_end();
 	m_statusbar.obby_end();
 
-	m_header.group_session->set_sensitive(false);
+	m_header.action_session_document_create->set_sensitive(false);
+	m_header.action_session_document_open->set_sensitive(false);
 	m_header.group_user->set_sensitive(false);
-	m_header.group_view->set_sensitive(false);
 	m_header.action_app_session_save->set_sensitive(false);
 	m_header.action_app_session_quit->set_sensitive(false);
 
@@ -585,7 +587,17 @@ void Gobby::Window::on_folder_document_remove(DocWindow& window)
 	// Update title bar if there are no more documents left
 	// (folder_tab_switched is not emitted in this case)
 	if(m_folder.get_n_pages() == 0)
+	{
 		update_title_bar();
+
+		// TODO: This should be done automatically with flags for the
+		// menu items which specify when the entry is visible
+		if(m_buffer.get() == NULL)
+		{
+			m_header.group_session->set_sensitive(false);
+			m_header.group_view->set_sensitive(false);
+		}
+	}
 }
 
 void Gobby::Window::on_folder_document_close_request(Document& document)
@@ -1006,7 +1018,7 @@ void Gobby::Window::update_title_bar()
 	// Get currently active document
 	const Document& document = *get_current_document();
 	// Get title of current document
-	const Glib::ustring& file = document.get_document().get_title();
+	const Glib::ustring& file = document.get_title();
 	// Get path of current document
 	Glib::ustring path = document.get_path();
 
@@ -1148,7 +1160,8 @@ void Gobby::Window::close_document(DocWindow& document)
 		// Add button to allow the user to save the dialog
 		dlg.add_button("Close without saving", Gtk::RESPONSE_REJECT);
 		dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-		dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_ACCEPT)->grab_focus();
+		dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_ACCEPT)->
+			grab_focus();
 
 		// Show the dialog
 		int result = dlg.run();
@@ -1185,8 +1198,8 @@ void Gobby::Window::close_document(DocWindow& document)
 	{
 		// Buffer does not exist: Maybe the connection has been lost
 		// or something: Just remove the document from the folder.
-		on_folder_document_remove(document);
 		m_folder.remove_page(document);
+		on_folder_document_remove(document);
 	}
 }
 

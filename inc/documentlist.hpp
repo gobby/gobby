@@ -67,7 +67,7 @@ protected:
 
 	virtual void on_subscribe();
 	virtual void on_selection_changed();
-	virtual bool on_button_press(GdkEventButton* event);
+	virtual bool on_tree_button_press(GdkEventButton* event);
 
 	/** Reference to header.
 	 */

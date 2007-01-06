@@ -137,8 +137,10 @@ void Gobby::Folder::obby_end()
 			get_nth_page(i)
 		)->get_document().set_sensitive(false);
 
-	// TODO: Disable some items, but let save and close still active.
+	// Disable some items, but let save and close still active.
 	// Disable all if the last document has been closed.
+	if(get_n_pages() > 0)
+		enable_document_items(DOCUMENT_ITEMS_ENABLE_DISCONN);
 }
 
 void Gobby::Folder::obby_user_join(const obby::user& user)
@@ -269,15 +271,15 @@ void Gobby::Folder::set_tab_colour(DocWindow& win, const Glib::ustring& colour)
 void Gobby::Folder::enable_document_items(DocumentItems which)
 {
 	m_header.action_session_document_save->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
 	m_header.action_session_document_save_as->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
 	m_header.action_session_document_close->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
 	m_header.action_view_preferences->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
 	m_header.action_view_syntax->
-		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_ALL);
+		set_sensitive(which >= DOCUMENT_ITEMS_ENABLE_DISCONN);
 }
 
 void Gobby::Folder::on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language)
