@@ -25,9 +25,9 @@ Gobby::Document::Document(obby::document& doc)
 
 	// Textbuffer signal handlers
 	buf->signal_insert().connect(
-		sigc::mem_fun(*this, &Document::on_insert) );
+		sigc::mem_fun(*this, &Document::on_insert), false);
 	buf->signal_erase().connect(
-		sigc::mem_fun(*this, &Document::on_erase) );
+		sigc::mem_fun(*this, &Document::on_erase), false);
 
 	// Obby signal handlers
 	doc.insert_event().connect(
@@ -65,9 +65,8 @@ void Gobby::Document::on_insert(const Gtk::TextBuffer::iterator& begin,
 {
 	if(m_editing) return;
 
-	// TODO: begin.get_offset()-1?
-	std::cout << "Insert " << text << " at " << begin.get_offset()-1 << std::endl;
-	m_doc.insert(begin.get_offset() - 1, text);
+	std::cout << "Insert " << text << " at " << begin.get_offset() << std::endl;
+	m_doc.insert(begin.get_offset(), text);
 }
 
 void Gobby::Document::on_erase(const Gtk::TextBuffer::iterator& begin,
@@ -75,9 +74,9 @@ void Gobby::Document::on_erase(const Gtk::TextBuffer::iterator& begin,
 {
 	if(m_editing) return;
 	
-	std::cout << (begin == end) << std::endl;
-	std::cout << "Erasing from " << begin << " to " << end.get_offset()+1 << std::endl;
-	m_doc.erase(begin.get_offset(), end.get_offset()+1 );
+	std::cout << "Erasing from " << begin.get_offset()
+	          << " to " << end.get_offset() << std::endl;
+	m_doc.erase(begin.get_offset(), end.get_offset() );
 }
 
 void Gobby::Document::on_obby_insert(const obby::insert_record& record)
