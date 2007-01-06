@@ -300,9 +300,12 @@ void Gobby::Window::on_about()
 #endif
 
 	std::deque<Glib::ustring> authors;
-	authors.push_back("Armin Burgmeier <armin@0x539.de>");
-	authors.push_back("Benjamin Herr <ben@0x539.de>");
-	authors.push_back("Philipp Kern <phil@0x539.de>");
+	authors.push_back("Developers:");
+	authors.push_back("  Armin Burgmeier <armin@0x539.de>");
+	authors.push_back("  Philipp Kern <phil@0x539.de>");
+	authors.push_back("");
+	authors.push_back("Contributors:");
+	authors.push_back("  Benjamin Herr <ben@0x539.de>");
 	
 	std::deque<Glib::ustring> artists;
 	artists.push_back("Thomas Glatt <tom@0x539.de>");
