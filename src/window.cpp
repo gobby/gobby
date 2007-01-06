@@ -169,6 +169,11 @@ void Gobby::Window::obby_start()
 	m_buffer->server_message_event().connect(
 		sigc::mem_fun(*this, &Window::on_obby_server_chat) );
 
+	// Accept drag and drop of files into the gobby window
+	std::list<Gtk::TargetEntry> targets;
+	targets.push_back(Gtk::TargetEntry("text/uri-list") );
+	drag_dest_set(targets);
+
 	// Delegate start of obby session
 	m_header.obby_start(*m_buffer);
 	m_folder.obby_start(*m_buffer);
@@ -198,6 +203,9 @@ void Gobby::Window::obby_start()
 
 void Gobby::Window::obby_end()
 {
+	// No drag and drop anymore
+	drag_dest_unset();
+
 	// Nothing to do if no buffer is open
 	if(!m_buffer.get() ) return;
 
@@ -386,16 +394,18 @@ void Gobby::Window::on_document_create()
 
 void Gobby::Window::on_document_open()
 {
+	// Create FileChooser
 	Gtk::FileChooserDialog dlg(*this, _("Open new document"));
+	// Create buttons to close it
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
+	// TODO: MultiSelection?
+	// Show FileChooser
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
-		// TODO: Set path in newly generated document
-		m_buffer->create_document(
-			Glib::path_get_basename(dlg.get_filename()),
-			Glib::file_get_contents(dlg.get_filename()) );
+		// Open chosen file
+		open_local_file(dlg.get_filename() );
 	}
 }
 
@@ -573,6 +583,42 @@ void Gobby::Window::on_chat(const Glib::ustring& message)
 	m_buffer->send_message(message);
 }
 
+/* Drag and Drop */
+void Gobby::Window::on_drag_data_received(
+	const Glib::RefPtr<Gdk::DragContext>& context,
+	int x, int y, const Gtk::SelectionData& data,
+	guint info, guint time
+)
+{
+	// We only accept uri-lists as new files to open
+	if(data.get_target() == "text/uri-list")
+	{
+		// Get files by dragdata
+		std::vector<std::string> files = data.get_uris();
+
+		// Open all of them
+		for(std::vector<std::string>::iterator iter = files.begin();
+		    iter != files.end();
+		    ++ iter)
+		{
+			try
+			{
+				// Convert URI to filename
+				open_local_file(
+					Glib::filename_from_uri(*iter) );
+			}
+			catch(Glib::Exception& e)
+			{
+				// Show any errors while converting a file
+				display_error(e.what() );
+			}
+		}
+	}
+
+	// Call base function
+	Gtk::Window::on_drag_data_received(context, x, y, data, info, time);
+}
+
 void Gobby::Window::on_obby_close()
 {
 	display_error(_("Connection lost"));
@@ -648,11 +694,14 @@ void Gobby::Window::on_obby_document_remove(obby::document_info& document)
 		set_title("Gobby");
 }
 
-void Gobby::Window::display_error(const Glib::ustring& message)
+void Gobby::Window::open_local_file(const Glib::ustring& file)
 {
-	Gtk::MessageDialog dlg(*this, message, false, Gtk::MESSAGE_ERROR,
-	                       Gtk::BUTTONS_OK, true);
-	dlg.run();
+	// TODO: Set path in newly generated document
+	// TODO: Convert file to UTF-8
+	m_buffer->create_document(
+		Glib::path_get_basename(file),
+		Glib::file_get_contents(file)
+	);
 }
 
 void Gobby::Window::close_document(DocWindow& document)
@@ -675,5 +724,12 @@ void Gobby::Window::close_document(DocWindow& document)
 		if(!m_folder.get_n_pages() )
 			m_header.disable_document_actions();
 	}
+}
+
+void Gobby::Window::display_error(const Glib::ustring& message)
+{
+	Gtk::MessageDialog dlg(*this, message, false, Gtk::MESSAGE_ERROR,
+	                       Gtk::BUTTONS_OK, true);
+	dlg.run();
 }
 

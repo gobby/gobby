@@ -80,6 +80,13 @@ protected:
 
 	void on_chat(const Glib::ustring& message);
 
+	// Drag and drop
+	virtual void on_drag_data_received(
+		const Glib::RefPtr<Gdk::DragContext>& context,
+		int x, int y, const Gtk::SelectionData& data,
+		guint info, guint time
+	);
+
 	// Obby signal handlers
 	void on_obby_close();
 
@@ -94,6 +101,7 @@ protected:
 	void on_obby_chat(obby::user& user, const Glib::ustring& message);
 
 	// Helper functions
+	void open_local_file(const Glib::ustring& file);
 	void close_document(DocWindow& doc);
 	void display_error(const Glib::ustring& message);
 
