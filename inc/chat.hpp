@@ -47,8 +47,10 @@ public:
 	void obby_document_remove(LocalDocumentInfo& document);
 
 protected:
-	//void add_line(const obby::user& user, const Glib::ustring& message);
 	void on_chat();
+
+	void on_query_failed(const obby::command_query& query);
+	void on_help(const std::string& name, const std::string& desc);
 
 	void on_message(const obby::chat::message& message);
 	void on_user_message(const obby::chat::user_message& message);

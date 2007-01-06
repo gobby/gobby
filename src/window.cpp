@@ -454,8 +454,6 @@ void Gobby::Window::on_session_join()
 
 			buffer->close_event().connect(
 				sigc::mem_fun(*this, &Window::on_obby_close) );
-			//buffer->encrypted_event().connect(
-			//	sigc::mem_fun(*this, &Window::on_obby_encrypted) );
 
 			buffer->request_encryption();
 

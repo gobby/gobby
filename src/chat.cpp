@@ -94,11 +94,6 @@ Gobby::Chat::~Chat()
 {
 }
 
-/*Gobby::Chat::signal_chat_type Gobby::Chat::chat_event() const
-{
-	return m_signal_chat;
-}*/
-
 void Gobby::Chat::obby_start(LocalBuffer& buf)
 {
 	m_buffer = &buf;
@@ -108,6 +103,14 @@ void Gobby::Chat::obby_start(LocalBuffer& buf)
 	m_btn_chat.set_sensitive(true);
 
 	set_sensitive(true);
+
+	buf.get_command_queue().query_failed_event().connect(
+		sigc::mem_fun(*this, &Chat::on_query_failed)
+	);
+
+	buf.get_command_queue().help_event().connect(
+		sigc::mem_fun(*this, &Chat::on_help)
+	);
 
 	const obby::chat& chat = buf.get_chat();
 	chat.message_event().connect(
@@ -130,19 +133,10 @@ void Gobby::Chat::obby_end()
 
 void Gobby::Chat::obby_user_join(const obby::user& user)
 {
-	/*if(~user.get_flags() & obby::user::flags::CONNECTED)
-		return;
-
-	obby::format_string str(_("%0% has joined") );
-	str << user.get_name();
-	m_log_chat.log(str.str(), "blue");*/
 }
 
 void Gobby::Chat::obby_user_part(const obby::user& user)
 {
-/*	obby::format_string str(_("%0% has left") );
-	str << user.get_name();
-	m_log_chat.log(str.str(), "blue");*/
 }
 
 void Gobby::Chat::obby_document_insert(LocalDocumentInfo& document)
@@ -153,59 +147,6 @@ void Gobby::Chat::obby_document_remove(LocalDocumentInfo& document)
 {
 }
 
-#if 0
-void Gobby::Chat::obby_message(const obby::user& user,
-                               const Glib::ustring& message)
-{
-	// Make sure we are not deceived by rogue multi line messages
-	Glib::ustring::size_type prev = 0, pos = 0;
-	while( (pos = message.find('\n', pos)) != Glib::ustring::npos)
-	{
-		add_line(user, message.substr(prev, pos - prev) );
-		prev = ++pos;
-	}
-	add_line(user, message.substr(prev));
-}
-
-void Gobby::Chat::add_line(const obby::user& user, const Glib::ustring& message)
-{
-	const obby::user& self = m_buffer->get_self();
-	Glib::ustring name = self.get_name();
-
-	// Check if we have to highlight the line becasue the user's nick name
-	// was found in the the message.
-	Glib::ustring colour = "black";
-
-	// Only check for highlighting if another user wrote this message
-	if(&self != &user)
-	{
-		Glib::ustring::size_type pos = 0;
-		while( (message.find(name, pos)) != Glib::ustring::npos)
-		{
-			// Check that the found position is not part of another
-			// word ('ck' should not be found in 'luck' and such).
-			if(pos > 0 && Glib::Unicode::isalnum(message[pos - 1]) )
-				{ ++ pos; continue; }
-
-			if(pos + name.length() < message.length() &&
-			   Glib::Unicode::isalnum(message[pos + name.length()]))
-				{ ++ pos; continue; }
-
-			// Found occurence
-			colour = "darkred";
-			break;
-		}
-	}
-
-	m_log_chat.log("<" + user.get_name() + "> " + message, colour);
-}
-
-void Gobby::Chat::obby_server_message(const Glib::ustring& message)
-{
-	m_log_chat.log(message, "forest green");
-}
-#endif
-
 void Gobby::Chat::on_chat()
 {
 	if(m_buffer == NULL)
@@ -215,11 +156,46 @@ void Gobby::Chat::on_chat()
 	if(message.empty() ) return;
 	m_ent_chat.set_text("");
 
-	// Send each line separately
-	each_line(
-		message,
-		sigc::mem_fun(*this, &Gobby::Chat::send_line)
+	// Commands beginning with /
+	if(message[0] == '/')
+	{
+		Glib::ustring::size_type pos = message.find_first_of(" \n\v\t");
+		obby::command_query query(
+			message.substr(1, pos - 1),
+			message.substr(pos + 1)
+		);
+
+		m_buffer->send_command(query);
+	}
+	else
+	{
+		// Send each line separately
+		each_line(
+			message,
+			sigc::mem_fun(*this, &Gobby::Chat::send_line)
+		);
+	}
+}
+
+void Gobby::Chat::on_query_failed(const obby::command_query& query)
+{
+	obby::format_string str(
+		_("Command '%0%' not found. Type /help for a list of "
+		  "existing commands.")
 	);
+
+	str << query.get_command();
+	m_log_chat.log(str.str(), "red", std::time(NULL) );
+}
+
+void Gobby::Chat::on_help(const std::string& name, const std::string& desc)
+{
+	obby::format_string str(
+		_("%0%: %1%")
+	);
+
+	str << name << desc;
+	m_log_chat.log(str.str(), "black", std::time(NULL) );
 }
 
 void Gobby::Chat::on_message(const obby::chat::message& message)
@@ -303,4 +279,3 @@ void Gobby::Chat::recv_system_line(const std::string& line,
 {
 	m_log_chat.log(message.repr(), "blue", message.get_timestamp() );
 }
-
