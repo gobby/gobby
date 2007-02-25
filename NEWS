@@ -1,6 +1,18 @@
 Gobby
 =====
 
+Version 0.4.2:
+ * Gobby now opens absolute file names passed via command line
+ * View is now kept when remote operations affect the current position,
+   through appropriate scrolling
+ * Documents could be subscribed by double-clicking on them in the list
+ * Local files are not flagged as modified anymore
+ * Urgency hint is now configurable
+ * Windows compilation fixes
+
+Version 0.4.1:
+ * Release with no further important changes.
+
 Version 0.4.0:
  * Session encryption through GNUTLS
  * Reduced CPU usage and memory footprint through the removal of one
