@@ -1387,19 +1387,9 @@ void Gobby::Window::save_local_file(DocWindow& doc,
                                     const Glib::ustring& file,
                                     const std::string& encoding)
 {
-	// Open stream to file
-	std::ofstream stream(file.c_str() );
-
 	try
 	{
-		if(!stream)
-		{
-			obby::format_string str(
-				_("Could not open file '%0%' for writing")
-			);
-			str << file;
-			throw std::runtime_error(str.str() );
-		}
+		Glib::RefPtr<Glib::IOChannel> channel = Glib::IOChannel::create_from_file(file, "w");
 
 		// Save content into file
 		std::string conv_content = doc.get_content().raw();
@@ -1412,8 +1402,8 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 			);
 		}
 
-		stream << conv_content;
-		stream.close();
+		channel->write(conv_content);
+		channel->close();
 
 		m_document_settings.set_path(doc.get_info(), file);
 
@@ -1427,7 +1417,7 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 		// Unset modifified flag
 		doc.get_document().get_buffer()->set_modified(false);
 	}
-	catch(Glib::ConvertError& e)
+	catch(Glib::Error& e)
 	{
 		display_error(e.what() );
 	}
