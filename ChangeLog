@@ -1,3 +1,7 @@
+2007-02-25  Armin Burgmeier  <armin@0x539.de>
+
+	* src/ipc.cpp: Define _WIN32_WINNT to get HWND_MESSAGE API.
+
 2007-02-25  Philipp Kern <phil@0x539.de>
 
 	* NEWS, configure.in: Bump version to 0.4.2 and document important

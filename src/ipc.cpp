@@ -16,6 +16,9 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// We want HWND_MESSAGE 
+#define _WIN32_WINNT 0x500
+
 // TODO: Split into two files?
 #ifdef WIN32
 # include <stdexcept>
