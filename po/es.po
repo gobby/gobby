@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-17 14:31+0200\n"
+"POT-Creation-Date: 2007-03-02 16:54+0000\n"
 "PO-Revision-Date: 2006-06-22 18:18+0000\n"
 "Last-Translator: Rolando Espinoza <darkrho@gmail.com>\n"
 "Language-Team: Mario Palomo Torrero <mpalomo@ihman.com>\n"
@@ -16,15 +16,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: src/icon.cpp:4348 src/header.cpp:384 src/userlist.cpp:117
+#: src/icon.cpp:62 src/header.cpp:384 src/userlist.cpp:117
 msgid "User list"
 msgstr "Lista de usuarios"
 
-#: src/icon.cpp:4351 src/header.cpp:393 src/documentlist.cpp:103
+#: src/icon.cpp:65 src/header.cpp:393 src/documentlist.cpp:103
 msgid "Document list"
 msgstr "Lista de documentos"
 
-#: src/icon.cpp:4354 src/header.cpp:403
+#: src/icon.cpp:68 src/header.cpp:403
 msgid "Chat"
 msgstr "Chat"
 
@@ -231,7 +231,6 @@ msgstr "Desactiva el lenguaje actual"
 
 #. Build description string
 #: src/header.cpp:645
-#, c-format
 msgid "Selects %0% as language"
 msgstr "Selecciona el lenguaje %0%"
 
@@ -240,7 +239,6 @@ msgid "Not connected"
 msgstr "No conectado"
 
 #: src/statusbar.cpp:54
-#, c-format
 msgid "Selected language: %0%"
 msgstr "Lenguaje seleccionado: %0%"
 
@@ -265,18 +263,15 @@ msgid "Send"
 msgstr "Enviar"
 
 #: src/chat.cpp:226
-#, c-format
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
 "Comando '%0%' no encontrado. Escriba /help para mostrar la lista de comandos."
 
 #: src/chat.cpp:237
-#, c-format
 msgid "%0%: %1%"
 msgstr "%0%: %1%"
 
 #: src/chat.cpp:251
-#, c-format
 msgid "Document %0% does not exist"
 msgstr "El document %0% no existe"
 
@@ -380,65 +375,68 @@ msgstr "Ventanas"
 msgid "Remember the positions and states"
 msgstr "Recordar las posiciones y los estados"
 
-#: src/preferencesdialog.cpp:222
+#: src/preferencesdialog.cpp:219
+msgid "Highlight the window on incoming chat messages"
+msgstr ""
+
+#: src/preferencesdialog.cpp:225
 msgid "Show text only"
 msgstr "Mostrar sólo texto"
 
-#: src/preferencesdialog.cpp:223
+#: src/preferencesdialog.cpp:226
 msgid "Show icons only"
 msgstr "Mostrar sólo iconos"
 
-#: src/preferencesdialog.cpp:224
+#: src/preferencesdialog.cpp:227
 msgid "Show both icons and text"
 msgstr "Mostrar texto e iconos"
 
-#: src/preferencesdialog.cpp:307
+#: src/preferencesdialog.cpp:313
 msgid "Pattern"
 msgstr "Patrón"
 
-#: src/preferencesdialog.cpp:308
+#: src/preferencesdialog.cpp:314
 msgid "Language"
 msgstr "Lenguaje"
 
-#: src/preferencesdialog.cpp:309
+#: src/preferencesdialog.cpp:315
 msgid "Mime type"
 msgstr "Tipo MIME"
 
-#: src/preferencesdialog.cpp:311
+#: src/preferencesdialog.cpp:317
 msgid "This is a list of all recognized file types"
 msgstr "Esto es una lista de todos los tipos de fichero reconocidos"
 
-#: src/preferencesdialog.cpp:457
+#: src/preferencesdialog.cpp:463
 msgid "Pattern must not be empty."
 msgstr "El patrón no debe estar vacio"
 
-#: src/preferencesdialog.cpp:491
-#, c-format
+#: src/preferencesdialog.cpp:497
 msgid "There is no language with the mime type '%0%'."
 msgstr "No hay lenguaje con el tipo MIME '%0%'"
 
-#: src/preferencesdialog.cpp:613
+#: src/preferencesdialog.cpp:619
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/preferencesdialog.cpp:618
+#: src/preferencesdialog.cpp:624
 msgid "Editor"
 msgstr "Editor"
 
-#: src/preferencesdialog.cpp:619
+#: src/preferencesdialog.cpp:625
 msgid "View"
 msgstr "Ver"
 
 #. Appearance only affects the global Gobby window
-#: src/preferencesdialog.cpp:622
+#: src/preferencesdialog.cpp:628
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: src/preferencesdialog.cpp:623
+#: src/preferencesdialog.cpp:629
 msgid "Font"
 msgstr "Tipo de letra"
 
-#: src/preferencesdialog.cpp:624
+#: src/preferencesdialog.cpp:630
 msgid "Files"
 msgstr "Ficheros"
 
@@ -499,7 +497,6 @@ msgid "Port"
 msgstr "Puerto"
 
 #: src/joinprogressdialog.cpp:34
-#, c-format
 msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
@@ -560,7 +557,7 @@ msgid "Logged in successfully, synchronising session..."
 msgstr "Ingreso correcto, sincronizando sesión..."
 
 #. Connection closed by remote site
-#: src/joinprogressdialog.cpp:559 src/window.cpp:984
+#: src/joinprogressdialog.cpp:559 src/window.cpp:988
 msgid "Connection lost"
 msgstr "Conexión perdida"
 
@@ -617,7 +614,6 @@ msgid "Search and replace"
 msgstr "Buscar y reemplazar"
 
 #: src/finddialog.cpp:181
-#, c-format
 msgid "\"%0%\" has not been found in the document."
 msgstr "%0% no encontrado en el documento."
 
@@ -626,7 +622,6 @@ msgid "No occurence has been replaced"
 msgstr "Ninguna sustitución realizada"
 
 #: src/finddialog.cpp:267
-#, c-format
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
 msgstr[0] "%0% sustitución realizada"
@@ -685,15 +680,15 @@ msgstr "Crear documento"
 msgid "Enter document name"
 msgstr "Introducir el nombre del documento"
 
-#: src/window.cpp:640
+#: src/window.cpp:644
 msgid "Open new document"
 msgstr "Abrir nuevo documento"
 
-#: src/window.cpp:723
+#: src/window.cpp:727
 msgid "Save current document"
 msgstr "Guardar documento actual"
 
-#: src/window.cpp:805
+#: src/window.cpp:809
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
@@ -704,11 +699,11 @@ msgstr ""
 "usarlos cuando se creen nuevos documentos."
 
 #. Build password dialog with info
-#: src/window.cpp:849
+#: src/window.cpp:853
 msgid "Set user password"
 msgstr "Establecer contraseña de usuario"
 
-#: src/window.cpp:851
+#: src/window.cpp:855
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
@@ -716,8 +711,7 @@ msgstr ""
 "Establezca la contraseña de usuario para su cuenta. Cuando intente acceder "
 "de nuevo con este usuario se le preguntará por su contraseña."
 
-#: src/window.cpp:912
-#, c-format
+#: src/window.cpp:916
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
@@ -727,31 +721,23 @@ msgstr ""
 "cambiar las preferencias globales, utilice el submenú de preferencias en el "
 "menu \"Editar\"."
 
-#: src/window.cpp:1022
+#: src/window.cpp:1026
 msgid "Colour change failed: Colour already in use"
 msgstr "Error al cambiar de color: ese color ya se está usando"
 
-#: src/window.cpp:1271
-#, c-format
+#: src/window.cpp:1275
 msgid "Connected to %0%:%1%"
 msgstr "Conectado a %0%:%1%"
 
-#: src/window.cpp:1315
-#, c-format
+#: src/window.cpp:1319
 msgid "Serving on port %0%"
 msgstr "Servidor en puerto %0%"
 
-#: src/window.cpp:1390
-#, c-format
-msgid "Could not open file '%0%' for writing"
-msgstr "No se pudo abrir el fichero %0% para escritura"
-
-#: src/window.cpp:1439
-#, c-format
+#: src/window.cpp:1437
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "¿Guardar cambios al documento %0% antes de cerrar?"
 
-#: src/window.cpp:1449
+#: src/window.cpp:1447
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
@@ -759,14 +745,17 @@ msgstr ""
 "Si no se guarda, los cambios se perderán, pero aún se podrán recuperar si se "
 "vuelve a suscribir al documento mientras las sesión permanezca abierta."
 
-#: src/window.cpp:1458
+#: src/window.cpp:1456
 msgid "If you don't save, changes will be discarded."
 msgstr "Si no se guarda, los cambios se perderán."
 
 #. Add button to allow the user to save the dialog
-#: src/window.cpp:1473
+#: src/window.cpp:1471
 msgid "Close without saving"
 msgstr "Cerrar sin guardar"
+
+#~ msgid "Could not open file '%0%' for writing"
+#~ msgstr "No se pudo abrir el fichero %0% para escritura"
 
 #~ msgid "_View"
 #~ msgstr "_Ver"
