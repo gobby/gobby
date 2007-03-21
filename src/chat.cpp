@@ -54,7 +54,7 @@ namespace
 	               const sigc::slot<void, const std::string&> func)
 	{
 		std::string::size_type prev = 0, pos = 0;
-		while( (pos = text.find('\n', pos)) != Glib::ustring::npos)
+		while( (pos = text.find('\n', pos)) != std::string::npos)
 		{
 			func(text.substr(prev, pos - prev) );
 			prev = ++pos;
@@ -332,17 +332,17 @@ void Gobby::Chat::recv_user_line(const std::string& line,
 		if(is_highlighted(line, m_buffer->get_self().get_name()) )
 			colour = "darkred";
 
-	m_log_chat.log(message.repr(), colour, message.get_timestamp() );
+	m_log_chat.log(line, colour, message.get_timestamp() );
 }
 
 void Gobby::Chat::recv_server_line(const std::string& line,
                                    const obby::chat::server_message& message)
 {
-	m_log_chat.log(message.repr(), "forest green", message.get_timestamp());
+	m_log_chat.log(line, "forest green", message.get_timestamp());
 }
 
 void Gobby::Chat::recv_system_line(const std::string& line,
                                    const obby::chat::system_message& message)
 {
-	m_log_chat.log(message.repr(), "blue", message.get_timestamp() );
+	m_log_chat.log(line, "blue", message.get_timestamp() );
 }
