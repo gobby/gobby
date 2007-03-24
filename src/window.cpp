@@ -68,7 +68,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		m_preferences,
 		config.get_root()["windows"]
 	),
-	m_finddialog(*this), m_gotodialog(*this),
 	m_folder(m_header, m_preferences), m_chat(*this, m_preferences),
 	m_statusbar(m_header, m_folder)
 {
@@ -782,22 +781,28 @@ void Gobby::Window::on_document_close()
 
 void Gobby::Window::on_edit_search()
 {
-	m_finddialog.set_search_only(true);
-	m_finddialog.show();
-	m_finddialog.grab_focus();
+	if(m_finddialog.get() == NULL)
+		m_finddialog.reset(new FindDialog(*this));
+
+	m_finddialog->set_search_only(true);
+	m_finddialog->present();
 }
 
 void Gobby::Window::on_edit_search_replace()
 {
-	m_finddialog.set_search_only(false);
-	m_finddialog.show();
-	m_finddialog.grab_focus();
+	if(m_finddialog.get() == NULL)
+		m_finddialog.reset(new FindDialog(*this));
+
+	m_finddialog->set_search_only(false);
+	m_finddialog->present();
 }
 
 void Gobby::Window::on_edit_goto_line()
 {
-	m_gotodialog.show();
-	m_gotodialog.grab_focus();
+	if(m_gotodialog.get() == NULL)
+		m_gotodialog.reset(new GotoDialog(*this));
+
+	m_gotodialog->present();
 }
 
 void Gobby::Window::on_edit_preferences()

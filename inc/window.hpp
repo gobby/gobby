@@ -204,8 +204,8 @@ protected:
 	UserList m_userlist;
 	DocumentList m_documentlist;
 
-	FindDialog m_finddialog;
-	GotoDialog m_gotodialog;
+	std::auto_ptr<FindDialog> m_finddialog;
+	std::auto_ptr<GotoDialog> m_gotodialog;
 
 	Folder m_folder;
 	Chat m_chat;
