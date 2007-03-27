@@ -1,8 +1,14 @@
 2007-03-27  Philipp Kern <phil@0x539.de>
 
-       * src/preferences.cpp: Fix some mime types. It seems that they
-         are inconsistent over different distributions, at least the
-         fixed ones are commonly changed.
+	* src/window.cpp: Output an error to the console if the zeroconf
+	daemon is unavailable instead of displaying an annoying message
+	box.
+
+2007-03-27  Philipp Kern <phil@0x539.de>
+
+	* src/preferences.cpp: Fix some mime types. It seems that they
+        are inconsistent over different distributions, at least the
+        fixed ones are commonly changed.
 
 2007-03-24  Armin Burgmeier  <armin@0x539.de>
 
