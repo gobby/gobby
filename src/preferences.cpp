@@ -187,12 +187,12 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 	{
 		// Default list
 		add_by_mime_type("*.ada", "text/x-ada", lang_mgr);
-		add_by_mime_type("*.c", "text/x-c", lang_mgr);
-		add_by_mime_type("*.h", "text/x-c++", lang_mgr);
-		add_by_mime_type("*.hh", "text/x-c++", lang_mgr);
-		add_by_mime_type("*.cpp", "text/x-c++", lang_mgr);
-		add_by_mime_type("*.hpp", "text/x-c++", lang_mgr);
-		add_by_mime_type("*.cc", "text/x-c++", lang_mgr);
+		add_by_mime_type("*.c", "text/x-csrc", lang_mgr);
+		add_by_mime_type("*.h", "text/x-chdr", lang_mgr);
+		add_by_mime_type("*.cpp", "text/x-c++src", lang_mgr);
+		add_by_mime_type("*.hpp", "text/x-c++hdr", lang_mgr);
+		add_by_mime_type("*.cc", "text/x-c++src", lang_mgr);
+		add_by_mime_type("*.hh", "text/x-c++hdr", lang_mgr);
 		add_by_mime_type("*.cs", "text/x-csharp", lang_mgr);
 		add_by_mime_type("*.css", "text/css", lang_mgr);
 		add_by_mime_type("*.diff", "text/x-diff", lang_mgr);
@@ -205,7 +205,7 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 		add_by_mime_type("*.xhtml", "text/html", lang_mgr);
 		add_by_mime_type("*.idl", "text/x-idl", lang_mgr);
 		add_by_mime_type("*.java", "text/x-java", lang_mgr);
-		add_by_mime_type("*.js", "text/x-javascript", lang_mgr);
+		add_by_mime_type("*.js", "application/x-javascript", lang_mgr);
 		add_by_mime_type("*.tex", "text/x-tex", lang_mgr);
 		add_by_mime_type("*.latex", "text/x-tex", lang_mgr);
 		add_by_mime_type("*.lua", "text/x-lua", lang_mgr);
