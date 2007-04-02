@@ -106,6 +106,21 @@ void Gobby::Preferences::Font::serialise(Config::ParentEntry& entry) const
 	entry.set_value("desc", desc.to_string());
 }
 
+Gobby::Preferences::Behaviour::Behaviour()
+{
+}
+
+Gobby::Preferences::Behaviour::Behaviour(Config::ParentEntry& entry):
+	auto_open_new_documents(entry.get_value<bool>(
+		"auto_open_new_documents", false))
+{
+}
+
+void Gobby::Preferences::Behaviour::serialise(Config::ParentEntry& entry) const
+{
+	entry.set_value("auto_open_new_documents", auto_open_new_documents);
+}
+
 Gobby::Preferences::FileList::iterator::iterator(const base_iterator iter):
 	m_iter(iter)
 {
@@ -306,6 +321,7 @@ Gobby::Preferences::Preferences(Config& config, const LangManager& lang_mgr):
 	view(config.get_root()["view"]),
 	appearance(config.get_root()["appearance"]),
 	font(config.get_root()["font"]),
+	behaviour(config.get_root()["behaviour"]),
 	files(config.get_root()["files"], lang_mgr)
 {
 }
@@ -317,5 +333,6 @@ void Gobby::Preferences::serialise(Config& config) const
 	view.serialise(config.get_root()["view"]);
 	appearance.serialise(config.get_root()["appearance"]);
 	font.serialise(config.get_root()["font"]);
+	behaviour.serialise(config.get_root()["behaviour"]);
 	files.serialise(config.get_root()["files"]);
 }

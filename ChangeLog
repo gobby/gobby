@@ -1,5 +1,14 @@
 2007-04-02  Philipp Kern <phil@0x539.de>
 
+	* src/window.cpp:
+	* inc/preferences.hpp:
+	* src/preferences.cpp:
+	* inc/preferencesdialog.hpp:
+	* src/preferencesdialog.cpp: add new configuration option to open
+	new remotely-created documents automatically [fixes #232]
+
+2007-04-02  Philipp Kern <phil@0x539.de>
+
 	* src/window.cpp: Mention avahi-daemon in failure message.
 
 2007-03-27  Philipp Kern <phil@0x539.de>
@@ -14,7 +23,7 @@
         are inconsistent over different distributions, at least the
         fixed ones are commonly changed.
 
-2007-03-24  Armin Burgmeier  <armin@0x539.de>
+2007-03-24  Armin Burgmeier <armin@0x539.de>
 
 	* inc/window.hpp:
 	* src/window.cpp: Focus find and goto dialogs always when the
@@ -22,18 +31,18 @@
 	but as soon as they are required, to improve startup time
 	[fixes #251].
 
-2007-03-21  Armin Burgmeier  <armin@0x539.de>
+2007-03-21  Armin Burgmeier <armin@0x539.de>
 
 	* src/chat.cpp: Do not print an incoming message as much times as its
 	number of lines, but only once.
 
-2007-02-25  Armin Burgmeier  <armin@0x539.de>
+2007-02-25  Armin Burgmeier <armin@0x539.de>
 
 	* src/window.cpp: Open output file to save a document with
 	Glib::IOChannel instead of std::ofstream to get correct conversion of
 	filename encoding from glib.
 
-2007-02-25  Armin Burgmeier  <armin@0x539.de>
+2007-02-25  Armin Burgmeier <armin@0x539.de>
 
 	* src/ipc.cpp: Define _WIN32_WINNT to get HWND_MESSAGE API.
 

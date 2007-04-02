@@ -1037,6 +1037,10 @@ void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
 	LocalDocumentInfo& local_doc =
 		dynamic_cast<LocalDocumentInfo&>(document);
 
+	if(m_preferences.behaviour.auto_open_new_documents
+			&& !local_doc.is_subscribed() )
+		local_doc.subscribe();
+
 	m_folder.obby_document_insert(local_doc);
 	m_userlist.obby_document_insert(local_doc);
 	m_documentlist.obby_document_insert(local_doc);

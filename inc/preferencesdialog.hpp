@@ -147,6 +147,20 @@ public:
 		Glib::ustring m_init_font;
 	};
 
+	class Behaviour: public Page
+	{
+	public:
+		Behaviour(const Preferences& preferences);
+		void set(Preferences::Behaviour& behaviour) const;
+
+	protected:
+		Gtk::VBox m_box;
+
+		Gtk::Frame m_frame_documents;
+		Gtk::VBox m_box_documents;
+		Gtk::CheckButton m_btn_auto_open;
+	};
+
 	class FileList: public Page
 	{
 	public:
@@ -263,6 +277,7 @@ protected:
 	View m_page_view;
 	Appearance m_page_appearance;
 	Font m_page_font;
+	Behaviour m_page_behaviour;
 	FileList m_page_files;
 };
 

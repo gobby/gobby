@@ -98,6 +98,16 @@ public:
 		Pango::FontDescription desc;
 	};
 
+	class Behaviour
+	{
+	public:
+		Behaviour();
+		Behaviour(Config::ParentEntry& entry);
+		void serialise(Config::ParentEntry& entry) const;
+
+		bool auto_open_new_documents;
+	};
+
 	class FileList
 	{
 	public:
@@ -149,6 +159,7 @@ public:
 	View view;
 	Appearance appearance;
 	Font font;
+	Behaviour behaviour;
 	FileList files;
 };
 

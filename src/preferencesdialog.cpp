@@ -293,6 +293,27 @@ void Gobby::PreferencesDialog::Font::set(Preferences::Font& font) const
 		font.desc = Pango::FontDescription(m_init_font);
 }
 
+Gobby::PreferencesDialog::Behaviour::Behaviour(const Preferences& preferences):
+	m_frame_documents(_("Document management") ),
+	m_btn_auto_open(_("Open new remotely-created documents automatically") )
+{
+	bool auto_open = preferences.behaviour.auto_open_new_documents;
+
+	m_btn_auto_open.set_active(auto_open);
+	m_box_documents.pack_start(m_btn_auto_open, Gtk::PACK_SHRINK);
+	m_frame_documents.add(m_box_documents);
+
+	m_box.pack_start(m_frame_documents, Gtk::PACK_SHRINK);
+
+	add(m_box);
+}
+
+void Gobby::PreferencesDialog::Behaviour::set(
+	Preferences::Behaviour& preferences) const
+{
+	preferences.auto_open_new_documents = m_btn_auto_open.get_active();
+}
+
 Gobby::PreferencesDialog::FileList::LanguageColumns::LanguageColumns()
 {
 	add(language);
@@ -619,7 +640,7 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
  : Gtk::Dialog(_("Preferences"), parent, true),
    m_page_editor(preferences, m_tooltips), m_page_view(preferences),
    m_page_appearance(preferences), m_page_font(preferences),
-   m_page_files(*this, preferences, lang_mgr)
+   m_page_behaviour(preferences), m_page_files(*this, preferences, lang_mgr)
 {
 	m_notebook.append_page(m_page_editor, _("Editor") );
 	m_notebook.append_page(m_page_view, _("View") );
@@ -627,6 +648,7 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
 	// Appearance only affects the global Gobby window
 	if(!local) m_notebook.append_page(m_page_appearance, _("Appearance") );
 	m_notebook.append_page(m_page_font, _("Font") );
+	if(!local) m_notebook.append_page(m_page_behaviour, _("Behaviour") );
 	if(!local) m_notebook.append_page(m_page_files, _("Files") );
 
 	get_vbox()->set_spacing(5);
@@ -648,5 +670,6 @@ void Gobby::PreferencesDialog::set(Preferences& preferences) const
 	m_page_view.set(preferences.view);
 	m_page_appearance.set(preferences.appearance);
 	m_page_font.set(preferences.font);
+	m_page_behaviour.set(preferences.behaviour);
 	m_page_files.set(preferences.files);
 }
