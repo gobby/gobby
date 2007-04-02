@@ -1,3 +1,7 @@
+2007-04-02  Philipp Kern <phil@0x539.de>
+
+	* src/window.cpp: Mention avahi-daemon in failure message.
+
 2007-03-27  Philipp Kern <phil@0x539.de>
 
 	* src/window.cpp: Output an error to the console if the zeroconf

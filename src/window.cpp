@@ -178,8 +178,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	}
 	catch(std::runtime_error&)
 	{
-		std::cerr << _("Howl initialisation failed. Probably you need "
-			"to run mDNSResponder as root prior to Gobby. "
+		std::cerr << _("Zeroconf initialisation failed. Probably you "
+			"need to run avahi-daemon or mDNSResponder, depending "
+			"on the library you use, as root prior to Gobby. "
 			"Zeroconf support is deactivated for this session.");
 		std::cerr << std::endl;
 		m_zeroconf.reset();
