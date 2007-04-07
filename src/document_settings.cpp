@@ -51,6 +51,7 @@ Gobby::DocumentSettings::Columns::Columns()
 	add(title);
 	add(original_encoding);
 	add(path);
+	add(auto_open);
 }
 
 Gobby::DocumentSettings::DocumentSettings(Window& window):
@@ -105,6 +106,18 @@ void Gobby::DocumentSettings::set_path(const LocalDocumentInfo& info,
                                        const Glib::ustring& path)
 {
 	(*get_iter(info))[columns.path] = path;
+}
+
+bool Gobby::DocumentSettings::
+	get_automatically_opened(const LocalDocumentInfo& info) const
+{
+	return (*get_iter(info))[columns.auto_open];
+}
+
+void Gobby::DocumentSettings::set_automatically_opened(
+	const LocalDocumentInfo& info, bool value)
+{
+	(*get_iter(info))[columns.auto_open] = value;
 }
 
 /*Gobby::DocumentSettings::Columns&
@@ -182,6 +195,7 @@ void Gobby::DocumentSettings::on_document_insert(DocumentInfo& info)
 	(*iter)[columns.icon] = m_icon;
 	(*iter)[columns.color] = document_color(local_info);
 	(*iter)[columns.title] = local_info.get_suffixed_title();
+	(*iter)[columns.auto_open] = false;
 
 	m_map[&local_info] = iter;
 

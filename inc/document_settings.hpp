@@ -45,6 +45,7 @@ public:
 		Gtk::TreeModelColumn<Glib::ustring> title;
 		Gtk::TreeModelColumn<Glib::ustring> original_encoding;
 		Gtk::TreeModelColumn<Glib::ustring> path;
+		Gtk::TreeModelColumn<bool> auto_open;
 	};
 
 	DocumentSettings(Window& wnd);
@@ -91,6 +92,15 @@ public:
 	 */
 	void set_path(const LocalDocumentInfo& info,
 	              const Glib::ustring& path);
+
+	/** @brief Returns if the document was opened automatically.
+	 */
+	bool get_automatically_opened(const LocalDocumentInfo& info) const;
+
+	/** @brief Sets the automatically opened flag on a document.
+	 */
+	void set_automatically_opened(const LocalDocumentInfo& info,
+	                              bool value);
 
 	/** @brief Returns the columns for the underlaying ListStore.
 	 */
