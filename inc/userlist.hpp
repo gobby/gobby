@@ -42,6 +42,7 @@ public:
 
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 		Gtk::TreeModelColumn<Glib::ustring> text;
+		Gtk::TreeModelColumn<LocalDocumentInfo*> info;
 		// TODO: Column with pointer that holds reference to obby::user?
 	};
 
@@ -65,9 +66,12 @@ protected:
 	void remove_children(const Gtk::TreeIter& parent);
 
 	void on_user_subscribe(const obby::user& user,
-	                       const LocalDocumentInfo& info);
+	                       LocalDocumentInfo& info);
 	void on_user_unsubscribe(const obby::user& user,
 	                         const LocalDocumentInfo& info);
+
+	void on_row_activated(const Gtk::TreePath& path,
+	                      Gtk::TreeViewColumn* column);
 
 	Header& m_header;
 

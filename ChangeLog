@@ -1,5 +1,11 @@
 2007-04-07  Philipp Kern <phil@0x539.de>
 
+	* inc/userlist.hpp:
+	* src/userlist.hpp: allow doubleclicks on documents in the userlist
+	to subscribe to them [fixes #225]
+
+2007-04-07  Philipp Kern <phil@0x539.de>
+
 	* inc/document_settings.hpp: signals now pass a non-const
 	LocalDocumentInfo reference
 	* inc/window.hpp:

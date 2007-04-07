@@ -62,6 +62,7 @@ Gobby::UserList::Columns::Columns()
 {
 	add(icon);
 	add(text);
+	add(info);
 }
 
 Gobby::UserList::UserList(Gtk::Window& parent,
@@ -105,6 +106,8 @@ Gobby::UserList::UserList(Gtk::Window& parent,
 
 	m_tree_view.get_selection()->set_mode(Gtk::SELECTION_NONE);
 	m_tree_view.set_headers_visible(false);
+	m_tree_view.signal_row_activated().connect(
+		sigc::mem_fun(*this, &UserList::on_row_activated) );
 
 	m_scrolled_wnd.set_shadow_type(Gtk::SHADOW_IN);
 	m_scrolled_wnd.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -173,7 +176,7 @@ void Gobby::UserList::obby_user_join(const obby::user& user)
 		{
 			on_user_subscribe(
 				user,
-				dynamic_cast<const LocalDocumentInfo&>(
+				dynamic_cast<LocalDocumentInfo&>(
 					*iter
 				)
 			);
@@ -239,7 +242,7 @@ void Gobby::UserList::obby_document_remove(LocalDocumentInfo& info)
 }
 
 void Gobby::UserList::on_user_subscribe(const obby::user& user,
-                                        const LocalDocumentInfo& info)
+                                        LocalDocumentInfo& info)
 {
 	Gtk::TreeIter iter = find_iter(m_iter_online, user.get_name() );
 	if(iter == m_iter_online->children().end() )
@@ -252,6 +255,8 @@ void Gobby::UserList::on_user_subscribe(const obby::user& user,
 	);
 
 	(*doc)[m_tree_cols.text] = info.get_title();
+
+	(*doc)[m_tree_cols.info] = &info;
 }
 
 void Gobby::UserList::on_user_unsubscribe(const obby::user& user,
@@ -287,3 +292,21 @@ void Gobby::UserList::remove_children(const Gtk::TreeIter& parent)
 	while(iter != list.end() )
 		iter = m_tree_data->erase(iter);
 }
+
+void Gobby::UserList::on_row_activated(const Gtk::TreePath& path,
+                                       Gtk::TreeViewColumn* columns)
+{
+	Gtk::TreeIter tree_iter = m_tree_data->get_iter(path);
+	LocalDocumentInfo* info = (*tree_iter)[m_tree_cols.info];
+
+	if(info == NULL)
+		// The selected row is a user, not a document.
+		return;
+
+	if(Gobby::is_subscribable(*info) &&
+	   info->get_subscription_state() == Gobby::LocalDocumentInfo::UNSUBSCRIBED)
+	{
+		info->subscribe();
+	}
+}
+
