@@ -1,5 +1,13 @@
 2007-04-07  Philipp Kern <phil@0x539.de>
 
+	* inc/document_settings.hpp: signals now pass a non-const
+	LocalDocumentInfo reference
+	* inc/window.hpp:
+	* src/window.cpp: automatically opened tabs should not grab
+	the focus [finally fixes #232]
+
+2007-04-07  Philipp Kern <phil@0x539.de>
+
 	* inc/document_settings.hpp:
 	* src/document_settings.cpp: add a flag whether the document was
 	opened automatically or not

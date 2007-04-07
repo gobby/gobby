@@ -141,7 +141,7 @@ protected:
 	void on_folder_document_close_request(DocWindow& window);
 	void on_folder_tab_switched(DocWindow& window);
 
-	void on_settings_document_insert(const LocalDocumentInfo& info);
+	void on_settings_document_insert(LocalDocumentInfo& info);
 
 	void on_about();
 	void on_quit();

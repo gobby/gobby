@@ -547,9 +547,12 @@ void Gobby::Window::on_about()
 
 void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
-	// Select newly created page
-	m_folder.set_current_page(m_folder.page_num(window) );
-	window.grab_focus();
+	// Select newly created page if not automatically opened
+	if(!m_document_settings.get_automatically_opened(window.get_info() ))
+	{
+		m_folder.set_current_page(m_folder.page_num(window) );
+		window.grab_focus();
+	}
 
 	// Unset modifified flag when locally opened
 	if(!m_local_file_path.empty())
@@ -591,8 +594,16 @@ void Gobby::Window::on_folder_tab_switched(DocWindow& window)
 	update_title_bar();
 }
 
-void Gobby::Window::on_settings_document_insert(const LocalDocumentInfo& info)
+void Gobby::Window::on_settings_document_insert(LocalDocumentInfo& info)
 {
+	// Mark automatically opened documents and subscribe to them.
+	if(m_preferences.behaviour.auto_open_new_documents
+		&& !info.is_subscribed() )
+	{
+		m_document_settings.set_automatically_opened(info, true);
+		info.subscribe();
+	}
+
 	// Set the path from which this document was opened,
 	// if we opened that file.
 	if(info.get_owner() == &m_buffer->get_self() &&
@@ -1036,10 +1047,6 @@ void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
 {
 	LocalDocumentInfo& local_doc =
 		dynamic_cast<LocalDocumentInfo&>(document);
-
-	if(m_preferences.behaviour.auto_open_new_documents
-			&& !local_doc.is_subscribed() )
-		local_doc.subscribe();
 
 	m_folder.obby_document_insert(local_doc);
 	m_userlist.obby_document_insert(local_doc);

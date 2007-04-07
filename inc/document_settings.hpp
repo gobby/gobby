@@ -50,9 +50,9 @@ public:
 
 	DocumentSettings(Window& wnd);
 
-	typedef sigc::signal<void, const LocalDocumentInfo&>
+	typedef sigc::signal<void, LocalDocumentInfo&>
 		signal_document_insert_type;
-	typedef sigc::signal<void, const LocalDocumentInfo&>
+	typedef sigc::signal<void, LocalDocumentInfo&>
 		signal_document_remove_type;
 
 	/** @brief Called by the window when a new session has been opened.
