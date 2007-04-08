@@ -1,6 +1,17 @@
 Gobby
 =====
 
+Version 0.4.3:
+ * Find and Goto dialogs are now focused when invoked
+ * Zeroconf failures are now only printed on the console, no dialog is invoked
+ * Preference option added to subscribe automatically to all documents
+   in a session
+ * Doubleclicks on documents in the user list now opens them if they are
+   not already opened
+ * Window highlights itself only if the chat widget is open
+ * Toolbar style "text besides icon" is now supported
+ * Tab bar is only shown if more than one document is opened
+
 Version 0.4.2:
  * Gobby now opens absolute file names passed via command line
  * View is now kept when remote operations affect the current position,

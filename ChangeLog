@@ -1,5 +1,10 @@
 2007-04-09  Philipp Kern <phil@0x539.de>
 
+	* configure.ac: bump version to 0.4.3
+	* NEWS: note down usability improvements in 0.4.3
+
+2007-04-09  Philipp Kern <phil@0x539.de>
+
 	* src/window.cpp: do not show tabs if only one document present
 	[fixes #220]
 
