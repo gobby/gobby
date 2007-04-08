@@ -67,6 +67,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		*this,
 		m_document_settings,
 		m_header,
+		m_folder,
 		m_preferences,
 		config.get_root()["windows"]
 	),

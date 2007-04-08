@@ -35,6 +35,7 @@ namespace
 Gobby::DocumentList::DocumentList(Gtk::Window& parent,
                                   DocumentSettings& settings,
                                   Header& header,
+                                  Folder& folder,
                                   const Preferences& preferences,
 				  Config::ParentEntry& config_entry):
 	ToggleWindow(
@@ -45,6 +46,7 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 	),
 	m_buffer(NULL),
 	m_settings(settings),
+	m_folder(folder),
 	m_btn_subscribe(_("Subscribe") )
 {
 	m_view_col.pack_start(settings.columns.icon, false);
@@ -217,4 +219,22 @@ void Gobby::DocumentList::on_row_activated(const Gtk::TreePath& path,
                                            Gtk::TreeViewColumn* column)
 {
 	on_subscribe();
+
+	// select the tab if present
+	Gtk::TreeIter tree_iter = m_settings.get_list()->get_iter(path);
+	LocalDocumentInfo* info = (*tree_iter)[m_settings.columns.info];
+	if(info->get_subscription_state() == Gobby::LocalDocumentInfo::SUBSCRIBED)
+	{
+		for(int i = 0; i < m_folder.get_n_pages(); ++i)
+		{
+			DocWindow* win = static_cast<DocWindow*>(
+				m_folder.get_nth_page(i)
+				);
+			if(info == &win->get_info() )
+			{
+				m_folder.set_current_page(i);
+				break;
+			}
+		}
+	}
 }

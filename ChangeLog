@@ -1,5 +1,11 @@
 2007-04-09  Philipp Kern <phil@0x539.de>
 
+	* src/window.cpp:
+	* inc/documentlist.hpp:
+	* src/documentlist.cpp: allow the same in the document list
+
+2007-04-09  Philipp Kern <phil@0x539.de>
+
 	* inc/window.hpp:
 	* src/window.cpp: pass a folder object to the user list
 	* inc/userlist.hpp:

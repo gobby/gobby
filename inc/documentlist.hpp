@@ -26,6 +26,7 @@
 #include "document_settings.hpp"
 #include "togglewindow.hpp"
 #include "header.hpp"
+#include "folder.hpp"
 
 namespace Gobby
 {
@@ -38,6 +39,7 @@ public:
 	DocumentList(Gtk::Window& parent,
 	             DocumentSettings& settings,
 	             Header& header,
+		     Folder& folder,
 		     const Preferences& preferences,
 		     Config::ParentEntry& config_entry);
 
@@ -62,6 +64,8 @@ protected:
 
 	LocalBuffer* m_buffer;
 	DocumentSettings& m_settings;
+
+	Folder& m_folder;
 
 	Gtk::VBox m_mainbox;
 	Gtk::Button m_btn_subscribe;
