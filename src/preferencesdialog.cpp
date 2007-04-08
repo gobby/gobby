@@ -39,6 +39,7 @@ namespace
 		{
 		case 0: return Gtk::TOOLBAR_TEXT;
 		case 1: return Gtk::TOOLBAR_ICONS;
+		case 3: return Gtk::TOOLBAR_BOTH_HORIZ;
 		case 2: default: return Gtk::TOOLBAR_BOTH;
 		}
 	}
@@ -225,12 +226,14 @@ Gobby::PreferencesDialog::Appearance::
 	m_cmb_toolbar_style.append_text(_("Show text only") );
 	m_cmb_toolbar_style.append_text(_("Show icons only") );
 	m_cmb_toolbar_style.append_text(_("Show both icons and text") );
+	m_cmb_toolbar_style.append_text(_("Show text besides icons") );
 
 	switch(style)
 	{
 	case Gtk::TOOLBAR_TEXT: m_cmb_toolbar_style.set_active(0); break;
 	case Gtk::TOOLBAR_ICONS: m_cmb_toolbar_style.set_active(1); break;
 	case Gtk::TOOLBAR_BOTH: m_cmb_toolbar_style.set_active(2); break;
+	case Gtk::TOOLBAR_BOTH_HORIZ: m_cmb_toolbar_style.set_active(3); break;
 	default: break; // Avoids compiler warnings
 	}
 

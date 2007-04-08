@@ -170,7 +170,9 @@ Gobby::Header::AutoAction::AutoAction(action_type action,
 
 void Gobby::Header::AutoAction::on_state_change(const ApplicationState& state)
 {
-	m_action->set_sensitive(state.query(m_inc_flags, m_exc_flags) );
+	bool sensitive = state.query(m_inc_flags, m_exc_flags);
+	m_action->set_sensitive(sensitive);
+	m_action->property_is_important().set_value(sensitive);
 }
 
 void Gobby::Header::AutoList::add(action_type action,

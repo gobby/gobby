@@ -1,5 +1,11 @@
 2007-04-08  Philipp Kern <phil@0x539.de>
 
+	* src/preferencesdialog.cpp: add toolbar setting for "text besides icon"
+	* src/header.cpp: set important flags of the actions according
+	to the sensitivity
+
+2007-04-08  Philipp Kern <phil@0x539.de>
+
 	* src/window.cpp:
 	* src/chat.cpp: set urgency hint on window only when chat widget
 	is visible [fixes #256]
