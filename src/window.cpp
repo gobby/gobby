@@ -565,6 +565,12 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 			APPLICATION_DOCUMENT,
 			APPLICATION_NONE
 		);
+
+		m_folder.set_show_tabs(false);
+	}
+	else
+	{
+		m_folder.set_show_tabs(true);
 	}
 }
 
@@ -580,6 +586,10 @@ void Gobby::Window::on_folder_document_remove(DocWindow& window)
 			APPLICATION_NONE,
 			APPLICATION_DOCUMENT
 		);
+	}
+	else if(m_folder.get_n_pages() == 1)
+	{
+		m_folder.set_show_tabs(false);
 	}
 }
 
