@@ -201,13 +201,14 @@ protected:
 	DocumentSettings m_document_settings;
 
 	Header m_header;
+	Folder m_folder;
+
 	UserList m_userlist;
 	DocumentList m_documentlist;
 
 	std::auto_ptr<FindDialog> m_finddialog;
 	std::auto_ptr<GotoDialog> m_gotodialog;
 
-	Folder m_folder;
 	Chat m_chat;
 	StatusBar m_statusbar;
 

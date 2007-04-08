@@ -1,5 +1,13 @@
 2007-04-09  Philipp Kern <phil@0x539.de>
 
+	* inc/window.hpp:
+	* src/window.cpp: pass a folder object to the user list
+	* inc/userlist.hpp:
+	* src/userlist.cpp: doubleclicks on already subscribed documents now
+	cause the document to be selected
+
+2007-04-09  Philipp Kern <phil@0x539.de>
+
 	* configure.ac: bump version to 0.4.3
 	* NEWS: note down usability improvements in 0.4.3
 

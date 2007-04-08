@@ -55,9 +55,11 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_application_state, m_lang_manager),
+	m_folder(m_header, m_preferences), 
 	m_userlist(
 		*this,
 		m_header,
+		m_folder,
 		m_preferences,
 		config.get_root()["windows"]
 	),
@@ -68,7 +70,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		m_preferences,
 		config.get_root()["windows"]
 	),
-	m_folder(m_header, m_preferences), m_chat(*this, m_preferences),
+	m_chat(*this, m_preferences),
 	m_statusbar(m_header, m_folder)
 {
 	// Header

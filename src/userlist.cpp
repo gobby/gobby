@@ -67,6 +67,7 @@ Gobby::UserList::Columns::Columns()
 
 Gobby::UserList::UserList(Gtk::Window& parent,
                           Header& header,
+                          Folder& folder,
                           const Preferences& m_preferences,
 			  Config::ParentEntry& config_entry):
 	ToggleWindow(
@@ -75,7 +76,8 @@ Gobby::UserList::UserList(Gtk::Window& parent,
 		m_preferences,
 		config_entry["userlist"]
 	),
-	m_header(header)
+	m_header(header),
+	m_folder(folder)
 {
 	m_tree_data = Gtk::TreeStore::create(m_tree_cols);
 
@@ -307,6 +309,20 @@ void Gobby::UserList::on_row_activated(const Gtk::TreePath& path,
 	   info->get_subscription_state() == Gobby::LocalDocumentInfo::UNSUBSCRIBED)
 	{
 		info->subscribe();
+	}
+	else if(info->get_subscription_state() == Gobby::LocalDocumentInfo::SUBSCRIBED)
+	{
+		for(int i = 0; i < m_folder.get_n_pages(); ++i)
+		{
+			DocWindow* win = static_cast<DocWindow*>(
+				m_folder.get_nth_page(i)
+				);
+			if(info == &win->get_info() )
+			{
+				m_folder.set_current_page(i);
+				break;
+			}
+		}
 	}
 }
 

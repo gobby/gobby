@@ -26,6 +26,7 @@
 #include "togglewindow.hpp"
 #include "buffer_def.hpp"
 #include "header.hpp"
+#include "folder.hpp"
 
 namespace Gobby
 {
@@ -48,6 +49,7 @@ public:
 
 	UserList(Gtk::Window& parent,
 	         Header& header,
+		 Folder& folder,
 		 const Preferences& preferences,
 		 Config::ParentEntry& config_entry);
 
@@ -74,6 +76,7 @@ protected:
 	                      Gtk::TreeViewColumn* column);
 
 	Header& m_header;
+	Folder& m_folder;
 
 	LocalBuffer* m_buffer;
 
