@@ -165,7 +165,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_application_state.modify(APPLICATION_INITIAL, APPLICATION_NONE);
 
 	show_all_children();
-	if(!show_chat) m_frame_chat.hide();
+	if(!show_chat) m_frame_chat.hide_all();
 
 	set_title("Gobby");
 	set_default_size(640, 480);
@@ -980,11 +980,11 @@ void Gobby::Window::on_window_chat()
 {
 	if(m_header.action_window_chat->get_active() )
 	{
-		m_frame_chat.show();
+		m_frame_chat.show_all();
 	}
 	else
 	{
-		m_frame_chat.hide();
+		m_frame_chat.hide_all();
 	}
 }
 
