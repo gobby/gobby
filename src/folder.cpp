@@ -534,3 +534,17 @@ void Gobby::Folder::on_document_language_changed(DocWindow& window)
 	if(wnd == &window)
 		m_signal_document_language_changed.emit(window);
 }
+
+void Gobby::Folder::select_document(const LocalDocumentInfo& info)
+{
+	for(int i = 0; i < get_n_pages(); ++i)
+	{
+		DocWindow* win = static_cast<DocWindow*>(get_nth_page(i));
+
+		if(&info == &win->get_info() )
+		{
+			set_current_page(i);
+			break;
+		}
+	}
+}

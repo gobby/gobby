@@ -223,18 +223,9 @@ void Gobby::DocumentList::on_row_activated(const Gtk::TreePath& path,
 	// select the tab if present
 	Gtk::TreeIter tree_iter = m_settings.get_list()->get_iter(path);
 	LocalDocumentInfo* info = (*tree_iter)[m_settings.columns.info];
-	if(info->get_subscription_state() == Gobby::LocalDocumentInfo::SUBSCRIBED)
+
+	if(info->get_subscription_state() == LocalDocumentInfo::SUBSCRIBED)
 	{
-		for(int i = 0; i < m_folder.get_n_pages(); ++i)
-		{
-			DocWindow* win = static_cast<DocWindow*>(
-				m_folder.get_nth_page(i)
-				);
-			if(info == &win->get_info() )
-			{
-				m_folder.set_current_page(i);
-				break;
-			}
-		}
+		m_folder.select_document(*info);
 	}
 }

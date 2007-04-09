@@ -306,23 +306,13 @@ void Gobby::UserList::on_row_activated(const Gtk::TreePath& path,
 		return;
 
 	if(Gobby::is_subscribable(*info) &&
-	   info->get_subscription_state() == Gobby::LocalDocumentInfo::UNSUBSCRIBED)
+	   info->get_subscription_state() == LocalDocumentInfo::UNSUBSCRIBED)
 	{
 		info->subscribe();
 	}
-	else if(info->get_subscription_state() == Gobby::LocalDocumentInfo::SUBSCRIBED)
+	else if(info->get_subscription_state() == LocalDocumentInfo::SUBSCRIBED)
 	{
-		for(int i = 0; i < m_folder.get_n_pages(); ++i)
-		{
-			DocWindow* win = static_cast<DocWindow*>(
-				m_folder.get_nth_page(i)
-				);
-			if(info == &win->get_info() )
-			{
-				m_folder.set_current_page(i);
-				break;
-			}
-		}
+		m_folder.select_document(*info);
 	}
 }
 

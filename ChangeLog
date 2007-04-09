@@ -1,3 +1,12 @@
+2007-04-09  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/folder.hpp:
+	* src/folder.cpp: Added a select_document() function that selects the
+	page that shows the given document.
+
+	* src/userlist.cpp:
+	* src/documentlist.cpp: Make use of it.
+
 2007-04-09  Philipp Kern <phil@0x539.de>
 
 	* src/window.cpp:

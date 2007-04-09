@@ -100,6 +100,10 @@ public:
 	void obby_document_insert(LocalDocumentInfo& document);
 	void obby_document_remove(LocalDocumentInfo& document);
 
+	/** Selects the given document in the folder.
+	 */
+	void select_document(const LocalDocumentInfo& info);
+
 	/** Signal which will be emitted if a document has been added to the
 	 * folder.
 	 */
