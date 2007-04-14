@@ -1,5 +1,11 @@
 2007-04-14  Armin Burgmeier  <armin@0x539.de>
 
+	* src/joindialog.cpp: Only access the currently selected row to set
+	the content of the host and port entries when there actually is a
+	selected row.
+
+2007-04-14  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/joindialog.hpp:
 	* src/joindialog.cpp: Take a obby::zeroconf_base instead of
 	obby::zeroconf, do not install timer when using avahi as zeroconf

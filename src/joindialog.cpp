@@ -243,10 +243,14 @@ void Gobby::JoinDialog::on_leave(const std::string& name)
 
 void Gobby::JoinDialog::on_change()
 {
-	Gtk::TreeModel::iterator iter =
-		m_session_view.get_selection()->get_selected();
-	m_ent_host.set_text((*iter)[m_session_cols.host]);
-	m_ent_port.set_value((*iter)[m_session_cols.port]);
+	if(m_session_view.get_selection()->count_selected_rows() > 0)
+	{
+		Gtk::TreeModel::iterator iter =
+			m_session_view.get_selection()->get_selected();
+
+		m_ent_host.set_text((*iter)[m_session_cols.host]);
+		m_ent_port.set_value((*iter)[m_session_cols.port]);
+	}
 }
 
 void Gobby::JoinDialog::on_show()
