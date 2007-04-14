@@ -11,6 +11,11 @@ gobby_LDADD     = $(gobby_LIBS) $(gtksourceview_LIBS)
 gobby_CPPFLAGS  = $(gobby_CFLAGS) $(gtksourceview_CFLAGS)
 gobby_CPPFLAGS += -I../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\"
 
+if WITH_AVAHI
+gobby_LDADD += $(avahi_LIBS)
+gobby_CPPFLAGS += $(avahi_CFLAGS)
+endif
+
 if WITH_GNOME
 gobby_LDADD += $(gnome_LIBS)
 gobby_CPPFLAGS += $(gnome_CFLAGS)

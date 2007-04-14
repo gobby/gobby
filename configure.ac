@@ -73,6 +73,16 @@ if test "x$ac_cv_lib_obby_obby_has_zeroconf" = "xyes" ; then
 fi
 AM_CONDITIONAL(WITH_ZEROCONF, test x$ac_cv_lib_obby_obby_has_zeroconf = xyes)
 
+# Check for a specific Zeroconf support in obby, namely Avahi.
+AC_CHECK_LIB(obby, obby_has_avahi, [obby_has_avahi=yes],
+             [obby_has_avahi=no], [$pkg_cv_obby_LIBS])
+if test "x$ac_cv_lib_obby_obby_has_avahi" = "xyes" ; then
+	AC_DEFINE([WITH_AVAHI], 1,
+	          [Define whether to use Avahi as Zeroconf backend])
+	PKG_CHECK_MODULES([avahi], [avahi-glib])
+fi
+AM_CONDITIONAL(WITH_AVAHI, test x$ac_cv_lib_obby_obby_has_avahi = xyes)
+
 # Check if we are running on OS X, for special link handling.
 if test "x$build_vendor" = "xapple" ; then
   AC_DEFINE([OSX], 1, [Define whether we are running on Mac OS X.])

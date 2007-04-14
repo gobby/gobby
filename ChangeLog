@@ -1,3 +1,9 @@
+2007-04-14  Phliipp Kern <phil@0x539.de>
+
+	* configure.ac, Makefile.am: check for Avahi in obby and link against
+	  avahi-glib if Avahi proper is used for Zeroconf support; provide
+	  an additional define WITH_AVAHI for usage within the code
+
 2007-04-09  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/folder.hpp:
