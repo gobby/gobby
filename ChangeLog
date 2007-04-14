@@ -1,3 +1,14 @@
+2007-04-14  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/joindialog.hpp:
+	* src/joindialog.cpp: Take a obby::zeroconf_base instead of
+	obby::zeroconf, do not install timer when using avahi as zeroconf
+	backend.
+
+	* inc/window.hpp:
+	* src/window.cpp: Use Glib mainloop for avahi zeroconf backend,
+	otherwise poll it every 1500 milliseconds.
+
 2007-04-14  Phliipp Kern <phil@0x539.de>
 
 	* configure.ac, Makefile.am: check for Avahi in obby and link against

@@ -61,7 +61,7 @@ public:
 #else
 	JoinDialog(Gtk::Window& parent,
 	           Config::ParentEntry& config_entry,
-	           obby::zeroconf* zeroconf);
+	           obby::zeroconf_base* zeroconf);
 #endif
 	virtual ~JoinDialog();
 
@@ -80,7 +80,9 @@ protected:
 
 #ifdef WITH_ZEROCONF
 	Gtk::TreeModel::iterator find_entry(const std::string& name) const;
+#ifndef WITH_AVAHI
 	virtual bool on_timer();
+#endif
 	virtual void on_discover(const std::string& name,
 	                         const net6::ipv4_address& addr);
 	virtual void on_leave(const std::string& name);
@@ -105,7 +107,7 @@ protected:
 	Gtk::TreeView m_session_view;
 	Glib::RefPtr<Gtk::ListStore> m_session_list;
 	Columns m_session_cols;
-	obby::zeroconf* m_zeroconf;
+	obby::zeroconf_base* m_zeroconf;
 	sigc::connection m_timer_connection;
 #endif
 

@@ -36,7 +36,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 #else
 Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
                               Config::ParentEntry& config_entry,
-                              obby::zeroconf* zeroconf):
+                              obby::zeroconf_base* zeroconf):
 #endif
 	Gtk::Dialog(_("Join obby session"), parent, true, true),
    m_config_entry(config_entry),
@@ -213,11 +213,13 @@ Gobby::JoinDialog::find_entry(const std::string& name) const
 	return m_session_list->children().end();
 }
 
+#ifndef WITH_AVAHI
 bool Gobby::JoinDialog::on_timer()
 {
 	m_zeroconf->select(0);
 	return true;
 }
+#endif
 
 void Gobby::JoinDialog::on_discover(const std::string& name,
                                     const net6::ipv4_address& addr)
@@ -254,8 +256,10 @@ void Gobby::JoinDialog::on_show()
 	{
 		m_session_list->clear();
 		m_zeroconf->discover();
+#ifndef WITH_AVAHI
 		m_timer_connection = Glib::signal_timeout().connect(
 			sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
+#endif
 	}
 }
 

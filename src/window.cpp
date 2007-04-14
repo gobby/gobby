@@ -49,9 +49,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
 	m_lang_manager(Gtk::SourceLanguagesManager::create() ),
 	m_preferences(m_config, m_lang_manager), m_icon_mgr(icon_mgr),
-#ifdef WITH_ZEROCONF
-	m_zeroconf(NULL),
-#endif
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_application_state, m_lang_manager),
@@ -73,6 +70,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	),
 	m_chat(*this, m_preferences),
 	m_statusbar(m_header, m_folder)
+#ifdef WITH_AVAHI
+	,m_glib_poll(avahi_glib_poll_new(NULL, G_PRIORITY_DEFAULT))
+#endif
 {
 	// Header
 	m_header.action_app_session_create->signal_activate().connect(
@@ -177,7 +177,13 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	// Initialise Zeroconf
 	try
 	{
+#ifdef WITH_AVAHI
+		m_zeroconf.reset(new obby::zeroconf_avahi(avahi_glib_poll_get(m_glib_poll)));
+#else
 		m_zeroconf.reset(new obby::zeroconf);
+		// Periodically check for events when not using Avahi Glib Poll
+		Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*m_zeroconf.get(), &zeroconf_base::select), 0), 1500);
+#endif
 	}
 	catch(std::runtime_error&)
 	{
@@ -244,6 +250,16 @@ Gobby::Window::~Window()
 		screen.set_value("width", scr->get_width() );
 		screen.set_value("height", scr->get_height() );
 	}
+
+	/* Free explictely to make sure that the avahi poll is no longer
+	 * referenced when we free it */
+#ifdef WITH_ZEROCONF
+	m_zeroconf.reset(NULL);
+#endif
+
+#ifdef WITH_AVAHI
+	avahi_glib_poll_free(m_glib_poll);
+#endif
 }
 
 bool Gobby::Window::on_delete_event(GdkEventAny* event)

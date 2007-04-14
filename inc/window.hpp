@@ -49,6 +49,10 @@
 #ifdef WITH_ZEROCONF
 #include <obby/zeroconf.hpp>
 #endif
+#ifdef WITH_AVAHI
+#include <obby/zeroconf_avahi.hpp>
+#include <avahi-glib/glib-watch.h>
+#endif
 
 namespace Gobby
 {
@@ -230,7 +234,10 @@ protected:
 	// obby
 	std::auto_ptr<LocalBuffer> m_buffer;
 #ifdef WITH_ZEROCONF
-	std::auto_ptr<obby::zeroconf> m_zeroconf;
+	std::auto_ptr<obby::zeroconf_base> m_zeroconf;
+#endif
+#ifdef WITH_AVAHI
+	AvahiGLibPoll* m_glib_poll;
 #endif
 	sigc::connection m_timer_conn;
 };
