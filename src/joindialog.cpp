@@ -18,6 +18,7 @@
 
 #include <gtkmm/stock.h>
 #include <gtkmm/enums.h>
+#include <gtkmm/alignment.h>
 #include <iostream>
 #include "common.hpp"
 #include "joindialog.hpp"
@@ -110,7 +111,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 
 	m_table.set_spacings(5);
 	m_vbox.set_spacing(5);
-	m_vbox.pack_start(m_table);
+	m_vbox.pack_start(m_table, Gtk::PACK_SHRINK);
 
 #ifdef WITH_ZEROCONF
 	if(m_zeroconf != NULL)
@@ -128,7 +129,9 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 		m_zeroconf->leave_event().connect(
 			sigc::mem_fun(*this, &JoinDialog::on_leave) );
 
-		m_vbox.pack_start(m_ep_discover);
+		Gtk::Alignment* alignment = new Gtk::Alignment(0.5, 0.0);
+		alignment->add(m_ep_discover);
+		m_vbox.pack_start(*alignment, Gtk::PACK_EXPAND_WIDGET);
 	}
 #endif
 
@@ -140,7 +143,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 
 	show_all();
 	set_border_width(10);
-	set_resizable(false);
+	set_resizable(true);
 }
 
 Gobby::JoinDialog::~JoinDialog()
@@ -275,6 +278,9 @@ void Gobby::JoinDialog::on_show()
 			m_session_view.append_column(_("User"), m_session_cols.name);
 			m_session_view.append_column(_("Host"), m_session_cols.host);
 			m_session_view.append_column(_("Port"), m_session_cols.port);
+
+			// Enable selection
+			m_session_view.get_selection()->set_mode(Gtk::SELECTION_SINGLE);
 		} catch(std::runtime_error& e) {
 			std::cerr << "Discovery failed: " << e.what() << std::endl;
 
@@ -289,8 +295,16 @@ void Gobby::JoinDialog::on_show()
 			stop->property_stock_id().set_value("gtk-dialog-error");
 
 			// append them
-			m_session_view.append_column("", *stop);
-			m_session_view.append_column(_("Failure"), *failure);
+			Gtk::TreeViewColumn* column = Gtk::manage(
+				new Gtk::TreeViewColumn(_("Failure")));
+
+			column->pack_start(*stop, false);
+			column->pack_start(*failure, true);
+			column->set_spacing(8);
+			m_session_view.append_column(*column);
+
+			// Disable selection
+			m_session_view.get_selection()->set_mode(Gtk::SELECTION_NONE);
 
 			// create a dummy row for the renderer to be displayed
 			// and discard the pointer

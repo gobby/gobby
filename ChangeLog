@@ -1,3 +1,8 @@
+2007-04-15  Armin Burgmeier  <armin@0x539.de>
+
+	* src/joindialog.cpp: Don't allow selection in the error case, use a
+	single column for both icon and text. Make the dialog resizable.
+
 2007-04-15  Philipp Kern <phil@0x539.de>
 
 	* src/joindialog.cpp: failure handling for exceptions thrown
