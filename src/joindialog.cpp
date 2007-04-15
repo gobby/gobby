@@ -18,6 +18,7 @@
 
 #include <gtkmm/stock.h>
 #include <gtkmm/enums.h>
+#include <iostream>
 #include "common.hpp"
 #include "joindialog.hpp"
 
@@ -116,9 +117,6 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 	{
 		m_session_list = Gtk::ListStore::create(m_session_cols);
 		m_session_view.set_model(m_session_list);
-		m_session_view.append_column(_("User"), m_session_cols.name);
-		m_session_view.append_column(_("Host"), m_session_cols.host);
-		m_session_view.append_column(_("Port"), m_session_cols.port);
 		m_session_view.get_selection()->set_mode(
 			Gtk::SELECTION_SINGLE);
 		m_session_view.get_selection()->signal_changed().connect(
@@ -232,6 +230,7 @@ void Gobby::JoinDialog::on_discover(const std::string& name,
 	row[m_session_cols.name] = name;
 	row[m_session_cols.host] = addr.get_name();
 	row[m_session_cols.port] = addr.get_port();
+	m_ep_discover.set_expanded(true);
 }
 
 void Gobby::JoinDialog::on_leave(const std::string& name)
@@ -259,7 +258,45 @@ void Gobby::JoinDialog::on_show()
 	if(m_zeroconf != NULL && !m_timer_connection.connected())
 	{
 		m_session_list->clear();
-		m_zeroconf->discover();
+		try {
+			// clear treeview columns
+			Gtk::TreeViewColumn* col = NULL;
+			while((col = m_session_view.get_column(0)) != NULL)
+				m_session_view.remove_column(*col);
+
+			// hide the expanders contents, it will automatically be opened
+			// when items are discovered
+			m_ep_discover.set_expanded(false);
+
+			// discover elements
+			m_zeroconf->discover();
+
+			// resetup columns
+			m_session_view.append_column(_("User"), m_session_cols.name);
+			m_session_view.append_column(_("Host"), m_session_cols.host);
+			m_session_view.append_column(_("Port"), m_session_cols.port);
+		} catch(std::runtime_error& e) {
+			std::cerr << "Discovery failed: " << e.what() << std::endl;
+
+			// setup failure columns
+			Gtk::CellRendererText* failure = Gtk::manage(
+				new Gtk::CellRendererText());
+			failure->property_text().set_value(e.what() );
+			g_object_set(G_OBJECT(failure->gobj()), "ellipsize",
+				PANGO_ELLIPSIZE_END, NULL);
+			Gtk::CellRendererPixbuf* stop = Gtk::manage(
+				new Gtk::CellRendererPixbuf());
+			stop->property_stock_id().set_value("gtk-dialog-error");
+
+			// append them
+			m_session_view.append_column("", *stop);
+			m_session_view.append_column(_("Failure"), *failure);
+
+			// create a dummy row for the renderer to be displayed
+			// and discard the pointer
+			m_session_list->append();
+			m_ep_discover.set_expanded(true);
+		}
 #ifndef WITH_AVAHI
 		m_timer_connection = Glib::signal_timeout().connect(
 			sigc::mem_fun(*this, &JoinDialog::on_timer), 400);
