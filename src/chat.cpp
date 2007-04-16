@@ -332,7 +332,10 @@ void Gobby::Chat::recv_user_line(const std::string& line,
 		if(is_highlighted(line, m_buffer->get_self().get_name()) )
 			colour = "darkred";
 
-	m_log_chat.log(line, colour, message.get_timestamp() );
+	std::string complete_line =
+		"<" + message.get_user().get_name() + "> " + line;
+
+	m_log_chat.log(complete_line, colour, message.get_timestamp() );
 }
 
 void Gobby::Chat::recv_server_line(const std::string& line,
