@@ -287,7 +287,7 @@ void Gobby::Chat::on_user_message(const obby::chat::user_message& message)
 {
 	// Split received message up into lines
 	each_line(
-		message.get_text(),
+		message.repr(),
 		sigc::bind(
 			sigc::mem_fun(*this, &Gobby::Chat::recv_user_line),
 			sigc::ref(message)
@@ -299,7 +299,7 @@ void Gobby::Chat::on_server_message(const obby::chat::server_message& message)
 {
 	// Split received message up into lines
 	each_line(
-		message.get_text(),
+		message.repr(),
 		sigc::bind(
 			sigc::mem_fun(*this, &Gobby::Chat::recv_server_line),
 			sigc::ref(message)
@@ -310,7 +310,7 @@ void Gobby::Chat::on_server_message(const obby::chat::server_message& message)
 void Gobby::Chat::on_system_message(const obby::chat::system_message& message)
 {
 	each_line(
-		message.get_text(),
+		message.repr(),
 		sigc::bind(
 			sigc::mem_fun(*this, &Gobby::Chat::recv_system_line),
 			sigc::ref(message)
@@ -332,10 +332,7 @@ void Gobby::Chat::recv_user_line(const std::string& line,
 		if(is_highlighted(line, m_buffer->get_self().get_name()) )
 			colour = "darkred";
 
-	std::string complete_line =
-		"<" + message.get_user().get_name() + "> " + line;
-
-	m_log_chat.log(complete_line, colour, message.get_timestamp() );
+	m_log_chat.log(line, colour, message.get_timestamp() );
 }
 
 void Gobby::Chat::recv_server_line(const std::string& line,
