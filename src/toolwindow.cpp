@@ -23,11 +23,7 @@ Gobby::ToolWindow::ToolWindow(Gtk::Window& parent):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
 	m_x(0), m_y(0), m_w(0), m_h(0)
 {
-#ifndef WIN32
 	set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-#else
-	set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);
-#endif
 	set_transient_for(parent);
 	set_position(Gtk::WIN_POS_CENTER_ON_PARENT);
 }

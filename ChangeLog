@@ -1,5 +1,11 @@
 2007-04-23  Philipp Kern <phil@0x539.de>
 
+	* src/togglewindow.cpp: ToggleWindow needs UTILITY hints in any
+	  case
+	* src/toolwindow.cpp: use DIALOG unconditionally on every ToolWindow
+
+2007-04-23  Philipp Kern <phil@0x539.de>
+
 	* src/toolwindow.cpp: use DIALOG hint on *nix, UTILITY on Win32
 	* src/window.cpp: copyright notice renewed
 
