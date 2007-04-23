@@ -508,7 +508,7 @@ void Gobby::Window::on_about()
 	dlg.set_comments(_("A collaborative text editor"));
 
 	dlg.set_copyright(
-		"Copyright (C) 2005-2006 0x539 dev group <crew@0x539.de>"
+		"Copyright (C) 2005-2007 0x539 dev group <crew@0x539.de>"
 	);
 
 	dlg.set_logo(m_icon_mgr.gobby);

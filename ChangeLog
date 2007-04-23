@@ -1,3 +1,8 @@
+2007-04-23  Philipp Kern <phil@0x539.de>
+
+	* src/toolwindow.cpp: use DIALOG hint on *nix, UTILITY on Win32
+	* src/window.cpp: copyright notice renewed
+
 2007-04-16  Armin Burgmeier  <armin@0x539.de>
 
 	* src/chat.cpp: Reintroduce user tags in chat which got accidentaly
@@ -8,6 +13,7 @@
 	* src/joindialog.cpp: Don't allow selection in the error case, use a
 	single column for both icon and text. Make the dialog resizable.
 
+>>>>>>> .r1592
 2007-04-15  Philipp Kern <phil@0x539.de>
 
 	* src/joindialog.cpp: failure handling for exceptions thrown
