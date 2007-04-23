@@ -52,6 +52,8 @@ Gobby::ToggleWindow::ToggleWindow(Gtk::Window& parent,
 				sigc::mem_fun(*this, &Gtk::Widget::show) );
 		}
 	}
+
+	set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);
 }
 
 Gobby::ToggleWindow::~ToggleWindow()
