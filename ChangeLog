@@ -1,3 +1,8 @@
+2007-05-10  Benjamin Herr <ben@0x539.de>
+
+	* inc/documentlist.hpp:
+	* src/documentlist.cpp: sort document list alphabetically
+
 2007-04-23  Philipp Kern <phil@0x539.de>
 
 	* src/togglewindow.cpp: ToggleWindow needs UTILITY hints in any
@@ -41,7 +46,7 @@
 	* src/window.cpp: Use Glib mainloop for avahi zeroconf backend,
 	otherwise poll it every 1500 milliseconds.
 
-2007-04-14  Phliipp Kern <phil@0x539.de>
+2007-04-14  Philipp Kern <phil@0x539.de>
 
 	* configure.ac, Makefile.am: check for Avahi in obby and link against
 	  avahi-glib if Avahi proper is used for Zeroconf support; provide

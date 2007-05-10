@@ -17,6 +17,7 @@
  */
 
 #include <gtkmm/stock.h>
+#include <gtkmm/treemodelsort.h>
 #include "common.hpp"
 #include "documentlist.hpp"
 
@@ -72,13 +73,14 @@ Gobby::DocumentList::DocumentList(Gtk::Window& parent,
 		settings.columns.color
 	);
 
-	m_view_col.set_sort_column(settings.columns.title);
-
 	m_tree_view.add_events(Gdk::BUTTON_PRESS_MASK);
 	m_tree_view.signal_row_activated().connect(
 		sigc::mem_fun(*this, &DocumentList::on_row_activated) );
 
-	m_tree_view.set_model(settings.get_list() );
+	m_sorted = Gtk::TreeModelSort::create(settings.get_list() );
+
+	m_sorted->set_sort_column(settings.columns.title, Gtk::SORT_ASCENDING);
+	m_tree_view.set_model(m_sorted);
 	m_tree_view.append_column(m_view_col);
 	m_tree_view.set_headers_visible(false);
 
@@ -175,8 +177,10 @@ void Gobby::DocumentList::on_subscribe()
 	    iter != selected_entries.end();
 	    ++ iter)
 	{
+		Gtk::TreePath unsorted_path =
+			m_sorted->convert_path_to_child_path(*iter);
 		Gtk::TreeIter tree_iter =
-			m_settings.get_list()->get_iter(*iter);
+			m_settings.get_list()->get_iter(unsorted_path);
 
 		LocalDocumentInfo* info =
 			(*tree_iter)[m_settings.columns.info];
@@ -199,8 +203,10 @@ void Gobby::DocumentList::on_selection_changed()
 	    iter != selected_entries.end();
 	    ++ iter)
 	{
+		Gtk::TreePath unsorted_path =
+			m_sorted->convert_path_to_child_path(*iter);
 		Gtk::TreeIter tree_iter =
-			m_settings.get_list()->get_iter(*iter);
+			m_settings.get_list()->get_iter(unsorted_path);
 
 		LocalDocumentInfo* info =
 			(*tree_iter)[m_settings.columns.info];
@@ -220,8 +226,10 @@ void Gobby::DocumentList::on_row_activated(const Gtk::TreePath& path,
 {
 	on_subscribe();
 
+	Gtk::TreePath unsorted_path = m_sorted->convert_path_to_child_path(path);
+
 	// select the tab if present
-	Gtk::TreeIter tree_iter = m_settings.get_list()->get_iter(path);
+	Gtk::TreeIter tree_iter = m_settings.get_list()->get_iter(unsorted_path);
 	LocalDocumentInfo* info = (*tree_iter)[m_settings.columns.info];
 
 	if(info->get_subscription_state() == LocalDocumentInfo::SUBSCRIBED)

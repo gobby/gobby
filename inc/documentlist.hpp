@@ -22,6 +22,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
+#include <gtkmm/treemodelsort.h>
 #include "buffer_def.hpp"
 #include "document_settings.hpp"
 #include "togglewindow.hpp"
@@ -72,6 +73,7 @@ protected:
 
 	Gtk::ScrolledWindow m_scrolled_wnd;
 	Gtk::TreeView m_tree_view;
+	Glib::RefPtr<Gtk::TreeModelSort> m_sorted;
 
 	Gtk::TreeViewColumn m_view_col;
 };
