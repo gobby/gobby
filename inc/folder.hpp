@@ -140,7 +140,7 @@ protected:
 	void set_tab_colour(DocWindow& win, const Glib::ustring& colour);
 
 	// Signal handlers
-	void on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language);
+	void on_language_changed(GtkSourceLanguage* language);
 
 	void on_document_subscribe(const obby::user& user,
 	                           LocalDocumentInfo& info);

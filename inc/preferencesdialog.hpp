@@ -42,8 +42,6 @@ namespace Gobby
 class PreferencesDialog : public Gtk::Dialog
 {
 public:
-	typedef Glib::RefPtr<Gtk::SourceLanguagesManager> LangManager;
-
 	class Page: public Gtk::Frame
 	{
 	public:
@@ -164,15 +162,13 @@ public:
 	class FileList: public Page
 	{
 	public:
-		typedef Glib::RefPtr<Gtk::SourceLanguage> Language;
-
 		// List of languages. TODO: Should be somewhere else
 		class LanguageColumns: public Gtk::TreeModel::ColumnRecord
 		{
 		public:
 			LanguageColumns();
 
-			Gtk::TreeModelColumn<Language> language;
+			Gtk::TreeModelColumn<GtkSourceLanguage*> language;
 			Gtk::TreeModelColumn<Glib::ustring> language_name;
 		};
 
@@ -188,7 +184,7 @@ public:
 
 		FileList(Gtk::Window& parent,
 		         const Preferences& preferences,
-		         const LangManager& lang_mgr);
+		         GtkSourceLanguageManager* lang_mgr);
 
 		void set(Preferences::FileList& files) const;
 
@@ -198,15 +194,14 @@ public:
 	protected:
 		struct LangCompare
 		{
-			bool operator()(const Language& first,
-			                const Language& second)
+			bool operator()(GtkSourceLanguage* first, GtkSourceLanguage* second)
 			{
-				return first->gobj() < second->gobj();
+				return first < second;
 			}
 		};
 
 		typedef std::map<
-			Glib::RefPtr<Gtk::SourceLanguage>,
+			GtkSourceLanguage*,
 			Gtk::TreeIter,
 			LangCompare
 		> map_type;
@@ -227,10 +222,10 @@ public:
 		void on_file_remove();
 
 		void set_language(const Gtk::TreeIter& row,
-		                  const Language& lang);
+		                  GtkSourceLanguage* lang);
 
 		Gtk::Window& m_parent;
-		const LangManager& m_lang_mgr;
+		GtkSourceLanguageManager* m_lang_mgr;
 
 		Gtk::CellRendererText* m_renderer_pattern;
 		Gtk::CellRendererCombo m_renderer_lang;
@@ -258,7 +253,7 @@ public:
 
 	PreferencesDialog(Gtk::Window& parent,
 	                  const Preferences& preferences,
-	                  const LangManager& lang_mgr,
+	                  GtkSourceLanguageManager* lang_mgr,
 	                  bool local);
 
 	void set(Preferences& preferences) const;

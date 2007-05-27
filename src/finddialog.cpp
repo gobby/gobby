@@ -172,7 +172,8 @@ void Gobby::FindDialog::on_find()
 	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
-	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_document().get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buf =
+    Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
 
 	bool result = search_sel(buf->get_insert()->get_iter() );
 	if(!result)
@@ -204,7 +205,8 @@ void Gobby::FindDialog::on_replace()
 	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
-	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_document().get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buf =
+    Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
 
 	// Get selected string
 	Glib::ustring sel_str = doc->get_selected_text();
@@ -242,7 +244,9 @@ void Gobby::FindDialog::on_replace_all()
 	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
-	Glib::RefPtr<Gtk::TextBuffer> buf = doc->get_document().get_buffer();
+	Glib::RefPtr<Gtk::TextBuffer> buf =
+    Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
+
 	Gtk::TextIter begin = buf->begin();
 
 	unsigned int replace_count = 0;

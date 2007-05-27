@@ -27,11 +27,11 @@
 
 namespace
 {
-	bool lang_sort(const Glib::RefPtr<Gtk::SourceLanguage>& first,
-	               const Glib::RefPtr<Gtk::SourceLanguage>& second)
-	{
-		return first->get_name() < second->get_name();
-	}
+  gint lang_sort(gconstpointer first, gconstpointer second)
+  {
+    return strcmp(gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(first)),
+                  gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(second)));
+  }
 
 	Gtk::ToolbarStyle rownum_to_toolstyle(int rownum)
 	{
@@ -332,7 +332,7 @@ Gobby::PreferencesDialog::FileList::FileColumns::FileColumns()
 
 Gobby::PreferencesDialog::FileList::FileList(Gtk::Window& parent,
                                              const Preferences& preferences,
-                                             const LangManager& lang_mgr):
+                                             GtkSourceLanguageManager* lang_mgr):
 	m_parent(parent), m_lang_mgr(lang_mgr),
 	m_viewcol_pattern(_("Pattern"), file_columns.pattern),
 	m_viewcol_lang(_("Language"), m_renderer_lang),
@@ -346,23 +346,28 @@ Gobby::PreferencesDialog::FileList::FileList(Gtk::Window& parent,
 	m_lang_list(Gtk::ListStore::create(lang_columns) ),
 	m_file_list(Gtk::ListStore::create(file_columns) )
 {
-	// Create language list
-	std::list<Glib::RefPtr<Gtk::SourceLanguage> > languages =
-		lang_mgr->get_available_languages();
+#ifdef WITH_GTKSOURCEVIEW2
+  const GSList* list =
+    gtk_source_language_manager_get_available_languages(lang_mgr);
+#else
+  const GSList* list =
+    gtk_source_languages_manager_get_available_languages(lang_mgr);
+#endif
 
-	languages.sort(&lang_sort);
+  GSList* languages = g_slist_copy(const_cast<GSList*>(list));
+  languages = g_slist_sort(languages, &lang_sort);
 
-	for(std::list<Glib::RefPtr<Gtk::SourceLanguage> >::const_iterator iter =
-		languages.begin();
-	    iter != languages.end();
-	    ++ iter)
+	for(GSList* iter = languages; iter != NULL; iter = iter->next)
 	{
 		Gtk::TreeIter tree_it = m_lang_list->append();
-		(*tree_it)[lang_columns.language] = *iter;
-		(*tree_it)[lang_columns.language_name] = (*iter)->get_name();
+		(*tree_it)[lang_columns.language] = GTK_SOURCE_LANGUAGE(iter->data);
+		(*tree_it)[lang_columns.language_name] =
+      gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(iter->data));
 
-		m_lang_map[*iter] = tree_it;
+		m_lang_map[GTK_SOURCE_LANGUAGE(iter->data)] = tree_it;
 	}
+
+  g_slist_free(languages);
 
 	m_renderer_pattern = static_cast<Gtk::CellRendererText*>(
 		m_viewcol_pattern.get_first_cell_renderer()
@@ -406,8 +411,8 @@ Gobby::PreferencesDialog::FileList::FileList(Gtk::Window& parent,
 	    iter != filelist.end();
 	    ++ iter)
 	{
-		std::list<Glib::ustring> mime_types =
-			iter.language()->get_mime_types();
+/*		std::list<Glib::ustring> mime_types =
+			iter.language()->get_mime_types();*/
 
 		Gtk::TreeIter tree_it = m_file_list->append();
 		(*tree_it)[file_columns.pattern] = iter.pattern();
@@ -512,8 +517,32 @@ void Gobby::PreferencesDialog::FileList::
 	on_mimetype_edited(const Glib::ustring& path,
 	                   const Glib::ustring& new_text)
 {
-	Glib::RefPtr<Gtk::SourceLanguage> lang =
-		m_lang_mgr->get_language_from_mime_type(new_text);
+#ifdef WITH_GTKSOURCEVIEW2
+  const GSList* list =
+    gtk_source_language_manager_get_available_languages(m_lang_mgr);
+
+  GtkSourceLanguage* lang = NULL;
+  for(; list != NULL; list = list->next)
+  {
+    GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(list->data);
+    gchar** mime_types = gtk_source_language_get_mime_types(language);
+    for(gchar** mime_type = mime_types; *mime_type != NULL; ++ mime_type)
+    {
+      if(strcmp(*mime_type, new_text.c_str()) == 0)
+      {
+        lang = language;
+        break;
+      }
+    }
+
+    g_strfreev(mime_types);
+    if(lang != NULL) break;
+  }
+#else
+  GtkSourceLanguage* lang =
+    gtk_source_languages_manager_get_language_from_mime_type(
+      m_lang_mgr, new_text.c_str());
+#endif
 
 	if(!lang)
 	{
@@ -546,7 +575,7 @@ void Gobby::PreferencesDialog::FileList::
 {
 	// We do not get an iterator/path/whatever that points to the
 	// chosen language in the language list.
-	Glib::RefPtr<Gtk::SourceLanguage> lang(NULL);
+  GtkSourceLanguage* lang = NULL;
 	Gtk::TreeNodeChildren children = m_lang_list->children();
 
 	for(Gtk::TreeIter iter = children.begin();
@@ -619,7 +648,7 @@ void Gobby::PreferencesDialog::FileList::on_file_remove()
 }
 
 void Gobby::PreferencesDialog::FileList::set_language(const Gtk::TreeIter& row,
-                                                      const Language& lang)
+                                                      GtkSourceLanguage* lang)
 {
 	map_type::const_iterator lang_it = m_lang_map.find(lang);
 	if(lang_it == m_lang_map.end() )
@@ -630,15 +659,29 @@ void Gobby::PreferencesDialog::FileList::set_language(const Gtk::TreeIter& row,
 		);
 	}
 
-	std::list<Glib::ustring> mime_types = lang->get_mime_types();
-
 	(*row)[file_columns.language] = lang_it->second;
-	(*row)[file_columns.mime_type] = mime_types.front();
+#ifdef WITH_GTKSOURCEVIEW2
+  gchar** mime_types = gtk_source_language_get_mime_types(lang);
+
+  if(mime_types && *mime_types)
+  	(*row)[file_columns.mime_type] = *mime_types;
+
+  g_strfreev(mime_types);
+#else
+  GSList* mime_types = gtk_source_language_get_mime_types(lang);
+  for(GSList* cur = mime_types; cur != NULL; cur = cur->next)
+  {
+    if(cur == mime_types)
+      (*row)[file_columns.mime_type] = static_cast<gchar*>(cur->data);
+    g_free(cur->data);
+  }
+  g_slist_free(mime_types);
+#endif
 }
 
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
                                             const Preferences& preferences,
-                                            const LangManager& lang_mgr,
+                                            GtkSourceLanguageManager* lang_mgr,
                                             bool local)
  : Gtk::Dialog(_("Preferences"), parent, true),
    m_page_editor(preferences, m_tooltips), m_page_view(preferences),

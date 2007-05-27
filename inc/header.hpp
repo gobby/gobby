@@ -27,9 +27,8 @@
 #include <gtkmm/menubar.h>
 #include <gtkmm/toolbar.h>
 
+#include "preferences.hpp" // Defines GtkSourceLanguageManager (gtksourceview1)
 #include "application_state.hpp"
-#include "sourceview/sourcelanguage.hpp"
-#include "sourceview/sourcelanguagesmanager.hpp"
 
 namespace Gobby
 {
@@ -101,30 +100,24 @@ public:
 	public:
 		//typedef AutoAction<Gtk::RadioAction> Action;
 		typedef Glib::RefPtr<Gtk::RadioAction> Action;
-		typedef Glib::RefPtr<Gtk::SourceLanguage> Language;
 
 		LanguageWrapper(Action action,
-		                Language language);
+		                GtkSourceLanguage* language);
+    ~LanguageWrapper();
 
 		Action get_action() const;
-		Language get_language() const;
+		GtkSourceLanguage* get_language() const;
 	protected:
 		Action m_action;
-		Language m_language;
+		GtkSourceLanguage* m_language;
 	};
 
-	typedef Glib::RefPtr<Gtk::SourceLanguagesManager> LangManager;
-
-	Header(const ApplicationState& state, const LangManager& lang_mgr);
+	Header(const ApplicationState& state,
+         GtkSourceLanguageManager* lang_mgr);
 
 	// Access to accelerator groups of the ui manager
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
 	Glib::RefPtr<const Gtk::AccelGroup> get_accel_group() const;
-
-	/*Glib::RefPtr<Gtk::SourceLanguagesManager>
-		get_lang_manager();
-	Glib::RefPtr<const Gtk::SourceLanguagesManager>
-		get_lang_manager() const;*/
 
 	// Access to toolbar & menubar
 	Gtk::MenuBar& get_menubar();
@@ -179,7 +172,6 @@ protected:
 	                     ApplicationFlags exc_flags);
 
 	const Glib::RefPtr<Gtk::UIManager> m_ui_manager;
-	//Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
 
 	Gtk::MenuBar* m_menubar;
 	Gtk::Toolbar* m_toolbar;

@@ -1,3 +1,31 @@
+2007-05-27  Armin Burgmeier  <armin@0x539.de>
+	
+	* inc/sourceview:
+	* src/sourceview:
+	* Makefile.am: Remove hand-coded GtkSourceView wrappers.
+
+	* configure.ac: Added --with-gtksourceview2 configure option.
+
+	* src/finddialog.cpp:
+	* src/window.cpp:
+	* src/statusbar.cpp:
+	* src/folder.cpp:
+	* src/document.cpp:
+	* src/preferencesdialog.cpp:
+	* src/main.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp:
+	* src/gotodialog.cpp:
+	* inc/window.hpp:
+	* inc/folder.hpp:
+	* inc/document.hpp:
+	* inc/preferencesdialog.hpp:
+	* inc/header.hpp:
+	* inc/docwindow.hpp:
+	* inc/preferences.hpp: Support GtkSourceview2, use GtkSourceView C API
+	directly.
+
 2007-05-10  Benjamin Herr <ben@0x539.de>
 
 	* inc/documentlist.hpp:

@@ -28,6 +28,7 @@
 #include <gtkmm/messagedialog.h>
 
 #include "features.hpp"
+#include "preferences.hpp"
 #include "icon.hpp"
 #include "config.hpp"
 #include "application_state.hpp"
@@ -135,7 +136,7 @@ protected:
 	void on_user_set_colour();
 
 	void on_view_preferences();
-	void on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang);
+	void on_view_language(GtkSourceLanguage* language);
 
 	void on_window_chat();
 
@@ -183,7 +184,7 @@ protected:
 
 	// Config
 	Config& m_config;
-	Glib::RefPtr<Gtk::SourceLanguagesManager> m_lang_manager;
+  GtkSourceLanguageManager* m_lang_manager;
 	Preferences m_preferences;
 	const IconManager& m_icon_mgr;
 

@@ -282,7 +282,7 @@ void Gobby::Folder::set_tab_colour(DocWindow& win, const Glib::ustring& colour)
 	label.set_use_markup(true);
 }
 
-void Gobby::Folder::on_language_changed(const Glib::RefPtr<Gtk::SourceLanguage>& language)
+void Gobby::Folder::on_language_changed(GtkSourceLanguage* language)
 {
 	// TODO: Gobby::Block
 	if(m_block_language) return;
@@ -354,7 +354,10 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 		)
 	);
 
-	new_wnd->get_document().get_buffer()->signal_modified_changed().connect(
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer = Glib::wrap(
+    GTK_TEXT_BUFFER(new_wnd->get_document().get_buffer()), true);
+
+	cpp_buffer->signal_modified_changed().connect(
 		sigc::bind(
 			sigc::mem_fun(
 				*this,
@@ -437,7 +440,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 
 	// However, if the obby session has been closed the statusbar is empty,
 	// there is no need to update anything.
-	Glib::RefPtr<Gtk::SourceLanguage> language = window.get_language();
+  GtkSourceLanguage* language = window.get_language();
 
 	// Set correct menu item
 	if(!m_block_language)

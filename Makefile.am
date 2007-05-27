@@ -68,14 +68,6 @@ noinst_HEADERS += inc/finddialog.hpp
 noinst_HEADERS += inc/gotodialog.hpp
 noinst_HEADERS += inc/dragdrop.hpp
 noinst_HEADERS += inc/window.hpp 
-noinst_HEADERS += inc/sourceview/sourceview.hpp
-noinst_HEADERS += inc/sourceview/sourcebuffer.hpp
-noinst_HEADERS += inc/sourceview/sourcelanguage.hpp
-noinst_HEADERS += inc/sourceview/sourcelanguagesmanager.hpp
-noinst_HEADERS += inc/sourceview/private/sourceview_p.hpp
-noinst_HEADERS += inc/sourceview/private/sourcebuffer_p.hpp
-noinst_HEADERS += inc/sourceview/private/sourcelanguage_p.hpp
-noinst_HEADERS += inc/sourceview/private/sourcelanguagesmanager_p.hpp
 
 if WIN32
 win32/gobby.res: win32/gobby.rc
@@ -126,10 +118,6 @@ gobby_SOURCES += src/gotodialog.cpp
 gobby_SOURCES += src/dragdrop.cpp
 gobby_SOURCES += src/window.cpp
 gobby_SOURCES += src/main.cpp
-gobby_SOURCES += src/sourceview/sourceview.cpp
-gobby_SOURCES += src/sourceview/sourcebuffer.cpp
-gobby_SOURCES += src/sourceview/sourcelanguage.cpp
-gobby_SOURCES += src/sourceview/sourcelanguagesmanager.cpp
 
 appicondir        = $(datadir)/pixmaps
 pixmapdir         = $(datadir)/pixmaps/gobby

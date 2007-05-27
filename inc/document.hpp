@@ -20,12 +20,13 @@
 #define _GOBBY_DOCUMENT_HPP_
 
 #include <map>
+#include <gtkmm/textbuffer.h>
+#include <gtksourceview/gtksourcebuffer.h>
 #include <obby/position.hpp>
 #include <obby/user_table.hpp>
 #include <obby/text.hpp>
 #include <obby/local_buffer.hpp>
 #include "gselector.hpp"
-#include "sourceview/sourcebuffer.hpp"
 
 namespace Gobby
 {
@@ -118,6 +119,7 @@ public:
 	/** @brief Creates a new document that belongs to the given buffer.
 	 */
 	Document(const template_type& tmpl);
+  ~Document();
 
 	/** @brief Returns TRUE when the document is empty e.g. does not
 	 * contain any text.
@@ -177,7 +179,7 @@ public:
 
 	/** @brief Returns the underlaying Gtk::SourceBuffer.
 	 */
-	Glib::RefPtr<Gtk::SourceBuffer> get_buffer() const;
+  GtkSourceBuffer* get_buffer() const;
 
 	/** @brief Signal that is emitted when the local user wants to insert
 	 * text.
@@ -311,7 +313,7 @@ protected:
 	// Whether text is currently edited, needed to prevent recursion
 	// in signal emission
 	bool m_editing;
-	Glib::RefPtr<Gtk::SourceBuffer> m_buffer;
+  GtkSourceBuffer* m_buffer;
 
 	signal_insert_type m_signal_local_insert;
 	signal_insert_type m_signal_remote_insert_before;

@@ -51,8 +51,9 @@ void Gobby::StatusBar::update_language(DocWindow& wnd)
 	m_bar_language.pop();
 	if(wnd.get_language() )
 	{
+    Glib::ustring name = gtk_source_language_get_name(wnd.get_language());
 		obby::format_string str(_("Selected language: %0%") );
-		str << wnd.get_language()->get_name().raw();
+		str << name.raw();
 		m_bar_language.push(str.str() );
 	}
 	else

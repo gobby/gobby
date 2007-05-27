@@ -30,11 +30,6 @@
 #include "window.hpp"
 #include "features.hpp"
 
-#include "sourceview/private/sourcelanguage_p.hpp"
-#include "sourceview/private/sourcelanguagesmanager_p.hpp"
-#include "sourceview/private/sourcebuffer_p.hpp"
-#include "sourceview/private/sourceview_p.hpp"
-
 #ifdef WITH_GNOME
 # include <libgnomevfs/gnome-vfs-init.h>
 #endif
@@ -119,10 +114,13 @@ open_files(Gobby::Window& wnd,
 
 int main(int argc, char* argv[]) try
 {
+  g_thread_init(NULL);
+//	if(!Glib::thread_supported())
+//		Glib::thread_init();
+
 	setlocale(LC_ALL, "");
 	net6::gettext_package gobby_package(GETTEXT_PACKAGE, LOCALE_DIR);
 	Gobby::init_gettext(gobby_package);
-
 
 	bool new_instance = true;
 	Glib::ustring join;
@@ -167,17 +165,9 @@ int main(int argc, char* argv[]) try
 
 	net6::main netkit;
 
-	if(!Glib::thread_supported())
-		Glib::thread_init();
-
 #ifdef WITH_GNOME
 	gnome_vfs_init();
 #endif
-
-	Glib::wrap_register(gtk_source_language_get_type(), &Gtk::SourceLanguage_Class::wrap_new);
-	Glib::wrap_register(gtk_source_languages_manager_get_type(), &Gtk::SourceLanguagesManager_Class::wrap_new);
-	Glib::wrap_register(gtk_source_buffer_get_type(), &Gtk::SourceBuffer_Class::wrap_new);
-	Glib::wrap_register(gtk_source_view_get_type(), &Gtk::SourceView_Class::wrap_new);
 
 	// Get files to open
 	std::vector<std::string> files(argc - 1);

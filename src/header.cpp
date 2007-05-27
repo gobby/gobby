@@ -122,19 +122,25 @@ namespace {
 	/** Callback function for std::list::sort to sort the languages by
 	 * their name.
 	 */
-	bool language_sort_callback(
-		const Glib::RefPtr<Gtk::SourceLanguage>& lang1,
-		const Glib::RefPtr<Gtk::SourceLanguage>& lang2
-	)
+	gint language_sort_callback(gconstpointer lang1, gconstpointer lang2)
 	{
-		return lang1->get_name() < lang2->get_name();
+    return strcmp(gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(lang1)),
+                  gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(lang2)));
 	}
 }
 
 Gobby::Header::LanguageWrapper::LanguageWrapper(Action action,
-                                                Language language):
+                                                GtkSourceLanguage* language):
 	m_action(action), m_language(language)
 {
+  if(m_language != NULL)
+    g_object_ref(G_OBJECT(m_language));
+}
+
+Gobby::Header::LanguageWrapper::~LanguageWrapper()
+{
+  if(m_language != NULL)
+    g_object_unref(G_OBJECT(m_language));
 }
 
 Gobby::Header::LanguageWrapper::Action
@@ -143,7 +149,7 @@ Gobby::Header::LanguageWrapper::get_action() const
 	return m_action;
 }
 
-Gobby::Header::LanguageWrapper::Language
+GtkSourceLanguage*
 Gobby::Header::LanguageWrapper::get_language() const
 {
 	return m_language;
@@ -204,9 +210,8 @@ Gobby::Header::Error::Code Gobby::Header::Error::code() const
 	return static_cast<Code>(gobject_->code);
 }
 
-#include <iostream>
 Gobby::Header::Header(const ApplicationState& state,
-                      const LangManager& lang_mgr):
+                      GtkSourceLanguageManager* lang_mgr):
 	group_app(Gtk::ActionGroup::create("MenuApp") ),
 	group_session(Gtk::ActionGroup::create("MenuSession") ),
 	group_edit(Gtk::ActionGroup::create("MenuEdit") ),
@@ -611,11 +616,17 @@ Gobby::Header::Header(const ApplicationState& state,
 	//Glib::wrap(lang, false);
 
 	// Get available languages
-	std::list<Glib::RefPtr<Gtk::SourceLanguage> > lang_list =
-		lang_mgr->get_available_languages();
+#ifdef WITH_GTKSOURCEVIEW2
+  const GSList* list = gtk_source_language_manager_get_available_languages(
+    lang_mgr);
+#else
+  const GSList* list = gtk_source_languages_manager_get_available_languages(
+    lang_mgr);
+#endif
 
-	// Sort languages by name
-	lang_list.sort(&language_sort_callback);
+	// Copy the last, so we can sort languages by name
+  GSList* lang_list = g_slist_copy(const_cast<GSList*>(list));
+  lang_list = g_slist_sort(lang_list, &language_sort_callback);
 
 	// Add None-Language
 	Glib::RefPtr<Gtk::RadioAction> action = Gtk::RadioAction::create(
@@ -626,26 +637,20 @@ Gobby::Header::Header(const ApplicationState& state,
 	);
 
 	group_edit->add(action);
-	action_edit_syntax_languages.push_back(
-		LanguageWrapper(
-			action,
-			Glib::RefPtr<Gtk::SourceLanguage>(NULL)
-		)
-	);
+	action_edit_syntax_languages.push_back(LanguageWrapper(action, NULL));
 
 	// Add languages
-	for(std::list<Glib::RefPtr<Gtk::SourceLanguage> >::const_iterator iter =
-		lang_list.begin();
-	    iter != lang_list.end();
-	    ++ iter)
+  for(GSList* iter = lang_list; iter != NULL; iter = iter->next)
 	{
+    GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(iter->data);
+
 		// Get current language 
-		Glib::RefPtr<Gtk::SourceLanguage> language = *iter;
-		Glib::ustring language_xml_name = language->get_name();
+		Glib::ustring language_xml_name =
+                  gtk_source_language_get_name(language);
 
 		// Build description string
 		obby::format_string str(_("Selects %0% as language") );
-		Glib::ustring name = language->get_name();
+		Glib::ustring name = language_xml_name;
 		str << name.raw();
 
 		// Add language to action group
@@ -653,7 +658,7 @@ Gobby::Header::Header(const ApplicationState& state,
 		action = Gtk::RadioAction::create(
 			m_lang_group,
 			"EditSyntaxLanguage" + language_xml_name,
-			language->get_name(),
+			name,
 			str.str()
 		);
 
@@ -677,6 +682,8 @@ Gobby::Header::Header(const ApplicationState& state,
 
 		m_ui_manager->add_ui_from_string(xml_desc);
 	}
+
+  g_slist_free(lang_list);
 
 	m_ui_manager->insert_action_group(group_app);
 	m_ui_manager->insert_action_group(group_session);

@@ -34,10 +34,32 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
+required_libs="libxml++-2.6 gtkmm-2.4 >= 2.6.0 gthread-2.0 net6-1.3 obby-0.4 >= 0.4.1"
+
+# GtkSourceView2 support
+AC_ARG_WITH([gtksourceview2],
+            AS_HELP_STRING([--with-gtksourceview2],
+               [whether to use gtksourceview2 instead of
+	        gtksourceview1 [[default=no]]]),
+            [ac_cv_with_gtksourceview2=$withval],
+	    [ac_cv_with_gtksourceview2=no])
+
+AC_CACHE_CHECK([whether to use gtksourceview2 instead of gtksourceview1],
+               [ac_cv_with_gtksourceview2], [ac_cv_with_gtksourceview2=no])
+
+if test "x$ac_cv_with_gtksourceview2" = "xyes" ; then
+  AC_DEFINE([WITH_GTKSOURCEVIEW2], 1,
+    [Define whether to use gtksourceview2 instead of gtksourceview1])
+  required_libs+=" gtksourceview-2.0"
+else
+  required_libs+=" gtksourceview-1.0"
+fi
+
+AM_CONDITIONAL(WITH_GTKSOURCEVIEW2, test x$ac_cv_with_gtksourceview2 != xno)
+AC_CACHE_SAVE
+
 # Checks for libraries.
-PKG_CHECK_MODULES([gobby],
-                  [libxml++-2.6 gtkmm-2.4 >= 2.6.0 gtksourceview-1.0 gthread-2.0
-                   net6-1.3 obby-0.4 >= 0.4.1])
+PKG_CHECK_MODULES([gobby], [$required_libs])
 AC_CACHE_SAVE
 
 # Check for the Gtkmm version available (either 2.6 or 2.8).

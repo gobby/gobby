@@ -20,10 +20,20 @@
 #define _GOBBY_PREFERENCES_HPP_
 
 #include <gtkmm/toolbar.h>
+#include "features.hpp"
 #include "config.hpp"
 
-#include "sourceview/sourcelanguage.hpp"
-#include "sourceview/sourcelanguagesmanager.hpp"
+#include <gtksourceview/gtksourcelanguage.h>
+
+#ifdef WITH_GTKSOURCEVIEW2
+# include <gtksourceview/gtksourcelanguagemanager.h>
+#else
+# include <gtksourceview/gtksourcelanguagesmanager.h>
+#endif
+
+#ifndef WITH_GTKSOURCEVIEW2
+typedef GtkSourceLanguagesManager GtkSourceLanguageManager;
+#endif
 
 namespace Gobby
 {
@@ -31,9 +41,6 @@ namespace Gobby
 class Preferences
 {
 public:
-	typedef Glib::RefPtr<Gtk::SourceLanguage> Language;
-	typedef Glib::RefPtr<Gtk::SourceLanguagesManager> LangManager;
-
 	/** Uninitialised preferences.
 	 */
 	Preferences();
@@ -41,7 +48,7 @@ public:
 	/** Reads preferences values out of a config, using default values
 	 * for values that do not exist in the config.
 	 */
-	Preferences(Config& m_config, const LangManager& lang_mgr);
+	Preferences(Config& m_config, GtkSourceLanguageManager* lang_mgr);
 
 	/** Serialises preferences back to config.
 	 */
@@ -111,7 +118,7 @@ public:
 	class FileList
 	{
 	public:
-		typedef std::map<Glib::ustring, Language> map_type;
+		typedef std::map<Glib::ustring, GtkSourceLanguage*> map_type;
 
 		class iterator
 		{
@@ -128,14 +135,16 @@ public:
 			bool operator!=(const iterator& other) const;
 
 			const Glib::ustring& pattern() const;
-			const Language& language() const;
+			GtkSourceLanguage* language() const;
 		private:
 			base_iterator m_iter;
 		};
 
 		FileList();
 		FileList(Config::ParentEntry& entry,
-		         const LangManager& lang_mgr);
+		         GtkSourceLanguageManager* lang_mgr);
+    FileList(const FileList& src);
+    ~FileList();
 
 		void serialise(Config::ParentEntry& entry) const;
 
@@ -143,14 +152,16 @@ public:
 		// when pattern is already in the map. Compare lang to be sure
 		// that the entry actually has been inserted.
 		iterator add(const Glib::ustring& pattern,
-		             const Language& lang);
+		             GtkSourceLanguage* lang);
 
 		iterator begin() const;
 		iterator end() const;
 	protected:
+#ifndef WITH_GTKSOURCEVIEW2
 		iterator add_by_mime_type(const Glib::ustring& pattern,
 		                          const Glib::ustring& mime_type,
-		                          const LangManager& lang_mgr);
+		                          GtkSourceLanguageManager* lang_mgr);
+#endif
 
 		map_type m_files;
 	};

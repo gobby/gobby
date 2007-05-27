@@ -20,8 +20,8 @@
 #define _GOBBY_DOCWINDOW_HPP_
 
 #include <gtkmm/scrolledwindow.h>
+#include <gtksourceview/gtksourceview.h>
 
-#include "sourceview/sourceview.hpp"
 #include "features.hpp"
 #include "preferences.hpp"
 #include "document.hpp"
@@ -83,14 +83,14 @@ public:
 	 */
 	void grab_focus();
 
-	/** @brief Returns the current Gtk::SourceLanguage the document is
+	/** @brief Returns the current GtkSourceLanguage the document is
 	 * highlighted with.
 	 */
-	Glib::RefPtr<Gtk::SourceLanguage> get_language() const;
+	GtkSourceLanguage* get_language() const;
 
 	/** @brief Changes the language of the document.
 	 */
-	void set_language(const Glib::RefPtr<Gtk::SourceLanguage>& language);
+	void set_language(GtkSourceLanguage* language);
 
 	/** @brief Returns the preferences set for this document.
 	 */
@@ -174,7 +174,7 @@ protected:
 	void store_scroll();
 	void restore_scroll();
 
-	Gtk::SourceView m_view;
+  GtkSourceView* m_view;
 	LocalDocumentInfo& m_info;
 	const Document& m_doc;
 

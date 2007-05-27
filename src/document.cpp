@@ -208,10 +208,13 @@ Gobby::Document::template_type::get_buffer() const
 
 Gobby::Document::Document(const template_type& tmpl):
 	m_self(tmpl.get_buffer().get_self() ),
-	m_editing(false), m_buffer(Gtk::SourceBuffer::create() )
+	m_editing(false), m_buffer(gtk_source_buffer_new(NULL))
 {
 	const template_type::buffer_type& buf = tmpl.get_buffer();
 	const obby::user_table& table = buf.get_user_table();
+
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), TRUE);
 
 	for(obby::user_table::iterator iter =
 		table.begin(obby::user::flags::NONE, obby::user::flags::NONE);
@@ -221,27 +224,27 @@ Gobby::Document::Document(const template_type& tmpl):
 		on_user_join(*iter);
 	}
 
-	m_buffer->signal_insert().connect(
+	cpp_buffer->signal_insert().connect(
 		sigc::hide(sigc::mem_fun(*this, &Document::on_insert_before)),
 		false
 	);
 
-	m_buffer->signal_insert().connect(
+	cpp_buffer->signal_insert().connect(
 		sigc::hide(sigc::mem_fun(*this, &Document::on_insert_after)),
 		true
 	);
 
-	m_buffer->signal_erase().connect(
+	cpp_buffer->signal_erase().connect(
 		sigc::mem_fun(*this, &Document::on_erase_before),
 		false
 	);
 
-	m_buffer->signal_apply_tag().connect(
+	cpp_buffer->signal_apply_tag().connect(
 		sigc::mem_fun(*this, &Document::on_apply_tag_before),
 		false
 	);
 
-	m_buffer->begin_not_undoable_action();
+  gtk_source_buffer_begin_not_undoable_action(m_buffer);
 
 	// TODO: Connect to user table's signal handler - as soon as it
 	// has some...
@@ -251,17 +254,27 @@ Gobby::Document::Document(const template_type& tmpl):
 		sigc::mem_fun(*this, &Document::on_user_color) );
 }
 
+Gobby::Document::~Document()
+{
+  g_object_unref(G_OBJECT(m_buffer));
+}
+
 bool Gobby::Document::empty() const
 {
-	return m_buffer->begin() == m_buffer->end();
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), TRUE);
+
+	return cpp_buffer->begin() == cpp_buffer->end();
 }
 
 obby::position Gobby::Document::size() const
 {
 	obby::position cur_size = 0;
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
 
-	for(Gtk::TextIter iter = m_buffer->begin();
-	    iter != m_buffer->end();
+	for(Gtk::TextIter iter = cpp_buffer->begin();
+	    iter != cpp_buffer->end();
 	    iter.forward_line() )
 	{
 		cur_size += iter.get_bytes_in_line();
@@ -278,11 +291,14 @@ Gobby::Document::get_slice(obby::position from, obby::position len) const
 	Gtk::TextIter pos = get_iter(from);
 	Gtk::TextIter prev = pos;
 
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
 	// Initial author
 	const obby::user* author = author_at_iter(pos);
 	Glib::RefPtr<const Gtk::TextTag> any_tag(NULL);
 
-	while( (len > 0 || len == obby::text::npos) && pos != m_buffer->end())
+	while( (len > 0 || len == obby::text::npos) && pos != cpp_buffer->end())
 	{
 		const obby::user* new_author = forward_chunk(pos);
 		obby::position diff = diff_bytes(prev, pos);
@@ -303,7 +319,7 @@ Gobby::Document::get_slice(obby::position from, obby::position len) const
 		author = new_author;
 	}
 
-	if(len != obby::text::npos && pos == m_buffer->end() && len > 0)
+	if(len != obby::text::npos && pos == cpp_buffer->end() && len > 0)
 	{
 		throw std::logic_error(
 			"Gobby::Document::get_slice:\n"
@@ -316,17 +332,23 @@ Gobby::Document::get_slice(obby::position from, obby::position len) const
 
 Gobby::Document::chunk_iterator Gobby::Document::chunk_begin() const
 {
-	return chunk_iterator(*this, m_buffer->begin() );
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
+	return chunk_iterator(*this, cpp_buffer->begin() );
 }
 
 Gobby::Document::chunk_iterator Gobby::Document::chunk_end() const
 {
-	return chunk_iterator(*this, m_buffer->end() );
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
+	return chunk_iterator(*this, cpp_buffer->end() );
 }
 
 void Gobby::Document::clear()
 {
-	m_buffer->set_text("");
+  gtk_text_buffer_set_text(GTK_TEXT_BUFFER(m_buffer), "", 0);
 }
 
 void Gobby::Document::insert(obby::position pos,
@@ -359,16 +381,19 @@ void Gobby::Document::erase(obby::position pos, obby::position len)
 	if(m_editing) return;
 	editor edit(m_editing);
 
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
 	Gtk::TextIter begin = get_iter(pos);
 	Gtk::TextIter end = begin;
 
 	if(len == obby::text::npos)
-		end = m_buffer->end();
+		end = cpp_buffer->end();
 	else
 		forward_bytes(end, len);
 
 	m_signal_remote_erase_before.emit(pos, len);
-	m_buffer->erase(begin, end);
+	cpp_buffer->erase(begin, end);
 	m_signal_remote_erase_after.emit(pos, len);
 }
 
@@ -377,9 +402,12 @@ void Gobby::Document::append(const obby::text& str)
 	if(m_editing) return;
 	editor edit(m_editing);
 
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
 	obby::position doc_size = size();
 	m_signal_remote_insert_before.emit(doc_size, str);
-	insert_impl(m_buffer->end(), str);
+	insert_impl(cpp_buffer->end(), str);
 	m_signal_remote_insert_after.emit(doc_size, str);
 }
 
@@ -389,13 +417,16 @@ void Gobby::Document::append(const std::string& str,
 	if(m_editing) return;
 	editor edit(m_editing);
 
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
 	obby::position doc_size = size();
 	m_signal_remote_insert_before.emit(doc_size, str);
-	insert_impl(m_buffer->end(), str, author);
+	insert_impl(cpp_buffer->end(), str, author);
 	m_signal_remote_insert_after.emit(doc_size, str);
 }
 
-Glib::RefPtr<Gtk::SourceBuffer> Gobby::Document::get_buffer() const
+GtkSourceBuffer* Gobby::Document::get_buffer() const
 {
 	return m_buffer;
 }
@@ -438,11 +469,14 @@ void Gobby::Document::on_user_join(const obby::user& user)
 {
 	map_user_type::iterator user_it = m_map_user.find(&user);
 
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
 	if(user_it == m_map_user.end() )
 	{
 		Glib::RefPtr<Gtk::TextTag> tag = Gtk::TextTag::create();
 		tag->property_background_gdk() = user_color(user);
-		m_buffer->get_tag_table()->add(tag);
+		cpp_buffer->get_tag_table()->add(tag);
 		tag->set_priority(0);
 
 		m_map_user[&user] = tag;
@@ -477,7 +511,9 @@ void Gobby::Document::on_insert_before(const Gtk::TextIter& iter,
 	if(m_editing) return;
 	editor edit(m_editing);
 
-	m_signal_local_insert.emit(diff_bytes(m_buffer->begin(), iter), text);
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer = Glib::wrap(
+    GTK_TEXT_BUFFER(m_buffer), true);
+	m_signal_local_insert.emit(diff_bytes(cpp_buffer->begin(), iter), text);
 }
 
 void Gobby::Document::on_insert_after(const Gtk::TextIter& iter,
@@ -499,9 +535,11 @@ void Gobby::Document::on_erase_before(const Gtk::TextIter& begin,
 	if(m_editing) return;
 
 	editor edit(m_editing);
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
 
 	m_signal_local_erase.emit(
-		diff_bytes(m_buffer->begin(), begin),
+		diff_bytes(cpp_buffer->begin(), begin),
 		diff_bytes(begin, end)
 	);
 }
@@ -510,15 +548,21 @@ void Gobby::Document::on_apply_tag_before(const Glib::RefPtr<Gtk::TextTag>& tag,
                                           const Gtk::TextIter& begin,
                                           const Gtk::TextIter& end)
 {
-	if(m_map_tag.find(tag) != m_map_tag.end() && !m_editing)
-		m_buffer->signal_apply_tag().emission_stop();
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
+  if(m_map_tag.find(tag) != m_map_tag.end() && !m_editing)
+		cpp_buffer->signal_apply_tag().emission_stop();
 }
 
 Gtk::TextIter Gobby::Document::get_iter(obby::position at) const
 {
 	Gtk::TextIter pos;
-	for(pos = m_buffer->begin();
-	    at > 0 && pos != m_buffer->end();)
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
+	for(pos = cpp_buffer->begin();
+	    at > 0 && pos != cpp_buffer->end();)
 	{
 		obby::position new_bytes = pos.get_bytes_in_line();
 
@@ -535,7 +579,7 @@ Gtk::TextIter Gobby::Document::get_iter(obby::position at) const
 		at -= new_bytes;
 	}
 
-	if(pos == m_buffer->end() && at > 0)
+	if(pos == cpp_buffer->end() && at > 0)
 	{
 		throw std::logic_error(
 			"Gobby::Document::get_iter:\n"
@@ -591,8 +635,11 @@ const obby::user* Gobby::Document::forward_chunk(Gtk::TextIter& iter) const
 {
 	Glib::RefPtr<Gtk::TextTag> any_tag(NULL);
 
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
 	for(iter.forward_to_tag_toggle(any_tag);
-	    iter != m_buffer->end();
+	    iter != cpp_buffer->end();
 	    iter.forward_to_tag_toggle(any_tag))
 	{
 		const obby::user* new_author;
@@ -609,7 +656,10 @@ Gtk::TextIter Gobby::Document::insert_impl(const Gtk::TextIter& iter,
                                            const std::string& str,
                                            const obby::user* author)
 {
-	Gtk::TextIter result = m_buffer->insert(iter, str);
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
+	Gtk::TextIter result = cpp_buffer->insert(iter, str);
 
 	Gtk::TextIter begin = result;
 	begin.backward_chars(g_utf8_strlen(str.c_str(), -1));
@@ -617,11 +667,11 @@ Gtk::TextIter Gobby::Document::insert_impl(const Gtk::TextIter& iter,
 	tag_text(begin, result, author);
 
 	// Left gravity cursor on remote insert
-	if(result == m_buffer->get_insert()->get_iter() )
-		m_buffer->move_mark(m_buffer->get_insert(), begin);
+	if(result == cpp_buffer->get_insert()->get_iter() )
+		cpp_buffer->move_mark(cpp_buffer->get_insert(), begin);
 
-	if(result == m_buffer->get_selection_bound()->get_iter() )
-		m_buffer->move_mark(m_buffer->get_selection_bound(), begin);
+	if(result == cpp_buffer->get_selection_bound()->get_iter() )
+	 cpp_buffer->move_mark(cpp_buffer->get_selection_bound(), begin);
 
 	return result;
 }
@@ -649,11 +699,14 @@ void Gobby::Document::tag_text(const Gtk::TextIter& begin,
                                const Gtk::TextIter& end,
                                const obby::user* with)
 {
+  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
+    Glib::wrap(GTK_TEXT_BUFFER(m_buffer), true);
+
 	for(map_user_type::const_iterator user_iter = m_map_user.begin();
 	    user_iter != m_map_user.end();
 	    ++ user_iter)
 	{
-		m_buffer->remove_tag(user_iter->second, begin, end);
+		cpp_buffer->remove_tag(user_iter->second, begin, end);
 	}
 
 	if(with != NULL)
@@ -668,6 +721,6 @@ void Gobby::Document::tag_text(const Gtk::TextIter& begin,
 			);
 		}
 
-		m_buffer->apply_tag(user_it->second, begin, end);
+		cpp_buffer->apply_tag(user_it->second, begin, end);
 	}
 }

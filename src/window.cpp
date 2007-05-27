@@ -47,12 +47,16 @@
 
 Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
-	m_lang_manager(Gtk::SourceLanguagesManager::create() ),
+#ifdef WITH_GTKSOURCEVIEW2
+	m_lang_manager(gtk_source_language_manager_new()),
+#else
+	m_lang_manager(gtk_source_languages_manager_new()),
+#endif
 	m_preferences(m_config, m_lang_manager), m_icon_mgr(icon_mgr),
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_application_state, m_lang_manager),
-	m_folder(m_header, m_preferences), 
+	m_folder(m_header, m_preferences),
 	m_userlist(
 		*this,
 		m_header,
@@ -575,7 +579,10 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 
 	// Unset modifified flag when locally opened
 	if(!m_local_file_path.empty())
-		window.get_document().get_buffer()->set_modified(false);
+  {
+    gtk_text_buffer_set_modified(
+      GTK_TEXT_BUFFER(window.get_document().get_buffer()), FALSE);
+  }
 
 	if(m_folder.get_n_pages() == 1)
 	{
@@ -990,7 +997,7 @@ void Gobby::Window::on_view_preferences()
 }
 
 void
-Gobby::Window::on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang)
+Gobby::Window::on_view_language(GtkSourceLanguage* language)
 {
 	// Set language of current document
 	DocWindow* doc = get_current_document();
@@ -1002,7 +1009,7 @@ Gobby::Window::on_view_language(const Glib::RefPtr<Gtk::SourceLanguage>& lang)
 		);
 	}
 
-	doc->set_language(lang);
+	doc->set_language(language);
 }
 
 void Gobby::Window::on_window_chat()
@@ -1461,7 +1468,8 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 		// Update title bar according to new path
 		update_title_bar();
 		// Unset modifified flag
-		doc.get_document().get_buffer()->set_modified(false);
+		gtk_text_buffer_set_modified(
+      GTK_TEXT_BUFFER(doc.get_document().get_buffer()), FALSE);
 	}
 	catch(Glib::Error& e)
 	{

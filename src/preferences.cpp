@@ -18,6 +18,44 @@
 
 #include "preferences.hpp"
 
+namespace
+{
+  GtkSourceLanguage*
+  get_language_from_mime_type(GtkSourceLanguageManager* manager,
+                              const gchar* mime_type)
+  {
+#ifdef WITH_GTKSOURCEVIEW2
+    const GSList* list = gtk_source_language_manager_get_available_languages(
+      manager);
+
+    for(; list != NULL; list = list->next)
+    {
+      gchar** mime_types = gtk_source_language_get_mime_types(
+        GTK_SOURCE_LANGUAGE(list->data));
+
+      if(mime_types != NULL)
+      {
+        for(gchar** type = mime_types; *type != NULL; ++ type)
+        {
+          if(strcmp(mime_type, *type) == 0)
+          {
+            g_strfreev(mime_types);
+            return GTK_SOURCE_LANGUAGE(list->data);
+          }
+        }
+
+        g_strfreev(mime_types);
+      }
+    }
+
+    return NULL;
+#else
+    return gtk_source_languages_manager_get_language_from_mime_type(
+      manager, mime_type);
+#endif
+  }
+}
+
 Gobby::Preferences::Editor::Editor()
 {
 }
@@ -158,7 +196,7 @@ const Glib::ustring& Gobby::Preferences::FileList::iterator::pattern() const
 	return m_iter->first;
 }
 
-const Gobby::Preferences::Language&
+GtkSourceLanguage*
 Gobby::Preferences::FileList::iterator::language() const
 {
 	return m_iter->second;
@@ -169,7 +207,7 @@ Gobby::Preferences::FileList::FileList()
 }
 
 Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
-                                       const LangManager& lang_mgr)
+                                       GtkSourceLanguageManager* lang_mgr)
 {
 	if(entry.begin() != entry.end() )
 	{
@@ -192,14 +230,37 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 				Glib::ustring
 			>("mime_type", "unknown");
 
-			Glib::RefPtr<Gtk::SourceLanguage> lang =
-				lang_mgr->get_language_from_mime_type(mime);
+      GtkSourceLanguage* lang = get_language_from_mime_type(
+        lang_mgr, mime.c_str());
 
-			if(lang) m_files[pattern] = lang;
+			if(lang)
+      {
+        m_files[pattern] = lang;
+        g_object_ref(G_OBJECT(lang));
+      }
 		}
 	}
 	else
 	{
+#ifdef WITH_GTKSOURCEVIEW2
+    const GSList* list = gtk_source_language_manager_get_available_languages(
+      lang_mgr);
+
+    for(; list != NULL; list = list->next)
+    {
+      GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(list->data);
+      gchar** globs = gtk_source_language_get_globs(language);
+      if(globs != NULL)
+      {
+        for(gchar** glob = globs; *glob != NULL; ++ glob)
+        {
+          add(*glob, language);
+        }
+
+        g_strfreev(globs);
+      }
+    }
+#else
 		// Default list
 		add_by_mime_type("*.ada", "text/x-ada", lang_mgr);
 		add_by_mime_type("*.c", "text/x-csrc", lang_mgr);
@@ -252,7 +313,31 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 		);
 		add_by_mime_type("*.tcl", "text/x-tcl", lang_mgr);
 		add_by_mime_type("Makefile", "text/x-makefile", lang_mgr);
+#endif
 	}
+}
+
+Gobby::Preferences::FileList::FileList(const FileList& src):
+  m_files(src.m_files)
+{
+  // TODO: It would also be great if we would not need to ref all the
+  // languages.
+  for(map_type::iterator iter = m_files.begin();
+      iter != m_files.end();
+      ++ iter)
+  {
+    g_object_ref(G_OBJECT(iter->second));
+  }
+}
+
+Gobby::Preferences::FileList::~FileList()
+{
+  for(map_type::iterator iter = m_files.begin();
+      iter != m_files.end();
+      ++ iter)
+  {
+    g_object_unref(G_OBJECT(iter->second));
+  }
 }
 
 void Gobby::Preferences::FileList::serialise(Config::ParentEntry& entry) const
@@ -266,38 +351,60 @@ void Gobby::Preferences::FileList::serialise(Config::ParentEntry& entry) const
 		std::stringstream stream;
 		stream << "file" << (++num);
 
-		std::list<Glib::ustring> mime_types =
-			iter->second->get_mime_types();
+    gchar* mime_type = NULL;
+#ifdef WITH_GTKSOURCEVIEW2
+    gchar** mime_types = gtk_source_language_get_mime_types(iter->second);
+    if(mime_types != NULL && *mime_types != NULL)
+      mime_type = g_strdup(*mime_types);
+    g_strfreev(mime_types);
+#else
+    GSList* mime_types = gtk_source_language_get_mime_types(iter->second);
+    for(GSList* cur = mime_types; cur != NULL; cur = cur->next)
+    {
+      if(!mime_type)
+        mime_type = static_cast<gchar*>(cur->data);
+      else
+        g_free(cur->data);
+    }
+    g_slist_free(mime_types);
+#endif
 
 		Config::ParentEntry& main = entry.set_parent(stream.str());
 
 		main.set_value("pattern", iter->first);
-		main.set_value("mime_type", mime_types.front());
+    if(mime_type != NULL)
+      main.set_value("mime_type", mime_type);
+
+    g_free(mime_type);
 	}
 }
 
 Gobby::Preferences::FileList::iterator
 Gobby::Preferences::FileList::add(const Glib::ustring& pattern,
-                                  const Language& lang)
+                                  GtkSourceLanguage* lang)
 {
 	//map_type::iterator iter = m_files.find(pattern);
 	//if(iter != m_files.end() ) return iter;
+  g_object_ref(G_OBJECT(lang));
 	return iterator(m_files.insert(std::make_pair(pattern, lang) ).first);
 }
 
+#ifndef WITH_GTKSOURCEVIEW2
 Gobby::Preferences::FileList::iterator
 Gobby::Preferences::FileList::add_by_mime_type(const Glib::ustring& pattern,
                                                const Glib::ustring& mime_type,
-                                               const LangManager& lang_mgr)
+                                               GtkSourceLanguageManager* lang_mgr)
 {
-	Glib::RefPtr<Gtk::SourceLanguage> lang =
-		lang_mgr->get_language_from_mime_type(mime_type);
+  GtkSourceLanguage* lang =
+    gtk_source_languages_manager_get_language_from_mime_type(
+      lang_mgr, mime_type.c_str());
 
-	if(lang)
+	if(lang != NULL)
 		return add(pattern, lang);
 	else
 		return iterator(m_files.end());
 }
+#endif
 
 Gobby::Preferences::FileList::iterator
 Gobby::Preferences::FileList::begin() const
@@ -316,13 +423,13 @@ Gobby::Preferences::Preferences()
 	// Uninitialised preferences
 }
 
-Gobby::Preferences::Preferences(Config& config, const LangManager& lang_mgr):
+Gobby::Preferences::Preferences(Config& config, GtkSourceLanguageManager* mgr):
 	editor(config.get_root()["editor"]),
 	view(config.get_root()["view"]),
 	appearance(config.get_root()["appearance"]),
 	font(config.get_root()["font"]),
 	behaviour(config.get_root()["behaviour"]),
-	files(config.get_root()["files"], lang_mgr)
+	files(config.get_root()["files"], mgr)
 {
 }
 
