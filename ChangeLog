@@ -1,3 +1,8 @@
+2007-06-12  Armin Burgmeier  <armin@0x539.de>
+
+	* src/documentlist.cpp: fixed a bug related to the document list's
+	  selection (clear the selection in obby_start) [fixes #271]
+
 2007-05-27  Armin Burgmeier  <armin@0x539.de>
 	
 	* inc/sourceview:

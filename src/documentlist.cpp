@@ -115,6 +115,10 @@ void Gobby::DocumentList::obby_start(LocalBuffer& buf)
 	// Clear old data
 	m_scrolled_wnd.set_sensitive(true);
 	m_buffer = &buf;
+
+	// This is necessary because otherwise on_selection_changed()
+	// might be called when the document info is already destroyed.
+	m_tree_view.get_selection()->unselect_all();
 }
 
 void Gobby::DocumentList::obby_end()
@@ -224,7 +228,10 @@ void Gobby::DocumentList::on_selection_changed()
 void Gobby::DocumentList::on_row_activated(const Gtk::TreePath& path,
                                            Gtk::TreeViewColumn* column)
 {
-	on_subscribe();
+	if(m_buffer != NULL && m_buffer->is_open())
+	{
+		on_subscribe();
+	}
 
 	Gtk::TreePath unsorted_path = m_sorted->convert_path_to_child_path(path);
 
