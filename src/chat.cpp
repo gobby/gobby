@@ -189,7 +189,8 @@ void Gobby::Chat::on_chat()
 
 	Glib::ustring message = m_ent_chat.get_text();
 	if(message.empty() ) return;
-	m_ent_chat.set_text("");
+	/* set_text("") did crash on Vista */
+	m_ent_chat.delete_text(0, -1);
 
 	// Commands beginning with /
 	if(message[0] == '/')

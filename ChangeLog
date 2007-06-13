@@ -1,3 +1,8 @@
+2007-06-13  Philipp Kern  <phil@0x539.de>
+
+	* src/chat.cpp: use Gtk::Entry::delete_text(...) instead of
+	  Gtk::Entry::set_text(""); the latter crashes on Windows Vista
+
 2007-06-12  Armin Burgmeier  <armin@0x539.de>
 
 	* src/documentlist.cpp: fixed a bug related to the document list's
