@@ -1,3 +1,31 @@
+2007-06-15  Philipp Kern  <phil@0x539.de>
+
+	* NEWS:
+	* configure.ac: bump version to 0.4.4 and document the changes
+
+	* mkinstalldirs: removed from the repository, is symlinked through
+	  autogen.sh
+
+2007-06-15  Philipp Kern  <phil@0x539.de>
+
+	* src/finddialog.cpp:
+	* src/window.cpp:
+	* src/statusbar.cpp:
+	* src/folder.cpp:
+	* src/document.cpp:
+	* src/preferencesdialog.cpp:
+	* src/main.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp:
+	* inc/window.hpp:
+	* inc/document.hpp:
+	* inc/header.hpp:
+	* inc/docwindow.hpp:
+	* inc/preferences.hpp:
+	* inc/documentlist.hpp: fixed the indentation from two spaces to
+	  one tab and removed some cruft
+
 2007-06-13  Philipp Kern  <phil@0x539.de>
 
 	* src/chat.cpp: use Gtk::Entry::delete_text(...) instead of

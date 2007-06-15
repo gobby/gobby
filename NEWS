@@ -1,6 +1,13 @@
 Gobby
 =====
 
+Version 0.4.4:
+ * Fixed two crashes: one on Windows Vista related to the chat widget,
+   and one triggered on rejoins with multiple documents opened in the
+   editor
+ * GtkSourceView's C API is called directly
+ * The document list is now sorted alphabetically
+
 Version 0.4.3:
  * Find and Goto dialogs are now focused when invoked
  * Zeroconf failures are now only printed on the console, no dialog is invoked
