@@ -1,3 +1,25 @@
+2007-06-16  Philipp Kern  <phil@0x539.de>
+
+	* po/POTFILES.in: add more source files to be scanned for strings
+	  to be translated
+
+	* po/gobby.pot: update, mainly line numbers
+
+	* po/ca.po:
+	* po/pt.po:
+	* po/es.po:
+	* po/fr.po:
+	* po/de.po:
+	* po/sv.po:
+	* po/zh_CN.po: translation roundup: new line numbers, some strings
+	  changed by Rosetta contributors
+
+	* configure.ac:
+	* po/it.po:
+	* po/ru.po: new translations imported from Rosetta
+
+	* NEWS: documented new translations
+
 2007-06-15  Philipp Kern  <phil@0x539.de>
 
 	* NEWS:

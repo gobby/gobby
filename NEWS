@@ -7,6 +7,9 @@ Version 0.4.4:
    editor
  * GtkSourceView's C API is called directly
  * The document list is now sorted alphabetically
+ * New translations:
+   - Italian
+   - Russian
 
 Version 0.4.3:
  * Find and Goto dialogs are now focused when invoked

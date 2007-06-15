@@ -1,32 +1,31 @@
-# Swedish translation for gobby
-# Copyright (c) (c) 2005 Canonical Ltd, and Rosetta Contributors 2005
+# Italian translation for gobby
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
 # This file is distributed under the same license as the gobby package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2005.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-16 00:37+0200\n"
-"PO-Revision-Date: 2007-03-05 22:08+0000\n"
-"Last-Translator: Jimmy Stridh <jimmy@stridh.nu>\n"
-"Language-Team: Swedish <sv@li.org>\n"
+"PO-Revision-Date: 2007-05-03 09:56+0000\n"
+"Last-Translator: Milo Casagrande <milo_casagrande@yahoo.it>\n"
+"Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Version: 0.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Rosetta-Export-Date: 2007-06-15 22:28:17+0000\n"
+"X-Rosetta-Export-Date: 2007-06-15 22:28:11+0000\n"
 
 #: src/chat.cpp:73
 msgid "Send"
-msgstr "Skicka"
+msgstr "Invia"
 
 #: src/chat.cpp:227
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
-"Kommando '%0%' hittades inte. Skriv /help för en lista på befintliga "
-"kommandon."
+"Comando «%0%» non trovato. Digitare /help per l'elenco dei comandi esistenti."
 
 #: src/chat.cpp:238
 msgid "%0%: %1%"
@@ -34,424 +33,418 @@ msgstr "%0%: %1%"
 
 #: src/chat.cpp:252
 msgid "Document %0% does not exist"
-msgstr "Dokument %0% finns inte"
+msgstr "Il documento %0% non esiste"
 
 #: src/chat.cpp:258
 msgid "Usage: /remove <document>"
-msgstr "Användning: /remove <dokument>"
+msgstr "Uso: /remove <documento>"
 
 #: src/documentlist.cpp:51
 msgid "Subscribe"
-msgstr "Prenumerera"
+msgstr "Sottoscrivi"
 
 #: src/documentlist.cpp:107 src/header.cpp:400 src/icon.cpp:65
 msgid "Document list"
-msgstr "Dokumentlista"
+msgstr "Elenco documenti"
 
 #: src/encoding.cpp:98
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
 msgstr ""
-"Lyckades inte konvertera indata till UTF-8: Antingen är kodningen okänd "
-"eller indatan binär."
+"Conversione input in UTF-8 fallita: codifica sconosciuta o input binario."
 
 #: src/encoding_selector.cpp:145
 msgid "Character Encoding:"
-msgstr "Teckenkodning:"
+msgstr "Codifica caratteri:"
 
 #: src/finddialog.cpp:43
 msgid "Find what:"
-msgstr "Sök efter:"
+msgstr "Cerca:"
 
 #: src/finddialog.cpp:44
 msgid "Replace with:"
-msgstr "Ersätt med:"
+msgstr "Sostituisci con:"
 
 #: src/finddialog.cpp:45
 msgid "Match whole word only"
-msgstr "Matcha endast hela ord"
+msgstr "Considerare solo parole intere"
 
 #: src/finddialog.cpp:46
 msgid "Match case"
-msgstr "Matcha gemener/VERSALER"
+msgstr "Corrispondenza esatta"
 
 #: src/finddialog.cpp:47
 msgid "Match as regular expression"
-msgstr "Matcha som ett reguljärt sökuttryck"
+msgstr "Corrispondenza come espressione regolare"
 
 #: src/finddialog.cpp:48
 msgid "Direction"
-msgstr "Riktning"
+msgstr "Direzione"
 
 #: src/finddialog.cpp:49
 msgid "_Up"
-msgstr "_Upp"
+msgstr "_Su"
 
 #: src/finddialog.cpp:50
 msgid "_Down"
-msgstr "_Ner"
+msgstr "_Giù"
 
 #: src/finddialog.cpp:52
 msgid "_Replace"
-msgstr "_Ersätt"
+msgstr "Sost_ituisci"
 
 #: src/finddialog.cpp:53
 msgid "Replace _all"
-msgstr "Ersätt _alla"
+msgstr "Sostituisci _tutto"
 
 #: src/finddialog.cpp:158
 msgid "Search"
-msgstr "Sök"
+msgstr "Cerca"
 
 #: src/finddialog.cpp:158
 msgid "Search and replace"
-msgstr "Sök och ersätt"
+msgstr "Cerca e sostituisci"
 
 #: src/finddialog.cpp:182
 msgid "\"%0%\" has not been found in the document."
-msgstr "\"%0%\" hittades inte i dokumentet."
+msgstr "«%0%« non è stato trovato nel documento."
 
 #: src/finddialog.cpp:265
 msgid "No occurence has been replaced"
-msgstr "Inga ersättningar gjordes"
+msgstr "Nessuna occorrenza è stata sostituita"
 
 #: src/finddialog.cpp:271
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
-msgstr[0] "%0% ersättning gjordes"
-msgstr[1] "%0% ersättningar gjordes"
+msgstr[0] "%0% occorrenza sostituita"
+msgstr[1] "%0% occorrenze sostituite"
 
 #: src/finddialog.cpp:301
 msgid "No document currently opened"
-msgstr "Inga dokument är öppna"
+msgstr "Nessun documento aperto"
 
 #: src/gotodialog.cpp:30
 msgid "Line number:"
-msgstr "Radnummer:"
+msgstr "Numero riga:"
 
 #: src/gotodialog.cpp:32
 msgid "_Go to line"
-msgstr "_Gå till rad"
+msgstr "_Vai alla riga"
 
 #: src/gotodialog.cpp:77
 msgid "Go to line"
-msgstr "Gå till rad"
+msgstr "Vai alla riga"
 
 #: src/header.cpp:227
 msgid "Create session..."
-msgstr "Skapa session..."
+msgstr "Crea sessione..."
 
 #: src/header.cpp:228
 msgid "Opens a new obby session"
-msgstr "Öppnar en ny obby-session"
+msgstr "Apre una nuova sessione"
 
 #: src/header.cpp:236
 msgid "Join session..."
-msgstr "Anslut till session..."
+msgstr "Accedi sessione..."
 
 #: src/header.cpp:237
 msgid "Joins an existing obby session"
-msgstr "Ansluter till en existerande obby-session"
+msgstr "Entra in una sessione esistente"
 
 #: src/header.cpp:245
 msgid "Save session..."
-msgstr "Spara session..."
+msgstr "Salva sessione..."
 
 #: src/header.cpp:246
 msgid "Saves the complete session for a later restore"
-msgstr "Sparar den kompletta sessionen för att kunna återställa den senare"
+msgstr "Salva la sessione completa per un ripristino futuro"
 
 #: src/header.cpp:254
 msgid "Quit session"
-msgstr "Avsluta session"
+msgstr "Termina sessione"
 
 #: src/header.cpp:255
 msgid "Leaves the currently running obby session"
-msgstr "Lämnar den aktiva obby-sessionen"
+msgstr "Esce dalla sessione in corso"
 
 #: src/header.cpp:263
 msgid "Quit"
-msgstr "Avsluta"
+msgstr "Esci"
 
 #: src/header.cpp:264
 msgid "Quits the application"
-msgstr "Avslutar programmet"
+msgstr "Esce dal programma"
 
 #: src/header.cpp:268
 msgid "_Session"
-msgstr "_Session"
+msgstr "_Sessione"
 
 #: src/header.cpp:274
 msgid "Create document..."
-msgstr "Skapa dokument..."
+msgstr "Crea documento..."
 
 #: src/header.cpp:275
 msgid "Creates a new document"
-msgstr "Skapar ett nytt dokument"
+msgstr "Crea un nuovo documento"
 
 #: src/header.cpp:283
 msgid "Open document..."
-msgstr "Öppna dokument..."
+msgstr "Apri documento..."
 
 #: src/header.cpp:284
 msgid "Loads a file into a new document"
-msgstr "Laddar in en fil till ett nytt dokument"
+msgstr "Carica un file in un nuovo documento"
 
 #: src/header.cpp:292
 msgid "Save document"
-msgstr "Spara dokument"
+msgstr "Salva documento"
 
 #: src/header.cpp:293
 msgid "Saves a document into a file"
-msgstr "Sparar dokument till fil"
+msgstr "Salva un documento su un file"
 
 #: src/header.cpp:301
 msgid "Save document as..."
-msgstr "Spara dokument som..."
+msgstr "Salva documento come..."
 
 #: src/header.cpp:302
 msgid "Saves a document to another location"
-msgstr "Sparar dokument till annan plats"
+msgstr "Salva un documento in un'altra posizione"
 
 #: src/header.cpp:310
 msgid "Close document"
-msgstr "Stäng dokument"
+msgstr "Chiudi documento"
 
 #: src/header.cpp:311
 msgid "Closes an opened document"
-msgstr "Stänger ett öppet dokument"
+msgstr "Chiude un documento aperto"
 
 #: src/header.cpp:315
 msgid "_Edit"
-msgstr "R_edigera"
+msgstr "_Modifica"
 
 #: src/header.cpp:321
 msgid "Find..."
-msgstr "Sök..."
+msgstr "Trova..."
 
 #: src/header.cpp:322
 msgid "Search for a text in the current document"
-msgstr "Spara aktuellt dokument"
+msgstr "Cerca una stringa di testo nel documento"
 
 #: src/header.cpp:330
 msgid "Find and replace..."
-msgstr "Sök och ersätt..."
+msgstr "Trova e sostituisci..."
 
 #: src/header.cpp:331
 msgid "Search for a text and replace it with another one"
-msgstr "Sök efter en textsträng och ersätt med en annan"
+msgstr "Cerca e sostituisce del testo"
 
 #: src/header.cpp:339
 msgid "Go to line..."
-msgstr "Hoppa till rad..."
+msgstr "Vai alla riga..."
 
 #: src/header.cpp:340
 msgid "Move cursor to a specified line"
-msgstr "Flytta markören till en angiven rad"
+msgstr "Muove il cursore alla riga specificata"
 
 #: src/header.cpp:348
 msgid "Preferences..."
-msgstr "Inställningar..."
+msgstr "Preferenze..."
 
 #: src/header.cpp:349
 msgid "Displays a dialog to customise Gobby for your needs"
-msgstr "Öppnar en dialogruta för att anpassa Gobby efter dina behov"
+msgstr "Visualizza un dialogo per personalizzare Gobby alle proprie esigenze"
 
 #: src/header.cpp:357
 msgid "Document preferences..."
-msgstr "Dokumentegenskaper..."
+msgstr "Preferenze del documento..."
 
 #: src/header.cpp:358
 msgid "Shows a preferences dialog that is just applied to this document"
-msgstr "Visar en egenskapsdialog som endast tillämpas för detta dokument"
+msgstr "Mostra un dialogo per le preferenze del documento attuale"
 
 #: src/header.cpp:363
 msgid "Syntax"
-msgstr "Syntax"
+msgstr "Sintassi"
 
 #: src/header.cpp:365
 msgid "_User"
-msgstr "_Användare"
+msgstr "_Utente"
 
 #: src/header.cpp:371
 msgid "Set password..."
-msgstr "Sätt lösenord..."
+msgstr "Imposta password..."
 
 #: src/header.cpp:372
 msgid "Sets a password for this user"
-msgstr "Sätter ett lösenord för denna användare"
+msgstr "Imposta una password per questo utente"
 
 #: src/header.cpp:380
 msgid "Set colour..."
-msgstr "Välj färg..."
+msgstr "Imposta colore..."
 
 #: src/header.cpp:381
 msgid "Sets a new colour for this user"
-msgstr "Väljer en ny färg för denna användare"
+msgstr "Imposta un nuovo colore per questo utente"
 
 #: src/header.cpp:385
 msgid "_Window"
-msgstr "_Fönster"
+msgstr "Fi_nestra"
 
 #: src/header.cpp:391 src/icon.cpp:62 src/userlist.cpp:122
 msgid "User list"
-msgstr "Användare"
+msgstr "Elenco utenti"
 
 #: src/header.cpp:392
 msgid "Displays a list of users that are currently joined"
-msgstr "Visar en lista på anslutna användare"
+msgstr "Visualizza l'elenco degli utenti attualmente nella sessione"
 
 #: src/header.cpp:401
 msgid "Displays a list of documents within the current session"
-msgstr "Visar en lista på dokument i den aktuella sessionen"
+msgstr "Visualizza l'elenco dei documenti della sessione corrente"
 
 #: src/header.cpp:410 src/icon.cpp:68
 msgid "Chat"
-msgstr "Chatt"
+msgstr "Chat"
 
 #: src/header.cpp:411
 msgid "Displays a chat to talk to other people in the session"
-msgstr ""
-"Visar ett chatt-fönster där man kan prata med andra användare av sessionen"
+msgstr "Visualizza una chat per parlare con altre persone durante la sessione"
 
 #: src/header.cpp:416
 msgid "_Help"
-msgstr "_Hjälp"
+msgstr "A_iuto"
 
 #: src/header.cpp:422
 msgid "About"
-msgstr "Om"
+msgstr "I_nformazioni"
 
 #: src/header.cpp:423
 msgid "Shows Gobby's copyright and credits"
-msgstr "Visar information om Gobbys copyright och medarbetare"
+msgstr "Mostra copyright e informazioni di Gobby"
 
 #: src/header.cpp:628
 msgid "None"
-msgstr "Ingen"
+msgstr "Nessuna"
 
 #: src/header.cpp:629
 msgid "Unselects the current language"
-msgstr "Väljer bort nuvarande språk"
+msgstr "Deseleziona il linguaggio corrente"
 
 #. Build description string
 #: src/header.cpp:645
 msgid "Selects %0% as language"
-msgstr "Väljer %0% som språk"
+msgstr "Seleziona %0% come linguaggio"
 
 #: src/hostdialog.cpp:25
 msgid "Create obby session"
-msgstr "Skapa obbysession"
+msgstr "Crea sessione obby"
 
 #: src/hostdialog.cpp:28 src/joindialog.cpp:47
 msgid "Port:"
-msgstr "Port:"
+msgstr "Porta:"
 
 #: src/hostdialog.cpp:29 src/joindialog.cpp:48
 msgid "Name:"
-msgstr "Namn:"
+msgstr "Nome :"
 
 #: src/hostdialog.cpp:30 src/joindialog.cpp:49
 msgid "Colour:"
-msgstr "Färg:"
+msgstr "Colore:"
 
 #: src/hostdialog.cpp:31
 msgid "Password:"
-msgstr "Lösenord:"
+msgstr "Password:"
 
 #: src/hostdialog.cpp:32
 msgid "Restore session:"
-msgstr "Återställ session:"
+msgstr "Ripristina sessione:"
 
 #: src/hostdialog.cpp:34
 msgid "Restore session"
-msgstr "Återställ session"
+msgstr "Ripristina sessione"
 
 #: src/hostdialog.cpp:112
 msgid "_Host"
-msgstr "_Värddator"
+msgstr "A_vvia"
 
 #: src/hostprogressdialog.cpp:29
 msgid "Opening obby session..."
-msgstr "Öppnar obby-session..."
+msgstr "Apertura sessione obby..."
 
 #: src/joindialog.cpp:43
 msgid "Join obby session"
-msgstr "Anslut till obbysession"
+msgstr "Accedi sessione obby"
 
 #: src/joindialog.cpp:46
 msgid "Host:"
-msgstr "Värddator:"
+msgstr "Host:"
 
 #: src/joindialog.cpp:51
 msgid "Local network"
-msgstr "Lokalt nätverk"
+msgstr "Rete locale"
 
 #. resetup columns
 #: src/joindialog.cpp:278
 msgid "User"
-msgstr "Användare"
+msgstr "Utente"
 
 #: src/joindialog.cpp:279
 msgid "Host"
-msgstr "Värddator"
+msgstr "Host"
 
 #: src/joindialog.cpp:280
 msgid "Port"
-msgstr "Port"
+msgstr "Porta"
 
 #: src/joindialog.cpp:299
 #, fuzzy
 msgid "Failure"
-msgstr "Filer"
+msgstr "File"
 
 #: src/joinprogressdialog.cpp:34
 msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
 msgstr ""
-"Ett användarlösenord för använder '%0%' krävs. Du kan antingen välja ett "
-"annat användarnamn, ange ditt lösenord eller avbryta anslutningen."
+"È richiesta la password per l'utente «%0%». È possibile cambiare il nome "
+"utente, digitare la password o annullare la connessione."
 
 #: src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
-msgstr ""
-"Namnet används redan. Du kan välja ett annat namn eller koppla ner "
-"anslutningen."
+msgstr "Nome già in uso. Sceglierne un altro o annullare la connessione."
 
 #: src/joinprogressdialog.cpp:116 src/joinprogressdialog.cpp:227
 msgid "New name:"
-msgstr "Nytt namn:"
+msgstr "Nuovo nome:"
 
 #: src/joinprogressdialog.cpp:157
 msgid ""
 "Colour is already in use. You may choose another colour or cancel the "
 "connection."
-msgstr ""
-"Färgen används redan. Du kan välja en annan färg eller koppla ner "
-"anslutningen."
+msgstr "Colore già in uso. Sceglierne un altro o annullare la connessione."
 
 #: src/joinprogressdialog.cpp:182
 msgid ""
 "Session password required. You have to type in the password to be able to "
 "join the obby session."
 msgstr ""
-"Ett sessionslösenord krävs. Du måste ange lösenordet för att kunna ansluta "
-"till obby-sessionen."
+"È necessaria la password di sessione. Digitare la password per poter "
+"accedere alla sessione."
 
 #: src/joinprogressdialog.cpp:186
 msgid "Session password:"
-msgstr "Sessionslösenord:"
+msgstr "Password di sessione:"
 
 #: src/joinprogressdialog.cpp:228
 msgid "User password:"
-msgstr "Användarlösenord:"
+msgstr "Password utente:"
 
 #: src/joinprogressdialog.cpp:307
 msgid "Joining obby session..."
-msgstr "Ansluter till obby-session..."
+msgstr "Accesso alla sessione obby..."
 
 #. Thread has established connection, wait for welcome packet
 #. The welcome event will be emitted as soon as the connection
@@ -459,117 +452,117 @@ msgstr "Ansluter till obby-session..."
 #. this that really waits for the welcome packet.
 #: src/joinprogressdialog.cpp:404
 msgid "Setting up connection encryption (TLS)..."
-msgstr "Sätter upp anslutningskryptering (TLS)..."
+msgstr "Impostazione connessione cifrata (TLS)..."
 
 #. Update status message
 #: src/joinprogressdialog.cpp:464
 msgid "Login packet sent, waiting for response..."
-msgstr "Inloggningspaket skickat, väntar på svar..."
+msgstr "Pacchetto di accesso inviato, in attesa della risposta..."
 
 #: src/joinprogressdialog.cpp:546
 msgid "Logged in successfully, synchronising session..."
-msgstr "Inloggning lyckades, synkroniserar session..."
+msgstr "Accesso eseguito con successo, sincronizzazione della sessione..."
 
 #. Connection closed by remote site
 #: src/joinprogressdialog.cpp:559 src/window.cpp:1041
 msgid "Connection lost"
-msgstr "Anslutningen bruten"
+msgstr "Connessione interrotta"
 
 #: src/preferencesdialog.cpp:60
 msgid "Tab Stops"
-msgstr "Tabulatorstopp"
+msgstr "Tabulazioni"
 
 #: src/preferencesdialog.cpp:61
 msgid "Indentation"
-msgstr "Indrag"
+msgstr "Rientro"
 
 #: src/preferencesdialog.cpp:62
 msgid "Home/End behaviour"
-msgstr "Home/End-beteende"
+msgstr "Comportamento tasti Inizio/Fine"
 
 #: src/preferencesdialog.cpp:63
 msgid "Tab width:"
-msgstr "Tabulatorbredd:"
+msgstr "Larghezza tabulazioni:"
 
 #: src/preferencesdialog.cpp:64
 msgid "Insert spaces instead of tabs"
-msgstr "Använd mellanslag istället för tabulator"
+msgstr "Inserire spazi invece di tabulazioni"
 
 #: src/preferencesdialog.cpp:65
 msgid "Enable automatic indentation"
-msgstr "Aktivera automatiskt indrag"
+msgstr "Abilitare rientro automatico"
 
 #: src/preferencesdialog.cpp:66
 msgid "Smart home/end"
-msgstr "Smart home/end"
+msgstr "Inizio/Fine intelligente"
 
 #: src/preferencesdialog.cpp:79
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
 msgstr ""
-"Med denna valmöjlighet aktiverad flyttar Home/End-knapparna markören till "
-"första/sista tecknet innan de går till början/slutet av raden."
+"Con questa opzione abilitata, i tasti Inizio/Fine posizionano il cursore al "
+"primo/ultimo carattere prima di spostarlo all'inizio/fine della riga."
 
 #: src/preferencesdialog.cpp:124
 msgid "Text wrapping"
-msgstr "Textbrytning"
+msgstr "A capo automatico"
 
 #: src/preferencesdialog.cpp:125
 msgid "Line numbers"
-msgstr "Radnummer"
+msgstr "Numeri di riga"
 
 #: src/preferencesdialog.cpp:126
 msgid "Current line"
-msgstr "Nuvarande rad"
+msgstr "Riga corrente"
 
 #: src/preferencesdialog.cpp:127
 msgid "Right margin"
-msgstr "Högermarginal"
+msgstr "Margine destro"
 
 #: src/preferencesdialog.cpp:128
 msgid "Bracket matching"
-msgstr "Hakparentesmatchning"
+msgstr "Cossispendenza parentesi"
 
 #: src/preferencesdialog.cpp:129
 msgid "Enable text wrapping"
-msgstr "AKtivera textbrytning"
+msgstr "Abilitare a capo automatico"
 
 #: src/preferencesdialog.cpp:130
 msgid "Do not split words over two lines"
-msgstr "Dela inte ord över två rader"
+msgstr "Non separare le parole su due righe"
 
 #: src/preferencesdialog.cpp:131
 msgid "Display line numbers"
-msgstr "Visa radnummer"
+msgstr "Visualizzare i numeri di riga"
 
 #: src/preferencesdialog.cpp:132
 msgid "Highlight current line"
-msgstr "Framhäv aktuell rad"
+msgstr "Evidenziare la riga corrente"
 
 #: src/preferencesdialog.cpp:133
 msgid "Display right margin"
-msgstr "Visa högermarginal"
+msgstr "Visualizzare il margine destro"
 
 #: src/preferencesdialog.cpp:134
 msgid "Right margin at column:"
-msgstr "Högermarginal vid kolumn:"
+msgstr "Margine destro alla colonna:"
 
 #: src/preferencesdialog.cpp:135
 msgid "Highlight matching bracket"
-msgstr "Framhäv matchande klammer"
+msgstr "Evidenziare la parentesi corrispondente"
 
 #: src/preferencesdialog.cpp:218
 msgid "Toolbar"
-msgstr "Verktygsrad"
+msgstr "Barra degli strumenti"
 
 #: src/preferencesdialog.cpp:219
 msgid "Windows"
-msgstr "Fönster"
+msgstr "Finestre"
 
 #: src/preferencesdialog.cpp:220
 msgid "Remember the positions and states"
-msgstr "Kom ihåg positioner och egenskaper"
+msgstr "Ricordare la posizione e lo stato"
 
 #: src/preferencesdialog.cpp:222
 msgid "Highlight the window on incoming chat messages"
@@ -577,25 +570,25 @@ msgstr ""
 
 #: src/preferencesdialog.cpp:228
 msgid "Show text only"
-msgstr "Visa endast text"
+msgstr "Solo testo"
 
 #: src/preferencesdialog.cpp:229
 msgid "Show icons only"
-msgstr "Visa endast ikoner"
+msgstr "Solo icone"
 
 #: src/preferencesdialog.cpp:230
 msgid "Show both icons and text"
-msgstr "Visa både ikoner och text"
+msgstr "Icone e testo"
 
 #: src/preferencesdialog.cpp:231
 #, fuzzy
 msgid "Show text besides icons"
-msgstr "Visa endast text"
+msgstr "Solo testo"
 
 #: src/preferencesdialog.cpp:302
 #, fuzzy
 msgid "Document management"
-msgstr "Ange dokumentnamn"
+msgstr "Inserire il nome del documento"
 
 #: src/preferencesdialog.cpp:303
 msgid "Open new remotely-created documents automatically"
@@ -603,48 +596,48 @@ msgstr ""
 
 #: src/preferencesdialog.cpp:339
 msgid "Pattern"
-msgstr "Mönster"
+msgstr "Estensione"
 
 #: src/preferencesdialog.cpp:340
 msgid "Language"
-msgstr "Språk"
+msgstr "Linguaggio"
 
 #: src/preferencesdialog.cpp:341
 msgid "Mime type"
-msgstr "MIME-typ"
+msgstr "Tipo MIME"
 
 #: src/preferencesdialog.cpp:343
 msgid "This is a list of all recognized file types"
-msgstr "Detta är en lista på alla stödda filtyper"
+msgstr "Questo è un elenco di tutti i tipi di file riconosciuti"
 
 #: src/preferencesdialog.cpp:494
 msgid "Pattern must not be empty."
-msgstr "Mönster får inte vara tomt."
+msgstr "L'estensione non può essere vuota."
 
 #: src/preferencesdialog.cpp:552
 msgid "There is no language with the mime type '%0%'."
-msgstr "Det finns inget språk med MIME-typen '%0%'."
+msgstr "Nessun linguaggio con un tipo di MIME «%0%»."
 
 #: src/preferencesdialog.cpp:689
 msgid "Preferences"
-msgstr "Inställningar"
+msgstr "Preferenze"
 
 #: src/preferencesdialog.cpp:694
 msgid "Editor"
-msgstr "Redigerare"
+msgstr "Editor"
 
 #: src/preferencesdialog.cpp:695
 msgid "View"
-msgstr "Visa"
+msgstr "Visualizzazione"
 
 #. Appearance only affects the global Gobby window
 #: src/preferencesdialog.cpp:698
 msgid "Appearance"
-msgstr "Utseende"
+msgstr "Aspetto"
 
 #: src/preferencesdialog.cpp:699
 msgid "Font"
-msgstr "Teckensnitt"
+msgstr "Tipo di carattere"
 
 #: src/preferencesdialog.cpp:700
 msgid "Behaviour"
@@ -652,27 +645,27 @@ msgstr ""
 
 #: src/preferencesdialog.cpp:701
 msgid "Files"
-msgstr "Filer"
+msgstr "File"
 
 #: src/statusbar.cpp:38 src/statusbar.cpp:100
 msgid "Not connected"
-msgstr "Inte ansluten"
+msgstr "Non connesso"
 
 #: src/statusbar.cpp:56
 msgid "Selected language: %0%"
-msgstr "Valt språk: %0%"
+msgstr "Linguaggio selezionato: %0%"
 
 #: src/statusbar.cpp:62
 msgid "No language selected"
-msgstr "Inget språk valt"
+msgstr "Nessun linguaggio selezionato"
 
 #: src/userlist.cpp:94
 msgid "Online"
-msgstr "Ansluten"
+msgstr "Online"
 
 #: src/userlist.cpp:95
 msgid "Offline"
-msgstr "Frånkopplad"
+msgstr "Offline"
 
 #: src/window.cpp:194
 #, fuzzy
@@ -681,45 +674,44 @@ msgid ""
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
-"Initieringen av Howl misslyckades. Du måste antagligen köra mDNSResponder "
-"som root innan du startar Gobby. Stöd för Zeroconf är deaktiverat för denna "
-"session."
+"Installazione di Howl fallita. È necessario eseguire mDNSResponder come root "
+"prima di Gobby. Il supporto a Zeroconf è disabilitato per questa sessione."
 
 #: src/window.cpp:276
 msgid "You are still connected to a session"
-msgstr "Du är fortfarande ansluten till en session"
+msgstr "Si è ancora connessi in una sessione"
 
 #: src/window.cpp:284
 msgid "Do you want to close Gobby nevertheless?"
-msgstr "Vill du stänga Gobby ändå?"
+msgstr "Chiudere Gobby in ogni caso?"
 
 #: src/window.cpp:444
 msgid "Use default .obby extension if none is given"
-msgstr "Använd standard .obby-ändelse om ingen annan är angiven"
+msgstr "Usare l'estensione predefinita «.obby» se nessuna è specificata"
 
 #: src/window.cpp:449
 msgid "Save obby session"
-msgstr "Spara obbysession"
+msgstr "Salva la sessione obby"
 
 #: src/window.cpp:512
 msgid "A collaborative text editor"
-msgstr "En kollaborativ textredigerare"
+msgstr "Un editor di testo collaborativo"
 
 #: src/window.cpp:669
 msgid "Create document"
-msgstr "Skapa dokument"
+msgstr "Crea documento"
 
 #: src/window.cpp:669
 msgid "Enter document name"
-msgstr "Ange dokumentnamn"
+msgstr "Inserire il nome del documento"
 
 #: src/window.cpp:691
 msgid "Open new document"
-msgstr "Öppna nytt dokument"
+msgstr "Apri nuovo documento"
 
 #: src/window.cpp:774
 msgid "Save current document"
-msgstr "Spara aktuellt dokument"
+msgstr "Salva documento corrente"
 
 #: src/window.cpp:862
 msgid ""
@@ -727,22 +719,21 @@ msgid ""
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
 msgstr ""
-"Klicka på \"Verkställ\" för att tillämpa de nya inställningarna på dokument "
-"som för närvarande är öppna. \"OK\" sparar bara inställningarna för att "
-"använda dem med nya dokument."
+"Fare clic su «Applica» per applicare le nuove impostazioni ai documenti "
+"aperti. «OK» conserva i valori per usarli con i nuovi documenti creati."
 
 #. Build password dialog with info
 #: src/window.cpp:906
 msgid "Set user password"
-msgstr "Sätt användarlösenord"
+msgstr "Imposta password utente"
 
 #: src/window.cpp:908
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
-"Sätter ett användarlösenord för ditt användarkonto. Nästa gång du försöker "
-"logga in med denna användare kommer ditt lösenord att efterfrågas."
+"Impostare una password per il proprio account. Al prossimo accesso con "
+"questo utente, verrà richiesta la password."
 
 #: src/window.cpp:969
 msgid ""
@@ -750,97 +741,42 @@ msgid ""
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
-"De här inställningarna påverkar endast det för närvarande aktiva dokumentet "
-"\"%0%\". Använd \"Inställningar\" under \"Redigera\"-menyn om du vill ändra "
-"globala inställningar."
+"Queste preferenze riguardano solamente il documento «%0%». Se si desidera "
+"modificare le preferenze globali, scegliere «Preferenze...» dal menù "
+"«Modifica»."
 
 #: src/window.cpp:1079
 msgid "Colour change failed: Colour already in use"
-msgstr "Färgändring misslyckades: Färgen används redan"
+msgstr "Cambiamento colore fallito: colore già in uso"
 
 #: src/window.cpp:1328
 msgid "Connected to %0%:%1%"
-msgstr "Ansluten till %0%:%1%"
+msgstr "Connesso a %0%:%1%"
 
 #: src/window.cpp:1372
 msgid "Serving on port %0%"
-msgstr "Lyssnar på port %0%"
+msgstr "Sulla porta %0%"
 
 #: src/window.cpp:1492
 msgid "Save changes to document \"%0%\" before closing?"
-msgstr "Spara ändringar till dokument \"%0%\" före stängning?"
+msgstr "Salvare i cambiamenti al documento «%0%» prima di uscire?"
 
 #: src/window.cpp:1502
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
 msgstr ""
-"Om du inte sparar kommer ändringar att kastas, men kan fortfarande hämtas "
-"tillbaka om du prenumerar på dokumentet igen."
+"Non salvando, i cambiamenti andranno persi, ma potranno essere recuperati "
+"riaprendo il documento fintantoché la sessione rimane aperta."
 
 #: src/window.cpp:1511
 msgid "If you don't save, changes will be discarded."
-msgstr "Om du inte sparar kommer eventuella ändringar att kastas."
+msgstr "Non salvando, i cambiamenti andranno persi."
 
 #. Add button to allow the user to save the dialog
 #: src/window.cpp:1526
 msgid "Close without saving"
-msgstr "Stäng utan att spara"
+msgstr "Chiudi senza salvare"
 
 #~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Kunde inte öppna filen '%0%' för skrivning"
-
-#~ msgid "_View"
-#~ msgstr "_Visa"
-
-#~ msgid "Passwords do not match"
-#~ msgstr "Lösenorden stämmer ej överens"
-
-#~ msgid "Waiting for welcome packet..."
-#~ msgstr "Väntar på välkomstpaket..."
-
-#~ msgid "Could not save file '%0%': %1%"
-#~ msgstr "Kunde inte spara filen '%0%': %1%"
-
-#~ msgid "%0% has joined"
-#~ msgstr "%0% har anslutit"
-
-#~ msgid "%0% has left"
-#~ msgstr "%0% har lämn<t"
-
-#~ msgid "Gobby"
-#~ msgstr "Gobby"
-
-#~ msgid "Colour"
-#~ msgstr "Färg"
-
-#~ msgid "Name"
-#~ msgstr "Namn"
-
-#~ msgid "Subscribed"
-#~ msgstr "Prenumererar"
-
-#~ msgid ""
-#~ "The document \"%0%\" has been changed since it was saved to disk. Are you "
-#~ "sure that you want to close it?"
-#~ msgstr ""
-#~ "Dokumentet \"%0%\" har ändrats sedan det sparades till disk. Är du säker "
-#~ "på att du vill stänga det?"
-
-#~ msgid ""
-#~ "You are not subscribed to the document \"%0%\".\n"
-#~ "\n"
-#~ "To view changes that others make or to edit the document yourself, you "
-#~ "have to subscribe to this document. Use the following button to perform "
-#~ "this.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Du prenumererar inte på dokumentet \"%0%\".\n"
-#~ "\n"
-#~ "För att se ändringar andra gör eller för att ändra dokumentet själv måste "
-#~ "du prenumerera på det här dokumentet. Använd följande knapp för att göra "
-#~ "detta.\n"
-#~ "\n"
-
-#~ msgid "Enter user password"
-#~ msgstr "Ange användarlösenord"
+#~ msgstr "Impossibile aprire il file «%0%» in scrittura"
