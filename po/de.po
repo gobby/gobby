@@ -679,9 +679,9 @@ msgid ""
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
-"Zeroconf-Initialisierung fehlgeschlagen. Wahrscheinlich musst du "
-"avahi-daemon oder mDNSResponder starten, je nachdem welche Bibliothek "
-"benutzt wird. Zeroconf-Unterstützung ist für diese Sitzung deaktiviert."
+"Zeroconf-Initialisierung fehlgeschlagen. Wahrscheinlich musst du avahi-"
+"daemon oder mDNSResponder starten, je nachdem welche Bibliothek benutzt "
+"wird. Zeroconf-Unterstützung ist für diese Sitzung deaktiviert."
 
 #: src/window.cpp:276
 msgid "You are still connected to a session"
@@ -790,4 +790,3 @@ msgstr ""
 #: src/window.cpp:1526
 msgid "Close without saving"
 msgstr "Verwerfen"
-
