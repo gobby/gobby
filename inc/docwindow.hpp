@@ -174,7 +174,7 @@ protected:
 	void store_scroll();
 	void restore_scroll();
 
-  GtkSourceView* m_view;
+	GtkSourceView* m_view;
 	LocalDocumentInfo& m_info;
 	const Document& m_doc;
 

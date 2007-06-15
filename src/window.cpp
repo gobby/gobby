@@ -205,8 +205,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		Config::ParentEntry& screen = config.get_root()["screen"];
 
 		// Restore the window's position from the configuration
-        	const int x = windows["main"].get_value<int>("x", 0);
-	        const int y = windows["main"].get_value<int>("y", 0);
+		const int x = windows["main"].get_value<int>("x", 0);
+		const int y = windows["main"].get_value<int>("y", 0);
 		const int w = windows["main"].get_value<int>("width", 0);
 		const int h = windows["main"].get_value<int>("height", 0);
 
@@ -579,10 +579,10 @@ void Gobby::Window::on_folder_document_add(DocWindow& window)
 
 	// Unset modifified flag when locally opened
 	if(!m_local_file_path.empty())
-  {
-    gtk_text_buffer_set_modified(
-      GTK_TEXT_BUFFER(window.get_document().get_buffer()), FALSE);
-  }
+	{
+		gtk_text_buffer_set_modified(
+			GTK_TEXT_BUFFER(window.get_document().get_buffer()), FALSE);
+	}
 
 	if(m_folder.get_n_pages() == 1)
 	{
@@ -1469,7 +1469,8 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 		update_title_bar();
 		// Unset modifified flag
 		gtk_text_buffer_set_modified(
-      GTK_TEXT_BUFFER(doc.get_document().get_buffer()), FALSE);
+			GTK_TEXT_BUFFER(doc.get_document().get_buffer()),
+			FALSE);
 	}
 	catch(Glib::Error& e)
 	{

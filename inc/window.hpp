@@ -184,7 +184,7 @@ protected:
 
 	// Config
 	Config& m_config;
-  GtkSourceLanguageManager* m_lang_manager;
+	GtkSourceLanguageManager* m_lang_manager;
 	Preferences m_preferences;
 	const IconManager& m_icon_mgr;
 

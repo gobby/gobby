@@ -354,8 +354,8 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 		)
 	);
 
-  Glib::RefPtr<Gtk::TextBuffer> cpp_buffer = Glib::wrap(
-    GTK_TEXT_BUFFER(new_wnd->get_document().get_buffer()), true);
+	Glib::RefPtr<Gtk::TextBuffer> cpp_buffer = Glib::wrap(
+		GTK_TEXT_BUFFER(new_wnd->get_document().get_buffer()), true);
 
 	cpp_buffer->signal_modified_changed().connect(
 		sigc::bind(
@@ -440,7 +440,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 
 	// However, if the obby session has been closed the statusbar is empty,
 	// there is no need to update anything.
-  GtkSourceLanguage* language = window.get_language();
+	GtkSourceLanguage* language = window.get_language();
 
 	// Set correct menu item
 	if(!m_block_language)
@@ -551,3 +551,4 @@ void Gobby::Folder::select_document(const LocalDocumentInfo& info)
 		}
 	}
 }
+

@@ -30,9 +30,9 @@ namespace
 	typedef gboolean (*gtk_source_iter_search_func)(
 		const GtkTextIter*,
 		const gchar*,
-        	GtkSourceSearchFlags,
+		GtkSourceSearchFlags,
 		GtkTextIter*,
-                GtkTextIter*,
+		GtkTextIter*,
 		const GtkTextIter*
 	);
 }
@@ -173,7 +173,7 @@ void Gobby::FindDialog::on_find()
 	if(doc == NULL) return;
 
 	Glib::RefPtr<Gtk::TextBuffer> buf =
-    Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
+		Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
 
 	bool result = search_sel(buf->get_insert()->get_iter() );
 	if(!result)
@@ -206,7 +206,7 @@ void Gobby::FindDialog::on_replace()
 	if(doc == NULL) return;
 
 	Glib::RefPtr<Gtk::TextBuffer> buf =
-    Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
+		Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
 
 	// Get selected string
 	Glib::ustring sel_str = doc->get_selected_text();
@@ -245,7 +245,7 @@ void Gobby::FindDialog::on_replace_all()
 	if(doc == NULL) return;
 
 	Glib::RefPtr<Gtk::TextBuffer> buf =
-    Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
+		Glib::wrap(GTK_TEXT_BUFFER(doc->get_document().get_buffer()), true);
 
 	Gtk::TextIter begin = buf->begin();
 

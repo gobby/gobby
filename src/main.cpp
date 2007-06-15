@@ -114,7 +114,7 @@ open_files(Gobby::Window& wnd,
 
 int main(int argc, char* argv[]) try
 {
-  g_thread_init(NULL);
+	g_thread_init(NULL);
 //	if(!Glib::thread_supported())
 //		Glib::thread_init();
 

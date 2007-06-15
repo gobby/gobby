@@ -103,7 +103,7 @@ public:
 
 		LanguageWrapper(Action action,
 		                GtkSourceLanguage* language);
-    ~LanguageWrapper();
+		~LanguageWrapper();
 
 		Action get_action() const;
 		GtkSourceLanguage* get_language() const;
@@ -113,7 +113,7 @@ public:
 	};
 
 	Header(const ApplicationState& state,
-         GtkSourceLanguageManager* lang_mgr);
+	       GtkSourceLanguageManager* lang_mgr);
 
 	// Access to accelerator groups of the ui manager
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();

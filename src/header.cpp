@@ -124,8 +124,8 @@ namespace {
 	 */
 	gint language_sort_callback(gconstpointer lang1, gconstpointer lang2)
 	{
-    return strcmp(gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(lang1)),
-                  gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(lang2)));
+		return strcmp(gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(lang1)),
+			gtk_source_language_get_name(GTK_SOURCE_LANGUAGE(lang2)));
 	}
 }
 
@@ -133,14 +133,14 @@ Gobby::Header::LanguageWrapper::LanguageWrapper(Action action,
                                                 GtkSourceLanguage* language):
 	m_action(action), m_language(language)
 {
-  if(m_language != NULL)
-    g_object_ref(G_OBJECT(m_language));
+	if(m_language != NULL)
+		g_object_ref(G_OBJECT(m_language));
 }
 
 Gobby::Header::LanguageWrapper::~LanguageWrapper()
 {
-  if(m_language != NULL)
-    g_object_unref(G_OBJECT(m_language));
+	if(m_language != NULL)
+		g_object_unref(G_OBJECT(m_language));
 }
 
 Gobby::Header::LanguageWrapper::Action
@@ -608,25 +608,18 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_help->add(action_help);
 	group_help->add(action_help_about);
 
-	// A kind of hack to ensure that
-	// Gtk::SourceLanguage::sourcelanguage_class_.init() is called.
-	// See the TODO item in Glib::wrap(GtkSourceLanguage*, bool) in
-	// sourcelanguage.cpp
-	//GtkSourceLanguage* lang = NULL;
-	//Glib::wrap(lang, false);
-
 	// Get available languages
 #ifdef WITH_GTKSOURCEVIEW2
-  const GSList* list = gtk_source_language_manager_get_available_languages(
-    lang_mgr);
+	const GSList* list = gtk_source_language_manager_get_available_languages(
+		lang_mgr);
 #else
-  const GSList* list = gtk_source_languages_manager_get_available_languages(
-    lang_mgr);
+	const GSList* list = gtk_source_languages_manager_get_available_languages(
+		lang_mgr);
 #endif
 
 	// Copy the last, so we can sort languages by name
-  GSList* lang_list = g_slist_copy(const_cast<GSList*>(list));
-  lang_list = g_slist_sort(lang_list, &language_sort_callback);
+	GSList* lang_list = g_slist_copy(const_cast<GSList*>(list));
+	lang_list = g_slist_sort(lang_list, &language_sort_callback);
 
 	// Add None-Language
 	Glib::RefPtr<Gtk::RadioAction> action = Gtk::RadioAction::create(
@@ -640,13 +633,13 @@ Gobby::Header::Header(const ApplicationState& state,
 	action_edit_syntax_languages.push_back(LanguageWrapper(action, NULL));
 
 	// Add languages
-  for(GSList* iter = lang_list; iter != NULL; iter = iter->next)
+	for(GSList* iter = lang_list; iter != NULL; iter = iter->next)
 	{
-    GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(iter->data);
+		GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(iter->data);
 
 		// Get current language 
 		Glib::ustring language_xml_name =
-                  gtk_source_language_get_name(language);
+			gtk_source_language_get_name(language);
 
 		// Build description string
 		obby::format_string str(_("Selects %0% as language") );
@@ -683,7 +676,7 @@ Gobby::Header::Header(const ApplicationState& state,
 		m_ui_manager->add_ui_from_string(xml_desc);
 	}
 
-  g_slist_free(lang_list);
+	g_slist_free(lang_list);
 
 	m_ui_manager->insert_action_group(group_app);
 	m_ui_manager->insert_action_group(group_session);
@@ -726,19 +719,6 @@ Glib::RefPtr<const Gtk::AccelGroup> Gobby::Header::get_accel_group() const
 {
 	return m_ui_manager->get_accel_group();
 }
-
-#if 0
-Glib::RefPtr<Gtk::SourceLanguagesManager> Gobby::Header::get_lang_manager()
-{
-	return m_lang_manager;
-}
-
-Glib::RefPtr<const Gtk::SourceLanguagesManager>
-Gobby::Header::get_lang_manager() const
-{
-	return m_lang_manager;
-}
-#endif
 
 Gtk::MenuBar& Gobby::Header::get_menubar()
 {

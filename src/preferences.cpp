@@ -20,40 +20,43 @@
 
 namespace
 {
-  GtkSourceLanguage*
-  get_language_from_mime_type(GtkSourceLanguageManager* manager,
-                              const gchar* mime_type)
-  {
+	GtkSourceLanguage*
+	get_language_from_mime_type(GtkSourceLanguageManager* manager,
+	                            const gchar* mime_type)
+	{
 #ifdef WITH_GTKSOURCEVIEW2
-    const GSList* list = gtk_source_language_manager_get_available_languages(
-      manager);
+		const GSList* list =
+			gtk_source_language_manager_get_available_languages(
+				manager
+				);
 
-    for(; list != NULL; list = list->next)
-    {
-      gchar** mime_types = gtk_source_language_get_mime_types(
-        GTK_SOURCE_LANGUAGE(list->data));
+		for(; list != NULL; list = list->next)
+		{
+			gchar** mime_types =
+				gtk_source_language_get_mime_types(
+					GTK_SOURCE_LANGUAGE(list->data)
+				);
+			if(mime_types != NULL)
+			{
+	      			for(gchar** type = mime_types; *type != NULL; ++type)
+				{
+	        			if(strcmp(mime_type, *type) == 0)
+					{
+						g_strfreev(mime_types);
+						return GTK_SOURCE_LANGUAGE(list->data);
+					}
+				}
 
-      if(mime_types != NULL)
-      {
-        for(gchar** type = mime_types; *type != NULL; ++ type)
-        {
-          if(strcmp(mime_type, *type) == 0)
-          {
-            g_strfreev(mime_types);
-            return GTK_SOURCE_LANGUAGE(list->data);
-          }
-        }
+				g_strfreev(mime_types);
+			}
+		}
 
-        g_strfreev(mime_types);
-      }
-    }
-
-    return NULL;
+		return NULL;
 #else
-    return gtk_source_languages_manager_get_language_from_mime_type(
-      manager, mime_type);
+		return gtk_source_languages_manager_get_language_from_mime_type(
+			manager, mime_type);
 #endif
-  }
+	}
 }
 
 Gobby::Preferences::Editor::Editor()
@@ -230,36 +233,36 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 				Glib::ustring
 			>("mime_type", "unknown");
 
-      GtkSourceLanguage* lang = get_language_from_mime_type(
-        lang_mgr, mime.c_str());
+			GtkSourceLanguage* lang = get_language_from_mime_type(
+				lang_mgr, mime.c_str());
 
 			if(lang)
-      {
-        m_files[pattern] = lang;
-        g_object_ref(G_OBJECT(lang));
-      }
+			{
+				m_files[pattern] = lang;
+				g_object_ref(G_OBJECT(lang));
+			}
 		}
 	}
 	else
 	{
 #ifdef WITH_GTKSOURCEVIEW2
-    const GSList* list = gtk_source_language_manager_get_available_languages(
-      lang_mgr);
+		const GSList* list = gtk_source_language_manager_get_available_languages(
+			lang_mgr);
 
-    for(; list != NULL; list = list->next)
-    {
-      GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(list->data);
-      gchar** globs = gtk_source_language_get_globs(language);
-      if(globs != NULL)
-      {
-        for(gchar** glob = globs; *glob != NULL; ++ glob)
-        {
-          add(*glob, language);
-        }
+		for(; list != NULL; list = list->next)
+		{
+			GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(list->data);
+			gchar** globs = gtk_source_language_get_globs(language);
+			if(globs != NULL)
+			{
+				for(gchar** glob = globs; *glob != NULL; ++ glob)
+				{
+					add(*glob, language);
+				}
 
-        g_strfreev(globs);
-      }
-    }
+				g_strfreev(globs);
+			}
+		}
 #else
 		// Default list
 		add_by_mime_type("*.ada", "text/x-ada", lang_mgr);
@@ -320,24 +323,24 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 Gobby::Preferences::FileList::FileList(const FileList& src):
   m_files(src.m_files)
 {
-  // TODO: It would also be great if we would not need to ref all the
-  // languages.
-  for(map_type::iterator iter = m_files.begin();
-      iter != m_files.end();
-      ++ iter)
-  {
-    g_object_ref(G_OBJECT(iter->second));
-  }
+	// TODO: It would also be great if we would not need to ref all the
+	// languages.
+	for(map_type::iterator iter = m_files.begin();
+	    iter != m_files.end();
+	    ++ iter)
+	{
+		g_object_ref(G_OBJECT(iter->second));
+	}
 }
 
 Gobby::Preferences::FileList::~FileList()
 {
-  for(map_type::iterator iter = m_files.begin();
-      iter != m_files.end();
-      ++ iter)
-  {
-    g_object_unref(G_OBJECT(iter->second));
-  }
+	for(map_type::iterator iter = m_files.begin();
+	    iter != m_files.end();
+	    ++ iter)
+	{
+		g_object_unref(G_OBJECT(iter->second));
+	}
 }
 
 void Gobby::Preferences::FileList::serialise(Config::ParentEntry& entry) const
@@ -351,31 +354,33 @@ void Gobby::Preferences::FileList::serialise(Config::ParentEntry& entry) const
 		std::stringstream stream;
 		stream << "file" << (++num);
 
-    gchar* mime_type = NULL;
+		gchar* mime_type = NULL;
 #ifdef WITH_GTKSOURCEVIEW2
-    gchar** mime_types = gtk_source_language_get_mime_types(iter->second);
-    if(mime_types != NULL && *mime_types != NULL)
-      mime_type = g_strdup(*mime_types);
-    g_strfreev(mime_types);
+		gchar** mime_types =
+			gtk_source_language_get_mime_types(iter->second);
+		if(mime_types != NULL && *mime_types != NULL)
+			mime_type = g_strdup(*mime_types);
+		g_strfreev(mime_types);
 #else
-    GSList* mime_types = gtk_source_language_get_mime_types(iter->second);
-    for(GSList* cur = mime_types; cur != NULL; cur = cur->next)
-    {
-      if(!mime_type)
-        mime_type = static_cast<gchar*>(cur->data);
-      else
-        g_free(cur->data);
-    }
-    g_slist_free(mime_types);
+		GSList* mime_types =
+			gtk_source_language_get_mime_types(iter->second);
+		for(GSList* cur = mime_types; cur != NULL; cur = cur->next)
+		{
+			if(!mime_type)
+				mime_type = static_cast<gchar*>(cur->data);
+			else
+				g_free(cur->data);
+		}
+		g_slist_free(mime_types);
 #endif
 
 		Config::ParentEntry& main = entry.set_parent(stream.str());
 
 		main.set_value("pattern", iter->first);
-    if(mime_type != NULL)
-      main.set_value("mime_type", mime_type);
+		if(mime_type != NULL)
+			main.set_value("mime_type", mime_type);
 
-    g_free(mime_type);
+		g_free(mime_type);
 	}
 }
 
@@ -385,7 +390,7 @@ Gobby::Preferences::FileList::add(const Glib::ustring& pattern,
 {
 	//map_type::iterator iter = m_files.find(pattern);
 	//if(iter != m_files.end() ) return iter;
-  g_object_ref(G_OBJECT(lang));
+	g_object_ref(G_OBJECT(lang));
 	return iterator(m_files.insert(std::make_pair(pattern, lang) ).first);
 }
 
@@ -395,9 +400,9 @@ Gobby::Preferences::FileList::add_by_mime_type(const Glib::ustring& pattern,
                                                const Glib::ustring& mime_type,
                                                GtkSourceLanguageManager* lang_mgr)
 {
-  GtkSourceLanguage* lang =
-    gtk_source_languages_manager_get_language_from_mime_type(
-      lang_mgr, mime_type.c_str());
+	GtkSourceLanguage* lang =
+		gtk_source_languages_manager_get_language_from_mime_type(
+			lang_mgr, mime_type.c_str());
 
 	if(lang != NULL)
 		return add(pattern, lang);
@@ -443,3 +448,4 @@ void Gobby::Preferences::serialise(Config& config) const
 	behaviour.serialise(config.get_root()["behaviour"]);
 	files.serialise(config.get_root()["files"]);
 }
+

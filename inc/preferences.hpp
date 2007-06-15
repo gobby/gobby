@@ -143,8 +143,8 @@ public:
 		FileList();
 		FileList(Config::ParentEntry& entry,
 		         GtkSourceLanguageManager* lang_mgr);
-    FileList(const FileList& src);
-    ~FileList();
+		FileList(const FileList& src);
+		~FileList();
 
 		void serialise(Config::ParentEntry& entry) const;
 

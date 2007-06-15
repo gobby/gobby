@@ -61,7 +61,7 @@ protected:
 	void on_subscribe();
 	void on_selection_changed();
 	void on_row_activated(const Gtk::TreePath& path,
-                              Gtk::TreeViewColumn* column);
+	                      Gtk::TreeViewColumn* column);
 
 	LocalBuffer* m_buffer;
 	DocumentSettings& m_settings;
