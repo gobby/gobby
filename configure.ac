@@ -50,9 +50,9 @@ AC_CACHE_CHECK([whether to use gtksourceview2 instead of gtksourceview1],
 if test "x$ac_cv_with_gtksourceview2" = "xyes" ; then
   AC_DEFINE([WITH_GTKSOURCEVIEW2], 1,
     [Define whether to use gtksourceview2 instead of gtksourceview1])
-  required_libs+=" gtksourceview-2.0"
+  required_libs="$required_libs gtksourceview-2.0"
 else
-  required_libs+=" gtksourceview-1.0"
+  required_libs="$required_libs gtksourceview-1.0"
 fi
 
 AM_CONDITIONAL(WITH_GTKSOURCEVIEW2, test x$ac_cv_with_gtksourceview2 != xno)

@@ -1,5 +1,9 @@
 2007-06-16  Philipp Kern  <phil@0x539.de>
 
+	* configure.ac: fixed POSIX compliance
+
+2007-06-16  Philipp Kern  <phil@0x539.de>
+
 	* po/POTFILES.in: add more source files to be scanned for strings
 	  to be translated
 
