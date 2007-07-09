@@ -81,12 +81,17 @@ protected:
 #ifdef WITH_ZEROCONF
 	Gtk::TreeModel::iterator find_entry(const std::string& name) const;
 #ifndef WITH_AVAHI
-	virtual bool on_timer();
+	bool on_timer();
 #endif
-	virtual void on_discover(const std::string& name,
-	                         const net6::ipv4_address& addr);
-	virtual void on_leave(const std::string& name);
-	virtual void on_change();
+// The template function is implemented in the source file, thus it's private.
+private:
+	template <typename addr_type>
+	void on_discover(const std::string& name,
+	                 const addr_type& addr);
+
+protected:
+	void on_leave(const std::string& name);
+	void on_change();
 
 	virtual void on_show();
 	virtual void on_hide();

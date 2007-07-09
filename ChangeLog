@@ -1,3 +1,8 @@
+2007-07-09  Philipp Kern  <phil@0x539.de>
+
+	* inc/joindialog.hpp:
+	* src/joindialog.cpp: add support for IPv6 autodiscovery
+
 2007-07-09  Armin Burgmeier  <armin@0x539.de>
 
 	* src/preferencesdialog.cpp:

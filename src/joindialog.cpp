@@ -124,8 +124,12 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 			sigc::mem_fun(*this, &JoinDialog::on_change) );
 		m_ep_discover.add(m_session_view);
 
-		m_zeroconf->discover_event().connect(
-			sigc::mem_fun(*this, &JoinDialog::on_discover));
+		m_zeroconf->discover_event().connect(sigc::mem_fun(
+			*this,
+			&JoinDialog::on_discover<net6::ipv4_address>));
+		m_zeroconf->discover6_event().connect(sigc::mem_fun(
+			*this,
+			&JoinDialog::on_discover<net6::ipv6_address>));
 		m_zeroconf->leave_event().connect(
 			sigc::mem_fun(*this, &JoinDialog::on_leave) );
 
@@ -222,17 +226,22 @@ bool Gobby::JoinDialog::on_timer()
 }
 #endif
 
+template <typename addr_type>
 void Gobby::JoinDialog::on_discover(const std::string& name,
-                                    const net6::ipv4_address& addr)
+                                    const addr_type& addr)
 {
 	// Ignore entries which introduce user names which are already in
 	// the list. The second of the clashing entries is just dropped.
 	if(find_entry(name) != m_session_list->children().end() )
 		return;
+
 	Gtk::TreeModel::Row row = *(m_session_list->append() );
 	row[m_session_cols.name] = name;
 	row[m_session_cols.host] = addr.get_name();
+	// Generic addresses do not bear ports, thus the passed addr_type
+	// must implement get_port().
 	row[m_session_cols.port] = addr.get_port();
+
 	m_ep_discover.set_expanded(true);
 }
 
