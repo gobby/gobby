@@ -1,5 +1,9 @@
 2007-07-09  Philipp Kern  <phil@0x539.de>
 
+	* src/main.cpp: bugfix to use IPC by default
+
+2007-07-09  Philipp Kern  <phil@0x539.de>
+
 	* inc/joindialog.hpp:
 	* src/joindialog.cpp: add support for IPv6 autodiscovery
 

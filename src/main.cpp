@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) try
 	net6::gettext_package gobby_package(GETTEXT_PACKAGE, LOCALE_DIR);
 	Gobby::init_gettext(gobby_package);
 
-	bool new_instance = true;
+	bool new_instance = false;
 	Glib::ustring join;
 
 	Glib::OptionGroup opt_group_gobby("gobby", "Gobby options", "Options related directly to gobby");
