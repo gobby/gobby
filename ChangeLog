@@ -1,3 +1,10 @@
+2007-07-09  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferencesdialog.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp: Adjusted for gtksourceview2 API changes.
+
 2007-06-16  Philipp Kern  <phil@0x539.de>
 
 	* configure.ac: fixed POSIX compliance

@@ -350,7 +350,7 @@ Gobby::PreferencesDialog::FileList::FileList(Gtk::Window& parent,
 {
 #ifdef WITH_GTKSOURCEVIEW2
 	const GSList* list =
-		gtk_source_language_manager_get_available_languages(lang_mgr);
+		gtk_source_language_manager_list_languages(lang_mgr);
 #else
 	const GSList* list =
 		gtk_source_languages_manager_get_available_languages(lang_mgr);
@@ -521,7 +521,7 @@ void Gobby::PreferencesDialog::FileList::
 {
 #ifdef WITH_GTKSOURCEVIEW2
 	const GSList* list =
-		gtk_source_language_manager_get_available_languages(m_lang_mgr);
+		gtk_source_language_manager_list_languages(m_lang_mgr);
 
 	GtkSourceLanguage* lang = NULL;
 	for(; list != NULL; list = list->next)

@@ -351,8 +351,8 @@ void Gobby::DocWindow::apply_preferences()
 #ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_view_set_smart_home_end(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.homeend_smart ?
-		GTKSOURCEVIEW_SMART_HOME_END_ALWAYS :
-		GTKSOURCEVIEW_SMART_HOME_END_DISABLED);
+		GTK_SOURCE_SMART_HOME_END_ALWAYS :
+		GTK_SOURCE_SMART_HOME_END_DISABLED);
 #else
 	gtk_source_view_set_smart_home_end(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.homeend_smart);
