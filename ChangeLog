@@ -1,5 +1,9 @@
 2007-07-22  Philipp Kern <phil@0x539.de>
 
+	* Fix compilation with GtkSourceView 1
+
+2007-07-22  Philipp Kern <phil@0x539.de>
+
         * New Swedish translation by Daniel Nylander [fixes #282]
 
 2007-07-09  Philipp Kern  <phil@0x539.de>

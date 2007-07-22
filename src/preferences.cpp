@@ -16,7 +16,11 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <gtksourceview/gtksourcelanguagemanager.h>
+#ifdef WITH_GTKSOURCEVIEW2
+# include <gtksourceview/gtksourcelanguagemanager.h>
+#else
+# include <gtksourceview/gtksourcelanguagesmanager.h>
+#endif
 #include "preferences.hpp"
 
 namespace
