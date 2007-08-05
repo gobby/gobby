@@ -1,3 +1,8 @@
+2007-08-05  Philipp Kern <phil@0x539.de>
+
+	* Place a `Save' button instead of a plain `OK' button in the
+	  `Save file' dialog and set it as the default response.
+
 2007-07-22  Philipp Kern <phil@0x539.de>
 
 	* Fix compilation with GtkSourceView 1

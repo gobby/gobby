@@ -804,7 +804,8 @@ void Gobby::Window::on_document_save_as()
 
 	// Add buttons to close the dialog
 	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	dlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+	dlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK);
+	dlg.set_default_response(Gtk::RESPONSE_OK);
 
 	if(dlg.run() == Gtk::RESPONSE_OK)
 	{
