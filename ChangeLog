@@ -1,3 +1,15 @@
+2007-08-12  Armin Burgmeier  <armin@0x539.de>
+
+	* src/window.cpp: Set IO channel encoding to "" when saving files
+	because we do the necessary conversion ourselves before saving. This
+	fixes saving non-UTF-8 encoded files.
+
+	* src/icon.cpp: Convert pixmap paths to UTF-8 on windows, allowing
+	gobby to run inside paths containing non-ASCII characters.
+
+	* src/preferences.cpp: Include features.hpp for correct gtksourceview2
+	detection.
+
 2007-08-05  Philipp Kern <phil@0x539.de>
 
 	* Place a `Save' button instead of a plain `OK' button in the

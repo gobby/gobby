@@ -24,8 +24,10 @@ namespace
 			/* Not installed */
 #ifdef _WIN32
 			TCHAR path[MAX_PATH];
-			if(!GetModuleFileName(NULL, path, MAX_PATH))
+			if(!GetModuleFileNameA(NULL, path, MAX_PATH))
 				throw e;
+
+			path = Glib::locale_to_utf8(path);
 
 			return Gdk::Pixbuf::create_from_file(
 				Glib::build_filename(

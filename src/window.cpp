@@ -1444,6 +1444,7 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 	try
 	{
 		Glib::RefPtr<Glib::IOChannel> channel = Glib::IOChannel::create_from_file(file, "w");
+		channel->set_encoding("");
 
 		// Save content into file
 		std::string conv_content = doc.get_content().raw();
