@@ -124,7 +124,9 @@ protected:
 	void on_document_create();
 	void on_document_open();
 	void on_document_save();
+	bool handle_document_save();
 	void on_document_save_as();
+	bool handle_document_save_as();
 	void on_document_close();
 
 	void on_edit_search();
