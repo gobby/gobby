@@ -726,6 +726,11 @@ void Gobby::Window::on_document_open()
 
 void Gobby::Window::on_document_save()
 {
+	handle_document_save();
+}
+
+bool Gobby::Window::handle_document_save()
+{
 	// Get page
 	DocWindow* doc = get_current_document();
 	if(doc == NULL)
@@ -748,15 +753,21 @@ void Gobby::Window::on_document_save()
 				doc->get_info()
 			)
 		);
+		return true;
 	}
 	else
 	{
 		// Open save as dialog otherwise
-		on_document_save_as();
+		return handle_document_save_as();
 	}
 }
 
 void Gobby::Window::on_document_save_as()
+{
+	handle_document_save_as();
+}
+
+bool Gobby::Window::handle_document_save_as()
 {
 	// Get page
 	DocWindow* doc = get_current_document();
@@ -817,7 +828,9 @@ void Gobby::Window::on_document_save_as()
 			dlg.get_filename(),
 			dlg.get_selector().get_encoding()
 		);
+		return true;
 	}
+	return false;
 }
 
 void Gobby::Window::on_document_close()
@@ -1532,6 +1545,9 @@ void Gobby::Window::close_document(DocWindow& window)
 
 		// Show the dialog
 		int result = dlg.run();
+		// Hide it because we cannot back up to it if a later dialog
+		// is cancelled.
+		dlg.hide();
 
 		switch(result)
 		{
@@ -1541,9 +1557,8 @@ void Gobby::Window::close_document(DocWindow& window)
 		case Gtk::RESPONSE_ACCEPT:
 			/* Save the document before closing it */
 			m_folder.set_current_page(m_folder.page_num(window) );
-			// TODO: Do not close the document if the user cancells
-			// the save dialog.
-			on_document_save();
+			if(!handle_document_save() )
+				return;
 			break;
 		case Gtk::RESPONSE_CANCEL:
 		case Gtk::RESPONSE_DELETE_EVENT:

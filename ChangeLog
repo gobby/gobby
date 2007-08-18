@@ -1,5 +1,11 @@
 2007-08-18  Philipp Kern <phil@0x539.de>
 
+	* inc/window.hpp:
+	* src/window.cpp: do not close document if `save as' is cancelled
+	  [fixes #288]
+
+2007-08-18  Philipp Kern <phil@0x539.de>
+
 	* NEWS:
 	* configure.ac: bump version to 0.4.5 and document the changes
 
