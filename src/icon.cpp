@@ -33,7 +33,7 @@ namespace
 				Glib::build_filename(
 					Glib::build_filename(
 						Glib::path_get_dirname(
-							utf8_path
+							utf_path
 						),
 						"pixmaps"
 					),
