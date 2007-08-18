@@ -1,3 +1,7 @@
+2007-08-18  Armin Burgmeier  <armin@0x539.de>
+
+	* src/icon.cpp: Win32 build fix.
+
 2007-08-18  Philipp Kern <phil@0x539.de>
 
 	* inc/window.hpp:

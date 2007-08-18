@@ -27,12 +27,14 @@ namespace
 			if(!GetModuleFileNameA(NULL, path, MAX_PATH))
 				throw e;
 
-			path = Glib::locale_to_utf8(path);
+			std::string utf_path = Glib::locale_to_utf8(path);
 
 			return Gdk::Pixbuf::create_from_file(
 				Glib::build_filename(
 					Glib::build_filename(
-						Glib::path_get_dirname(path),
+						Glib::path_get_dirname(
+							utf8_path
+						),
 						"pixmaps"
 					),
 					file
