@@ -610,7 +610,7 @@ Gobby::Header::Header(const ApplicationState& state,
 
 	// Get available languages
 #ifdef WITH_GTKSOURCEVIEW2
-	const GSList* list = gtk_source_language_manager_get_available_languages(
+	const GSList* list = gtk_source_language_manager_list_languages(
 		lang_mgr);
 #else
 	const GSList* list = gtk_source_languages_manager_get_available_languages(

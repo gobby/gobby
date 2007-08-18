@@ -16,6 +16,13 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "features.hpp"
+
+#ifdef WITH_GTKSOURCEVIEW2
+# include <gtksourceview/gtksourcelanguagemanager.h>
+#else
+# include <gtksourceview/gtksourcelanguagesmanager.h>
+#endif
 #include "preferences.hpp"
 
 namespace
@@ -26,9 +33,7 @@ namespace
 	{
 #ifdef WITH_GTKSOURCEVIEW2
 		const GSList* list =
-			gtk_source_language_manager_get_available_languages(
-				manager
-				);
+			gtk_source_language_manager_list_languages(manager);
 
 		for(; list != NULL; list = list->next)
 		{
@@ -246,7 +251,7 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 	else
 	{
 #ifdef WITH_GTKSOURCEVIEW2
-		const GSList* list = gtk_source_language_manager_get_available_languages(
+		const GSList* list = gtk_source_language_manager_list_languages(
 			lang_mgr);
 
 		for(; list != NULL; list = list->next)

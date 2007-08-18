@@ -1,6 +1,11 @@
 Gobby
 =====
 
+Version 0.4.5:
+ * Important bugfixes:
+   - fixed the save routine for files not encoded in UTF-8
+   - allow Gobby to run inside paths containing non-ASCII characters
+
 Version 0.4.4:
  * Fixed two crashes: one on Windows Vista related to the chat widget,
    and one triggered on rejoins with multiple documents opened in the
