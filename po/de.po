@@ -459,7 +459,7 @@ msgstr "Trete der Sitzung bei..."
 #. this that really waits for the welcome packet.
 #: src/joinprogressdialog.cpp:404
 msgid "Setting up connection encryption (TLS)..."
-msgstr "TLS-Verschluesselung wird eingerichtet..."
+msgstr "TLS-Verschlüsselung wird eingerichtet..."
 
 #. Update status message
 #: src/joinprogressdialog.cpp:464
