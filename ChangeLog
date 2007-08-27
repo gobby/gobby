@@ -1,5 +1,11 @@
 2007-08-27  Armin Burgmeier  <armin@0x539.de>
 
+	* src/historyentry.cpp: Avoid Gtk::Entry::set_text() because it seems
+	to crash on Vista. Use Gtk::Editable::delete_text and
+	Gtk::Editable::insert_text instead.
+
+2007-08-27  Armin Burgmeier  <armin@0x539.de>
+
 	* src/window.cpp: Make sure not to try to send an unsubscription
 	request twice.
 

@@ -63,12 +63,16 @@ void Gobby::HistoryEntry::scroll_down()
 		++ m_pos;
 		if(m_pos != m_history.end() )
 		{
-			set_text(*m_pos);
+			/* set_text(*m_pos) did crash on Vista */
+			delete_text(0, -1);
+			int pos = 0;
+			insert_text(*m_pos, m_pos->bytes(), pos);
+			//set_text(*m_pos);
 			set_position(m_pos->length() );
 		}
 		else
 		{
-			set_text("");
+			delete_text(0, -1);
 		}
 	}
 	else
@@ -77,7 +81,8 @@ void Gobby::HistoryEntry::scroll_down()
 		{
 			m_history.push_back(get_text() );
 			m_pos = m_history.end();
-			set_text("");
+
+			delete_text(0, -1);
 		}
 	}
 }
@@ -95,7 +100,13 @@ void Gobby::HistoryEntry::scroll_up()
 	}
 
 	-- m_pos;
-	set_text(*m_pos);
+
+	/* set_text(*m_pos) did crash on Vista */
+	delete_text(0, -1);
+	int pos = 0;
+	insert_text(*m_pos, m_pos->bytes(), pos);
+	//set_text(*m_pos);
 	set_position(m_pos->length() );
+
 }
 
