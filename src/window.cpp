@@ -1499,6 +1499,14 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 
 void Gobby::Window::close_document(DocWindow& window)
 {
+	/* Cannot unsubscribe when not subscribed (e.g. unsubscription request
+	 * has already been sent. */
+	if(window.get_info().get_subscription_state() !=
+	   Gobby::LocalDocumentInfo::SUBSCRIBED)
+	{
+		return;
+	}
+
 	// Check for the document being modified
 	if(window.get_modified() )
 	{
