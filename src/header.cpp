@@ -97,7 +97,7 @@ namespace {
 			gunichar c = *iter;
 
 			// Not an ASCII character, or a dangerous one?
-			if(c == '<' || c == '>' || c == '\"' || c > 0x7f)
+			if(c == '<' || c == '>' || c == '\"' || c > 0x7f || Glib::Unicode::isspace(c))
 			{
 				// Get next iter to find the end position
 				Glib::ustring::iterator next = iter;
@@ -610,15 +610,21 @@ Gobby::Header::Header(const ApplicationState& state,
 
 	// Get available languages
 #ifdef WITH_GTKSOURCEVIEW2
-	const GSList* list = gtk_source_language_manager_list_languages(
-		lang_mgr);
+	GSList* lang_list = NULL;
+	const gchar* const* ids = gtk_source_language_manager_get_language_ids(lang_mgr);
+	for(const gchar* const* id = ids; *id != NULL; ++ id)
+	{
+		GtkSourceLanguage* language = gtk_source_language_manager_get_language(lang_mgr, *id);
+		lang_list = g_slist_prepend(lang_list, language);
+	}
 #else
 	const GSList* list = gtk_source_languages_manager_get_available_languages(
 		lang_mgr);
+
+	// Copy the list, so we can sort languages by name
+	GSList* lang_list = g_slist_copy(const_cast<GSList*>(list));
 #endif
 
-	// Copy the last, so we can sort languages by name
-	GSList* lang_list = g_slist_copy(const_cast<GSList*>(list));
 	lang_list = g_slist_sort(lang_list, &language_sort_callback);
 
 	// Add None-Language

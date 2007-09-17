@@ -349,14 +349,19 @@ Gobby::PreferencesDialog::FileList::FileList(Gtk::Window& parent,
 	m_file_list(Gtk::ListStore::create(file_columns) )
 {
 #ifdef WITH_GTKSOURCEVIEW2
-	const GSList* list =
-		gtk_source_language_manager_list_languages(lang_mgr);
+	GSList* languages = NULL;
+	const gchar* const* ids = gtk_source_language_manager_get_language_ids(lang_mgr);
+	for(const gchar* const* id = ids; *id != NULL; ++ id)
+	{
+		GtkSourceLanguage* language = gtk_source_language_manager_get_language(lang_mgr, *id);
+		languages = g_slist_prepend(languages, language);
+	}
 #else
 	const GSList* list =
 		gtk_source_languages_manager_get_available_languages(lang_mgr);
+	GSList* languages = g_slist_copy(const_cast<GSList*>(list));
 #endif
 
-	GSList* languages = g_slist_copy(const_cast<GSList*>(list));
 	languages = g_slist_sort(languages, &lang_sort);
 
 	for(GSList* iter = languages; iter != NULL; iter = iter->next)
@@ -520,13 +525,13 @@ void Gobby::PreferencesDialog::FileList::
 	                   const Glib::ustring& new_text)
 {
 #ifdef WITH_GTKSOURCEVIEW2
-	const GSList* list =
-		gtk_source_language_manager_list_languages(m_lang_mgr);
+	const gchar* const* ids = gtk_source_language_manager_get_language_ids(m_lang_mgr);
 
 	GtkSourceLanguage* lang = NULL;
-	for(; list != NULL; list = list->next)
+	for(const gchar* const* id = ids; *id != NULL; ++ id)
 	{
-		GtkSourceLanguage* language = GTK_SOURCE_LANGUAGE(list->data);
+		GtkSourceLanguage* language = gtk_source_language_manager_get_language(m_lang_mgr, *id);
+
 		gchar** mime_types = gtk_source_language_get_mime_types(language);
 		for(gchar** mime_type = mime_types; *mime_type != NULL; ++ mime_type)
 		{

@@ -1,3 +1,11 @@
+2007-09-17  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferencesdialog.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp: Adapted to latest (and final) GtkSourceView2
+	API.
+
 2007-08-27  Armin Burgmeier  <armin@0x539.de>
 
 	* src/historyentry.cpp: Avoid Gtk::Entry::set_text() because it seems
@@ -2652,4 +2660,3 @@
 2005-03-30  Armin Burgmeier <armin@0x539.de>
 
 	Empty gobby window
-

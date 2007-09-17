@@ -16,12 +16,13 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "features.hpp"
+
 #include <glibmm/pattern.h>
 #include <gtkmm/textview.h>
 
-#include "features.hpp"
 #ifdef WITH_GTKSOURCEVIEW2
-# include <gtksourceview/gtksourcestylemanager.h>
+# include <gtksourceview/gtksourcebuffer.h>
 #endif
 
 #include "preferences.hpp"
@@ -69,7 +70,7 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 		Glib::wrap(GTK_TEXT_BUFFER(buffer), true);
 
 	// Set source language by filename
-	gtk_source_buffer_set_highlight(buffer, FALSE);
+	gtk_source_buffer_set_highlight_syntax(buffer, FALSE);
 
 	for(Preferences::FileList::iterator iter = preferences.files.begin();
 	    iter != preferences.files.end();
@@ -79,7 +80,7 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 		if(spec.match(info.get_title()) )
 		{
 			gtk_source_buffer_set_language(buffer, iter.language());
-			gtk_source_buffer_set_highlight(buffer, TRUE);
+			gtk_source_buffer_set_highlight_syntax(buffer, TRUE);
 		}
 	}
 
@@ -87,10 +88,10 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	// Set a theme so we see anything.
 	// TODO: This should be temporary code until gtksourceview2 sets a default
 	// theme.
-	GtkSourceStyleManager* sm = gtk_source_style_manager_new();
+/*	GtkSourceStyleManager* sm = gtk_source_style_manager_new();
 	GtkSourceStyleScheme* scheme = gtk_source_style_manager_get_scheme(sm, "gvim");
 	gtk_source_buffer_set_style_scheme(buffer, scheme);
-	g_object_unref(G_OBJECT(sm));
+	g_object_unref(G_OBJECT(sm));*/
 #endif
 
 	cpp_buffer->signal_mark_set().connect(
@@ -224,7 +225,7 @@ void Gobby::DocWindow::set_language(GtkSourceLanguage* language)
 		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)));
 
 	gtk_source_buffer_set_language(buffer, language);
-	gtk_source_buffer_set_highlight(buffer, language != NULL);
+	gtk_source_buffer_set_highlight_syntax(buffer, language != NULL);
 
 	m_signal_language_changed.emit();
 }
@@ -342,7 +343,7 @@ void Gobby::DocWindow::apply_preferences()
 {
 	GtkTextBuffer* buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view));
 
-	gtk_source_view_set_tabs_width(GTK_SOURCE_VIEW(m_view),
+	gtk_source_view_set_tab_width(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.tab_width);
 	gtk_source_view_set_insert_spaces_instead_of_tabs(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.tab_spaces);
@@ -364,11 +365,11 @@ void Gobby::DocWindow::apply_preferences()
 		m_preferences.view.linenum_display);
 	gtk_source_view_set_highlight_current_line(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.curline_highlight);
-	gtk_source_view_set_show_margin(GTK_SOURCE_VIEW(m_view),
+	gtk_source_view_set_show_right_margin(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.margin_display);
-	gtk_source_view_set_margin(GTK_SOURCE_VIEW(m_view),
+	gtk_source_view_set_right_margin_position(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.margin_pos);
-	gtk_source_buffer_set_check_brackets(GTK_SOURCE_BUFFER(buffer),
+	gtk_source_buffer_set_highlight_matching_brackets(GTK_SOURCE_BUFFER(buffer),
 		m_preferences.view.bracket_highlight);
 
 	gtk_widget_modify_font(GTK_WIDGET(m_view), m_preferences.font.desc.gobj());
