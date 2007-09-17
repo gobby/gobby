@@ -365,12 +365,21 @@ void Gobby::DocWindow::apply_preferences()
 		m_preferences.view.linenum_display);
 	gtk_source_view_set_highlight_current_line(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.curline_highlight);
+#ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_view_set_show_right_margin(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.margin_display);
 	gtk_source_view_set_right_margin_position(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.margin_pos);
 	gtk_source_buffer_set_highlight_matching_brackets(GTK_SOURCE_BUFFER(buffer),
 		m_preferences.view.bracket_highlight);
+#else
+	gtk_source_view_set_show_margin(GTK_SOURCE_VIEW(m_view),
+		m_preferences.view.margin_display);
+	gtk_source_view_set_margin(GTK_SOURCE_VIEW(m_view),
+		m_preferences.view.margin_pos);
+	gtk_source_buffer_set_check_brackets(GTK_SOURCE_BUFFER(buffer),
+		m_preferences.view.bracket_highlight);
+#endif
 
 	gtk_widget_modify_font(GTK_WIDGET(m_view), m_preferences.font.desc.gobj());
 
