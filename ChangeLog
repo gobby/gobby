@@ -1,3 +1,8 @@
+2007-09-20  Philipp Kern <phil@0x539.de>
+
+	* src/ipc.cpp: added unistd.h to the list of includes to ease porting
+	  to OpenBSD
+
 2007-09-17  Armin Burgmeier  <armin@0x539.de>
 
 	* src/preferencesdialog.cpp:
