@@ -1,3 +1,9 @@
+2007-09-30  Benjamin Herr  <ben@0x539.de>
+
+	* src/window.cpp: Make sure that the two buttons on the confirmation
+	dialog when exiting gobby with a session running do not have the same
+	mnemonics.
+
 2007-09-20  Philipp Kern <phil@0x539.de>
 
 	* src/ipc.cpp: added unistd.h to the list of includes to ease porting

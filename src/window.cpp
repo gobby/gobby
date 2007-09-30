@@ -284,8 +284,13 @@ bool Gobby::Window::on_delete_event(GdkEventAny* event)
 		_("Do you want to close Gobby nevertheless?")
 	);
 
-	dlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	dlg.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_YES)->grab_focus();
+	Gtk::Image* img = Gtk::manage(new Gtk::Image(Gtk::Stock::CANCEL,
+	                                             Gtk::ICON_SIZE_BUTTON));
+	Gtk::Button* cancel_button
+		= dlg.add_button(_("C_ancel"), Gtk::RESPONSE_CANCEL);
+	dlg.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_YES);
+	cancel_button->set_image(*img);
+	cancel_button->grab_focus();
 
 	return dlg.run() != Gtk::RESPONSE_YES;
 }
