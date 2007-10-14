@@ -135,7 +135,7 @@ void Gobby::LogView::log(const Glib::ustring& text,
 		tag
 	);
 
-	scroll_to_mark(m_end_mark, 0.0f);
+	scroll_to(m_end_mark, 0.0f);
 
 #ifdef HAVE_SHOW_URL
 	Gtk::TextIter begin = end;

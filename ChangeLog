@@ -1,3 +1,14 @@
+2007-10-14  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/preferencesdialog.hpp:
+	* src/preferencesdialog.cpp: Don't use the tooltip for the smart
+	home/end option when gtkmm was built without deprecated API.
+
+	* src/logview.cpp: Replaced scroll_to_mark by scroll_to because the
+	former is deprecated.
+
+	* src/docwindow.cpp: Fix gtksourceview1 build.
+
 2007-09-30  Benjamin Herr  <ben@0x539.de>
 
 	* src/window.cpp: Make sure that the two buttons on the confirmation

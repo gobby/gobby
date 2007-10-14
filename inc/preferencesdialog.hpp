@@ -53,8 +53,12 @@ public:
 	class Editor: public Page
 	{
 	public:
+#ifndef GTKMM_DISABLE_DEPRECATED
 		Editor(const Preferences& preferences,
 		       Gtk::Tooltips& tooltips);
+#else
+		Editor(const Preferences& preferences);
+#endif
 
 		void set(Preferences::Editor& editor) const;
 
@@ -266,7 +270,10 @@ public:
 
 protected:
 	Gtk::Notebook m_notebook;
+
+#ifndef GTKMM_DISABLE_DEPRECATED
 	Gtk::Tooltips m_tooltips;
+#endif
 
 	Editor m_page_editor;
 	View m_page_view;

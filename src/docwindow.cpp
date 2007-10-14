@@ -69,8 +69,12 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
 		Glib::wrap(GTK_TEXT_BUFFER(buffer), true);
 
+#ifdef WITH_GTKSOURCEVIEW2
 	// Set source language by filename
 	gtk_source_buffer_set_highlight_syntax(buffer, FALSE);
+#else
+	gtk_source_buffer_set_highlight(buffer, FALSE);
+#endif
 
 	for(Preferences::FileList::iterator iter = preferences.files.begin();
 	    iter != preferences.files.end();
@@ -80,7 +84,11 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 		if(spec.match(info.get_title()) )
 		{
 			gtk_source_buffer_set_language(buffer, iter.language());
+#ifdef WITH_GTKSOURCEVIEW2
 			gtk_source_buffer_set_highlight_syntax(buffer, TRUE);
+#else
+			gtk_source_buffer_set_highlight(buffer, TRUE);
+#endif
 		}
 	}
 
@@ -225,7 +233,12 @@ void Gobby::DocWindow::set_language(GtkSourceLanguage* language)
 		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)));
 
 	gtk_source_buffer_set_language(buffer, language);
+
+#ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_buffer_set_highlight_syntax(buffer, language != NULL);
+#else
+	gtk_source_buffer_set_highlight(buffer, language != NULL);
+#endif
 
 	m_signal_language_changed.emit();
 }
@@ -343,8 +356,14 @@ void Gobby::DocWindow::apply_preferences()
 {
 	GtkTextBuffer* buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view));
 
+#ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_view_set_tab_width(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.tab_width);
+#else
+	gtk_source_view_set_tabs_width(GTK_SOURCE_VIEW(m_view),
+		m_preferences.editor.tab_width);
+#endif
+
 	gtk_source_view_set_insert_spaces_instead_of_tabs(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.tab_spaces);
 	gtk_source_view_set_auto_indent(GTK_SOURCE_VIEW(m_view),

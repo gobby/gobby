@@ -55,8 +55,12 @@ Gobby::PreferencesDialog::Page::Page():
 	set_border_width(10);
 }
 
+#ifndef GTKMM_DISABLE_DEPRECATED
 Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences,
                                          Gtk::Tooltips& tooltips):
+#else
+Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences):
+#endif
 	m_frame_tab(_("Tab Stops") ),
 	m_frame_indentation(_("Indentation") ),
 	m_frame_homeend(_("Home/End behaviour") ),
@@ -74,10 +78,12 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences,
 	m_ent_tab_width.set_value(tab_width);
 	m_ent_tab_width.set_increments(1, 1);
 
+#ifndef GTKMM_DISABLE_DEPRECATED
 	// TODO: Improve this description
 	tooltips.set_tip(m_btn_homeend_smart,
 		_("With this option enabled, Home/End keys move to first/last "
 		  "character before going to the start/end of the line.") );
+#endif
 
 	m_box_tab_width.set_spacing(5);
 	m_box_tab_width.pack_start(m_lbl_tab_width, Gtk::PACK_SHRINK);
@@ -692,9 +698,16 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
                                             GtkSourceLanguageManager* lang_mgr,
                                             bool local)
  : Gtk::Dialog(_("Preferences"), parent, true),
-   m_page_editor(preferences, m_tooltips), m_page_view(preferences),
-   m_page_appearance(preferences), m_page_font(preferences),
-   m_page_behaviour(preferences), m_page_files(*this, preferences, lang_mgr)
+#ifndef GTKMM_DISABLE_DEPRECATED
+   m_page_editor(preferences, m_tooltips),
+#else
+   m_page_editor(preferences),
+#endif
+   m_page_view(preferences),
+   m_page_appearance(preferences),
+   m_page_font(preferences),
+   m_page_behaviour(preferences),
+   m_page_files(*this, preferences, lang_mgr)
 {
 	m_notebook.append_page(m_page_editor, _("Editor") );
 	m_notebook.append_page(m_page_view, _("View") );
