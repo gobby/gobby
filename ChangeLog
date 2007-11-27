@@ -1,3 +1,9 @@
+2007-11-27  Armin Burgmeier  <armin@0x539.de>
+
+	* src/docwindow.cpp: Enable indentation-on-tab in gtksourceview1
+
+	* configure.in: Require gtksourceview >= 1.8.
+
 2007-10-14  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/preferencesdialog.hpp:

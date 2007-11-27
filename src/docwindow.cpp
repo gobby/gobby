@@ -76,6 +76,9 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	gtk_source_buffer_set_highlight(buffer, FALSE);
 #endif
 
+	// Enable indent-on-tab
+	gtk_source_view_set_indent_on_tab(m_view, TRUE);
+
 	for(Preferences::FileList::iterator iter = preferences.files.begin();
 	    iter != preferences.files.end();
 	    ++ iter)
