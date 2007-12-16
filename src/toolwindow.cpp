@@ -19,6 +19,8 @@
 #include "toolwindow.hpp"
 #include "features.hpp"
 
+#include <gdk/gdkkeysyms.h>
+
 Gobby::ToolWindow::ToolWindow(Gtk::Window& parent):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
 	m_x(0), m_y(0), m_w(0), m_h(0)
@@ -47,4 +49,15 @@ void Gobby::ToolWindow::on_hide()
 	get_size(m_w, m_h);
 
 	Gtk::Window::on_hide();
+}
+
+bool Gobby::ToolWindow::on_key_press_event(GdkEventKey* event)
+{
+	if(event->keyval == GDK_Escape)
+	{
+		hide();
+		return true;
+	}
+
+	return Gtk::Window::on_key_press_event(event);
 }

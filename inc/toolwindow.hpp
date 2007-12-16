@@ -35,6 +35,8 @@ protected:
 	virtual void on_show();
 	virtual void on_hide();
 
+	virtual bool on_key_press_event(GdkEventKey* event);
+
 	int m_x, m_y, m_w, m_h;
 };
 

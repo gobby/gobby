@@ -3,6 +3,7 @@ Gobby
 
 Version 0.4.6:
   * Require gtksourceview 1.8 to enable indent-on-tab
+  * Several utility windows close on escape
 
 Version 0.4.5:
  * Important bugfixes:
