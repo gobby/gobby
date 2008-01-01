@@ -311,6 +311,8 @@ Gobby::PreferencesDialog::Behaviour::Behaviour(const Preferences& preferences):
 	bool auto_open = preferences.behaviour.auto_open_new_documents;
 
 	m_btn_auto_open.set_active(auto_open);
+	m_box_documents.set_spacing(5);
+	m_box_documents.set_border_width(5);
 	m_box_documents.pack_start(m_btn_auto_open, Gtk::PACK_SHRINK);
 	m_frame_documents.add(m_box_documents);
 
