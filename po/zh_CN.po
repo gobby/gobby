@@ -18,56 +18,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#~ msgid "Shows up a dialog to customise Gobby for your needs"
-#~ msgstr "显示对话框以按您的需要自定义 Gobby"
-
-#, fuzzy
-#~ msgid "_View"
-#~ msgstr "查看"
-
-#, fuzzy
-#~ msgid ""
-#~ "Howl initialisation failed. Probably you need to run mDNSResponder as root "
-#~ "prior to Gobby. Zeroconf support is deactivated for this session."
-#~ msgstr ""
-#~ "Howl 初始化失败。您可能需要以在 Gobby 之前以 root 权限运行 mDNSResponder。本会话的 Zeroconf 支持已被禁用。"
-
-#~ msgid "Passwords do not match"
-#~ msgstr "密码不匹配"
-
-#~ msgid "%0% has joined"
-#~ msgstr "%0% 已加入"
-
-#~ msgid "%0% has left"
-#~ msgstr "%0% 已离开"
-
-#~ msgid "Gobby"
-#~ msgstr "Gobby"
-
-#~ msgid "Join an existing obby session"
-#~ msgstr "加入已存在的 obby 会话"
-
-#~ msgid "Closes an open document"
-#~ msgstr "关闭已开启的文档"
-
-#~ msgid "Colour"
-#~ msgstr "颜色"
-
-#~ msgid "Name"
-#~ msgstr "名称"
-
-#~ msgid "Subscribed"
-#~ msgstr "已订阅的"
-
-#~ msgid "Waiting for welcome packet..."
-#~ msgstr "正在等待欢迎包..."
-
-#~ msgid "Enter user password"
-#~ msgstr "输入用户密码"
-
-#~ msgid "Enter session password"
-#~ msgstr "输入会话密码"
-
 #: src/chat.cpp:73
 msgid "Send"
 msgstr "发送"
@@ -101,7 +51,8 @@ msgstr ""
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
-msgstr "无法将输入字符转换为 UTF-8 编码：您使用的是未知的编码方式或者二进制输入。"
+msgstr ""
+"无法将输入字符转换为 UTF-8 编码：您使用的是未知的编码方式或者二进制输入。"
 
 #: src/encoding_selector.cpp:145
 msgid "Character Encoding:"
@@ -554,7 +505,8 @@ msgstr "智能 home/end"
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
-msgstr "开启此选项，Home/End 键将在移动至 行首/行尾 之前先移动至 最前/最后 一个字符"
+msgstr ""
+"开启此选项，Home/End 键将在移动至 行首/行尾 之前先移动至 最前/最后 一个字符"
 
 #: src/preferencesdialog.cpp:124
 msgid "Text wrapping"
@@ -728,7 +680,8 @@ msgid ""
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
-"Howl 初始化失败。您可能需要以在 Gobby 之前以 root 权限运行 mDNSResponder。本会话的 Zeroconf 支持已被禁用。"
+"Howl 初始化失败。您可能需要以在 Gobby 之前以 root 权限运行 mDNSResponder。本"
+"会话的 Zeroconf 支持已被禁用。"
 
 #: src/window.cpp:276
 msgid "You are still connected to a session"

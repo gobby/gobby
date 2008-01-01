@@ -18,13 +18,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#~ msgid "_View"
-#~ msgstr "Ver"
-
-#, c-format
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Impossivel abrir ficheiro '%0%' para escrita"
-
 #: src/chat.cpp:73
 msgid "Send"
 msgstr "Enviar"
@@ -776,3 +769,9 @@ msgstr "Se não guardar as alterações serão perdidas."
 #: src/window.cpp:1526
 msgid "Close without saving"
 msgstr "Sair sem guardar"
+
+#~ msgid "_View"
+#~ msgstr "Ver"
+
+#~ msgid "Could not open file '%0%' for writing"
+#~ msgstr "Impossivel abrir ficheiro '%0%' para escrita"

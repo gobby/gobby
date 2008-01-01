@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-16 00:37+0200\n"
 "PO-Revision-Date: 2007-10-26 03:09+0000\n"
 "Last-Translator: Oh, A-Reum <dhdkfma1016@gmail.com>\n"
@@ -24,7 +24,9 @@ msgstr "보내기"
 
 #: src/chat.cpp:227
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
-msgstr "'%0%' 명령어가 없습니다. /help 명령어로 사용 가능한 명령어를 확인하시기 바랍니다."
+msgstr ""
+"'%0%' 명령어가 없습니다. /help 명령어로 사용 가능한 명령어를 확인하시기 바랍"
+"니다."
 
 #: src/chat.cpp:238
 msgid "%0%: %1%"
@@ -405,7 +407,8 @@ msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
 msgstr ""
-"'%0%'의 사용자 비밀번호가 필요합니다.  다른 사용자 이름을 선택하고, 당신의 사용자 비밀번호를 입력하거나 연겨를 취소하세요."
+"'%0%'의 사용자 비밀번호가 필요합니다.  다른 사용자 이름을 선택하고, 당신의 사"
+"용자 비밀번호를 입력하거나 연겨를 취소하세요."
 
 #: src/joinprogressdialog.cpp:111
 msgid ""
@@ -420,13 +423,15 @@ msgstr "새 이름:"
 msgid ""
 "Colour is already in use. You may choose another colour or cancel the "
 "connection."
-msgstr "현재 색상은 이미 사용중입니다. 다른 색상을 고르시거나 연결을 취소하세요."
+msgstr ""
+"현재 색상은 이미 사용중입니다. 다른 색상을 고르시거나 연결을 취소하세요."
 
 #: src/joinprogressdialog.cpp:182
 msgid ""
 "Session password required. You have to type in the password to be able to "
 "join the obby session."
-msgstr "세션 비밀번호가 필요합니다. obby 세션에 참여할 수 있는 비밀번호를 입력하세요."
+msgstr ""
+"세션 비밀번호가 필요합니다. obby 세션에 참여할 수 있는 비밀번호를 입력하세요."
 
 #: src/joinprogressdialog.cpp:186
 msgid "Session password:"
@@ -495,8 +500,8 @@ msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
 msgstr ""
-"이 옵션이 선택되면, Home/End 키를 사용했을 경우 문장의 처음과 끝부분에 커서가 가기 전에 해당 줄의 문장의 시작부분과 끝부분에 "
-"커서가 가게 됩니다."
+"이 옵션이 선택되면, Home/End 키를 사용했을 경우 문장의 처음과 끝부분에 커서"
+"가 가기 전에 해당 줄의 문장의 시작부분과 끝부분에 커서가 가게 됩니다."
 
 #: src/preferencesdialog.cpp:124
 msgid "Text wrapping"
@@ -708,8 +713,8 @@ msgid ""
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
 msgstr ""
-"\"적용\" 을 클릭하면 현재 열려있는 문서에 새로운 설정이 적용됩니다. \"확인\" 을 클릭하면 설정이 저장되고 새로 생성되는 문서들 "
-"부터 그 설정이 사용됩니다."
+"\"적용\" 을 클릭하면 현재 열려있는 문서에 새로운 설정이 적용됩니다. \"확인\" "
+"을 클릭하면 설정이 저장되고 새로 생성되는 문서들 부터 그 설정이 사용됩니다."
 
 #. Build password dialog with info
 #: src/window.cpp:906
@@ -721,7 +726,8 @@ msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
-"당신의 사용자 계정에 비밀번호를 설정하세요. 이 사용자가 다음에 로그인 했을 경우 , 당신은 당신의 비밀번호를 입력해야 합니다."
+"당신의 사용자 계정에 비밀번호를 설정하세요. 이 사용자가 다음에 로그인 했을 경"
+"우 , 당신은 당신의 비밀번호를 입력해야 합니다."
 
 #: src/window.cpp:969
 msgid ""
@@ -729,8 +735,8 @@ msgid ""
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
-"이 속성은 현재 사용중인 문서 \"%0%\" 에만 적용됩니다. 만약 모든 문서의 속성을 바꾸고 싶으시면, \"편집\" 메뉴에 속성에서 "
-"변경하세요."
+"이 속성은 현재 사용중인 문서 \"%0%\" 에만 적용됩니다. 만약 모든 문서의 속성"
+"을 바꾸고 싶으시면, \"편집\" 메뉴에 속성에서 변경하세요."
 
 #: src/window.cpp:1079
 msgid "Colour change failed: Colour already in use"
@@ -753,8 +759,8 @@ msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
 msgstr ""
-"저장하지 않으면 변경사항은 적용되지 않습니다. 하지만 세션이 아직 열려있으면 문서를 다시 불러올 수 있기 때문에 문서를 다시 부활시킬 수 "
-"있습니다."
+"저장하지 않으면 변경사항은 적용되지 않습니다. 하지만 세션이 아직 열려있으면 "
+"문서를 다시 불러올 수 있기 때문에 문서를 다시 부활시킬 수 있습니다."
 
 #: src/window.cpp:1511
 msgid "If you don't save, changes will be discarded."

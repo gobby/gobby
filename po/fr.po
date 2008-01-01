@@ -19,89 +19,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#~ msgid "Shows up a dialog to customise Gobby for your needs"
-#~ msgstr "Afficher un dialogue pour personnaliser Gobby"
-
-#, fuzzy
-#~ msgid "_View"
-#~ msgstr "Affichage"
-
-#~ msgid "Shows up a list of users that are currently joined"
-#~ msgstr "Affiche la liste des utilisateurs connectés"
-
-#~ msgid "Shows up a list of documents within the current session"
-#~ msgstr "Affiche la liste des documents de la séance actuelle"
-
-#, fuzzy
-#~ msgid "Shows up a chat to talk to other people in the session"
-#~ msgstr "Affiche la liste des documents de la séance actuelle"
-
-#~ msgid ""
-#~ "Howl initialisation failed. Probably you need to run mDNSResponder as root "
-#~ "prior to Gobby. Zeroconf support is deactivated for this session."
-#~ msgstr ""
-#~ "Howl initialisation failed. Probably you need to run mDNSResponder as root "
-#~ "prior to Gobby. Zeroconf support is deactivated for this session."
-
-#, c-format
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Impossible d'ouvrir le fichier '%0%' en écriture"
-
-#~ msgid "Passwords do not match"
-#~ msgstr "Les mots de passe ne sont pas identiques"
-
-#~ msgid "%0% has joined"
-#~ msgstr "%0% est arrivé(e)"
-
-#~ msgid "%0% has left"
-#~ msgstr "%0% est parti(e)"
-
-#~ msgid "Gobby"
-#~ msgstr "Gobby"
-
-#~ msgid "Colour"
-#~ msgstr "Couleur"
-
-#~ msgid "Name"
-#~ msgstr "Nom"
-
-#~ msgid "Subscribed"
-#~ msgstr "S'abonner"
-
-#~ msgid "%0% pending change"
-#~ msgid_plural "%0% pending changes"
-#~ msgstr[0] "%0% modification en attente"
-#~ msgstr[1] "%0% modification en attente"
-
-#~ msgid "Revision: %0%"
-#~ msgstr "Révision : %0%"
-
-#~ msgid "Waiting for welcome packet..."
-#~ msgstr "Attendre le paquet d'accueil..."
-
-#~ msgid ""
-#~ "You are not subscribed to the document \"%0%\".\n"
-#~ "\n"
-#~ "To view changes that others make or to edit the document yourself, you have "
-#~ "to subscribe to this document. Use the following button to perform this.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Vous n'êtes pas abonné au document « %0% ».\n"
-#~ "\n"
-#~ "Pour voir les modifications des autres ou pour modifier vous-mêmes le "
-#~ "document, vous devez vous abonner à ce document. À cet effet, utilisez le "
-#~ "bouton suivant.\n"
-#~ "\n"
-
-#~ msgid "Enter user password"
-#~ msgstr "Entrer le mot de passe utilisateur"
-
-#~ msgid "Peer %0% (%1%) not found in peer list"
-#~ msgstr "%0% (%1%) ne se trouve pas dans la liste des copin(e)s"
-
-#~ msgid "Waiting for thread to finish..."
-#~ msgstr "Attendre la fin du thread..."
-
 #: src/chat.cpp:73
 msgid "Send"
 msgstr "Envoyer"
@@ -348,8 +265,7 @@ msgstr "Préférences du document..."
 
 #: src/header.cpp:358
 msgid "Shows a preferences dialog that is just applied to this document"
-msgstr ""
-"Affiche les Préférences qui s'appliquent spécifiquement à ce document"
+msgstr "Affiche les Préférences qui s'appliquent spécifiquement à ce document"
 
 #: src/header.cpp:363
 msgid "Syntax"
@@ -878,3 +794,86 @@ msgstr "Si vous n'enregistrez pas, les modifications seront perdues."
 #: src/window.cpp:1526
 msgid "Close without saving"
 msgstr "Fermer sans enregistrer"
+
+#~ msgid "Shows up a dialog to customise Gobby for your needs"
+#~ msgstr "Afficher un dialogue pour personnaliser Gobby"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "Affichage"
+
+#~ msgid "Shows up a list of users that are currently joined"
+#~ msgstr "Affiche la liste des utilisateurs connectés"
+
+#~ msgid "Shows up a list of documents within the current session"
+#~ msgstr "Affiche la liste des documents de la séance actuelle"
+
+#, fuzzy
+#~ msgid "Shows up a chat to talk to other people in the session"
+#~ msgstr "Affiche la liste des documents de la séance actuelle"
+
+#~ msgid ""
+#~ "Howl initialisation failed. Probably you need to run mDNSResponder as "
+#~ "root prior to Gobby. Zeroconf support is deactivated for this session."
+#~ msgstr ""
+#~ "Howl initialisation failed. Probably you need to run mDNSResponder as "
+#~ "root prior to Gobby. Zeroconf support is deactivated for this session."
+
+#~ msgid "Could not open file '%0%' for writing"
+#~ msgstr "Impossible d'ouvrir le fichier '%0%' en écriture"
+
+#~ msgid "Passwords do not match"
+#~ msgstr "Les mots de passe ne sont pas identiques"
+
+#~ msgid "%0% has joined"
+#~ msgstr "%0% est arrivé(e)"
+
+#~ msgid "%0% has left"
+#~ msgstr "%0% est parti(e)"
+
+#~ msgid "Gobby"
+#~ msgstr "Gobby"
+
+#~ msgid "Colour"
+#~ msgstr "Couleur"
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#~ msgid "Subscribed"
+#~ msgstr "S'abonner"
+
+#~ msgid "%0% pending change"
+#~ msgid_plural "%0% pending changes"
+#~ msgstr[0] "%0% modification en attente"
+#~ msgstr[1] "%0% modification en attente"
+
+#~ msgid "Revision: %0%"
+#~ msgstr "Révision : %0%"
+
+#~ msgid "Waiting for welcome packet..."
+#~ msgstr "Attendre le paquet d'accueil..."
+
+#~ msgid ""
+#~ "You are not subscribed to the document \"%0%\".\n"
+#~ "\n"
+#~ "To view changes that others make or to edit the document yourself, you "
+#~ "have to subscribe to this document. Use the following button to perform "
+#~ "this.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Vous n'êtes pas abonné au document « %0% ».\n"
+#~ "\n"
+#~ "Pour voir les modifications des autres ou pour modifier vous-mêmes le "
+#~ "document, vous devez vous abonner à ce document. À cet effet, utilisez le "
+#~ "bouton suivant.\n"
+#~ "\n"
+
+#~ msgid "Enter user password"
+#~ msgstr "Entrer le mot de passe utilisateur"
+
+#~ msgid "Peer %0% (%1%) not found in peer list"
+#~ msgstr "%0% (%1%) ne se trouve pas dans la liste des copin(e)s"
+
+#~ msgid "Waiting for thread to finish..."
+#~ msgstr "Attendre la fin du thread..."

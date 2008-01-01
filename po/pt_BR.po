@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-16 00:37+0200\n"
 "PO-Revision-Date: 2007-10-16 21:17+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -255,8 +255,7 @@ msgstr "Preferências..."
 
 #: src/header.cpp:349
 msgid "Displays a dialog to customise Gobby for your needs"
-msgstr ""
-"Exibe um diálogo para personalizar o Gobby conforme suas necessidades"
+msgstr "Exibe um diálogo para personalizar o Gobby conforme suas necessidades"
 
 #: src/header.cpp:357
 msgid "Document preferences..."
