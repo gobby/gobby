@@ -1,3 +1,8 @@
+2008-01-01  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac: bump obby dependency to 0.4.5 to get IPv6
+	  autodiscovery
+
 2007-12-16  Armin Burgmeier  <armin@0x539.de>
 
 	* src/toolwindow.hpp:

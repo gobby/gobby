@@ -34,7 +34,7 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-required_libs="libxml++-2.6 gtkmm-2.4 >= 2.6.0 gthread-2.0 net6-1.3 obby-0.4 >= 0.4.1"
+required_libs="libxml++-2.6 gtkmm-2.4 >= 2.6.0 gthread-2.0 net6-1.3 obby-0.4 >= 0.4.5"
 
 # GtkSourceView2 support
 AC_ARG_WITH([gtksourceview2],
