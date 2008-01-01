@@ -593,13 +593,12 @@ msgid "Show text besides icons"
 msgstr "Text neben dem Symbol anzeigen"
 
 #: src/preferencesdialog.cpp:302
-#, fuzzy
 msgid "Document management"
-msgstr "Dokumentenverwaltung"
+msgstr "Umgang mit Dokumenten"
 
 #: src/preferencesdialog.cpp:303
 msgid "Open new remotely-created documents automatically"
-msgstr "Öffne von anderen neu erzeugte Dokumente automatisch"
+msgstr "Öffne neu erzeugte Dokumente automatisch"
 
 #: src/preferencesdialog.cpp:339
 msgid "Pattern"
