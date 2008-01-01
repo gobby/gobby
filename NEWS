@@ -3,7 +3,13 @@ Gobby
 
 Version 0.4.6:
   * Require gtksourceview 1.8 to enable indent-on-tab
+  * Require obby 0.4.5 to support IPv6 autodiscovery
   * Several utility windows close on escape
+  * Compilation fixes for gtksourceview 2.0
+  * New (partial) translations:
+    - Brazilian Portuguese
+    - Polish
+    - Korean
 
 Version 0.4.5:
  * Important bugfixes:
