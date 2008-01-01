@@ -1,5 +1,12 @@
 2008-01-01  Philipp Kern  <phil@0x539.de>
 
+	* po/pt_BR.po, po/pl.po, po/ko.po: added new translations
+	  from Rosetta
+	* po/*.po: translation roundup fetched from Rosetta
+	* configure.ac: add pt_BR, pl and ko
+
+2008-01-01  Philipp Kern  <phil@0x539.de>
+
 	* configure.ac: bump obby dependency to 0.4.5 to get IPv6
 	  autodiscovery
 

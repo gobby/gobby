@@ -8,14 +8,95 @@ msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-16 00:37+0200\n"
-"PO-Revision-Date: 2006-08-17 14:02+0000\n"
+"PO-Revision-Date: 2007-09-23 11:02+0000\n"
 "Last-Translator: Rolando Espinoza La Fuente <darkrho@gmail.com>\n"
 "Language-Team: Mario Palomo Torrero <mpalomo@ihman.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Rosetta-Export-Date: 2007-06-15 22:28:13+0000\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#~ msgid "Shows up a dialog to customise Gobby for your needs"
+#~ msgstr "Muestra un diálogo para configurar Gobby con sus preferencias"
+
+#~ msgid "_View"
+#~ msgstr "_Ver"
+
+#~ msgid ""
+#~ "Howl initialisation failed. Probably you need to run mDNSResponder as root "
+#~ "prior to Gobby. Zeroconf support is deactivated for this session."
+#~ msgstr ""
+#~ "Falló la inicialización Howl. Probablemente se necesite ejecutar "
+#~ "mDNSResponder como root antes de ejecutar Gobby. El soporte Zeroconf está "
+#~ "desactivado para esta sesión."
+
+#, c-format
+#~ msgid "Could not open file '%0%' for writing"
+#~ msgstr "No se pudo abrir el fichero %0% para escritura"
+
+#~ msgid "Passwords do not match"
+#~ msgstr "Las contraseñas no coinciden"
+
+#~ msgid "%0% has joined"
+#~ msgstr "%0% conectado"
+
+#~ msgid "%0% has left"
+#~ msgstr "%0% desconectado"
+
+#~ msgid "Gobby"
+#~ msgstr "Gobby"
+
+#~ msgid "Colour"
+#~ msgstr "Color"
+
+#~ msgid "Name"
+#~ msgstr "Nombre"
+
+#~ msgid "Subscribed"
+#~ msgstr "Subscrito"
+
+#~ msgid "%0% pending change"
+#~ msgid_plural "%0% pending changes"
+#~ msgstr[0] "%0% cambios pendientes"
+#~ msgstr[1] "%0% cambios pendientes"
+
+#~ msgid "Revision: %0%"
+#~ msgstr "Revisión: %0%"
+
+#~ msgid "Waiting for welcome packet..."
+#~ msgstr "Esperando paquete de bienvenida..."
+
+#~ msgid ""
+#~ "You are not subscribed to the document \"%0%\".\n"
+#~ "\n"
+#~ "To view changes that others make or to edit the document yourself, you have "
+#~ "to subscribe to this document. Use the following button to perform this.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "No está suscrito al documento \"%0%\".\n"
+#~ "\n"
+#~ "Para ver los cambios que otros hacen o para editar el documento, es "
+#~ "necesario suscribirse a este documento. Utilice el siguiente botón para "
+#~ "hacer esto.\n"
+#~ "\n"
+
+#~ msgid "Enter user password"
+#~ msgstr "Introducir contraseña de usuario"
+
+#~ msgid "Peer %0% (%1%) not found in peer list"
+#~ msgstr "Equipo %0% (%1%) no encontrado en la lista"
+
+#~ msgid "Waiting for thread to finish..."
+#~ msgstr "Esperando que el thread termine..."
+
+#~ msgid ""
+#~ "The document \"%0%\" has been changed since it was saved to disk. Are you "
+#~ "sure that you want to close it?"
+#~ msgstr ""
+#~ "El documento \"%0%\" ha cambiado desde la última vez que se guardó. ¿Seguro "
+#~ "que quiere cerrarlo?"
 
 #: src/chat.cpp:73
 msgid "Send"
@@ -402,7 +483,7 @@ msgstr "Puerto"
 #: src/joindialog.cpp:299
 #, fuzzy
 msgid "Failure"
-msgstr "Ficheros"
+msgstr "Fallo"
 
 #: src/joinprogressdialog.cpp:34
 msgid ""
@@ -415,7 +496,8 @@ msgstr ""
 #: src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
-msgstr "Nombre ya utilizado. Puede elegir otro nombre o cancelar la conexión."
+msgstr ""
+"Nombre ya utilizado. Puede elegir otro nombre o cancelar la conexión."
 
 #: src/joinprogressdialog.cpp:116 src/joinprogressdialog.cpp:227
 msgid "New name:"
@@ -566,8 +648,9 @@ msgid "Remember the positions and states"
 msgstr "Recordar las posiciones y los estados"
 
 #: src/preferencesdialog.cpp:222
+#, fuzzy
 msgid "Highlight the window on incoming chat messages"
-msgstr ""
+msgstr "Realzar la ventana de mensajes de entrada"
 
 #: src/preferencesdialog.cpp:228
 msgid "Show text only"
@@ -584,16 +667,16 @@ msgstr "Mostrar texto e iconos"
 #: src/preferencesdialog.cpp:231
 #, fuzzy
 msgid "Show text besides icons"
-msgstr "Mostrar sólo texto"
+msgstr "Mostrar texto además de iconos"
 
 #: src/preferencesdialog.cpp:302
 #, fuzzy
 msgid "Document management"
-msgstr "Introducir el nombre del documento"
+msgstr "Gestionar documento"
 
 #: src/preferencesdialog.cpp:303
 msgid "Open new remotely-created documents automatically"
-msgstr ""
+msgstr "Abrir automáticamente nuevos documentos crados remotamente"
 
 #: src/preferencesdialog.cpp:339
 msgid "Pattern"
@@ -642,7 +725,7 @@ msgstr "Tipo de letra"
 
 #: src/preferencesdialog.cpp:700
 msgid "Behaviour"
-msgstr ""
+msgstr "Comportamiento"
 
 #: src/preferencesdialog.cpp:701
 msgid "Files"
@@ -675,7 +758,7 @@ msgid ""
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
-"Falló la inicialización Howl. Probablemente se necesite ejecutar "
+"Falló la inicialización de Zeroconf. Probablemente se necesite ejecutar "
 "mDNSResponder como root antes de ejecutar Gobby. El soporte Zeroconf está "
 "desactivado para esta sesión."
 
@@ -780,72 +863,3 @@ msgstr "Si no se guarda, los cambios se perderán."
 #: src/window.cpp:1526
 msgid "Close without saving"
 msgstr "Cerrar sin guardar"
-
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "No se pudo abrir el fichero %0% para escritura"
-
-#~ msgid "_View"
-#~ msgstr "_Ver"
-
-#~ msgid "Passwords do not match"
-#~ msgstr "Las contraseñas no coinciden"
-
-#~ msgid "Waiting for welcome packet..."
-#~ msgstr "Esperando paquete de bienvenida..."
-
-#~ msgid "%0% has joined"
-#~ msgstr "%0% conectado"
-
-#~ msgid "%0% has left"
-#~ msgstr "%0% desconectado"
-
-#~ msgid "Gobby"
-#~ msgstr "Gobby"
-
-#~ msgid "Colour"
-#~ msgstr "Color"
-
-#~ msgid "Name"
-#~ msgstr "Nombre"
-
-#~ msgid "Subscribed"
-#~ msgstr "Subscrito"
-
-#~ msgid ""
-#~ "The document \"%0%\" has been changed since it was saved to disk. Are you "
-#~ "sure that you want to close it?"
-#~ msgstr ""
-#~ "El documento \"%0%\" ha cambiado desde la última vez que se guardó. "
-#~ "¿Seguro que quiere cerrarlo?"
-
-#~ msgid ""
-#~ "You are not subscribed to the document \"%0%\".\n"
-#~ "\n"
-#~ "To view changes that others make or to edit the document yourself, you "
-#~ "have to subscribe to this document. Use the following button to perform "
-#~ "this.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "No está suscrito al documento \"%0%\".\n"
-#~ "\n"
-#~ "Para ver los cambios que otros hacen o para editar el documento, es "
-#~ "necesario suscribirse a este documento. Utilice el siguiente botón para "
-#~ "hacer esto.\n"
-#~ "\n"
-
-#~ msgid "Enter user password"
-#~ msgstr "Introducir contraseña de usuario"
-
-#~ msgid "%0% pending change"
-#~ msgid_plural "%0% pending changes"
-#~ msgstr[0] "%0% cambios pendientes"
-#~ msgstr[1] "%0% cambios pendientes"
-
-#~ msgid "Revision: %0%"
-#~ msgstr "Revisión: %0%"
-
-#~ msgid "Peer %0% (%1%) not found in peer list"
-#~ msgstr "Equipo %0% (%1%) no encontrado en la lista"
-
-#~ msgid "Waiting for thread to finish..."
-#~ msgstr "Esperando que el thread termine..."

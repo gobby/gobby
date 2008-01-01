@@ -9,14 +9,98 @@ msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-16 00:37+0200\n"
-"PO-Revision-Date: 2006-08-17 14:02+0000\n"
+"PO-Revision-Date: 2007-12-17 13:56+0000\n"
 "Last-Translator: Peer Janssen <peer@baden-online.de>\n"
 "Language-Team: Peer Janssen <peer@baden-online.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Rosetta-Export-Date: 2007-06-15 22:28:12+0000\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#~ msgid "Shows up a dialog to customise Gobby for your needs"
+#~ msgstr "Afficher un dialogue pour personnaliser Gobby"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "Affichage"
+
+#~ msgid "Shows up a list of users that are currently joined"
+#~ msgstr "Affiche la liste des utilisateurs connectés"
+
+#~ msgid "Shows up a list of documents within the current session"
+#~ msgstr "Affiche la liste des documents de la séance actuelle"
+
+#, fuzzy
+#~ msgid "Shows up a chat to talk to other people in the session"
+#~ msgstr "Affiche la liste des documents de la séance actuelle"
+
+#~ msgid ""
+#~ "Howl initialisation failed. Probably you need to run mDNSResponder as root "
+#~ "prior to Gobby. Zeroconf support is deactivated for this session."
+#~ msgstr ""
+#~ "Howl initialisation failed. Probably you need to run mDNSResponder as root "
+#~ "prior to Gobby. Zeroconf support is deactivated for this session."
+
+#, c-format
+#~ msgid "Could not open file '%0%' for writing"
+#~ msgstr "Impossible d'ouvrir le fichier '%0%' en écriture"
+
+#~ msgid "Passwords do not match"
+#~ msgstr "Les mots de passe ne sont pas identiques"
+
+#~ msgid "%0% has joined"
+#~ msgstr "%0% est arrivé(e)"
+
+#~ msgid "%0% has left"
+#~ msgstr "%0% est parti(e)"
+
+#~ msgid "Gobby"
+#~ msgstr "Gobby"
+
+#~ msgid "Colour"
+#~ msgstr "Couleur"
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#~ msgid "Subscribed"
+#~ msgstr "S'abonner"
+
+#~ msgid "%0% pending change"
+#~ msgid_plural "%0% pending changes"
+#~ msgstr[0] "%0% modification en attente"
+#~ msgstr[1] "%0% modification en attente"
+
+#~ msgid "Revision: %0%"
+#~ msgstr "Révision : %0%"
+
+#~ msgid "Waiting for welcome packet..."
+#~ msgstr "Attendre le paquet d'accueil..."
+
+#~ msgid ""
+#~ "You are not subscribed to the document \"%0%\".\n"
+#~ "\n"
+#~ "To view changes that others make or to edit the document yourself, you have "
+#~ "to subscribe to this document. Use the following button to perform this.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Vous n'êtes pas abonné au document « %0% ».\n"
+#~ "\n"
+#~ "Pour voir les modifications des autres ou pour modifier vous-mêmes le "
+#~ "document, vous devez vous abonner à ce document. À cet effet, utilisez le "
+#~ "bouton suivant.\n"
+#~ "\n"
+
+#~ msgid "Enter user password"
+#~ msgstr "Entrer le mot de passe utilisateur"
+
+#~ msgid "Peer %0% (%1%) not found in peer list"
+#~ msgstr "%0% (%1%) ne se trouve pas dans la liste des copin(e)s"
+
+#~ msgid "Waiting for thread to finish..."
+#~ msgstr "Attendre la fin du thread..."
 
 #: src/chat.cpp:73
 msgid "Send"
@@ -25,19 +109,20 @@ msgstr "Envoyer"
 #: src/chat.cpp:227
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
+"La commande '%0%' n'a pas été trouvée. Entrez /help pour obtenir la liste "
+"des commandes."
 
 #: src/chat.cpp:238
 msgid "%0%: %1%"
-msgstr ""
+msgstr "%0% : %1%"
 
 #: src/chat.cpp:252
 msgid "Document %0% does not exist"
-msgstr ""
+msgstr "Le document %0% n'existe pas"
 
 #: src/chat.cpp:258
-#, fuzzy
 msgid "Usage: /remove <document>"
-msgstr "Enregistrer le document"
+msgstr "Utilisation : /remove <document>"
 
 #: src/documentlist.cpp:51
 msgid "Subscribe"
@@ -57,7 +142,7 @@ msgstr ""
 
 #: src/encoding_selector.cpp:145
 msgid "Character Encoding:"
-msgstr ""
+msgstr "Encodage de caractère"
 
 #: src/finddialog.cpp:43
 msgid "Find what:"
@@ -203,7 +288,7 @@ msgstr "Enregistrer le document"
 
 #: src/header.cpp:293
 msgid "Saves a document into a file"
-msgstr "Sauvegarde du document dans un fichier"
+msgstr "Sauvegarde un document dans un fichier"
 
 #: src/header.cpp:301
 msgid "Save document as..."
@@ -231,7 +316,7 @@ msgstr "Rechercher..."
 
 #: src/header.cpp:322
 msgid "Search for a text in the current document"
-msgstr "Rechercher du teste dans le document actuel"
+msgstr "Rechercher du texte dans le document courant"
 
 #: src/header.cpp:330
 msgid "Find and replace..."
@@ -239,7 +324,7 @@ msgstr "Rechercher et remplacer..."
 
 #: src/header.cpp:331
 msgid "Search for a text and replace it with another one"
-msgstr "Rechercher et remplacer un texte par un autre"
+msgstr "Rechercher un texte et le remplacer par un autre"
 
 #: src/header.cpp:339
 msgid "Go to line..."
@@ -247,7 +332,7 @@ msgstr "Aller à la ligne..."
 
 #: src/header.cpp:340
 msgid "Move cursor to a specified line"
-msgstr "Déplacer le curseur vers la ligne..."
+msgstr "Déplacer le curseur vers une ligne précise"
 
 #: src/header.cpp:348
 msgid "Preferences..."
@@ -263,7 +348,8 @@ msgstr "Préférences du document..."
 
 #: src/header.cpp:358
 msgid "Shows a preferences dialog that is just applied to this document"
-msgstr "Affiche les Préférences qui s'appliquent spécifiquement à ce document"
+msgstr ""
+"Affiche les Préférences qui s'appliquent spécifiquement à ce document"
 
 #: src/header.cpp:363
 msgid "Syntax"
@@ -307,11 +393,13 @@ msgstr "Affiche la liste des documents de la séance actuelle"
 
 #: src/header.cpp:410 src/icon.cpp:68
 msgid "Chat"
-msgstr ""
+msgstr "Messagerie instantanée (chat)"
 
 #: src/header.cpp:411
 msgid "Displays a chat to talk to other people in the session"
 msgstr ""
+"Affiche la messagerie instantanée pour communiquer avec les autres membres "
+"de la session"
 
 #: src/header.cpp:416
 msgid "_Help"
@@ -401,7 +489,7 @@ msgstr "Port"
 
 #: src/joindialog.cpp:299
 msgid "Failure"
-msgstr ""
+msgstr "Échec"
 
 #: src/joinprogressdialog.cpp:34
 msgid ""
@@ -455,8 +543,9 @@ msgstr "Joindre une séance « obby »..."
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
 #: src/joinprogressdialog.cpp:404
+#, fuzzy
 msgid "Setting up connection encryption (TLS)..."
-msgstr ""
+msgstr "Mise en place de la connection de cryptage (TLS)..."
 
 #. Update status message
 #: src/joinprogressdialog.cpp:464
@@ -569,8 +658,11 @@ msgid "Remember the positions and states"
 msgstr "Mémoriser les positions et attributs"
 
 #: src/preferencesdialog.cpp:222
+#, fuzzy
 msgid "Highlight the window on incoming chat messages"
 msgstr ""
+"Mettre en valeur la fenêtre lorsque des messages instantanés vous "
+"parviennent."
 
 #: src/preferencesdialog.cpp:228
 msgid "Show text only"
@@ -578,7 +670,7 @@ msgstr "Afficher uniquement le texte"
 
 #: src/preferencesdialog.cpp:229
 msgid "Show icons only"
-msgstr "Afficher uniquement les symboles"
+msgstr "Afficher uniquement les icônes"
 
 #: src/preferencesdialog.cpp:230
 msgid "Show both icons and text"
@@ -596,31 +688,35 @@ msgstr "Entrer le nom du document"
 
 #: src/preferencesdialog.cpp:303
 msgid "Open new remotely-created documents automatically"
-msgstr ""
+msgstr "Ouvrir automatiquement les nouveaux documents créés à distances."
 
 #: src/preferencesdialog.cpp:339
+#, fuzzy
 msgid "Pattern"
-msgstr ""
+msgstr "Modèle"
 
 #: src/preferencesdialog.cpp:340
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #: src/preferencesdialog.cpp:341
+#, fuzzy
 msgid "Mime type"
-msgstr ""
+msgstr "Type Mime"
 
 #: src/preferencesdialog.cpp:343
 msgid "This is a list of all recognized file types"
-msgstr ""
+msgstr "Voici la liste des formats de fichiers reconnus"
 
 #: src/preferencesdialog.cpp:494
+#, fuzzy
 msgid "Pattern must not be empty."
-msgstr ""
+msgstr "Le modèle ne doit pas rester vide"
 
 #: src/preferencesdialog.cpp:552
+#, fuzzy
 msgid "There is no language with the mime type '%0%'."
-msgstr ""
+msgstr "Aucune langue ne correspond au type de mime '%0%'."
 
 #: src/preferencesdialog.cpp:689
 msgid "Preferences"
@@ -641,19 +737,19 @@ msgstr "Apparence de la fenêtre Gobby"
 
 #: src/preferencesdialog.cpp:699
 msgid "Font"
-msgstr ""
+msgstr "Police de caractère"
 
 #: src/preferencesdialog.cpp:700
 msgid "Behaviour"
-msgstr ""
+msgstr "Comportement"
 
 #: src/preferencesdialog.cpp:701
 msgid "Files"
-msgstr ""
+msgstr "Fichiers"
 
 #: src/statusbar.cpp:38 src/statusbar.cpp:100
 msgid "Not connected"
-msgstr ""
+msgstr "Non connecté"
 
 #: src/statusbar.cpp:56
 msgid "Selected language: %0%"
@@ -776,12 +872,9 @@ msgstr ""
 
 #: src/window.cpp:1511
 msgid "If you don't save, changes will be discarded."
-msgstr ""
+msgstr "Si vous n'enregistrez pas, les modifications seront perdues."
 
 #. Add button to allow the user to save the dialog
 #: src/window.cpp:1526
 msgid "Close without saving"
-msgstr ""
-
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Impossible d'ouvrir le fichier '%0%' en écriture"
+msgstr "Fermer sans enregistrer"

@@ -3,21 +3,25 @@
 # This file is distributed under the same license as the gobby package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-06-16 00:37+0200\n"
-"PO-Revision-Date: 2007-05-07 13:02+0000\n"
+"PO-Revision-Date: 2007-09-27 14:38+0000\n"
 "Last-Translator: Nkolay Parukhin <nik@sevpinro.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Rosetta-Export-Date: 2007-05-07 13:08:05+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#, c-format
+#~ msgid "Could not open file '%0%' for writing"
+#~ msgstr "Невозможно открыть файл '%0%' для записи"
 
 #: src/chat.cpp:73
 msgid "Send"
@@ -403,9 +407,8 @@ msgid "Port"
 msgstr "Порт"
 
 #: src/joindialog.cpp:299
-#, fuzzy
 msgid "Failure"
-msgstr "Файлы"
+msgstr "Ошибка"
 
 #: src/joinprogressdialog.cpp:34
 msgid ""
@@ -573,7 +576,7 @@ msgstr "Запоминать положение и состояние"
 
 #: src/preferencesdialog.cpp:222
 msgid "Highlight the window on incoming chat messages"
-msgstr ""
+msgstr "Подсвечивать окно при входящих сообщениях чата"
 
 #: src/preferencesdialog.cpp:228
 msgid "Show text only"
@@ -588,18 +591,16 @@ msgid "Show both icons and text"
 msgstr "Показать пиктограммы и текст"
 
 #: src/preferencesdialog.cpp:231
-#, fuzzy
 msgid "Show text besides icons"
-msgstr "Показать только текст"
+msgstr "Показать текст рядом с пиктограммами"
 
 #: src/preferencesdialog.cpp:302
-#, fuzzy
 msgid "Document management"
-msgstr "Введите имя документа"
+msgstr "Управление документами"
 
 #: src/preferencesdialog.cpp:303
 msgid "Open new remotely-created documents automatically"
-msgstr ""
+msgstr "Открыть новый удалённо-созданный документ автоматически"
 
 #: src/preferencesdialog.cpp:339
 msgid "Pattern"
@@ -648,7 +649,7 @@ msgstr "Шрифт"
 
 #: src/preferencesdialog.cpp:700
 msgid "Behaviour"
-msgstr ""
+msgstr "Поведение"
 
 #: src/preferencesdialog.cpp:701
 msgid "Files"
@@ -675,14 +676,14 @@ msgid "Offline"
 msgstr "Отключённые"
 
 #: src/window.cpp:194
-#, fuzzy
 msgid ""
 "Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
-"Сбой инициализации. Возможно вам нужно выполнить mDNSResponder как root "
-"перед запуском Gobby. Поддержка Zeroconf отключена в этом сеансе."
+"Сбой инициализации Zeroconf. Возможно вам нужно выполнить avahi-daemon  или "
+"mDNSResponder как root перед запуском Gobby. Поддержка Zeroconf отключена в "
+"этом сеансе."
 
 #: src/window.cpp:276
 msgid "You are still connected to a session"
@@ -786,6 +787,3 @@ msgstr "Если не сохранить, изменения будут поте
 #: src/window.cpp:1526
 msgid "Close without saving"
 msgstr "Закрыть без сохранения"
-
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Невозможно открыть файл '%0%' для записи"
