@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Gobby Collaborative Editor
 Name[de]=Gobby-Gemeinschaftseditor
 Comment=Edit text files collaboratively
@@ -8,6 +7,6 @@ Exec=gobby
 Terminal=false
 Type=Application
 Icon=gobby.png
-Categories=Application;TextEditor;Network;
+Categories=TextEditor;Network;
 StartupNotify=true
 MimeType=text/plain;

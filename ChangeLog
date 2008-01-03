@@ -1,3 +1,8 @@
+2008-01-03  Philipp Kern  <phil@0x539.de>
+
+	* contrib/gobby.desktop: adhere to the freedesktop.org Desktop
+	  Entry Specification v1.0
+
 2008-01-01  Armin Burgmeier  <armin@0x539.de>
 
 	* src/preferencesdialog.cpp: Add some spacing to the document
