@@ -43,6 +43,10 @@ namespace {
 		"      <menuitem action=\"SessionDocumentClose\" />"
 		"    </menu>"
 		"    <menu action=\"MenuEdit\">"
+//		"      <menuitem action=\"EditCopy\" />"
+//		"      <menuitem action=\"EditCut\" />"
+//		"      <menuitem action=\"EditPaste\" />"
+//		"      <separator />"
 		"      <menuitem action=\"EditSearch\" />"
 		"      <menuitem action=\"EditSearchReplace\" />"
 		"      <separator />"
@@ -612,10 +616,13 @@ Gobby::Header::Header(const ApplicationState& state,
 #ifdef WITH_GTKSOURCEVIEW2
 	GSList* lang_list = NULL;
 	const gchar* const* ids = gtk_source_language_manager_get_language_ids(lang_mgr);
-	for(const gchar* const* id = ids; *id != NULL; ++ id)
+	if(ids != NULL)
 	{
-		GtkSourceLanguage* language = gtk_source_language_manager_get_language(lang_mgr, *id);
-		lang_list = g_slist_prepend(lang_list, language);
+		for(const gchar* const* id = ids; *id != NULL; ++ id)
+		{
+			GtkSourceLanguage* language = gtk_source_language_manager_get_language(lang_mgr, *id);
+			lang_list = g_slist_prepend(lang_list, language);
+		}
 	}
 #else
 	const GSList* list = gtk_source_languages_manager_get_available_languages(

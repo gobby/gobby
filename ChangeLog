@@ -1,3 +1,10 @@
+2008-01-20  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferences.cpp:
+	* src/preferencesdialog.cpp:
+	* src/header.cpp: Don't crash when no GtkSourceView languages are
+	installed.
+
 2008-01-03  Philipp Kern  <phil@0x539.de>
 
 	* contrib/gobby.desktop: adhere to the freedesktop.org Desktop

@@ -33,6 +33,7 @@ namespace
 	{
 #ifdef WITH_GTKSOURCEVIEW2
 		const gchar* const* ids = gtk_source_language_manager_get_language_ids(manager);
+		if(ids == NULL) return NULL;
 
 		for(const gchar* const* id = ids; *id != NULL; ++ id)
 		{
@@ -255,6 +256,7 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 	{
 #ifdef WITH_GTKSOURCEVIEW2
 		const gchar* const* ids = gtk_source_language_manager_get_language_ids(lang_mgr);
+		if(ids == NULL) return; // No languages available
 
 		for(const gchar* const* id = ids; *id != NULL; ++ id)
 		{
