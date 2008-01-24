@@ -16,6 +16,8 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <cstring>
+
 #include "features.hpp"
 
 #ifdef WITH_GTKSOURCEVIEW2

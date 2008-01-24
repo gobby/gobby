@@ -1,3 +1,11 @@
+2008-01-24  Philipp Kern  <phil@0x539.de>
+
+	* src/header.cpp:
+	* src/preferences.cpp:
+	* src/preferencesdialog.cpp:
+	* src/unix.cpp: Fix build failures with g++-4.3
+	  (thanks to Matthias Klose)
+
 2008-01-20  Armin Burgmeier  <armin@0x539.de>
 
 	* src/preferences.cpp:
