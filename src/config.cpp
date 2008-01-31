@@ -268,6 +268,12 @@ Gobby::Config::Config(const Glib::ustring& file):
 {
 	xmlpp::DomParser parser;
 
+	if(!Glib::file_test(file, Glib::FILE_TEST_IS_REGULAR))
+	{
+		m_root.reset(new ParentEntry("gobby_config") );
+		return;
+	}
+
 	try
 	{
 		parser.parse_file(file);

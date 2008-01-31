@@ -1,3 +1,8 @@
+2008-01-31  Armin Burgmeier  <armin@0x539.de>
+
+	* src/config.cpp: File test before loading XML file, this seems to
+	crash on Windows otherwise.
+
 2008-01-24  Philipp Kern  <phil@0x539.de>
 
 	* src/header.cpp:
