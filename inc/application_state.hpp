@@ -32,7 +32,8 @@ enum ApplicationFlags {
 	APPLICATION_INITIAL  = 0x01, // Application has just been initialised
 	APPLICATION_SESSION  = 0x02, // Session has been opened
 	APPLICATION_DOCUMENT = 0x04, // At least one doucment is opened
-	APPLICATION_HOST     = 0x08  // Application is hosting the session
+	APPLICATION_HOST     = 0x08, // Application is hosting the session
+	APPLICATION_SELECTED = 0x10  // Text is selected
 };
 
 NET6_DEFINE_ENUM_OPS(ApplicationFlags)
