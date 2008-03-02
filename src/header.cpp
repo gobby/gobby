@@ -614,7 +614,6 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_help->add(action_help_about);
 
 	// Get available languages
-#ifdef WITH_GTKSOURCEVIEW2
 	GSList* lang_list = NULL;
 	const gchar* const* ids = gtk_source_language_manager_get_language_ids(lang_mgr);
 	if(ids != NULL)
@@ -625,13 +624,6 @@ Gobby::Header::Header(const ApplicationState& state,
 			lang_list = g_slist_prepend(lang_list, language);
 		}
 	}
-#else
-	const GSList* list = gtk_source_languages_manager_get_available_languages(
-		lang_mgr);
-
-	// Copy the list, so we can sort languages by name
-	GSList* lang_list = g_slist_copy(const_cast<GSList*>(list));
-#endif
 
 	lang_list = g_slist_sort(lang_list, &language_sort_callback);
 

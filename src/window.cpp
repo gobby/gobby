@@ -47,16 +47,12 @@
 
 Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
-#ifdef WITH_GTKSOURCEVIEW2
 	m_lang_manager(gtk_source_language_manager_new()),
-#else
-	m_lang_manager(gtk_source_languages_manager_new()),
-#endif
-	m_preferences(m_config, m_lang_manager), m_icon_mgr(icon_mgr),
+	m_preferences(m_config), m_icon_mgr(icon_mgr),
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_application_state, m_lang_manager),
-	m_folder(m_header, m_preferences),
+	m_folder(m_header, m_preferences, m_lang_manager),
 	m_userlist(
 		*this,
 		m_header,
@@ -199,29 +195,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		m_zeroconf.reset();
 	}
 #endif
-
-	if(m_preferences.appearance.remember)
-	{
-		Config::ParentEntry& screen = config.get_root()["screen"];
-
-		// Restore the window's position from the configuration
-		const int x = windows["main"].get_value<int>("x", 0);
-		const int y = windows["main"].get_value<int>("y", 0);
-		const int w = windows["main"].get_value<int>("width", 0);
-		const int h = windows["main"].get_value<int>("height", 0);
-
-		const int s_w = screen.get_value<int>("width", 0);
-		const int s_h = screen.get_value<int>("height", 0);
-		bool first_run = (x == 0 && y == 0 && w == 0 && h == 0);
-
-		Glib::RefPtr<Gdk::Screen> scr(get_screen() );
-		if( (scr->get_width() >= s_w && scr->get_height() >= s_h) &&
-		    (!first_run) )
-		{
-			move(x, y);
-			resize(w, h);
-		}
-	}
 }
 
 Gobby::Window::~Window()
@@ -237,23 +210,6 @@ Gobby::Window::~Window()
 		"visible",
 		m_header.action_window_chat->get_active()
 	);
-
-	// Save the window's current position
-	if(m_preferences.appearance.remember)
-	{
-		int x, y, w, h;
-		get_position(x, y); get_size(w, h);
-		Glib::RefPtr<Gdk::Screen> scr(get_screen() );
-
-		windows["main"].set_value("x", x);
-		windows["main"].set_value("y", y);
-		windows["main"].set_value("width", w);
-		windows["main"].set_value("height", h);
-
-		Config::ParentEntry& screen = m_config.get_root()["screen"];
-		screen.set_value("width", scr->get_width() );
-		screen.set_value("height", scr->get_height() );
-	}
 
 	/* Free explictely to make sure that the avahi poll is no longer
 	 * referenced when we free it */
@@ -637,14 +593,6 @@ void Gobby::Window::on_folder_tab_switched(DocWindow& window)
 
 void Gobby::Window::on_settings_document_insert(LocalDocumentInfo& info)
 {
-	// Mark automatically opened documents and subscribe to them.
-	if(m_preferences.behaviour.auto_open_new_documents
-		&& !info.is_subscribed() )
-	{
-		m_document_settings.set_automatically_opened(info, true);
-		info.subscribe();
-	}
-
 	// Set the path from which this document was opened,
 	// if we opened that file.
 	if(info.get_owner() == &m_buffer->get_self() &&
@@ -874,49 +822,11 @@ void Gobby::Window::on_edit_goto_line()
 
 void Gobby::Window::on_edit_preferences()
 {
-	PreferencesDialog dlg(*this, m_preferences, m_lang_manager, false);
+	if(m_preferences_dlg.get() == NULL)
+		m_preferences_dlg.reset(
+			new PreferencesDialog(*this, m_preferences));
 
-	// Info label
-	Gtk::Label lbl_info(_(
-		"Click on \"Apply\" to apply the new settings to documents "
-		"that are currently open. \"OK\" will just store the values "
-		"to use them with newly created documents."
-	) );
-
-	// Show info label and apply button if documents are open
-	if(m_buffer.get() && m_buffer->document_count() > 0)
-	{
-		// TODO: How to get the label to use all available space?
-		lbl_info.set_line_wrap(true);
-		lbl_info.set_alignment(Gtk::ALIGN_LEFT);
-
-		dlg.get_vbox()->pack_start(lbl_info, Gtk::PACK_SHRINK);
-		dlg.add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
-		lbl_info.show();
-	}
-
-	int result = dlg.run();
-	if(result == Gtk::RESPONSE_OK || result == Gtk::RESPONSE_APPLY)
-	{
-		// Use new preferences
-		Preferences prefs;
-		dlg.set(prefs);
-		m_preferences = prefs;
-
-		// Apply window preferences
-		apply_preferences();
-
-		// Apply preferences to open documents.
-		if(result == Gtk::RESPONSE_APPLY)
-		{
-			for(int i = 0; i < m_folder.get_n_pages(); ++ i)
-			{
-				DocWindow& doc = *static_cast<DocWindow*>(
-					m_folder.get_nth_page(i) );
-				doc.set_preferences(m_preferences);
-			}
-		}
-	}
+	m_preferences_dlg->present();
 }
 
 void Gobby::Window::on_user_set_password()
@@ -966,6 +876,7 @@ void Gobby::Window::on_user_set_colour()
 
 void Gobby::Window::on_view_preferences()
 {
+#if 0
 	// Get current page
 	DocWindow* doc = get_current_document();
 	if(doc == NULL)
@@ -1013,6 +924,7 @@ void Gobby::Window::on_view_preferences()
 		dlg.set(prefs);
 		doc->set_preferences(prefs);
 	}
+#endif
 }
 
 void

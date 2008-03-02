@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005, 2006 0x539 dev group
+ * Copyright (C) 2005 - 2008 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -23,158 +23,123 @@
 #include "features.hpp"
 #include "config.hpp"
 
-#include <gtksourceview/gtksourcelanguage.h>
-
-#ifdef WITH_GTKSOURCEVIEW2
-# include <gtksourceview/gtksourcelanguagemanager.h>
-#else
-# include <gtksourceview/gtksourcelanguagesmanager.h>
-#endif
-
-#ifndef WITH_GTKSOURCEVIEW2
-typedef GtkSourceLanguagesManager GtkSourceLanguageManager;
-#endif
-
 namespace Gobby
 {
 
 class Preferences
 {
 public:
-	/** Uninitialised preferences.
-	 */
-	Preferences();
+	template<typename Type>
+	class Option
+	{
+	public:
+		typedef sigc::signal<void> signal_changed_type;
+
+		Option(const Type& initial_value):
+			m_value(initial_value) {}
+
+		const Option<Type>& operator=(const Type& new_value)
+		{
+			m_value = new_value;
+			notify();
+			return *this;
+		}
+
+		operator const Type&() const
+		{
+			return m_value;
+		}
+
+		operator Type&()
+		{
+			return m_value;
+		}
+
+		signal_changed_type signal_changed() const
+		{
+			return m_signal_changed;
+		}
+
+		void notify() const
+		{
+			m_signal_changed.emit();
+		}
+
+	protected:
+		Type m_value;
+		signal_changed_type m_signal_changed;
+	};
 
 	/** Reads preferences values out of a config, using default values
 	 * for values that do not exist in the config.
 	 */
-	Preferences(Config& m_config, GtkSourceLanguageManager* lang_mgr);
+	Preferences(Config& m_config);
 
 	/** Serialises preferences back to config.
 	 */
 	void serialise(Config& config) const;
 
+	class User
+	{
+	public:
+		User(Config::ParentEntry& entry);
+		void serialise(Config::ParentEntry& entry) const;
+
+		Option<Glib::ustring> name;
+		Option<double> hue;
+		Option<std::string> host_directory;
+	};
+
 	class Editor
 	{
 	public:
-		Editor();
 		Editor(Config::ParentEntry& entry);
 		void serialise(Config::ParentEntry& entry) const;
 
-		unsigned int tab_width;
-		bool tab_spaces;
-		bool indentation_auto;
-		bool homeend_smart;
+		Option<unsigned int> tab_width;
+		Option<bool> tab_spaces;
+		Option<bool> indentation_auto;
+		Option<bool> homeend_smart;
 	};
 
 	class View
 	{
 	public:
-		View();
 		View(Config::ParentEntry& entry);
 		void serialise(Config::ParentEntry& entry) const;
 
-		bool wrap_text;
-		bool wrap_words;
-		bool linenum_display;
-		bool curline_highlight;
-		bool margin_display;
-		unsigned int margin_pos;
-		bool bracket_highlight;
+		Option<Gtk::WrapMode> wrap_mode;
+		Option<bool> linenum_display;
+		Option<bool> curline_highlight;
+		Option<bool> margin_display;
+		Option<unsigned int> margin_pos;
+		Option<bool> bracket_highlight;
 	};
 
 	class Appearance
 	{
 	public:
-		Appearance();
 		Appearance(Config::ParentEntry& entry);
 		void serialise(Config::ParentEntry& entry) const;
 
-		Gtk::ToolbarStyle toolbar_show;
-		bool remember;
-		bool urgency_hint;
+		Option<Gtk::ToolbarStyle> toolbar_show;
+		Option<Pango::FontDescription> font;
 	};
 
-	class Font
-	{
-	public:
-		Font();
-		Font(Config::ParentEntry& entry);
-		void serialise(Config::ParentEntry& entry) const;
-
-		Pango::FontDescription desc;
-	};
-
-	class Behaviour
-	{
-	public:
-		Behaviour();
-		Behaviour(Config::ParentEntry& entry);
-		void serialise(Config::ParentEntry& entry) const;
-
-		bool auto_open_new_documents;
-	};
-
-	class FileList
-	{
-	public:
-		typedef std::map<Glib::ustring, GtkSourceLanguage*> map_type;
-
-		class iterator
-		{
-		private:
-			typedef map_type::const_iterator base_iterator;
-
-		public:
-			iterator(base_iterator iter);
-
-			iterator& operator++();
-			iterator operator++(int);
-
-			bool operator==(const iterator& other) const;
-			bool operator!=(const iterator& other) const;
-
-			const Glib::ustring& pattern() const;
-			GtkSourceLanguage* language() const;
-		private:
-			base_iterator m_iter;
-		};
-
-		FileList();
-		FileList(Config::ParentEntry& entry,
-		         GtkSourceLanguageManager* lang_mgr);
-		FileList(const FileList& src);
-		~FileList();
-
-		void serialise(Config::ParentEntry& entry) const;
-
-		// This function may also return an already existing iterator
-		// when pattern is already in the map. Compare lang to be sure
-		// that the entry actually has been inserted.
-		iterator add(const Glib::ustring& pattern,
-		             GtkSourceLanguage* lang);
-
-		iterator begin() const;
-		iterator end() const;
-	protected:
-#ifndef WITH_GTKSOURCEVIEW2
-		iterator add_by_mime_type(const Glib::ustring& pattern,
-		                          const Glib::ustring& mime_type,
-		                          GtkSourceLanguageManager* lang_mgr);
-#endif
-
-		map_type m_files;
-	};
-
+	User user;
 	Editor editor;
 	View view;
 	Appearance appearance;
-	Font font;
-	Behaviour behaviour;
-	FileList files;
 };
+
+template<typename Type>
+std::ostream& operator<<(std::ostream& stream,
+                         const Preferences::Option<Type>& option)
+{
+	stream << static_cast<const Type&>(option);
+	return stream;
+}
 
 }
 
 #endif // _GOBBY_PREFERENCES_HPP_
-

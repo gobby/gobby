@@ -30,7 +30,7 @@ Gobby::ToggleWindow::ToggleWindow(Gtk::Window& parent,
 	action->signal_activate().connect(
 		sigc::mem_fun(*this, &ToggleWindow::on_activate) );
 
-	if(preferences.appearance.remember)
+	/*if(preferences.appearance.remember)
 	{
 		// Read the ToggleWindow's last position from config
 		const int x = config_entry.get_value<int>("x", 0);
@@ -51,16 +51,16 @@ Gobby::ToggleWindow::ToggleWindow(Gtk::Window& parent,
 			parent.signal_show().connect(
 				sigc::mem_fun(*this, &Gtk::Widget::show) );
 		}
-	}
+	}*/
 
 	set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);
 }
 
 Gobby::ToggleWindow::~ToggleWindow()
 {
-	if(m_preferences.appearance.remember)
+	//if(m_preferences.appearance.remember)
 	{
-		int x, y, w, h;
+	/*	int x, y, w, h;
 		get_position(x, y);
 		get_size(w, h);
 
@@ -68,7 +68,7 @@ Gobby::ToggleWindow::~ToggleWindow()
 		m_config_entry.set_value("y", y);
 		m_config_entry.set_value("width", w);
 		m_config_entry.set_value("height", h);
-		m_config_entry.set_value("visible", is_visible() );
+		m_config_entry.set_value("visible", is_visible() );*/
 	}
 }
 

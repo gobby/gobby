@@ -22,18 +22,15 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/box.h>
-#include <gtkmm/expander.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/notebook.h>
-#include <gtkmm/tooltips.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/cellrenderercombo.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/fontselection.h>
+#include <gtkmm/alignment.h>
+#include <gtkmm/filechooserbutton.h>
+#include <gtkmm/fontbutton.h>
+#include <gtkmm/colorbutton.h>
 #include "preferences.hpp"
 
 namespace Gobby
@@ -42,42 +39,66 @@ namespace Gobby
 class PreferencesDialog : public Gtk::Dialog
 {
 public:
+	class Group: public Gtk::Frame
+	{
+	public:
+		Group(const Glib::ustring& title);
+		void add(Gtk::Widget& widget);
+
+	protected:
+		Gtk::Alignment m_alignment;
+		Gtk::VBox m_box;
+	};
+
 	class Page: public Gtk::Frame
 	{
 	public:
 		Page();
+		void add(Gtk::Widget& widget);
 
 	protected:
+		Gtk::VBox m_box;
+	};
+
+	class User: public Page
+	{
+	public:
+		User(const Preferences& preferences);
+
+	protected:
+		Group m_group_settings;
+		Group m_group_paths;
+
+		Gtk::HBox m_box_user_name;
+		Gtk::Label m_lbl_user_name;
+		Gtk::Entry m_ent_user_name;
+
+		Gtk::HBox m_box_user_color;
+		Gtk::Label m_lbl_user_color;
+		Gtk::ColorButton m_btn_user_color;
+
+		Gtk::HBox m_box_path_host_directory;
+		Gtk::Label m_lbl_path_host_directory;
+		Gtk::FileChooserButton m_btn_path_host_directory;
 	};
 
 	class Editor: public Page
 	{
 	public:
-#ifndef GTKMM_DISABLE_DEPRECATED
-		Editor(const Preferences& preferences,
-		       Gtk::Tooltips& tooltips);
-#else
 		Editor(const Preferences& preferences);
-#endif
-
-		void set(Preferences::Editor& editor) const;
 
 	protected:
-		Gtk::VBox m_box;
-		Gtk::Frame m_frame_tab;
-		Gtk::Frame m_frame_indentation;
-		Gtk::Frame m_frame_homeend;
+		Group m_group_tab;
+		Group m_group_indentation;
+		Group m_group_homeend;
 
-		Gtk::VBox m_box_tab;
 		Gtk::HBox m_box_tab_width;
 		Gtk::Label m_lbl_tab_width;
 		Gtk::SpinButton m_ent_tab_width;
 		Gtk::CheckButton m_btn_tab_spaces;
 
-		Gtk::VBox m_box_indentation;
 		Gtk::CheckButton m_btn_indentation_auto;
 
-		Gtk::VBox m_box_homeend;
 		Gtk::CheckButton m_btn_homeend_smart;
 	};
 
@@ -88,32 +109,27 @@ public:
 		void set(Preferences::View& view) const;
 
 	protected:
-		virtual void on_margin_display_toggled();
+		void on_wrap_text_toggled();
+		void on_margin_display_toggled();
 
-		Gtk::VBox m_box;
-		Gtk::Frame m_frame_wrap;
-		Gtk::Frame m_frame_linenum;
-		Gtk::Frame m_frame_curline;
-		Gtk::Frame m_frame_margin;
-		Gtk::Frame m_frame_bracket;
+		Group m_group_wrap;
+		Group m_group_linenum;
+		Group m_group_curline;
+		Group m_group_margin;
+		Group m_group_bracket;
 
-		Gtk::VBox m_box_wrap;
 		Gtk::CheckButton m_btn_wrap_text;
 		Gtk::CheckButton m_btn_wrap_words;
 
-		Gtk::VBox m_box_linenum;
 		Gtk::CheckButton m_btn_linenum_display;
 
-		Gtk::VBox m_box_curline;
 		Gtk::CheckButton m_btn_curline_highlight;
 
-		Gtk::VBox m_box_margin;
 		Gtk::CheckButton m_btn_margin_display;
 		Gtk::HBox m_box_margin_pos;
 		Gtk::Label m_lbl_margin_pos;
 		Gtk::SpinButton m_ent_margin_pos;
 
-		Gtk::VBox m_box_bracket;
 		Gtk::CheckButton m_btn_bracket_highlight;
 	};
 
@@ -121,166 +137,30 @@ public:
 	{
 	public:
 		Appearance(const Preferences& preferences);
-		void set(Preferences::Appearance& appearance) const;
 
 	protected:
-		Gtk::VBox m_box;
-		Gtk::Frame m_frame_toolbar;
-		Gtk::Frame m_frame_windows;
+		Group m_group_toolbar;
+		Group m_group_font;
 
-		Gtk::VBox m_box_toolbar;
 		Gtk::ComboBoxText m_cmb_toolbar_style;
 
-		Gtk::VBox m_box_windows;
-		Gtk::CheckButton m_btn_remember;
-		Gtk::CheckButton m_btn_urgency_hint;
-	};
-
-	class Font: public Page
-	{
-	public:
-		Font(const Preferences& preferences);
-		void set(Preferences::Font& font) const;
-
-	protected:
-		void on_fontsel_realize();
-
-		Gtk::FontSelection m_font_sel;
-		Glib::ustring m_init_font;
-	};
-
-	class Behaviour: public Page
-	{
-	public:
-		Behaviour(const Preferences& preferences);
-		void set(Preferences::Behaviour& behaviour) const;
-
-	protected:
-		Gtk::VBox m_box;
-
-		Gtk::Frame m_frame_documents;
-		Gtk::VBox m_box_documents;
-		Gtk::CheckButton m_btn_auto_open;
-	};
-
-	class FileList: public Page
-	{
-	public:
-		// List of languages. TODO: Should be somewhere else
-		class LanguageColumns: public Gtk::TreeModel::ColumnRecord
-		{
-		public:
-			LanguageColumns();
-
-			Gtk::TreeModelColumn<GtkSourceLanguage*> language;
-			Gtk::TreeModelColumn<Glib::ustring> language_name;
-		};
-
-		class FileColumns: public Gtk::TreeModel::ColumnRecord
-		{
-		public:
-			FileColumns();
-
-			Gtk::TreeModelColumn<Glib::ustring> pattern;
-			Gtk::TreeModelColumn<Glib::ustring> mime_type;
-			Gtk::TreeModelColumn<Gtk::TreeIter> language;
-		};
-
-		FileList(Gtk::Window& parent,
-		         const Preferences& preferences,
-		         GtkSourceLanguageManager* lang_mgr);
-
-		void set(Preferences::FileList& files) const;
-
-		const LanguageColumns lang_columns;
-		const FileColumns file_columns;
-
-	protected:
-		struct LangCompare
-		{
-			bool operator()(GtkSourceLanguage* first, GtkSourceLanguage* second)
-			{
-				return first < second;
-			}
-		};
-
-		typedef std::map<
-			GtkSourceLanguage*,
-			Gtk::TreeIter,
-			LangCompare
-		> map_type;
-
-		void cell_data_file_language(Gtk::CellRenderer* renderer,
-		                             const Gtk::TreeIter& iter);
-
-		void on_pattern_edited(const Glib::ustring& path,
-		                       const Glib::ustring& new_text);
-		void on_mimetype_edited(const Glib::ustring& path,
-		                        const Glib::ustring& new_text);
-		void on_language_edited(const Glib::ustring& path,
-		                        const Glib::ustring& new_text);
-
-		void on_selection_changed();
-
-		void on_file_add();
-		void on_file_remove();
-
-		void set_language(const Gtk::TreeIter& row,
-		                  GtkSourceLanguage* lang);
-
-		Gtk::Window& m_parent;
-		GtkSourceLanguageManager* m_lang_mgr;
-
-		Gtk::CellRendererText* m_renderer_pattern;
-		Gtk::CellRendererCombo m_renderer_lang;
-		Gtk::CellRendererText* m_renderer_mimetype;
-
-		Gtk::TreeViewColumn m_viewcol_pattern;
-		Gtk::TreeViewColumn m_viewcol_lang;
-		Gtk::TreeViewColumn m_viewcol_mimetype;
-
-		Gtk::VBox m_vbox;
-		Gtk::Label m_intro;
-		Gtk::ScrolledWindow m_wnd;
-		Gtk::TreeView m_view;
-
-		Gtk::HButtonBox m_hbox;
-		Gtk::Button m_btn_add;
-		Gtk::Button m_btn_remove;
-
-		// Map for better access to iterators to the language list
-		map_type m_lang_map;
-
-		Glib::RefPtr<Gtk::ListStore> m_lang_list;
-		Glib::RefPtr<Gtk::ListStore> m_file_list;
+		Gtk::FontButton m_btn_font;
 	};
 
 	PreferencesDialog(Gtk::Window& parent,
-	                  const Preferences& preferences,
-	                  GtkSourceLanguageManager* lang_mgr,
-	                  bool local);
-
-	void set(Preferences& preferences) const;
-
-#if 0
-	const Editor& editor() const;
-	const View& view() const;
-	const Appearance& appearance() const;
-#endif
+	                  Preferences& preferences);
 
 protected:
+	virtual void on_response(int id);
+
+	Preferences& m_preferences;
+
 	Gtk::Notebook m_notebook;
 
-#ifndef GTKMM_DISABLE_DEPRECATED
-	Gtk::Tooltips m_tooltips;
-#endif
-
+	User m_page_user;
 	Editor m_page_editor;
 	View m_page_view;
 	Appearance m_page_appearance;
-	Font m_page_font;
-	Behaviour m_page_behaviour;
-	FileList m_page_files;
 };
 
 }

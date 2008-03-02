@@ -82,7 +82,8 @@ public:
 	typedef sigc::signal<void, DocWindow&>
 		signal_tab_switched_type;
 
-	Folder(Header& header, const Preferences& preferences);
+	Folder(Header& header, const Preferences& preferences,
+	       GtkSourceLanguageManager* lang_manager);
 
 #if 0
 	Glib::RefPtr<const Gtk::SourceLanguagesManager>
@@ -187,6 +188,8 @@ protected:
 	/** Reference to current preferences
 	 */
 	const Preferences& m_preferences;
+
+	GtkSourceLanguageManager* m_lang_manager;
 
 	/** Contains a pointer to the current active obby buffer.
 	 */

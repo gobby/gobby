@@ -21,9 +21,7 @@
 #include <glibmm/pattern.h>
 #include <gtkmm/textview.h>
 
-#ifdef WITH_GTKSOURCEVIEW2
-# include <gtksourceview/gtksourcebuffer.h>
-#endif
+#include <gtksourceview/gtksourcebuffer.h>
 
 #include "preferences.hpp"
 #include "docwindow.hpp"
@@ -32,22 +30,30 @@ namespace
 {
 	GtkWrapMode wrap_mode_from_preferences(const Gobby::Preferences& pref)
 	{
-		if(pref.view.wrap_text)
+		return static_cast<GtkWrapMode>(static_cast<Gtk::WrapMode>(pref.view.wrap_mode));
+	}
+
+	bool glob_matches(const gchar* const* globs, const std::string& str)
+	{
+		if(globs)
 		{
-			if(pref.view.wrap_words)
-				return GTK_WRAP_CHAR;
-			else
-				return GTK_WRAP_WORD;
+			for(const gchar* const* glob = globs;
+			    *glob != NULL;
+			    ++ glob)
+			{
+				Glib::PatternSpec spec(*glob);
+				if(spec.match(str))
+					return true;
+			}
 		}
-		else
-		{
-			return GTK_WRAP_NONE;
-		}
+
+		return false;
 	}
 }
 
 Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
-                            const Preferences& preferences):
+                            const Preferences& preferences,
+			    GtkSourceLanguageManager* manager):
 	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
 	m_info(info), m_doc(info.get_content() ),
 	m_preferences(preferences), /*m_editing(false),*/
@@ -69,41 +75,35 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
 		Glib::wrap(GTK_TEXT_BUFFER(buffer), true);
 
-#ifdef WITH_GTKSOURCEVIEW2
 	// Set source language by filename
 	gtk_source_buffer_set_highlight_syntax(buffer, FALSE);
-#else
-	gtk_source_buffer_set_highlight(buffer, FALSE);
-#endif
 
 	// Enable indent-on-tab
 	gtk_source_view_set_indent_on_tab(m_view, TRUE);
 
-	for(Preferences::FileList::iterator iter = preferences.files.begin();
-	    iter != preferences.files.end();
-	    ++ iter)
+	const gchar* const* ids =
+		gtk_source_language_manager_get_language_ids(manager);
+
+	if(ids)
 	{
-		Glib::PatternSpec spec(iter.pattern());
-		if(spec.match(info.get_title()) )
+		for(const gchar* const* id = ids; *id != NULL; ++ id)
 		{
-			gtk_source_buffer_set_language(buffer, iter.language());
-#ifdef WITH_GTKSOURCEVIEW2
-			gtk_source_buffer_set_highlight_syntax(buffer, TRUE);
-#else
-			gtk_source_buffer_set_highlight(buffer, TRUE);
-#endif
+			GtkSourceLanguage* lang =
+				gtk_source_language_manager_get_language(
+					manager, *id);
+
+			if(lang)
+			{
+				gchar** globs = gtk_source_language_get_globs(lang);
+				if(glob_matches(globs, info.get_title()))
+				{
+					set_language(lang);
+					break;
+				}
+				g_strfreev(globs);
+			}
 		}
 	}
-
-#ifdef WITH_GTKSOURCEVIEW2
-	// Set a theme so we see anything.
-	// TODO: This should be temporary code until gtksourceview2 sets a default
-	// theme.
-/*	GtkSourceStyleManager* sm = gtk_source_style_manager_new();
-	GtkSourceStyleScheme* scheme = gtk_source_style_manager_get_scheme(sm, "gvim");
-	gtk_source_buffer_set_style_scheme(buffer, scheme);
-	g_object_unref(G_OBJECT(sm));*/
-#endif
 
 	cpp_buffer->signal_mark_set().connect(
 		sigc::mem_fun(*this, &DocWindow::on_mark_set)
@@ -236,13 +236,7 @@ void Gobby::DocWindow::set_language(GtkSourceLanguage* language)
 		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)));
 
 	gtk_source_buffer_set_language(buffer, language);
-
-#ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_buffer_set_highlight_syntax(buffer, language != NULL);
-#else
-	gtk_source_buffer_set_highlight(buffer, language != NULL);
-#endif
-
 	m_signal_language_changed.emit();
 }
 
@@ -359,27 +353,17 @@ void Gobby::DocWindow::apply_preferences()
 {
 	GtkTextBuffer* buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view));
 
-#ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_view_set_tab_width(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.tab_width);
-#else
-	gtk_source_view_set_tabs_width(GTK_SOURCE_VIEW(m_view),
-		m_preferences.editor.tab_width);
-#endif
 
 	gtk_source_view_set_insert_spaces_instead_of_tabs(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.tab_spaces);
 	gtk_source_view_set_auto_indent(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.indentation_auto);
-#ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_view_set_smart_home_end(GTK_SOURCE_VIEW(m_view),
 		m_preferences.editor.homeend_smart ?
 		GTK_SOURCE_SMART_HOME_END_ALWAYS :
 		GTK_SOURCE_SMART_HOME_END_DISABLED);
-#else
-	gtk_source_view_set_smart_home_end(GTK_SOURCE_VIEW(m_view),
-		m_preferences.editor.homeend_smart);
-#endif
 
 	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(m_view),
 		wrap_mode_from_preferences(m_preferences));
@@ -387,23 +371,14 @@ void Gobby::DocWindow::apply_preferences()
 		m_preferences.view.linenum_display);
 	gtk_source_view_set_highlight_current_line(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.curline_highlight);
-#ifdef WITH_GTKSOURCEVIEW2
 	gtk_source_view_set_show_right_margin(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.margin_display);
 	gtk_source_view_set_right_margin_position(GTK_SOURCE_VIEW(m_view),
 		m_preferences.view.margin_pos);
 	gtk_source_buffer_set_highlight_matching_brackets(GTK_SOURCE_BUFFER(buffer),
 		m_preferences.view.bracket_highlight);
-#else
-	gtk_source_view_set_show_margin(GTK_SOURCE_VIEW(m_view),
-		m_preferences.view.margin_display);
-	gtk_source_view_set_margin(GTK_SOURCE_VIEW(m_view),
-		m_preferences.view.margin_pos);
-	gtk_source_buffer_set_check_brackets(GTK_SOURCE_BUFFER(buffer),
-		m_preferences.view.bracket_highlight);
-#endif
 
-	gtk_widget_modify_font(GTK_WIDGET(m_view), m_preferences.font.desc.gobj());
+	gtk_widget_modify_font(GTK_WIDGET(m_view), static_cast<Pango::FontDescription&>(m_preferences.appearance.font).gobj());
 
 	// Cursor position may have changed because of new tab width
 	// TODO: Only emit if the position really changed

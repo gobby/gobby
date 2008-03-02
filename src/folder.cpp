@@ -113,10 +113,11 @@ Gobby::Folder::TabLabel::close_event()
 }
 
 Gobby::Folder::Folder(Header& header,
-                      const Preferences& preferences):
+                      const Preferences& preferences,
+                      GtkSourceLanguageManager* lang_manager):
 	Gtk::Notebook(),
 	m_block_language(false), m_header(header), m_preferences(preferences),
-	m_buffer(NULL)
+	m_lang_manager(lang_manager), m_buffer(NULL)
 {
 	set_scrollable(true);
 
@@ -323,7 +324,7 @@ void Gobby::Folder::on_self_subscribe(LocalDocumentInfo& info)
 {
 	// Create new document
 	DocWindow* new_wnd =
-		Gtk::manage(new DocWindow(info, m_preferences) );
+		Gtk::manage(new DocWindow(info, m_preferences, m_lang_manager) );
 
 	// Watch update signal to emit document_updated signal if a document
 	// has been updated.

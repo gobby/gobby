@@ -42,6 +42,7 @@
 #include "joindialog.hpp"
 #include "finddialog.hpp"
 #include "gotodialog.hpp"
+#include "preferencesdialog.hpp"
 #include "folder.hpp"
 #include "document_settings.hpp"
 #include "chat.hpp"
@@ -231,6 +232,7 @@ protected:
 	std::queue<std::string> m_file_queue;
 
 	// Dialogs
+	std::auto_ptr<PreferencesDialog> m_preferences_dlg;
 	std::auto_ptr<HostDialog> m_host_dlg;
 	std::auto_ptr<JoinDialog> m_join_dlg;
 

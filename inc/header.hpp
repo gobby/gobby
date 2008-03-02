@@ -27,7 +27,7 @@
 #include <gtkmm/menubar.h>
 #include <gtkmm/toolbar.h>
 
-#include "preferences.hpp" // Defines GtkSourceLanguageManager (gtksourceview1)
+#include <gtksourceview/gtksourcelanguagemanager.h>
 #include "application_state.hpp"
 
 namespace Gobby

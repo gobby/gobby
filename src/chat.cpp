@@ -279,8 +279,8 @@ void Gobby::Chat::on_message(const obby::chat::message& message)
 		throw std::logic_error("Gobby::Chat::on_message");
 
 #ifdef GTKMM_GEQ_28
-	if(!m_focus && m_preferences.appearance.urgency_hint && is_visible())
-		m_parent.set_urgency_hint(true);
+//	if(!m_focus && m_preferences.appearance.urgency_hint && is_visible())
+//		m_parent.set_urgency_hint(true);
 #endif
 }
 

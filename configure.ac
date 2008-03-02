@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([gobby], [0.4.6], [crew@0x539.de])
+AC_INIT([gobby], [0.4.90], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9 check-news)
 AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([inc/window.hpp])
@@ -34,39 +34,10 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-required_libs="libxml++-2.6 gtkmm-2.4 >= 2.6.0 gthread-2.0 net6-1.3 obby-0.4 >= 0.4.5"
-
-# GtkSourceView2 support
-AC_ARG_WITH([gtksourceview2],
-            AS_HELP_STRING([--with-gtksourceview2],
-               [whether to use gtksourceview2 instead of
-	        gtksourceview1 [[default=no]]]),
-            [ac_cv_with_gtksourceview2=$withval],
-	    [ac_cv_with_gtksourceview2=no])
-
-AC_CACHE_CHECK([whether to use gtksourceview2 instead of gtksourceview1],
-               [ac_cv_with_gtksourceview2], [ac_cv_with_gtksourceview2=no])
-
-if test "x$ac_cv_with_gtksourceview2" = "xyes" ; then
-  AC_DEFINE([WITH_GTKSOURCEVIEW2], 1,
-    [Define whether to use gtksourceview2 instead of gtksourceview1])
-  required_libs="$required_libs gtksourceview-2.0"
-else
-  required_libs="$required_libs gtksourceview-1.0 >= 1.8"
-fi
-
-AM_CONDITIONAL(WITH_GTKSOURCEVIEW2, test x$ac_cv_with_gtksourceview2 != xno)
-AC_CACHE_SAVE
+required_libs="libxml++-2.6 gtkmm-2.4 >= 2.12.0 gthread-2.0 net6-1.3 obby-0.4 >= 0.4.5 gtksourceview-2.0"
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [$required_libs])
-AC_CACHE_SAVE
-
-# Check for the Gtkmm version available (either 2.6 or 2.8).
-PKG_CHECK_GTKMM
-if test "x$GTKMM_VER" = "x28" ; then
-  AC_DEFINE([GTKMM_GEQ_28], 1, [Defined if Gtkmm's version is 2.8 or greater])
-fi
 AC_CACHE_SAVE
 
 # As we could not yet auto-detect the GNOME desktop environment, it's the

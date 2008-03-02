@@ -20,7 +20,9 @@
 #define _GOBBY_DOCWINDOW_HPP_
 
 #include <gtkmm/scrolledwindow.h>
+
 #include <gtksourceview/gtksourceview.h>
+#include <gtksourceview/gtksourcelanguagemanager.h>
 
 #include "features.hpp"
 #include "preferences.hpp"
@@ -43,7 +45,8 @@ public:
 	 *
 	 * The preferences are initially applied to the DocWindow.
 	 */
-	DocWindow(LocalDocumentInfo& info, const Preferences& preferences);
+	DocWindow(LocalDocumentInfo& info, const Preferences& preferences,
+	          GtkSourceLanguageManager* manager);
 
 	/** @brief Returns the current cursor position in <em>row</em>
 	 * and <em>col</em>.

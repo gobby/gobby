@@ -1,3 +1,27 @@
+2008-03-02  Armin Burgmeier  <armin@0x539.de>
+
+	* configure.ac: Require at least gtkmm 2.12, drop gtksourceview1
+	support, post-branch-bump to 0.4.90.
+
+	* inc/preferences.hpp:
+	* src/preferences.cpp: Removed options not required for infinote,
+	added user preferences page.
+
+	* inc/preferencesdialog.hpp:
+	* src/preferencesdialog.cpp: Adapted and redesigned preferences
+	dialog to better meet the Gnome HIG. Currently disfunctional.
+
+	* inc/header.hpp:
+	* inc/folder.hpp:
+	* inc/docwindow.hpp:
+	* inc/window.hpp:
+	* src/header.cpp:
+	* src/folder.cpp:
+	* src/chat.cpp:
+	* src/togglewindow.cpp:
+	* src/docwindow.cpp:
+	* src/window.cpp: Adapt.
+
 2008-01-31  Armin Burgmeier  <armin@0x539.de>
 
 	* src/config.cpp: File test before loading XML file, this seems to
