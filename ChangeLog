@@ -1,5 +1,14 @@
 2008-03-03  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/initialdialog.hpp:
+	* src/initialdialog.cpp:
+	* Makefile.am: Added an initial welcome dialog.
+
+	* inc/window.hpp:
+	* src/window.cpp: Show initial dialog the first time gobby is started.
+
+2008-03-03  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/preferencesdialog.hpp:
 	* src/preferencesdialog.cpp: Store chosen preferences.
 

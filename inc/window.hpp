@@ -43,6 +43,7 @@
 #include "finddialog.hpp"
 #include "gotodialog.hpp"
 #include "preferencesdialog.hpp"
+#include "initialdialog.hpp"
 #include "folder.hpp"
 #include "document_settings.hpp"
 #include "chat.hpp"
@@ -109,7 +110,9 @@ protected:
 	// Gtk::Window overrides
 	virtual bool on_delete_event(GdkEventAny* event);
 	virtual void on_realize();
+	virtual void on_show();
 
+	void on_initial_dialog_hide();
 	void on_chat_realize();
 
 	// Start/End obby session
@@ -232,6 +235,7 @@ protected:
 	std::queue<std::string> m_file_queue;
 
 	// Dialogs
+	std::auto_ptr<InitialDialog> m_initial_dlg;
 	std::auto_ptr<PreferencesDialog> m_preferences_dlg;
 	std::auto_ptr<HostDialog> m_host_dlg;
 	std::auto_ptr<JoinDialog> m_join_dlg;

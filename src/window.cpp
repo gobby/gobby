@@ -270,6 +270,28 @@ void Gobby::Window::on_realize()
 	}
 }
 
+void Gobby::Window::on_show()
+{
+	Gtk::Window::on_show();
+
+	if(!m_config.get_root()["initial"].get_value<bool>("run", false))
+	{
+		m_initial_dlg.reset(new InitialDialog(m_preferences,
+		                                      m_icon_mgr));
+		m_initial_dlg->present();
+		m_initial_dlg->signal_hide().connect(
+			sigc::mem_fun(*this,
+			              &Window::on_initial_dialog_hide));
+	}
+}
+
+void Gobby::Window::on_initial_dialog_hide()
+{
+	m_initial_dlg.reset(NULL);
+	// Don't show again
+	m_config.get_root()["initial"].set_value("run", true);
+}
+
 void Gobby::Window::on_chat_realize()
 {
 	m_mainpaned.set_position(m_mainpaned.get_height() * 3 / 5);
