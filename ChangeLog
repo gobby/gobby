@@ -1,7 +1,19 @@
+2008-03-03  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/preferencesdialog.hpp:
+	* src/preferencesdialog.cpp: Store chosen preferences.
+
+	* inc/preferences.hpp: Add Preferences::Option::set for convenience.
+
+	* inc/colorutil.hpp:
+	* src/colorutil.cpp:
+	* Makefile.am: Added colorutil containing some utility functions to
+	handle colors.
+
 2008-03-02  Armin Burgmeier  <armin@0x539.de>
 
 	* configure.ac: Require at least gtkmm 2.12, drop gtksourceview1
-	support, post-branch-bump to 0.4.90.
+	support, post-branch bump to 0.4.90.
 
 	* inc/preferences.hpp:
 	* src/preferences.cpp: Removed options not required for infinote,

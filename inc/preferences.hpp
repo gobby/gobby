@@ -45,6 +45,11 @@ public:
 			return *this;
 		}
 
+		void set(const Type& new_value)
+		{
+			*this = new_value;
+		}
+
 		operator const Type&() const
 		{
 			return m_value;

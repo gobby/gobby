@@ -33,6 +33,7 @@ noinst_HEADERS += inc/unix.hpp
 endif
 noinst_HEADERS += inc/gselector.hpp
 noinst_HEADERS += inc/ipc.hpp
+noinst_HEADERS += inc/colorutil.hpp
 noinst_HEADERS += inc/config.hpp
 noinst_HEADERS += inc/common.hpp
 noinst_HEADERS += inc/encoding.hpp
@@ -82,6 +83,7 @@ gobby_SOURCES += src/unix.cpp
 endif
 gobby_SOURCES += src/gselector.cpp
 gobby_SOURCES += src/ipc.cpp
+gobby_SOURCES += src/colorutil.cpp
 gobby_SOURCES += src/config.cpp
 gobby_SOURCES += src/common.cpp
 gobby_SOURCES += src/encoding.cpp

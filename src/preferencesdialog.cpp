@@ -23,10 +23,13 @@
 #include <obby/format_string.hpp>
 
 #include "common.hpp"
+#include "colorutil.hpp"
 #include "preferencesdialog.hpp"
 
 namespace
 {
+	using namespace Gobby;
+
 	Gtk::ToolbarStyle rownum_to_toolstyle(int rownum)
 	{
 		switch(rownum)
@@ -36,6 +39,185 @@ namespace
 		case 3: return Gtk::TOOLBAR_BOTH_HORIZ;
 		case 2: default: return Gtk::TOOLBAR_BOTH;
 		}
+	}
+
+	Gtk::WrapMode
+	wrap_mode_from_check_buttons(Gtk::CheckButton& char_button,
+	                             Gtk::CheckButton& word_button)
+	{
+		if(!char_button.get_active())
+			return Gtk::WRAP_NONE;
+		else if(!word_button.get_active())
+			return Gtk::WRAP_CHAR;
+		else
+			return Gtk::WRAP_WORD_CHAR;
+	}
+
+	Pango::FontDescription create_description(const Glib::ustring& str)
+	{
+		return Pango::FontDescription(str);
+	}
+
+	template<typename OptionType>
+	void connect_option(Gtk::CheckButton& checkbutton,
+	                    Preferences::Option<OptionType>& option)
+	{
+		checkbutton.signal_toggled().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<OptionType>::set
+				),
+				sigc::mem_fun(
+					checkbutton,
+					&Gtk::CheckButton::get_active
+				)
+			)
+		);
+	}
+
+	template<typename OptionType>
+	void connect_option(Gtk::SpinButton& spinbutton,
+	                    Preferences::Option<OptionType>& option)
+	{
+		spinbutton.signal_value_changed().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<OptionType>::set
+				),
+				sigc::mem_fun(
+					spinbutton,
+					&Gtk::SpinButton::get_value
+				)
+			)
+		);
+	}
+
+	template<typename OptionType>
+	void connect_option(Gtk::Entry& entry,
+	                    Preferences::Option<OptionType>& option)
+	{
+		entry.signal_changed().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<OptionType>::set
+				),
+				sigc::mem_fun(
+					entry,
+					&Gtk::Entry::get_text
+				)
+			)
+		);
+	}
+
+	void
+	connect_toolbar_style_option(Gtk::ComboBox& box,
+	                             Preferences::Option<Gtk::ToolbarStyle>&
+	                             option)
+	{
+		box.signal_changed().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<
+						Gtk::ToolbarStyle>::set
+				),
+				sigc::compose(
+					sigc::ptr_fun(rownum_to_toolstyle),
+					sigc::mem_fun(
+						box,
+						&Gtk::ComboBox::
+							get_active_row_number
+					)
+				)
+			)
+		);
+	}
+
+	void connect_wrap_option(Gtk::CheckButton& char_button,
+	                         Gtk::CheckButton& word_button,
+				 Preferences::Option<Gtk::WrapMode>& option)
+	{
+		sigc::slot<void> toggled_slot(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<
+						Gtk::WrapMode>::set
+				),
+				sigc::bind(
+					sigc::ptr_fun(
+						wrap_mode_from_check_buttons),
+					sigc::ref(char_button),
+					sigc::ref(word_button)
+				)
+			)
+		);
+
+		char_button.signal_toggled().connect(toggled_slot);
+		word_button.signal_toggled().connect(toggled_slot);
+	}
+
+	void connect_hue_option(Gtk::ColorButton& color_button,
+	                        Preferences::Option<double>& option)
+	{
+		color_button.signal_color_set().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<double>::set
+				),
+				sigc::compose(
+					sigc::ptr_fun(&hue_from_gdk_color),
+					sigc::mem_fun(
+						color_button,
+						&Gtk::ColorButton::get_color
+					)
+				)
+			)
+		);
+	}
+
+	void connect_path_option(Gtk::FileChooser& file_chooser,
+	                         Preferences::Option<std::string>& option)
+	{
+		file_chooser.signal_selection_changed().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<std::string>::set
+				),
+				sigc::mem_fun(
+					file_chooser,
+					&Gtk::FileChooser::get_filename
+				)
+			)
+		);
+	}
+
+	void connect_font_option(Gtk::FontButton& button,
+	                         Preferences::Option<Pango::FontDescription>&
+	                         option)
+	{
+		button.signal_font_set().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<
+						Pango::FontDescription>::set
+				),
+				sigc::compose(
+					sigc::ptr_fun(&create_description),
+					sigc::mem_fun(
+						button,
+						&Gtk::FontButton::
+							get_font_name
+					)
+				)
+			)
+		);
 	}
 }
 
@@ -79,7 +261,7 @@ void Gobby::PreferencesDialog::Page::add(Gtk::Widget& widget)
 	m_box.pack_start(widget, Gtk::PACK_SHRINK);
 }
 
-Gobby::PreferencesDialog::User::User(const Preferences& preferences):
+Gobby::PreferencesDialog::User::User(Preferences& preferences):
 	m_group_settings(_("Settings")),
 	m_group_paths(_("Paths")),
 	m_box_user_name(false, 6),
@@ -93,16 +275,18 @@ Gobby::PreferencesDialog::User::User(const Preferences& preferences):
 	m_lbl_user_name.show();
 	m_ent_user_name.set_text(preferences.user.name);
 	m_ent_user_name.show();
+	connect_option(m_ent_user_name, preferences.user.name);
 
 	m_box_user_name.pack_start(m_lbl_user_name, Gtk::PACK_SHRINK);
 	m_box_user_name.pack_start(m_ent_user_name, Gtk::PACK_EXPAND_WIDGET);
 	m_box_user_name.show();
 
 	Gdk::Color color;
-	color.set_hsl(preferences.user.hue, 0.8, 1.0);
+	color.set_hsv(preferences.user.hue * 360, 0.8, 1.0);
 	m_lbl_user_color.show();
 	m_btn_user_color.set_color(color);
 	m_btn_user_color.show();
+	connect_hue_option(m_btn_user_color, preferences.user.hue);
 
 	m_box_user_color.pack_start(m_lbl_user_color, Gtk::PACK_SHRINK);
 	m_box_user_color.pack_start(
@@ -118,6 +302,8 @@ Gobby::PreferencesDialog::User::User(const Preferences& preferences):
 		static_cast<const std::string&>(
 			preferences.user.host_directory));
 	m_btn_path_host_directory.show();
+	connect_path_option(m_btn_path_host_directory,
+	                    preferences.user.host_directory);
 
 	m_box_path_host_directory.set_tooltip_text(
 		_("The directory into which locally hosted sessions "
@@ -135,7 +321,7 @@ Gobby::PreferencesDialog::User::User(const Preferences& preferences):
 	add(m_group_paths);
 }
 
-Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences):
+Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_tab(_("Tab Stops") ),
 	m_group_indentation(_("Indentation") ),
 	m_group_homeend(_("Home/End behaviour") ),
@@ -154,6 +340,7 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences):
 	m_ent_tab_width.set_value(tab_width);
 	m_ent_tab_width.set_increments(1, 1);
 	m_ent_tab_width.show();
+	connect_option(m_ent_tab_width, preferences.editor.tab_width);
 
 	m_btn_homeend_smart.set_tooltip_text(
 		_("With this option enabled, Home/End keys move to "
@@ -168,10 +355,14 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences):
 
 	m_btn_tab_spaces.set_active(tab_spaces);
 	m_btn_tab_spaces.show();
+	connect_option(m_btn_tab_spaces, preferences.editor.tab_spaces);
 	m_btn_indentation_auto.set_active(indentation_auto);
 	m_btn_indentation_auto.show();
+	connect_option(m_btn_indentation_auto,
+	               preferences.editor.indentation_auto);
 	m_btn_homeend_smart.set_active(homeend_smart);
 	m_btn_homeend_smart.show();
+	connect_option(m_btn_homeend_smart, preferences.editor.homeend_smart);
 
 	m_group_tab.add(m_box_tab_width);
 	m_group_tab.add(m_btn_tab_spaces);
@@ -188,7 +379,7 @@ Gobby::PreferencesDialog::Editor::Editor(const Preferences& preferences):
 	add(m_group_homeend);
 }
 
-Gobby::PreferencesDialog::View::View(const Preferences& preferences):
+Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	m_group_wrap(_("Text wrapping") ),
 	m_group_linenum(_("Line numbers") ),
 	m_group_curline(_("Current line") ),
@@ -218,21 +409,32 @@ Gobby::PreferencesDialog::View::View(const Preferences& preferences):
 	m_ent_margin_pos.set_value(margin_pos);
 	m_ent_margin_pos.set_increments(1, 16);
 	m_ent_margin_pos.show();
+	connect_option(m_ent_margin_pos, preferences.view.margin_pos);
 
 	m_btn_wrap_text.set_active(mode != Gtk::WRAP_NONE);
 	m_btn_wrap_text.show();
 	m_btn_wrap_words.set_active(mode == Gtk::WRAP_WORD_CHAR);
 	m_btn_wrap_words.set_sensitive(mode != Gtk::WRAP_NONE);
 	m_btn_wrap_words.show();
+	connect_wrap_option(m_btn_wrap_text,
+	                    m_btn_wrap_words,
+                            preferences.view.wrap_mode);
 	m_btn_linenum_display.set_active(linenum_display);
 	m_btn_linenum_display.show();
+	connect_option(m_btn_linenum_display,
+	               preferences.view.linenum_display);
 	m_btn_curline_highlight.set_active(curline_highlight);
 	m_btn_curline_highlight.show();
+	connect_option(m_btn_curline_highlight,
+	               preferences.view.curline_highlight);
 	m_btn_margin_display.set_active(margin_display);
 	m_btn_margin_display.show();
+	connect_option(m_btn_margin_display,
+	               preferences.view.margin_display);
 	m_btn_bracket_highlight.set_active(bracket_highlight);
 	m_btn_bracket_highlight.show();
-
+	connect_option(m_btn_bracket_highlight,
+	               preferences.view.bracket_highlight);
 
 	m_box_margin_pos.set_spacing(6);
 	m_box_margin_pos.set_sensitive(margin_display);
@@ -275,7 +477,7 @@ void Gobby::PreferencesDialog::View::on_margin_display_toggled()
 }
 
 Gobby::PreferencesDialog::Appearance::
-	Appearance(const Gobby::Preferences& preferences):
+	Appearance(Gobby::Preferences& preferences):
 	m_group_toolbar(_("Toolbar") ),
 	m_group_font(_("Font") )
 {
@@ -287,6 +489,8 @@ Gobby::PreferencesDialog::Appearance::
 	m_cmb_toolbar_style.append_text(_("Show both icons and text") );
 	m_cmb_toolbar_style.append_text(_("Show text besides icons") );
 	m_cmb_toolbar_style.show();
+	connect_toolbar_style_option(m_cmb_toolbar_style,
+	                             preferences.appearance.toolbar_show);
 
 	switch(style)
 	{
@@ -299,6 +503,7 @@ Gobby::PreferencesDialog::Appearance::
 
 	m_btn_font.set_font_name(font.to_string());
 	m_btn_font.show();
+	connect_font_option(m_btn_font, preferences.appearance.font);
 
 	m_group_toolbar.add(m_cmb_toolbar_style);
 	m_group_toolbar.show();

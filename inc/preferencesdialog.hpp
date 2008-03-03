@@ -63,7 +63,7 @@ public:
 	class User: public Page
 	{
 	public:
-		User(const Preferences& preferences);
+		User(Preferences& preferences);
 
 	protected:
 		Group m_group_settings;
@@ -75,6 +75,7 @@ public:
 
 		Gtk::HBox m_box_user_color;
 		Gtk::Label m_lbl_user_color;
+		/* TODO: Use an own color chooser to only choose hue */
 		Gtk::ColorButton m_btn_user_color;
 
 		Gtk::HBox m_box_path_host_directory;
@@ -85,7 +86,7 @@ public:
 	class Editor: public Page
 	{
 	public:
-		Editor(const Preferences& preferences);
+		Editor(Preferences& preferences);
 
 	protected:
 		Group m_group_tab;
@@ -105,7 +106,7 @@ public:
 	class View: public Page
 	{
 	public:
-		View(const Preferences& preferences);
+		View(Preferences& preferences);
 		void set(Preferences::View& view) const;
 
 	protected:
@@ -136,7 +137,7 @@ public:
 	class Appearance: public Page
 	{
 	public:
-		Appearance(const Preferences& preferences);
+		Appearance(Preferences& preferences);
 
 	protected:
 		Group m_group_toolbar;
