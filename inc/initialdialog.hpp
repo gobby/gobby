@@ -34,7 +34,8 @@ namespace Gobby
 class InitialDialog : public Gtk::Dialog
 {
 public:
-	InitialDialog(Preferences& preferences,
+	InitialDialog(Gtk::Window& parent,
+	              Preferences& preferences,
 	              const IconManager& icon_manager);
 
 protected:

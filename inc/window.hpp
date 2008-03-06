@@ -46,7 +46,7 @@
 #include "initialdialog.hpp"
 #include "folder.hpp"
 #include "document_settings.hpp"
-#include "chat.hpp"
+#include "browser.hpp"
 #include "statusbar.hpp"
 #include "dragdrop.hpp"
 #ifdef WITH_ZEROCONF
@@ -113,7 +113,6 @@ protected:
 	virtual void on_show();
 
 	void on_initial_dialog_hide();
-	void on_chat_realize();
 
 	// Start/End obby session
 	void obby_start();
@@ -203,15 +202,16 @@ protected:
 
 	// GUI
 	Gtk::VBox m_mainbox;
-	Gtk::VPaned m_mainpaned;
+	Gtk::HPaned m_paned;
 
-	Gtk::Frame m_frame_chat;
+	Gtk::Frame m_frame_browser;
 	Gtk::Frame m_frame_text;
 
 	ApplicationState m_application_state;
 	DocumentSettings m_document_settings;
 
 	Header m_header;
+	Browser m_browser;
 	Folder m_folder;
 
 	UserList m_userlist;
@@ -220,7 +220,6 @@ protected:
 	std::auto_ptr<FindDialog> m_finddialog;
 	std::auto_ptr<GotoDialog> m_gotodialog;
 
-	Chat m_chat;
 	StatusBar m_statusbar;
 
 	sigc::connection m_conn_chat_realize;

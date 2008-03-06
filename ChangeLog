@@ -1,3 +1,22 @@
+2008-03-06  Armin Burgmeier  <armin@0x539.de>
+	
+	* inc/resolv.hpp:
+	* src/resolv.cpp: Code to asynchronously resolve host names.
+
+	* inc/browser.hpp:
+	* src/browser.cpp: Added Browser class that shows remote directories
+	to browse (via InfGtkBrowserView), and that allows to create direct
+	connections.
+
+	* inc/window.hpp:
+	* src/window.cpp: Show browser in a sidepane to the left, remove chat.
+
+	* src/initialdialog.cpp: Set window title.
+
+	* Makefile.am: Added browser.{h,c}pp and resolv.{h,c}pp
+
+	* configure.ac: Depend on infinote.
+
 2008-03-03  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/initialdialog.hpp:

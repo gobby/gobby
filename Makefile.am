@@ -32,11 +32,13 @@ else
 noinst_HEADERS += inc/unix.hpp
 endif
 noinst_HEADERS += inc/gselector.hpp
+noinst_HEADERS += inc/browser.hpp
 noinst_HEADERS += inc/ipc.hpp
 noinst_HEADERS += inc/colorutil.hpp
 noinst_HEADERS += inc/config.hpp
 noinst_HEADERS += inc/common.hpp
 noinst_HEADERS += inc/encoding.hpp
+noinst_HEADERS += inc/resolv.hpp
 noinst_HEADERS += inc/regex.hpp
 noinst_HEADERS += inc/application_state.hpp
 noinst_HEADERS += inc/encoding_selector.hpp
@@ -83,11 +85,13 @@ else
 gobby_SOURCES += src/unix.cpp
 endif
 gobby_SOURCES += src/gselector.cpp
+gobby_SOURCES += src/browser.cpp
 gobby_SOURCES += src/ipc.cpp
 gobby_SOURCES += src/colorutil.cpp
 gobby_SOURCES += src/config.cpp
 gobby_SOURCES += src/common.cpp
 gobby_SOURCES += src/encoding.cpp
+gobby_SOURCES += src/resolv.cpp
 gobby_SOURCES += src/regex.cpp
 gobby_SOURCES += src/application_state.cpp
 gobby_SOURCES += src/encoding_selector.cpp

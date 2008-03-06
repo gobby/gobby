@@ -45,6 +45,35 @@
 #include "icon.hpp"
 #include "colorsel.hpp"
 
+#include <libinftextgtk/inf-text-gtk-buffer.h>
+#include <libinftext/inf-text-session.h>
+#include <libinftext/inf-text-buffer.h>
+
+namespace
+{
+	InfSession*
+	session_new(InfIo* io, InfConnectionManager* manager,
+	            InfConnectionManagerGroup* sync_group,
+	            InfXmlConnection* sync_connection)
+	{
+		GtkTextBuffer* textbuffer = gtk_text_buffer_new(NULL);
+		InfUserTable* user_table = inf_user_table_new();
+		InfTextGtkBuffer* buffer =
+			inf_text_gtk_buffer_new(textbuffer, user_table);
+		InfTextSession* session =
+			inf_text_session_new_with_user_table(
+				manager, INF_TEXT_BUFFER(buffer), io,
+				user_table, sync_group, sync_connection);
+		return INF_SESSION(session);
+	}
+
+	const InfcNotePlugin TEXT_PLUGIN =
+	{
+		"InfText",
+		session_new
+	};
+}
+
 Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
 	m_lang_manager(gtk_source_language_manager_new()),
@@ -52,6 +81,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_application_state, m_lang_manager),
+	m_browser(*this, &TEXT_PLUGIN, m_preferences),
 	m_folder(m_header, m_preferences, m_lang_manager),
 	m_userlist(
 		*this,
@@ -68,7 +98,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		m_preferences,
 		config.get_root()["windows"]
 	),
-	m_chat(*this, m_preferences),
 	m_statusbar(m_header, m_folder)
 #ifdef WITH_AVAHI
 	,m_glib_poll(avahi_glib_poll_new(NULL, G_PRIORITY_DEFAULT))
@@ -120,6 +149,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_header.action_help_about->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_about) );
 
+	m_browser.show();
+
 	// Folder
 	m_folder.document_add_event().connect(
 		sigc::mem_fun(*this, &Window::on_folder_document_add) );
@@ -134,23 +165,20 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_document_settings.document_insert_event().connect(
 		sigc::mem_fun(*this, &Window::on_settings_document_insert) );
 
-	m_conn_chat_realize = m_chat.signal_realize().connect(
-		sigc::mem_fun(*this, &Window::on_chat_realize) );
-
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
-	m_frame_chat.set_shadow_type(Gtk::SHADOW_IN);
+	m_frame_browser.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
 
-	m_frame_chat.add(m_chat);
+	m_frame_browser.add(m_browser);
 	m_frame_text.add(m_folder);
 
-	m_mainpaned.pack1(m_frame_text, true, false);
-	m_mainpaned.pack2(m_frame_chat, true, false);
+	m_paned.pack1(m_frame_browser, true, false);
+	m_paned.pack2(m_frame_text, true, false);
 
 	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);
-	m_mainbox.pack_start(m_mainpaned, Gtk::PACK_EXPAND_WIDGET);
+	m_mainbox.pack_start(m_paned, Gtk::PACK_EXPAND_WIDGET);
 	m_mainbox.pack_start(m_statusbar, Gtk::PACK_SHRINK);
 
 	add(m_mainbox);
@@ -159,16 +187,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	apply_preferences();
 
 	Config::ParentEntry& windows = config.get_root()["windows"];
-	bool show_chat = windows["chat"].get_value<bool>(
-		"visible",
-		true
-	);
-
-	m_header.action_window_chat->set_active(show_chat);
 	m_application_state.modify(APPLICATION_INITIAL, APPLICATION_NONE);
 
 	show_all_children();
-	if(!show_chat) m_frame_chat.hide_all();
 
 	set_title("Gobby");
 	set_default_size(640, 480);
@@ -204,12 +225,6 @@ Gobby::Window::~Window()
 
 	// Serialise preferences into config
 	m_preferences.serialise(m_config);
-
-	Config::ParentEntry& windows = m_config.get_root()["windows"];
-	windows["chat"].set_value(
-		"visible",
-		m_header.action_window_chat->get_active()
-	);
 
 	/* Free explictely to make sure that the avahi poll is no longer
 	 * referenced when we free it */
@@ -255,6 +270,8 @@ void Gobby::Window::on_realize()
 {
 	Gtk::Window::on_realize();
 
+	m_paned.set_position(m_paned.get_width() * 2 / 5);
+
 	// Create new IPC instance
 	try
 	{
@@ -276,7 +293,7 @@ void Gobby::Window::on_show()
 
 	if(!m_config.get_root()["initial"].get_value<bool>("run", false))
 	{
-		m_initial_dlg.reset(new InitialDialog(m_preferences,
+		m_initial_dlg.reset(new InitialDialog(*this, m_preferences,
 		                                      m_icon_mgr));
 		m_initial_dlg->present();
 		m_initial_dlg->signal_hide().connect(
@@ -290,12 +307,6 @@ void Gobby::Window::on_initial_dialog_hide()
 	m_initial_dlg.reset(NULL);
 	// Don't show again
 	m_config.get_root()["initial"].set_value("run", true);
-}
-
-void Gobby::Window::on_chat_realize()
-{
-	m_mainpaned.set_position(m_mainpaned.get_height() * 3 / 5);
-	m_conn_chat_realize.disconnect();
 }
 
 void Gobby::Window::obby_start()
@@ -323,7 +334,6 @@ void Gobby::Window::obby_start()
 	m_documentlist.obby_start(*m_buffer);
 	m_document_settings.obby_start(*m_buffer);
 	m_userlist.obby_start(*m_buffer);
-	m_chat.obby_start(*m_buffer);
 	m_statusbar.obby_start(*m_buffer);
 
 	// Forward user joins
@@ -402,7 +412,6 @@ void Gobby::Window::obby_end()
 	m_document_settings.obby_end();
 	m_userlist.obby_end();
 	m_documentlist.obby_end();
-	m_chat.obby_end();
 	m_statusbar.obby_end();
 
 #ifdef WITH_ZEROCONF
@@ -969,11 +978,9 @@ void Gobby::Window::on_window_chat()
 {
 	if(m_header.action_window_chat->get_active() )
 	{
-		m_frame_chat.show_all();
 	}
 	else
 	{
-		m_frame_chat.hide_all();
 	}
 }
 
@@ -1006,7 +1013,6 @@ void Gobby::Window::on_obby_user_join(const obby::user& user)
 	m_folder.obby_user_join(user);
 	m_userlist.obby_user_join(user);
 	m_documentlist.obby_user_join(user);
-	m_chat.obby_user_join(user);
 	m_statusbar.obby_user_join(user);
 }
 
@@ -1016,7 +1022,6 @@ void Gobby::Window::on_obby_user_part(const obby::user& user)
 	m_folder.obby_user_part(user);
 	m_userlist.obby_user_part(user);
 	m_documentlist.obby_user_part(user);
-	m_chat.obby_user_part(user);
 	m_statusbar.obby_user_part(user);
 }
 
@@ -1040,7 +1045,6 @@ void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
 	m_folder.obby_document_insert(local_doc);
 	m_userlist.obby_document_insert(local_doc);
 	m_documentlist.obby_document_insert(local_doc);
-	m_chat.obby_document_insert(local_doc);
 	m_statusbar.obby_document_insert(local_doc);
 }
 
@@ -1052,7 +1056,6 @@ void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
 	m_folder.obby_document_remove(local_doc);
 	m_userlist.obby_document_remove(local_doc);
 	m_documentlist.obby_document_remove(local_doc);
-	m_chat.obby_document_remove(local_doc);
 	m_statusbar.obby_document_remove(local_doc);
 }
 

@@ -36,7 +36,8 @@ namespace
 	}
 }
 
-Gobby::InitialDialog::InitialDialog(Preferences& preferences,
+Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
+                                    Preferences& preferences,
                                     const IconManager& icon_manager):
 	m_preferences(preferences),
 	m_table(2, 2),
@@ -120,6 +121,7 @@ Gobby::InitialDialog::InitialDialog(Preferences& preferences,
 	get_vbox()->pack_start(m_topbox, Gtk::PACK_EXPAND_WIDGET);
 
 	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	set_title("Gobby");
 }
 
 void Gobby::InitialDialog::on_response(int id)
