@@ -1,3 +1,25 @@
+2008-03-09  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/documentlist.hpp:
+	* inc/userlist.hpp:
+	* src/documentlist.cpp:
+	* src/userlist.cpp:
+	* Makefile.am: Removed.
+
+	* inc/preferences.hpp:
+	* src/preferences.cpp: Added show_toolbar and show_statusbar
+	preferences.
+
+	* inc/initialdialog.hpp: Added missing include (gtkmm/image.h).
+
+	* inc/header.hpp:
+	* src/header.cpp: Redesign menu/toolbar to better match common
+	editors.
+
+	* inc/window.hpp:
+	* src/folder.cpp:
+	* src/window.cpp: Adapt to above changes, current UI disfunctional.
+
 2008-03-06  Armin Burgmeier  <armin@0x539.de>
 	
 	* inc/resolv.hpp:

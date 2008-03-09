@@ -481,7 +481,7 @@ Gobby::PreferencesDialog::Appearance::
 	m_group_toolbar(_("Toolbar") ),
 	m_group_font(_("Font") )
 {
-	Gtk::ToolbarStyle style = preferences.appearance.toolbar_show;
+	Gtk::ToolbarStyle style = preferences.appearance.toolbar_style;
 	const Pango::FontDescription& font = preferences.appearance.font;
 
 	m_cmb_toolbar_style.append_text(_("Show text only") );
@@ -490,7 +490,7 @@ Gobby::PreferencesDialog::Appearance::
 	m_cmb_toolbar_style.append_text(_("Show text besides icons") );
 	m_cmb_toolbar_style.show();
 	connect_toolbar_style_option(m_cmb_toolbar_style,
-	                             preferences.appearance.toolbar_show);
+	                             preferences.appearance.toolbar_style);
 
 	switch(style)
 	{

@@ -81,28 +81,34 @@ void Gobby::Preferences::View::serialise(Config::ParentEntry& entry) const
 }
 
 Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
-	toolbar_show(
+	toolbar_style(
 		static_cast<Gtk::ToolbarStyle>(
 			entry.get_value<int>(
-				"toolbar_show",
+				"toolbar_style",
+				// TODO: Get default value from gconf
 				static_cast<int>(Gtk::TOOLBAR_BOTH)
 			)
 		)
 	),
 	font(Pango::FontDescription(entry.get_value<Glib::ustring>(
-		"font", "Monospace 10")))
+		"font", "Monospace 10"))),
+	show_toolbar(entry.get_value<bool>("show_toolbar", true)),
+	show_statusbar(entry.get_value<bool>("show_statusbar", true))
 {
 }
 
 void Gobby::Preferences::Appearance::
 	serialise(Config::ParentEntry& entry) const
 {
-	entry.set_value("toolbar_show", static_cast<int>(toolbar_show) );
+	entry.set_value("toolbar_style", static_cast<int>(toolbar_style) );
 
 	entry.set_value(
 		"font",
 		static_cast<const Pango::FontDescription&>(font).to_string()
 	);
+
+	entry.set_value("show_toolbar", show_toolbar);
+	entry.set_value("show_statusbar", show_statusbar);
 }
 
 Gobby::Preferences::Preferences(Config& config):

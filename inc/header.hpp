@@ -23,12 +23,14 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/uimanager.h>
+#include <gtkmm/toggleaction.h>
 #include <gtkmm/radioaction.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/toolbar.h>
 
 #include <gtksourceview/gtksourcelanguagemanager.h>
-#include "application_state.hpp"
+
+#include "preferences.hpp"
 
 namespace Gobby
 {
@@ -48,140 +50,78 @@ public:
 		Code code() const;
 	};
 
-	/** @brief Action that automatically chances sensitivity depending
-	 * on application state.
-	 */
-	class AutoAction
+	class LanguageAction: public Gtk::RadioAction
 	{
-	public:
-		typedef Glib::RefPtr<Gtk::Action> action_type;
-
-		AutoAction(action_type action,
-		           const ApplicationState& state,
-		           ApplicationFlags inc_flags,
-			   ApplicationFlags exc_flags);
-
 	protected:
-		void on_state_change(const ApplicationState& state);
-
-		action_type m_action;
-		ApplicationFlags m_inc_flags;
-		ApplicationFlags m_exc_flags;
-	};
-
-	/** @brief Class that stores multiple AutoActions.
-	 *
-	 * Once an AutoAction has been created, it works without any further
-	 * need to access the AutoAction object again, one just needs to
-	 * keep the AutoAction somewhere and release it when the application
-	 * exits.
-	 *
-	 * So this class does just keep auto actions without providing access
-	 * to them.
-	 */
-	class AutoList
-	{
+		LanguageAction(GtkSourceLanguage* language,
+		               Gtk::RadioAction::Group& group);
 	public:
-		typedef AutoAction::action_type action_type;
+		static Glib::RefPtr<LanguageAction>
+		create(GtkSourceLanguage* language,
+		       Gtk::RadioAction::Group& group);
 
-		void add(action_type action,
-		         const ApplicationState& state,
-			 ApplicationFlags inc_flags,
-			 ApplicationFlags exc_flags);
-
-		~AutoList();
-
-	protected:
-		std::list<AutoAction*> m_list;
-	};
-
-	class LanguageWrapper
-	{
-	public:
-		//typedef AutoAction<Gtk::RadioAction> Action;
-		typedef Glib::RefPtr<Gtk::RadioAction> Action;
-
-		LanguageWrapper(Action action,
-		                GtkSourceLanguage* language);
-		~LanguageWrapper();
-
-		Action get_action() const;
-		GtkSourceLanguage* get_language() const;
-	protected:
-		Action m_action;
+		GtkSourceLanguage* get_language() const { return m_language; }
+	private:
 		GtkSourceLanguage* m_language;
 	};
 
-	Header(const ApplicationState& state,
+        typedef std::list<Glib::RefPtr<LanguageAction> > LanguageList;
+	typedef std::map<Glib::ustring, const LanguageList> LanguageMap;
+
+	Header(Preferences& preferences,
 	       GtkSourceLanguageManager* lang_mgr);
 
-	// Access to accelerator groups of the ui manager
 	Glib::RefPtr<Gtk::AccelGroup> get_accel_group();
 	Glib::RefPtr<const Gtk::AccelGroup> get_accel_group() const;
 
-	// Access to toolbar & menubar
 	Gtk::MenuBar& get_menubar();
 	Gtk::Toolbar& get_toolbar();
 
-	const Glib::RefPtr<Gtk::ActionGroup> group_app;
-	const Glib::RefPtr<Gtk::ActionGroup> group_session;
-	const Glib::RefPtr<Gtk::ActionGroup> group_edit;
-	const Glib::RefPtr<Gtk::ActionGroup> group_user;
-	const Glib::RefPtr<Gtk::ActionGroup> group_window;
-	const Glib::RefPtr<Gtk::ActionGroup> group_help;
-
-	const Glib::RefPtr<Gtk::Action> action_app;
-	const Glib::RefPtr<Gtk::Action> action_app_session_create;
-	const Glib::RefPtr<Gtk::Action> action_app_session_join;
-	const Glib::RefPtr<Gtk::Action> action_app_session_save;
-	const Glib::RefPtr<Gtk::Action> action_app_session_quit;
-	const Glib::RefPtr<Gtk::Action> action_app_quit;
-
-	const Glib::RefPtr<Gtk::Action> action_session;
-	const Glib::RefPtr<Gtk::Action> action_session_document_create;
-	const Glib::RefPtr<Gtk::Action> action_session_document_open;
-	const Glib::RefPtr<Gtk::Action> action_session_document_save;
-	const Glib::RefPtr<Gtk::Action> action_session_document_save_as;
-	const Glib::RefPtr<Gtk::Action> action_session_document_close;
-
-	const Glib::RefPtr<Gtk::Action> action_edit;
-	const Glib::RefPtr<Gtk::Action> action_edit_search;
-	const Glib::RefPtr<Gtk::Action> action_edit_search_replace;
-	const Glib::RefPtr<Gtk::Action> action_edit_goto_line;
-	const Glib::RefPtr<Gtk::Action> action_edit_preferences;
-	const Glib::RefPtr<Gtk::Action> action_edit_document_preferences;
-	const Glib::RefPtr<Gtk::Action> action_edit_syntax;
-	std::list<LanguageWrapper> action_edit_syntax_languages;
-
-	const Glib::RefPtr<Gtk::Action> action_user;
-	const Glib::RefPtr<Gtk::Action> action_user_set_password;
-	const Glib::RefPtr<Gtk::Action> action_user_set_colour;
-
-	const Glib::RefPtr<Gtk::Action> action_window;
-	const Glib::RefPtr<Gtk::ToggleAction> action_window_userlist;
-	const Glib::RefPtr<Gtk::ToggleAction> action_window_documentlist;
-	const Glib::RefPtr<Gtk::ToggleAction> action_window_chat;
-
-	const Glib::RefPtr<Gtk::Action> action_help;
-	const Glib::RefPtr<Gtk::Action> action_help_about;
-
 protected:
-	void set_action_auto(const Glib::RefPtr<Gtk::Action>& action,
-	                     const ApplicationState& state,
-	                     ApplicationFlags inc_flags,
-	                     ApplicationFlags exc_flags);
+	Preferences& m_preferences;
+	Gtk::RadioAction::Group m_highlight_group;
 
 	const Glib::RefPtr<Gtk::UIManager> m_ui_manager;
 
 	Gtk::MenuBar* m_menubar;
 	Gtk::Toolbar* m_toolbar;
 
-	Gtk::RadioButtonGroup m_lang_group;
+public:
+	const Glib::RefPtr<Gtk::ActionGroup> group_file;
+	const Glib::RefPtr<Gtk::ActionGroup> group_edit;
+	const Glib::RefPtr<Gtk::ActionGroup> group_view;
+	const Glib::RefPtr<Gtk::ActionGroup> group_help;
 
-	/** @brief List that just stores internally the auto actions to have
-	 * the actions change sensitivity automatically.
-	 */
-	AutoList m_auto_actions;
+	const Glib::RefPtr<Gtk::Action> action_file;
+	const Glib::RefPtr<Gtk::Action> action_file_new;
+	const Glib::RefPtr<Gtk::Action> action_file_open;
+	const Glib::RefPtr<Gtk::Action> action_file_save;
+	const Glib::RefPtr<Gtk::Action> action_file_save_as;
+	const Glib::RefPtr<Gtk::Action> action_file_save_all;
+	const Glib::RefPtr<Gtk::Action> action_file_quit;
+
+        const Glib::RefPtr<Gtk::Action> action_edit;
+        const Glib::RefPtr<Gtk::Action> action_edit_undo;
+        const Glib::RefPtr<Gtk::Action> action_edit_redo;
+        const Glib::RefPtr<Gtk::Action> action_edit_cut;
+        const Glib::RefPtr<Gtk::Action> action_edit_copy;
+        const Glib::RefPtr<Gtk::Action> action_edit_paste;
+        const Glib::RefPtr<Gtk::Action> action_edit_find;
+        const Glib::RefPtr<Gtk::Action> action_edit_find_next;
+        const Glib::RefPtr<Gtk::Action> action_edit_find_prev;
+        const Glib::RefPtr<Gtk::Action> action_edit_find_replace;
+        const Glib::RefPtr<Gtk::Action> action_edit_goto_line;
+        const Glib::RefPtr<Gtk::Action> action_edit_preferences;
+
+	const Glib::RefPtr<Gtk::Action> action_view;
+	const Glib::RefPtr<Gtk::ToggleAction> action_view_toolbar;
+	const Glib::RefPtr<Gtk::ToggleAction> action_view_statusbar;
+	const Glib::RefPtr<Gtk::Action> action_view_highlight_mode;
+	const Glib::RefPtr<LanguageAction> action_view_highlight_none;
+        const LanguageMap action_view_highlight_languages;
+
+	const Glib::RefPtr<Gtk::Action> action_help;
+	const Glib::RefPtr<Gtk::Action> action_help_about;
 };
 
 }

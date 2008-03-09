@@ -121,7 +121,7 @@ Gobby::Folder::Folder(Header& header,
 {
 	set_scrollable(true);
 
-	for(std::list<Header::LanguageWrapper>::const_iterator iter =
+/*	for(std::list<Header::LanguageWrapper>::const_iterator iter =
 		m_header.action_edit_syntax_languages.begin();
 	    iter != m_header.action_edit_syntax_languages.end();
 	    ++ iter)
@@ -137,7 +137,7 @@ Gobby::Folder::Folder(Header& header,
 		);
 	}
 
-	add_events(Gdk::KEY_PRESS_MASK);
+	add_events(Gdk::KEY_PRESS_MASK);*/
 }
 
 #if 0
@@ -447,7 +447,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 	if(!m_block_language)
 	{
 		m_block_language = true;
-		for(std::list<Header::LanguageWrapper>::const_iterator iter =
+/*		for(std::list<Header::LanguageWrapper>::const_iterator iter =
 			m_header.action_edit_syntax_languages.begin();
 		    iter != m_header.action_edit_syntax_languages.end();
 		    ++ iter)
@@ -455,7 +455,7 @@ void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 			if(iter->get_language() == language)
 				iter->get_action()->set_active(true);
 
-		}
+		}*/
 		m_block_language = false;
 	}
 

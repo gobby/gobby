@@ -127,8 +127,11 @@ public:
 		Appearance(Config::ParentEntry& entry);
 		void serialise(Config::ParentEntry& entry) const;
 
-		Option<Gtk::ToolbarStyle> toolbar_show;
+		Option<Gtk::ToolbarStyle> toolbar_style;
 		Option<Pango::FontDescription> font;
+
+		Option<bool> show_toolbar;
+		Option<bool> show_statusbar;
 	};
 
 	User user;

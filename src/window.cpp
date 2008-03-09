@@ -80,29 +80,15 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_preferences(m_config), m_icon_mgr(icon_mgr),
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
-	m_header(m_application_state, m_lang_manager),
+	m_header(m_preferences, m_lang_manager),
 	m_browser(*this, &TEXT_PLUGIN, m_preferences),
 	m_folder(m_header, m_preferences, m_lang_manager),
-	m_userlist(
-		*this,
-		m_header,
-		m_folder,
-		m_preferences,
-		config.get_root()["windows"]
-	),
-	m_documentlist(
-		*this,
-		m_document_settings,
-		m_header,
-		m_folder,
-		m_preferences,
-		config.get_root()["windows"]
-	),
 	m_statusbar(m_header, m_folder)
 #ifdef WITH_AVAHI
 	,m_glib_poll(avahi_glib_poll_new(NULL, G_PRIORITY_DEFAULT))
 #endif
 {
+#if 0
 	// Header
 	m_header.action_app_session_create->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_session_create) );
@@ -148,7 +134,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 
 	m_header.action_help_about->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_about) );
-
+#endif
 	m_browser.show();
 
 	// Folder
@@ -331,9 +317,7 @@ void Gobby::Window::obby_start()
 
 	// Delegate start of obby session
 	m_folder.obby_start(*m_buffer);
-	m_documentlist.obby_start(*m_buffer);
 	m_document_settings.obby_start(*m_buffer);
-	m_userlist.obby_start(*m_buffer);
 	m_statusbar.obby_start(*m_buffer);
 
 	// Forward user joins
@@ -364,8 +348,6 @@ void Gobby::Window::obby_start()
 	// Show up document list if obby buffer contains documents
 	if(m_buffer->document_count() > 0)
 	{
-		m_documentlist.show();
-		m_documentlist.grab_focus();
 	}
 
 	ApplicationFlags inc_flags = APPLICATION_SESSION;
@@ -410,8 +392,6 @@ void Gobby::Window::obby_end()
 	// Tell GUI components that the session ended
 	m_folder.obby_end();
 	m_document_settings.obby_end();
-	m_userlist.obby_end();
-	m_documentlist.obby_end();
 	m_statusbar.obby_end();
 
 #ifdef WITH_ZEROCONF
@@ -976,12 +956,6 @@ Gobby::Window::on_view_language(GtkSourceLanguage* language)
 
 void Gobby::Window::on_window_chat()
 {
-	if(m_header.action_window_chat->get_active() )
-	{
-	}
-	else
-	{
-	}
 }
 
 void Gobby::Window::on_quit()
@@ -1011,8 +985,6 @@ void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
 	// Tell user join to components
 	m_folder.obby_user_join(user);
-	m_userlist.obby_user_join(user);
-	m_documentlist.obby_user_join(user);
 	m_statusbar.obby_user_join(user);
 }
 
@@ -1020,15 +992,11 @@ void Gobby::Window::on_obby_user_part(const obby::user& user)
 {
 	// Tell user part to components
 	m_folder.obby_user_part(user);
-	m_userlist.obby_user_part(user);
-	m_documentlist.obby_user_part(user);
 	m_statusbar.obby_user_part(user);
 }
 
 void Gobby::Window::on_obby_user_colour(const obby::user& user)
 {
-	m_userlist.obby_user_colour(user);
-	m_documentlist.obby_user_colour(user);
 	m_folder.obby_user_colour(user);
 }
 
@@ -1043,8 +1011,6 @@ void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
 		dynamic_cast<LocalDocumentInfo&>(document);
 
 	m_folder.obby_document_insert(local_doc);
-	m_userlist.obby_document_insert(local_doc);
-	m_documentlist.obby_document_insert(local_doc);
 	m_statusbar.obby_document_insert(local_doc);
 }
 
@@ -1054,8 +1020,6 @@ void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
 		dynamic_cast<LocalDocumentInfo&>(document);
 
 	m_folder.obby_document_remove(local_doc);
-	m_userlist.obby_document_remove(local_doc);
-	m_documentlist.obby_document_remove(local_doc);
 	m_statusbar.obby_document_remove(local_doc);
 }
 
@@ -1096,8 +1060,6 @@ Gobby::DocWindow* Gobby::Window::get_current_document()
 
 void Gobby::Window::apply_preferences()
 {
-	m_header.get_toolbar().set_toolbar_style(
-		m_preferences.appearance.toolbar_show);
 }
 
 void Gobby::Window::update_title_bar()

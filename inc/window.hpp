@@ -36,8 +36,6 @@
 #include "header.hpp"
 #include "docwindow.hpp"
 #include "buffer_def.hpp"
-#include "userlist.hpp"
-#include "documentlist.hpp"
 #include "hostdialog.hpp"
 #include "joindialog.hpp"
 #include "finddialog.hpp"
@@ -213,9 +211,6 @@ protected:
 	Header m_header;
 	Browser m_browser;
 	Folder m_folder;
-
-	UserList m_userlist;
-	DocumentList m_documentlist;
 
 	std::auto_ptr<FindDialog> m_finddialog;
 	std::auto_ptr<GotoDialog> m_gotodialog;
