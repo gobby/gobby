@@ -1,3 +1,12 @@
+2008-03-13  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/statusbar.hpp:
+	* src/statusbar.cpp: Removed old functionality, add methods to add
+	and remove status messages.
+
+	* inc/window.hpp:
+	* inc/window.cpp: Adapt.
+
 2008-03-09  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/documentlist.hpp:

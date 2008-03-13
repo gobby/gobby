@@ -81,9 +81,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_preferences, m_lang_manager),
-	m_browser(*this, &TEXT_PLUGIN, m_preferences),
 	m_folder(m_header, m_preferences, m_lang_manager),
-	m_statusbar(m_header, m_folder)
+	m_statusbar(m_folder),
+	m_browser(*this, &TEXT_PLUGIN, m_statusbar, m_preferences)
 #ifdef WITH_AVAHI
 	,m_glib_poll(avahi_glib_poll_new(NULL, G_PRIORITY_DEFAULT))
 #endif
@@ -318,7 +318,6 @@ void Gobby::Window::obby_start()
 	// Delegate start of obby session
 	m_folder.obby_start(*m_buffer);
 	m_document_settings.obby_start(*m_buffer);
-	m_statusbar.obby_start(*m_buffer);
 
 	// Forward user joins
 	const obby::user_table& table = m_buffer->get_user_table();
@@ -392,7 +391,6 @@ void Gobby::Window::obby_end()
 	// Tell GUI components that the session ended
 	m_folder.obby_end();
 	m_document_settings.obby_end();
-	m_statusbar.obby_end();
 
 #ifdef WITH_ZEROCONF
 	if(m_zeroconf.get() )
@@ -985,14 +983,12 @@ void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
 	// Tell user join to components
 	m_folder.obby_user_join(user);
-	m_statusbar.obby_user_join(user);
 }
 
 void Gobby::Window::on_obby_user_part(const obby::user& user)
 {
 	// Tell user part to components
 	m_folder.obby_user_part(user);
-	m_statusbar.obby_user_part(user);
 }
 
 void Gobby::Window::on_obby_user_colour(const obby::user& user)
@@ -1011,7 +1007,6 @@ void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
 		dynamic_cast<LocalDocumentInfo&>(document);
 
 	m_folder.obby_document_insert(local_doc);
-	m_statusbar.obby_document_insert(local_doc);
 }
 
 void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
@@ -1020,7 +1015,6 @@ void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
 		dynamic_cast<LocalDocumentInfo&>(document);
 
 	m_folder.obby_document_remove(local_doc);
-	m_statusbar.obby_document_remove(local_doc);
 }
 
 void Gobby::Window::on_ipc_file(const std::string& file)
@@ -1245,7 +1239,6 @@ bool Gobby::Window::session_join_impl(const Glib::ustring& host,
 
 		obby::format_string str(_("Connected to %0%:%1%") );
 		str << host << port;
-		m_statusbar.update_connection(str.str() );
 
 		// Start session
 		m_buffer = buffer;
@@ -1289,7 +1282,6 @@ bool Gobby::Window::session_open_impl(unsigned int port,
 
 		obby::format_string str(_("Serving on port %0%") );
 		str << port;
-		m_statusbar.update_connection(str.str() );
 
 		m_buffer = buffer;
 

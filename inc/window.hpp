@@ -209,13 +209,12 @@ protected:
 	DocumentSettings m_document_settings;
 
 	Header m_header;
-	Browser m_browser;
 	Folder m_folder;
+	StatusBar m_statusbar;
+	Browser m_browser;
 
 	std::auto_ptr<FindDialog> m_finddialog;
 	std::auto_ptr<GotoDialog> m_gotodialog;
-
-	StatusBar m_statusbar;
 
 	sigc::connection m_conn_chat_realize;
 

@@ -16,116 +16,84 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <sstream>
-#include <gtkmm/separator.h>
-#include <obby/format_string.hpp>
-#include <obby/local_buffer.hpp>
-#include "common.hpp"
 #include "statusbar.hpp"
 
-Gobby::StatusBar::StatusBar(Header& header, const Folder& folder):
-	m_header(header)
+#include <gtkmm/stock.h>
+
+namespace
+{
+	Gtk::StockID
+	message_type_to_stock_id(Gobby::StatusBar::MessageType type)
+	{
+		switch(type)
+		{
+		case Gobby::StatusBar::INFO:
+			return Gtk::Stock::DIALOG_INFO;
+		case Gobby::StatusBar::ERROR:
+			return Gtk::Stock::DIALOG_ERROR;
+		default:	
+			g_assert_not_reached();
+		}
+	}
+}
+
+Gobby::StatusBar::StatusBar(const Folder& folder):
+	Gtk::HBox(false, 2)
 {
 	pack_end(m_bar_position, Gtk::PACK_SHRINK);
-	pack_end(m_bar_language, Gtk::PACK_SHRINK);
-
 	m_bar_position.set_size_request(200, -1);
-	m_bar_language.set_size_request(200, -1);
-
-	set_has_resize_grip(false);
-	m_bar_language.set_has_resize_grip(false);
-
-	push(_("Not connected"));
-
-	folder.document_cursor_moved_event().connect(
-		sigc::mem_fun(*this, &StatusBar::update_cursor) );
-	folder.document_language_changed_event().connect(
-		sigc::mem_fun(*this, &StatusBar::update_language) );
-	folder.tab_switched_event().connect(
-		sigc::mem_fun(*this, &StatusBar::update_from_document) );
+	m_bar_position.show();
 }
 
-void Gobby::StatusBar::update_language(DocWindow& wnd)
+Gobby::StatusBar::MessageHandle
+Gobby::StatusBar::add_message(MessageType type,
+                              const Glib::ustring& message,
+                              unsigned int timeout)
 {
-	// Selected language
-	m_bar_language.pop();
-	if(wnd.get_language() )
+	Gtk::HBox* bar = Gtk::manage(new Gtk::HBox);
+
+	Gtk::Image* image = Gtk::manage(new Gtk::Image(
+		message_type_to_stock_id(type), Gtk::ICON_SIZE_MENU));
+	bar->pack_start(*image, Gtk::PACK_SHRINK);
+	image->show();
+
+	Gtk::Label* label = Gtk::manage(new Gtk::Label(message,
+	                                               Gtk::ALIGN_LEFT));
+	label->set_ellipsize(Pango::ELLIPSIZE_END);
+	bar->pack_start(*label, Gtk::PACK_EXPAND_WIDGET);
+	label->show();
+
+	GtkShadowType shadow_type;
+	gtk_widget_style_get(GTK_WIDGET(m_bar_position.gobj()),
+	                     "shadow-type", &shadow_type, NULL);
+	Gtk::Frame* frame = Gtk::manage(new Gtk::Frame);
+	frame->set_shadow_type(static_cast<Gtk::ShadowType>(shadow_type));
+	frame->add(*bar);
+	bar->show();
+
+	pack_start(*frame, Gtk::PACK_EXPAND_WIDGET);
+	reorder_child(*frame, 0);
+	frame->show();
+
+	m_list.push_back(frame);
+	MessageHandle iter(m_list.end());
+	--iter;
+
+	if(timeout)
 	{
-		Glib::ustring name =
-			gtk_source_language_get_name(wnd.get_language());
-		obby::format_string str(_("Selected language: %0%") );
-		str << name.raw();
-		m_bar_language.push(str.str() );
+		Glib::signal_timeout().connect_seconds(
+			sigc::bind(
+				sigc::mem_fun(*this,
+				              &StatusBar::remove_message),
+				iter), timeout);
 	}
-	else
-	{
-		m_bar_language.push(_("No language selected") );
-	}
+
+	return iter;
 }
 
-void Gobby::StatusBar::update_cursor(DocWindow& wnd)
+void Gobby::StatusBar::remove_message(const MessageHandle& handle)
 {
-	unsigned int row, col;
-	wnd.get_cursor_position(row, col);
-
-	m_bar_position.pop();
-	obby::format_string str("Line: %0%, Column: %1%");
-	str << (row + 1) << (col + 1);
-	m_bar_position.push(str.str() );
+	// TODO: Cancel timout, if any.
+	remove(**handle);
+	m_list.erase(handle);
 }
-
-void Gobby::StatusBar::update_from_document(DocWindow& wnd)
-{
-	update_language(wnd);
-	update_cursor(wnd);
-}
-
-void Gobby::StatusBar::update_connection(const Glib::ustring& str)
-{
-	// TODO: Do this in obby_start!
-	pop();
-	push(str);
-}
-
-void Gobby::StatusBar::obby_start(LocalBuffer& buf)
-{
-}
-
-void Gobby::StatusBar::obby_end()
-{
-	pop();
-	m_bar_language.pop();
-	m_bar_position.pop();
-
-	push(_("Not connected"));
-}
-
-void Gobby::StatusBar::obby_user_join(const obby::user& user)
-{
-}
-
-void Gobby::StatusBar::obby_user_part(const obby::user& user)
-{
-}
-
-void Gobby::StatusBar::obby_document_insert(LocalDocumentInfo& document)
-{
-}
-
-void Gobby::StatusBar::obby_document_remove(LocalDocumentInfo& document)
-{
-	// Last document that is closed?
-	if(document.get_buffer().document_count() == 1)
-	{
-		// Clear document-related statusbar items
-		m_bar_language.pop();
-		m_bar_position.pop();
-	}
-}
-
-void Gobby::StatusBar::on_show()
-{
-	Gtk::Statusbar::on_show();
-	//m_sep.hide();
-}
-

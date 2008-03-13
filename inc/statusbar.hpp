@@ -33,31 +33,30 @@
 namespace Gobby
 {
 
-class StatusBar: public Gtk::Statusbar
+class StatusBar: public Gtk::HBox
 {
+protected:
+	typedef std::list<Gtk::Widget*> MessageList;
+
 public:
-	StatusBar(Header& header, const Folder& folder);
+	enum MessageType {
+		INFO,
+		ERROR
+	};
 
-	void update_language(DocWindow& wnd);
-	void update_cursor(DocWindow& wnd);
-	void update_from_document(DocWindow& wnd);
+	typedef MessageList::iterator MessageHandle;
 
-	void update_connection(const Glib::ustring& str);
+	StatusBar(const Folder& folder);
 
-	// Calls from the window
-	void obby_start(LocalBuffer& buf);
-	void obby_end();
-	void obby_user_join(const obby::user& user);
-	void obby_user_part(const obby::user& user);
-	void obby_document_insert(LocalDocumentInfo& document);
-	void obby_document_remove(LocalDocumentInfo& document);
+	MessageHandle add_message(MessageType type,
+	                          const Glib::ustring& message,
+	                          unsigned int timeout); // timeout in seconds
 
-	virtual void on_show();
+	void remove_message(const MessageHandle& handle);
 
 protected:
-	Header& m_header;
+	MessageList m_list;
 
-	Gtk::Statusbar m_bar_language;
 	Gtk::Statusbar m_bar_position;
 };
 
