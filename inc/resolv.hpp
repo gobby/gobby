@@ -30,8 +30,10 @@ namespace Gobby
 
 struct ResolvHandle;
 
-typedef sigc::slot<void, InfIpAddress*, guint> SlotResolvDone;
-typedef sigc::slot<void, const std::runtime_error&> SlotResolvError;
+typedef sigc::slot<void, ResolvHandle*, InfIpAddress*, guint>
+	SlotResolvDone;
+typedef sigc::slot<void, ResolvHandle*, const std::runtime_error&>
+	SlotResolvError;
 
 ResolvHandle* resolve(const Glib::ustring& hostname,
                       const Glib::ustring& service,

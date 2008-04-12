@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005, 2006 0x539 dev group
+ * Copyright (C) 2005 - 2008 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -19,178 +19,77 @@
 #ifndef _GOBBY_DOCWINDOW_HPP_
 #define _GOBBY_DOCWINDOW_HPP_
 
-#include <gtkmm/scrolledwindow.h>
+#include "preferences.hpp"
+#include "features.hpp"
+
+#include <gtkmm/box.h>
+#include <gtkmm/paned.h>
+#include <gtkmm/textiter.h>
 
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 
-#include "features.hpp"
-#include "preferences.hpp"
-#include "document.hpp"
-#include "buffer_def.hpp"
+#include <libinftext/inf-text-session.h>
 
 namespace Gobby
 {
 
-/** @brief A DocWindow displays a Document.
- */
-class DocWindow: public Gtk::ScrolledWindow
+class DocWindow: public Gtk::HPaned
 {
 public:
-	typedef sigc::signal<void> signal_cursor_moved_type;
-	typedef sigc::signal<void> signal_content_changed_type;
-	typedef sigc::signal<void> signal_language_changed_type;
+	typedef sigc::signal<void, GtkSourceLanguage*> SignalLanguageChanged;
 
-	/** @brief Creates a new DocWindow displaying the given document.
-	 *
-	 * The preferences are initially applied to the DocWindow.
-	 */
-	DocWindow(LocalDocumentInfo& info, const Preferences& preferences,
+	DocWindow(InfTextSession* session, const Glib::ustring& title,
+	          const Preferences& preferences,
 	          GtkSourceLanguageManager* manager);
+	virtual ~DocWindow();
 
-	/** @brief Returns the current cursor position in <em>row</em>
-	 * and <em>col</em>.
-	 */
-	void get_cursor_position(unsigned int& row, unsigned int& col);
+	const InfTextSession* get_session() const { return m_session; }
+	InfTextSession* get_session() { return m_session; }
+	const Glib::ustring& get_title() const { return m_title; }
 
-	/** @brief Selects the given range of text and scrolls to it to
-	 * be visible.
-	 */
+	void get_cursor_position(unsigned int& row, unsigned int& col) const;
 	void set_selection(const Gtk::TextIter& begin,
 	                   const Gtk::TextIter& end);
-
-	/** @brief Makes the source view insensitive, but lets the view
-	 * be scrollable.
-	 */
-	void disable();
-
-	/** @brief Returns the currently selected text.
-	 */
 	Glib::ustring get_selected_text() const;
 
-	/** @brief Returns the title of the document. Equivalent to
-	 * get_document().get_title(). DEPRECATED.
-	 */
-	const Glib::ustring& get_title() const; // TODO: Remove this as soon as the obby buffers stay available after session has been closed
-
-	/** @brief Returns whether the document has been modified since it
-	 * has been saved to disk.
-	 *
-	 * Equivalent to get_document().get_buffer()->get_modified().
-	 * DEPRECATED.
-	 */
-	bool get_modified() const; // TODO: Remove this in favor of get_document().get_buffer()->get_modified()
-
-	/** @brief Gives the focus to the underlaying sourceview instead of
-	 * the scrolled window containing it.
-	 */
-	void grab_focus();
-
-	/** @brief Returns the current GtkSourceLanguage the document is
-	 * highlighted with.
-	 */
 	GtkSourceLanguage* get_language() const;
-
-	/** @brief Changes the language of the document.
-	 */
 	void set_language(GtkSourceLanguage* language);
 
-	/** @brief Returns the preferences set for this document.
-	 */
-	const Preferences& get_preferences() const;
+	GtkSourceView* get_text_view() { return m_view; }
+	GtkSourceBuffer* get_text_buffer() { return m_buffer; }
 
-	/** @brief Changes the preferences for this document.
-	 */
-	void set_preferences(const Preferences& preferences);
+	void set_info(const Glib::ustring& message);
 
-	/** @brief Returns the whole document content.
-	 *
-	 * Equivalent to get_document().get_buffer()->get_text(). DEPRECATED
-	 */
-	Glib::ustring get_content() const; // // TODO: Remove this as soon as the obby buffers stay available after session has been close
-
-	/** @brief Signal that is emitted when the cursor has been moved.
-	 */
-	signal_cursor_moved_type cursor_moved_event() const;
-
-	/** @brief Signal that is emitted when the document's content has
-	 * changed.
-	 *
-	 * TODO: Move this signal to Gobby::Document.
-	 */
-	signal_content_changed_type content_changed_event() const;
-
-	/** @brief Signal that is emitted when the language of the document
-	 * has changed.
-	 */
-	signal_language_changed_type language_changed_event() const;
-
-	/** @brief Provides access to the underlaying document info.
-	 */
-	const LocalDocumentInfo& get_info() const;
-
-	/** @brief Provides access to the underlaying document info.
-	 */
-	LocalDocumentInfo& get_info();
-
-	/** @brief Provides access to the underlaying document. Equivalent
-	 * to get_info().get_content().
-	 */
-	const Document& get_document() const;
+	SignalLanguageChanged signal_language_changed() const {
+		return m_signal_language_changed;
+	}
 
 protected:
-	/** @brief Callback to watch cursor movement.
-	 */
-	void on_mark_set(const Gtk::TextIter& location,
-	                 const Glib::RefPtr<Gtk::TextMark>& mark);
+	void on_tab_width_changed();
+	void on_tab_spaces_changed();
+	void on_auto_indent_changed();
+	void on_homeend_smart_changed();
 
-	/** @brief Callback when the buffer content changed.
-	 */
-	void on_changed();
+	void on_wrap_mode_changed();
+	void on_linenum_display_changed();
+	void on_curline_highlight_changed();
+	void on_margin_display_changed();
+	void on_margin_pos_changed();
+	void on_bracket_highlight_changed();
 
-	/** @brief Callback when text has to be inserted.
-	 */
-	void on_local_insert(obby::position pos,
-	                     const std::string& text);
+	void on_font_changed();
 
-	/** @brief Callback when text has to be erased.
-	 */
-	void on_local_erase(obby::position pos,
-	                    obby::position len);
-
-	void on_remote_insert_before(obby::position pos,
-	                             const std::string& text);
-
-	void on_remote_erase_before(obby::position pos,
-	                            obby::position len);
-
-	void on_remote_insert_after(obby::position pos,
-	                            const std::string& text);
-
-	void on_remote_erase_after(obby::position pos,
-	                           obby::position len);
-
-	/** @brief Helper function that applies the preferences to the buffer.
-	 */
-	void apply_preferences();
-
-	void store_scroll();
-	void restore_scroll();
+	InfTextSession* m_session;
+	Glib::ustring m_title;
+	const Preferences& m_preferences;
 
 	GtkSourceView* m_view;
-	LocalDocumentInfo& m_info;
-	const Document& m_doc;
+	GtkSourceBuffer* m_buffer;
 
-	Preferences m_preferences;
-	//bool m_editing;
-	Glib::ustring m_title; // TODO: Remove this as soon as the obby buffers stay available after session has been closed
+	Gtk::VBox m_info_box;
 
-	signal_cursor_moved_type m_signal_cursor_moved;
-	signal_content_changed_type m_signal_content_changed;
-	signal_language_changed_type m_signal_language_changed;
-
-	double m_scrolly;
-	bool m_scroll_restore;
+	SignalLanguageChanged m_signal_language_changed;
 };
 
 }

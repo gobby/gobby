@@ -37,6 +37,24 @@ namespace
 	}
 }
 
+class Gobby::StatusBar::Message
+{
+public:
+	Message(Gtk::Widget* widget):
+		m_widget(widget) {}
+	~Message() { m_conn.disconnect(); }
+
+	void set_timeout_connection(sigc::connection timeout_conn)
+	{
+		m_conn = timeout_conn;
+	}
+
+	Gtk::Widget* widget() const { return m_widget; }
+protected:
+	Gtk::Widget* m_widget;
+	sigc::connection m_conn;
+};
+
 Gobby::StatusBar::StatusBar(const Folder& folder):
 	Gtk::HBox(false, 2)
 {
@@ -75,17 +93,24 @@ Gobby::StatusBar::add_message(MessageType type,
 	reorder_child(*frame, 0);
 	frame->show();
 
-	m_list.push_back(frame);
+	m_list.push_back(new Message(frame));
 	MessageHandle iter(m_list.end());
 	--iter;
 
 	if(timeout)
 	{
-		Glib::signal_timeout().connect_seconds(
+		sigc::slot<bool> slot(sigc::bind_return(
 			sigc::bind(
-				sigc::mem_fun(*this,
-				              &StatusBar::remove_message),
-				iter), timeout);
+				sigc::mem_fun(
+					*this,
+					&StatusBar::remove_message),
+				iter),
+			false));
+		
+		sigc::connection timeout_conn =
+			Glib::signal_timeout().connect_seconds(slot, timeout);
+
+		(*iter)->set_timeout_connection(timeout_conn);
 	}
 
 	return iter;
@@ -93,7 +118,7 @@ Gobby::StatusBar::add_message(MessageType type,
 
 void Gobby::StatusBar::remove_message(const MessageHandle& handle)
 {
-	// TODO: Cancel timout, if any.
-	remove(**handle);
+	remove(*(*handle)->widget());
+	delete *handle;
 	m_list.erase(handle);
 }

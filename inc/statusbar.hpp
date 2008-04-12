@@ -36,7 +36,8 @@ namespace Gobby
 class StatusBar: public Gtk::HBox
 {
 protected:
-	typedef std::list<Gtk::Widget*> MessageList;
+	class Message;
+	typedef std::list<Message*> MessageList;
 
 public:
 	enum MessageType {

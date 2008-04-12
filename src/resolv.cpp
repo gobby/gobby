@@ -44,7 +44,7 @@ namespace
 	{
 		std::auto_ptr<ResolvHandle> auto_handle(handle);
 		if(!handle->cancel)
-			handle->slot_done(address, port);
+			handle->slot_done(handle, address, port);
 		inf_ip_address_free(address);
 		return false;
 	}
@@ -55,7 +55,7 @@ namespace
 		if(!handle->cancel)
 		{
 			std::runtime_error error(gai_strerror(errcode));
-			handle->slot_error(error);
+			handle->slot_error(handle, error);
 		}
 
 		return false;;

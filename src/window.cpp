@@ -56,10 +56,11 @@ namespace
 	            InfConnectionManagerGroup* sync_group,
 	            InfXmlConnection* sync_connection)
 	{
-		GtkTextBuffer* textbuffer = gtk_text_buffer_new(NULL);
+		GtkSourceBuffer* textbuffer = gtk_source_buffer_new(NULL);
 		InfUserTable* user_table = inf_user_table_new();
 		InfTextGtkBuffer* buffer =
-			inf_text_gtk_buffer_new(textbuffer, user_table);
+			inf_text_gtk_buffer_new(GTK_TEXT_BUFFER(textbuffer),
+			                        user_table);
 		InfTextSession* session =
 			inf_text_session_new_with_user_table(
 				manager, INF_TEXT_BUFFER(buffer), io,
@@ -81,7 +82,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_application_state(APPLICATION_NONE),
 	m_document_settings(*this),
 	m_header(m_preferences, m_lang_manager),
-	m_folder(m_header, m_preferences, m_lang_manager),
+	m_folder(m_preferences, m_lang_manager),
 	m_statusbar(m_folder),
 	m_browser(*this, &TEXT_PLUGIN, m_statusbar, m_preferences)
 #ifdef WITH_AVAHI
@@ -137,6 +138,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 #endif
 	m_browser.show();
 
+#if 0
 	// Folder
 	m_folder.document_add_event().connect(
 		sigc::mem_fun(*this, &Window::on_folder_document_add) );
@@ -146,7 +148,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		sigc::mem_fun(*this, &Window::on_folder_document_close_request) );
 	m_folder.tab_switched_event().connect(
 		sigc::mem_fun(*this, &Window::on_folder_tab_switched) );
-
+#endif
 	// Settings
 	m_document_settings.document_insert_event().connect(
 		sigc::mem_fun(*this, &Window::on_settings_document_insert) );
@@ -316,7 +318,6 @@ void Gobby::Window::obby_start()
 	m_dnd.reset(new DragDrop(*this) );
 
 	// Delegate start of obby session
-	m_folder.obby_start(*m_buffer);
 	m_document_settings.obby_start(*m_buffer);
 
 	// Forward user joins
@@ -389,7 +390,6 @@ void Gobby::Window::obby_end()
 	m_dnd.reset(NULL);
 
 	// Tell GUI components that the session ended
-	m_folder.obby_end();
 	m_document_settings.obby_end();
 
 #ifdef WITH_ZEROCONF
@@ -538,6 +538,7 @@ void Gobby::Window::on_about()
 	dlg.run();
 }
 
+#if 0
 void Gobby::Window::on_folder_document_add(DocWindow& window)
 {
 	// Select newly created page if not automatically opened
@@ -599,6 +600,7 @@ void Gobby::Window::on_folder_tab_switched(DocWindow& window)
 	// Update title bar
 	update_title_bar();
 }
+#endif
 
 void Gobby::Window::on_settings_document_insert(LocalDocumentInfo& info)
 {
@@ -702,7 +704,7 @@ bool Gobby::Window::handle_document_save()
 			"No document opened"
 		);
 	}
-
+#if 0
 	// Is there already a path for this document?
 	std::string path = m_document_settings.get_path(doc->get_info() );
 	if(!path.empty() )
@@ -722,6 +724,7 @@ bool Gobby::Window::handle_document_save()
 		// Open save as dialog otherwise
 		return handle_document_save_as();
 	}
+#endif
 }
 
 void Gobby::Window::on_document_save_as()
@@ -748,6 +751,7 @@ bool Gobby::Window::handle_document_save_as()
 		Gtk::FILE_CHOOSER_ACTION_SAVE
 	);
 
+#if 0
 	// TODO: Preselect document's encoding
 	dlg.get_selector().set_encoding(
 		m_document_settings.get_original_encoding(doc->get_info())
@@ -793,6 +797,7 @@ bool Gobby::Window::handle_document_save_as()
 		return true;
 	}
 	return false;
+#endif
 }
 
 void Gobby::Window::on_document_close()
@@ -982,18 +987,18 @@ void Gobby::Window::on_obby_close()
 void Gobby::Window::on_obby_user_join(const obby::user& user)
 {
 	// Tell user join to components
-	m_folder.obby_user_join(user);
+	//m_folder.obby_user_join(user);
 }
 
 void Gobby::Window::on_obby_user_part(const obby::user& user)
 {
 	// Tell user part to components
-	m_folder.obby_user_part(user);
+	//m_folder.obby_user_part(user);
 }
 
 void Gobby::Window::on_obby_user_colour(const obby::user& user)
 {
-	m_folder.obby_user_colour(user);
+	//m_folder.obby_user_colour(user);
 }
 
 void Gobby::Window::on_obby_user_colour_failed()
@@ -1006,7 +1011,7 @@ void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
 	LocalDocumentInfo& local_doc =
 		dynamic_cast<LocalDocumentInfo&>(document);
 
-	m_folder.obby_document_insert(local_doc);
+	//m_folder.obby_document_insert(local_doc);
 }
 
 void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
@@ -1014,7 +1019,7 @@ void Gobby::Window::on_obby_document_remove(DocumentInfo& document)
 	LocalDocumentInfo& local_doc =
 		dynamic_cast<LocalDocumentInfo&>(document);
 
-	m_folder.obby_document_remove(local_doc);
+	//m_folder.obby_document_remove(local_doc);
 }
 
 void Gobby::Window::on_ipc_file(const std::string& file)
@@ -1068,9 +1073,9 @@ void Gobby::Window::update_title_bar()
 	// Get currently active document
 	const DocWindow& window = *get_current_document();
 	// Get title of current document
-	const Glib::ustring& file = window.get_info().get_suffixed_title();
+	const Glib::ustring& file = window.get_title();
 	// Get path of current document
-	Glib::ustring path = m_document_settings.get_path(window.get_info() );
+	Glib::ustring path;// = m_document_settings.get_path(window.get_info() );
 
 	// Show path in title, if we know it
 	if(!path.empty() )
@@ -1081,14 +1086,14 @@ void Gobby::Window::update_title_bar()
 			path.replace(0, home.length(), "~");
 
 		// Set title with file and path
-		obby::format_string title_str("%0% (%1%) - Gobby");
+		obby::format_string title_str("%0% (%1%)");
 		title_str << file << Glib::path_get_dirname(path);
 		set_title(title_str.str() );
 	}
 	else
 	{
 		// Path not known: Set title with file only
-		obby::format_string title_str("%0% - Gobby");
+		obby::format_string title_str("%0%");
 		title_str << file;
 		set_title(title_str.str() );
 	}
@@ -1302,6 +1307,7 @@ bool Gobby::Window::session_open_impl(unsigned int port,
 void Gobby::Window::open_local_file(const Glib::ustring& file,
                                     const std::string& encoding)
 {
+#if 0
 	try
 	{
 		// Set local file path for the document_insert callback
@@ -1344,12 +1350,14 @@ void Gobby::Window::open_local_file(const Glib::ustring& file,
 		// Show errors while opening the file (e.g. if it doesn't exist)
 		display_error(e.what() );
 	}
+#endif
 }
 
 void Gobby::Window::save_local_file(DocWindow& doc,
                                     const Glib::ustring& file,
                                     const std::string& encoding)
 {
+#if 0
 	try
 	{
 		Glib::RefPtr<Glib::IOChannel> channel = Glib::IOChannel::create_from_file(file, "w");
@@ -1380,7 +1388,7 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 		update_title_bar();
 		// Unset modifified flag
 		gtk_text_buffer_set_modified(
-			GTK_TEXT_BUFFER(doc.get_document().get_buffer()),
+			GTK_TEXT_BUFFER(doc.get_text_buffer()),
 			FALSE);
 	}
 	catch(Glib::Error& e)
@@ -1391,10 +1399,12 @@ void Gobby::Window::save_local_file(DocWindow& doc,
 	{
 		display_error(e.what() );
 	}
+#endif
 }
 
 void Gobby::Window::close_document(DocWindow& window)
 {
+#if 0
 	/* Cannot unsubscribe when not subscribed (e.g. unsubscription request
 	 * has already been sent. */
 	if(window.get_info().get_subscription_state() !=
@@ -1476,6 +1486,7 @@ void Gobby::Window::close_document(DocWindow& window)
 	}
 
 	window.get_info().unsubscribe();
+#endif
 }
 
 void Gobby::Window::display_error(const Glib::ustring& message,

@@ -37,7 +37,7 @@ Gobby::Preferences::Editor::Editor(Config::ParentEntry& entry):
 	tab_width(entry.get_value<unsigned int>("tab_width", 8)),
 	tab_spaces(entry.get_value<bool>("tab_insert_spaces", false)),
 	indentation_auto(entry.get_value<bool>("auto_indentation", true)),
-	homeend_smart(entry.get_value<bool>("smart_homeend", true) )
+	homeend_smart(entry.get_value<bool>("smart_homeend", false) )
 {
 }
 

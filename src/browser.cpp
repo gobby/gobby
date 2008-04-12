@@ -17,9 +17,9 @@
  */
 
 #include "browser.hpp"
-#include "resolv.hpp"
 #include "common.hpp"
 
+#include <obby/format_string.hpp>
 #include <libinfinity/inf-config.h>
 #include <libinfinity/common/inf-discovery-avahi.h>
 
@@ -28,9 +28,11 @@
 
 Gobby::Browser::Browser(Gtk::Window& parent,
                         const InfcNotePlugin* text_plugin,
+                        StatusBar& status_bar,
                         Preferences& preferences):
 	m_parent(parent),
 	m_text_plugin(text_plugin),
+	m_status_bar(status_bar),
 	m_preferences(preferences),
 	m_expander(_("_Direct connection"), true),
 	m_hbox(false, 6),
@@ -102,7 +104,13 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 
 Gobby::Browser::~Browser()
 {
-	/* TODO: Cancel all ResolvHandles */
+	for(ResolvMap::iterator iter = m_resolv_map.begin();
+	    iter != m_resolv_map.end();
+	    ++ iter)
+	{
+		cancel(iter->first);
+	}
+
 	g_object_unref(m_browser_model);
 	g_object_unref(m_io);
 }
@@ -176,37 +184,53 @@ void Gobby::Browser::on_hostname_activate()
 			host = str;
 	}
 
-	resolve(host, service,
+	ResolvHandle* resolv_handle = resolve(host, service,
 	        sigc::bind(
 			sigc::mem_fun(*this, &Browser::on_resolv_done), str),
 	        sigc::mem_fun(*this, &Browser::on_resolv_error));
 
 	m_entry_hostname.set_text("");
-	/* TODO: Set info in statusbar? */
+
+	// Translators: That's a Unicode horizontal ellipsis character,
+	// not three dots.
+	obby::format_string status_str("Resolving %0%…");
+	status_str << host;
+	StatusBar::MessageHandle message_handle =
+		m_status_bar.add_message(StatusBar::INFO,
+		                         status_str.str(), 0);
+
+	m_resolv_map[resolv_handle].message_handle = message_handle;
 }
 
-void Gobby::Browser::on_resolv_done(InfIpAddress* address, guint port,
+void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
+                                    InfIpAddress* address, guint port,
                                     const Glib::ustring& hostname)
 {
-	InfTcpConnection* connection;
-	InfXmppConnection* xmpp;
+	ResolvMap::iterator iter = m_resolv_map.find(handle);
+	g_assert(iter != m_resolv_map.end());
 
-	xmpp = inf_xmpp_manager_lookup_connection_by_address(
-		m_xmpp_manager, address, port);
+	m_status_bar.remove_message(iter->second.message_handle);
+	m_resolv_map.erase(iter);
+
+	InfXmppConnection* xmpp =
+		inf_xmpp_manager_lookup_connection_by_address(m_xmpp_manager,
+		                                              address,
+		                                              port);
 
 	if(!xmpp)
 	{
-		connection = INF_TCP_CONNECTION(g_object_new(
-			INF_TYPE_TCP_CONNECTION,
-			"io", m_io,
-			"remote-address", address,
-			"remote-port", port,
-			NULL));
+		InfTcpConnection* connection = INF_TCP_CONNECTION(
+			g_object_new(INF_TYPE_TCP_CONNECTION,
+			             "io", m_io,
+			             "remote-address", address,
+			             "remote-port", port,
+			             NULL));
 
 		GError* error = NULL;
 		if(!inf_tcp_connection_open(connection, &error))
 		{
-			/* TODO: Feedback, statusbar */
+			m_status_bar.add_message(StatusBar::ERROR,
+			                         error->message, 5);
 			g_error_free(error);
 		}
 		else
@@ -236,7 +260,14 @@ void Gobby::Browser::on_resolv_done(InfIpAddress* address, guint port,
 		hostname.c_str());
 }
 
-void Gobby::Browser::on_resolv_error(const std::runtime_error& error)
+void Gobby::Browser::on_resolv_error(ResolvHandle* handle,
+                                     const std::runtime_error& error)
 {
-	/* TODO: Feedback. Status bar message. */
+	ResolvMap::iterator iter = m_resolv_map.find(handle);
+	g_assert(iter != m_resolv_map.end());
+
+	m_status_bar.remove_message(iter->second.message_handle);
+	m_resolv_map.erase(iter);
+
+	m_status_bar.add_message(StatusBar::ERROR, error.what(), 5);
 }

@@ -34,7 +34,9 @@
 #include <gtkmm/label.h>
 #include <gtkmm/treeiter.h>
 
+#include "resolv.hpp"
 #include "preferences.hpp"
+#include "statusbar.hpp"
 
 namespace Gobby
 {
@@ -42,10 +44,19 @@ namespace Gobby
 class Browser: public Gtk::VBox
 {
 public:
-	typedef sigc::signal<void, InfcBrowser*, InfcBrowserIter*> SignalActivate;
+	struct Resolv
+	{
+		StatusBar::MessageHandle message_handle;
+	};
+
+	typedef std::map<ResolvHandle*, Resolv> ResolvMap;
+
+	typedef sigc::signal<void, InfcBrowser*, InfcBrowserIter*>
+		SignalActivate;
 
 	Browser(Gtk::Window& parent,
 	        const InfcNotePlugin* text_plugin,
+	        StatusBar& status_bar,
 	        Preferences& preferences);
 	~Browser();
 
@@ -78,12 +89,14 @@ protected:
 	void on_activate(GtkTreeIter* iter);
 	void on_hostname_activate();
 
-	void on_resolv_done(InfIpAddress* address, guint port,
-	                    const Glib::ustring& hostname);
-	void on_resolv_error(const std::runtime_error& error);
+	void on_resolv_done(ResolvHandle* handle, InfIpAddress* address,
+	                    guint port, const Glib::ustring& hostname);
+	void on_resolv_error(ResolvHandle* handle,
+	                     const std::runtime_error& error);
 
 	Gtk::Window& m_parent;
 	const InfcNotePlugin* m_text_plugin;
+	StatusBar& m_status_bar;
 	Preferences& m_preferences;
 
 	InfXmppManager* m_xmpp_manager;
@@ -97,6 +110,7 @@ protected:
 	Gtk::Label m_label_hostname;
 	Gtk::Entry m_entry_hostname;
 
+	ResolvMap m_resolv_map;
 	SignalActivate m_signal_activate;
 };
 

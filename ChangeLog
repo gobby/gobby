@@ -1,3 +1,31 @@
+2008-04-12  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferences.cpp: Changed default value for homeend_smart to
+	false.
+
+	* inc/resolv.hpp:
+	* src/resolv.cpp: Changed signature of callbacks to include the
+	ResolvHandle.
+
+	* inc/browser.hpp:
+	* src/browser.cpp: Added resolv map to correctly cancel pending
+	resolvs on destruction.
+
+	* inc/statusbar.hpp:
+	* src/statusbar.cpp: Correctly remove the timeout connection on
+	destruction of a statusbar message.
+
+	* inc/folder.hpp:
+	* inc/docwindow.hpp:
+	* src/folder.cpp:
+	* src/docwindow.cpp: Changed Folder and DocWindow to be used with
+	InfTextSession instead of obby::local_document_info.
+
+	* inc/window.hpp:
+	* src/finddialog.cpp:
+	* src/gotodialog.cpp:
+	* src/window.cpp: Adapted to Folder and DocWindow changes.
+
 2008-03-13  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/statusbar.hpp:

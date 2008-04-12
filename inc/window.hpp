@@ -142,13 +142,13 @@ protected:
 	void on_view_language(GtkSourceLanguage* language);
 
 	void on_window_chat();
-
+#if 0
 	// Folder UI handler
 	void on_folder_document_add(DocWindow& window);
 	void on_folder_document_remove(DocWindow& window);
 	void on_folder_document_close_request(DocWindow& window);
 	void on_folder_tab_switched(DocWindow& window);
-
+#endif
 	void on_settings_document_insert(LocalDocumentInfo& info);
 
 	void on_about();

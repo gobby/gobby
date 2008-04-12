@@ -87,7 +87,7 @@ void Gobby::GotoDialog::on_show()
 	if(window != NULL)
 	{
     Glib::RefPtr<Gtk::TextBuffer> buffer =
-      Glib::wrap(GTK_TEXT_BUFFER(window->get_document().get_buffer()), true);
+      Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()), true);
 		Gtk::TextIter cursor = buffer->get_insert()->get_iter();
 
 		m_ent_line.set_value(cursor.get_line() + 1);
@@ -104,7 +104,7 @@ void Gobby::GotoDialog::on_goto()
 	{
 		int value = m_ent_line.get_value_as_int();
     Glib::RefPtr<Gtk::TextBuffer> buffer =
-      Glib::wrap(GTK_TEXT_BUFFER(window->get_document().get_buffer()), true);
+      Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()), true);
 		Gtk::TextIter begin = buffer->get_iter_at_line(value - 1);
 		window->set_selection(begin, begin);
 	}

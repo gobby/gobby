@@ -19,7 +19,10 @@
 #include "features.hpp"
 
 #include <glibmm/pattern.h>
-#include <gtkmm/textview.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/scrolledwindow.h>
+
+#include <libinftextgtk/inf-text-gtk-buffer.h>
 
 #include <gtksourceview/gtksourcebuffer.h>
 
@@ -49,126 +52,170 @@ namespace
 
 		return false;
 	}
-}
 
-Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
-                            const Preferences& preferences,
-			    GtkSourceLanguageManager* manager):
-	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
-	m_info(info), m_doc(info.get_content() ),
-	m_preferences(preferences), /*m_editing(false),*/
-	m_title(info.get_title() ),
-	m_scrolly(0.0),
-	m_scroll_restore(false)
-{
-	if(!info.is_subscribed() )
+	bool language_matches_title(GtkSourceLanguage* language,
+	                            const gchar* title)
 	{
-		throw std::logic_error(
-			"Gobby::DocWindow::DocWindow:\n"
-			"Local user is not subscribed"
-		);
+		bool result = false;
+		gchar** globs = gtk_source_language_get_globs(language);
+		if(glob_matches(globs, title))
+			result = true;
+		g_strfreev(globs);
+		return result;
 	}
 
-	GtkSourceBuffer* buffer = m_doc.get_buffer();
-	gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_view), GTK_TEXT_BUFFER(buffer));
-
-	Glib::RefPtr<Gtk::TextBuffer> cpp_buffer =
-		Glib::wrap(GTK_TEXT_BUFFER(buffer), true);
-
-	// Set source language by filename
-	gtk_source_buffer_set_highlight_syntax(buffer, FALSE);
-
-	// Enable indent-on-tab
-	gtk_source_view_set_indent_on_tab(m_view, TRUE);
-
-	const gchar* const* ids =
-		gtk_source_language_manager_get_language_ids(manager);
-
-	if(ids)
+	GtkSourceLanguage*
+	get_language_for_title(GtkSourceLanguageManager* manager,
+	                       const gchar* title)
 	{
-		for(const gchar* const* id = ids; *id != NULL; ++ id)
+		const gchar* const* ids =
+			gtk_source_language_manager_get_language_ids(manager);
+
+		if(ids)
 		{
-			GtkSourceLanguage* lang =
-				gtk_source_language_manager_get_language(
+			for(const gchar* const* id = ids; *id != NULL; ++ id)
+			{
+				GtkSourceLanguage* l;
+				l = gtk_source_language_manager_get_language(
 					manager, *id);
 
-			if(lang)
-			{
-				gchar** globs = gtk_source_language_get_globs(lang);
-				if(glob_matches(globs, info.get_title()))
-				{
-					set_language(lang);
-					break;
-				}
-				g_strfreev(globs);
+				if(l)
+					if(language_matches_title(l, title))
+						return l;
 			}
 		}
+
+		return NULL;
 	}
+}
 
-	cpp_buffer->signal_mark_set().connect(
-		sigc::mem_fun(*this, &DocWindow::on_mark_set)
-	);
+Gobby::DocWindow::DocWindow(InfTextSession* session,
+                            const Glib::ustring& title,
+                            const Preferences& preferences,
+			    GtkSourceLanguageManager* manager):
+	m_session(session), m_title(title), m_preferences(preferences),
+	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
+	m_info_box(false, 0)
+{
+	g_object_ref(m_session);
 
-	cpp_buffer->signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_changed)
-	);
+	InfBuffer* buffer = inf_session_get_buffer(INF_SESSION(session));
+	m_buffer = GTK_SOURCE_BUFFER(inf_text_gtk_buffer_get_text_buffer(
+		INF_TEXT_GTK_BUFFER(buffer)));
 
-	m_doc.local_insert_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_local_insert)
-	);
+	gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_view),
+	                         GTK_TEXT_BUFFER(m_buffer));
+	gtk_source_buffer_set_language(
+		m_buffer, get_language_for_title(manager, m_title.c_str()));
 
-	m_doc.local_erase_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_local_erase)
-	);
+	m_preferences.editor.tab_width.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_tab_width_changed));
+	m_preferences.editor.tab_spaces.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_tab_spaces_changed));
+	m_preferences.editor.indentation_auto.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_auto_indent_changed));
+	m_preferences.editor.homeend_smart.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_homeend_smart_changed));
 
-	m_doc.remote_insert_before_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_remote_insert_before)
-	);
+	m_preferences.view.wrap_mode.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_wrap_mode_changed));
+	m_preferences.view.linenum_display.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_linenum_display_changed));
+	m_preferences.view.curline_highlight.signal_changed().connect(
+		sigc::mem_fun(*this,
+		              &DocWindow::on_curline_highlight_changed));
+	m_preferences.view.margin_display.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_margin_display_changed));
+	m_preferences.view.margin_pos.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_margin_pos_changed));
+	m_preferences.view.bracket_highlight.signal_changed().connect(
+		sigc::mem_fun(*this,
+		              &DocWindow::on_bracket_highlight_changed));
 
-	m_doc.remote_erase_before_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_remote_erase_before)
-	);
+	m_preferences.appearance.font.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_font_changed));
 
-	m_doc.remote_insert_after_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_remote_insert_after)
-	);
+	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
+	gtk_source_view_set_insert_spaces_instead_of_tabs(
+		m_view, m_preferences.editor.tab_spaces);
+	gtk_source_view_set_auto_indent(
+		m_view, m_preferences.editor.indentation_auto);
+	gtk_source_view_set_smart_home_end(
+		m_view, m_preferences.editor.homeend_smart ?
+			GTK_SOURCE_SMART_HOME_END_ALWAYS :
+			GTK_SOURCE_SMART_HOME_END_DISABLED);
+	gtk_text_view_set_wrap_mode(
+		GTK_TEXT_VIEW(m_view),
+		wrap_mode_from_preferences(m_preferences));
+	gtk_source_view_set_show_line_numbers(
+		m_view, m_preferences.view.linenum_display);
+	gtk_source_view_set_highlight_current_line(
+		m_view, m_preferences.view.curline_highlight);
+	gtk_source_view_set_show_right_margin(
+		m_view, m_preferences.view.margin_display);
+	gtk_source_view_set_right_margin_position(
+		m_view, m_preferences.view.margin_pos);
+	gtk_source_buffer_set_highlight_matching_brackets(
+		m_buffer, m_preferences.view.margin_pos);
+	const Pango::FontDescription& desc = m_preferences.appearance.font;
+	gtk_widget_modify_font(
+		GTK_WIDGET(m_view),
+		const_cast<PangoFontDescription*>(desc.gobj()));
 
-	m_doc.remote_erase_after_event().connect(
-		sigc::mem_fun(*this, &DocWindow::on_remote_erase_after)
-	);
+	m_info_box.show();
+	Gtk::Frame* infoframe = Gtk::manage(new Gtk::Frame);
+	infoframe->set_shadow_type(Gtk::SHADOW_IN);
+	infoframe->add(m_info_box);
+	// Don't show infoframe by default
 
-	apply_preferences();
-	gtk_text_buffer_set_modified(GTK_TEXT_BUFFER(buffer), !m_doc.empty());
+	gtk_widget_show(GTK_WIDGET(m_view));
+	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
+	scroll->set_shadow_type(Gtk::SHADOW_IN);
+	scroll->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	gtk_container_add(GTK_CONTAINER(scroll->gobj()), GTK_WIDGET(m_view));
+	scroll->show();
 
-	set_shadow_type(Gtk::SHADOW_IN);
-	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-	gtk_container_add(GTK_CONTAINER(gobj()), GTK_WIDGET(m_view));
+	Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox);
+	vbox->pack_start(*infoframe, Gtk::PACK_SHRINK);
+	vbox->pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
+	vbox->show();
+
+	pack1(*vbox, true, false);
+}
+
+Gobby::DocWindow::~DocWindow()
+{
+	g_object_unref(m_session);
+	m_session = NULL;
 }
 
 void Gobby::DocWindow::get_cursor_position(unsigned int& row,
-                                           unsigned int& col)
+                                           unsigned int& col) const
 {
-	Glib::RefPtr<Gtk::TextBuffer> cpp_buffer = Glib::wrap(
-		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)), true);
+	GtkTextMark* insert_mark =
+		gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(m_buffer));
 
-	Glib::RefPtr<Gtk::TextMark> mark = cpp_buffer->get_insert();
+	GtkTextIter iter;
+	gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(m_buffer),
+	                                 &iter, insert_mark);
 
-	// Gtk::TextBuffer::Mark::get_iter is not const. Why not? It prevents
-	// this function from being const.
-	Gtk::TextBuffer::iterator iter = mark->get_iter();
+	row = gtk_text_iter_get_line(&iter);
+	col = 0;
 
-	// Row is trivial
-	row = iter.get_line(); col = 0;
-	int chars = iter.get_line_offset();
+	unsigned int chars = gtk_text_iter_get_line_offset(&iter);
+	unsigned int tabs = m_preferences.editor.tab_width;
 
 	// Tab characters expand to more than one column
-	unsigned int tabs = m_preferences.editor.tab_width;
-	for(iter.set_line_offset(0); iter.get_line_offset() < chars; ++ iter)
+	for(gtk_text_iter_set_line_offset(&iter, 0);
+	    gtk_text_iter_get_line_offset(&iter) < chars;
+	    gtk_text_iter_forward_char(&iter))
 	{
 		unsigned int width = 1;
-		if(*iter == '\t')
+		if(gtk_text_iter_get_char(&iter) == '\t')
 		{
-			width = (tabs - iter.get_line_offset() % tabs) % tabs;
+			unsigned int offset =
+				gtk_text_iter_get_line_offset(&iter);
+			width = (tabs - offset % tabs) % tabs;
 			if(width == 0) width = tabs;
 		}
 
@@ -182,8 +229,7 @@ void Gobby::DocWindow::set_selection(const Gtk::TextIter& begin,
 	gtk_text_buffer_select_range(
 		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)),
 		begin.gobj(),
-		end.gobj()
-		);
+		end.gobj());
 
 	gtk_text_view_scroll_to_mark(
 		GTK_TEXT_VIEW(m_view),
@@ -192,227 +238,94 @@ void Gobby::DocWindow::set_selection(const Gtk::TextIter& begin,
 		0.1, FALSE, 0.0, 0.0);
 }
 
-void Gobby::DocWindow::disable()
-{
-	gtk_widget_set_sensitive(GTK_WIDGET(m_view), FALSE);
-}
-
 Glib::ustring Gobby::DocWindow::get_selected_text() const
 {
 	GtkTextIter start, end;
 	gtk_text_buffer_get_selection_bounds(
-		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)), &start, &end);
+		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)),
+		&start, &end);
 
 	Gtk::TextIter start_cpp(&start), end_cpp(&end);
 	return start_cpp.get_slice(end_cpp);
 }
 
-const Glib::ustring& Gobby::DocWindow::get_title() const
-{
-	return m_title;
-}
-
-bool Gobby::DocWindow::get_modified() const
-{
-	return gtk_text_buffer_get_modified(
-		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view))) == TRUE;
-}
-
-void Gobby::DocWindow::grab_focus()
-{
-	Gtk::ScrolledWindow::grab_focus();
-	gtk_widget_grab_focus(GTK_WIDGET(m_view));
-}
-
 GtkSourceLanguage* Gobby::DocWindow::get_language() const
 {
-	return gtk_source_buffer_get_language(GTK_SOURCE_BUFFER(
-		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view))));
+	return gtk_source_buffer_get_language(m_buffer);
 }
 
 void Gobby::DocWindow::set_language(GtkSourceLanguage* language)
 {
-	GtkSourceBuffer* buffer = GTK_SOURCE_BUFFER(
-		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)));
-
-	gtk_source_buffer_set_language(buffer, language);
-	gtk_source_buffer_set_highlight_syntax(buffer, language != NULL);
-	m_signal_language_changed.emit();
+	gtk_source_buffer_set_language(m_buffer, language);
+	m_signal_language_changed.emit(language);
 }
 
-const Gobby::Preferences& Gobby::DocWindow::get_preferences() const
+void Gobby::DocWindow::on_tab_width_changed()
 {
-	return m_preferences;
+	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
 }
 
-void Gobby::DocWindow::set_preferences(const Preferences& preferences)
+void Gobby::DocWindow::on_tab_spaces_changed()
 {
-	m_preferences = preferences;
-	apply_preferences();
+	gtk_source_view_set_insert_spaces_instead_of_tabs(
+		m_view, m_preferences.editor.tab_spaces);
 }
 
-Glib::ustring Gobby::DocWindow::get_content() const
+void Gobby::DocWindow::on_auto_indent_changed()
 {
-	Glib::RefPtr<Gtk::TextBuffer> buffer = Glib::wrap(
-		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)), true);
-
-	return buffer->get_text();
+	gtk_source_view_set_auto_indent(
+		m_view, m_preferences.editor.indentation_auto);
 }
 
-Gobby::DocWindow::signal_cursor_moved_type
-Gobby::DocWindow::cursor_moved_event() const
+void Gobby::DocWindow::on_homeend_smart_changed()
 {
-	return m_signal_cursor_moved;
+	gtk_source_view_set_smart_home_end(
+		m_view, m_preferences.editor.homeend_smart ?
+			GTK_SOURCE_SMART_HOME_END_ALWAYS :
+			GTK_SOURCE_SMART_HOME_END_DISABLED);
 }
 
-Gobby::DocWindow::signal_content_changed_type
-Gobby::DocWindow::content_changed_event() const
+void Gobby::DocWindow::on_wrap_mode_changed()
 {
-	return m_signal_content_changed;
-}
-
-Gobby::DocWindow::signal_language_changed_type
-Gobby::DocWindow::language_changed_event() const
-{
-	return m_signal_language_changed;
-}
-
-const Gobby::LocalDocumentInfo& Gobby::DocWindow::get_info() const
-{
-	return m_info;
-}
-
-Gobby::LocalDocumentInfo& Gobby::DocWindow::get_info()
-{
-	return m_info;
-}
-
-const Gobby::Document& Gobby::DocWindow::get_document() const
-{
-	return m_doc;
-}
-
-void Gobby::DocWindow::on_mark_set(const Gtk::TextIter& location,
-                                   const Glib::RefPtr<Gtk::TextMark>& mark)
-{
-	// Mark was deleted
-	if(!mark) return;
-
-	if(mark->gobj() == gtk_text_buffer_get_insert(
-	   gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view))))
-	{
-		m_signal_cursor_moved.emit();
-	}
-}
-
-void Gobby::DocWindow::on_changed()
-{
-	// Cursor may have moved.
-	// TODO: Check if the cursor really moved
-	m_signal_cursor_moved.emit();
-	m_signal_content_changed.emit();
-}
-
-void Gobby::DocWindow::on_local_insert(obby::position pos,
-                                       const std::string& error)
-{
-	m_info.insert(pos, error);
-}
-
-void Gobby::DocWindow::on_local_erase(obby::position pos,
-                                      obby::position len)
-{
-	m_info.erase(pos, len);
-}
-
-void Gobby::DocWindow::on_remote_insert_before(obby::position,
-                                               const std::string& text)
-{
-	store_scroll();
-}
-
-void Gobby::DocWindow::on_remote_erase_before(obby::position pos,
-                                              obby::position len)
-{
-	store_scroll();
-}
-
-void Gobby::DocWindow::on_remote_insert_after(obby::position,
-                                              const std::string& text)
-{
-	restore_scroll();
-}
-
-void Gobby::DocWindow::on_remote_erase_after(obby::position pos,
-                                             obby::position len)
-{
-	restore_scroll();
-}
-
-void Gobby::DocWindow::apply_preferences()
-{
-	GtkTextBuffer* buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view));
-
-	gtk_source_view_set_tab_width(GTK_SOURCE_VIEW(m_view),
-		m_preferences.editor.tab_width);
-
-	gtk_source_view_set_insert_spaces_instead_of_tabs(GTK_SOURCE_VIEW(m_view),
-		m_preferences.editor.tab_spaces);
-	gtk_source_view_set_auto_indent(GTK_SOURCE_VIEW(m_view),
-		m_preferences.editor.indentation_auto);
-	gtk_source_view_set_smart_home_end(GTK_SOURCE_VIEW(m_view),
-		m_preferences.editor.homeend_smart ?
-		GTK_SOURCE_SMART_HOME_END_ALWAYS :
-		GTK_SOURCE_SMART_HOME_END_DISABLED);
-
-	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(m_view),
+	gtk_text_view_set_wrap_mode(
+		GTK_TEXT_VIEW(m_view),
 		wrap_mode_from_preferences(m_preferences));
-	gtk_source_view_set_show_line_numbers(GTK_SOURCE_VIEW(m_view),
-		m_preferences.view.linenum_display);
-	gtk_source_view_set_highlight_current_line(GTK_SOURCE_VIEW(m_view),
-		m_preferences.view.curline_highlight);
-	gtk_source_view_set_show_right_margin(GTK_SOURCE_VIEW(m_view),
-		m_preferences.view.margin_display);
-	gtk_source_view_set_right_margin_position(GTK_SOURCE_VIEW(m_view),
-		m_preferences.view.margin_pos);
-	gtk_source_buffer_set_highlight_matching_brackets(GTK_SOURCE_BUFFER(buffer),
-		m_preferences.view.bracket_highlight);
-
-	gtk_widget_modify_font(GTK_WIDGET(m_view), static_cast<Pango::FontDescription&>(m_preferences.appearance.font).gobj());
-
-	// Cursor position may have changed because of new tab width
-	// TODO: Only emit if the position really changed
-	m_signal_cursor_moved.emit();
 }
 
-void Gobby::DocWindow::store_scroll()
+void Gobby::DocWindow::on_linenum_display_changed()
 {
-	Gdk::Rectangle curs_rect;
-	int x, y;
-
-	Gtk::TextView* cpp_view = Glib::wrap(GTK_TEXT_VIEW(m_view));
-	cpp_view->get_iter_location(cpp_view->get_buffer()->get_insert()->get_iter(), curs_rect);
-	cpp_view->buffer_to_window_coords(
-		Gtk::TEXT_WINDOW_WIDGET,
-		curs_rect.get_x(), curs_rect.get_y(),
-		x, y);
-
-	m_scrolly = y / static_cast<double>((cpp_view->get_height() - curs_rect.get_height()));
-	m_scroll_restore = true;
+	gtk_source_view_set_show_line_numbers(
+		m_view, m_preferences.view.linenum_display);
 }
 
-void Gobby::DocWindow::restore_scroll()
+void Gobby::DocWindow::on_curline_highlight_changed()
 {
-	if(m_scroll_restore)
-	{
-		Gtk::TextView* cpp_view = Glib::wrap(GTK_TEXT_VIEW(m_view));
-		if(m_scrolly >= 0.0 && m_scrolly <= 1.0)
-			cpp_view->scroll_to(
-				cpp_view->get_buffer()->get_insert(),
-				0, 0,
-				m_scrolly);
-
-		m_scroll_restore = false;
-	}
+	gtk_source_view_set_highlight_current_line(
+		m_view, m_preferences.view.curline_highlight);
 }
 
+void Gobby::DocWindow::on_margin_display_changed()
+{
+	gtk_source_view_set_show_right_margin(
+		m_view, m_preferences.view.margin_display);
+}
+
+void Gobby::DocWindow::on_margin_pos_changed()
+{
+	gtk_source_view_set_right_margin_position(
+		m_view, m_preferences.view.margin_pos);
+}
+
+void Gobby::DocWindow::on_bracket_highlight_changed()
+{
+	gtk_source_buffer_set_highlight_matching_brackets(
+		m_buffer, m_preferences.view.bracket_highlight);
+}
+
+void Gobby::DocWindow::on_font_changed()
+{
+	const Pango::FontDescription& desc = m_preferences.appearance.font;
+	gtk_widget_modify_font(
+		GTK_WIDGET(m_view),
+		const_cast<PangoFontDescription*>(desc.gobj()));
+}
