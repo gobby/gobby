@@ -16,12 +16,12 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <stdexcept>
-#include <gtkmm/liststore.h>
-
-#include "common.hpp"
-#include "encoding.hpp"
 #include "encoding_selector.hpp"
+#include "encoding.hpp"
+#include "i18n.hpp"
+
+#include <gtkmm/liststore.h>
+#include <stdexcept>
 
 const std::string Gobby::EncodingSelector::AUTO_DETECT = "Auto Detect";
 

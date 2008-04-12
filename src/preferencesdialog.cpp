@@ -16,15 +16,13 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <stdexcept>
-#include <gtkmm/stock.h>
-#include <gtkmm/messagedialog.h>
-
-#include <obby/format_string.hpp>
-
-#include "common.hpp"
-#include "colorutil.hpp"
 #include "preferencesdialog.hpp"
+#include "colorutil.hpp"
+#include "i18n.hpp"
+
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/stock.h>
+#include <stdexcept>
 
 namespace
 {

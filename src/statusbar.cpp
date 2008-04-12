@@ -18,6 +18,7 @@
 
 #include "statusbar.hpp"
 
+#include <gtkmm/frame.h>
 #include <gtkmm/stock.h>
 
 namespace

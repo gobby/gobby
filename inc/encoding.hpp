@@ -19,8 +19,10 @@
 #ifndef _GOBBY_ENCODING_HPP_
 #define _GOBBY_ENCODING_HPP_
 
-#include <list>
-#include <gtkmm/textview.h>
+#include <glibmm/ustring.h>
+
+#include <vector>
+#include <string>
 
 namespace Gobby
 {

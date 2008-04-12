@@ -20,12 +20,12 @@
 #define _GOBBY_FOLDER_HPP_
 
 #include <sigc++/signal.h>
-#include <net6/default_accumulator.hpp>
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtkmm/notebook.h>
 
-#include "preferences.hpp"
 #include "docwindow.hpp"
+#include "preferences.hpp"
+#include "default_accumulator.hpp"
 
 namespace Gobby
 {
@@ -38,7 +38,7 @@ public:
 	typedef sigc::signal<void, DocWindow*> SignalDocumentChanged;
 
 	typedef sigc::signal<bool, DocWindow&>::
-		accumulated<net6::default_accumulator<bool, true> >
+		accumulated<default_accumulator<bool, true> >
 			SignalDocumentCloseRequest;
 
 	Folder(const Preferences& preferences,

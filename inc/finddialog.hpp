@@ -19,6 +19,9 @@
 #ifndef _GOBBY_FINDDIALOG_HPP_
 #define _GOBBY_FINDDIALOG_HPP_
 
+#include "docwindow.hpp"
+#include "toolwindow.hpp"
+
 #include <gtkmm/window.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/box.h>
@@ -28,9 +31,6 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/frame.h>
-
-#include "toolwindow.hpp"
-#include "regex.hpp"
 
 namespace Gobby
 {
@@ -83,9 +83,6 @@ protected:
 	                 Gtk::TextIter& match_start,
 	                 Gtk::TextIter& match_end);
 
-	void update_regex();
-	void compile_regex();
-
 	Gobby::Window& m_gobby;
 
 	Gtk::HBox m_box_main;
@@ -105,7 +102,6 @@ protected:
 	Gtk::VBox m_box_options;
 	Gtk::CheckButton m_check_whole_word;
 	Gtk::CheckButton m_check_case;
-	Gtk::CheckButton m_check_regex;
 
 	Gtk::Frame m_frame_direction;
 	Gtk::VBox m_box_direction;
@@ -117,9 +113,6 @@ protected:
 	Gtk::Button m_btn_replace;
 	Gtk::Button m_btn_replace_all;
 	Gtk::Button m_btn_close;
-
-	regex m_regex;
-	bool m_regex_changed;
 };
 
 }

@@ -1,5 +1,104 @@
 2008-04-12  Armin Burgmeier  <armin@0x539.de>
 
+	* contrib/gobby-0.0.20050522.ebuild:
+	* contrib/artwork/chat.svg:
+	* test/test_document.cpp: Removed, these are outdated.
+
+	* inc/default_accumulator.hpp:
+	* inc/serialize.hpp:
+	* src/serialize.cpp: Added. These are basically copies from net6, but
+	in the Gobby namespace.
+
+	* inc/i18n.hpp:
+	* src/i18n.cpp: Moved from inc/common.hpp or src/common.cpp,
+	respectively.
+
+	* inc/application_state.hpp:
+	* inc/buffer_def.hpp:
+	* inc/chat.hpp:
+	* inc/colorsel.hpp:
+	* inc/historyentry.hpp:
+	* inc/document.hpp:
+	* inc/document_settings.hpp:
+	* inc/entrydialog.hpp:
+	* inc/fileentry.hpp:
+	* inc/gselector.hpp:
+	* inc/hostdialog.hpp:
+	* inc/hostprogressdialog.hpp:
+	* inc/ipc.hpp:
+	* inc/joindialog.hpp:
+	* inc/joinprogressdialog.hpp:
+	* inc/logview.hpp:
+	* inc/passworddialog.hpp:
+	* inc/progressdialog.hpp:
+	* inc/regex.hpp:
+	* inc/togglewindow.hpp:
+	* inc/unix.hpp:
+	* src/application_state.cpp:
+	* src/buffer_def.cpp:
+	* src/chat.cpp:
+	* src/colorsel.cpp:
+	* src/document.cpp:
+	* src/document_settings.cpp:
+	* src/entrydialog.cpp:
+	* src/fileentry.cpp:
+	* src/gselector.cpp:
+	* src/historyentry.cpp:
+	* src/hostdialog.cpp:
+	* src/hostprogressdialog.cpp:
+	* src/ipc.cpp:
+	* src/joindialog.cpp:
+	* src/joinprogressdialog.cpp:
+	* src/logview.cpp:
+	* src/passworddialog.cpp:
+	* src/preferencesdialog.cpp:
+	* src/progressdialog.cpp:
+	* src/regex.cpp:
+	* src/togglewindow.cpp:
+	* src/unix.cpp: Removed. They are no longer required for infinote, or
+	at least not in a such way that a complete rewrite would not be easier
+	anyway.
+
+	* inc/config.hpp:
+	* inc/dragdrop.hpp:
+	* inc/encoding.hpp:
+	* inc/finddialog.hpp:
+	* inc/folder.hpp:
+	* inc/statusbar.hpp:
+	* inc/window.hpp:
+	* src/browser.cpp:
+	* src/config.cpp:
+	* src/dragdrop.cpp:
+	* src/encoding.cpp:
+	* src/encoding_selector.cpp:
+	* src/finddialog.cpp:
+	* src/folder.cpp:
+	* src/gotodialog.cpp:
+	* src/header.cpp:
+	* src/icon.cpp:
+	* src/initialdialog.cpp:
+	* src/main.cpp:
+	* src/resolv.cpp:
+	* src/statusbar.cpp:
+	* src/window.cpp: Removed any occurences of net6/obby stuff, replaced
+	by equivalent functionlity if possible.
+
+	* po/POTFILES.in: Removed source files, added a TODO comment to readd
+	them as soon as the required files are ready.
+
+	* Makefile.am:
+	* contrib/Makefile.am:
+	* contrib/artwork/Makefile.am:
+	* inc/Makefile.am:
+	* pixmaps/Makefile.am:
+	* src/Makefile.am:
+	* win32/Makefile.am: Hierarchical build instead of only a top-level
+	Makefile.am, so that each Makefile.am is smaller and easier to use.
+
+	* configure.ac: Remove dependency on net6 and obby.
+
+2008-04-12  Armin Burgmeier  <armin@0x539.de>
+
 	* src/preferences.cpp: Changed default value for homeend_smart to
 	false.
 

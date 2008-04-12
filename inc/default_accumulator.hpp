@@ -1,5 +1,5 @@
 /* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+ * Copyright (C) 2005 - 2008 0x539 dev group
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -16,42 +16,30 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_ENTRYDIALOG_HPP_
-#define _GOBBY_ENTRYDIALOG_HPP_
-
-#include <gtkmm/label.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/dialog.h>
+#ifndef _GOBBY_DEFAULT_ACCUMULATOR_HPP_
+#define _GOBBY_DEFAULT_ACCUMULATOR_HPP_
 
 namespace Gobby
 {
 
-class EntryDialog: public Gtk::Dialog
-{
+/** Accumulator for signals with return type that defaults to a value if no
+ * signal handler is connected.
+ */
+
+template<typename return_type, return_type default_return>
+class default_accumulator {
 public:
-	EntryDialog(Gtk::Window& parent,
-	            const Glib::ustring& title,
-	            const Glib::ustring& label);
-	virtual ~EntryDialog();
+	typedef return_type result_type;
 
-	Glib::ustring get_text() const;
-	void set_text(const Glib::ustring& text);
-
-	Gtk::Entry& get_entry();
-
-	void set_check_valid_entry(bool enable);
-	bool get_check_valid_entry() const;
-
-protected:
-	void on_entry_changed();
-
-	Gtk::Entry m_entry;
-	Gtk::Label m_label;
-	Gtk::VBox  m_box;
-
-	bool m_check_valid_entry;
+	template<typename iterator>
+	result_type operator()(iterator begin, iterator end) const {
+		return_type result = default_return;
+		for(; begin != end; ++ begin)
+			result = *begin;
+		return result;
+	}
 };
 
-}
+} // namespace Gobby
 
-#endif // _GOBBY_ENTRYDIALOG_HPP_
+#endif // _GOBBY_DEFAULT_ACCUMULATOR_HPP_

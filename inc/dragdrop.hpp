@@ -20,7 +20,6 @@
 #define _GOBBY_DRAGDROP_HPP_
 
 #include <sigc++/trackable.h>
-#include <net6/non_copyable.hpp>
 
 namespace Gobby
 {
@@ -30,7 +29,7 @@ class Window;
 /** Class that handles Drag+Drop in the main application window.
  */
 
-class DragDrop: public sigc::trackable, private net6::non_copyable
+class DragDrop: public sigc::trackable
 {
 public:
 	DragDrop(Window& window);

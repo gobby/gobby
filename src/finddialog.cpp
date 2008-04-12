@@ -16,14 +16,14 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <gtksourceview/gtksourceiter.h>
-#include <gtkmm/stock.h>
-#include <gtkmm/messagedialog.h>
-
-#include "common.hpp"
-#include "document.hpp"
-#include "window.hpp"
 #include "finddialog.hpp"
+#include "window.hpp"
+#include "i18n.hpp"
+
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/textbuffer.h>
+#include <gtkmm/stock.h>
+#include <gtksourceview/gtksourceiter.h>
 
 namespace
 {
@@ -44,15 +44,13 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 	m_label_replace(_("Replace with:"), Gtk::ALIGN_LEFT),
 	m_check_whole_word(_("Match whole word only")),
 	m_check_case(_("Match case")),
-	m_check_regex(_("Match as regular expression")),
 	m_frame_direction(_("Direction")),
 	m_radio_up(m_group_direction, _("_Up"), true),
 	m_radio_down(m_group_direction, _("_Down"), true),
 	m_btn_find(Gtk::Stock::FIND),
 	m_btn_replace(_("_Replace") ),
 	m_btn_replace_all(_("Replace _all") ),
-	m_btn_close(Gtk::Stock::CLOSE),
-	m_regex("")
+	m_btn_close(Gtk::Stock::CLOSE)
 {
 	Gtk::Image* replace_img = Gtk::manage(
 		new Gtk::Image(
@@ -96,7 +94,6 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 
 	m_box_options.pack_start(m_check_whole_word, Gtk::PACK_EXPAND_WIDGET);
 	m_box_options.pack_start(m_check_case, Gtk::PACK_EXPAND_WIDGET);
-	m_box_options.pack_start(m_check_regex, Gtk::PACK_EXPAND_WIDGET);
 
 	m_frame_direction.add(m_box_direction);
 	m_box_direction.set_border_width(4);
@@ -108,13 +105,6 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 	m_box_btns.pack_start(m_btn_replace, Gtk::PACK_EXPAND_PADDING);
 	m_box_btns.pack_start(m_btn_replace_all, Gtk::PACK_EXPAND_PADDING);
 	m_box_btns.pack_start(m_btn_close, Gtk::PACK_EXPAND_PADDING);
-
-	m_entry_find.signal_changed().connect(
-		sigc::mem_fun(*this, &FindDialog::update_regex));
-	m_check_case.signal_toggled().connect(
-		sigc::mem_fun(*this, &FindDialog::update_regex));
-	m_check_regex.signal_toggled().connect(
-		sigc::mem_fun(*this, &FindDialog::update_regex));
 
 	m_entry_find.signal_activate().connect(
 		sigc::mem_fun(*this, &FindDialog::on_find) );
@@ -141,7 +131,6 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 	set_resizable(false);
 	show_all_children();
 
-	m_check_regex.hide();
 	set_search_only(true);
 }
 
@@ -166,9 +155,6 @@ void Gobby::FindDialog::on_show()
 
 void Gobby::FindDialog::on_find()
 {
-	if(m_check_regex.get_active() && m_regex_changed)
-		compile_regex();
-
 	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
@@ -178,15 +164,13 @@ void Gobby::FindDialog::on_find()
 	bool result = search_sel(buf->get_insert()->get_iter() );
 	if(!result)
 	{
-		obby::format_string str(
-			_("\"%0%\" has not been found in the document.")
-		);
-
-		str << m_entry_find.get_text();
+		Glib::ustring str = Glib::ustring::compose(
+			"\"%1\" has not been found in the document",
+			m_entry_find.get_text());
 
 		Gtk::MessageDialog dlg(
 			*this,
-			str.str(),
+			str,
 			false,
 			Gtk::MESSAGE_INFO,
 			Gtk::BUTTONS_OK,
@@ -199,9 +183,6 @@ void Gobby::FindDialog::on_find()
 
 void Gobby::FindDialog::on_replace()
 {
-	if(m_check_regex.get_active() && m_regex_changed)
-		compile_regex();
-
 	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
@@ -238,9 +219,6 @@ void Gobby::FindDialog::on_replace()
 
 void Gobby::FindDialog::on_replace_all()
 {
-	if(m_check_regex.get_active() && m_regex_changed)
-		compile_regex();
-
 	DocWindow* doc = get_document();
 	if(doc == NULL) return;
 
@@ -266,16 +244,10 @@ void Gobby::FindDialog::on_replace_all()
 	}
 	else
 	{
-		obby::format_string str(
-			ngettext(
-				"%0% occurence has been replaced",
-				"%0% occurences have been replaced",
-				replace_count
-			)
-		);
-
-		str << replace_count;
-		msg = str.str();
+		msg = Glib::ustring::compose(
+			ngettext("%1 occurence has been replaced",
+			         "%1 occurences have been replaced",
+			         replace_count), replace_count);
 	}
 
 	Gtk::MessageDialog dlg(
@@ -292,7 +264,7 @@ void Gobby::FindDialog::on_replace_all()
 
 Gobby::DocWindow* Gobby::FindDialog::get_document()
 {
-	DocWindow* doc = m_gobby.get_current_document();
+	DocWindow* doc = m_gobby.get_folder().get_current_document();
 
 	if(doc == NULL)
 	{
@@ -390,173 +362,34 @@ bool Gobby::FindDialog::search_once(const Gtk::TextIter& from,
                                     Gtk::TextIter& match_start,
                                     Gtk::TextIter& match_end)
 {
-	if(m_check_regex.get_active() )
+	GtkSourceSearchFlags flags = GtkSourceSearchFlags(0);
+	if(!m_check_case.get_active() )
+		flags = GTK_SOURCE_SEARCH_CASE_INSENSITIVE;
+
+	gtk_source_iter_search_func search_func =
+		gtk_source_iter_forward_search;
+
+	if(m_radio_up.get_active() )
+		search_func = gtk_source_iter_backward_search;
+
+	Glib::ustring find_str = m_entry_find.get_text();
+	GtkTextIter match_start_gtk, match_end_gtk;
+	gboolean result = search_func(
+		from.gobj(),
+		find_str.c_str(),
+		flags,
+		&match_start_gtk,
+		&match_end_gtk,
+		to != NULL ? to->gobj() : NULL
+	);
+
+	if(result == TRUE)
 	{
-		Glib::RefPtr<Gtk::TextBuffer> buf = from.get_buffer();
+		match_start = Gtk::TextIter(&match_start_gtk);
+		match_end = Gtk::TextIter(&match_end_gtk);
 
-		Gtk::TextIter start_pos, limit;
-		if(m_radio_up.get_active() )
-		{
-			limit = from;
-
-			if(to == NULL)
-				start_pos = buf->begin();
-			else
-				start_pos = *to;
-		}
-		else if(m_radio_down.get_active() )
-		{
-			start_pos = from;
-
-			if(to == NULL)
-				limit = buf->end();
-			else
-				limit = *to;
-		}
-
-		Gtk::TextIter begin = buf->end(), end = buf->end();
-		Gtk::TextIter cur_line = start_pos, next_line = start_pos;
-		for(;;)
-		{
-			next_line.forward_line();
-
-			// Get current line of text
-			Glib::ustring line = cur_line.get_slice(next_line);
-
-			// Trim trailing text after limit
-			if(limit.get_line() == cur_line.get_line() )
-			{
-				if(!limit.ends_line() )
-				{
-					line.erase(
-						limit.get_line_offset() -
-						cur_line.get_line_offset()
-					);
-				}
-			}
-
-			regex::match_options options =
-				regex::match_options::NONE;
-
-			if(!cur_line.starts_line() )
-				options |= regex::match_options::NOT_BOL;
-
-			if(cur_line.get_line() == limit.get_line() &&
-			   !limit.ends_line() )
-				options |= regex::match_options::NOT_EOL;
-
-			std::pair<std::size_t, std::size_t> pos;
-			bool result = m_regex.find(
-				line.c_str(),
-				pos,
-				options
-			);
-
-			if(result == true)
-			{
-				begin = end = cur_line;
-				begin.set_line_index(
-					begin.get_line_index() + pos.first
-				);
-
-				end.set_line_index(
-					end.get_line_index() + pos.second
-				);
-
-				// Match after limit
-				if(end > limit) break;
-
-				// First match is result if searching forward
-				if(m_radio_down.get_active() )
-				{
-					match_start = begin;
-					match_end = end;
-
-					return true;
-				}
-			}
-
-			cur_line = next_line;
-			if(cur_line > limit || cur_line == buf->end() )
-				break;
-		}
-
-		if(m_radio_up.get_active() )
-		{
-			// No match for backward search
-			if(begin == buf->end() && end == buf->end() )
-				return false;
-
-			match_start = begin;
-			match_end = end;
-
-			return true;
-		}
-
-		// No match for forward search
-		return false;
+		return true;
 	}
-	else
-	{
-		GtkSourceSearchFlags flags = GtkSourceSearchFlags(0);
-		if(!m_check_case.get_active() )
-			flags = GTK_SOURCE_SEARCH_CASE_INSENSITIVE;
 
-		gtk_source_iter_search_func search_func =
-			gtk_source_iter_forward_search;
-
-		if(m_radio_up.get_active() )
-			search_func = gtk_source_iter_backward_search;
-
-		Glib::ustring find_str = m_entry_find.get_text();
-		GtkTextIter match_start_gtk, match_end_gtk;
-		gboolean result = search_func(
-			from.gobj(),
-			find_str.c_str(),
-			flags,
-			&match_start_gtk,
-			&match_end_gtk,
-			to != NULL ? to->gobj() : NULL
-		);
-
-		if(result == TRUE)
-		{
-			match_start = Gtk::TextIter(&match_start_gtk);
-			match_end = Gtk::TextIter(&match_end_gtk);
-
-			return true;
-		}
-
-		return false;
-	}
+	return false;
 }
-
-void Gobby::FindDialog::update_regex()
-{
-	if (m_check_regex.get_active())
-		m_regex_changed = true;
-	else
-		m_regex_changed = false;
-}
-
-void Gobby::FindDialog::compile_regex()
-{
-	if (m_check_case.get_active())
-	{
-		m_regex.reset(
-			m_entry_find.get_text().c_str(),
-			regex::compile_options::EXTENDED
-		);
-	}
-	else
-	{
-		m_regex.reset(
-			m_entry_find.get_text().c_str(),
-			regex::compile_options::EXTENDED |
-			regex::compile_options::IGNORE_CASE
-		);
-	}
-
-	m_regex_changed = false;
-}
-

@@ -16,29 +16,19 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "application_state.hpp"
+#include "i18n.hpp"
+#include "features.hpp"
 
-Gobby::ApplicationState::ApplicationState(ApplicationFlags initial_flags):
-	m_state(initial_flags)
+#include <libintl.h>
+
+const char* Gobby::_(const char* msgid)
 {
+	return dgettext(GETTEXT_PACKAGE, msgid);
 }
 
-void Gobby::ApplicationState::modify(ApplicationFlags inc_flags,
-                                     ApplicationFlags exc_flags)
+const char* Gobby::ngettext(const char* msgid,
+                            const char* msgid_plural,
+                            unsigned long int n)
 {
-	(m_state |= inc_flags) &= ~exc_flags;
-	m_signal_state_changed.emit(m_state);
-}
-
-bool Gobby::ApplicationState::query(ApplicationFlags inc_flags,
-                                    ApplicationFlags exc_flags) const
-{
-	return ((m_state & inc_flags) == inc_flags) &&
-	       ((m_state & exc_flags) == 0);
-}
-
-Gobby::ApplicationState::signal_state_changed_type
-Gobby::ApplicationState::state_changed_event() const
-{
-	return m_signal_state_changed;
+	return dngettext(GETTEXT_PACKAGE, msgid, msgid_plural, n);
 }

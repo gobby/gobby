@@ -17,7 +17,6 @@
  */
 
 #include "resolv.hpp"
-#include "common.hpp"
 
 #include <glibmm/main.h>
 #include <glibmm/thread.h>

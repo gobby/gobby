@@ -16,13 +16,13 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <gtkmm/stock.h>
-#include <gtkmm/messagedialog.h>
-
-#include "common.hpp"
-#include "document.hpp"
 #include "gotodialog.hpp"
 #include "window.hpp"
+#include "i18n.hpp"
+
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/textbuffer.h>
+#include <gtkmm/stock.h>
 
 Gobby::GotoDialog::GotoDialog(Gobby::Window& parent):
 	ToolWindow(parent),
@@ -40,7 +40,7 @@ Gobby::GotoDialog::GotoDialog(Gobby::Window& parent):
 
 	m_btn_goto.set_image(*goto_img);
 
-	// TODO: Change this value according to line count in current document?
+	// TODO: Change this value according to line count in current document!
 	m_ent_line.set_range(1, 0x7fffffff);
 	m_ent_line.set_increments(1, 10);
 	m_ent_line.set_activates_default(true);
@@ -83,11 +83,13 @@ void Gobby::GotoDialog::on_show()
 {
 	m_ent_line.grab_focus();
 
-	Gobby::DocWindow* window = m_window.get_current_document();
+	Gobby::DocWindow* window =
+		m_window.get_folder().get_current_document();
 	if(window != NULL)
 	{
-    Glib::RefPtr<Gtk::TextBuffer> buffer =
-      Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()), true);
+		Glib::RefPtr<Gtk::TextBuffer> buffer =
+			Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()),
+			           true);
 		Gtk::TextIter cursor = buffer->get_insert()->get_iter();
 
 		m_ent_line.set_value(cursor.get_line() + 1);
@@ -99,12 +101,14 @@ void Gobby::GotoDialog::on_show()
 
 void Gobby::GotoDialog::on_goto()
 {
-	Gobby::DocWindow* window = m_window.get_current_document();
+	Gobby::DocWindow* window =
+		m_window.get_folder().get_current_document();
 	if(window != NULL)
 	{
 		int value = m_ent_line.get_value_as_int();
-    Glib::RefPtr<Gtk::TextBuffer> buffer =
-      Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()), true);
+		Glib::RefPtr<Gtk::TextBuffer> buffer =
+			Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()),
+			           true);
 		Gtk::TextIter begin = buffer->get_iter_at_line(value - 1);
 		window->set_selection(begin, begin);
 	}

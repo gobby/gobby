@@ -175,10 +175,12 @@ namespace
 			char* buf = new char[size + 1];
 			DragQueryFileA(drop, i, buf, size + 1);
 
-			m_window.open_local_file(
+			// TODO: User still needs to select where to store
+			// that file in the directory.
+			/*m_window.open_local_file(
 				buf,
 				Gobby::EncodingSelector::AUTO_DETECT
-			);
+			);*/
 
 			delete[] buf;
 		}
@@ -239,10 +241,12 @@ namespace
 				dlg.run();
 			}
 
-			window.open_local_file(
+			// TODO: User still needs to select where to store
+			// that file in the directory.
+			/*window.open_local_file(
 				filename,
 				Gobby::EncodingSelector::AUTO_DETECT
-			);
+			);*/
 		}
 	}
 #endif

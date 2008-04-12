@@ -17,9 +17,8 @@
  */
 
 #include "browser.hpp"
-#include "common.hpp"
+#include "i18n.hpp"
 
-#include <obby/format_string.hpp>
 #include <libinfinity/inf-config.h>
 #include <libinfinity/common/inf-discovery-avahi.h>
 
@@ -193,11 +192,10 @@ void Gobby::Browser::on_hostname_activate()
 
 	// Translators: That's a Unicode horizontal ellipsis character,
 	// not three dots.
-	obby::format_string status_str("Resolving %0%…");
-	status_str << host;
 	StatusBar::MessageHandle message_handle =
-		m_status_bar.add_message(StatusBar::INFO,
-		                         status_str.str(), 0);
+		m_status_bar.add_message(
+			StatusBar::INFO, Glib::ustring::compose(
+				_("Resolving %0…"), host), 0);
 
 	m_resolv_map[resolv_handle].message_handle = message_handle;
 }

@@ -16,9 +16,10 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <cstdlib>
-#include "common.hpp"
 #include "encoding.hpp"
+#include "i18n.hpp"
+
+#include <glibmm/convert.h>
 
 namespace
 {

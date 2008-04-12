@@ -16,6 +16,15 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "config.hpp"
+#include "i18n.hpp"
+
+#include <glibmm/miscutils.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/exception.h>
+#include <libxml++/parsers/domparser.h>
+#include <libxml++/exceptions/exception.h>
+
 // For mkdir / CreateDirectory
 #ifdef WIN32
 #include <windows.h>
@@ -28,19 +37,12 @@
 #include <cstring>
 #include <stdexcept>
 
-#include <glibmm/miscutils.h>
-#include <glibmm/fileutils.h>
-#include <glibmm/exception.h>
-#include <libxml++/parsers/domparser.h>
-#include <libxml++/exceptions/exception.h>
-
-#include "config.hpp"
-
 namespace
 {
 	// Creates a new directory
 	void create_directory(const char* path)
 	{
+		using namespace Gobby;
 #ifdef WIN32
 		if(CreateDirectoryA(path, NULL) == FALSE)
 		{
@@ -65,18 +67,20 @@ namespace
 
 			throw Gobby::Config::Error(
 				Gobby::Config::Error::PATH_CREATION_FAILED,
-				"Could not create directory " +
-				std::string(path) + ": " + error_message
-			);
+				Glib::ustring::compose(
+					_("Could not create directory "
+					  "\"%1\": %2"), std::string(path),
+					error_message));
 		}
 #else
 		if(mkdir(path, 0755) == -1)
 		{
 			throw Gobby::Config::Error(
 				Gobby::Config::Error::PATH_CREATION_FAILED,
-				"Could not create directory " +
-				std::string(path) + ": " + strerror(errno)
-			);
+				Glib::ustring::compose(
+					_("Could not create directory "
+					  "\"%1\": %2"), std::string(path),
+					strerror(errno)));
 		}
 #endif
 	}
@@ -337,7 +341,7 @@ const Gobby::Config::ParentEntry& Gobby::Config::get_root() const
 	return *m_root;
 }
 
-std::string serialise::default_context_to<Gdk::Color>::
+std::string Gobby::serialize::default_context_to<Gdk::Color>::
 	to_string(const data_type& from) const
 {
 	unsigned int red = from.get_red() * 255 / 65535;
@@ -349,8 +353,8 @@ std::string serialise::default_context_to<Gdk::Color>::
 	return stream.str();
 }
 
-serialise::default_context_from<Gdk::Color>::data_type
-serialise::default_context_from<Gdk::Color>::
+Gobby::serialize::default_context_from<Gdk::Color>::data_type
+Gobby::serialize::default_context_from<Gdk::Color>::
 	from_string(const std::string& from) const
 {
 	unsigned int rgb_color;
@@ -371,14 +375,14 @@ serialise::default_context_from<Gdk::Color>::
 	return color;
 }
 
-std::string serialise::default_context_to<Glib::ustring>::
+std::string Gobby::serialize::default_context_to<Glib::ustring>::
 	to_string(const data_type& from) const
 {
 	return from;
 }
 
-serialise::default_context_from<Glib::ustring>::data_type
-serialise::default_context_from<Glib::ustring>::
+Gobby::serialize::default_context_from<Glib::ustring>::data_type
+Gobby::serialize::default_context_from<Glib::ustring>::
 	from_string(const std::string& from) const
 {
 	return from;

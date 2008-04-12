@@ -19,16 +19,12 @@
 #ifndef _GOBBY_STATUSBAR_HPP_
 #define _GOBBY_STATUSBAR_HPP_
 
-#include <glibmm/ustring.h>
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/statusbar.h>
-#include <obby/user.hpp>
-#include "document.hpp"
-#include "buffer_def.hpp"
-#include "header.hpp"
 #include "folder.hpp"
+
+#include <gtkmm/box.h>
+#include <gtkmm/statusbar.h>
+
+#include <glibmm/ustring.h>
 
 namespace Gobby
 {

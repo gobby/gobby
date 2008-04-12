@@ -16,12 +16,13 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "initialdialog.hpp"
+#include "colorutil.hpp"
+#include "i18n.hpp"
+#include "features.hpp"
+
 #include <gtkmm/stock.h>
 #include <gtkmm/alignment.h>
-#include "features.hpp"
-#include "common.hpp"
-#include "colorutil.hpp"
-#include "initialdialog.hpp"
 
 namespace
 {

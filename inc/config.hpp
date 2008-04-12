@@ -19,10 +19,10 @@
 #ifndef _GOBBY_CONFIG_HPP_
 #define _GOBBY_CONFIG_HPP_
 
+#include "serialize.hpp"
+
 #include <map>
 #include <memory>
-#include <net6/non_copyable.hpp>
-#include <net6/serialise.hpp>
 #include <glibmm/error.h>
 #include <glibmm/ustring.h>
 #include <gdkmm/color.h>
@@ -34,7 +34,7 @@
 namespace Gobby
 {
 
-class Config: private net6::non_copyable
+class Config
 {
 public:
 	class Error: public Glib::Error
@@ -50,7 +50,7 @@ public:
 
 	/** @brief Abstract base class for configuration file entries.
 	 */
-	class Entry: private net6::non_copyable
+	class Entry
 	{
 	public:
 		Entry(const Glib::ustring& name);
@@ -79,8 +79,8 @@ public:
 		ValueEntry(
 			const Glib::ustring& name,
 			const DataType& value,
-			const serialise::context_base_to<DataType>& ctx =
-				serialise::default_context_to<DataType>()
+			const serialize::context_base_to<DataType>& ctx =
+				serialize::default_context_to<DataType>()
 		);
 
 		/** @brief Returns the value of this entry and tries to
@@ -88,12 +88,12 @@ public:
 		 */
 		template<typename DataType>
 		DataType get(
-			const serialise::context_base_from<DataType>& ctx =
-			serialise::default_context_from<DataType>()
+			const serialize::context_base_from<DataType>& ctx =
+			serialize::default_context_from<DataType>()
 		) const;
 
 	protected:
-		serialise::data m_data;
+		serialize::data m_data;
 	};
 
 	/** Value entry with type information. Useful for future storage
@@ -109,8 +109,8 @@ public:
 		TypedValueEntry(
 			const Glib::ustring& name,
 			const DataType& value,
-			const serialise::context_base_to<DataType>& ctx =
-				serialise::default_context_to<DataType>()
+			const serialize::context_base_to<DataType>& ctx =
+				serialize::default_context_to<DataType>()
 		);
 
 		/** @brief Reads a value entry from a xml element.
@@ -222,8 +222,8 @@ public:
 		DataType get_value(
 			const Glib::ustring& name,
 			const DataType& default_value = DataType(),
-			const serialise::context_base_from<DataType>& ctx =
-				serialise::default_context_from<DataType>()
+			const serialize::context_base_from<DataType>& ctx =
+				serialize::default_context_from<DataType>()
 		) const;
 
 		/** @brief Returns the value from the child with the given
@@ -237,10 +237,10 @@ public:
 		DataType supply_value(
 			const Glib::ustring& name,
 			const DataType& default_value = DataType(),
-			const serialise::context_base_from<DataType>& ctx_from =
-				serialise::default_context_from<DataType>(),
-			const serialise::context_base_to<DataType>& ctx_to =
-				serialise::default_context_to<DataType>()
+			const serialize::context_base_from<DataType>& ctx_from =
+				serialize::default_context_from<DataType>(),
+			const serialize::context_base_to<DataType>& ctx_to =
+				serialize::default_context_to<DataType>()
 		);
 
 		/** @brief Creates a new child ValueEntry with the given name
@@ -253,8 +253,8 @@ public:
 		void set_value(
 			const Glib::ustring& name,
 			const DataType& value,
-			const serialise::context_base_to<DataType>& ctx =
-				serialise::default_context_to<DataType>()
+			const serialize::context_base_to<DataType>& ctx =
+				serialize::default_context_to<DataType>()
 		);
 
 		/** @brief Returns the parent entry at name.
@@ -310,23 +310,23 @@ template<typename DataType>
 Config::ValueEntry::
 	ValueEntry(const Glib::ustring& name,
                    const DataType& value,
-                   const serialise::context_base_to<DataType>& ctx):
+                   const serialize::context_base_to<DataType>& ctx):
 	Entry(name), m_data(value, ctx)
 {
 }
 
 template<typename DataType>
 DataType Config::ValueEntry::
-	get(const serialise::context_base_from<DataType>& from) const
+	get(const serialize::context_base_from<DataType>& from) const
 {
-	return m_data.::serialise::data::as<DataType>(from);
+	return m_data.Gobby::serialize::data::as<DataType>(from);
 }
 
 template<typename DataType>
 Config::TypedValueEntry<DataType>::
 	TypedValueEntry(const Glib::ustring& name,
 	                const DataType& value,
-                        const serialise::context_base_to<DataType>& ctx):
+                        const serialize::context_base_to<DataType>& ctx):
 	ValueEntry(name, value, ctx)
 {
 }
@@ -340,7 +340,7 @@ Config::TypedValueEntry<DataType>::TypedValueEntry(const xmlpp::Element& elem):
 template<typename DataType>
 void Config::TypedValueEntry<DataType>::save(xmlpp::Element& elem) const
 {
-	elem.set_child_text(m_data.serialised() );
+	elem.set_child_text(m_data.serialized() );
 }
 
 template<typename BaseIterator, typename Entry>
@@ -399,7 +399,7 @@ template<typename DataType>
 DataType Config::ParentEntry::
 	get_value(const Glib::ustring& name,
                   const DataType& default_value,
-                  const serialise::context_base_from<DataType>& ctx) const
+                  const serialize::context_base_from<DataType>& ctx) const
 {
 	const ValueEntry* entry = get_value_child(name);
 	if(entry == NULL) return default_value;
@@ -410,8 +410,8 @@ template<typename DataType>
 DataType Config::ParentEntry::
 	supply_value(const Glib::ustring& name,
 	             const DataType& default_value,
-	             const serialise::context_base_from<DataType>& ctx_from,
-	             const serialise::context_base_to<DataType>& ctx_to)
+	             const serialize::context_base_from<DataType>& ctx_from,
+	             const serialize::context_base_to<DataType>& ctx_to)
 {
 	ValueEntry* entry = get_value_child(name);
 	if(entry != NULL) return entry->get(ctx_from);
@@ -424,7 +424,7 @@ template<typename DataType>
 void Config::ParentEntry::
 	set_value(const Glib::ustring& name,
 	          const DataType& value,
-	          const serialise::context_base_to<DataType>& ctx)
+	          const serialize::context_base_to<DataType>& ctx)
 {
 	Entry* entry = get_child(name);
 	if(entry != NULL) delete entry;
@@ -432,9 +432,7 @@ void Config::ParentEntry::
 	m_map[name] = new TypedValueEntry<DataType>(name, value, ctx);
 }
 
-} // namespace Gobby
-
-namespace serialise
+namespace serialize
 {
 
 /** @brief Used to convert Gdk::Color to a string.
@@ -478,6 +476,8 @@ public:
 	virtual data_type from_string(const std::string& from) const;
 };
 
-} // namespace serialise
+} // namespace serialize
+
+} // namespace Gobby
 
 #endif // _GOBBY_CONFIG_HPP_

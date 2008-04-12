@@ -16,18 +16,17 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <stdexcept>
-#include <gdk/gdkkeysyms.h>
+#include "folder.hpp"
+
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/stock.h>
-
-#include "document.hpp"
-#include "folder.hpp"
+#include <gdk/gdkkeysyms.h>
+#include <stdexcept>
 
 namespace
 {
-	class KeyMap: private net6::non_copyable
+	class KeyMap
 	{
 	public:
 		static const unsigned int nval = ~0u;
