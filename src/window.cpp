@@ -58,29 +58,34 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_header(m_preferences, m_lang_manager),
 	m_folder(m_preferences, m_lang_manager),
 	m_statusbar(m_folder),
-	m_browser(*this, &TEXT_PLUGIN, m_statusbar, m_preferences)
+	m_browser(*this, &TEXT_PLUGIN, m_statusbar, m_preferences),
+	m_commands_browser(m_browser, m_folder, m_statusbar)
 {
+	m_header.show();
 	m_browser.show();
+	m_folder.show();
+	m_statusbar.show();
 
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
 	m_frame_browser.set_shadow_type(Gtk::SHADOW_IN);
-	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
-
 	m_frame_browser.add(m_browser);
+	m_frame_browser.show();
+	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
 	m_frame_text.add(m_folder);
+	m_frame_text.show();
 
 	m_paned.pack1(m_frame_browser, true, false);
 	m_paned.pack2(m_frame_text, true, false);
+	m_paned.show();
 
 	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);
 	m_mainbox.pack_start(m_paned, Gtk::PACK_EXPAND_WIDGET);
 	m_mainbox.pack_start(m_statusbar, Gtk::PACK_SHRINK);
+	m_mainbox.show();
 
 	add(m_mainbox);
-
-	show_all_children();
 
 	set_title("Gobby");
 	set_default_size(640, 480);

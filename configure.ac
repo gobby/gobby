@@ -53,7 +53,6 @@ AC_CACHE_CHECK([whether to integrate into the GNOME desktop environment],
 if test "x$ac_cv_with_gnome" = "xyes" ; then
   AC_DEFINE([WITH_GNOME], 1,
     [Define whether to integrate into the GNOME desktop environment.])
-  PKG_CHECK_MODULES([gnome], [gnome-vfs-2.0])
 fi
 AM_CONDITIONAL(WITH_GNOME, test x$ac_cv_with_gnome != xno)
 AC_CACHE_SAVE
@@ -72,7 +71,9 @@ AC_OUTPUT([
 		po/Makefile.in
 
 		inc/Makefile
+			inc/commands/Makefile
 		src/Makefile
+			src/commands/Makefile
 
 		contrib/Makefile
 			contrib/artwork/Makefile

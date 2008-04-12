@@ -42,6 +42,8 @@
 #include "statusbar.hpp"
 #include "dragdrop.hpp"
 
+#include "commands/browser-commands.hpp"
+
 namespace Gobby
 {
 
@@ -79,6 +81,8 @@ protected:
 	Folder m_folder;
 	StatusBar m_statusbar;
 	Browser m_browser;
+
+	BrowserCommands m_commands_browser;
 
 	// TODO: Can't we use this directly now that the session is
 	// "always open"?

@@ -63,18 +63,33 @@ namespace
 		typedef Glib::SignalProxy0<void> SignalCloseRequest;
 
 		TabLabel(InfTextSession* session, const Glib::ustring& title):
-			m_session(session), m_title(title), m_label(title),
-			m_button(Gtk::Stock::CLOSE)
+			Gtk::HBox(false, 4), m_session(session),
+			m_title(title), m_label(title)
 		{
-			m_label.set_ellipsize(Pango::ELLIPSIZE_END);
+			m_icon.show();
+
+			//m_label.set_ellipsize(Pango::ELLIPSIZE_END);
 			m_label.show();
 
-			m_icon.show();
+			m_button.set_relief(Gtk::RELIEF_NONE);
+			m_button.set_focus_on_click(false);
+
+			Glib::RefPtr<Gtk::RcStyle> rc_style(
+				Gtk::RcStyle::create());
+			rc_style->set_xthickness(0);
+			rc_style->set_ythickness(0);
+			m_button.modify_style(rc_style);
+
+			Gtk::Image* button_image = Gtk::manage(
+				new Gtk::Image(Gtk::Stock::CLOSE,
+				               Gtk::ICON_SIZE_MENU));
+			button_image->show();
+			m_button.add(*button_image);
 			m_button.show();
 
 			pack_start(m_icon, Gtk::PACK_SHRINK);
 			pack_start(m_label, Gtk::PACK_EXPAND_WIDGET);
-			pack_end(m_button, Gtk::PACK_SHRINK);
+			pack_start(m_button, Gtk::PACK_SHRINK);
 		}
 
 		SignalCloseRequest signal_close_request() {
@@ -82,6 +97,17 @@ namespace
 		}
 
 	private:
+		virtual void on_style_changed(
+			const Glib::RefPtr<Gtk::Style>& previous_style)
+		{
+			int width, height;
+			gtk_icon_size_lookup_for_settings(
+				gtk_widget_get_settings(GTK_WIDGET(gobj())),
+				GTK_ICON_SIZE_MENU, &width, &height);
+
+			m_button.set_size_request(width + 2, height + 2);
+		}
+
 		InfTextSession* m_session;
 		Glib::ustring m_title;
 
@@ -103,12 +129,14 @@ Gobby::DocWindow& Gobby::Folder::add_document(InfTextSession* session,
 {
 	Gobby::DocWindow* window = Gtk::manage(
 		new DocWindow(session, title, m_preferences, m_lang_manager));
+	window->show();
 
 	TabLabel* tablabel = Gtk::manage(new TabLabel(session, title));
 	tablabel->signal_close_request().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_tab_close_request),
 			sigc::ref(*window)));
+	tablabel->show();
 	append_page(*window, *tablabel);
 
 	m_signal_document_added.emit(*window);
@@ -118,6 +146,7 @@ Gobby::DocWindow& Gobby::Folder::add_document(InfTextSession* session,
 void Gobby::Folder::remove_document(DocWindow& window)
 {
 	m_signal_document_removed.emit(window);
+	inf_session_close(INF_SESSION(window.get_session()));
 	remove_page(window);
 	// TODO: Emit document_changed with NULL DocWindow if this was the
 	// last document, since switch_page is not called.
@@ -140,6 +169,11 @@ Gobby::DocWindow*
 Gobby::Folder::get_current_document()
 {
 	return static_cast<DocWindow*>(get_nth_page(get_current_page()));
+}
+
+void Gobby::Folder::switch_to_document(DocWindow& document)
+{
+	set_current_page(page_num(document));
 }
 
 void Gobby::Folder::on_tab_close_request(DocWindow& window)

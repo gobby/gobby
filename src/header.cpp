@@ -204,7 +204,7 @@ Gobby::Header::Header(Preferences& preferences,
 	action_file_save_all(
 		Gtk::Action::create(
 			"FileSaveAll", Gtk::Stock::SAVE,
-			_("Save all"), _("Save all open files locally"))),
+			_("Save All"), _("Save all open files locally"))),
 	action_file_quit(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)),
 
 	action_edit(Gtk::Action::create("MenuEdit", _("_Edit"))),

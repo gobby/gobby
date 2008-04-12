@@ -105,6 +105,7 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_view),
 	                         GTK_TEXT_BUFFER(m_buffer));
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
 	gtk_source_buffer_set_language(
 		m_buffer, get_language_for_title(manager, m_title.c_str()));
 

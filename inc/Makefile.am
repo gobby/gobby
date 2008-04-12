@@ -1,3 +1,4 @@
+SUBDIRS = commands
 
 noinst_HEADERS = \
 	browser.hpp \

@@ -1,5 +1,34 @@
 2008-04-12  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/commands/browser-commands.hpp:
+	* inc/commands/Makefile.am
+	* src/commands/browser-commands.cpp:
+	* src/commands/Makefile.am: Added functionality to subscribe to a
+	session.
+
+	* inc/Makefile.am:
+	* src/Makefile.am: Recurse into the commands subdirectory.
+
+	* Makefile.am: Link src/commands/libgobby-commands.a
+
+	* configure.ac: Create inc/commands/Makefile.am and
+	src/commands/Makefile.am.
+
+	* inc/folder.hpp:
+	* src/folder.cpp: Added switch_to_document(), make close button in tab
+	label look correct.
+
+	* src/header.cpp: Rename label for save all menu item from "Save all"
+	to "Save All".
+
+	* src/docwindow.cpp: Make the window non-editable by default. We make
+	it editable later when a local user has joined.
+
+	* inc/window.hpp:
+	* src/window.cpp: Added BrowserCommands object.
+
+2008-04-12  Armin Burgmeier  <armin@0x539.de>
+
 	* contrib/gobby-0.0.20050522.ebuild:
 	* contrib/artwork/chat.svg:
 	* test/test_document.cpp: Removed, these are outdated.

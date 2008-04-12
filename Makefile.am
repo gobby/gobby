@@ -11,7 +11,7 @@ if WIN32
 gobby_LDADD = $(gobby_LIBS) src/libgobby.a -lole32 -luuid
 gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows win32/gobby.res
 else
-gobby_LDADD = $(gobby_LIBS) src/libgobby.a
+gobby_LDADD = $(gobby_LIBS) src/libgobby.a src/commands/libgobby-commands.a
 endif
 
 gobby_SOURCES = 
