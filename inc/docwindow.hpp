@@ -23,6 +23,8 @@
 #include "features.hpp"
 
 #include <gtkmm/box.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/label.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/textiter.h>
 
@@ -59,7 +61,8 @@ public:
 	GtkSourceView* get_text_view() { return m_view; }
 	GtkSourceBuffer* get_text_buffer() { return m_buffer; }
 
-	void set_info(const Glib::ustring& message);
+	void set_info(const Glib::ustring& info);
+	void unset_info();
 
 	SignalLanguageChanged signal_language_changed() const {
 		return m_signal_language_changed;
@@ -87,7 +90,9 @@ protected:
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;
 
+	Gtk::Frame m_info_frame;
 	Gtk::VBox m_info_box;
+	Gtk::Label m_info_label;
 
 	SignalLanguageChanged m_signal_language_changed;
 };

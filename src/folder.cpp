@@ -155,9 +155,13 @@ void Gobby::Folder::remove_document(DocWindow& window)
 Gobby::DocWindow*
 Gobby::Folder::lookup_document(InfTextSession* session)
 {
-	for(unsigned int i = 0; i < get_n_pages(); ++ i)
+	const PageList& pagelist = pages();
+	for(PageList::iterator iter = pagelist.begin();
+	    iter != pagelist.end(); ++ iter)
 	{
-		DocWindow* window = static_cast<DocWindow*>(get_nth_page(i));
+		DocWindow* window =
+			static_cast<DocWindow*>(iter->get_child());
+
 		if(window->get_session() == session)
 			return window;
 	}

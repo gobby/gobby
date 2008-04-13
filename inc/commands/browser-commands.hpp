@@ -34,8 +34,8 @@ class BrowserCommands: public sigc::trackable
 {
 public:
 	BrowserCommands(Browser& browser, Folder& folder,
-	                StatusBar& status_bar);
-	~BrowserCommands();
+	                StatusBar& status_bar,
+	                const Preferences& preferences);
 
 protected:
 	static void on_finished_static(InfcNodeRequest* request,
@@ -54,21 +54,106 @@ protected:
 			INFC_NODE_REQUEST(request), error);
 	}
 
+	static void on_synchronization_failed_static(InfSession* session,
+	                                             InfXmlConnection* conn,
+	                                             const GError* error,
+						     gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_synchronization_failed(session, conn, error);
+	}
+
+	static void on_synchronization_complete_static(InfSession* session,
+	                                               InfXmlConnection* conn,
+	                                               gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_synchronization_complete(session, conn);
+	}
+
+	static void on_synchronization_progress_static(InfSession* session,
+	                                               InfXmlConnection* conn,
+	                                               gdouble percentage,
+	                                               gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_synchronization_progress(
+				session, conn, percentage);
+	}
+
+	static void on_close_static(InfSession* session,
+	                            gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->on_close(session);
+	}
+
+	static void on_user_join_failed_static(InfcUserRequest* request,
+	                                       const GError* error,
+                                               gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_user_join_failed(request, error);
+	}
+
+	static void on_user_join_finished_static(InfcUserRequest* request,
+	                                         InfUser* user,
+                                                 gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_user_join_finished(request, user);
+	}
+
 	void on_activate(InfcBrowser* browser, InfcBrowserIter* iter);
 	void on_finished(InfcNodeRequest* request);
 	void on_failed(InfcNodeRequest* request, const GError* error);
 
+	void on_synchronization_failed(InfSession* session,
+	                               InfXmlConnection* connection,
+	                               const GError* error);
+	void on_synchronization_complete(InfSession* session,
+	                                 InfXmlConnection* connection);
+	void on_synchronization_progress(InfSession* session,
+	                                 InfXmlConnection* connection,
+	                                 gdouble percentage);
+	void on_close(InfSession* session);
+
+	void on_user_join_failed(InfcUserRequest* request,
+	                         const GError* error);
+	void on_user_join_finished(InfcUserRequest* request, InfUser* user);
+
 	Browser& m_browser;
 	Folder& m_folder;
 	StatusBar& m_status_bar;
+	const Preferences& m_preferences;
 
 	struct RequestNode {
+		BrowserCommands* commands;
 		InfcBrowser* browser;
 		StatusBar::MessageHandle handle;
+
+		RequestNode();
+		RequestNode(const RequestNode& node);
+		~RequestNode();
+	};
+
+	struct SessionNode {
+		InfcSessionProxy* proxy;
+
+		gulong failed_id;
+		gulong complete_id;
+		gulong progress_id;
+		gulong close_id;
+
+		SessionNode();
+		SessionNode(const SessionNode& node);
+		~SessionNode();
 	};
 
 	typedef std::map<InfcNodeRequest*, RequestNode> RequestMap;
 	RequestMap m_request_map;
+
+	typedef std::map<InfSession*, SessionNode> SessionMap;
+	SessionMap m_session_map;
 };
 
 }

@@ -19,7 +19,6 @@
 #include "features.hpp"
 
 #include <glibmm/pattern.h>
-#include <gtkmm/frame.h>
 #include <gtkmm/scrolledwindow.h>
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
@@ -163,10 +162,16 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 		GTK_WIDGET(m_view),
 		const_cast<PangoFontDescription*>(desc.gobj()));
 
+	m_info_label.set_selectable(true);
+	m_info_label.set_line_wrap(true);
+	m_info_label.show();
+
+	m_info_box.pack_start(m_info_label, Gtk::PACK_SHRINK);
+	m_info_box.set_border_width(6);
 	m_info_box.show();
-	Gtk::Frame* infoframe = Gtk::manage(new Gtk::Frame);
-	infoframe->set_shadow_type(Gtk::SHADOW_IN);
-	infoframe->add(m_info_box);
+
+	m_info_frame.set_shadow_type(Gtk::SHADOW_IN);
+	m_info_frame.add(m_info_box);
 	// Don't show infoframe by default
 
 	gtk_widget_show(GTK_WIDGET(m_view));
@@ -177,7 +182,7 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	scroll->show();
 
 	Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox);
-	vbox->pack_start(*infoframe, Gtk::PACK_SHRINK);
+	vbox->pack_start(m_info_frame, Gtk::PACK_SHRINK);
 	vbox->pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
 	vbox->show();
 
@@ -248,6 +253,17 @@ Glib::ustring Gobby::DocWindow::get_selected_text() const
 
 	Gtk::TextIter start_cpp(&start), end_cpp(&end);
 	return start_cpp.get_slice(end_cpp);
+}
+
+void Gobby::DocWindow::set_info(const Glib::ustring& info)
+{
+	m_info_label.set_text(info);
+	m_info_frame.show();
+}
+
+void Gobby::DocWindow::unset_info()
+{
+	m_info_frame.hide();
 }
 
 GtkSourceLanguage* Gobby::DocWindow::get_language() const

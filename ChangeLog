@@ -1,3 +1,19 @@
+2008-04-13  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/browser-commands.hpp:
+	* src/commands/browser-commands.cpp: Track synchronization, perform a
+	user join after synchronization, show error and status messages.
+
+	* inc/docwindow.hpp:
+	* src/docwindow.cpp: Implemented DocWindow::set_info() and
+	DocWindow::unset_info().
+
+	* src/folder.cpp: Changed Folder::lookup_document() to use a PageList
+	and an iterator instead of traversing the list by index.
+
+	* src/window.cpp: Pass the preferences to the BrowserCommands because
+	it needs to find the name for the user to join.
+
 2008-04-12  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/browser-commands.hpp:
