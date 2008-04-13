@@ -1,5 +1,15 @@
 2008-04-13  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/docwindow.hpp:
+	* src/docwindow.cpp: Added DocWindow::set_active_user().
+
+	* src/folder.cpp: Show icon in the tab representing the current
+	subscription state.
+
+	* src/commands/browser-commands.cpp: Set active user after user join.
+
+2008-04-13  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/commands/browser-commands.hpp:
 	* src/commands/browser-commands.cpp: Track synchronization, perform a
 	user join after synchronization, show error and status messages.
@@ -126,7 +136,7 @@
 	* src/resolv.cpp:
 	* src/statusbar.cpp:
 	* src/window.cpp: Removed any occurences of net6/obby stuff, replaced
-	by equivalent functionlity if possible.
+	by equivalent functionality if possible.
 
 	* po/POTFILES.in: Removed source files, added a TODO comment to readd
 	them as soon as the required files are ready.

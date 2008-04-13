@@ -62,11 +62,20 @@ namespace
 	public:
 		typedef Glib::SignalProxy0<void> SignalCloseRequest;
 
-		TabLabel(InfTextSession* session, const Glib::ustring& title):
-			Gtk::HBox(false, 4), m_session(session),
+		TabLabel(Gobby::DocWindow& document,
+		         const Glib::ustring& title):
+			Gtk::HBox(false, 4), m_document(document),
 			m_title(title), m_label(title)
 		{
+			update_icon();
 			m_icon.show();
+
+			g_signal_connect(
+				document.get_text_view(), "notify::editable",
+				G_CALLBACK(on_notify_editable_static), this);
+			g_signal_connect(
+				document.get_session(), "notify::status",
+				G_CALLBACK(on_notify_status_static), this);
 
 			//m_label.set_ellipsize(Pango::ELLIPSIZE_END);
 			m_label.show();
@@ -74,11 +83,11 @@ namespace
 			m_button.set_relief(Gtk::RELIEF_NONE);
 			m_button.set_focus_on_click(false);
 
-			Glib::RefPtr<Gtk::RcStyle> rc_style(
-				Gtk::RcStyle::create());
-			rc_style->set_xthickness(0);
-			rc_style->set_ythickness(0);
-			m_button.modify_style(rc_style);
+			GtkRcStyle* rc_style = gtk_rc_style_new();
+			rc_style->xthickness = rc_style->ythickness = 0;
+			gtk_widget_modify_style(GTK_WIDGET(m_button.gobj()),
+			                        rc_style);
+			g_object_unref(rc_style);
 
 			Gtk::Image* button_image = Gtk::manage(
 				new Gtk::Image(Gtk::Stock::CLOSE,
@@ -97,6 +106,20 @@ namespace
 		}
 
 	private:
+		static void on_notify_editable_static(GObject* object,
+		                                      GParamSpec* pspec,
+		                                      gpointer user_data)
+		{
+			static_cast<TabLabel*>(user_data)->update_icon();
+		}
+
+		static void on_notify_status_static(GObject* object,
+		                                    GParamSpec* pspec,
+		                                    gpointer user_data)
+		{
+			static_cast<TabLabel*>(user_data)->update_icon();
+		}
+
 		virtual void on_style_changed(
 			const Glib::RefPtr<Gtk::Style>& previous_style)
 		{
@@ -108,7 +131,39 @@ namespace
 			m_button.set_size_request(width + 2, height + 2);
 		}
 
-		InfTextSession* m_session;
+		void update_icon()
+		{
+			InfTextSession* session = m_document.get_session();
+			GtkTextView* view =
+				GTK_TEXT_VIEW(m_document.get_text_view());
+
+			switch(inf_session_get_status(INF_SESSION(session)))
+			{
+			case INF_SESSION_SYNCHRONIZING:
+				m_icon.set(Gtk::Stock::EXECUTE,
+				           Gtk::ICON_SIZE_MENU);
+				break;
+			case INF_SESSION_RUNNING:
+				if(gtk_text_view_get_editable(view))
+				{
+					m_icon.set(Gtk::Stock::EDIT,
+					           Gtk::ICON_SIZE_MENU);
+				}
+				else
+				{
+					m_icon.set(Gtk::Stock::FILE,
+					           Gtk::ICON_SIZE_MENU);
+				}
+
+				break;
+			case INF_SESSION_CLOSED:
+				m_icon.set(Gtk::Stock::STOP,
+				           Gtk::ICON_SIZE_MENU);
+				break;
+			}
+		}
+
+		Gobby::DocWindow& m_document;
 		Glib::ustring m_title;
 
 		Gtk::Image m_icon;
@@ -131,7 +186,7 @@ Gobby::DocWindow& Gobby::Folder::add_document(InfTextSession* session,
 		new DocWindow(session, title, m_preferences, m_lang_manager));
 	window->show();
 
-	TabLabel* tablabel = Gtk::manage(new TabLabel(session, title));
+	TabLabel* tablabel = Gtk::manage(new TabLabel(*window, title));
 	tablabel->signal_close_request().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_tab_close_request),

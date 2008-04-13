@@ -266,6 +266,25 @@ void Gobby::DocWindow::unset_info()
 	m_info_frame.hide();
 }
 
+void Gobby::DocWindow::set_active_user(InfTextUser* user)
+{
+	g_assert(
+		inf_user_table_lookup_user_by_id(
+			inf_session_get_user_table(INF_SESSION(m_session)),
+			inf_user_get_id(INF_USER(user)))
+		== INF_USER(user));
+
+	inf_text_gtk_buffer_set_active_user(
+		INF_TEXT_GTK_BUFFER(
+			inf_session_get_buffer(INF_SESSION(m_session))),
+		user);
+
+	if(user != NULL)
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), TRUE);
+	else
+		gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
+}
+
 GtkSourceLanguage* Gobby::DocWindow::get_language() const
 {
 	return gtk_source_buffer_get_language(m_buffer);

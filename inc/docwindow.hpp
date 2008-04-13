@@ -32,6 +32,7 @@
 #include <gtksourceview/gtksourcelanguagemanager.h>
 
 #include <libinftext/inf-text-session.h>
+#include <libinftext/inf-text-user.h>
 
 namespace Gobby
 {
@@ -57,6 +58,8 @@ public:
 
 	GtkSourceLanguage* get_language() const;
 	void set_language(GtkSourceLanguage* language);
+
+	void set_active_user(InfTextUser* user);
 
 	GtkSourceView* get_text_view() { return m_view; }
 	GtkSourceBuffer* get_text_buffer() { return m_buffer; }

@@ -19,6 +19,8 @@
 #include "commands/browser-commands.hpp"
 #include "i18n.hpp"
 
+#include <libinftext/inf-text-user.h>
+
 namespace
 {
 	const char* GOBBY_BROWSER_COMMANDS_SESSION_PROXY =
@@ -398,6 +400,8 @@ void Gobby::BrowserCommands::on_user_join_failed(InfcUserRequest* request,
 void Gobby::BrowserCommands::on_user_join_finished(InfcUserRequest* request,
                                                    InfUser* user)
 {
+	g_assert(INF_TEXT_IS_USER(user));
+
 	gpointer proxy_ptr =
 		g_object_get_data(G_OBJECT(request),
 	                          GOBBY_BROWSER_COMMANDS_SESSION_PROXY);
@@ -408,4 +412,6 @@ void Gobby::BrowserCommands::on_user_join_finished(InfcUserRequest* request,
 	g_assert(window != NULL);
 
 	window->unset_info();
+
+	window->set_active_user(INF_TEXT_USER(user));
 }
