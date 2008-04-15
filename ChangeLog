@@ -1,3 +1,8 @@
+2008-04-15  Philipp Kern  <phil@0x539.de>
+
+	* po/ja.po:
+	* configure.ac: add Japanese translation, thanks to MASAMI Chikahiro
+
 2008-01-31  Armin Burgmeier  <armin@0x539.de>
 
 	* src/config.cpp: File test before loading XML file, this seems to

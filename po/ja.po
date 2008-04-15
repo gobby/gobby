@@ -1,0 +1,869 @@
+# Gobby l10n Japanese Translation
+# Copyright (C) 2005 0x539 dev group
+# This file is distributed under the same license as the Gobby package.
+# Chikahiro Masami <cmasa.z321@gmail.com>, 2008.
+
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gobby 0.2.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-01-01 22:37+0100\n"
+"PO-Revision-Date: 2007-12-17 13:56+0000\n"
+"Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
+"Language-Team: Chikahiro Masami <cmasa.z321@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Launchpad-Export-Date: 2008-04-15 10:00+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: src/chat.cpp:73
+msgid "Send"
+msgstr "送信"
+
+#: src/chat.cpp:227
+msgid "Command '%0%' not found. Type /help for a list of existing commands."
+msgstr "コマンド「%0%」はありません。/help と入力すると利用可能なコマンドを表示します。"
+
+#: src/chat.cpp:238
+msgid "%0%: %1%"
+msgstr "%0% : %1%"
+
+#: src/chat.cpp:252
+msgid "Document %0% does not exist"
+msgstr "文書「%0%」はありません"
+
+#: src/chat.cpp:258
+msgid "Usage: /remove <document>"
+msgstr "使用法: /remove <document>"
+
+#: src/documentlist.cpp:51
+msgid "Subscribe"
+msgstr "購読"
+
+#: src/documentlist.cpp:107 src/header.cpp:400 src/icon.cpp:69
+msgid "Document list"
+msgstr "文書一覧"
+
+#: src/encoding.cpp:98
+msgid ""
+"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
+"binary input."
+msgstr ""
+"入力をUTF-8に変換するのに失敗しました。入力エンコーディングが"
+"不明かバイナリの入力です。"
+
+#: src/encoding_selector.cpp:145
+msgid "Character Encoding:"
+msgstr "文字のエンコーディング"
+
+#: src/finddialog.cpp:43
+msgid "Find what:"
+msgstr "検索文字列:"
+
+#: src/finddialog.cpp:44
+msgid "Replace with:"
+msgstr "置換文字列:"
+
+#: src/finddialog.cpp:45
+msgid "Match whole word only"
+msgstr "完全に一致する単語だけを検索する"
+
+#: src/finddialog.cpp:46
+msgid "Match case"
+msgstr "大文字と小文字を区別する"
+
+#: src/finddialog.cpp:47
+msgid "Match as regular expression"
+msgstr "正規表現を使用する"
+
+#: src/finddialog.cpp:48
+msgid "Direction"
+msgstr "方向"
+
+#: src/finddialog.cpp:49
+msgid "_Up"
+msgstr "上へ(_U)"
+
+#: src/finddialog.cpp:50
+msgid "_Down"
+msgstr "下へ(_D)"
+
+#: src/finddialog.cpp:52
+msgid "_Replace"
+msgstr "置換(_R)"
+
+#: src/finddialog.cpp:53
+msgid "Replace _all"
+msgstr "全て置換(_A)"
+
+#: src/finddialog.cpp:158
+msgid "Search"
+msgstr "検索"
+
+#: src/finddialog.cpp:158
+msgid "Search and replace"
+msgstr "置換"
+
+#: src/finddialog.cpp:182
+msgid "\"%0%\" has not been found in the document."
+msgstr "「%0%」が見つかりませんでした"
+
+#: src/finddialog.cpp:265
+msgid "No occurence has been replaced"
+msgstr "何も置換しませんでした"
+
+#: src/finddialog.cpp:271
+msgid "%0% occurence has been replaced"
+msgid_plural "%0% occurences have been replaced"
+msgstr[0] "%0% を置換しました"
+
+#: src/finddialog.cpp:301
+msgid "No document currently opened"
+msgstr "文書が１つも開いていません"
+
+#: src/gotodialog.cpp:30
+msgid "Line number:"
+msgstr "行番号:"
+
+#: src/gotodialog.cpp:32
+msgid "_Go to line"
+msgstr "指定行に移動(_G)"
+
+#: src/gotodialog.cpp:77
+msgid "Go to line"
+msgstr "指定行に移動"
+
+#: src/header.cpp:227
+msgid "Create session..."
+msgstr "セッションを作成..."
+
+#: src/header.cpp:228
+msgid "Opens a new obby session"
+msgstr "新しいobbyセッションを開く"
+
+#: src/header.cpp:236
+msgid "Join session..."
+msgstr "セッションに参加..."
+
+#: src/header.cpp:237
+msgid "Joins an existing obby session"
+msgstr "存在するobbyセッションに参加"
+
+#: src/header.cpp:245
+msgid "Save session..."
+msgstr "セッションを保存..."
+
+#: src/header.cpp:246
+msgid "Saves the complete session for a later restore"
+msgstr "後で復元するためにセッションを完全に保存する"
+
+#: src/header.cpp:254
+msgid "Quit session"
+msgstr "セッションを終了"
+
+#: src/header.cpp:255
+msgid "Leaves the currently running obby session"
+msgstr "現在実行中のobbyセッションを残す"
+
+#: src/header.cpp:263
+msgid "Quit"
+msgstr "終了"
+
+#: src/header.cpp:264
+msgid "Quits the application"
+msgstr "アプリケーションを終了"
+
+#: src/header.cpp:268
+msgid "_Session"
+msgstr "セッション(_S)"
+
+#: src/header.cpp:274
+msgid "Create document..."
+msgstr "文書を作成"
+
+#: src/header.cpp:275
+msgid "Creates a new document"
+msgstr "新しい文書を作成"
+
+#: src/header.cpp:283
+msgid "Open document..."
+msgstr "文書を開く"
+
+#: src/header.cpp:284
+msgid "Loads a file into a new document"
+msgstr "ファイルを新しい文書として開く"
+
+#: src/header.cpp:292
+msgid "Save document"
+msgstr "文書の保存"
+
+#: src/header.cpp:293
+msgid "Saves a document into a file"
+msgstr "文書をファイルに保存"
+
+#: src/header.cpp:301
+msgid "Save document as..."
+msgstr "名前をつけて文書を保存"
+
+#: src/header.cpp:302
+msgid "Saves a document to another location"
+msgstr "文書を別な場所に保存"
+
+#: src/header.cpp:310
+msgid "Close document"
+msgstr "この文書を閉じる"
+
+#: src/header.cpp:311
+msgid "Closes an opened document"
+msgstr "開いている文書を閉じる"
+
+#: src/header.cpp:315
+msgid "_Edit"
+msgstr "編集(_E)"
+
+#: src/header.cpp:321
+msgid "Find..."
+msgstr "検索..."
+
+#: src/header.cpp:322
+msgid "Search for a text in the current document"
+msgstr "現在の文章を検索する"
+
+#: src/header.cpp:330
+msgid "Find and replace..."
+msgstr "置換..."
+
+#: src/header.cpp:331
+msgid "Search for a text and replace it with another one"
+msgstr "文字を検索して置換する"
+
+#: src/header.cpp:339
+msgid "Go to line..."
+msgstr "指定行に移動..."
+
+#: src/header.cpp:340
+msgid "Move cursor to a specified line"
+msgstr "指定した行にカーソルを移動する"
+
+#: src/header.cpp:348
+msgid "Preferences..."
+msgstr "設定..."
+
+#: src/header.cpp:349
+msgid "Displays a dialog to customise Gobby for your needs"
+msgstr "ダイアログを表示して、Gobbyをカスタマイズする"
+
+#: src/header.cpp:357
+msgid "Document preferences..."
+msgstr "文書の設定..."
+
+#: src/header.cpp:358
+msgid "Shows a preferences dialog that is just applied to this document"
+msgstr "この文書のみに適用する設定ダイアログを表示する"
+
+#: src/header.cpp:363
+msgid "Syntax"
+msgstr "構文"
+
+#: src/header.cpp:365
+msgid "_User"
+msgstr "利用者(_U)"
+
+#: src/header.cpp:371
+msgid "Set password..."
+msgstr "パスワードを設定..."
+
+#: src/header.cpp:372
+msgid "Sets a password for this user"
+msgstr "この利用者のパスワードを設定"
+
+#: src/header.cpp:380
+msgid "Set colour..."
+msgstr "色を設定..."
+
+#: src/header.cpp:381
+msgid "Sets a new colour for this user"
+msgstr "この利用者の新しい色を設定"
+
+#: src/header.cpp:385
+msgid "_Window"
+msgstr "ウィンドウ(_W)"
+
+#: src/header.cpp:391 src/icon.cpp:66 src/userlist.cpp:122
+msgid "User list"
+msgstr "利用者一覧"
+
+#: src/header.cpp:392
+msgid "Displays a list of users that are currently joined"
+msgstr "現在接続している利用者を表示する"
+
+#: src/header.cpp:401
+msgid "Displays a list of documents within the current session"
+msgstr "現在のセッションで使用中の文書を表示する"
+
+#: src/header.cpp:410 src/icon.cpp:72
+msgid "Chat"
+msgstr "会話"
+
+#: src/header.cpp:411
+msgid "Displays a chat to talk to other people in the session"
+msgstr "セッションの他の利用者と会話する"
+
+#: src/header.cpp:416
+msgid "_Help"
+msgstr "ヘルプ(_H)"
+
+#: src/header.cpp:422
+msgid "About"
+msgstr "情報"
+
+#: src/header.cpp:423
+msgid "Shows Gobby's copyright and credits"
+msgstr "Gobbyの著作権を表示"
+
+#: src/header.cpp:634
+msgid "None"
+msgstr "なし"
+
+#: src/header.cpp:635
+msgid "Unselects the current language"
+msgstr "現在の構文の選択を解除"
+
+#. Build description string
+#: src/header.cpp:651
+msgid "Selects %0% as language"
+msgstr "「%0%」を選択"
+
+#: src/hostdialog.cpp:25
+msgid "Create obby session"
+msgstr "obbyセッションを作成"
+
+#: src/hostdialog.cpp:28 src/joindialog.cpp:47
+msgid "Port:"
+msgstr "ポート番号:"
+
+#: src/hostdialog.cpp:29 src/joindialog.cpp:48
+msgid "Name:"
+msgstr "名前:"
+
+#: src/hostdialog.cpp:30 src/joindialog.cpp:49
+msgid "Colour:"
+msgstr "色:"
+
+#: src/hostdialog.cpp:31
+msgid "Password:"
+msgstr "パスワード:"
+
+#: src/hostdialog.cpp:32
+msgid "Restore session:"
+msgstr "セッションを復元:"
+
+#: src/hostdialog.cpp:34
+msgid "Restore session"
+msgstr "セッションを復元"
+
+#: src/hostdialog.cpp:112
+msgid "_Host"
+msgstr "ホスト(_H)"
+
+#: src/hostprogressdialog.cpp:29
+msgid "Opening obby session..."
+msgstr "obbyセッションを開いています..."
+
+#: src/joindialog.cpp:43
+msgid "Join obby session"
+msgstr "obbyセッションに参加"
+
+#: src/joindialog.cpp:46
+msgid "Host:"
+msgstr "ホスト:"
+
+#: src/joindialog.cpp:51
+msgid "Local network"
+msgstr "ローカル・ネットワーク"
+
+#. resetup columns
+#: src/joindialog.cpp:287
+msgid "User"
+msgstr "利用者"
+
+#: src/joindialog.cpp:288
+msgid "Host"
+msgstr "ホスト"
+
+#: src/joindialog.cpp:289
+msgid "Port"
+msgstr "ポート"
+
+#: src/joindialog.cpp:308
+msgid "Failure"
+msgstr "失敗"
+
+#: src/joinprogressdialog.cpp:34
+msgid ""
+"User password for user '%0%' required. You may either choose another user "
+"name, type in your user password or cancel the connection."
+msgstr ""
+"利用者「%0%」のパスワードが必要です。別な利用者の名前を指定するか、"
+"パスワードを入力するか、接続をキャンセルしてください。"
+
+#: src/joinprogressdialog.cpp:111
+msgid ""
+"Name is already in use. You may choose another name or cancel the connection."
+msgstr "その名前はすでに使われています。別の名前を選ぶか、接続をキャンセルしてください。"
+
+#: src/joinprogressdialog.cpp:116 src/joinprogressdialog.cpp:227
+msgid "New name:"
+msgstr "新しい名前:"
+
+#: src/joinprogressdialog.cpp:157
+msgid ""
+"Colour is already in use. You may choose another colour or cancel the "
+"connection."
+msgstr "その色はすでに使われています。別の色を選ぶか、接続をキャンセルしてください。"
+
+#: src/joinprogressdialog.cpp:182
+msgid ""
+"Session password required. You have to type in the password to be able to "
+"join the obby session."
+msgstr ""
+"セッション・パスワードが必要です。obbyセッションに参加するには、"
+"パスワードを入力する必要があります。"
+
+#: src/joinprogressdialog.cpp:186
+msgid "Session password:"
+msgstr "セッション・パスワード:"
+
+#: src/joinprogressdialog.cpp:228
+msgid "User password:"
+msgstr "利用者パスワード:"
+
+#: src/joinprogressdialog.cpp:307
+msgid "Joining obby session..."
+msgstr "obbyセッションに参加..."
+
+#. Thread has established connection, wait for welcome packet
+#. The welcome event will be emitted as soon as the connection
+#. has been encrypted. Maybe we should have another step before
+#. this that really waits for the welcome packet.
+#: src/joinprogressdialog.cpp:404
+#, fuzzy
+msgid "Setting up connection encryption (TLS)..."
+msgstr "暗号化接続の設定(TLS)..."
+
+#. Update status message
+#: src/joinprogressdialog.cpp:464
+msgid "Login packet sent, waiting for response..."
+msgstr "ログイン・パケットを送信しました。反応待ち..."
+
+#: src/joinprogressdialog.cpp:546
+msgid "Logged in successfully, synchronising session..."
+msgstr "ログインが成功しました。セッションの同期中..."
+
+#. Connection closed by remote site
+#: src/joinprogressdialog.cpp:559 src/window.cpp:1060
+msgid "Connection lost"
+msgstr "接続を閉じました"
+
+#: src/preferencesdialog.cpp:64
+msgid "Tab Stops"
+msgstr "タブ"
+
+#: src/preferencesdialog.cpp:65
+msgid "Indentation"
+msgstr "インデント"
+
+#: src/preferencesdialog.cpp:66
+msgid "Home/End behaviour"
+msgstr "Home/End の振る舞い"
+
+#: src/preferencesdialog.cpp:67
+msgid "Tab width:"
+msgstr "タブ幅:"
+
+#: src/preferencesdialog.cpp:68
+msgid "Insert spaces instead of tabs"
+msgstr "タブの代わりにスペースを挿入"
+
+#: src/preferencesdialog.cpp:69
+msgid "Enable automatic indentation"
+msgstr "自動インデントを有効にする"
+
+#: src/preferencesdialog.cpp:70
+msgid "Smart home/end"
+msgstr "スマート Home/End"
+
+#: src/preferencesdialog.cpp:84
+msgid ""
+"With this option enabled, Home/End keys move to first/last character before "
+"going to the start/end of the line."
+msgstr ""
+"このオプションを有効にすると、Home/End キーは行の最初/最後ではなく、"
+"行の最初/最後の文字に移動するようになります。"
+
+#: src/preferencesdialog.cpp:130
+msgid "Text wrapping"
+msgstr "折り返し"
+
+#: src/preferencesdialog.cpp:131
+msgid "Line numbers"
+msgstr "行番号"
+
+#: src/preferencesdialog.cpp:132
+msgid "Current line"
+msgstr "カーソルがある行"
+
+#: src/preferencesdialog.cpp:133
+msgid "Right margin"
+msgstr "右マージン"
+
+#: src/preferencesdialog.cpp:134
+msgid "Bracket matching"
+msgstr "括弧の対応"
+
+#: src/preferencesdialog.cpp:135
+msgid "Enable text wrapping"
+msgstr "折り返しを有効にする"
+
+#: src/preferencesdialog.cpp:136
+msgid "Do not split words over two lines"
+msgstr "単語の途中で折り返さない"
+
+#: src/preferencesdialog.cpp:137
+msgid "Display line numbers"
+msgstr "行番号を表示"
+
+#: src/preferencesdialog.cpp:138
+msgid "Highlight current line"
+msgstr "カーソルがある行を強調表示"
+
+#: src/preferencesdialog.cpp:139
+msgid "Display right margin"
+msgstr "右マージンを表示"
+
+#: src/preferencesdialog.cpp:140
+msgid "Right margin at column:"
+msgstr "右マージン幅:"
+
+#: src/preferencesdialog.cpp:141
+msgid "Highlight matching bracket"
+msgstr "対応する括弧を強調表示する"
+
+#: src/preferencesdialog.cpp:224
+msgid "Toolbar"
+msgstr "ツールバー"
+
+#: src/preferencesdialog.cpp:225
+msgid "Windows"
+msgstr "ウィンドウ"
+
+#: src/preferencesdialog.cpp:226
+msgid "Remember the positions and states"
+msgstr "位置と状態を保存する"
+
+#: src/preferencesdialog.cpp:228
+#, fuzzy
+msgid "Highlight the window on incoming chat messages"
+msgstr "メッセージを受信したウィンドウを強調表示"
+
+#: src/preferencesdialog.cpp:234
+msgid "Show text only"
+msgstr "文字のみ表示"
+
+#: src/preferencesdialog.cpp:235
+msgid "Show icons only"
+msgstr "アイコンのみ表示"
+
+#: src/preferencesdialog.cpp:236
+msgid "Show both icons and text"
+msgstr "アイコンと文字を表示"
+
+#: src/preferencesdialog.cpp:237
+#, fuzzy
+msgid "Show text besides icons"
+msgstr "アイコンの横に文字を表示"
+
+#: src/preferencesdialog.cpp:308
+#, fuzzy
+msgid "Document management"
+msgstr "文書管理"
+
+#: src/preferencesdialog.cpp:309
+msgid "Open new remotely-created documents automatically"
+msgstr "自動的に外部で作成された文書を開く"
+
+#: src/preferencesdialog.cpp:347
+#, fuzzy
+msgid "Pattern"
+msgstr "パターン"
+
+#: src/preferencesdialog.cpp:348
+msgid "Language"
+msgstr "構文"
+
+#: src/preferencesdialog.cpp:349
+#, fuzzy
+msgid "Mime type"
+msgstr "MIMEタイプ"
+
+#: src/preferencesdialog.cpp:351
+msgid "This is a list of all recognized file types"
+msgstr "指定可能なファイルの種類"
+
+#: src/preferencesdialog.cpp:507
+#, fuzzy
+msgid "Pattern must not be empty."
+msgstr "パターンは空でなければいけません。"
+
+#: src/preferencesdialog.cpp:565
+#, fuzzy
+msgid "There is no language with the mime type '%0%'."
+msgstr "MIMEタイプ「%0%」で使用できる構文がありません。"
+
+#: src/preferencesdialog.cpp:702
+msgid "Preferences"
+msgstr "設定"
+
+#: src/preferencesdialog.cpp:714
+msgid "Editor"
+msgstr "エディタ"
+
+#: src/preferencesdialog.cpp:715
+msgid "View"
+msgstr "表示"
+
+#. Appearance only affects the global Gobby window
+#: src/preferencesdialog.cpp:718
+msgid "Appearance"
+msgstr "外観"
+
+#: src/preferencesdialog.cpp:719
+msgid "Font"
+msgstr "フォント"
+
+#: src/preferencesdialog.cpp:720
+msgid "Behaviour"
+msgstr "動作"
+
+#: src/preferencesdialog.cpp:721
+msgid "Files"
+msgstr "ファイル"
+
+#: src/statusbar.cpp:38 src/statusbar.cpp:100
+msgid "Not connected"
+msgstr "接続していません"
+
+#: src/statusbar.cpp:56
+msgid "Selected language: %0%"
+msgstr "選択構文: %0%"
+
+#: src/statusbar.cpp:62
+msgid "No language selected"
+msgstr "構文が選択されていません"
+
+#: src/userlist.cpp:94
+msgid "Online"
+msgstr "オンライン"
+
+#: src/userlist.cpp:95
+msgid "Offline"
+msgstr "オフライン"
+
+#: src/window.cpp:194
+#, fuzzy
+msgid ""
+"Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
+"mDNSResponder, depending on the library you use, as root prior to Gobby. "
+"Zeroconf support is deactivated for this session."
+msgstr ""
+"Zeroconfの初期化に失敗しました。Gobbyを実行する前に、root権限で、あなたが"
+"使用しているライブラリによって、avahi-daemonかmdnsresponderのいずれかを"
+"実行する必要があります。このセッションでは、Zeroconfのサポートは無効になります。"
+
+#: src/window.cpp:276
+msgid "You are still connected to a session"
+msgstr "あなたは、まだセッションに接続しています"
+
+#: src/window.cpp:284
+msgid "Do you want to close Gobby nevertheless?"
+msgstr "それでもGobbyを終了しますか？"
+
+#: src/window.cpp:290
+msgid "C_ancel"
+msgstr "キャンセル(_C)"
+
+#: src/window.cpp:449
+msgid "Use default .obby extension if none is given"
+msgstr "指定されていない場合は、デフォルトの .obby を利用します。"
+
+#: src/window.cpp:454
+msgid "Save obby session"
+msgstr "obby セッションを保存"
+
+#: src/window.cpp:517
+msgid "A collaborative text editor"
+msgstr "コラボレーティブ・テキスト・エディタ"
+
+#: src/window.cpp:674
+msgid "Create document"
+msgstr "文書を作成"
+
+#: src/window.cpp:674
+msgid "Enter document name"
+msgstr "文書名を入力"
+
+#: src/window.cpp:696
+msgid "Open new document"
+msgstr "新しい文書を開く"
+
+#: src/window.cpp:790
+msgid "Save current document"
+msgstr "現在の文書を保存"
+
+#: src/window.cpp:881
+msgid ""
+"Click on \"Apply\" to apply the new settings to documents that are currently "
+"open. \"OK\" will just store the values to use them with newly created "
+"documents."
+msgstr ""
+"現在開いている文書に新しい設定を適用するには、「適用」をクリックしてください。"
+"「OK」をクリックした場合は、次に開かれる文書から反映されます。"
+
+#. Build password dialog with info
+#: src/window.cpp:925
+msgid "Set user password"
+msgstr "利用者パスワードを設定"
+
+#: src/window.cpp:927
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+"あなたのアカウントの利用者パスワードを設定します。次にログインするとき、"
+"このパスワードが要求されます。"
+
+#: src/window.cpp:988
+msgid ""
+"These preferences affect only the currently active document \"%0%\". If you "
+"want to change global preferences, use the preferences menu item in the "
+"\"Edit\" menu."
+msgstr ""
+"この設定は現在開かれている「%0%」にのみ影響します。もし、全体の設定を変更"
+"したい場合は、「編集」メニューの設定メニューを使ってください。"
+
+#: src/window.cpp:1098
+msgid "Colour change failed: Colour already in use"
+msgstr "色の変更に失敗しました: その色はすでに使われています"
+
+#: src/window.cpp:1347
+msgid "Connected to %0%:%1%"
+msgstr "%0%:%1% に接続しました"
+
+#: src/window.cpp:1391
+msgid "Serving on port %0%"
+msgstr "ポート番号 %0% にてサービス提供中"
+
+#: src/window.cpp:1520
+msgid "Save changes to document \"%0%\" before closing?"
+msgstr "「%0%」を閉じる前に保存しますか？"
+
+#: src/window.cpp:1530
+msgid ""
+"If you don't save, changes will be discarded, but may still be retrieved if "
+"you re-subscribe to the document as long as the session remains open."
+msgstr ""
+"保存しない場合は、変更点は破棄されます。しかしセッションが開いている間は、"
+"文書を再度取得することで復元できます。"
+
+#: src/window.cpp:1539
+msgid "If you don't save, changes will be discarded."
+msgstr "保存しない場合、変更点は破棄されます。"
+
+#. Add button to allow the user to save the dialog
+#: src/window.cpp:1554
+msgid "Close without saving"
+msgstr "保存せずに閉じる"
+#~ msgid "Shows up a dialog to customise Gobby for your needs"
+#~ msgstr "あなたのニーズに合わせてGobbyをカスタマイズするダイアログを表示"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "表示(_V)"
+
+#~ msgid "Shows up a list of users that are currently joined"
+#~ msgstr "現在接続している利用者の一覧を表示"
+
+#~ msgid "Shows up a list of documents within the current session"
+#~ msgstr "現在のセッションで使用している文書の一覧を表示"
+
+#, fuzzy
+#~ msgid "Shows up a chat to talk to other people in the session"
+#~ msgstr "セッションの他の利用者と会話する画面を表示"
+
+#~ msgid ""
+#~ "Howl initialisation failed. Probably you need to run mDNSResponder as "
+#~ "root prior to Gobby. Zeroconf support is deactivated for this session."
+#~ msgstr ""
+#~ "Howlの初期化に失敗しました。Gobbyを実行する前に、root権限で、mDNSResponderを"
+#~ "実行する必要があります。このセッションでは、Zeroconfのサポートは無効になります。"
+
+#~ msgid "Could not open file '%0%' for writing"
+#~ msgstr "書き込むためにファイル「%0%」を開くことができません"
+
+#~ msgid "Passwords do not match"
+#~ msgstr "パスワードが一致しません"
+
+#~ msgid "%0% has joined"
+#~ msgstr "%0% が接続しました"
+
+#~ msgid "%0% has left"
+#~ msgstr "%0% が退出しました"
+
+#~ msgid "Gobby"
+#~ msgstr "Gobby"
+
+#~ msgid "Colour"
+#~ msgstr "色"
+
+#~ msgid "Name"
+#~ msgstr "名前"
+
+#~ msgid "Subscribed"
+#~ msgstr "購読"
+
+#~ msgid "%0% pending change"
+#~ msgid_plural "%0% pending changes"
+#~ msgstr[0] "%0% 個、変更を保留しています"
+
+#~ msgid "Revision: %0%"
+#~ msgstr "レビジョン : %0%"
+
+#~ msgid "Waiting for welcome packet..."
+#~ msgstr "パケットの待機中..."
+
+#~ msgid ""
+#~ "You are not subscribed to the document \"%0%\".\n"
+#~ "\n"
+#~ "To view changes that others make or to edit the document yourself, you "
+#~ "have to subscribe to this document. Use the following button to perform "
+#~ "this.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "文書「%0%」を購読できません。\n"
+#~ "\n"
+#~ "他の利用者が行った変更を確認したり、あなたが文書を編集するには、"
+#~ "あなたはこの文書を購読する必要があります。次のボタンを使用して購読して"
+#~ "ください。\n"
+#~ "\n"
+
+#~ msgid "Enter user password"
+#~ msgstr "利用者パスワードを入力"
+
+#~ msgid "Peer %0% (%1%) not found in peer list"
+#~ msgstr "%0% (%1%) は利用者一覧にありません"
+
+#~ msgid "Waiting for thread to finish..."
+#~ msgstr "スレッドの終了待ち..."
