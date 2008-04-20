@@ -55,7 +55,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	InfConnectionManager* connection_manager =
 		inf_connection_manager_new();
 
-	m_browser_model = inf_gtk_browser_model_new(INF_IO(m_io),
+	m_browser_store = inf_gtk_browser_store_new(INF_IO(m_io),
 	                                            connection_manager,
 	                                            NULL);
 	g_object_unref(connection_manager);
@@ -65,14 +65,15 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	InfDiscoveryAvahi* discovery =
 		inf_discovery_avahi_new(INF_IO(m_io), m_xmpp_manager,
 		                        NULL, NULL);
-	inf_gtk_browser_model_add_discovery(m_browser_model,
+	inf_gtk_browser_store_add_discovery(m_browser_store,
 	                                    INF_DISCOVERY(discovery));
 	g_object_unref(discovery);
 #endif
 
 	m_browser_view =
 		INF_GTK_BROWSER_VIEW(
-			inf_gtk_browser_view_new_with_model(m_browser_model));
+			inf_gtk_browser_view_new_with_model(
+				INF_GTK_BROWSER_MODEL(m_browser_store)));
 
 	gtk_widget_show(GTK_WIDGET(m_browser_view));
 	gtk_container_add(GTK_CONTAINER(m_scroll.gobj()),
@@ -82,7 +83,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_scroll.show();
 
 	g_signal_connect(
-		m_browser_model,
+		m_browser_store,
 		"set-browser",
 		G_CALLBACK(&on_set_browser_static),
 		this
@@ -110,7 +111,7 @@ Gobby::Browser::~Browser()
 		cancel(iter->first);
 	}
 
-	g_object_unref(m_browser_model);
+	g_object_unref(m_browser_store);
 	g_object_unref(m_io);
 }
 
@@ -143,7 +144,7 @@ void Gobby::Browser::on_activate(GtkTreeIter* iter)
 	InfcBrowser* browser;
 	InfcBrowserIter* browser_iter;
 
-	gtk_tree_model_get(GTK_TREE_MODEL(m_browser_model), iter,
+	gtk_tree_model_get(GTK_TREE_MODEL(m_browser_store), iter,
 	                   INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
 	                   INF_GTK_BROWSER_MODEL_COL_NODE, &browser_iter,
 	                   -1);
@@ -253,8 +254,8 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 	// TODO: Remove erroneous entry with same name, if any, before
 	// adding.
 
-	inf_gtk_browser_model_add_connection(
-		m_browser_model, INF_XML_CONNECTION(xmpp),
+	inf_gtk_browser_store_add_connection(
+		m_browser_store, INF_XML_CONNECTION(xmpp),
 		hostname.c_str());
 }
 

@@ -20,7 +20,7 @@
 #define _GOBBY_BROWSER_HPP_
 
 #include <libinfgtk/inf-gtk-io.h>
-#include <libinfgtk/inf-gtk-browser-model.h>
+#include <libinfgtk/inf-gtk-browser-store.h>
 #include <libinfgtk/inf-gtk-browser-view.h>
 #include <libinfinity/client/infc-browser.h>
 #include <libinfinity/common/inf-xmpp-manager.h>
@@ -73,7 +73,7 @@ protected:
 
 		browserpp->on_set_browser(iter, browser);
 			//Gtk::TreeIter(
-			//	GTK_TREE_MODEL(browserpp->m_browser_model),
+			//	GTK_TREE_MODEL(browserpp->m_browser_store),
 			//	iter), browser);
 	}
 
@@ -101,7 +101,7 @@ protected:
 
 	InfXmppManager* m_xmpp_manager;
 	InfGtkIo* m_io;
-	InfGtkBrowserModel* m_browser_model;
+	InfGtkBrowserStore* m_browser_store;
 	InfGtkBrowserView* m_browser_view;
 	Gtk::ScrolledWindow m_scroll;
 
