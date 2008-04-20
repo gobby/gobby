@@ -1,3 +1,7 @@
+2008-04-20  Armin Burgmeier  <armin@0x539.de>
+
+	* src/browser.cpp: Fixed a format string (%1 instead of %0).
+
 2008-04-13  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/docwindow.hpp:
