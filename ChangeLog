@@ -1,5 +1,9 @@
 2008-04-15  Philipp Kern  <phil@0x539.de>
 
+	* po/ja.po: Japanese translation updated
+
+2008-04-15  Philipp Kern  <phil@0x539.de>
+
 	* po/ja.po:
 	* configure.ac: add Japanese translation, thanks to MASAMI Chikahiro
 

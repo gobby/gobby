@@ -450,9 +450,8 @@ msgstr "obbyセッションに参加..."
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
 #: src/joinprogressdialog.cpp:404
-#, fuzzy
 msgid "Setting up connection encryption (TLS)..."
-msgstr "暗号化接続の設定(TLS)..."
+msgstr "暗号化接続(TLS)の設定中..."
 
 #. Update status message
 #: src/joinprogressdialog.cpp:464
@@ -565,7 +564,6 @@ msgid "Remember the positions and states"
 msgstr "位置と状態を保存する"
 
 #: src/preferencesdialog.cpp:228
-#, fuzzy
 msgid "Highlight the window on incoming chat messages"
 msgstr "メッセージを受信したウィンドウを強調表示"
 
@@ -582,12 +580,10 @@ msgid "Show both icons and text"
 msgstr "アイコンと文字を表示"
 
 #: src/preferencesdialog.cpp:237
-#, fuzzy
 msgid "Show text besides icons"
 msgstr "アイコンの横に文字を表示"
 
 #: src/preferencesdialog.cpp:308
-#, fuzzy
 msgid "Document management"
 msgstr "文書管理"
 
@@ -596,7 +592,6 @@ msgid "Open new remotely-created documents automatically"
 msgstr "自動的に外部で作成された文書を開く"
 
 #: src/preferencesdialog.cpp:347
-#, fuzzy
 msgid "Pattern"
 msgstr "パターン"
 
@@ -605,7 +600,6 @@ msgid "Language"
 msgstr "構文"
 
 #: src/preferencesdialog.cpp:349
-#, fuzzy
 msgid "Mime type"
 msgstr "MIMEタイプ"
 
@@ -614,12 +608,10 @@ msgid "This is a list of all recognized file types"
 msgstr "指定可能なファイルの種類"
 
 #: src/preferencesdialog.cpp:507
-#, fuzzy
 msgid "Pattern must not be empty."
-msgstr "パターンは空でなければいけません。"
+msgstr "パターンが空ではいけません。"
 
 #: src/preferencesdialog.cpp:565
-#, fuzzy
 msgid "There is no language with the mime type '%0%'."
 msgstr "MIMEタイプ「%0%」で使用できる構文がありません。"
 
@@ -673,7 +665,6 @@ msgid "Offline"
 msgstr "オフライン"
 
 #: src/window.cpp:194
-#, fuzzy
 msgid ""
 "Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
@@ -786,84 +777,4 @@ msgstr "保存しない場合、変更点は破棄されます。"
 #: src/window.cpp:1554
 msgid "Close without saving"
 msgstr "保存せずに閉じる"
-#~ msgid "Shows up a dialog to customise Gobby for your needs"
-#~ msgstr "あなたのニーズに合わせてGobbyをカスタマイズするダイアログを表示"
 
-#, fuzzy
-#~ msgid "_View"
-#~ msgstr "表示(_V)"
-
-#~ msgid "Shows up a list of users that are currently joined"
-#~ msgstr "現在接続している利用者の一覧を表示"
-
-#~ msgid "Shows up a list of documents within the current session"
-#~ msgstr "現在のセッションで使用している文書の一覧を表示"
-
-#, fuzzy
-#~ msgid "Shows up a chat to talk to other people in the session"
-#~ msgstr "セッションの他の利用者と会話する画面を表示"
-
-#~ msgid ""
-#~ "Howl initialisation failed. Probably you need to run mDNSResponder as "
-#~ "root prior to Gobby. Zeroconf support is deactivated for this session."
-#~ msgstr ""
-#~ "Howlの初期化に失敗しました。Gobbyを実行する前に、root権限で、mDNSResponderを"
-#~ "実行する必要があります。このセッションでは、Zeroconfのサポートは無効になります。"
-
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "書き込むためにファイル「%0%」を開くことができません"
-
-#~ msgid "Passwords do not match"
-#~ msgstr "パスワードが一致しません"
-
-#~ msgid "%0% has joined"
-#~ msgstr "%0% が接続しました"
-
-#~ msgid "%0% has left"
-#~ msgstr "%0% が退出しました"
-
-#~ msgid "Gobby"
-#~ msgstr "Gobby"
-
-#~ msgid "Colour"
-#~ msgstr "色"
-
-#~ msgid "Name"
-#~ msgstr "名前"
-
-#~ msgid "Subscribed"
-#~ msgstr "購読"
-
-#~ msgid "%0% pending change"
-#~ msgid_plural "%0% pending changes"
-#~ msgstr[0] "%0% 個、変更を保留しています"
-
-#~ msgid "Revision: %0%"
-#~ msgstr "レビジョン : %0%"
-
-#~ msgid "Waiting for welcome packet..."
-#~ msgstr "パケットの待機中..."
-
-#~ msgid ""
-#~ "You are not subscribed to the document \"%0%\".\n"
-#~ "\n"
-#~ "To view changes that others make or to edit the document yourself, you "
-#~ "have to subscribe to this document. Use the following button to perform "
-#~ "this.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "文書「%0%」を購読できません。\n"
-#~ "\n"
-#~ "他の利用者が行った変更を確認したり、あなたが文書を編集するには、"
-#~ "あなたはこの文書を購読する必要があります。次のボタンを使用して購読して"
-#~ "ください。\n"
-#~ "\n"
-
-#~ msgid "Enter user password"
-#~ msgstr "利用者パスワードを入力"
-
-#~ msgid "Peer %0% (%1%) not found in peer list"
-#~ msgstr "%0% (%1%) は利用者一覧にありません"
-
-#~ msgid "Waiting for thread to finish..."
-#~ msgstr "スレッドの終了待ち..."
