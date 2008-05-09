@@ -51,7 +51,7 @@ void Gobby::FileCommands::on_new()
 
 void Gobby::FileCommands::on_location_dialog_response(int id)
 {
-	if(id = Gtk::RESPONSE_ACCEPT)
+	if(id == Gtk::RESPONSE_ACCEPT)
 	{
 		InfcBrowserIter iter;
 		InfcBrowser* browser =
@@ -65,4 +65,6 @@ void Gobby::FileCommands::on_location_dialog_response(int id)
 
 		// TODO: Info in statusbar, map, etc.
 	}
+
+	m_location_dialog->hide();
 }

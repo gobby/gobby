@@ -21,6 +21,17 @@
 
 #include <gtkmm/stock.h>
 
+namespace
+{
+	bool operator==(const GtkTreeIter& iter1, const GtkTreeIter& iter2)
+	{
+		return iter1.stamp == iter2.stamp &&
+		       iter1.user_data == iter2.user_data &&
+		       iter1.user_data2 == iter2.user_data2 &&
+		       iter1.user_data3 == iter2.user_data3;
+	}
+}
+
 Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
                                                       InfGtkBrowserModel* m):
 	m_table(3, 2), m_name_label(_("Document Name:"), Gtk::ALIGN_RIGHT),
@@ -33,6 +44,7 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 {
 	m_name_label.show();
 	m_name_entry.show();
+	m_name_entry.set_activates_default(true);
 	m_location_label.show();
 	gtk_widget_show(GTK_WIDGET(m_view));
 
@@ -52,12 +64,23 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 	m_table.set_border_width(12);
 	m_table.show();
 
+	g_signal_connect(m_view, "selection-changed",
+	                 G_CALLBACK(on_selection_changed_static), this);
+	g_signal_connect(m_filter_model, "row-changed",
+	                 G_CALLBACK(on_row_changed_static), this);
+
+	// Hide non-subdirectories:
+	gtk_tree_model_filter_set_visible_func(
+		GTK_TREE_MODEL_FILTER(m_filter_model),
+		filter_visible_func_static, this, NULL);
+
 	get_vbox()->pack_start(m_table, Gtk::PACK_EXPAND_WIDGET);
 
-	// TODO: Make ACCEPT insensitive if nothing is selected
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_ACCEPT);
 
+	set_response_sensitive(Gtk::RESPONSE_ACCEPT, false);
+	set_default_response(Gtk::RESPONSE_ACCEPT);
 	set_default_size(-1, 480);
 	set_title(_("Select document's target location"));
 }
@@ -83,24 +106,43 @@ InfcBrowser* Gobby::DocumentLocationDialog::get_selected_directory(
 	InfcBrowserIter* iter) const
 {
 	GtkTreeIter tree_iter;
-	InfcBrowserIter* browser_iter;
-	InfcBrowser* browser;
-
 	if(inf_gtk_browser_view_get_selected(m_view, &tree_iter))
 	{
-		gtk_tree_model_get(
-			GTK_TREE_MODEL(m_filter_model),
-			&tree_iter,
-			INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
-			INF_GTK_BROWSER_MODEL_COL_NODE, &browser_iter,
-			-1);
+		InfGtkBrowserModelStatus status =
+			INF_GTK_BROWSER_MODEL_CONNECTED;
 
-		*iter = *browser_iter;
+		GtkTreeIter dummy_iter;
+		if(!gtk_tree_model_iter_parent(GTK_TREE_MODEL(m_filter_model),
+		                               &dummy_iter, &tree_iter))
+		{
+			gtk_tree_model_get(
+				GTK_TREE_MODEL(m_filter_model),
+				&tree_iter,
+				INF_GTK_BROWSER_MODEL_COL_STATUS, &status,
+				-1);
+		}
 
-		infc_browser_iter_free(browser_iter);
-		g_object_unref(browser);
+		if(status == INF_GTK_BROWSER_MODEL_CONNECTED)
+		{
+			InfcBrowserIter* browser_iter;
+			InfcBrowser* browser;
 
-		return browser;
+			gtk_tree_model_get(
+				GTK_TREE_MODEL(m_filter_model),
+				&tree_iter,
+				INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
+				INF_GTK_BROWSER_MODEL_COL_NODE, &browser_iter,
+				-1);
+
+			*iter = *browser_iter;
+			infc_browser_iter_free(browser_iter);
+			g_object_unref(browser);
+			return browser;
+		}
+		else
+		{
+			return NULL;
+		}
 	}
 	else
 	{
@@ -114,4 +156,104 @@ void Gobby::DocumentLocationDialog::on_show()
 
 	m_name_entry.select_region(0, m_name_entry.get_text_length());
 	m_name_entry.grab_focus();
+}
+
+void Gobby::DocumentLocationDialog::on_selection_changed(GtkTreeIter* iter)
+{
+	gboolean accept_sensitive = false;
+	if(iter != NULL)
+	{
+		GtkTreeIter dummy_iter;
+		if(gtk_tree_model_iter_parent(GTK_TREE_MODEL(m_filter_model),
+		                              &dummy_iter, iter))
+		{
+			// Child: Always OK
+			accept_sensitive = true;
+		}
+		else
+		{
+			// Top-level node: Check status
+			InfGtkBrowserModelStatus status;
+			gtk_tree_model_get(GTK_TREE_MODEL(m_filter_model),
+			                   iter,
+			                   INF_GTK_BROWSER_MODEL_COL_STATUS,
+			                   &status,
+			                   -1);
+
+			accept_sensitive =
+				(status == INF_GTK_BROWSER_MODEL_CONNECTED);
+		}
+	}
+
+	set_response_sensitive(Gtk::RESPONSE_ACCEPT, accept_sensitive);
+}
+
+void Gobby::DocumentLocationDialog::on_row_changed(GtkTreePath* path,
+                                                   GtkTreeIter* iter)
+{
+	// If a toplevel entry is selected, and the status changed to
+	// connected, then make the Accept button sensitive. On the other
+	// hand, if status changed to something else, then
+	// make it insensitive.
+	GtkTreeIter sel_iter;
+
+	if(inf_gtk_browser_view_get_selected(m_view, &sel_iter))
+	{
+		// We cannot compare the iterators directly here, since
+		// GtkTreeModelFilter seems to allow two iterators pointing to
+		// the same row but having a different user_data3 field. We
+		// therefore compare the paths instead.
+		GtkTreePath* sel_path = gtk_tree_model_get_path(
+			GTK_TREE_MODEL(m_filter_model), &sel_iter);
+		if(gtk_tree_path_compare(path, sel_path) == 0)
+		{
+			GtkTreeIter dummy_iter;
+			if(!gtk_tree_model_iter_parent(
+				GTK_TREE_MODEL(m_filter_model), &dummy_iter,
+				iter))
+			{
+				InfGtkBrowserModelStatus s;
+				gtk_tree_model_get(
+					GTK_TREE_MODEL(m_filter_model), iter,
+					INF_GTK_BROWSER_MODEL_COL_STATUS, &s,
+					-1);
+
+				set_response_sensitive(
+					Gtk::RESPONSE_ACCEPT,
+					s == INF_GTK_BROWSER_MODEL_CONNECTED
+				);
+			}
+		}
+
+		gtk_tree_path_free(sel_path);
+	}
+}
+
+bool Gobby::DocumentLocationDialog::filter_visible_func(GtkTreeModel* model,
+                                                        GtkTreeIter* iter)
+{
+	GtkTreeIter dummy_iter;
+	if(!gtk_tree_model_iter_parent(model, &dummy_iter, iter))
+	{
+		return true;
+	}
+	else
+	{
+		InfcBrowserIter* browser_iter;
+		InfcBrowser* browser;
+
+		gtk_tree_model_get(
+			model, iter,
+			INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
+			INF_GTK_BROWSER_MODEL_COL_NODE, &browser_iter,
+			-1);
+
+		bool result = infc_browser_iter_is_subdirectory(browser,
+		                                                browser_iter);
+
+		infc_browser_iter_free(browser_iter);
+		g_object_unref(browser);
+
+		return result;
+	}
 }

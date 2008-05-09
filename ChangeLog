@@ -1,5 +1,14 @@
 2008-05-09  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/dialogs/documentlocationdialog.hpp:
+	* src/dialogs/documentlocationdialog.cpp: Only allow ACCEPT response
+	when a subdirectory is selected, filter all nodes but subdirectories.
+
+	* src/commands/file-commands.cpp: Hide DocumentLocationDialog after
+	usage.
+
+2008-05-09  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/util/Makefile.am:
 	* inc/util/color.hpp:
 	* inc/util/config.hpp:

@@ -46,6 +46,36 @@ public:
 protected:
 	virtual void on_show();
 
+	static void on_selection_changed_static(InfGtkBrowserView* view,
+	                                        GtkTreeIter* iter,
+	                                        gpointer user_data)
+	{
+		static_cast<DocumentLocationDialog*>(
+			user_data)->on_selection_changed(iter);
+	}
+
+	static void on_row_changed_static(GtkTreeModel* model,
+	                                  GtkTreePath* path,
+					  GtkTreeIter* iter,
+	                                  gpointer user_data)
+	{
+		static_cast<DocumentLocationDialog*>(
+			user_data)->on_row_changed(path, iter);
+	}
+
+	static gboolean filter_visible_func_static(GtkTreeModel* model,
+	                                           GtkTreeIter* iter,
+	                                           gpointer user_data)
+	{
+		return static_cast<DocumentLocationDialog*>(
+			user_data)->filter_visible_func(model, iter);
+	}
+
+	void on_selection_changed(GtkTreeIter* iter);
+	void on_row_changed(GtkTreePath* path, GtkTreeIter* iter);
+
+	bool filter_visible_func(GtkTreeModel* model, GtkTreeIter* iter);
+
 	Gtk::Table m_table;
 	Gtk::Label m_name_label;
 	Gtk::Entry m_name_entry;
