@@ -19,30 +19,34 @@
 #ifndef _GOBBY_WINDOW_HPP_
 #define _GOBBY_WINDOW_HPP_
 
-#include <queue>
-#include <memory>
+#include "features.hpp"
+#include "dragdrop.hpp"
+
+#include "commands/browser-commands.hpp"
+#include "commands/file-commands.hpp"
+
+#include "dialogs/finddialog.hpp"
+#include "dialogs/gotodialog.hpp"
+#include "dialogs/preferencesdialog.hpp"
+#include "dialogs/initialdialog.hpp"
+
+#include "core/preferences.hpp"
+#include "core/iconmanager.hpp"
+#include "core/header.hpp"
+#include "core/docwindow.hpp"
+#include "core/folder.hpp"
+#include "core/browser.hpp"
+#include "core/statusbar.hpp"
+
+#include "util/config.hpp"
 
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/messagedialog.h>
 
-#include "features.hpp"
-#include "preferences.hpp"
-#include "icon.hpp"
-#include "config.hpp"
-#include "header.hpp"
-#include "docwindow.hpp"
-#include "finddialog.hpp"
-#include "gotodialog.hpp"
-#include "preferencesdialog.hpp"
-#include "initialdialog.hpp"
-#include "folder.hpp"
-#include "browser.hpp"
-#include "statusbar.hpp"
-#include "dragdrop.hpp"
-
-#include "commands/browser-commands.hpp"
+#include <queue>
+#include <memory>
 
 namespace Gobby
 {
@@ -83,6 +87,7 @@ protected:
 	Browser m_browser;
 
 	BrowserCommands m_commands_browser;
+	FileCommands m_commands_file;
 
 	// TODO: Can't we use this directly now that the session is
 	// "always open"?

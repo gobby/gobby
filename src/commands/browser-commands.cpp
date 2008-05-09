@@ -17,7 +17,7 @@
  */
 
 #include "commands/browser-commands.hpp"
-#include "i18n.hpp"
+#include "util/i18n.hpp"
 
 #include <libinftext/inf-text-user.h>
 

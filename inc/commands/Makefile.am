@@ -1,3 +1,4 @@
 
 noinst_HEADERS = \
-	browser-commands.hpp
+	browser-commands.hpp \
+	file-commands.hpp

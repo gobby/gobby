@@ -19,9 +19,9 @@
 #ifndef _GOBBY_BROWSER_COMMANDS_HPP_
 #define _GOBBY_BROWSER_COMMANDS_HPP_
 
-#include "browser.hpp"
-#include "folder.hpp"
-#include "statusbar.hpp"
+#include "core/browser.hpp"
+#include "core/folder.hpp"
+#include "core/statusbar.hpp"
 
 #include <libinfinity/client/infc-browser.h>
 #include <libinfinity/client/infc-request.h>

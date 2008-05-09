@@ -1,29 +1,10 @@
-SUBDIRS = commands
+SUBDIRS = util core dialogs commands
 
 noinst_LIBRARIES = libgobby.a
 
 libgobby_a_SOURCES = \
-	browser.cpp \
-	colorutil.cpp \
-	config.cpp \
-	docwindow.cpp \
 	dragdrop.cpp \
-	encoding.cpp \
-	encoding_selector.cpp \
-	finddialog.cpp \
-	folder.cpp \
-	gotodialog.cpp \
-	header.cpp \
-	i18n.cpp \
-	icon.cpp \
-	initialdialog.cpp \
 	main.cpp \
-	preferences.cpp \
-	preferencesdialog.cpp \
-	resolv.cpp \
-	serialize.cpp \
-	statusbar.cpp \
-	toolwindow.cpp \
 	window.cpp
 
 appicondir = $(datadir)/pixmaps

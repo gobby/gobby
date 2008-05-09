@@ -1,3 +1,71 @@
+2008-05-09  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/util/Makefile.am:
+	* inc/util/color.hpp:
+	* inc/util/config.hpp:
+	* inc/util/defaultaccumulator.hpp:
+	* inc/util/encoding.hpp:
+	* inc/util/i18n.hpp:
+	* inc/util/resolv.hpp:
+	* inc/util/serialize.hpp:
+	* inc/core/Makefile.am:
+	* inc/core/browser.hpp:
+	* inc/core/docwindow.hpp:
+	* inc/core/encodingselector.hpp:
+	* inc/core/folder.hpp:
+	* inc/core/header.hpp:
+	* inc/core/iconmanager.hpp:
+	* inc/core/preferences.hpp:
+	* inc/core/statusbar.hpp:
+	* inc/core/toolwindow.hpp:
+	* inc/dialogs/Makefile.am:
+	* inc/dialogs/finddialog.hpp:
+	* inc/dialogs/gotodialog.hpp:
+	* inc/dialogs/initialdialog.hpp:
+	* inc/dialogs/preferencesdialog.hpp:
+	* inc/commands/Makefile.am:
+	* inc/commands/browser-commands.hpp:
+	* inc/window.hpp:
+	* inc/Makefile.am:
+	* src/util/Makefile.am:
+	* src/util/color.cpp:
+	* src/util/config.cpp:
+	* src/util/encoding.cpp:
+	* src/util/i18n.cpp:
+	* src/util/resolv.cpp:
+	* src/util/serialize.cpp:
+	* src/core/Makefile.am:
+	* src/core/browser.cpp:
+	* src/core/docwindow.cpp:
+	* src/core/encodingselector.cpp:
+	* src/core/folder.cpp:
+	* src/core/header.cpp:
+	* src/core/iconmanager.cpp:
+	* src/core/preferences.cpp:
+	* src/core/statusbar.cpp:
+	* src/core/toolwindow.cpp:
+	* src/dialogs/Makefile.am:
+	* src/dialogs/finddialog.cpp:
+	* src/dialogs/gotodialog.cpp:
+	* src/dialogs/initialdialog.cpp:
+	* src/dialogs/preferencesdialog.cpp:
+	* src/commands/Makefile.am:
+	* src/commands/browser-commands.cpp:
+	* src/dragdrop.cpp:
+	* src/main.cpp:
+	* src/window.cpp:
+	* src/Makefile.am:
+	* Makefile.am:
+	* configure.ac: Reordered file hierarchy, fixing includes.
+
+	* inc/dialogs/documentlocationdialog.hpp:
+	* src/dialogs/documentlocationdialog.cpp: Added a dialog allowing the
+	user to select on which directory and server to create a document.
+
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Added functionality for File/New
+	using the new dialog.
+
 2008-04-20  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/browser.hpp:

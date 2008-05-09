@@ -16,6 +16,10 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "core/encodingselector.hpp"
+#include "dragdrop.hpp"
+#include "window.hpp"
+
 #include <string>
 #include <vector>
 
@@ -23,10 +27,6 @@
 #include <windows.h>
 #include <gdk/gdkwin32.h>
 #endif
-
-#include "encoding_selector.hpp"
-#include "dragdrop.hpp"
-#include "window.hpp"
 
 namespace
 {

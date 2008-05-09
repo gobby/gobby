@@ -16,10 +16,11 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "window.hpp"
-#include "config.hpp"
-#include "icon.hpp"
 #include "features.hpp"
+#include "window.hpp"
+
+#include "core/iconmanager.hpp"
+#include "util/config.hpp"
 
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>

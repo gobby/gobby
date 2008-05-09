@@ -16,10 +16,10 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "window.hpp"
-#include "docwindow.hpp"
-#include "icon.hpp"
 #include "features.hpp"
+#include "window.hpp"
+#include "core/docwindow.hpp"
+#include "core/iconmanager.hpp"
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 #include <libinftext/inf-text-session.h>
@@ -59,7 +59,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_folder(m_preferences, m_lang_manager),
 	m_statusbar(m_folder),
 	m_browser(*this, &TEXT_PLUGIN, m_statusbar, m_preferences),
-	m_commands_browser(m_browser, m_folder, m_statusbar, m_preferences)
+	m_commands_browser(m_browser, m_folder, m_statusbar, m_preferences),
+	m_commands_file(*this, m_header, m_browser, m_folder, m_statusbar)
 {
 	m_header.show();
 	m_browser.show();

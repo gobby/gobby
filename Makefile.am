@@ -7,11 +7,16 @@ dist_man_MANS = gobby.1
 
 bin_PROGRAMS = gobby
 
+gobby_LDADD = $(gobby_LIBS) \
+	src/libgobby.a \
+	src/commands/libgobby-commands.a \
+	src/dialogs/libgobby-dialogs.a \
+	src/core/libgobby-core.a \
+	src/util/libgobby-util.a
+
 if WIN32
-gobby_LDADD = $(gobby_LIBS) src/libgobby.a -lole32 -luuid
+gobby_LDADD += -lole32 -luuid
 gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows win32/gobby.res
-else
-gobby_LDADD = $(gobby_LIBS) src/libgobby.a src/commands/libgobby-commands.a
 endif
 
 gobby_SOURCES = 
