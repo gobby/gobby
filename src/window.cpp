@@ -20,36 +20,7 @@
 #include "window.hpp"
 #include "core/docwindow.hpp"
 #include "core/iconmanager.hpp"
-
-#include <libinftextgtk/inf-text-gtk-buffer.h>
-#include <libinftext/inf-text-session.h>
-#include <libinftext/inf-text-buffer.h>
-
-namespace
-{
-	InfSession*
-	session_new(InfIo* io, InfConnectionManager* manager,
-	            InfConnectionManagerGroup* sync_group,
-	            InfXmlConnection* sync_connection)
-	{
-		GtkSourceBuffer* textbuffer = gtk_source_buffer_new(NULL);
-		InfUserTable* user_table = inf_user_table_new();
-		InfTextGtkBuffer* buffer =
-			inf_text_gtk_buffer_new(GTK_TEXT_BUFFER(textbuffer),
-			                        user_table);
-		InfTextSession* session =
-			inf_text_session_new_with_user_table(
-				manager, INF_TEXT_BUFFER(buffer), io,
-				user_table, sync_group, sync_connection);
-		return INF_SESSION(session);
-	}
-
-	const InfcNotePlugin TEXT_PLUGIN =
-	{
-		"InfText",
-		session_new
-	};
-}
+#include "core/noteplugin.hpp"
 
 Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
@@ -58,7 +29,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_header(m_preferences, m_lang_manager),
 	m_folder(m_preferences, m_lang_manager),
 	m_statusbar(m_folder),
-	m_browser(*this, &TEXT_PLUGIN, m_statusbar, m_preferences),
+	m_browser(*this, Plugins::TEXT, m_statusbar, m_preferences),
 	m_commands_browser(m_browser, m_folder, m_statusbar, m_preferences),
 	m_commands_file(*this, m_header, m_browser, m_folder, m_statusbar)
 {

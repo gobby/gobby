@@ -60,8 +60,7 @@ void Gobby::FileCommands::on_location_dialog_response(int id)
 
 		Glib::ustring str(m_location_dialog->get_document_name());
 		
-		// TODO: Use TRUE here, but make sure browser-commands handles
-		// the subscription correctly.
+		// TODO: Use FileOperations here
 		InfcNodeRequest* request = infc_browser_add_note(
 			browser, &iter, str.c_str(),
 			infc_browser_lookup_plugin(browser, "InfText"),

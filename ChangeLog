@@ -1,5 +1,15 @@
 2008-05-18  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/core/Makefile.am:
+	* src/core/Makefile.am:
+	* inc/core/noteplugin.hpp:
+	* src/core/noteplugin.cpp: Added text plugin as a public global
+	constant.
+
+	* src/window.cpp: Adapt.
+
+2008-05-18  Armin Burgmeier  <armin@0x539.de>
+
 	* src/dialogs/documentlocationdialog.cpp: Initially refilter the
 	InfGtkBrowserModelFilter, otherwise previously explored nodes are
 	always visible.
