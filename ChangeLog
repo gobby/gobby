@@ -1,3 +1,12 @@
+2008-05-18  Armin Burgmeier  <armin@0x539.de>
+
+	* src/dialogs/documentlocationdialog.cpp: Initially refilter the
+	InfGtkBrowserModelFilter, otherwise previously explored nodes are
+	always visible.
+
+	* src/commands/file-commands.cpp: Adapt to the new infinote API in
+	infc_browser_add_note().
+
 2008-05-09  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/dialogs/documentlocationdialog.hpp:

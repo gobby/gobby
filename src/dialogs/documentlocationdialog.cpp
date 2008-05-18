@@ -74,6 +74,9 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 		GTK_TREE_MODEL_FILTER(m_filter_model),
 		filter_visible_func_static, this, NULL);
 
+	// Required to filter initial content:
+	gtk_tree_model_filter_refilter(GTK_TREE_MODEL_FILTER(m_filter_model));
+
 	get_vbox()->pack_start(m_table, Gtk::PACK_EXPAND_WIDGET);
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
