@@ -19,6 +19,7 @@
 #ifndef _GOBBY_FILE_COMMANDS_HPP_
 #define _GOBBY_FILE_COMMANDS_HPP_
 
+#include "operations/operations.hpp"
 #include "dialogs/documentlocationdialog.hpp"
 #include "core/header.hpp"
 #include "core/browser.hpp"
@@ -34,7 +35,7 @@ class FileCommands: public sigc::trackable
 public:
 	FileCommands(Gtk::Window& parent, Header& header,
 	             const Browser& browser, Folder& folder,
-	             StatusBar& status_bar);
+	             Operations& operations);
 
 protected:
 	void on_new();
@@ -43,7 +44,7 @@ protected:
 	Gtk::Window& m_parent;
 	const Browser& m_browser;
 	Folder& m_folder;
-	StatusBar& m_status_bar;
+	Operations& m_operations;
 
 	std::auto_ptr<DocumentLocationDialog> m_location_dialog;
 };

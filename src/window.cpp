@@ -30,8 +30,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_folder(m_preferences, m_lang_manager),
 	m_statusbar(m_folder),
 	m_browser(*this, Plugins::TEXT, m_statusbar, m_preferences),
+	m_operations(m_statusbar), 
 	m_commands_browser(m_browser, m_folder, m_statusbar, m_preferences),
-	m_commands_file(*this, m_header, m_browser, m_folder, m_statusbar)
+	m_commands_file(*this, m_header, m_browser, m_folder, m_operations)
 {
 	m_header.show();
 	m_browser.show();

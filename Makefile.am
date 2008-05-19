@@ -10,6 +10,7 @@ bin_PROGRAMS = gobby
 gobby_LDADD = $(gobby_LIBS) \
 	src/libgobby.a \
 	src/commands/libgobby-commands.a \
+	src/operations/libgobby-operations.a \
 	src/dialogs/libgobby-dialogs.a \
 	src/core/libgobby-core.a \
 	src/util/libgobby-util.a

@@ -21,9 +21,9 @@
 
 Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
                                   const Browser& browser, Folder& folder,
-                                  StatusBar& status_bar):
+                                  Operations& operations):
 	m_parent(parent), m_browser(browser), m_folder(folder),
-	m_status_bar(status_bar)
+	m_operations(operations)
 {
 	header.action_file_new->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_new));
@@ -58,15 +58,9 @@ void Gobby::FileCommands::on_location_dialog_response(int id)
 			m_location_dialog->get_selected_directory(&iter);
 		g_assert(browser != NULL);
 
-		Glib::ustring str(m_location_dialog->get_document_name());
-		
-		// TODO: Use FileOperations here
-		InfcNodeRequest* request = infc_browser_add_note(
-			browser, &iter, str.c_str(),
-			infc_browser_lookup_plugin(browser, "InfText"),
-			FALSE);
-
-		// TODO: Info in statusbar, map, etc.
+		m_operations.create_document(
+			browser, &iter,
+			m_location_dialog->get_document_name());
 	}
 
 	m_location_dialog->hide();

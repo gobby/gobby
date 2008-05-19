@@ -1,3 +1,26 @@
+2008-05-19  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/Makefile.am:
+	* inc/operations/Makefile.am:
+	* inc/operations/operation-new.hpp:
+	* inc/operations/operations.hpp:
+	* src/Makefile.am:
+	* src/operations/Makefile.am:
+	* src/operations/operation-new.cpp:
+	* src/operations/operations.cpp: Added Operation subsystem, handling
+	tracking of asynchronous operations.
+
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Make use of OperationNew to create
+	new documents.
+
+	* inc/window.hpp:
+	* src/window.cpp: Instantate an Operations object, pass to
+	FileCommands.
+
+	* configure.ac:
+	* Makefile.am: Create new makefiles, link libgobby-operations.h.
+
 2008-05-18  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/core/Makefile.am:

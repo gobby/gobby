@@ -1,4 +1,4 @@
-SUBDIRS = util core dialogs commands
+SUBDIRS = util core dialogs operations commands
 
 noinst_HEADERS = \
 	dragdrop.hpp \

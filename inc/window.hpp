@@ -24,10 +24,11 @@
 
 #include "commands/browser-commands.hpp"
 #include "commands/file-commands.hpp"
+#include "operations/operations.hpp"
 
-#include "dialogs/finddialog.hpp"
+/*#include "dialogs/finddialog.hpp"
 #include "dialogs/gotodialog.hpp"
-#include "dialogs/preferencesdialog.hpp"
+#include "dialogs/preferencesdialog.hpp"*/
 #include "dialogs/initialdialog.hpp"
 
 #include "core/preferences.hpp"
@@ -86,6 +87,9 @@ protected:
 	StatusBar m_statusbar;
 	Browser m_browser;
 
+	// Functionality
+	Operations m_operations;
+
 	BrowserCommands m_commands_browser;
 	FileCommands m_commands_file;
 
@@ -95,9 +99,9 @@ protected:
 
 	// Dialogs
 	std::auto_ptr<InitialDialog> m_initial_dlg;
-	std::auto_ptr<PreferencesDialog> m_preferences_dlg;
+/*	std::auto_ptr<PreferencesDialog> m_preferences_dlg;
 	std::auto_ptr<FindDialog> m_finddialog;
-	std::auto_ptr<GotoDialog> m_gotodialog;
+	std::auto_ptr<GotoDialog> m_gotodialog;*/
 };
 
 }

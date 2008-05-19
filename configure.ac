@@ -74,11 +74,13 @@ AC_OUTPUT([
 			inc/util/Makefile
 			inc/core/Makefile
 			inc/dialogs/Makefile
+			inc/operations/Makefile
 			inc/commands/Makefile
 		src/Makefile
 			src/util/Makefile
 			src/core/Makefile
 			src/dialogs/Makefile
+			src/operations/Makefile
 			src/commands/Makefile
 
 		contrib/Makefile
