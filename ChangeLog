@@ -1,3 +1,8 @@
+2008-06-03  Philipp Kern  <phil@0x539.de>
+
+	* src/hostdialog.cpp: implement accessibility (except for the session
+	  file) in HostDialog
+
 2008-04-15  Philipp Kern  <phil@0x539.de>
 
 	* po/ja.po: Japanese translation updated

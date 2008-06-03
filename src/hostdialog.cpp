@@ -16,7 +16,11 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <list>
 #include <gtkmm/stock.h>
+#include <atkmm/relationset.h>
+#include <atkmm/relation.h>
+#include <atkmm/object.h>
 #include "common.hpp"
 #include "hostdialog.hpp"
 
@@ -122,6 +126,28 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent,
 	show_all();
 	set_border_width(10);
 	set_resizable(false);
+
+	// Add label associations to get proper accessibility.
+	m_lbl_port.get_accessible()->get_relation_set()->set_add(
+		Atk::Relation::create(
+			std::list<Glib::RefPtr<Atk::Object> >(1, m_ent_port.get_accessible()),
+			Atk::RELATION_LABEL_FOR)
+		);
+	m_lbl_name.get_accessible()->get_relation_set()->set_add(
+		Atk::Relation::create(
+			std::list<Glib::RefPtr<Atk::Object> >(1, m_ent_name.get_accessible()),
+			Atk::RELATION_LABEL_FOR)
+		);
+	m_lbl_color.get_accessible()->get_relation_set()->set_add(
+		Atk::Relation::create(
+			std::list<Glib::RefPtr<Atk::Object> >(1, m_btn_color.get_accessible()),
+			Atk::RELATION_LABEL_FOR)
+		);
+	m_lbl_password.get_accessible()->get_relation_set()->set_add(
+		Atk::Relation::create(
+			std::list<Glib::RefPtr<Atk::Object> >(1, m_ent_password.get_accessible()),
+			Atk::RELATION_LABEL_FOR)
+		);
 }
 
 Gobby::HostDialog::~HostDialog()
