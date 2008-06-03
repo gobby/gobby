@@ -1,5 +1,9 @@
 2008-06-03  Philipp Kern  <phil@0x539.de>
 
+	* src/logview.cpp: re-enable the cursor for accessibility
+
+2008-06-03  Philipp Kern  <phil@0x539.de>
+
 	* src/joindialog.cpp: implement accessibility
 
 2008-06-03  Philipp Kern  <phil@0x539.de>

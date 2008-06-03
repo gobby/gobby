@@ -59,8 +59,10 @@ Gobby::LogView::LogView():
 	);
 
 	set_editable(false);
-	set_cursor_visible(false);
 	set_wrap_mode(Gtk::WRAP_WORD_CHAR);
+
+	// needed for accessibility
+	set_cursor_visible(true);
 
 #ifdef HAVE_SHOW_URL
 	signal_motion_notify_event().connect(
