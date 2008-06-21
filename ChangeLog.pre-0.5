@@ -1,0 +1,2742 @@
+2008-01-31  Armin Burgmeier  <armin@0x539.de>
+
+	* src/config.cpp: File test before loading XML file, this seems to
+	crash on Windows otherwise.
+
+2008-01-24  Philipp Kern  <phil@0x539.de>
+
+	* src/header.cpp:
+	* src/preferences.cpp:
+	* src/preferencesdialog.cpp:
+	* src/unix.cpp: Fix build failures with g++-4.3
+	  (thanks to Matthias Klose)
+
+2008-01-20  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferences.cpp:
+	* src/preferencesdialog.cpp:
+	* src/header.cpp: Don't crash when no GtkSourceView languages are
+	installed.
+
+2008-01-03  Philipp Kern  <phil@0x539.de>
+
+	* contrib/gobby.desktop: adhere to the freedesktop.org Desktop
+	  Entry Specification v1.0
+
+2008-01-01  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferencesdialog.cpp: Add some spacing to the document
+	management option group.
+
+2008-01-01  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac: bump version to 0.4.6
+	* NEWS: documented the changes
+
+2008-01-01  Philipp Kern  <phil@0x539.de>
+
+	* po/pt_BR.po, po/pl.po, po/ko.po: added new translations
+	  from Rosetta
+	* po/*.po: translation roundup fetched from Rosetta
+	* configure.ac: add pt_BR, pl and ko
+
+2008-01-01  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac: bump obby dependency to 0.4.5 to get IPv6
+	  autodiscovery
+
+2007-12-16  Armin Burgmeier  <armin@0x539.de>
+
+	* src/toolwindow.hpp:
+	* src/toolwindow.cpp: Hide on escape.
+
+2007-11-27  Armin Burgmeier  <armin@0x539.de>
+
+	* src/docwindow.cpp: Enable indentation-on-tab in gtksourceview1
+
+	* configure.in: Require gtksourceview >= 1.8.
+
+2007-10-14  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/preferencesdialog.hpp:
+	* src/preferencesdialog.cpp: Don't use the tooltip for the smart
+	home/end option when gtkmm was built without deprecated API.
+
+	* src/logview.cpp: Replaced scroll_to_mark by scroll_to because the
+	former is deprecated.
+
+	* src/docwindow.cpp: Fix gtksourceview1 build.
+
+2007-09-30  Benjamin Herr  <ben@0x539.de>
+
+	* src/window.cpp: Make sure that the two buttons on the confirmation
+	dialog when exiting gobby with a session running do not have the same
+	mnemonics.
+
+2007-09-20  Philipp Kern <phil@0x539.de>
+
+	* src/ipc.cpp: added unistd.h to the list of includes to ease porting
+	  to OpenBSD
+
+2007-09-17  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferencesdialog.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp: Adapted to latest (and final) GtkSourceView2
+	API.
+
+2007-08-27  Armin Burgmeier  <armin@0x539.de>
+
+	* src/historyentry.cpp: Avoid Gtk::Entry::set_text() because it seems
+	to crash on Vista. Use Gtk::Editable::delete_text and
+	Gtk::Editable::insert_text instead.
+
+2007-08-27  Armin Burgmeier  <armin@0x539.de>
+
+	* src/window.cpp: Make sure not to try to send an unsubscription
+	request twice.
+
+2007-08-18  Armin Burgmeier  <armin@0x539.de>
+
+	* src/icon.cpp: Win32 build fix.
+
+2007-08-18  Philipp Kern <phil@0x539.de>
+
+	* inc/window.hpp:
+	* src/window.cpp: do not close document if `save as' is cancelled
+	  [fixes #288]
+
+2007-08-18  Philipp Kern <phil@0x539.de>
+
+	* NEWS:
+	* configure.ac: bump version to 0.4.5 and document the changes
+
+2007-08-12  Armin Burgmeier  <armin@0x539.de>
+
+	* src/window.cpp: Set IO channel encoding to "" when saving files
+	because we do the necessary conversion ourselves before saving. This
+	fixes saving non-UTF-8 encoded files.
+
+	* src/icon.cpp: Convert pixmap paths to UTF-8 on windows, allowing
+	gobby to run inside paths containing non-ASCII characters.
+
+	* src/preferences.cpp: Include features.hpp for correct gtksourceview2
+	detection.
+
+2007-08-05  Philipp Kern <phil@0x539.de>
+
+	* Place a `Save' button instead of a plain `OK' button in the
+	  `Save file' dialog and set it as the default response.
+
+2007-07-22  Philipp Kern <phil@0x539.de>
+
+	* Fix compilation with GtkSourceView 1
+
+2007-07-22  Philipp Kern <phil@0x539.de>
+
+        * New Swedish translation by Daniel Nylander [fixes #282]
+
+2007-07-09  Philipp Kern  <phil@0x539.de>
+
+	* src/main.cpp: bugfix to use IPC by default
+
+2007-07-09  Philipp Kern  <phil@0x539.de>
+
+	* inc/joindialog.hpp:
+	* src/joindialog.cpp: add support for IPv6 autodiscovery
+
+2007-07-09  Armin Burgmeier  <armin@0x539.de>
+
+	* src/preferencesdialog.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp: Adjusted for gtksourceview2 API changes.
+
+2007-06-16  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac: fixed POSIX compliance
+
+2007-06-16  Philipp Kern  <phil@0x539.de>
+
+	* po/POTFILES.in: add more source files to be scanned for strings
+	  to be translated
+
+	* po/gobby.pot: update, mainly line numbers
+
+	* po/ca.po:
+	* po/pt.po:
+	* po/es.po:
+	* po/fr.po:
+	* po/de.po:
+	* po/sv.po:
+	* po/zh_CN.po: translation roundup: new line numbers, some strings
+	  changed by Rosetta contributors
+
+	* configure.ac:
+	* po/it.po:
+	* po/ru.po: new translations imported from Rosetta
+
+	* NEWS: documented new translations
+
+2007-06-15  Philipp Kern  <phil@0x539.de>
+
+	* NEWS:
+	* configure.ac: bump version to 0.4.4 and document the changes
+
+	* mkinstalldirs: removed from the repository, is symlinked through
+	  autogen.sh
+
+2007-06-15  Philipp Kern  <phil@0x539.de>
+
+	* src/finddialog.cpp:
+	* src/window.cpp:
+	* src/statusbar.cpp:
+	* src/folder.cpp:
+	* src/document.cpp:
+	* src/preferencesdialog.cpp:
+	* src/main.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp:
+	* inc/window.hpp:
+	* inc/document.hpp:
+	* inc/header.hpp:
+	* inc/docwindow.hpp:
+	* inc/preferences.hpp:
+	* inc/documentlist.hpp: fixed the indentation from two spaces to
+	  one tab and removed some cruft
+
+2007-06-13  Philipp Kern  <phil@0x539.de>
+
+	* src/chat.cpp: use Gtk::Entry::delete_text(...) instead of
+	  Gtk::Entry::set_text(""); the latter crashes on Windows Vista
+
+2007-06-12  Armin Burgmeier  <armin@0x539.de>
+
+	* src/documentlist.cpp: fixed a bug related to the document list's
+	  selection (clear the selection in obby_start) [fixes #271]
+
+2007-05-27  Armin Burgmeier  <armin@0x539.de>
+	
+	* inc/sourceview:
+	* src/sourceview:
+	* Makefile.am: Remove hand-coded GtkSourceView wrappers.
+
+	* configure.ac: Added --with-gtksourceview2 configure option.
+
+	* src/finddialog.cpp:
+	* src/window.cpp:
+	* src/statusbar.cpp:
+	* src/folder.cpp:
+	* src/document.cpp:
+	* src/preferencesdialog.cpp:
+	* src/main.cpp:
+	* src/header.cpp:
+	* src/docwindow.cpp:
+	* src/preferences.cpp:
+	* src/gotodialog.cpp:
+	* inc/window.hpp:
+	* inc/folder.hpp:
+	* inc/document.hpp:
+	* inc/preferencesdialog.hpp:
+	* inc/header.hpp:
+	* inc/docwindow.hpp:
+	* inc/preferences.hpp: Support GtkSourceview2, use GtkSourceView C API
+	directly.
+
+2007-05-10  Benjamin Herr <ben@0x539.de>
+
+	* inc/documentlist.hpp:
+	* src/documentlist.cpp: sort document list alphabetically
+
+2007-04-23  Philipp Kern <phil@0x539.de>
+
+	* src/togglewindow.cpp: ToggleWindow needs UTILITY hints in any
+	  case
+	* src/toolwindow.cpp: use DIALOG unconditionally on every ToolWindow
+
+2007-04-23  Philipp Kern <phil@0x539.de>
+
+	* src/toolwindow.cpp: use DIALOG hint on *nix, UTILITY on Win32
+	* src/window.cpp: copyright notice renewed
+
+2007-04-16  Armin Burgmeier  <armin@0x539.de>
+
+	* src/chat.cpp: Reintroduce user tags in chat which got accidentaly
+	lost in revision [1515].
+
+2007-04-15  Armin Burgmeier  <armin@0x539.de>
+
+	* src/joindialog.cpp: Don't allow selection in the error case, use a
+	single column for both icon and text. Make the dialog resizable.
+
+2007-04-15  Philipp Kern <phil@0x539.de>
+
+	* src/joindialog.cpp: failure handling for exceptions thrown
+	  by discover
+
+2007-04-14  Armin Burgmeier  <armin@0x539.de>
+
+	* src/joindialog.cpp: Only access the currently selected row to set
+	the content of the host and port entries when there actually is a
+	selected row.
+
+2007-04-14  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/joindialog.hpp:
+	* src/joindialog.cpp: Take a obby::zeroconf_base instead of
+	obby::zeroconf, do not install timer when using avahi as zeroconf
+	backend.
+
+	* inc/window.hpp:
+	* src/window.cpp: Use Glib mainloop for avahi zeroconf backend,
+	otherwise poll it every 1500 milliseconds.
+
+2007-04-14  Philipp Kern <phil@0x539.de>
+
+	* configure.ac, Makefile.am: check for Avahi in obby and link against
+	  avahi-glib if Avahi proper is used for Zeroconf support; provide
+	  an additional define WITH_AVAHI for usage within the code
+
+2007-04-09  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/folder.hpp:
+	* src/folder.cpp: Added a select_document() function that selects the
+	page that shows the given document.
+
+	* src/userlist.cpp:
+	* src/documentlist.cpp: Make use of it.
+
+2007-04-09  Philipp Kern <phil@0x539.de>
+
+	* src/window.cpp:
+	* inc/documentlist.hpp:
+	* src/documentlist.cpp: allow the same in the document list
+
+2007-04-09  Philipp Kern <phil@0x539.de>
+
+	* inc/window.hpp:
+	* src/window.cpp: pass a folder object to the user list
+	* inc/userlist.hpp:
+	* src/userlist.cpp: doubleclicks on already subscribed documents now
+	cause the document to be selected
+
+2007-04-09  Philipp Kern <phil@0x539.de>
+
+	* configure.ac: bump version to 0.4.3
+	* NEWS: note down usability improvements in 0.4.3
+
+2007-04-09  Philipp Kern <phil@0x539.de>
+
+	* src/window.cpp: do not show tabs if only one document present
+	[fixes #220]
+
+2007-04-08  Philipp Kern <phil@0x539.de>
+
+	* src/preferencesdialog.cpp: add toolbar setting for "text besides icon"
+	* src/header.cpp: set important flags of the actions according
+	to the sensitivity
+
+2007-04-08  Philipp Kern <phil@0x539.de>
+
+	* src/window.cpp:
+	* src/chat.cpp: set urgency hint on window only when chat widget
+	is visible [fixes #256]
+
+2007-04-07  Philipp Kern <phil@0x539.de>
+
+	* inc/userlist.hpp:
+	* src/userlist.hpp: allow doubleclicks on documents in the userlist
+	to subscribe to them [fixes #225]
+
+2007-04-07  Philipp Kern <phil@0x539.de>
+
+	* inc/document_settings.hpp: signals now pass a non-const
+	LocalDocumentInfo reference
+	* inc/window.hpp:
+	* src/window.cpp: automatically opened tabs should not grab
+	the focus [finally fixes #232]
+
+2007-04-07  Philipp Kern <phil@0x539.de>
+
+	* inc/document_settings.hpp:
+	* src/document_settings.cpp: add a flag whether the document was
+	opened automatically or not
+
+2007-04-02  Philipp Kern <phil@0x539.de>
+
+	* src/window.cpp:
+	* inc/preferences.hpp:
+	* src/preferences.cpp:
+	* inc/preferencesdialog.hpp:
+	* src/preferencesdialog.cpp: add new configuration option to open
+	new remotely-created documents automatically [fixes #232]
+
+2007-04-02  Philipp Kern <phil@0x539.de>
+
+	* src/window.cpp: Mention avahi-daemon in failure message.
+
+2007-03-27  Philipp Kern <phil@0x539.de>
+
+	* src/window.cpp: Output an error to the console if the zeroconf
+	daemon is unavailable instead of displaying an annoying message
+	box.
+
+2007-03-27  Philipp Kern <phil@0x539.de>
+
+	* src/preferences.cpp: Fix some mime types. It seems that they
+        are inconsistent over different distributions, at least the
+        fixed ones are commonly changed.
+
+2007-03-24  Armin Burgmeier <armin@0x539.de>
+
+	* inc/window.hpp:
+	* src/window.cpp: Focus find and goto dialogs always when the
+	corresponding actions are triggered. Also do not load them at startup
+	but as soon as they are required, to improve startup time
+	[fixes #251].
+
+2007-03-21  Armin Burgmeier <armin@0x539.de>
+
+	* src/chat.cpp: Do not print an incoming message as much times as its
+	number of lines, but only once.
+
+2007-02-25  Armin Burgmeier <armin@0x539.de>
+
+	* src/window.cpp: Open output file to save a document with
+	Glib::IOChannel instead of std::ofstream to get correct conversion of
+	filename encoding from glib.
+
+2007-02-25  Armin Burgmeier <armin@0x539.de>
+
+	* src/ipc.cpp: Define _WIN32_WINNT to get HWND_MESSAGE API.
+
+2007-02-25  Philipp Kern <phil@0x539.de>
+
+	* NEWS, configure.in: Bump version to 0.4.2 and document important
+	  changes.
+
+2007-01-02  Philipp Kern <phil@0x539.de>
+
+	Moved GlobalUnlock further downwards
+	(The pointer is only guaranteed to point to the right place within
+	GlobalLock and GlobalUnlock, thus it might point to an invalid memory
+	block. [Michael Walter])
+
+2006-12-31  Armin Burgmeier <armin@0x539.de>
+
+	Accept absolute file names for IPC [fixes #237]
+
+2006-11-08  Armin Burgmeier <armin@0x539.de>
+
+	Keep viewport position on remote operations
+
+2006-11-04  Armin Burgmeier <armin@0x539.de>
+
+	Allow subscribing by double click on document list
+
+2006-11-04  Armin Burgmeier <armin@0x539.de>
+
+	Libtool stuff
+
+2006-11-04  Armin Burgmeier <armin@0x539.de>
+
+	Do not set modified flag when opening a local file [fixes #214]
+
+2006-10-26  Philipp Kern <phil@0x539.de>
+
+	Put the urgency hint into the preferences dialog
+
+2006-09-05  Philipp Kern <phil@0x539.de>
+
+	MingW compilation fix: windres now detected by autoconf
+
+2006-09-05  Philipp Kern <phil@0x539.de>
+
+	MingW compilation fix
+
+2006-08-27  Philipp Kern <phil@0x539.de>
+
+	Updated ChangeLog for release
+
+2006-08-27  Philipp Kern <phil@0x539.de>
+
+	Bump version to 0.4.1
+
+2006-08-21  Armin Burgmeier <armin@0x539.de>
+
+	Load pixmaps from pixmaps/ if not found in PIXMAPS_DIR
+
+2006-08-21  Philipp Kern <phil@0x539.de>
+
+	Move the PNGs out of contrib/artwork into pixmaps
+
+2006-08-21  Philipp Kern <phil@0x539.de>
+
+	Remove inline pixmaps and use the external graphics in any case
+
+2006-08-17  Philipp Kern <phil@0x539.de>
+
+	Removed Gobby::Atomic, no longer needed
+
+2006-08-17  Philipp Kern <phil@0x539.de>
+
+	Translation roundup
+
+2006-08-17  Philipp Kern <phil@0x539.de>
+
+	Updated the manual page
+
+2006-08-16  Philipp Kern <phil@0x539.de>
+
+	Bump version to 0.4.0rc4 and depend on obby-0.4.0rc4 or higher
+
+2006-08-16  Armin Burgmeier <armin@0x539.de>
+
+	Preselect line in GotoDialog
+
+2006-08-16  Armin Burgmeier <armin@0x539.de>
+
+	Do not allow self-highlighting
+
+2006-08-15  Philipp Kern <phil@0x539.de>
+
+	Updated NEWS
+
+2006-08-14  Philipp Kern <phil@0x539.de>
+
+	Moved the contents of the View menu to Edit
+
+2006-08-14  Armin Burgmeier <armin@0x539.de>
+
+	Set type hint of tool windows to UTILITY
+
+2006-08-11  Armin Burgmeier <armin@0x539.de>
+
+	Renamed disable-ipc to new-instance
+
+2006-08-08  Armin Burgmeier <armin@0x539.de>
+
+	Made statusbar more standard-compliant
+
+2006-08-08  Armin Burgmeier <armin@0x539.de>
+
+	Added --join and --disable-ipc command line options
+
+2006-08-08  Armin Burgmeier <armin@0x539.de>
+
+	Set urgency hint when chat messages arrive 
+
+2006-08-08  Philipp Kern <phil@0x539.de>
+
+	Save user-modified palettes in the configuration [fixes #181]
+
+2006-08-07  Philipp Kern <phil@0x539.de>
+
+	Updated ChangeLog for release
+
+2006-08-07  Philipp Kern <phil@0x539.de>
+
+	Bumped version to 0.4.0rc3
+
+2006-08-07  Philipp Kern <phil@0x539.de>
+
+	Strictened the build-dependency on obby-0.4.0rc3
+
+2006-06-16  Philipp Kern <phil@0x539.de>
+
+	GCC 3.3 compile fixes
+
+2006-06-15  Philipp Kern <phil@0x539.de>
+
+	Do not crash when threads are already initialised
+
+2006-06-07  Philipp Kern <phil@0x539.de>
+
+	Replace "Shows up" by "Displays"
+
+2006-06-07  Philipp Kern <phil@0x539.de>
+
+	Updated ChangeLog for release
+
+2006-06-06  Philipp Kern <phil@0x539.de>
+
+	Depend on obby >= 0.4.0rc2; bump version to 0.4.0rc2
+
+2006-06-07  Armin Burgmeier <armin@0x539.de>
+
+	Fix SEGV caused by wrong usage of Gtk::AccelKey [fixes #163]
+
+2006-06-04  Philipp Kern <phil@0x539.de>
+
+	Translation roundup; new Catalan translation, thanks to Jordi Mallach
+
+2006-06-04  Philipp Kern <phil@0x539.de>
+
+	Bumped gobby.pot to reflect the current source code locations
+
+2006-05-07  Philipp Kern <phil@0x539.de>
+
+	Add document test to the `make check' testrunner
+
+2006-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Added append tests
+
+2006-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Added support for obby::text::npos to Document::erase and
+	Document::get_slice
+
+2006-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Added Document test
+
+2006-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Added Document::clear()
+
+2006-05-06  Philipp Kern <phil@0x539.de>
+
+	Check for substrings in Win32 detection
+
+2006-04-24  Armin Burgmeier <armin@0x539.de>
+
+	Added contrib/artwork/doclist.png to EXTRA_DIST [fixes #152]
+
+2006-04-19  Philipp Kern <phil@0x539.de>
+
+	Add a man page for Gobby
+
+2006-04-16  Philipp Kern <phil@0x539.de>
+
+	Do not depend on JoinDialog creation on invokation
+
+2006-04-15  Philipp Kern <phil@0x539.de>
+
+	Check for a generic zeroconf target in obby
+
+2006-04-15  Philipp Kern <phil@0x539.de>
+
+	Expand the artists' credits
+
+2006-04-11  Philipp Kern <phil@0x539.de>
+
+	Updated ChangeLog for release
+
+2006-04-10  Armin Burgmeier <armin@0x539.de>
+
+	src/gselector.cpp: Added idle call in timout handler.
+	This is a workaround for a possible bug in glib: A connection to
+	Glib::signal_io is not triggered without waking up the main loop
+	once more.
+
+2006-04-10  Philipp Kern <phil@0x539.de>
+
+	Enable URL support on Mac OS X
+
+2006-04-10  Philipp Kern <phil@0x539.de>
+
+	Updates to INSTALL
+
+2006-04-10  Philipp Kern <phil@0x539.de>
+
+	Little wrapping issue in translation
+
+2006-04-10  Philipp Kern <phil@0x539.de>
+
+	Reorder the PKG_CHECK_MODULES calls
+
+2006-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Use Gobby's color selection palette in JoinProgressDialog color prompt
+
+2006-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a thread-related issue that could cause a SEGV on
+	connection loss
+
+2006-04-01  Armin Burgmeier <armin@0x539.de>
+
+	Inherit Document from sigc::trackable
+
+2006-03-31  Philipp Kern <phil@0x539.de>
+
+	gtk-connect does not work on buttons on Mac; reason unknown
+
+2006-03-31  Philipp Kern <phil@0x539.de>
+
+	Update version to 0.4.0rc1
+
+2006-03-31  Philipp Kern <phil@0x539.de>
+
+	Some kind of translation roundup, very limited
+
+2006-03-30  Philipp Kern <phil@0x539.de>
+
+	Empty the TODO for now
+
+2006-03-31  Philipp Kern <phil@0x539.de>
+
+	Updated README
+
+2006-03-30  Armin Burgmeier <armin@0x539.de>
+
+	Align info labels in preferences dialog to the left
+
+2006-03-30  Armin Burgmeier <armin@0x539.de>
+
+	Set priority of user tags lower than GtkSourceView's bracket
+	highlighting tag
+
+2006-03-30  Armin Burgmeier <armin@0x539.de>
+
+	Initialize gnome-vfs correctly
+
+2006-03-30  Armin Burgmeier <armin@0x539.de>
+
+	Link http URLs in LogView when compiled --with-gnome [fixes #80]
+
+2006-03-30  Philipp Kern <phil@0x539.de>
+
+	Include the stat header
+
+2006-03-30  Armin Burgmeier <armin@0x539.de>
+
+	Fixed config class
+
+2006-03-29  Armin Burgmeier <armin@0x539.de>
+
+	Fixed Config::ParentEntry::supply_value
+
+2006-03-29  Philipp Kern <phil@0x539.de>
+
+	Depend on gnome-vfs-2.0 when compiled with GNOME support
+
+2006-03-29  Armin Burgmeier <armin@0x539.de>
+
+	Refactored Config class
+
+2006-03-28  Armin Burgmeier <armin@0x539.de>
+
+	Print remove command errors to chat
+
+2006-03-28  Armin Burgmeier <armin@0x539.de>
+
+	Use default context in ipc.cpp
+
+2006-03-28  Armin Burgmeier <armin@0x539.de>
+
+	Avoid unnecessary compiler warnings
+
+2006-03-27  Armin Burgmeier <armin@0x539.de>
+
+	Added timeout capability to GSelector, enable keepalives [fixes #131]
+
+2006-03-25  Armin Burgmeier <armin@0x539.de>
+
+	Added document list item
+
+2006-03-25  Armin Burgmeier <armin@0x539.de>
+
+	Remember position of tool windows
+
+2006-03-25  Armin Burgmeier <armin@0x539.de>
+
+	set initially given font name in Font::set when font selector is
+	never realized
+
+2006-03-25  Armin Burgmeier <armin@0x539.de>
+
+	Send command line parameters only to other gobbys owned by the
+	same user
+
+2006-03-25  Armin Burgmeier <armin@0x539.de>
+
+	Win32 IPC using hidden windows
+
+2006-03-25  Armin Burgmeier <armin@0x539.de>
+
+	Changed another occurence of obby-0.3 in configure script
+
+2006-03-25  Philipp Kern <phil@0x539.de>
+
+	Depend on net6-1.3 and obby-0.4
+
+2006-03-25  Armin Burgmeier <armin@0x539.de>
+
+	Pass command line parameters to remote Gobby instanc
+
+2006-03-24  Philipp Kern <phil@0x539.de>
+
+	Bump version to 0.3.99 to avoid confusion with final versions
+
+2006-03-24  Armin Burgmeier <armin@0x539.de>
+
+	Do not explictely request encryption, this is done by obby
+
+2006-03-24  Armin Burgmeier <armin@0x539.de>
+
+	Pack statusbar frames without space
+
+2006-03-24  Armin Burgmeier <armin@0x539.de>
+
+	Some fixes to JoinProgressDialog
+
+2006-03-24  Philipp Kern <phil@0x539.de>
+
+	Cosmetic changes to remove the references to RSA
+
+2006-02-08  Benjamin Herr <ben@0x539.de>
+
+	fixed possible out-of-bounds condition in convert2unix
+
+2006-03-20  Armin Burgmeier <armin@0x539.de>
+
+	Protect GSelector by a mutex
+
+2006-03-17  Philipp Kern <phil@0x539.de>
+
+	Initial NEWS section for 0.4.0
+
+2006-03-19  Armin Burgmeier <armin@0x539.de>
+
+	Send chat messages beginning with '/' as command
+
+2006-03-19  Armin Burgmeier <armin@0x539.de>
+
+	Activate goto button when pressing enter
+
+2006-03-17  Philipp Kern <phil@0x539.de>
+
+	We're in 2006
+
+2006-03-17  Armin Burgmeier <armin@0x539.de>
+
+	Reenabled user color change (has been dropped accidently)
+
+2006-03-17  Armin Burgmeier <armin@0x539.de>
+
+	Replaced DefaultDialog by Gtk::Dialog::set_default_response
+	[fixes #117]
+
+2006-03-15  Armin Burgmeier <armin@0x539.de>
+
+	Use Gtk::Statusbar instead of Gtk::Frame for status bar
+
+2006-03-15  Armin Burgmeier <armin@0x539.de>
+
+	Added toggle button to hide chat [fixes #134]
+
+2006-03-15  Armin Burgmeier <armin@0x539.de>
+
+	Added chat icon by Benjamin Herr
+
+2006-03-15  Armin Burgmeier <armin@0x539.de>
+
+	Added font selection to preferences [fixes #123]
+
+2006-03-14  Armin Burgmeier <armin@0x539.de>
+
+	Implemented EncodingSelector::remove_text for compatibility
+	with gtkmm < 2.8
+
+2006-03-14  Armin Burgmeier <armin@0x539.de>
+
+	Reopen host/join dialog after hosting/joining failed [fixes #130]
+
+2006-03-10  Armin Burgmeier <armin@0x539.de>
+
+	Show suffixed name in window title and document list [fixes #111]
+
+2006-03-10  Armin Burgmeier <armin@0x539.de>
+
+	Removed "Connection is now encrypted" debug message
+
+2006-03-10  Armin Burgmeier <armin@0x539.de>
+
+	Hide mime type column in file preferences page
+
+2006-03-10  Armin Burgmeier <armin@0x539.de>
+
+	Added mnemonics to main menu bar
+
+2006-03-10  Armin Burgmeier <armin@0x539.de>
+
+	Removed remaining references to mimemap
+
+2006-03-09  Armin Burgmeier <armin@0x539.de>
+
+	Ctrl+Alt+PgDown/Up shifts document [fixes #112]
+
+2006-03-09  Armin Burgmeier <armin@0x539.de>
+
+	Added filelist to preferences
+
+2006-03-08  Armin Burgmeier <armin@0x539.de>
+
+	Replaced mime map by file list in preferences
+
+2006-03-07  Armin Burgmeier <armin@0x539.de>
+
+	Disable OK button in password dialog when passwords do not match
+
+2006-03-07  Armin Burgmeier <armin@0x539.de>
+
+	Added application state frags controlling header sensitivity
+
+2006-03-06  Armin Burgmeier <armin@0x539.de>
+
+	Do not allow subscriptions to non-UTF-8-encoded documents
+
+2006-03-06  Armin Burgmeier <armin@0x539.de>
+
+	Store original encoding in document settings [fixes #65]
+
+2006-03-05  Armin Burgmeier <armin@0x539.de>
+
+	Added encoding selection in file chooser
+
+2006-03-05  Armin Burgmeier <armin@0x539.de>
+
+	Do not delete buffer after session closure, allow saving of closed
+	sessions
+
+2006-03-02  Philipp Kern <phil@0x539.de>
+
+	Transform the ok button into a host one in the host dialog
+
+2006-03-02  Philipp Kern <phil@0x539.de>
+
+	Use a connect button instead of ok in the join dialog
+
+2006-02-28  Armin Burgmeier <armin@0x539.de>
+
+	Introduced document settings to store document's original encoding
+
+2006-02-28  Armin Burgmeier <armin@0x539.de>
+
+	Send UTF-8 as encoding
+
+2006-02-26  Armin Burgmeier <armin@0x539.de>
+
+	Disable subscribe button when subscription request has been sent
+	[fixes #126]
+
+2006-02-24  Armin Burgmeier <armin@0x539.de>
+
+	alt+n switches tabs
+
+2006-02-23  Armin Burgmeier <armin@0x539.de>
+
+	Restored left gravity cursor on remote insert
+
+2006-02-23  Armin Burgmeier <armin@0x539.de>
+
+	Gobby seems to work now, but still needs further testing
+
+2006-02-22  Armin Burgmeier <armin@0x539.de>
+
+	Made Gobby compile again - does still not work
+
+2006-02-19  Armin Burgmeier <armin@0x539.de>
+
+	Adjusted GSelector to new selector principle
+
+2006-02-14  Philipp Kern <phil@0x539.de>
+
+	Experimental patch for client-initiated encryption
+
+2006-02-06  Armin Burgmeier <armin@0x539.de>
+
+	Replaced buffer wrappers by GSelector
+
+2006-02-03  Armin Burgmeier <armin@0x539.de>
+
+	Added obby/document.hpp include since it is heavily decoupled from
+	obby itself
+
+2006-02-02  Armin Burgmeier <armin@0x539.de>
+
+	Changed buffer wrapper to match obby's new_net()
+
+2006-01-30  Armin Burgmeier <armin@0x539.de>
+
+	Temporary adjustments for document template parameter in document info
+
+2006-01-29  Armin Burgmeier <armin@0x539.de>
+
+	Temporary adjustments to document type template in obby::document_info
+
+2006-01-26  Armin Burgmeier <armin@0x539.de>
+
+	Changes for new net6 IO conditions
+
+2006-01-11  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2006-01-07  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-12-31  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-12-13  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-12-11  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-12-10  Philipp Kern <phil@0x539.de>
+
+	Forgot to translate at least one string
+
+2005-12-08  Philipp Kern <phil@0x539.de>
+
+	Translation roundup
+
+2005-12-07  Philipp Kern <phil@0x539.de>
+
+	Armin spotted the problem with encodings in the chat window
+
+2005-11-24  Philipp Kern <phil@0x539.de>
+
+	Translation roundup
+
+2005-11-24  Philipp Kern <phil@0x539.de>
+
+	Require net6-1.2 >= 1.2.1
+
+2005-11-23  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-11-22  Armin Burgmeier <armin@0x539.de>
+
+	Removed covariant returns from buffer wrapper
+
+2005-11-21  Armin Burgmeier <armin@0x539.de>
+
+	Do not crash if empty config is found
+
+2005-11-20  Philipp Kern <phil@0x539.de>
+
+	Search for obby in the paths specified by pkg-config
+
+2005-11-20  Armin Burgmeier <armin@0x539.de>
+
+	Give initial focus to close button in close confirmation dialog
+
+2005-11-19  Armin Burgmeier <armin@0x539.de>
+
+	Updated README and AUTHORS
+
+2005-11-19  Armin Burgmeier <armin@0x539.de>
+
+	Atomic write failed if the destination directory was not on the same
+	device as the temporary directory, use normal write
+
+2005-11-19  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-11-18  Armin Burgmeier <armin@0x539.de>
+
+	Added icon.cpp to POTFILES.in
+
+2005-11-18  Armin Burgmeier <armin@0x539.de>
+
+	net6::gettext_package usage
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	documentlist.cpp was missing in POTFILES.in
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	Need to link against this for OLE Drag+Drop to work
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a bug in Win32 Drag+Drop
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	Added find- and goto dialog to POTFILES.in
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	Goto line Dialog [fixes #79]
+
+2005-11-17  Philipp Kern <phil@0x539.de>
+
+	Protect the unpublish call
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	Adjusted Automake.am
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	Introduces ToggleWindow
+
+2005-11-17  Armin Burgmeier <armin@0x539.de>
+
+	Win32 Drag+Drop support [fixes #71]
+
+2005-11-17  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-11-16  Armin Burgmeier <armin@0x539.de>
+
+	Use WINDOW_TYPE_HINT_UTILITY for FindDialog as well
+
+2005-11-16  Armin Burgmeier <armin@0x539.de>
+
+	Set WINDOW_TYPE_HINT_UTILITY window_hint for tool windows
+
+2005-11-16  Armin Burgmeier <armin@0x539.de>
+
+	Fixed last dependency on <regex.h>
+
+2005-11-16  Armin Burgmeier <armin@0x539.de>
+
+	Format time string according to current locale
+
+2005-11-15  Armin Burgmeier <armin@0x539.de>
+
+	Win32 build fixes
+
+2005-11-15  Philipp Kern <phil@0x539.de>
+
+	Updated NEWS
+
+2005-11-15  Philipp Kern <phil@0x539.de>
+
+	Translation roundup
+
+2005-11-15  Armin Burgmeier <armin@0x539.de>
+
+	Win32 fixes in ProgressDialog's threading concept
+
+2005-11-15  Armin Burgmeier <armin@0x539.de>
+
+	Prompt when the user wants to exit Gobby and a session is still open
+	[fixes #93]
+
+2005-11-15  Armin Burgmeier <armin@0x539.de>
+
+	Some UI fixes
+
+2005-11-15  Armin Burgmeier <armin@0x539.de>
+
+	Removed dependency on GNU regex library
+
+2005-11-15  Armin Burgmeier <armin@0x539.de>
+
+	Working FindDialog, removed regex support
+
+2005-11-14  Philipp Kern <phil@0x539.de>
+
+	String correction
+
+2005-11-13  Armin Burgmeier <armin@0x539.de>
+
+	Find dialog works better, but some regex stuff still does not work
+
+2005-11-13  Philipp Kern <phil@0x539.de>
+
+	Bugfix, transmit the value correctly
+
+2005-11-13  Philipp Kern <phil@0x539.de>
+
+	Remember the window positions
+
+2005-11-13  Armin Burgmeier <armin@0x539.de>
+
+	Non-working FindDialog
+
+2005-11-13  Philipp Kern <phil@0x539.de>
+
+	Moved the config from window to main
+
+2005-11-13  Philipp Kern <phil@0x539.de>
+
+	Expand online users by default
+
+2005-11-13  Armin Burgmeier <armin@0x539.de>
+
+	Added missing documentlist files
+
+2005-11-13  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-11-13  Armin Burgmeier <armin@0x539.de>
+
+	Added document list, only subscribed document are shown in folder
+
+2005-11-12  Philipp Kern <phil@0x539.de>
+
+	Added userlist image
+
+2005-11-12  Armin Burgmeier <armin@0x539.de>
+
+	Precreate Gobby icon
+
+2005-11-12  Armin Burgmeier <armin@0x539.de>
+
+	Removed empty paned from window
+
+2005-11-12  Armin Burgmeier <armin@0x539.de>
+
+	Added user list as tool window
+
+2005-11-11  Armin Burgmeier <armin@0x539.de>
+
+	Changed user list icons
+
+2005-11-11  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a synchronisation loss when resubscribing to a document
+
+2005-11-11  Armin Burgmeier <armin@0x539.de>
+
+	Implemented tree-based userlist
+
+2005-11-09  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-11-07  Armin Burgmeier <armin@0x539.de>
+
+	Made folder scrollable, decreases minimum width if many tabs are open
+
+2005-11-07  Armin Burgmeier <armin@0x539.de>
+
+	Initialise colour selection dialog with button's current colour in
+	Gobby::ColorButton
+
+2005-11-07  Armin Burgmeier <armin@0x539.de>
+
+	Userlist using TreeView; currently disfunctional!
+
+2005-11-07  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-11-06  Armin Burgmeier <armin@0x539.de>
+
+	Update title bar correctly upon reconnection [fixes #92]
+
+2005-11-06  Armin Burgmeier <armin@0x539.de>
+
+	Atomic write for documents, do not append newline on write [fixes #91]
+
+2005-11-06  Armin Burgmeier <armin@0x539.de>
+
+	Use a left-gravity cursor on remote insert operations [fixes #84]
+
+2005-11-06  Philipp Kern <phil@0x539.de>
+
+	Added translator credits and link to Rosetta
+
+2005-11-05  Armin Burgmeier <armin@0x539.de>
+
+	pre-select the save button in close confirmation dialog
+
+2005-11-05  Armin Burgmeier <armin@0x539.de>
+
+	Close document just unsubscribes from the document [fixes #83]
+
+2005-11-05  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a German translation error
+
+2005-11-05  Armin Burgmeier <armin@0x539.de>
+
+	Show a close confirmation dialog according to GNOME HIG [fixes #105]
+
+2005-11-05  Armin Burgmeier <armin@0x539.de>
+
+	Convert resulting filename to utf8 in FileEntry
+
+2005-11-05  Armin Burgmeier <armin@0x539.de>
+
+	Added overwrite confirmation if gtkmm is >= 2.8
+
+2005-11-05  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-11-04  Armin Burgmeier <armin@0x539.de>
+
+	Set Gobby::Icon::gobby as default window icon
+
+2005-11-04  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a memleak in the GtkSourceView wrapper
+
+2005-11-04  Armin Burgmeier <armin@0x539.de>
+
+	Adjustments for inc_flags/exc_flags
+
+2005-11-04  Philipp Kern <phil@0x539.de>
+
+	Allow to join servers with port numbers < 1024
+
+2005-11-03  Armin Burgmeier <armin@0x539.de>
+
+	Fixed another bug in configure.in
+
+2005-11-03  Armin Burgmeier <armin@0x539.de>
+
+	Fixed GTKMM-2.8 check
+
+2005-11-03  Armin Burgmeier <armin@0x539.de>
+
+	Allow to change name/colour directly if it is already in use
+	[Scott Baker]
+
+2005-11-03  Philipp Kern <phil@0x539.de>
+
+	Added a check for Gtkmm's version (untested)
+
+2005-11-03  Armin Burgmeier <armin@0x539.de>
+
+	Do not use IPv6 when hosting a session
+
+2005-11-03  Armin Burgmeier <armin@0x539.de>
+
+	Patched Gobby for new obby::colour class
+
+2005-11-03  Armin Burgmeier <armin@0x539.de>
+
+	LogView::log takes optionally timestamp
+
+2005-11-03  Philipp Kern <phil@0x539.de>
+
+	Changed one translated string
+
+2005-11-03  Philipp Kern <phil@0x539.de>
+
+	Added Swedish translation, thanks to Daniel Nylander
+
+2005-11-02  Armin Burgmeier <armin@0x539.de>
+
+	Patched Gobby for new obby chat class
+
+2005-11-02  Armin Burgmeier <armin@0x539.de>
+
+	Updated translation po/pot files
+
+2005-10-28  Armin Burgmeier <armin@0x539.de>
+
+	Patched set_selection to take Gtk::TextIter and scroll to selected
+	position
+
+2005-10-28  Benjamin Herr <ben@0x539.de>
+
+	Added GNU regex wrappers (not used yet because they suck at unicode)
+
+2005-10-27  Armin Burgmeier <armin@0x539.de>
+
+	Added Gobby::Document::set_selection
+
+2005-10-29  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-10-21  Armin Burgmeier <armin@0x539.de>
+
+	Temporary menu entry for saving a session [fixes #20]
+
+2005-10-15  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-10-09  Armin Burgmeier <armin@0x539.de>
+
+	Session to restore may be given in HostDialog
+
+2005-10-09  Armin Burgmeier <armin@0x539.de>
+
+	Introduces FileEntry
+
+2005-10-09  Armin Burgmeier <armin@0x539.de>
+
+	Removed trailing semicolon after namespace
+
+2005-10-09  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-10-08  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-10-08  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-10-07  Philipp Kern <phil@0x539.de>
+
+	Wrap the lines in the chat window [fixes #99]
+
+2005-10-07  Philipp Kern <phil@0x539.de>
+
+	Escape special characters in document title [fixes #101]
+
+2005-10-07  Philipp Kern <phil@0x539.de>
+
+	Translation roundup
+
+2005-10-07  Philipp Kern <phil@0x539.de>
+
+	Show current connection status in statusbar
+
+2005-10-07  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-10-05  Philipp Kern <phil@0x539.de>
+
+	Fixed thread creation issues
+
+2005-10-05  Philipp Kern <phil@0x539.de>
+
+	Compile fix by const_casting for g_atomic_int_get
+
+2005-10-05  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-10-04  Armin Burgmeier <armin@0x539.de>
+
+	Do not block when connecting to a remote host
+
+2005-10-04  Armin Burgmeier <armin@0x539.de>
+
+	Added Atomic class for Atomic boolean operations
+
+2005-10-04  Armin Burgmeier <armin@0x539.de>
+
+	Adjusted buffer wrappers to buffer's reusability
+
+2005-10-01  Philipp Kern <phil@0x539.de>
+
+	Do not show disconnected users as joined in chat
+
+2005-10-01  Philipp Kern <phil@0x539.de>
+
+	Make connected flag in userlist dependend on the user's value
+
+2005-09-29  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-09-22  Michael Walter <cm@leetspeak.org>
+
+	Added #include to <winsock2.h> to avoid <winsock.h> being
+	included later.
+
+2005-09-22  Michael Walter <cm@leetspeak.org>
+
+	Compile fix (m_client -> m_net.reset).
+
+2005-09-22  Michael Walter <cm@leetspeak.org>
+
+	Added missing return statement.
+
+2005-09-22  Michael Walter <cm@leetspeak.org>
+
+	Unicode fixes (was calling generic version with ASCII/ANSI strings).
+
+2005-09-20  Armin Burgmeier <armin@0x539.de>
+
+	Fixed usages of user_table's iterator for non-templated user_table
+
+2005-09-19  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-09-17  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a crash on client-side connection loss
+
+2005-09-15  Philipp Kern <phil@0x539.de>
+
+	Removed pending changes and revision from the status bar
+
+2005-09-15  Philipp Kern <phil@0x539.de>
+
+	Opened new 0.3.x tree
+
+2005-09-15  Philipp Kern <phil@0x539.de>
+
+	Depend on net6-1.2 and obby-0.3
+
+2005-09-15  Armin Burgmeier <armin@0x539.de>
+
+	Avoid useless thread in JoinProgressDialog
+
+2005-09-15  Armin Burgmeier <armin@0x539.de>
+
+	Two additional checks concerning subscription
+
+2005-09-15  Philipp Kern <phil@0x539.de>
+
+	Added 0.3.0 NEWS item
+
+2005-09-05  Philipp Kern <phil@0x539.de>
+
+	Added a NEWS item to reflect the line encoding patch
+
+2005-09-02  Philipp Kern <phil@0x539.de>
+
+	Updated NEWS to reflect more changes
+
+2005-09-14  Armin Burgmeier <armin@0x539.de>
+
+	Adjustments to jupiter-using obby
+
+2005-09-13  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-09-07  Armin Burgmeier <armin@0x539.de>
+
+	Some more const-correctness
+
+2005-09-06  Armin Burgmeier <armin@0x539.de>
+
+	Adjusted buffer wrapper because peer has been renamed to user in net6
+
+2005-07-28  Armin Burgmeier <armin@0x539.de>
+
+	Fixed SEGV on win32 when creating/joining a session
+
+2005-09-05  Philipp Kern <phil@0x539.de>
+
+	Removed obsolete TODO items
+
+2005-09-05  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-09-04  Philipp Kern <phil@0x539.de>
+
+	Convert all different line encodings to UNIX ones
+
+2005-09-02  Philipp Kern <phil@0x539.de>
+
+	Added 0.2.1 and 0.2.2 to version history
+
+2005-09-01  Armin Burgmeier <armin@0x539.de>
+
+	Disable Glib's implicit charset conversion to the current locale
+
+2005-08-31  Philipp Kern <phil@0x539.de>
+
+	Fixed most unknown file extensions, added some more
+
+2005-08-21  Philipp Kern <phil@0x539.de>
+
+	Made the JoinDialog vbox non-conditional
+
+2005-08-27  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-25  Armin Burgmeier <armin@0x539.de>
+
+	net6::client::conn is now auto_ptr<connection
+
+2005-08-25  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-23  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-18  Philipp Kern <phil@0x539.de>
+
+	Updated AUTHORS to list contributors and translators
+
+2005-08-18  Philipp Kern <phil@0x539.de>
+
+	Added Spanish translation, thanks to Mario Palomo
+
+2005-08-15  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-13  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-07  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-05  Philipp Kern <phil@0x539.de>
+
+	Allow to open documents as unowned text, thanks to Ben Levitt
+	[fixes #52]
+
+2005-08-05  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-03  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-08-02  Philipp Kern <phil@0x539.de>
+
+	Non-empty documents are flagged modified [ref #72]
+
+2005-07-31  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-29  Philipp Kern <phil@0x539.de>
+
+	Updated ChangeLog for release
+
+2005-07-29  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-28  Philipp Kern <phil@0x539.de>
+
+	Updated German translation
+
+2005-07-28  Philipp Kern <phil@0x539.de>
+
+	Updates from `make update-po'
+
+2005-07-28  Armin Burgmeier <armin@0x539.de>
+
+	Win32 build fix
+
+2005-07-27  Armin Burgmeier <armin@0x539.de>
+
+	Some fixes for buffer_wrappers
+
+2005-07-27  Armin Burgmeier <armin@0x539.de>
+
+	Fixed POTFILES.in for new io/ subdir
+
+2005-07-27  Armin Burgmeier <armin@0x539.de>
+
+	Emit content_changed signal in insert/erase_after [fixes #64]
+
+2005-07-27  Armin Burgmeier <armin@0x539.de>
+
+	Queried the cached subscribe value instead of requesting it from
+	obby::document_info [fixes #63]
+
+2005-07-27  Armin Burgmeier <armin@0x539.de>
+
+	Moved buffer_wrapper to io/ subdir, enhanced portabaility
+
+2005-07-27  Philipp Kern <phil@0x539.de>
+
+	The last missing French string
+
+2005-07-27  Philipp Kern <phil@0x539.de>
+
+	Updated French translation by Peer Janssen
+
+2005-07-27  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-26  Philipp Kern <phil@0x539.de>
+
+	Better Win32 network handling announced
+
+2005-07-26  Philipp Kern <phil@0x539.de>
+
+	Added a readme and an installation guide [fixes #51]
+
+2005-07-26  Philipp Kern <phil@0x539.de>
+
+	Initialise the colour selection dialog with the current user colour
+
+2005-07-26  Armin Burgmeier <armin@0x539.de>
+
+	Column returns the real column of the text not just the nth character
+
+2005-07-26  Armin Burgmeier <armin@0x539.de>
+
+	User highlighting when name is mentioned in chat [fixes #6]
+
+2005-07-26  Armin Burgmeier <armin@0x539.de>
+
+	Prompt before closing modified documents
+
+2005-07-26  Armin Burgmeier <armin@0x539.de>
+
+	Save host/port settings into new config keys
+
+2005-07-26  Armin Burgmeier <armin@0x539.de>
+
+	Switch to tabs newly opened [fixes #27]
+
+2005-07-26  Armin Burgmeier <armin@0x539.de>
+
+	Connected/Subscribed flags in user list (fixes #12)
+
+2005-07-25  Armin Burgmeier <armin@0x539.de>
+
+	Check for valid UTF-8 after converting
+
+2005-07-25  Armin Burgmeier <armin@0x539.de>
+
+	Try to convert files with other encodings to UTF-8 [fixes #43]
+
+2005-07-25  Philipp Kern <phil@0x539.de>
+
+	Colourised tab labels [fixes #59]
+
+2005-07-25  Philipp Kern <phil@0x539.de>
+
+	Merged host and join dialog data just again, with separated ports
+	and hostnames
+
+2005-07-25  Philipp Kern <phil@0x539.de>
+
+	Added more dots to the menu items
+
+2005-07-25  Armin Burgmeier <armin@0x539.de>
+
+	Format string adjustments
+
+2005-07-25  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-24  Philipp Kern <phil@0x539.de>
+
+	Depend on obby's 0.2.x API
+
+2005-07-24  Philipp Kern <phil@0x539.de>
+
+	Improved the Zeroconf handling
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Added Window::get_current_document
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Do not allow empty document names
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Removed useless preferences_changed delegate
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Update cursor position display in statusbar by remote changes
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Modified flag [fixes #25]
+
+2005-07-24  Philipp Kern <phil@0x539.de>
+
+	Translation roundup
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Added PasswordDialog
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Corrections to file handling
+
+2005-07-24  Armin Burgmeier <armin@0x539.de>
+
+	Added toolbar settings into preferences [fixes #32]
+
+2005-07-23  Philipp Kern <phil@0x539.de>
+
+	Added some release notes directly to the sources
+
+2005-07-23  Philipp Kern <phil@0x539.de>
+
+	Adjusted the Zeroconf usage
+
+2005-07-23  Armin Burgmeier <armin@0x539.de>
+
+	First attempt to allow opening files by dropping them on a
+	document, doesn't work.
+
+2005-07-23  Armin Burgmeier <armin@0x539.de>
+
+	Drag+Drop of files into open Gobby session
+
+2005-07-23  Philipp Kern <phil@0x539.de>
+
+	Set colour implemented
+
+2005-07-21  Armin Burgmeier <armin@0x539.de>
+
+	UNDO: Use 'session' config key for both client and host
+
+2005-07-23  Armin Burgmeier <armin@0x539.de>
+
+	No fixed size for the send button
+
+2005-07-23  Armin Burgmeier <armin@0x539.de>
+
+	Removed debug log
+
+2005-07-23  Armin Burgmeier <armin@0x539.de>
+
+	Colour presets [fixes #36] Thanks tom! :D
+
+2005-07-23  Philipp Kern <phil@0x539.de>
+
+	Use a tooltip instead of an expanded label
+
+2005-07-23  Armin Burgmeier <armin@0x539.de>
+
+	Smart home/end preference
+
+2005-07-23  Armin Burgmeier <armin@0x539.de>
+
+	Re-arranged status bar
+
+2005-07-22  Armin Burgmeier <armin@0x539.de>
+
+	Some more preferences
+
+2005-07-23  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-22  Armin Burgmeier <armin@0x539.de>
+
+	typo in preferences dialog fixed
+
+2005-07-22  Armin Burgmeier <armin@0x539.de>
+
+	Local preferences, syntax submenu
+
+2005-07-22  Armin Burgmeier <armin@0x539.de>
+
+	Fixed some messup
+
+2005-07-22  Philipp Kern <phil@0x539.de>
+
+	Fixed just another conflict
+
+2005-07-22  Philipp Kern <phil@0x539.de>
+
+	A cleanup patch to fix hundreds of conflicts
+
+2005-07-22  Philipp Kern <phil@0x539.de>
+
+	Changed the GtkSourceView dependency to a hard one
+
+2005-07-22  Armin Burgmeier <armin@0x539.de>
+
+	Fixed conflict caused by phil's security page
+
+2005-07-22  Armin Burgmeier <armin@0x539.de>
+
+	Introduced working preferences, some are missing
+
+2005-07-22  Philipp Kern <phil@0x539.de>
+
+	Added a Security stub to the preferences dialog sources
+
+2005-07-21  Philipp Kern <phil@0x539.de>
+
+	Changes to the About dialog
+
+2005-07-21  Armin Burgmeier <armin@0x539.de>
+
+	Small UI fixes
+
+2005-07-21  Armin Burgmeier <armin@0x539.de>
+
+	First preferences dialog approach
+
+2005-07-21  Philipp Kern <phil@0x539.de>
+
+	Used ngettext one time, updated templates a bit
+
+2005-07-21  Armin Burgmeier <armin@0x539.de>
+
+	Changes by libtool
+
+2005-07-21  Armin Burgmeier <armin@0x539.de>
+
+	Use 'session' config key for both client and host
+
+2005-07-21  Philipp Kern <phil@0x539.de>
+
+	Use the right directory to look for pixmaps
+
+2005-07-21  Armin Burgmeier <armin@0x539.de>
+
+	Small adjustments to net6 API change
+
+2005-07-21  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-20  Armin Burgmeier <armin@0x539.de>
+
+	Connect synchoniously to the server, would cause too much
+	trouble otherwise
+
+2005-07-20  Armin Burgmeier <armin@0x539.de>
+
+	Gtk::manage dynamically allocated widgets
+
+2005-07-20  Armin Burgmeier <armin@0x539.de>
+
+	Fixed SEGV on connection error
+
+2005-07-20  Armin Burgmeier <armin@0x539.de>
+
+	Initialize Threading system in main()
+
+2005-07-20  Armin Burgmeier <armin@0x539.de>
+
+	Close icons in tab labels [ref #32]
+
+2005-07-20  Armin Burgmeier <armin@0x539.de>
+
+	Display current document in title bar
+
+2005-07-19  Armin Burgmeier <armin@0x539.de>
+
+	Progress dialogs
+
+2005-07-18  Philipp Kern <phil@0x539.de>
+
+	Added dependency on gthread-2.0, versioned one on net6
+
+2005-07-17  Armin Burgmeier <armin@0x539.de>
+
+	User authentication stuff
+
+2005-07-15  Armin Burgmeier <armin@0x539.de>
+
+	Global password
+
+2005-07-15  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-03  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-07-01  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-30  Philipp Kern <phil@0x539.de>
+
+	Highlight chat messages with the own nickname [fixes #6]
+
+2005-06-30  Philipp Kern <phil@0x539.de>
+
+	Pass the current session buffer to all client widgets
+
+2005-06-25  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-24  Philipp Kern <phil@0x539.de>
+
+	Removed two unnecessary includes from src/buffer_wrapper.cpp
+
+2005-06-24  Philipp Kern <phil@0x539.de>
+
+	French translation reviewed by Mohammed Adnene Trojette <adn@diwi.org>
+
+2005-06-24  Philipp Kern <phil@0x539.de>
+
+	Updated translation files
+
+2005-06-24  Philipp Kern <phil@0x539.de>
+
+	Updated German translation, still not fully completed
+
+2005-06-23  Philipp Kern <phil@0x539.de>
+
+	Catch-all update of the gettext stuff
+
+2005-06-23  Philipp Kern <phil@0x539.de>
+
+	Added French translation of Peer Janssen <peer@baden-online.de>
+	[fixes #50]
+
+2005-06-23  Armin Burgmeier <armin@0x539.de>
+
+	Fixes for changed obby record API
+
+2005-06-17  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-16  Philipp Kern <phil@0x539.de>
+
+	Removed autogen.sh, it is superseded by autoreconf
+
+2005-06-16  Philipp Kern <phil@0x539.de>
+
+	Return a const char pointer from gettext
+
+2005-06-15  Philipp Kern <phil@0x539.de>
+
+	Added word wrapping
+
+2005-06-15  Armin Burgmeier <armin@0x539.de>
+
+	Replace all non-ascii characters in UI XML [fixes #44]
+
+2005-06-14  Philipp Kern <phil@0x539.de>
+
+	One new string to translate, updated debconf template
+
+2005-06-14  Philipp Kern <phil@0x539.de>
+
+	Added missing conditionals related to GtkSourceView
+
+2005-06-14  Philipp Kern <phil@0x539.de>
+
+	Gobby depends on obby 0.2.0 or higher
+
+2005-06-14  Armin Burgmeier <armin@0x539.de>
+
+	Using obby::format_string instead of std::stringstream
+
+2005-06-14  Armin Burgmeier <armin@0x539.de>
+
+	Enable highlighting when subscribed
+
+2005-06-14  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-13  Armin Burgmeier <armin@0x539.de>
+
+	Adjustments for synchronisation on request.
+	The core feature seems to work. The user interface, however,
+	may be discussed and changed later on. This is just a first try
+	to test the feature and to make Gobby compile with it.
+
+2005-06-13  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-12  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-10  Philipp Kern <phil@0x539.de>
+
+	Preliminary, but working Zeroconf support [ref #17]
+
+2005-06-09  Philipp Kern <phil@0x539.de>
+
+	Revised the German translation
+
+2005-06-09  Philipp Kern <phil@0x539.de>
+
+	Corrected AE color to BE colour
+
+2005-06-09  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-08  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-07  Armin Burgmeier <armin@0x539.de>
+
+	Adjusted code for changes user flags in libobby
+
+2005-06-07  Philipp Kern <phil@0x539.de>
+
+	Modified history by adding the missing 0.1.1 NEWS entry
+
+2005-06-07  Philipp Kern <phil@0x539.de>
+
+	Added dependency on Automake 1.9; added missing NEWS check
+
+2005-06-07  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-06  Philipp Kern <phil@0x539.de>
+
+	Ship gobby.desktop in the distribution
+
+2005-06-06  Armin Burgmeier <armin@0x539.de>
+
+	Adjusted for net6's error code transmission (#16)
+
+2005-06-06  Armin Burgmeier <armin@0x539.de>
+
+	Better win32 network implementation [fixes #2]
+
+2005-06-05  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-04  Philipp Kern <phil@0x539.de>
+
+	Updated ChangeLog for release
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a segfault which occured sometimes when closing documents
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	Introduced DefaultDialog to allow to press Enter in dialogs
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	Show up user-colourising text immediately [fixes #22]
+
+2005-06-04  Philipp Kern <phil@0x539.de>
+
+	Removed the useless ENABLE_NLS check as we hard-depend on gettext
+
+2005-06-04  Philipp Kern <phil@0x539.de>
+
+	Translated missing strings into German
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	Use another default color as black [fixes #34]
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	Remove entities in on_folder_tab_switched
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	A much better fix for #24
+
+2005-06-04  Philipp Kern <phil@0x539.de>
+
+	Updated the gettext template and the German translation
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	Removed Umlauts from Language file names to build valid XML,
+	renamed Document to View in menu
+
+2005-06-04  Armin Burgmeier <armin@0x539.de>
+
+	Update user colour in key press event handler if possible [fixes #24]
+	If someone copied a part of the buffer, the tags applied to it
+	were copied, too. If he pasted it then, the insert-text signal
+	handler could not remove those tags because they were not yet
+	applied. So it ended up in having to user colour tags applied to
+	the new range of text: The one from the user who pasted the text and
+	the one from the user who wrote the original text. This is solved
+	by adding tags followed by a key press event not anymore in the
+	insert-text event handler but in the key press event handler,
+	which is called later, when the pasted tag already has been applied.
+	Then, it may be removed and the one and only user colour tag
+	can be set.
+
+2005-06-03  Philipp Kern <phil@0x539.de>
+
+	Use "n unsynced change(s)" instead of "in sync"
+
+2005-06-03  Benjamin Herr <ben@0x539.de>
+
+	Fixed my messup fixing the chat multiline handling
+
+2005-06-03  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-02  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-02  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-02  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-02  Trac <trac@darcs.0x539.de>
+
+	TODO updated
+
+2005-06-02  Philipp Kern <phil@0x539.de>
+
+	Merging the multi-line chat fixes
+
+2005-05-31  Benjamin Herr <ben@0x539.de>
+
+	Splitting up received lines of chat by newlines, added todo items
+
+2005-06-02  Armin Burgmeier <armin@0x539.de>
+
+	Menu to switch the syntax colouring scheme [fixes #4]
+
+2005-06-01  Armin Burgmeier <armin@0x539.de>
+
+	Option to disable line numbers [fixes #7]
+
+2005-06-01  Armin Burgmeier <armin@0x539.de>
+
+	Show revision and sync state in statusbar [fixes #13]
+
+2005-06-01  Armin Burgmeier <armin@0x539.de>
+
+	Fixed some errors caused by recent libobby API changes
+
+2005-05-30  Armin Burgmeier <armin@0x539.de>
+
+	Set correct notebook tab after startup
+
+2005-05-29  Armin Burgmeier <armin@0x539.de>
+
+	Use of local_buffer instead of dynamic casts [ref #9]
+
+2005-05-29  Armin Burgmeier <armin@0x539.de>
+
+	Initialise size of paned widgets [fixes #5]
+
+2005-05-29  Armin Burgmeier <armin@0x539.de>
+
+	Allow the user to save documents after connection loss [fixes #1]
+
+2005-05-29  Armin Burgmeier <armin@0x539.de>
+
+	Disable close and save buttons if no more documents are open
+
+2005-05-28  Armin Burgmeier <armin@0x539.de>
+
+	Send lines separately in chat
+
+2005-05-26  Philipp Kern <phil@0x539.de>
+
+	Changed the desktop item's name to be a bit more compilant
+
+2005-05-26  Armin Burgmeier <armin@0x539.de>
+
+	Segfault fixed some time ago...
+
+2005-05-22  Philipp Kern <phil@0x539.de>
+
+	Ebuild change: Depend on gtksourceview, use GNOME integration
+
+2005-05-21  Philipp Kern <phil@0x539.de>
+
+	Load icon from file when compiled --with-gnome
+
+2005-05-21  Philipp Kern <phil@0x539.de>
+
+	Resized the 128x128 XPM to 32x32
+
+2005-05-20  Philipp Kern <pkern@debian.org>
+
+	Added missing assert include
+
+2005-05-20  Philipp Kern <phil@0x539.de>
+
+	Added build-dependency on net6-1.0
+
+2005-05-19  Philipp Kern <phil@0x539.de>
+
+	configure now detects the presence of GtkSourceView automatically
+
+2005-05-19  Philipp Kern <phil@0x539.de>
+
+	Makefile.am had a wrong conditional statement
+
+2005-05-15  Philipp Kern <phil@0x539.de>
+
+	Serious bug exploited, po/ permission-related build fix
+
+2005-05-15  Philipp Kern <phil@0x539.de>
+
+	Added GNOME integration
+
+2005-05-11  Philipp Kern <phil@0x539.de>
+
+	Added gzip'ed XPM version of the Gobby logo
+
+2005-05-10  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a segfault which occured sometimes on the exit
+
+2005-05-08  Armin Burgmeier <armin@0x539.de>
+
+	Shuffled some files around, fixed non-gtksourceview build [phil]
+
+2005-05-08  Armin Burgmeier <armin@0x539.de>
+
+	WIN32 build fix (resource files build correctly) [phil]
+
+2005-05-08  Armin Burgmeier <armin@0x539.de>
+
+	gobby resource file until autotools are able to build it
+
+2005-05-08  Armin Burgmeier <armin@0x539.de>
+
+	Sized gobby.ico to 48x48
+	Bigger icons just waste memory on windows, they will never be shown in
+	their full size.
+
+2005-05-08  Philipp Kern <phil@0x539.de>
+
+	Try to build gobby.res from top-level Makefile.am
+
+2005-05-08  Philipp Kern <phil@0x539.de>
+
+	Use Automake for win32/ subdirectory
+
+2005-05-08  Philipp Kern <phil@0x539.de>
+
+	Fixed make dist
+
+2005-05-08  Philipp Kern <phil@0x539.de>
+
+	Delocalised two error strings
+
+2005-05-08  Philipp Kern <phil@0x539.de>
+
+	po reflect new line numbers within the source files
+
+2005-05-08  Philipp Kern <phil@0x539.de>
+
+	Include contrib/ and win32/ in make dist
+
+2005-05-08  Philipp Kern <phil@0x539.de>
+
+	Added more WIN32 build stuff
+
+2005-05-07  Philipp Kern <phil@0x539.de>
+
+	Suppress the console window in favour of a real GUI application
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Win32 does not have localtime_r
+	We do not need thread safety anyway...
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	make dist requires ChangeLog...
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	win32 resource file for the gobby icon
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	User colourising
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Added keyboard shortcuts
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Moved language manager to folder
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Replaced _ macro by an inline function
+
+2005-05-07  Armin Burgmeier <armin@0x539.de>
+
+	Separate mime map
+
+2005-05-06  Armin Burgmeier <armin@0x539.de>
+
+	StatusBar showing cursor position and current language
+
+2005-05-06  Philipp Kern <phil@0x539.de>
+
+	Added more TODO items
+
+2005-05-05  Philipp Kern <phil@0x539.de>
+
+	Made the TODO list more readable
+
+2005-05-05  Philipp Kern <phil@0x539.de>
+
+	A missing shell call produced build errors
+
+2005-05-05  Philipp Kern <phil@0x539.de>
+
+	Set scripts executable and use a partial checkout in the ebuild
+
+2005-05-05  Philipp Kern <phil@0x539.de>
+
+	Added missing po/Makefile.in.in
+
+2005-05-05  Philipp Kern <phil@0x539.de>
+
+	Gobby i18n, German translation added
+
+2005-05-05  Philipp Kern <phil@0x539.de>
+
+	Ignore more intermediate files
+
+2005-05-05  Philipp Kern <phil@0x539.de>
+
+	Added mkinstalldirs from Autotools
+
+2005-05-05  Armin Burgmeier <armin@0x539.de>
+
+	auto* updated some auto-generated files...
+
+2005-05-05  Armin Burgmeier <armin@0x539.de>
+
+	Gobby sends positions now in bytes and no longer in characters.
+	libobby takes all positions in bytes to having not to care about
+	different encodings.
+
+2005-05-04  Philipp Kern <phil@0x539.de>
+
+	Display a Gtk::MessageDialog on an unhandled exception
+
+2005-04-27  Philipp Kern <phil@0x539.de>
+
+	Fixed gobby to compile without gtksourceview
+
+2005-04-26  Philipp Kern <phil@0x539.de>
+
+	Insert parameter placeholder corrected
+
+2005-04-25  Philipp Kern <phil@0x539.de>
+
+	Ugly fix to get the times right
+
+2005-04-25  Armin Burgmeier <armin@0x539.de>
+
+	Implemented timestamps in logview
+
+2005-04-25  Philipp Kern <phil@0x539.de>
+
+	Some corrections to the file types
+
+2005-04-24  Philipp Kern <phil@0x539.de>
+
+	Set current name in the Save FileChooser
+
+2005-04-24  Philipp Kern <phil@0x539.de>
+
+	Added two new TODO items
+
+2005-04-22  Armin Burgmeier <armin@0x539.de>
+
+	Code highlighting by file extension
+
+2005-04-22  Armin Burgmeier <armin@0x539.de>
+
+	Some GtkSourceView wrapper fixes and extensions
+
+2005-04-22  Armin Burgmeier <armin@0x539.de>
+
+	GtkSourceLanguagesManager wrapper
+
+2005-04-21  Armin Burgmeier <armin@0x539.de>
+
+	Wrapped GtkSourceLanguage
+
+2005-04-21  Armin Burgmeier <armin@0x539.de>
+
+	Use a monospaced font for the TextView
+
+2005-04-20  Armin Burgmeier <armin@0x539.de>
+
+	GtkSourceBuffer wrapper
+
+2005-04-18  Philipp Kern <phil@0x539.de>
+
+	Save document was missing in the source
+
+2005-04-17  Philipp Kern <phil@0x539.de>
+
+	Check for howl in libobby
+
+2005-04-17  Armin Burgmeier <armin@0x539.de>
+
+	sourceview/-subdir for sourceview wrappers, Gtk::SourceView
+	actually works
+
+2005-04-17  Philipp Kern <phil@0x539.de>
+
+	Gather host information correctly
+
+2005-04-17  Armin Burgmeier <armin@0x539.de>
+
+	Win32 buffer_wrappers using a timer
+
+2005-04-15  Armin Burgmeier <armin@0x539.de>
+
+	Added tom as artist
+
+2005-04-15  Armin Burgmeier <armin@0x539.de>
+
+	Added inline gobby icon
+
+2005-04-15  Philipp Kern <phil@0x539.de>
+
+	Added artwork credits
+
+2005-04-15  Thomas Glatt <tom@0x539.de>
+
+	Added Gobby artwork
+
+2005-04-15  Armin Burgmeier <armin@0x539.de>
+
+	Call correct base_function in Gobby::Host::on_connect
+
+2005-04-15  Armin Burgmeier <armin@0x539.de>
+
+	Adjusted buffer_wrapper for net6 API corrections
+
+2005-04-15  Armin Burgmeier <armin@0x539.de>
+
+	Added some first wrapper code for GtkSourceView -- disfunctional
+
+2005-04-15  Philipp Kern <phil@0x539.de>
+
+	Added framework to use SourceView instead of TextView
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Added boringfile
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Added save document hooks, but w/o real functionality
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Use the new include path of libobby
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Check for obby-1.0 instead of lobby-1.0
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Implemented open document
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Removed ui.xml from the ebuild
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	XML UI descriptions are now present within src/header.cpp
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Compile the right buffer wrappers for their corresponding platform
+
+2005-04-14  Philipp Kern <phil@0x539.de>
+
+	Fix buffer wrapper to use generic on !WIN32
+
+2005-04-12  Armin Burgmeier <armin@0x539.de>
+
+	Splitted buffer_wrapper up to buffer_wrapper_generic and
+	buffer_wrapper. buffer_wrapper_win32 will follow.
+
+2005-04-11  Philipp Kern <phil@0x539.de>
+
+	Implemented close a bit more correctly, updated TODO
+
+2005-04-11  Philipp Kern <phil@0x539.de>
+
+	Remove current document, *hopefully* w/o memory leak
+
+2005-04-10  Thomas Glatt <tom@0x539.de>
+
+	Ebuild for gobby
+
+2005-04-10  Philipp Kern <phil@0x539.de>
+
+	Resolved conflict in Makefile.am related to WIN32 build
+
+2005-04-10  Philipp Kern <phil@0x539.de>
+
+	Added WIN32 build support
+
+2005-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Win32 build fixes; buffer_wrappers still use a timer on win32
+
+2005-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Distribute header files with 'make dist'
+
+2005-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Replaced ERROR with IOERROR in buffer_wrappers according to
+	new net6 API
+
+2005-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Fixed missing <cassert> include in buffer_wrapper.cpp
+
+2005-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Use the file name of the file to open as document title
+
+2005-04-09  Philipp Kern <phil@0x539.de>
+
+	Relicensed under the GPL
+	Reasoning: There was never the intention to license gobby under
+	the LGPL. COPYING included the GPL but all the license headers referred
+	to the LGPL. This is now fixed in accordance with all the
+	contributing authors.
+	ACK:
+	 - Armin Burgmeier <armin@0x539.de>
+	 - Philipp Kern <phil@0x539.de>
+	 - Benjamin Herr <ben@0x539.de>
+
+2005-04-09  Armin Burgmeier <armin@0x539.de>
+
+	Watching on Glib::signal_io() instead of using a timer
+
+2005-04-08  Armin Burgmeier <armin@0x539.de>
+
+	Fixed a crash in gobby which occured if a connection has been lost
+
+2005-04-08  Armin Burgmeier <armin@0x539.de>
+
+	Changed Menu-Action 'Help' to 'MenuHelp', for consistency with other
+	actions
+
+2005-04-08  Armin Burgmeier <armin@0x539.de>
+
+	Resolved a conflict in inc/window.hpp and src/window.cpp
+
+2005-04-08  Armin Burgmeier <armin@0x539.de>
+
+	Document creation
+
+2005-04-08  Philipp Kern <phil@0x539.de>
+
+	Added about dialog
+
+2005-04-08  Benjamin Herr <ben@0x539.de>
+
+	Added entrydialog to prompt for strings
+
+2005-04-08  Armin Burgmeier <armin@0x539.de>
+
+	Fixed gobby synchronization
+
+2005-04-08  Benjamin Herr <ben@0x539.de>
+
+	Added menu items for *Document, fixed typo
+
+2005-04-08  Philipp Kern <phil@0x539.de>
+
+	Moved config_.hpp to config.hpp, introduced features.hpp
+
+2005-04-07  Philipp Kern <phil@0x539.de>
+
+	Added initial NEWS content and Ben to AUTHORS
+
+2005-04-07  Philipp Kern <phil@0x539.de>
+
+	Added document toolbar button stubs
+
+2005-04-07  Philipp Kern <phil@0x539.de>
+
+	Receive document title from libobby
+
+2005-04-07  Armin Burgmeier <armin@0x539.de>
+
+	h4ck
+
+2005-04-07  Benjamin Herr <ben@0x539.de>
+
+	Todo: Exceptions?
+
+2005-04-07  Benjamin Herr <ben@0x539.de>
+
+	Fixed window to also connect chat signals on join
+
+2005-04-07  Benjamin Herr <ben@0x539.de>
+
+	Fixed indenting spaces to be tabs
+
+2005-04-07  Armin Burgmeier <armin@0x539.de>
+
+	Document synchronisation thorugh libobby
+
+2005-04-07  Benjamin Herr <ben@0x539.de>
+
+	Added handling of chat events from m_chat and m_buffer
+
+2005-04-05  Armin Burgmeier <armin@0x539.de>
+
+	Initial TODO file
+
+2005-04-04  Philipp Kern <phil@0x539.de>
+
+	Depend on gtkmm-2.4 >= 2.6.0
+
+2005-04-03  Armin Burgmeier <armin@0x539.de>
+
+	Document class representing an obby::document
+
+2005-04-03  Armin Burgmeier <armin@0x539.de>
+
+	Event delegations
+
+2005-04-03  Armin Burgmeier <armin@0x539.de>
+
+	XML config file in home dir; requires libxml++
+
+2005-04-02  Armin Burgmeier <armin@0x539.de>
+
+	Added create & join dialogs
+
+2005-04-02  Armin Burgmeier <armin@0x539.de>
+
+	Skeleton of the UI
+
+2005-04-02  Armin Burgmeier <armin@0x539.de>
+
+	Header, GTK naming scheme
+
+2005-03-30  Philipp Kern <phil@0x539.de>
+
+	Autotoolised gobby
+
+2005-03-30  Armin Burgmeier <armin@0x539.de>
+
+	Empty gobby window
