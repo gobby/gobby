@@ -17,6 +17,7 @@
  */
 
 #include "util/config.hpp"
+#include "util/file.hpp"
 #include "util/i18n.hpp"
 
 #include <glibmm/miscutils.h>
@@ -25,82 +26,10 @@
 #include <libxml++/parsers/domparser.h>
 #include <libxml++/exceptions/exception.h>
 
-// For mkdir / CreateDirectory
-#ifdef WIN32
-#include <windows.h>
-#else
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <cerrno>
-#endif
-
-#include <cstring>
 #include <stdexcept>
 
 namespace
 {
-	// Creates a new directory
-	void create_directory(const char* path)
-	{
-		using namespace Gobby;
-#ifdef WIN32
-		if(CreateDirectoryA(path, NULL) == FALSE)
-		{
-			LPVOID msgbuf;
-			DWORD err = GetLastError();
-
-			FormatMessageA(
-				FORMAT_MESSAGE_ALLOCATE_BUFFER |
-				FORMAT_MESSAGE_FROM_SYSTEM,
-				NULL,
-				err,
-				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-				reinterpret_cast<LPSTR>(&msgbuf),
-				0,
-				NULL
-			);
-
-			std::string error_message = static_cast<LPSTR>(msgbuf);
-			LocalFree(msgbuf);
-
-			// TODO: Convert to UTF-8?
-
-			throw Gobby::Config::Error(
-				Gobby::Config::Error::PATH_CREATION_FAILED,
-				Glib::ustring::compose(
-					_("Could not create directory "
-					  "\"%1\": %2"), std::string(path),
-					error_message));
-		}
-#else
-		if(mkdir(path, 0755) == -1)
-		{
-			throw Gobby::Config::Error(
-				Gobby::Config::Error::PATH_CREATION_FAILED,
-				Glib::ustring::compose(
-					_("Could not create directory "
-					  "\"%1\": %2"), std::string(path),
-					strerror(errno)));
-		}
-#endif
-	}
-
-	void create_path_to(const std::string& to)
-	{
-		// Directory exists, nothing to do
-		if(Glib::file_test(to, Glib::FILE_TEST_IS_DIR) )
-			return;
-
-		// Find path to the directory to create
-		Glib::ustring path_to = Glib::path_get_dirname(to);
-
-		// Create this path, if it doesn't exists
-		create_path_to(path_to);
-
-		// Create new directory
-		create_directory(to.c_str() );
-	}
-
 	template<typename Map>
 	typename Map::mapped_type ptrmap_find(const Map& map,
 	                                      const typename Map::key_type& key)
@@ -109,21 +38,6 @@ namespace
 		if(iter == map.end() ) return NULL;
 		return iter->second;
 	}
-}
-
-Gobby::Config::Error::Error(Code error_code,
-                            const Glib::ustring& error_message):
-	Glib::Error(
-		g_quark_from_static_string("GOBBY_CONFIG_ERROR"),
-		static_cast<int>(error_code),
-		error_message
-	)
-{
-}
-
-Gobby::Config::Error::Code Gobby::Config::Error::code() const
-{
-	return static_cast<Code>(gobject_->code);
 }
 
 Gobby::Config::Entry::Entry(const Glib::ustring& name):
@@ -317,7 +231,7 @@ Gobby::Config::~Config()
 	try
 	{
 		Glib::ustring dirname = Glib::path_get_dirname(m_filename);
-		create_path_to(dirname);
+		create_directory_with_parents(dirname);
 
 		document.write_to_file_formatted(m_filename, "UTF-8");
 	}

@@ -1,3 +1,45 @@
+2008-06-22  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/util/file.hpp:
+	* src/util/file.cpp:
+	* inc/util/Makefile.am:
+	* src/util/Makefile.am: Added file.hpp/.cpp containing utility
+	functions to deal with the filesystem. Currently, a function that
+	creates a directory and all its parent if necessary is implemented.
+
+	* inc/util/config.hpp:
+	* src/util/config.cpp: Make use of that function in the destructor.
+
+	* inc/util/resolv.hpp: Include <memory> since we use std::auto_ptr<>.
+
+	* inc/operations/documentinfostorage.hpp:
+	* src/operations/documentinfostorage.cpp: Added class that stores
+	local information on known documents such as the local location, the
+	encoding and the eol style.
+
+	* inc/operations/operation-open.hpp:
+	* src/operations/operation-open.cpp: Implemented opening documents
+	from files, via giomm.
+
+	* inc/operations/Makefile.am:
+	* src/operations/Makefile.am: Add the new source files to the build.
+
+	* inc/operations/operations.hpp:
+	* src/operations/operations.cpp: Added encoding parameter to
+	create_document(), added DocumentInfoStorage member.
+
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Added functionlity for the Open menu
+	item.
+
+	* inc/window.hpp:
+	* src/window.cpp: Instantiate a DocumentInfoStorage, pass to
+	Operations.
+
+	* src/main.cpp: Initialize giomm.
+
+	* configure.ac: Added giomm as a dependency.
+
 2008-05-19  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/Makefile.am:

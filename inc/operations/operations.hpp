@@ -19,6 +19,7 @@
 #ifndef _GOBBY_OPERATIONS_OPERATIONS_HPP_
 #define _GOBBY_OPERATIONS_OPERATIONS_HPP_
 
+#include "operations/documentinfostorage.hpp"
 #include "core/statusbar.hpp"
 
 #include <libinfinity/client/infc-browser.h>
@@ -46,12 +47,17 @@ public:
 			return m_operations.m_status_bar;
 		}
 
+		DocumentInfoStorage& get_info_storage()
+		{
+			return m_operations.m_info_storage;
+		}
+
 		void remove() { m_operations.remove_operation(this); }
 	private:
 		Operations& m_operations;
 	};
 
-	Operations(StatusBar& status_bar);
+	Operations(DocumentInfoStorage& info_storage, StatusBar& status_bar);
 	~Operations();
 
 	void create_document(InfcBrowser* browser,
@@ -61,11 +67,13 @@ public:
 	void create_document(InfcBrowser* browser,
 	                     InfcBrowserIter* parent,
 	                     const Glib::ustring name,
-	                     const Glib::ustring& from_uri);
+	                     const Glib::ustring& from_uri,
+	                     const char* encoding);
 
 protected:
 	void remove_operation(Operation* operation);
 
+	DocumentInfoStorage& m_info_storage;
 	StatusBar& m_status_bar;
 
 	typedef std::set<Operation*> OperationSet;

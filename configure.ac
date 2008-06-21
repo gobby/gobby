@@ -36,7 +36,7 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-required_libs="libxml++-2.6 glibmm-2.4 >= 2.16.0 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0 libinfinity-1.0 libinftext-1.0 libinfgtk-1.0 libinftextgtk-1.0"
+required_libs="libxml++-2.6 glibmm-2.4 >= 2.16.0 giomm-2.4 >= 2.16.0 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0 libinfinity-1.0 libinftext-1.0 libinfgtk-1.0 libinftextgtk-1.0"
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [$required_libs])

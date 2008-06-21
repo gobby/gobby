@@ -17,6 +17,7 @@
  */
 
 #include "operations/operation-new.hpp"
+#include "operations/operation-open.hpp"
 #include "operations/operations.hpp"
 
 #include "core/noteplugin.hpp"
@@ -24,8 +25,9 @@
 
 Gobby::Operations::Operation::~Operation() {}
 
-Gobby::Operations::Operations(StatusBar& status_bar):
-	m_status_bar(status_bar)
+Gobby::Operations::Operations(DocumentInfoStorage& info_storage,
+                              StatusBar& status_bar):
+	m_info_storage(info_storage), m_status_bar(status_bar)
 {
 }
 
@@ -48,8 +50,11 @@ void Gobby::Operations::create_document(InfcBrowser* browser,
 void Gobby::Operations::create_document(InfcBrowser* browser,
                                         InfcBrowserIter* parent,
                                         const Glib::ustring name,
-                                        const Glib::ustring& from_uri)
+                                        const Glib::ustring& from_uri,
+					const char* encoding)
 {
+	m_operations.insert(new OperationOpen(*this, browser, parent, name,
+	                                      from_uri, encoding));
 }
 
 void Gobby::Operations::remove_operation(Operation* operation)

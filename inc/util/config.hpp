@@ -37,17 +37,6 @@ namespace Gobby
 class Config
 {
 public:
-	class Error: public Glib::Error
-	{
-	public:
-		enum Code {
-			PATH_CREATION_FAILED
-		};
-
-		Error(Code error_code, const Glib::ustring& error_message);
-		Code code() const;
-	};
-
 	/** @brief Abstract base class for configuration file entries.
 	 */
 	class Entry

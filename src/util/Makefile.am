@@ -4,6 +4,7 @@ libgobby_util_a_SOURCES = \
 	color.cpp \
 	config.cpp \
 	encoding.cpp \
+	file.cpp \
 	i18n.cpp \
 	resolv.cpp \
 	serialize.cpp

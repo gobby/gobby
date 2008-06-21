@@ -88,6 +88,7 @@ protected:
 	Browser m_browser;
 
 	// Functionality
+	DocumentInfoStorage m_info_storage;
 	Operations m_operations;
 
 	BrowserCommands m_commands_browser;

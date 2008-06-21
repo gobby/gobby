@@ -16,34 +16,14 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_RESOLV_HPP_
-#define _GOBBY_RESOLV_HPP_
+#ifndef _GOBBY_DIR_HPP_
+#define _GOBBY_DIR_HPP_
 
-#include <libinfinity/common/inf-ip-address.h>
-
-#include <glibmm/ustring.h>
-#include <sigc++/sigc++.h>
-
-#include <stdexcept>
-#include <memory>
+#include <string>
 
 namespace Gobby
 {
-
-struct ResolvHandle;
-
-typedef sigc::slot<void, ResolvHandle*, InfIpAddress*, guint>
-	SlotResolvDone;
-typedef sigc::slot<void, ResolvHandle*, const std::runtime_error&>
-	SlotResolvError;
-
-ResolvHandle* resolve(const Glib::ustring& hostname,
-                      const Glib::ustring& service,
-                      const SlotResolvDone& done_slot,
-                      const SlotResolvError& error_slot);
-
-void cancel(ResolvHandle* handle);
-
+	void create_directory_with_parents(const std::string& path);
 }
 
-#endif // _GOBBY_RESOLV_HPP_
+#endif // _GOBBY_DIR_HPP_

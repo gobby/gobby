@@ -24,10 +24,12 @@
 
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
+#include <giomm/init.h>
 #include <glibmm/optionentry.h>
 #include <glibmm/optiongroup.h>
 #include <glibmm/optioncontext.h>
 
+#include <libintl.h> // bindtextdomain
 #include <iostream>
 
 namespace
@@ -47,6 +49,7 @@ int main(int argc, char* argv[]) try
 {
 	g_thread_init(NULL);
 	gnutls_global_init();
+	Gio::init();
 
 	setlocale(LC_ALL, "");
 	bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
