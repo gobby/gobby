@@ -1,5 +1,11 @@
 2008-06-22  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/operations/documentinfostorage.hpp:
+	* src/operations/documentinfostorage.cpp: Disconnect from the
+	set-browser signal handler on destruction.
+
+2008-06-21  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/util/file.hpp:
 	* src/util/file.cpp:
 	* inc/util/Makefile.am:

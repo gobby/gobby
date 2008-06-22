@@ -114,6 +114,7 @@ public:
 		                            m_node_removed_handler);
 	}
 
+private:
 	InfcBrowser* m_browser;
 	gulong m_begin_explore_handler;
 	gulong m_node_removed_handler;
@@ -144,8 +145,9 @@ Gobby::DocumentInfoStorage::DocumentInfoStorage(InfGtkBrowserModel* model):
 
 	g_object_ref(m_model);
 
-	g_signal_connect(G_OBJECT(m_model), "set-browser",
-	                 G_CALLBACK(&on_set_browser_static), this);
+	m_set_browser_handler = g_signal_connect(
+		G_OBJECT(m_model), "set-browser",
+		G_CALLBACK(&on_set_browser_static), this);
 }
 
 Gobby::DocumentInfoStorage::~DocumentInfoStorage()
@@ -191,14 +193,14 @@ Gobby::DocumentInfoStorage::~DocumentInfoStorage()
 		          e.what());
 	}
 
+	g_signal_handler_disconnect(m_model, m_set_browser_handler);
+	g_object_unref(m_model);
+
 	for(BrowserMap::iterator iter = m_browsers.begin();
 	    iter != m_browsers.end(); ++ iter)
 	{
 		delete iter->second;
 	}
-
-	g_object_unref(m_model);
-	// TODO: Disconnect signal handlers
 }
 
 void Gobby::DocumentInfoStorage::init(xmlpp::Element* node)
@@ -268,6 +270,7 @@ void Gobby::DocumentInfoStorage::on_set_browser(GtkTreeIter* iter,
 
 			delete iter->second;
 			m_browsers.erase(iter);
+			g_object_unref(old_browser);
 		}
 	}
 }

@@ -93,6 +93,7 @@ protected:
 	typedef std::map<InfcBrowser*, BrowserConn*> BrowserMap;
 	BrowserMap m_browsers;
 
+	gulong m_set_browser_handler;
 	InfGtkBrowserModel* m_model;
 
 private:
