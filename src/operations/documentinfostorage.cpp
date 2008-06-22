@@ -78,6 +78,8 @@ namespace
 			else if(child->get_name() == "encoding")
 				info.encoding = text->get_content();
 		}
+
+		return root;
 	}
 
 	// Location to store the documents file:
@@ -164,7 +166,7 @@ Gobby::DocumentInfoStorage::~DocumentInfoStorage()
 		{
 			xmlpp::Element* child = root->add_child("document");
 
-			xmlpp::Element* root_child = root->add_child("root");
+			xmlpp::Element* root_child = child->add_child("root");
 			root_child->set_child_text(iter->first);
 
 			xmlpp::Element* uri_child = child->add_child("uri");

@@ -249,6 +249,8 @@ bool Gobby::OperationOpen::on_idle()
 	char* pos;
 	const char to_find[] = { '\r', '\n', '\0' };
 
+	/* TODO: Write directly into the buffer here,
+	 * instead of memmoving stuff. */
 	while( (pos = std::find_first_of<char*>(prev, outbuf,
 		to_find, to_find + sizeof(to_find))) != outbuf)
 	{

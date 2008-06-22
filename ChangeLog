@@ -1,5 +1,14 @@
 2008-06-22  Armin Burgmeier  <armin@0x539.de>
 
+	* src/operations/documentinfostorage.cpp: Added return value for
+	load_document, fixed storage of "root" node (was in top-level
+	<documents> instead of <document>), 
+
+	* src/operations/operation-open.cpp: Added a TODO comment to remmove
+	memmove.
+
+2008-06-22  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/operations/documentinfostorage.hpp:
 	* src/operations/documentinfostorage.cpp: Disconnect from the
 	set-browser signal handler on destruction.
