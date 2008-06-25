@@ -1,3 +1,10 @@
+2008-06-25  Yarek Tyshchenko  <yarek@britishgraphics.co.uk>
+
+	* configure.ac: Require ige-mac-integration when Gobby is complied
+	natively on OS X.
+
+	* src/header.cpp: Integrate the menu bar into the main OS X menu bar.
+
 2008-06-03  Philipp Kern  <phil@0x539.de>
 
 	* src/logview.cpp: re-enable the cursor for accessibility

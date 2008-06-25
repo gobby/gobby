@@ -36,6 +36,16 @@ AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
 required_libs="libxml++-2.6 gtkmm-2.4 >= 2.6.0 gthread-2.0 net6-1.3 obby-0.4 >= 0.4.5"
 
+# Check if we are running on OS X, for special link handling.
+if test "x$build_vendor" = "xapple" ; then
+  AC_DEFINE([OSX], 1, [Define whether we are running on Mac OS X.])
+  target=`pkg-config --variable=target gtk+-2.0`
+  if test "$target" = "quartz" ; then
+    required_libs="$required_libs ige-mac-integration"
+  fi
+fi
+AC_CACHE_SAVE
+
 # GtkSourceView2 support
 AC_ARG_WITH([gtksourceview2],
             AS_HELP_STRING([--with-gtksourceview2],
@@ -104,12 +114,6 @@ if test "x$ac_cv_lib_obby_obby_has_avahi" = "xyes" ; then
 	PKG_CHECK_MODULES([avahi], [avahi-glib])
 fi
 AM_CONDITIONAL(WITH_AVAHI, test x$ac_cv_lib_obby_obby_has_avahi = xyes)
-
-# Check if we are running on OS X, for special link handling.
-if test "x$build_vendor" = "xapple" ; then
-  AC_DEFINE([OSX], 1, [Define whether we are running on Mac OS X.])
-fi
-AC_CACHE_SAVE
 
 # Glib i18n/gettext support.
 ALL_LINGUAS="ca de es fr ja ko it pl pt pt_BR ru sv zh_CN"
