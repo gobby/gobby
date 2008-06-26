@@ -38,6 +38,16 @@ AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
 required_libs="libxml++-2.6 glibmm-2.4 >= 2.16.0 giomm-2.4 >= 2.16.0 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0 libinfinity-1.0 libinftext-1.0 libinfgtk-1.0 libinftextgtk-1.0"
 
+# Check if we are running on OS X, for special link handling.
+if test "x$build_vendor" = "xapple" ; then
+  AC_DEFINE([OSX], 1, [Define whether we are running on Mac OS X.])
+  target=`pkg-config --variable=target gtk+-2.0`
+  if test "$target" = "quartz" ; then
+    required_libs="$required_libs ige-mac-integration"
+  fi
+fi
+AC_CACHE_SAVE
+
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [$required_libs])
 AC_CACHE_SAVE

@@ -19,8 +19,13 @@
 #include "core/header.hpp"
 #include "core/iconmanager.hpp"
 #include "util/i18n.hpp"
+#include "features.hpp" // For OSX
 
 #include <gtkmm/stock.h>
+
+#ifdef OSX
+#include <ige-mac-menu.h>
+#endif
 
 namespace {
 	Glib::ustring ui_desc = 
@@ -370,7 +375,28 @@ Gobby::Header::Header(Preferences& preferences,
 		);
 	}
 
+#ifdef OSX
+	ige_mac_menu_set_menu_bar(GTK_MENU_SHELL(m_menubar->gobj()));
+	
+	ige_mac_menu_set_quit_menu_item(GTK_MENU_ITEM(
+		m_ui_manager->get_widget(
+			"/MenuMainBar/MenuFile/FileQuit")->gobj()));
+	
+	ige_mac_menu_add_app_menu_item(
+		ige_mac_menu_add_app_menu_group(), GTK_MENU_ITEM(
+			m_ui_manager->get_widget(
+				"/MenuMainBar/MenuHelp/HelpAbout")->gobj()),
+		NULL);
+
+	 ige_mac_menu_add_app_menu_item(
+	 	ige_mac_menu_add_app_menu_group(), GTK_MENU_ITEM(
+			m_ui_manager->get_widget(
+				"/MenuMainBar/MenuEdit/EditPreferences")
+			->gobj()),
+		NULL);
+#else
 	pack_start(*m_menubar, Gtk::PACK_SHRINK);
+#endif
 	pack_start(*m_toolbar, Gtk::PACK_SHRINK);
 
 	m_toolbar->set_toolbar_style(preferences.appearance.toolbar_style);

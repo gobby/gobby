@@ -1,3 +1,13 @@
+2008-06-25  Yarek Tyshchenko  <yarek@britishgraphics.co.uk>
+
+	(Merged from master):
+
+	* configure.ac: Require ige-mac-integration when Gobby is compiled
+	natively on OS X.
+
+	* src/core/header.cpp: Integrate the menu bar into the main OS X menu
+	bar.
+
 2008-06-22  Armin Burgmeier  <armin@0x539.de>
 
 	* src/operations/documentinfostorage.cpp: Added return value for
