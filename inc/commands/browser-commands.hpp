@@ -36,8 +36,28 @@ public:
 	BrowserCommands(Browser& browser, Folder& folder,
 	                StatusBar& status_bar,
 	                const Preferences& preferences);
+	~BrowserCommands();
 
 protected:
+	static void on_set_browser_static(InfGtkBrowserModel* model,
+	                                  GtkTreePath* path,
+	                                  GtkTreeIter* iter,
+	                                  InfcBrowser* browser,
+	                                  gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->on_set_browser(
+			model, iter, browser);
+	}
+
+	static void on_subscribe_session_static(InfcBrowser* browser,
+	                                        InfcBrowserIter* iter,
+	                                        InfcSessionProxy* proxy,
+	                                        gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_subscribe_session(browser, iter, proxy);
+	}
+
 	static void on_finished_static(InfcNodeRequest* request,
 	                               const InfcBrowserIter* iter,
 	                               gpointer user_data)
@@ -103,9 +123,15 @@ protected:
 			on_user_join_finished(request, user);
 	}
 
+	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
+	                    InfcBrowser* browser);
+
 	void on_activate(InfcBrowser* browser, InfcBrowserIter* iter);
 	void on_finished(InfcNodeRequest* request);
 	void on_failed(InfcNodeRequest* request, const GError* error);
+
+	void on_subscribe_session(InfcBrowser* browser, InfcBrowserIter* iter,
+	                          InfcSessionProxy* proxy);
 
 	void on_synchronization_failed(InfSession* session,
 	                               InfXmlConnection* connection,
@@ -117,14 +143,19 @@ protected:
 	                                 gdouble percentage);
 	void on_close(InfSession* session);
 
+	void join_user(InfcSessionProxy* proxy);
+
 	void on_user_join_failed(InfcUserRequest* request,
 	                         const GError* error);
 	void on_user_join_finished(InfcUserRequest* request, InfUser* user);
+	void user_joined(InfcSessionProxy* proxy, InfUser* user);
 
 	Browser& m_browser;
 	Folder& m_folder;
 	StatusBar& m_status_bar;
 	const Preferences& m_preferences;
+
+	gulong m_set_browser_handler;
 
 	struct RequestNode {
 		BrowserCommands* commands;
@@ -148,6 +179,11 @@ protected:
 		SessionNode(const SessionNode& node);
 		~SessionNode();
 	};
+
+	struct BrowserNode;
+
+	typedef std::map<InfcBrowser*, BrowserNode*> BrowserMap;
+	BrowserMap m_browser_map;
 
 	typedef std::map<InfcNodeRequest*, RequestNode> RequestMap;
 	RequestMap m_request_map;
