@@ -23,9 +23,11 @@
 #include "common.hpp"
 #include "header.hpp"
 #include "icon.hpp"
+
 #ifdef OSX
-#include "ige-mac-menu.h"
+#include <ige-mac-menu.h>
 #endif
+
 namespace {
 	Glib::ustring ui_desc = 
 		"<ui>"
