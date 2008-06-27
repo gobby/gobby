@@ -29,7 +29,7 @@ Gobby::OperationNew::OperationNew(Operations& operations,
 {
 	// TODO: Use TRUE here as soon as BrowserCommands handles it
 	m_request = infc_browser_add_note(browser, parent, name.c_str(),
-	                                  Plugins::TEXT, FALSE);
+	                                  Plugins::TEXT, TRUE);
 	// Note infc_browser_add_note does not return a
 	// new reference.
 	g_object_ref(m_request);

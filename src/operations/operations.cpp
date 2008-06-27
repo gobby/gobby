@@ -26,8 +26,10 @@
 Gobby::Operations::Operation::~Operation() {}
 
 Gobby::Operations::Operations(DocumentInfoStorage& info_storage,
+                              Preferences& preferences,
                               StatusBar& status_bar):
-	m_info_storage(info_storage), m_status_bar(status_bar)
+	m_info_storage(info_storage), m_preferences(preferences),
+	m_status_bar(status_bar)
 {
 }
 
@@ -53,8 +55,9 @@ void Gobby::Operations::create_document(InfcBrowser* browser,
                                         const Glib::ustring& from_uri,
 					const char* encoding)
 {
-	m_operations.insert(new OperationOpen(*this, browser, parent, name,
-	                                      from_uri, encoding));
+	m_operations.insert(
+		new OperationOpen(*this, m_preferences, browser, parent, name,
+	                          from_uri, encoding));
 }
 
 void Gobby::Operations::remove_operation(Operation* operation)

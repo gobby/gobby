@@ -31,9 +31,9 @@ namespace Gobby
 class OperationOpen: public Operations::Operation
 {
 public:
-	OperationOpen(Operations& operations, InfcBrowser* browser,
-	              InfcBrowserIter* parent, const std::string& name,
-	              const std::string& uri,
+	OperationOpen(Operations& operations, const Preferences& preferences,
+	              InfcBrowser* browser, InfcBrowserIter* parent,
+	              const std::string& name, const std::string& uri,
 		      const char* encoding /* NULL means auto-detect */);
 
 	virtual ~OperationOpen();
@@ -80,6 +80,7 @@ protected:
 
 	void error(const Glib::ustring& message);
 protected:
+	const Preferences& m_preferences;
 	std::string m_name;
 	InfcBrowser* m_browser;
 	InfcBrowserIter m_parent;

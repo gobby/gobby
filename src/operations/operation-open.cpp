@@ -50,13 +50,15 @@ namespace
 }
 
 Gobby::OperationOpen::OperationOpen(Operations& operations,
+                                    const Preferences& preferences,
                                     InfcBrowser* browser,
                                     InfcBrowserIter* parent,
                                     const std::string& name,
                                     const std::string& uri,
                                     const char* encoding):
-	Operation(operations), m_name(name), m_browser(browser),
-	m_parent(*parent), m_encoding_auto_detect_index(-1),
+	Operation(operations), m_preferences(preferences), m_name(name),
+	m_browser(browser), m_parent(*parent),
+	m_encoding_auto_detect_index(-1),
 	m_eol_style(DocumentInfoStorage::EOL_CR), m_request(NULL),
 	m_finished_id(0), m_failed_id(0), m_raw_pos(0)
 {
@@ -345,7 +347,24 @@ void Gobby::OperationOpen::encoding_error()
 
 void Gobby::OperationOpen::read_finish()
 {
+	GtkTextIter insert_iter;
+	GtkTextMark* insert = gtk_text_buffer_get_insert(m_content);
+	gtk_text_buffer_get_iter_at_mark(m_content, &insert_iter, insert);
+
+	InfUser* user = INF_USER(g_object_new(
+		INF_TEXT_TYPE_USER,
+		"id", 1,
+		"flags", INF_USER_LOCAL,
+		"name", m_preferences.user.name.get().c_str(),
+		"status", INF_USER_AVAILABLE,
+		"hue", m_preferences.user.hue.get(),
+		"caret-position", gtk_text_iter_get_offset(&insert_iter),
+		static_cast<void*>(NULL)));
+
 	InfUserTable* user_table = inf_user_table_new();
+	inf_user_table_add_user(user_table, user);
+	g_object_unref(user);
+
 	InfTextGtkBuffer* text_gtk_buffer =
 		inf_text_gtk_buffer_new(m_content, user_table);
 	g_object_unref(user_table);
@@ -364,10 +383,9 @@ void Gobby::OperationOpen::read_finish()
 	g_object_unref(text_gtk_buffer);
 
 	g_object_unref(io);
-	// TODO: Use TRUE here as soon as BrowserCommands handles it
 	m_request = infc_browser_add_note_with_content(
 		m_browser, &m_parent, m_name.c_str(), Plugins::TEXT,
-		INF_SESSION(session), FALSE);
+		INF_SESSION(session), TRUE);
 	g_object_unref(session);
 
 	// Note infc_browser_add_note_with_content does not return a

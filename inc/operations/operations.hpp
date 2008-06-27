@@ -57,7 +57,8 @@ public:
 		Operations& m_operations;
 	};
 
-	Operations(DocumentInfoStorage& info_storage, StatusBar& status_bar);
+	Operations(DocumentInfoStorage& info_storage,
+	           Preferences& preferences, StatusBar& status_bar);
 	~Operations();
 
 	void create_document(InfcBrowser* browser,
@@ -74,6 +75,7 @@ protected:
 	void remove_operation(Operation* operation);
 
 	DocumentInfoStorage& m_info_storage;
+	Preferences& m_preferences;
 	StatusBar& m_status_bar;
 
 	typedef std::set<Operation*> OperationSet;

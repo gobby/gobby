@@ -52,15 +52,20 @@ public:
 			*this = new_value;
 		}
 
+		const Type& get() const
+		{
+			return m_value;
+		}
+
 		operator const Type&() const
 		{
 			return m_value;
 		}
 
-		operator Type&()
+		/*operator Type&()
 		{
 			return m_value;
-		}
+		}*/
 
 		signal_changed_type signal_changed() const
 		{

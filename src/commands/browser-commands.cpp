@@ -123,7 +123,7 @@ Gobby::BrowserCommands::SessionNode::SessionNode():
 	proxy(NULL) {}
 
 Gobby::BrowserCommands::SessionNode::SessionNode(const SessionNode& node):
-	proxy(node.proxy)
+	proxy(node.proxy), status(node.status)
 {
 	g_assert(proxy == NULL);
 }
@@ -282,9 +282,15 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 	DocWindow& window = m_folder.add_document(
 		INF_TEXT_SESSION(session),
 		infc_browser_iter_get_name(browser, iter));
+	m_folder.switch_to_document(window);
 
 	SessionNode& node = m_session_map[session];
 	node.proxy = proxy;
+
+	/* We cache this for the synchronization-complete signal handler,
+	 * since the session already changed to RUNNING before the signal
+	 * handler is run: */
+	node.status = inf_session_get_status(session);
 	g_object_ref(proxy);
 
 	node.failed_id = g_signal_connect(
@@ -349,14 +355,17 @@ void Gobby::BrowserCommands::on_synchronization_failed(InfSession* session,
 	SessionMap::iterator iter = m_session_map.find(session);
 	g_assert(iter != m_session_map.end());
 
-	DocWindow* window = m_folder.lookup_document(
-		INF_TEXT_SESSION(session));
-	g_assert(window != NULL);
+	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
+	{
+		DocWindow* window = m_folder.lookup_document(
+			INF_TEXT_SESSION(session));
+		g_assert(window != NULL);
 
-	set_error_text(
-		*window,
-		Glib::ustring::compose("Synchronization failed: %1",
-		                       error->message), SYNC_ERROR);
+		set_error_text(
+			*window,
+			Glib::ustring::compose("Synchronization failed: %1",
+			                       error->message), SYNC_ERROR);
+	}
 }
 
 void Gobby::BrowserCommands::on_synchronization_complete(InfSession* session,
@@ -365,7 +374,11 @@ void Gobby::BrowserCommands::on_synchronization_complete(InfSession* session,
 	SessionMap::iterator iter = m_session_map.find(session);
 	g_assert(iter != m_session_map.end());
 
-	join_user(iter->second.proxy);
+	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
+	{
+		iter->second.status = INF_SESSION_RUNNING;
+		join_user(iter->second.proxy);
+	}
 }
 
 void Gobby::BrowserCommands::on_synchronization_progress(InfSession* session,
@@ -375,14 +388,17 @@ void Gobby::BrowserCommands::on_synchronization_progress(InfSession* session,
 	SessionMap::iterator iter = m_session_map.find(session);
 	g_assert(iter != m_session_map.end());
 
-	DocWindow* window = m_folder.lookup_document(
-		INF_TEXT_SESSION(session));
+	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
+	{
+		DocWindow* window = m_folder.lookup_document(
+			INF_TEXT_SESSION(session));
 
-	g_assert(window != NULL);
-	window->set_info(
-		Glib::ustring::compose(
-			_("Synchronization in progress… %1%%"),
-			static_cast<unsigned int>(percentage * 100)));
+		g_assert(window != NULL);
+		window->set_info(
+			Glib::ustring::compose(
+				_("Synchronization in progress… %1%%"),
+				static_cast<unsigned int>(percentage * 100)));
+	}
 }
 
 void Gobby::BrowserCommands::on_close(InfSession* session)

@@ -1,6 +1,29 @@
 2008-06-27  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/browser-commands.hpp:
+	* src/commands/browser-commands.cpp: Make sure subscription progress
+	is only shown for sessions that are synchronized, not for sync-ins.
+
+	* inc/core/preferences.hpp: Removed the non-const operator Type& since
+	it allows changing the Properties content without notification. Also
+	added get() in analogy to set().
+
+	* inc/operations/operation-open.hpp:
+	* src/operations/operation-open.cpp: Take a Preferences in the
+	constructor, add a user to the session before synchronizing it to the
+	server so that we can start editing the document before the
+	synchronization is complete.
+
+	* inc/operations/operations.hpp:
+	* src/operations/operations.cpp:
+	* src/window.cpp: Pass the Preferences object to OperationOpen.
+
+	* src/operations/operation-new.cpp: Automatically Subscribe to newly
+	created documents.
+
+2008-06-27  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/browser-commands.hpp:
 	* src/commands/browser-commands.cpp: Watch synchronization and join
 	user for every session subscribed to, not only sessions that have been
 	subscribed to by the BrowserCommands.

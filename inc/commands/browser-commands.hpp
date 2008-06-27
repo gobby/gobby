@@ -169,6 +169,7 @@ protected:
 
 	struct SessionNode {
 		InfcSessionProxy* proxy;
+		InfSessionStatus status;
 
 		gulong failed_id;
 		gulong complete_id;
