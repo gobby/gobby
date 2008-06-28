@@ -57,6 +57,7 @@ namespace
 		map_type m_keyvals;
 	};
 
+	/* TODO: Put TabLabel into an extra source file */
 	class TabLabel: public Gtk::HBox
 	{
 	public:
@@ -76,6 +77,12 @@ namespace
 			g_signal_connect(
 				document.get_session(), "notify::status",
 				G_CALLBACK(on_notify_status_static), this);
+			g_signal_connect(
+				document.get_session(),
+				"notify::subscription-group",
+				G_CALLBACK(
+					on_notify_subscription_group_static),
+				this);
 
 			//m_label.set_ellipsize(Pango::ELLIPSIZE_END);
 			m_label.show();
@@ -120,6 +127,14 @@ namespace
 			static_cast<TabLabel*>(user_data)->update_icon();
 		}
 
+		static void on_notify_subscription_group_static(GObject* obj,
+		                                                GParamSpec* p,
+		                                                gpointer data)
+		{
+			printf("Notify subscr group\n");
+			static_cast<TabLabel*>(data)->update_icon();
+		}
+
 		virtual void on_style_changed(
 			const Glib::RefPtr<Gtk::Style>& previous_style)
 		{
@@ -136,6 +151,14 @@ namespace
 			InfTextSession* session = m_document.get_session();
 			GtkTextView* view =
 				GTK_TEXT_VIEW(m_document.get_text_view());
+
+			if(inf_session_get_subscription_group(
+				INF_SESSION(session)) == NULL)
+			{
+				m_icon.set(Gtk::Stock::DISCONNECT,
+				           Gtk::ICON_SIZE_MENU);
+				return;
+			}
 
 			switch(inf_session_get_status(INF_SESSION(session)))
 			{

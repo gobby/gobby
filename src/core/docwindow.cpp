@@ -32,7 +32,8 @@ namespace
 {
 	GtkWrapMode wrap_mode_from_preferences(const Gobby::Preferences& pref)
 	{
-		return static_cast<GtkWrapMode>(static_cast<Gtk::WrapMode>(pref.view.wrap_mode));
+		return static_cast<GtkWrapMode>(
+			static_cast<Gtk::WrapMode>(pref.view.wrap_mode));
 	}
 
 	bool glob_matches(const gchar* const* globs, const std::string& str)
@@ -269,6 +270,7 @@ void Gobby::DocWindow::unset_info()
 void Gobby::DocWindow::set_active_user(InfTextUser* user)
 {
 	g_assert(
+		user == NULL ||
 		inf_user_table_lookup_user_by_id(
 			inf_session_get_user_table(INF_SESSION(m_session)),
 			inf_user_get_id(INF_USER(user)))

@@ -101,6 +101,14 @@ protected:
 				session, conn, percentage);
 	}
 
+	static void on_notify_connection_static(GObject* object,
+	                                        GParamSpec* pspec,
+	                                        gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_notify_connection(INFC_SESSION_PROXY(object));
+	}
+
 	static void on_close_static(InfSession* session,
 	                            gpointer user_data)
 	{
@@ -142,6 +150,7 @@ protected:
 	                                 InfXmlConnection* connection,
 	                                 gdouble percentage);
 	void on_close(InfSession* session);
+	void on_notify_connection(InfcSessionProxy* proxy);
 
 	void join_user(InfcSessionProxy* proxy);
 
@@ -171,6 +180,7 @@ protected:
 		InfcSessionProxy* proxy;
 		InfSessionStatus status;
 
+		gulong notify_connection_id;
 		gulong failed_id;
 		gulong complete_id;
 		gulong progress_id;

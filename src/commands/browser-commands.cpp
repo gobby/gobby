@@ -133,6 +133,7 @@ Gobby::BrowserCommands::SessionNode::~SessionNode()
 	if(proxy != NULL)
 	{
 		InfSession* session = infc_session_proxy_get_session(proxy);
+		g_signal_handler_disconnect(proxy, notify_connection_id);
 		g_signal_handler_disconnect(session, failed_id);
 		g_signal_handler_disconnect(session, complete_id);
 		g_signal_handler_disconnect(session, progress_id);
@@ -293,6 +294,9 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 	node.status = inf_session_get_status(session);
 	g_object_ref(proxy);
 
+	node.notify_connection_id = g_signal_connect(
+		proxy, "notify::connection",
+		G_CALLBACK(on_notify_connection_static), this);
 	node.failed_id = g_signal_connect(
 		session, "synchronization-failed",
 		G_CALLBACK(on_synchronization_failed_static), this);
@@ -406,6 +410,30 @@ void Gobby::BrowserCommands::on_close(InfSession* session)
 	SessionMap::iterator iter = m_session_map.find(session);
 	g_assert(iter != m_session_map.end());
 	m_session_map.erase(iter);
+}
+
+void Gobby::BrowserCommands::on_notify_connection(InfcSessionProxy* proxy)
+{
+	InfSession* session = infc_session_proxy_get_session(proxy);
+	SessionMap::iterator iter = m_session_map.find(session);
+	g_assert(iter != m_session_map.end());
+
+	if(infc_session_proxy_get_connection(proxy) == NULL)
+	{
+		DocWindow* window = m_folder.lookup_document(
+			INF_TEXT_SESSION(session));
+		g_assert(window != NULL);
+
+		window->set_info(_(
+			"The connection to the publisher of this document "
+			"has been lost. Further changes to the document "
+			"could not be synchronized to others anymore, "
+			"therefore the document cannot be edited anymore.\n\n"
+			"Please note also that it is possible that not all "
+			"of your latest changes have reached the "
+			"publisher before the connection was lost."));
+		window->set_active_user(NULL);
+	}
 }
 
 void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy)

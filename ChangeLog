@@ -1,3 +1,15 @@
+2008-06-28  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/browser-commands.hpp:
+	* src/commands/browser-commands.cpp: Set info text in DocWindow and
+	make the document readonly when the connection to the publisher has
+	been lost.
+
+	* src/core/docwindow.cpp: Allow user to be NULL in set_active_user().
+
+	* src/core/folder.cpp: Set icon in tab label when the connection to
+	the document's publisher has been lost.
+
 2008-06-27  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/browser-commands.hpp:
