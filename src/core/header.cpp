@@ -208,7 +208,7 @@ Gobby::Header::Header(Preferences& preferences,
 		Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS)),
 	action_file_save_all(
 		Gtk::Action::create(
-			"FileSaveAll", Gtk::Stock::SAVE,
+			"FileSaveAll", Gobby::IconManager::STOCK_SAVE_ALL,
 			_("Save All"), _("Save all open files locally"))),
 	action_file_quit(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)),
 
@@ -272,9 +272,10 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file_new);
 	group_file->add(action_file_open);
 	group_file->add(action_file_save);
-	group_file->add(action_file_save_as);
-	group_file->add(action_file_save_all,
-	                Gtk::AccelKey(""));
+	group_file->add(action_file_save_as,
+	                Gtk::AccelKey("<control><shift>S",
+			              "<Actions>/MenuFile/FileSaveAs"));
+	group_file->add(action_file_save_all);
 	group_file->add(action_file_quit);
 
 	group_edit->add(action_edit);

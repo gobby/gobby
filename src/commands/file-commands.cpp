@@ -122,7 +122,7 @@ void Gobby::FileCommands::on_document_removed(DocWindow& document)
 	if(m_mode == MODE_SAVE && &document == m_save_document)
 	{
 		m_save_document = NULL;
-		m_file_dialog->hide();
+		m_file_dialog.reset(NULL);
 	}
 }
 

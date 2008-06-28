@@ -1,5 +1,19 @@
 2008-06-28  Armin Burgmeier  <armin@0x539.de>
 
+	* pixmaps/save-all.svg:
+	* pixmaps/Makefile.am: Added icon for the save all menu item,
+	contributed by Benjamin Herr <ben@0x539.de>
+
+	* inc/core/iconmanager.hpp:
+	* src/core/iconmanager.cpp: Add it to the icon manager.
+
+	* src/core/header.cpp: Add it to the menu.
+
+	* src/commands/file-commands.cpp: Fix a crash when unsubscribing from
+	a session after having opened the file chooser to save a file.
+
+2008-06-28  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/core/documentinfostorage.hpp:
 	* src/core/documentinfostorage.cpp: Moved from
 	operations/documentinfostorage.[hc]pp. Also added the get_key()

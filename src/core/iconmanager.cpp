@@ -69,15 +69,18 @@ namespace
 Gtk::StockID Gobby::IconManager::STOCK_USERLIST("gobby-userlist");
 Gtk::StockID Gobby::IconManager::STOCK_DOCLIST("gobby-doclist");
 Gtk::StockID Gobby::IconManager::STOCK_CHAT("gobby-chat");
+Gtk::StockID Gobby::IconManager::STOCK_SAVE_ALL("gobby-save-all");
 
 Gobby::IconManager::IconManager():
 	gobby(load_pixbuf(APPICON_DIR, "gobby.png") ),
 	userlist(load_pixbuf(PIXMAPS_DIR, "userlist.png") ),
 	doclist(load_pixbuf(PIXMAPS_DIR, "doclist.png") ),
 	chat(load_pixbuf(PIXMAPS_DIR, "chat.png") ),
+	save_all(load_pixbuf(PIXMAPS_DIR, "save-all.svg")),
 	m_is_userlist(userlist),
 	m_is_doclist(doclist),
 	m_is_chat(chat),
+	m_is_save_all(save_all),
 	m_icon_factory(Gtk::IconFactory::create() )
 {
 	Gtk::StockItem userlist_item(STOCK_USERLIST, _("User list") );
@@ -88,6 +91,9 @@ Gobby::IconManager::IconManager():
 
 	Gtk::StockItem chat_item(STOCK_CHAT, _("Chat") );
 	m_icon_factory->add(STOCK_CHAT, m_is_chat);
+
+	Gtk::StockItem save_all_item(STOCK_SAVE_ALL, _("Save All"));
+	m_icon_factory->add(STOCK_SAVE_ALL, m_is_save_all);
 
 	m_icon_factory->add_default();
 }
