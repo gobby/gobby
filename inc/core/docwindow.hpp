@@ -43,6 +43,7 @@ public:
 	typedef sigc::signal<void, GtkSourceLanguage*> SignalLanguageChanged;
 
 	DocWindow(InfTextSession* session, const Glib::ustring& title,
+	          const std::string& info_storage_key,
 	          const Preferences& preferences,
 	          GtkSourceLanguageManager* manager);
 	virtual ~DocWindow();
@@ -50,6 +51,10 @@ public:
 	const InfTextSession* get_session() const { return m_session; }
 	InfTextSession* get_session() { return m_session; }
 	const Glib::ustring& get_title() const { return m_title; }
+	const std::string& get_info_storage_key() const
+	{
+		return m_info_storage_key;
+	}
 
 	void get_cursor_position(unsigned int& row, unsigned int& col) const;
 	void set_selection(const Gtk::TextIter& begin,
@@ -67,7 +72,8 @@ public:
 	void set_info(const Glib::ustring& info);
 	void unset_info();
 
-	SignalLanguageChanged signal_language_changed() const {
+	SignalLanguageChanged signal_language_changed() const
+	{
 		return m_signal_language_changed;
 	}
 
@@ -88,6 +94,7 @@ protected:
 
 	InfTextSession* m_session;
 	Glib::ustring m_title;
+	std::string m_info_storage_key;
 	const Preferences& m_preferences;
 
 	GtkSourceView* m_view;

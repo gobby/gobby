@@ -20,7 +20,7 @@
 #define _GOBBY_OPERATIONS_OPERATION_OPEN_HPP_
 
 #include "operations/operations.hpp"
-#include "operations/documentinfostorage.hpp"
+#include "core/documentinfostorage.hpp"
 
 #include <giomm/file.h>
 #include <giomm/inputstream.h>

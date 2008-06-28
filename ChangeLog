@@ -1,5 +1,46 @@
 2008-06-28  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/core/documentinfostorage.hpp:
+	* src/core/documentinfostorage.cpp: Moved from
+	operations/documentinfostorage.[hc]pp. Also added the get_key()
+	method and added overloads of get_info and set_info that take a key
+	instead of browser and iter.
+
+	* inc/operations/operation-open.hpp: Fixed include of
+	documentinfostorage.hpp.
+
+	* inc/operations/operation-save.hpp:
+	* src/operations/operation-save.cpp: Implemented saving of documents.
+	This currently does refuse to overwrite existing files due to a bug in
+	giomm, see http://bugzilla.gnome.org/show_bug.cgi?id=540656.
+
+	* inc/core/docwindow.hpp:
+	* src/core/docwindow.cpp: Store a storage info key, so that on save
+	the corresponding info can be updated.
+
+	* inc/core/folder.hpp:
+	* src/core/folder.cpp: Pass a correct storage info key to newly
+	created documents.
+
+	* inc/commands/browser-commands.hpp: 
+	* src/commands/browser-commands.cpp: Pass a storage info key to the
+	folder when a new document is opened because of a new subscription.
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Implemented save and save as
+	functionality.
+
+	* inc/operations/operations.hpp:
+	* src/operations/operations.cpp: Added save_document().
+
+	* src/window.cpp: Pass info storage to browser and file commands.
+
+	* inc/core/Makefile.am:
+	* inc/operations/Makefile.am:
+	* src/core/Makefile.am:
+	* src/operations/Makefile.am: Add new and moved files to build.
+
+2008-06-28  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/commands/browser-commands.hpp:
 	* src/commands/browser-commands.cpp: Set info text in DocWindow and
 	make the document readonly when the connection to the publisher has

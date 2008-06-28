@@ -91,9 +91,11 @@ namespace
 
 Gobby::DocWindow::DocWindow(InfTextSession* session,
                             const Glib::ustring& title,
+                            const std::string& info_storage_key,
                             const Preferences& preferences,
 			    GtkSourceLanguageManager* manager):
-	m_session(session), m_title(title), m_preferences(preferences),
+	m_session(session), m_title(title),
+	m_info_storage_key(info_storage_key), m_preferences(preferences),
 	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
 	m_info_box(false, 0)
 {

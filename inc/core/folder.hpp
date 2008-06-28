@@ -46,7 +46,8 @@ public:
 	       GtkSourceLanguageManager* lang_manager);
 
 	DocWindow& add_document(InfTextSession* session,
-	                        const Glib::ustring& title);
+	                        const Glib::ustring& title,
+	                        const std::string& info_storage_key);
 	void remove_document(DocWindow& document);
 
 	DocWindow* lookup_document(InfTextSession* session);

@@ -202,11 +202,14 @@ Gobby::Folder::Folder(const Preferences& preferences,
 	set_scrollable(true);
 }
 
-Gobby::DocWindow& Gobby::Folder::add_document(InfTextSession* session,
-                                              const Glib::ustring& title)
+Gobby::DocWindow&
+Gobby::Folder::add_document(InfTextSession* session,
+                            const Glib::ustring& title,
+                            const std::string& info_storage_key)
 {
 	Gobby::DocWindow* window = Gtk::manage(
-		new DocWindow(session, title, m_preferences, m_lang_manager));
+		new DocWindow(session, title, info_storage_key,
+		              m_preferences, m_lang_manager));
 	window->show();
 
 	TabLabel* tablabel = Gtk::manage(new TabLabel(*window, title));

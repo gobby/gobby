@@ -1,0 +1,278 @@
+/* gobby - A GTKmm driven libobby client
+ * Copyright (C) 2005 - 2008 0x539 dev group
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#include "operations/operation-save.hpp"
+
+#include "util/i18n.hpp"
+
+#include <cerrno>
+
+Gobby::OperationSave::OperationSave(Operations& operations,
+                                    DocWindow& document,
+                                    Folder& folder,
+				    const std::string& uri,
+				    const std::string& encoding,
+				    DocumentInfoStorage::EolStyle eol_style):
+	Operation(operations), m_document(&document), m_current_line_index(0),
+	m_iconv(encoding.c_str(), "UTF-8"), m_encoding(encoding),
+	m_eol_style(eol_style),
+	m_storage_key(document.get_info_storage_key()), m_buffer_size(0),
+	m_buffer_index(0)
+{
+	// Load content so that the session can go on while saving
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document.get_text_buffer());
+	GtkTextIter prev;
+	GtkTextIter pos;
+
+	gtk_text_buffer_get_start_iter(buffer, &prev);
+	pos = prev;
+	gtk_text_iter_forward_to_line_end(&pos);
+
+	do
+	{
+		Line line;
+		line.first =
+			gtk_text_buffer_get_text(buffer, &prev, &pos, TRUE);
+		line.second = gtk_text_iter_get_line_index(&pos);
+		m_lines.push_back(line);
+
+		gtk_text_iter_forward_line(&prev);
+		gtk_text_iter_forward_to_line_end(&pos);
+	} while(!gtk_text_iter_is_end(&prev));
+
+	m_current_line = m_lines.begin();
+
+	m_file = Gio::File::create_for_uri(uri);
+	m_file->replace_async(sigc::mem_fun(*this,
+	                                   &OperationSave::on_file_replace));
+
+	m_message_handle = get_status_bar().add_message(
+		StatusBar::INFO,
+		Glib::ustring::compose(_("Saving document %1 to %2…"),
+			document.get_title(), uri), 0);
+
+	folder.signal_document_removed().connect(
+		sigc::mem_fun(*this, &OperationSave::on_document_removed));
+}
+
+Gobby::OperationSave::~OperationSave()
+{
+	// TODO: Cancel outstanding async operations?
+
+	for(std::list<Line>::iterator iter = m_lines.begin();
+	    iter != m_lines.end(); ++ iter)
+	{
+		g_free(iter->first);
+	}
+
+	get_status_bar().remove_message(m_message_handle);
+
+	// Reset file explicitenly before closing stream so that, on failure,
+	// existing files are not overriden with the temporary files we
+	// actually wrote to, at least for local files.
+	m_file.reset();
+}
+
+void Gobby::OperationSave::on_document_removed(DocWindow& document)
+{
+	// We keep the document to unset the modified flag when the operation
+	// is complete, however, if the document is removed in the meanwhile,
+	// then we don't need to care anymore.
+	if(m_document == &document)
+		m_document = NULL;
+}
+
+void Gobby::OperationSave::on_file_replace(
+	const Glib::RefPtr<Gio::AsyncResult>& result)
+{
+	try
+	{
+		m_stream = m_file->replace_finish(result);
+		attempt_next();
+	}
+	catch(const Glib::Exception& ex)
+	{
+		error(ex.what());
+	}
+}
+
+void Gobby::OperationSave::attempt_next()
+{
+	bool done;
+
+	if(m_current_line == m_lines.end())
+	{
+		done = true;
+	}
+	else
+	{
+		// Don't add newline after last line
+		std::list<Line>::iterator next(m_current_line);
+		++ next;
+
+		if(next == m_lines.end() &&
+		   m_current_line_index == m_current_line->second)
+		{
+			done = true;
+		}
+		else
+		{
+			done = false;
+		}
+	}
+
+	if(done)
+	{
+		if(m_document != NULL)
+		{
+			gtk_text_buffer_set_modified(
+				GTK_TEXT_BUFFER(
+					m_document->get_text_buffer()),
+				FALSE);
+		}
+
+		DocumentInfoStorage::Info info;
+		info.uri = m_file->get_uri();
+		info.encoding = m_encoding;
+		info.eol_style = m_eol_style;
+		get_info_storage().set_info(m_storage_key, info);
+
+		m_stream->close();
+		remove();
+	}
+	else
+	{
+		write_next();
+	}
+}
+
+void Gobby::OperationSave::write_next()
+{
+	gchar* inbuf;
+	gsize inlen;
+	char newlinebuf[2] = { '\r', '\n' };
+
+	if(m_current_line_index < m_current_line->second)
+	{
+		inbuf = m_current_line->first + m_current_line_index;
+		inlen = m_current_line->second - m_current_line_index;
+	}
+	else
+	{
+		// Write newline
+		switch(m_eol_style)
+		{
+		case DocumentInfoStorage::EOL_CR:
+			inbuf = newlinebuf + 0;
+			inlen = 1;
+			break;
+		case DocumentInfoStorage::EOL_LF:
+			inbuf = newlinebuf + 1;
+			inlen = 1;
+			break;
+		case DocumentInfoStorage::EOL_CRLF:
+			inbuf = newlinebuf + 0;
+			inlen = 2;
+			break;
+		default:
+			g_assert_not_reached();
+			break;
+		}
+	}
+
+	gchar* outbuf = m_buffer;
+	gsize outlen = BUFFER_SIZE;
+
+	gchar* preserve_inbuf = inbuf;
+
+	std::size_t retval = m_iconv.iconv(&inbuf, &inlen, &outbuf, &outlen);
+
+	if(retval == static_cast<std::size_t>(-1))
+	{
+		g_assert(errno != EILSEQ);
+		// E2BIG and EINVAL are fully OK here.
+	}
+	else if(retval > 0)
+	{
+		error(_("The document contains one or more characters that "
+		        "cannot be encoded in the specified character "
+		        "coding."));
+		return;
+	}
+
+	// Advance bytes read.
+	m_current_line_index += inbuf - preserve_inbuf;
+	m_buffer_size = BUFFER_SIZE - outlen;
+	m_buffer_index = 0;
+
+	g_assert(m_buffer_size > 0);
+
+	if(m_current_line_index > m_current_line->second)
+	{
+		// Converted whole line:
+		g_free(m_current_line->first);
+		m_current_line = m_lines.erase(m_current_line);
+		m_current_line_index = 0;
+	}
+
+	m_stream->write_async(m_buffer, m_buffer_size,
+	                      sigc::mem_fun(*this,
+			                    &OperationSave::on_stream_write));
+}
+
+void Gobby::OperationSave::on_stream_write(
+	const Glib::RefPtr<Gio::AsyncResult>& result)
+{
+	try
+	{
+		gssize size = m_stream->write_finish(result);
+		// On size < 0 an exception should have been thrown.
+		g_assert(size >= 0);
+
+		m_buffer_index += size;
+		if(m_buffer_index < m_buffer_size)
+		{
+			// Write next chunk
+			m_stream->write_async(
+				m_buffer + m_buffer_index,
+				m_buffer_size - m_buffer_index,
+				sigc::mem_fun(
+					*this,
+					&OperationSave::on_stream_write));
+		}
+		else
+		{
+			// Go on with next part of line and/or next line
+			attempt_next();
+		}
+	}
+	catch(const Glib::Exception& ex)
+	{
+		error(ex.what());
+	}
+}
+
+void Gobby::OperationSave::error(const Glib::ustring& message)
+{
+	get_status_bar().add_message(
+		StatusBar::ERROR,
+		Glib::ustring::compose(_("Failed to save document %1: %2"),
+		                         m_file->get_uri(), message), 5);
+
+	remove();
+}

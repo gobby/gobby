@@ -1,6 +1,7 @@
 
 noinst_HEADERS = \
 	browser.hpp \
+	documentinfostorage.hpp \
 	docwindow.hpp \
 	encodingselector.hpp \
 	folder.hpp \

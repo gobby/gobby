@@ -36,7 +36,9 @@ class FileCommands: public sigc::trackable
 public:
 	FileCommands(Gtk::Window& parent, Header& header,
 	             const Browser& browser, Folder& folder,
-	             Operations& operations);
+	             Operations& operations,
+	             const DocumentInfoStorage& info_storage,
+	             Preferences& preferences);
 
 protected:
 	enum Mode {
@@ -45,21 +47,33 @@ protected:
 		MODE_SAVE
 	};
 
-	void create_file_dialog();
+	void create_file_dialog(Gtk::FileChooserAction action);
 	void create_location_dialog();
 
 	void on_new();
 	void on_open();
+	void on_save();
+	void on_save_as();
+
+	void on_document_removed(DocWindow& document);
+	void on_document_changed(DocWindow* document);
 
 	void on_file_dialog_response(int id);
 	void on_location_dialog_response(int id);
 
+	void set_sensitivity(bool sensitivity);
+
 	Gtk::Window& m_parent;
+	Header& m_header;
 	const Browser& m_browser;
 	Folder& m_folder;
 	Operations& m_operations;
+	const DocumentInfoStorage& m_document_info_storage;
+	Preferences& m_preferences;
 
+	std::string m_current_uri;
 	std::string m_open_uri;
+	DocWindow* m_save_document;
 
 	Mode m_mode;
 	std::auto_ptr<DocumentLocationDialog> m_location_dialog;

@@ -30,6 +30,7 @@
 namespace Gobby
 {
 
+// TODO: Move to core?
 class DocumentInfoStorage: public sigc::trackable
 {
 public:
@@ -48,10 +49,16 @@ public:
 	DocumentInfoStorage(InfGtkBrowserModel* model);
 	~DocumentInfoStorage();
 
+	std::string get_key(InfcBrowser* browser,
+	                    InfcBrowserIter* iter) const;
+
 	const Info* get_info(InfcBrowser* browser,
 	                     InfcBrowserIter* iter) const;
+	const Info* get_info(const std::string& key) const;
+
 	void set_info(InfcBrowser* browser, InfcBrowserIter* iter,
 	              const Info& info);
+	void set_info(const std::string& key, const Info& info);
 
 protected:
 	static void on_set_browser_static(InfGtkBrowserModel* model,
@@ -98,9 +105,6 @@ protected:
 
 private:
 	void init(xmlpp::Element* node);
-
-	std::string get_key_for_document(InfcBrowser* browser,
-	                                 InfcBrowserIter* iter) const;
 };
 
 }

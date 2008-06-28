@@ -19,6 +19,7 @@
 #ifndef _GOBBY_BROWSER_COMMANDS_HPP_
 #define _GOBBY_BROWSER_COMMANDS_HPP_
 
+#include "core/documentinfostorage.hpp"
 #include "core/browser.hpp"
 #include "core/folder.hpp"
 #include "core/statusbar.hpp"
@@ -34,6 +35,7 @@ class BrowserCommands: public sigc::trackable
 {
 public:
 	BrowserCommands(Browser& browser, Folder& folder,
+	                DocumentInfoStorage& info_storage,
 	                StatusBar& status_bar,
 	                const Preferences& preferences);
 	~BrowserCommands();
@@ -161,6 +163,7 @@ protected:
 
 	Browser& m_browser;
 	Folder& m_folder;
+	DocumentInfoStorage& m_info_storage;
 	StatusBar& m_status_bar;
 	const Preferences& m_preferences;
 

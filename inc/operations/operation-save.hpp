@@ -1,0 +1,75 @@
+/* gobby - A GTKmm driven libobby client
+ * Copyright (C) 2005 - 2008 0x539 dev group
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#ifndef _GOBBY_OPERATIONS_OPERATION_SAVE_HPP_
+#define _GOBBY_OPERATIONS_OPERATION_SAVE_HPP_
+
+#include "operations/operations.hpp"
+#include "core/documentinfostorage.hpp"
+
+#include <giomm/file.h>
+#include <giomm/outputstream.h>
+
+namespace Gobby
+{
+
+class OperationSave: public Operations::Operation
+{
+public:
+	OperationSave(Operations& operations, DocWindow& document,
+	              Folder& folder, const std::string& uri,
+	              const std::string& encoding,
+	              DocumentInfoStorage::EolStyle eol_style);
+
+	virtual ~OperationSave();
+
+protected:
+	void on_document_removed(DocWindow& document);
+	void on_file_replace(const Glib::RefPtr<Gio::AsyncResult>& result);
+	void on_stream_write(const Glib::RefPtr<Gio::AsyncResult>& result);
+
+	void attempt_next();
+	void write_next();
+	void error(const Glib::ustring& message);
+protected:
+	DocWindow* m_document;
+
+	typedef std::pair<gchar*, std::size_t> Line;
+	std::list<Line> m_lines;
+	std::list<Line>::iterator m_current_line;
+	std::size_t m_current_line_index;
+
+	std::string m_encoding;
+	DocumentInfoStorage::EolStyle m_eol_style;
+	std::string m_storage_key;
+	Glib::IConv m_iconv;
+
+	static const std::size_t BUFFER_SIZE = 1024;
+	char m_buffer[BUFFER_SIZE];
+	std::size_t m_buffer_size;
+	std::size_t m_buffer_index;
+
+	Glib::RefPtr<Gio::File> m_file;
+	Glib::RefPtr<Gio::OutputStream> m_stream;
+
+	StatusBar::MessageHandle m_message_handle;
+};
+
+}
+
+#endif // _GOBBY_OPERATIONS_OPERATION_SAVE_HPP_

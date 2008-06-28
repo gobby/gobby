@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "operations/documentinfostorage.hpp"
+#include "core/documentinfostorage.hpp"
 #include "util/file.hpp"
 
 #include <libxml++/nodes/textnode.h>
@@ -224,11 +224,33 @@ void Gobby::DocumentInfoStorage::init(xmlpp::Element* node)
 	}
 }
 
+std::string
+Gobby::DocumentInfoStorage::get_key(InfcBrowser* browser,
+                                    InfcBrowserIter* iter) const
+{
+	InfXmlConnection* connection = infc_browser_get_connection(browser);
+	g_assert(connection != NULL);
+
+	gchar* path = infc_browser_iter_get_path(browser, iter);
+	gchar* remote_id;
+	g_object_get(G_OBJECT(connection), "remote-id", &remote_id, NULL);
+	std::string result = std::string(remote_id) + "?" + path;
+	g_free(path);
+	g_free(remote_id);
+
+	return result;
+}
+
 const Gobby::DocumentInfoStorage::Info*
 Gobby::DocumentInfoStorage::get_info(InfcBrowser* browser,
                                      InfcBrowserIter* iter) const
 {
-	std::string key = get_key_for_document(browser, iter);
+	return get_info(get_key(browser, iter));
+}
+
+const Gobby::DocumentInfoStorage::Info*
+Gobby::DocumentInfoStorage::get_info(const std::string& key) const
+{
 	InfoMap::const_iterator map_iter = m_infos.find(key);
 	if(map_iter != m_infos.end()) return &map_iter->second;
 	return NULL;
@@ -238,7 +260,12 @@ void Gobby::DocumentInfoStorage::set_info(InfcBrowser* browser,
                                           InfcBrowserIter* iter,
                                           const Info& info)
 {
-	std::string key = get_key_for_document(browser, iter);
+	set_info(get_key(browser, iter), info);
+}
+
+void Gobby::DocumentInfoStorage::set_info(const std::string& key,
+                                          const Info& info)
+{
 	m_infos[key] = info;
 }
 
@@ -289,25 +316,9 @@ void Gobby::DocumentInfoStorage::on_node_removed(InfcBrowser* browser,
                                                  InfcBrowserIter* iter)
 {
 	// Remove info when the corresponding document is removed.
-	std::string key = get_key_for_document(browser, iter);
+	std::string key = get_key(browser, iter);
 	InfoMap::iterator map_iter = m_infos.find(key);
 	g_assert(map_iter != m_infos.end());
 	m_infos.erase(map_iter);
 }
 
-std::string
-Gobby::DocumentInfoStorage::get_key_for_document(InfcBrowser* browser,
-                                                 InfcBrowserIter* iter) const
-{
-	InfXmlConnection* connection = infc_browser_get_connection(browser);
-	g_assert(connection != NULL);
-
-	gchar* path = infc_browser_iter_get_path(browser, iter);
-	gchar* remote_id;
-	g_object_get(G_OBJECT(connection), "remote-id", &remote_id, NULL);
-	std::string result = std::string(remote_id) + "?" + path;
-	g_free(path);
-	g_free(remote_id);
-
-	return result;
-}

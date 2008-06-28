@@ -144,10 +144,11 @@ Gobby::BrowserCommands::SessionNode::~SessionNode()
 }
 
 Gobby::BrowserCommands::BrowserCommands(Browser& browser, Folder& folder,
+                                        DocumentInfoStorage& info_storage,
                                         StatusBar& status_bar,
                                         const Preferences& preferences):
-	m_browser(browser), m_folder(folder), m_status_bar(status_bar),
-	m_preferences(preferences)
+	m_browser(browser), m_folder(folder), m_info_storage(info_storage),
+	m_status_bar(status_bar), m_preferences(preferences)
 {
 	InfGtkBrowserModel* model = INF_GTK_BROWSER_MODEL(browser.get_store());
 	m_set_browser_handler =
@@ -282,7 +283,8 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 
 	DocWindow& window = m_folder.add_document(
 		INF_TEXT_SESSION(session),
-		infc_browser_iter_get_name(browser, iter));
+		infc_browser_iter_get_name(browser, iter),
+		m_info_storage.get_key(browser, iter));
 	m_folder.switch_to_document(window);
 
 	SessionNode& node = m_session_map[session];
