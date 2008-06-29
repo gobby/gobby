@@ -1,3 +1,12 @@
+2008-06-29  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Cleaned up the code a bit,
+	implemented save all.
+
+	* src/core/folder.cpp: Emit document_changed with NULL argument in
+	case the last document has been removed.
+
 2008-06-28  Armin Burgmeier  <armin@0x539.de>
 
 	* pixmaps/save-all.svg:

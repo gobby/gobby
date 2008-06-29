@@ -21,27 +21,384 @@
 
 #include <gtkmm/stock.h>
 
-// TODO: Introduce separate classes for the different tasks here...
-
 namespace
 {
-	void save_document(Gobby::DocWindow& document,
-	                   Gobby::Operations& operations,
-	                   const Gobby::DocumentInfoStorage& info_storage,
-	                   Gobby::Folder& folder,
-	                   Gtk::FileChooserDialog& dialog)
-	{
-		const Gobby::DocumentInfoStorage::Info* info =
-			info_storage.get_info(
-				document.get_info_storage_key());
+	using namespace Gobby;
 
-		// TODO: Get encoding from file dialog
-		operations.save_document(
-			document, folder, dialog.get_uri(),
-			info ? info->encoding : "UTF-8",
-			info ? info->eol_style :
-				Gobby::DocumentInfoStorage::EOL_LF);
+	// TODO: Split tasks into separate files in commands/file-tasks?
+	class TaskNew: public Gobby::FileCommands::Task
+	{
+	public:
+		TaskNew(FileCommands& file_commands):
+			Task(file_commands)
+		{
+			DocumentLocationDialog& dialog =
+				get_document_location_dialog();
+
+			dialog.signal_response().connect(
+				sigc::mem_fun(*this, &TaskNew::on_response));
+			dialog.set_document_name(_("New Document"));
+			dialog.present();
+		}
+
+		virtual ~TaskNew()
+		{
+			get_document_location_dialog().hide();
+		}
+
+		void on_response(int response_id)
+		{
+			if(response_id == Gtk::RESPONSE_ACCEPT)
+			{
+				DocumentLocationDialog& dialog =
+					get_document_location_dialog();
+			
+				InfcBrowserIter iter;
+				InfcBrowser* browser =
+					dialog.get_selected_directory(&iter);
+				g_assert(browser != NULL);
+
+				get_operations().create_document(
+					browser, &iter,
+					dialog.get_document_name());
+			}
+
+			finish();
+		}
+	};
+
+	class TaskOpen: public Gobby::FileCommands::Task
+	{
+	private:
+		Gtk::FileChooserDialog m_file_dialog;
+		std::string m_open_uri;
+
+	public:
+		TaskOpen(FileCommands& file_commands):
+			Task(file_commands),
+			m_file_dialog(get_parent(),
+			              _("Choose a text file to open"),
+			              Gtk::FILE_CHOOSER_ACTION_OPEN)
+		{
+			m_file_dialog.add_button(Gtk::Stock::CANCEL,
+		                                 Gtk::RESPONSE_CANCEL);
+			m_file_dialog.add_button(Gtk::Stock::OPEN,
+			                         Gtk::RESPONSE_ACCEPT);
+
+			m_file_dialog.signal_response().connect(sigc::mem_fun(
+				*this, &TaskOpen::on_file_response));
+
+			m_file_dialog.set_current_folder_uri(
+				get_current_folder_uri());
+			m_file_dialog.present();
+		}
+
+		virtual ~TaskOpen()
+		{
+			set_current_folder_uri(
+				m_file_dialog.get_current_folder_uri());
+
+			get_document_location_dialog().hide();
+		}
+
+		void on_file_response(int response_id)
+		{
+			if(response_id == Gtk::RESPONSE_ACCEPT)
+			{
+				DocumentLocationDialog& dialog =
+					get_document_location_dialog();
+
+				dialog.signal_response().connect(
+					sigc::mem_fun(
+						*this,
+						&TaskOpen::
+							on_location_response));
+
+				// TODO: Handle multiple selection
+				m_open_uri = m_file_dialog.get_uri();
+				dialog.set_document_name(
+					Glib::path_get_basename(
+						m_file_dialog.
+							get_filename()));
+
+				m_file_dialog.hide();
+				dialog.present();
+			}
+			else
+			{
+				finish();
+			}
+		}
+
+		void on_location_response(int response_id)
+		{
+			if(response_id == Gtk::RESPONSE_ACCEPT)
+			{
+				DocumentLocationDialog& dialog =
+					get_document_location_dialog();
+
+				InfcBrowserIter iter;
+				InfcBrowser* browser =
+					dialog.get_selected_directory(&iter);
+				g_assert(browser != NULL);
+
+				get_operations().create_document(
+					browser, &iter,
+					dialog.get_document_name(),
+					get_preferences(), m_open_uri, NULL);
+			}
+
+			finish();
+		}
+	};
+
+	class TaskSave: public Gobby::FileCommands::Task
+	{
+	private:
+		Gtk::FileChooserDialog m_file_dialog;
+		DocWindow* m_document;
+
+	public:
+		TaskSave(FileCommands& file_commands, DocWindow& document):
+			Task(file_commands),
+			m_file_dialog(
+				get_parent(), Glib::ustring::compose(_(
+					"Choose a location to save document "
+					"\"%1\" to"),
+					document.get_title()),
+				Gtk::FILE_CHOOSER_ACTION_SAVE),
+			m_document(&document)
+		{
+			
+			m_file_dialog.add_button(Gtk::Stock::CANCEL,
+			                         Gtk::RESPONSE_CANCEL);
+			m_file_dialog.add_button(Gtk::Stock::SAVE,
+			                          Gtk::RESPONSE_ACCEPT);
+			m_file_dialog.set_do_overwrite_confirmation(true);
+
+			m_file_dialog.signal_response().connect(sigc::mem_fun(
+				*this, &TaskSave::on_response));
+			get_folder().signal_document_removed().connect(
+				sigc::mem_fun(
+					*this,
+					&TaskSave::on_document_removed));
+
+			const DocumentInfoStorage::Info* info =
+				get_document_info_storage().get_info(
+					document.get_info_storage_key());
+
+			if(info != NULL && !info->uri.empty())
+			{
+				m_file_dialog.set_uri(info->uri);
+			}
+			else
+			{
+				m_file_dialog.set_current_folder_uri(
+					get_current_folder_uri());
+			}
+
+			m_file_dialog.present();
+		}
+
+		virtual ~TaskSave()
+		{
+			set_current_folder_uri(
+				m_file_dialog.get_current_folder_uri());
+		}
+
+		void on_response(int response_id)
+		{
+			if(response_id == Gtk::RESPONSE_ACCEPT)
+			{
+				const std::string& info_storage_key =
+					m_document->get_info_storage_key();
+
+				const DocumentInfoStorage::Info* info =
+					get_document_info_storage().get_info(
+						info_storage_key);
+
+				// TODO: Get encoding from file dialog
+				get_operations().save_document(
+					*m_document, get_folder(),
+					m_file_dialog.get_uri(),
+					info ? info->encoding : "UTF-8",
+					info ? info->eol_style :
+						DocumentInfoStorage::EOL_LF);
+			}
+
+			finish();
+		}
+
+		void on_document_removed(DocWindow& document)
+		{
+			// The document we are about to save was removed.
+			if(m_document == &document)
+				finish();
+		}
+	};
+
+	class TaskSaveAll: public Gobby::FileCommands::Task
+	{
+	private:
+		std::list<DocWindow*> m_documents;
+		std::list<DocWindow*>::iterator m_current;
+		std::auto_ptr<TaskSave> m_task;
+
+	public:
+		TaskSaveAll(FileCommands& file_commands):
+			Task(file_commands)
+		{
+			typedef Gtk::Notebook_Helpers::PageList PageList;
+			PageList& pages = get_folder().pages();
+
+			for(PageList::iterator iter = pages.begin();
+			    iter != pages.end(); ++ iter)
+			{
+				m_documents.push_back(
+					static_cast<DocWindow*>(
+						iter->get_child()));
+			}
+
+			get_folder().signal_document_removed().connect(
+				sigc::mem_fun(
+					*this,
+					&TaskSaveAll::on_document_removed));
+
+			m_current = m_documents.begin();
+			process_current();
+		}
+
+		void on_document_removed(DocWindow& document)
+		{
+			std::list<DocWindow*>::iterator iter = std::find(
+				m_documents.begin(), m_documents.end(),
+				&document);
+
+			if(iter == m_current)
+			{
+				m_current = m_documents.erase(m_current);
+				// Go on with next
+				process_current();
+			}
+
+			if(iter != m_documents.end())
+				m_documents.erase(iter);
+		}
+
+		void process_current()
+		{
+			m_task.reset(NULL);
+
+			if(m_current == m_documents.end())
+			{
+				finish();
+			}
+			else
+			{
+				DocWindow& doc = **m_current;
+
+				const DocumentInfoStorage::Info* info =
+					get_document_info_storage().get_info(
+						doc.get_info_storage_key());
+
+				if(info != NULL && !info->uri.empty())
+				{
+					get_operations().save_document(
+						doc, get_folder(), info->uri,
+						info->encoding,
+						info->eol_style);
+
+					m_current =
+						m_documents.erase(m_current);
+					process_current();
+				}
+				else
+				{
+					m_task.reset(
+						new TaskSave(m_file_commands,
+						             doc));
+
+					m_task->signal_finished().connect(
+						sigc::mem_fun(*this,
+							&TaskSaveAll::
+								on_finished));
+				}
+			}
+		}
+
+		void on_finished()
+		{
+			m_current = m_documents.erase(m_current);
+			process_current();
+		}
+	};
+} // anonymous namespace
+
+Gobby::FileCommands::Task::Task(FileCommands& file_commands):
+	m_file_commands(file_commands)
+{
+}
+
+Gobby::FileCommands::Task::~Task()
+{
+}
+
+void Gobby::FileCommands::Task::finish()
+{
+	// Note this could delete this:
+	m_signal_finished.emit();
+}
+
+Gtk::Window& FileCommands::Task::get_parent()
+{
+	return m_file_commands.m_parent;
+}
+
+Gobby::Folder& Gobby::FileCommands::Task::get_folder()
+{
+	return m_file_commands.m_folder;
+}
+
+Gobby::Operations& Gobby::FileCommands::Task::get_operations()
+{
+	return m_file_commands.m_operations;
+}
+
+const Gobby::DocumentInfoStorage&
+Gobby::FileCommands::Task::get_document_info_storage()
+{
+	return m_file_commands.m_document_info_storage;
+}
+
+Gobby::Preferences& Gobby::FileCommands::Task::get_preferences()
+{
+	return m_file_commands.m_preferences;
+}
+
+Gobby::DocumentLocationDialog&
+Gobby::FileCommands::Task::get_document_location_dialog()
+{
+	if(m_file_commands.m_location_dialog.get() == NULL)
+	{
+		m_file_commands.m_location_dialog.reset(
+			new DocumentLocationDialog(
+				m_file_commands.m_parent,
+				INF_GTK_BROWSER_MODEL(
+					m_file_commands.m_browser.
+						get_store())));
 	}
+
+	return *m_file_commands.m_location_dialog;
+}
+
+void Gobby::FileCommands::Task::set_current_folder_uri(const std::string& uri)
+{
+	m_file_commands.m_current_folder_uri = uri;
+}
+
+const std::string& Gobby::FileCommands::Task::get_current_folder_uri() const
+{
+	return m_file_commands.m_current_folder_uri;
 }
 
 Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
@@ -52,8 +409,7 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 	m_parent(parent), m_header(header), m_browser(browser),
 	m_folder(folder), m_operations(operations),
 	m_document_info_storage(info_storage), m_preferences(preferences),
-	m_current_uri(Glib::filename_to_uri(Glib::get_current_dir())),
-	m_mode(MODE_NEW)
+	m_current_folder_uri(Glib::filename_to_uri(Glib::get_current_dir()))
 {
 	header.action_file_new->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_new));
@@ -63,67 +419,21 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &FileCommands::on_save));
 	header.action_file_save_as->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_save_as));
-	folder.signal_document_removed().connect(
-		sigc::mem_fun(*this, &FileCommands::on_document_removed));
+	header.action_file_save_all->signal_activate().connect(
+		sigc::mem_fun(*this, &FileCommands::on_save_all));
+	header.action_file_quit->signal_activate().connect(
+		sigc::mem_fun(*this, &FileCommands::on_quit));
 	folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &FileCommands::on_document_changed));
 
 	set_sensitivity(folder.get_current_document() != NULL);
 }
 
-void Gobby::FileCommands::create_location_dialog()
+void Gobby::FileCommands::set_task(Task* task)
 {
-	m_location_dialog.reset(
-		new DocumentLocationDialog(
-			m_parent,
-			INF_GTK_BROWSER_MODEL(
-				m_browser.get_store())));
-
-	m_location_dialog->signal_response().connect(
-		sigc::mem_fun(
-			*this,
-			&FileCommands::on_location_dialog_response));
-}
-
-void Gobby::FileCommands::create_file_dialog(Gtk::FileChooserAction action)
-{
-	if(m_file_dialog.get() == NULL ||
-	   m_file_dialog->Gtk::FileChooser::get_action() != action)
-	{
-		m_file_dialog.reset(new Gtk::FileChooserDialog(m_parent, "",
-		                                               action));
-		m_file_dialog->add_button(Gtk::Stock::CANCEL,
-		                          Gtk::RESPONSE_CANCEL);
-
-		if(action == Gtk::FILE_CHOOSER_ACTION_OPEN)
-		{
-			m_file_dialog->add_button(Gtk::Stock::OPEN,
-			                          Gtk::RESPONSE_ACCEPT);
-		}
-		else
-		{
-			m_file_dialog->set_do_overwrite_confirmation(true);
-
-			m_file_dialog->add_button(Gtk::Stock::SAVE,
-			                          Gtk::RESPONSE_ACCEPT);
-		}
-
-		m_file_dialog->signal_response().connect(
-			sigc::mem_fun(
-				*this,
-				&FileCommands::on_file_dialog_response));
-	}
-}
-
-void Gobby::FileCommands::on_document_removed(DocWindow& document)
-{
-	// Hide save dialog again if the uses closes the document s/he is
-	// about to save...
-	if(m_mode == MODE_SAVE && &document == m_save_document)
-	{
-		m_save_document = NULL;
-		m_file_dialog.reset(NULL);
-	}
+	task->signal_finished().connect(sigc::mem_fun(
+		*this, &FileCommands::on_task_finished));
+	m_task.reset(task);
 }
 
 void Gobby::FileCommands::on_document_changed(DocWindow* document)
@@ -131,30 +441,19 @@ void Gobby::FileCommands::on_document_changed(DocWindow* document)
 	set_sensitivity(document != NULL);
 }
 
+void Gobby::FileCommands::on_task_finished()
+{
+	m_task.reset(NULL);
+}
+
 void Gobby::FileCommands::on_new()
 {
-	m_file_dialog.reset(NULL);
-	if(m_location_dialog.get() == NULL)
-		create_location_dialog();
-
-	m_mode = MODE_NEW;
-	m_location_dialog->set_document_name(_("New Document"));
-	m_location_dialog->present();
+	set_task(new TaskNew(*this));
 }
 
 void Gobby::FileCommands::on_open()
 {
-	if(m_location_dialog.get() != NULL)
-		m_location_dialog->hide();
-
-	create_file_dialog(Gtk::FILE_CHOOSER_ACTION_OPEN);
-
-	// TODO: Allow multiple selection
-	// TODO: Encoding selection in file chooser
-	m_mode = MODE_OPEN;
-	m_file_dialog->set_title(_("Choose a text file to open"));
-	m_file_dialog->set_current_folder_uri(m_current_uri);
-	m_file_dialog->present();
+	set_task(new TaskOpen(*this));
 }
 
 void Gobby::FileCommands::on_save()
@@ -181,95 +480,20 @@ void Gobby::FileCommands::on_save()
 
 void Gobby::FileCommands::on_save_as()
 {
-	if(m_location_dialog.get() != NULL)
-		m_location_dialog->hide();
-
-	create_file_dialog(Gtk::FILE_CHOOSER_ACTION_SAVE);
-
 	DocWindow* document = m_folder.get_current_document();
 	g_assert(document != NULL);
-	
-	m_mode = MODE_SAVE;
-	m_save_document = document;
-	m_file_dialog->set_title(
-		Glib::ustring::compose(
-			_("Choose a location to save document \"%1\" to"),
-			  m_save_document->get_title()));
 
-	const DocumentInfoStorage::Info* info =
-		m_document_info_storage.get_info(
-			document->get_info_storage_key());
-
-	if(info != NULL && !info->uri.empty())
-		m_file_dialog->set_uri(info->uri);
-	else
-		m_file_dialog->set_current_folder_uri(m_current_uri);
-
-	m_file_dialog->present();
+	set_task(new TaskSave(*this, *document));
 }
 
-void Gobby::FileCommands::on_file_dialog_response(int id)
+void Gobby::FileCommands::on_save_all()
 {
-	if(id == Gtk::RESPONSE_ACCEPT)
-	{
-		switch(m_mode)
-		{
-		case MODE_OPEN:
-			if(m_location_dialog.get() == NULL)
-				create_location_dialog();
-
-			// TODO: Handle multiple selection
-			m_open_uri = m_file_dialog->get_uri();
-			m_location_dialog->set_document_name(
-				Glib::path_get_basename(
-					m_file_dialog->get_filename()));
-			m_location_dialog->present();
-
-			break;
-		case MODE_SAVE:
-			save_document(*m_save_document, m_operations,
-			              m_document_info_storage, m_folder,
-			              *m_file_dialog);
-			break;
-		case MODE_NEW:
-		default:
-			g_assert_not_reached();
-		}
-	}
-
-	m_current_uri = m_file_dialog->get_current_folder_uri();
-	m_file_dialog.reset(NULL);
+	set_task(new TaskSaveAll(*this));
 }
 
-void Gobby::FileCommands::on_location_dialog_response(int id)
+void Gobby::FileCommands::on_quit()
 {
-	if(id == Gtk::RESPONSE_ACCEPT)
-	{
-		InfcBrowserIter iter;
-		InfcBrowser* browser =
-			m_location_dialog->get_selected_directory(&iter);
-		g_assert(browser != NULL);
-
-		switch(m_mode)
-		{
-		case MODE_NEW:
-			m_operations.create_document(
-				browser, &iter,
-				m_location_dialog->get_document_name());
-			break;
-		case MODE_OPEN:
-			m_operations.create_document(
-				browser, &iter,
-				m_location_dialog->get_document_name(),
-				m_preferences, m_open_uri, NULL);
-			break;
-		case MODE_SAVE:
-		default:
-			g_assert_not_reached();
-		}
-	}
-
-	m_location_dialog->hide();
+	m_parent.hide();
 }
 
 void Gobby::FileCommands::set_sensitivity(bool sensitivity)

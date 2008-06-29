@@ -40,26 +40,44 @@ public:
 	             const DocumentInfoStorage& info_storage,
 	             Preferences& preferences);
 
-protected:
-	enum Mode {
-		MODE_NEW,
-		MODE_OPEN,
-		MODE_SAVE
-	};
+	class Task: public sigc::trackable
+	{
+	public:
+		typedef sigc::signal<void> SignalFinished;
 
-	void create_file_dialog(Gtk::FileChooserAction action);
-	void create_location_dialog();
+		Task(FileCommands& file_commands);
+		virtual ~Task() = 0;
+
+		void finish();
+		Gtk::Window& get_parent();
+		Folder& get_folder();
+		Operations& get_operations();
+		const DocumentInfoStorage& get_document_info_storage();
+		Preferences& get_preferences();
+		DocumentLocationDialog& get_document_location_dialog();
+
+		void set_current_folder_uri(const std::string& uri);
+		const std::string& get_current_folder_uri() const;
+
+		SignalFinished signal_finished() const
+		{
+			return m_signal_finished;
+		}
+	protected:
+		FileCommands& m_file_commands;
+		SignalFinished m_signal_finished;
+	};
+protected:
+	void set_task(Task* task);
+	void on_document_changed(DocWindow* document);
+	void on_task_finished();
 
 	void on_new();
 	void on_open();
 	void on_save();
 	void on_save_as();
-
-	void on_document_removed(DocWindow& document);
-	void on_document_changed(DocWindow* document);
-
-	void on_file_dialog_response(int id);
-	void on_location_dialog_response(int id);
+	void on_save_all();
+	void on_quit();
 
 	void set_sensitivity(bool sensitivity);
 
@@ -71,13 +89,11 @@ protected:
 	const DocumentInfoStorage& m_document_info_storage;
 	Preferences& m_preferences;
 
-	std::string m_current_uri;
-	std::string m_open_uri;
-	DocWindow* m_save_document;
+	// TODO: This needs also to be available to BrowserCommands
+	std::string m_current_folder_uri;
 
-	Mode m_mode;
+	std::auto_ptr<Task> m_task;
 	std::auto_ptr<DocumentLocationDialog> m_location_dialog;
-	std::auto_ptr<Gtk::FileChooserDialog> m_file_dialog;
 };
 
 }

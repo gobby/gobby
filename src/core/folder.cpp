@@ -229,8 +229,9 @@ void Gobby::Folder::remove_document(DocWindow& window)
 	m_signal_document_removed.emit(window);
 	inf_session_close(INF_SESSION(window.get_session()));
 	remove_page(window);
-	// TODO: Emit document_changed with NULL DocWindow if this was the
-	// last document, since switch_page is not called.
+
+	if(get_n_pages() == 0)
+		m_signal_document_changed.emit(NULL);
 }
 
 Gobby::DocWindow*
