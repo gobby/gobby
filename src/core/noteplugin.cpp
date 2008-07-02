@@ -35,6 +35,11 @@ namespace
 	            InfXmlConnection* sync_connection)
 	{
 		GtkSourceBuffer* textbuffer = gtk_source_buffer_new(NULL);
+		// We never end this non-undoable action since we have our
+		// own (collaborative) Undo implementanion, and we don't want
+		// GtkSourceView to get in our way:
+		gtk_source_buffer_begin_not_undoable_action(textbuffer);
+
 		InfUserTable* user_table = inf_user_table_new();
 		InfTextGtkBuffer* buffer =
 			inf_text_gtk_buffer_new(GTK_TEXT_BUFFER(textbuffer),

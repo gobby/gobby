@@ -279,8 +279,12 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file_quit);
 
 	group_edit->add(action_edit);
-	group_edit->add(action_edit_undo);
-	group_edit->add(action_edit_redo);
+	group_edit->add(action_edit_undo,
+	                Gtk::AccelKey("<control>Z",
+			              "<Actions>/MenuEdit/EditUndo"));
+	group_edit->add(action_edit_redo,
+	                Gtk::AccelKey("<control><shift>Z",
+			              "<Actions>/MenuEdit/EditRedo"));
 	group_edit->add(action_edit_cut);
 	group_edit->add(action_edit_copy);
 	group_edit->add(action_edit_paste);

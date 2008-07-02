@@ -41,6 +41,7 @@ class DocWindow: public Gtk::HPaned
 {
 public:
 	typedef sigc::signal<void, GtkSourceLanguage*> SignalLanguageChanged;
+	typedef sigc::signal<void, InfTextUser*> SignalActiveUserChanged;
 
 	DocWindow(InfTextSession* session, const Glib::ustring& title,
 	          const std::string& info_storage_key,
@@ -64,6 +65,7 @@ public:
 	GtkSourceLanguage* get_language() const;
 	void set_language(GtkSourceLanguage* language);
 
+	InfTextUser* get_active_user() const;
 	void set_active_user(InfTextUser* user);
 
 	GtkSourceView* get_text_view() { return m_view; }
@@ -75,6 +77,11 @@ public:
 	SignalLanguageChanged signal_language_changed() const
 	{
 		return m_signal_language_changed;
+	}
+
+	SignalActiveUserChanged signal_active_user_changed() const
+	{
+		return m_signal_active_user_changed;
 	}
 
 protected:
@@ -105,6 +112,7 @@ protected:
 	Gtk::Label m_info_label;
 
 	SignalLanguageChanged m_signal_language_changed;
+	SignalActiveUserChanged m_signal_active_user_changed;
 };
 
 }

@@ -24,17 +24,14 @@
 
 #include "commands/browser-commands.hpp"
 #include "commands/file-commands.hpp"
+#include "commands/edit-commands.hpp"
 #include "operations/operations.hpp"
 
-/*#include "dialogs/finddialog.hpp"
-#include "dialogs/gotodialog.hpp"
-#include "dialogs/preferencesdialog.hpp"*/
 #include "dialogs/initialdialog.hpp"
 
 #include "core/preferences.hpp"
 #include "core/iconmanager.hpp"
 #include "core/header.hpp"
-#include "core/docwindow.hpp"
 #include "core/folder.hpp"
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
@@ -46,7 +43,6 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/messagedialog.h>
 
-#include <queue>
 #include <memory>
 
 namespace Gobby
@@ -93,6 +89,7 @@ protected:
 
 	BrowserCommands m_commands_browser;
 	FileCommands m_commands_file;
+	EditCommands m_commands_edit;
 
 	// TODO: Can't we use this directly now that the session is
 	// "always open"?
@@ -100,9 +97,6 @@ protected:
 
 	// Dialogs
 	std::auto_ptr<InitialDialog> m_initial_dlg;
-/*	std::auto_ptr<PreferencesDialog> m_preferences_dlg;
-	std::auto_ptr<FindDialog> m_finddialog;
-	std::auto_ptr<GotoDialog> m_gotodialog;*/
 };
 
 }

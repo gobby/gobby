@@ -1,3 +1,25 @@
+2008-07-02  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/core/docwindow.hpp:
+	* src/core/docwindow.cpp: Added the active_user_changed signal and
+	the get_active_user() function.
+
+	* src/core/header.cpp: Added shortcuts for Undo and Redo.
+
+	* src/core/noteplugin.cpp: Disable GtkSourceView Undo/Redo system by
+	calling gtk_source_buffer_begin_non_undoable_action() without ever
+	ending that non-undoable action.
+
+	* inc/commands/edit-commands.hpp:
+	* src/commands/edit-commands.cpp: New class handling the commands in
+	the Edit submenu. For now Undo and Redo are implemented.
+
+	* inc/window.hpp:
+	* src/window.cpp: Instantiate EditCommands.
+
+	* inc/commands/Makefile.am:
+	* src/commands/Makefile.am: Added new files to build.
+
 2008-06-29  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/file-commands.hpp:

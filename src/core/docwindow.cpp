@@ -269,6 +269,13 @@ void Gobby::DocWindow::unset_info()
 	m_info_frame.hide();
 }
 
+InfTextUser* Gobby::DocWindow::get_active_user() const
+{
+	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+		inf_session_get_buffer(INF_SESSION(m_session)));
+	return inf_text_gtk_buffer_get_active_user(buffer);
+}
+
 void Gobby::DocWindow::set_active_user(InfTextUser* user)
 {
 	g_assert(
@@ -287,6 +294,8 @@ void Gobby::DocWindow::set_active_user(InfTextUser* user)
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), TRUE);
 	else
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
+
+	m_signal_active_user_changed.emit(user);
 }
 
 GtkSourceLanguage* Gobby::DocWindow::get_language() const
