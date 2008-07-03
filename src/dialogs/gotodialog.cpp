@@ -107,6 +107,6 @@ void Gobby::GotoDialog::on_goto()
 			Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()),
 			           true);
 		Gtk::TextIter begin = buffer->get_iter_at_line(value - 1);
-		window->set_selection(begin, begin);
+		window->set_selection(begin.gobj(), begin.gobj());
 	}
 }

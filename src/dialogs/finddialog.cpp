@@ -27,7 +27,7 @@
 
 namespace
 {
-	typedef gboolean (*gtk_source_iter_search_func)(
+	typedef gboolean (*GtkSourceIterSearchFunc)(
 		const GtkTextIter*,
 		const gchar*,
 		GtkSourceSearchFlags,
@@ -35,266 +35,337 @@ namespace
 		GtkTextIter*,
 		const GtkTextIter*
 	);
+
+	const int RESPONSE_FIND = 1;
+	const int RESPONSE_REPLACE = 2;
+	const int RESPONSE_REPLACE_ALL = 3;
 }
 
-Gobby::FindDialog::FindDialog(Gtk::Window& parent, Folder& folder):
-	ToolWindow(parent),
-	m_folder(folder),
-	m_label_find(_("Find what:"), Gtk::ALIGN_LEFT),
-	m_label_replace(_("Replace with:"), Gtk::ALIGN_LEFT),
-	m_check_whole_word(_("Match whole word only")),
-	m_check_case(_("Match case")),
-	m_frame_direction(_("Direction")),
-	m_radio_up(m_group_direction, _("_Up"), true),
-	m_radio_down(m_group_direction, _("_Down"), true),
-	m_btn_find(Gtk::Stock::FIND),
-	m_btn_replace(_("_Replace") ),
-	m_btn_replace_all(_("Replace _all") ),
-	m_btn_close(Gtk::Stock::CLOSE)
+Gobby::FindDialog::FindDialog(Gtk::Window& parent, Folder& folder,
+                              StatusBar& status_bar):
+	Gtk::Dialog(_("Find"), parent),
+	m_folder(folder), m_status_bar(status_bar),
+	m_table_entries(2, 2),
+	m_label_find(_("_Search for:"), Gtk::ALIGN_LEFT,
+	             Gtk::ALIGN_CENTER, true),
+	m_label_replace(_("Replace _with:"), Gtk::ALIGN_LEFT,
+	                Gtk::ALIGN_CENTER, true),
+	m_check_case(_("_Match case"), true),
+	m_check_whole_word(_("Match _entire word only"), true),
+	m_check_backwards(_("Search _backwards"), true),
+	m_check_wrap_around(_("Wra_p around"), true)
 {
-	Gtk::Image* replace_img = Gtk::manage(
-		new Gtk::Image(
-			Gtk::Stock::FIND_AND_REPLACE,
-			Gtk::ICON_SIZE_BUTTON
-		)
-	);
+	m_entry_find.set_activates_default(true);
+	m_entry_replace.set_activates_default(true);
+	m_label_find.set_mnemonic_widget(m_entry_find);
+	m_label_replace.set_mnemonic_widget(m_entry_replace);
 
-	Gtk::Image* replace_all_img = Gtk::manage(
-		new Gtk::Image(
-			Gtk::Stock::FIND_AND_REPLACE,
-			Gtk::ICON_SIZE_BUTTON
-		)
-	);
+	m_label_find.show();
+	m_entry_find.show();
 
-	m_btn_replace.set_image(*replace_img);
-	m_btn_replace_all.set_image(*replace_all_img);
-
-	m_box_main.set_spacing(12);
-	m_box_main.pack_start(m_box_left);
-	m_box_main.pack_start(m_separator, Gtk::PACK_SHRINK);
-	m_box_main.pack_start(m_box_btns, Gtk::PACK_SHRINK);
-	add(m_box_main);
-
-	m_box_left.pack_start(m_table_entries);
-	m_box_left.pack_start(m_hbox);
-
-	m_table_entries.set_spacings(5);
 	m_table_entries.attach(m_label_find, 0, 1, 0, 1,
-		Gtk::SHRINK | Gtk::FILL, Gtk::EXPAND);
+	                       Gtk::FILL, Gtk::FILL);
 	m_table_entries.attach(m_label_replace, 0, 1, 1, 2,
-		Gtk::SHRINK | Gtk::FILL, Gtk::EXPAND);
+	                       Gtk::FILL, Gtk::FILL);
 	m_table_entries.attach(m_entry_find, 1, 2, 0, 1,
-		Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND);
+	                       Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 	m_table_entries.attach(m_entry_replace, 1, 2, 1, 2,
-		Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND);
+	                       Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+	m_table_entries.show();
+	m_table_entries.set_spacings(12);
 
-	m_hbox.pack_start(m_box_options);
-	m_hbox.pack_start(m_frame_direction, Gtk::PACK_SHRINK);
-	m_hbox.set_spacing(10);
+	m_check_case.show();
+	m_check_whole_word.show();
+	m_check_backwards.show();
+	m_check_wrap_around.show();
+	m_check_wrap_around.set_active(true);
 
-	m_box_options.pack_start(m_check_whole_word, Gtk::PACK_EXPAND_WIDGET);
-	m_box_options.pack_start(m_check_case, Gtk::PACK_EXPAND_WIDGET);
+	m_box_main.pack_start(m_table_entries, Gtk::PACK_SHRINK);
+	m_box_main.pack_start(m_check_case, Gtk::PACK_SHRINK);
+	m_box_main.pack_start(m_check_whole_word, Gtk::PACK_SHRINK);
+	m_box_main.pack_start(m_check_backwards, Gtk::PACK_SHRINK);
+	m_box_main.pack_start(m_check_wrap_around, Gtk::PACK_SHRINK);
+	m_box_main.set_spacing(12);
+	m_box_main.set_border_width(12);
+	m_box_main.show();
 
-	m_frame_direction.add(m_box_direction);
-	m_box_direction.set_border_width(4);
-	m_box_direction.pack_start(m_radio_up, Gtk::PACK_EXPAND_WIDGET);
-	m_box_direction.pack_start(m_radio_down, Gtk::PACK_EXPAND_WIDGET);
+	get_vbox()->pack_start(m_box_main);
 
-	m_box_btns.set_spacing(5);
-	m_box_btns.pack_start(m_btn_find, Gtk::PACK_EXPAND_PADDING);
-	m_box_btns.pack_start(m_btn_replace, Gtk::PACK_EXPAND_PADDING);
-	m_box_btns.pack_start(m_btn_replace_all, Gtk::PACK_EXPAND_PADDING);
-	m_box_btns.pack_start(m_btn_close, Gtk::PACK_EXPAND_PADDING);
-
-	m_entry_find.signal_activate().connect(
-		sigc::mem_fun(*this, &FindDialog::on_find) );
-	m_entry_replace.signal_activate().connect(
-		sigc::mem_fun(*this, &FindDialog::on_replace) );
-
-	m_radio_down.set_active(true);
-
-	m_btn_close.signal_clicked().connect(
-		sigc::mem_fun(*this, &FindDialog::hide));
-
-	m_btn_find.signal_clicked().connect(
-		sigc::mem_fun(*this, &FindDialog::on_find));
-	m_btn_replace.signal_clicked().connect(
-		sigc::mem_fun(*this, &FindDialog::on_replace) );
-	m_btn_replace_all.signal_clicked().connect(
-		sigc::mem_fun(*this, &FindDialog::on_replace_all) );
-
-	GTK_WIDGET_SET_FLAGS(m_btn_find.gobj(), GTK_CAN_DEFAULT);
-	set_default(m_btn_find);
-
-	set_border_width(16);
+	m_entry_find.signal_changed().connect(
+		sigc::mem_fun(*this, &FindDialog::on_find_text_changed));
+	m_entry_replace.signal_changed().connect(
+		sigc::mem_fun(*this, &FindDialog::on_replace_text_changed));
 
 	set_resizable(false);
-	show_all_children();
 
-	set_search_only(true);
+	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	m_button_replace_all = add_button(_("Replace _All"),
+	                                  RESPONSE_REPLACE_ALL);
+	m_button_replace = add_button(_("_Replace"), RESPONSE_REPLACE);
+	add_button(Gtk::Stock::FIND, RESPONSE_FIND);
+
+	set_default_response(RESPONSE_FIND);
+
+	m_button_replace->set_image(*Gtk::manage(new Gtk::Image(
+		Gtk::Stock::FIND_AND_REPLACE, Gtk::ICON_SIZE_BUTTON)));
+
+	m_folder.signal_document_changed().connect(
+		sigc::mem_fun(*this, &FindDialog::on_document_changed));
+	on_document_changed(m_folder.get_current_document());
+}
+
+bool Gobby::FindDialog::get_search_only() const
+{
+	return m_label_replace.is_visible();
 }
 
 void Gobby::FindDialog::set_search_only(bool search_only)
 {
-	void(Gtk::Widget::*show_func)();
-	show_func = search_only ? &Gtk::Widget::hide : &Gtk::Widget::show;
+	if(search_only)
+	{
+		m_label_replace.hide();
+		m_entry_replace.hide();
+		m_button_replace->hide();
+		m_button_replace_all->hide();
+	}
+	else
+	{
+		m_label_replace.show();
+		m_entry_replace.show();
+		m_button_replace->show();
+		m_button_replace_all->show();
+	}
 
-	sigc::bind(show_func, sigc::ref(m_entry_replace) )();
-	sigc::bind(show_func, sigc::ref(m_label_replace) )();
-	sigc::bind(show_func, sigc::ref(m_btn_replace) )();
-	sigc::bind(show_func, sigc::ref(m_btn_replace_all) )();
+	set_title(search_only ? _("Find") : _("Replace") );
+}
 
-	set_title(search_only ? _("Search") : _("Search and replace") );
+Glib::ustring Gobby::FindDialog::get_find_text() const
+{
+	return m_entry_find.get_text();
+}
+
+Glib::ustring Gobby::FindDialog::get_replace_text() const
+{
+	return m_entry_replace.get_text();
+}
+
+bool Gobby::FindDialog::find_next()
+{
+	bool result = find_and_select(NULL, SEARCH_FORWARD);
+	if(!result)
+	{
+		Glib::ustring str = Glib::ustring::compose(
+			_("Phrase \"%1\" has not been found"),
+			get_find_text());
+
+		m_status_bar.add_message(StatusBar::INFO, str, 5);
+		return false;
+	}
+
+	return true;
+}
+
+bool Gobby::FindDialog::find_previous()
+{
+	bool result = find_and_select(NULL, SEARCH_BACKWARD);
+	if(!result)
+	{
+		Glib::ustring str = Glib::ustring::compose(
+			_("Phrase \"%1\" has not been found"),
+			get_find_text());
+
+		m_status_bar.add_message(StatusBar::INFO, str, 5);
+		return false;
+	}
+
+	return true;
 }
 
 void Gobby::FindDialog::on_show()
 {
-	ToolWindow::on_show();
+	Gtk::Dialog::on_show();
 	m_entry_find.grab_focus();
 }
 
-void Gobby::FindDialog::on_find()
+void Gobby::FindDialog::on_response(int id)
 {
-	DocWindow* doc = get_document();
-	if(doc == NULL) return;
-
-	Glib::RefPtr<Gtk::TextBuffer> buf =
-		Glib::wrap(GTK_TEXT_BUFFER(doc->get_text_buffer()), true);
-
-	bool result = search_sel(buf->get_insert()->get_iter() );
-	if(!result)
+	switch(id)
 	{
-		Glib::ustring str = Glib::ustring::compose(
-			"\"%1\" has not been found in the document",
-			m_entry_find.get_text());
-
-		Gtk::MessageDialog dlg(
-			*this,
-			str,
-			false,
-			Gtk::MESSAGE_INFO,
-			Gtk::BUTTONS_OK,
-			true
-		);
-
-		dlg.run();
+	case Gtk::RESPONSE_CLOSE:
+		hide();
+		break;
+	case RESPONSE_FIND:
+		find();
+		break;
+	case RESPONSE_REPLACE:
+		replace();
+		break;
+	case RESPONSE_REPLACE_ALL:
+		replace_all();
+		break;
 	}
+
+	Gtk::Dialog::on_response(id);
 }
 
-void Gobby::FindDialog::on_replace()
+void Gobby::FindDialog::on_document_changed(DocWindow* document)
 {
-	DocWindow* doc = get_document();
-	if(doc == NULL) return;
+	m_active_user_changed_connection.disconnect();
 
-	Glib::RefPtr<Gtk::TextBuffer> buf =
-		Glib::wrap(GTK_TEXT_BUFFER(doc->get_text_buffer()), true);
+	if(document != NULL)
+	{
+		m_active_user_changed_connection =
+			document->signal_active_user_changed().connect(
+				sigc::mem_fun(
+					*this,
+					&FindDialog::on_active_user_changed));
+	}
+
+	update_sensitivity();
+}
+
+void Gobby::FindDialog::on_active_user_changed(InfTextUser* user)
+{
+	update_sensitivity();
+}
+
+void Gobby::FindDialog::on_find_text_changed()
+{
+	update_sensitivity();
+	m_signal_find_text_changed.emit();
+}
+
+void Gobby::FindDialog::on_replace_text_changed()
+{
+	m_signal_replace_text_changed.emit();
+}
+
+Gobby::FindDialog::SearchDirection Gobby::FindDialog::get_direction() const
+{
+	if(m_check_backwards.get_active())
+		return SEARCH_BACKWARD;
+	else
+		return SEARCH_FORWARD;
+}
+
+bool Gobby::FindDialog::find()
+{
+	if(get_direction() == SEARCH_FORWARD)
+		find_next();
+	else
+		find_previous();
+}
+
+bool Gobby::FindDialog::replace()
+{
+	DocWindow* document = m_folder.get_current_document();
+	g_assert(document != NULL);
 
 	// Get selected string
-	Glib::ustring sel_str = doc->get_selected_text();
-	Glib::ustring find_str = m_entry_find.get_text();
+	Glib::ustring sel_str = document->get_selected_text();
+	Glib::ustring find_str = get_find_text();
 
 	// Lowercase both if we are comparing insensitive
 	if(!m_check_case.get_active() )
 	{
-		sel_str.lowercase();
-		find_str.lowercase();
+		sel_str = sel_str.casefold();
+		find_str = find_str.casefold();
 	}
 
 	// Replace them if they are the same
 	if(sel_str == find_str)
 	{
-		// Replace occurence
-		buf->erase_selection();
-		buf->insert_at_cursor(m_entry_replace.get_text() );
+		GtkTextBuffer* buffer =
+			GTK_TEXT_BUFFER(document->get_text_buffer());
 
-		// ... and find the next
-		search_sel(buf->get_insert()->get_iter() );
+		// Replace occurence
+		Glib::ustring replace_text = get_replace_text();
+		gtk_text_buffer_delete_selection(buffer, TRUE, TRUE);
+		gtk_text_buffer_insert_at_cursor(buffer, replace_text.c_str(),
+		                                 replace_text.bytes());
+
+		// and find the next
+		find_and_select(NULL, get_direction());
+		return true;
 	}
 	else
 	{
 		// Search the first occurence
-		on_find();
+		return find();
 	}
 }
 
-void Gobby::FindDialog::on_replace_all()
+bool Gobby::FindDialog::replace_all()
 {
-	DocWindow* doc = get_document();
-	if(doc == NULL) return;
+	DocWindow* document = m_folder.get_current_document();
+	g_assert(document != NULL);
 
-	Glib::RefPtr<Gtk::TextBuffer> buf =
-		Glib::wrap(GTK_TEXT_BUFFER(doc->get_text_buffer()), true);
-
-	Gtk::TextIter begin = buf->begin();
+	GtkTextIter begin;
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document->get_text_buffer());
+	gtk_text_buffer_get_start_iter(buffer, &begin);
 
 	unsigned int replace_count = 0;
-	Gtk::TextIter match_start, match_end;
-	while(search_range(begin, NULL, match_start, match_end) )
+	GtkTextIter match_start, match_end;
+	while(find_range(&begin, NULL, SEARCH_FORWARD,
+	                 &match_start, &match_end))
 	{
-		begin = buf->erase(match_start, match_end);
-		begin = buf->insert(begin, m_entry_replace.get_text() );
+		Glib::ustring replace_text = get_replace_text();
+		gtk_text_buffer_delete(buffer, &match_start, &match_end);
+		gtk_text_buffer_insert(buffer, &match_start,
+		                       replace_text.c_str(),
+		                       replace_text.bytes());
 
 		++ replace_count;
+		begin = match_start;
 	}
 
-	Glib::ustring msg;
+	Glib::ustring message;
+	bool result;
+
 	if(replace_count == 0)
 	{
-		msg = _("No occurence has been replaced");
+		message = _("No occurence has been replaced");
+		result = false;
 	}
 	else
 	{
-		msg = Glib::ustring::compose(
+		message = Glib::ustring::compose(
 			ngettext("%1 occurence has been replaced",
 			         "%1 occurences have been replaced",
 			         replace_count), replace_count);
+		result = true;
 	}
 
-	Gtk::MessageDialog dlg(
-		*this,
-		msg,
-		false,
-		Gtk::MESSAGE_INFO,
-		Gtk::BUTTONS_OK,
-		true
-	);
-
-	dlg.run();
+	m_status_bar.add_message(StatusBar::INFO, message, 5);
+	return result;
 }
 
-Gobby::DocWindow* Gobby::FindDialog::get_document()
+bool Gobby::FindDialog::find_and_select(const GtkTextIter* from,
+                                        SearchDirection direction)
 {
-	DocWindow* doc = m_folder.get_current_document();
+	DocWindow* document = m_folder.get_current_document();
+	g_assert(document != NULL);
 
-	if(doc == NULL)
+	const GtkTextIter* real_begin = from;
+	GtkTextIter insert_iter;
+
+	// Search from cursor position if from is not given
+	if(from == NULL)
 	{
-		Gtk::MessageDialog dlg(
-			*this,
-			_("No document currently opened"),
-			false,
-			Gtk::MESSAGE_ERROR,
-			Gtk::BUTTONS_OK,
-			true
-		);
-
-		dlg.run();
+		GtkTextBuffer* buffer =
+			GTK_TEXT_BUFFER(document->get_text_buffer());
+		GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
+		gtk_text_buffer_get_iter_at_mark(buffer, &insert_iter, mark);
+		real_begin = &insert_iter;
 	}
 
-	return doc;
-}
-
-bool Gobby::FindDialog::search_sel(const Gtk::TextIter& from)
-{
-	DocWindow* doc = get_document();
-	if(doc == NULL) return false;
-
-	Gtk::TextIter match_start, match_end;
-	if(search_wrap(from, match_start, match_end) )
+	GtkTextIter match_start, match_end;
+	if(find_wrap(real_begin, direction, &match_start, &match_end))
 	{
-		if(m_radio_down.get_active() )
-			doc->set_selection(match_end, match_start);
+		if(direction == SEARCH_FORWARD)
+			document->set_selection(&match_end, &match_start);
 		else
-			doc->set_selection(match_start, match_end);
+			document->set_selection(&match_start, &match_end);
 
 		return true;
 	}
@@ -302,50 +373,65 @@ bool Gobby::FindDialog::search_sel(const Gtk::TextIter& from)
 	return false;
 }
 
-bool Gobby::FindDialog::search_wrap(const Gtk::TextIter& from,
-                                    Gtk::TextIter& match_start,
-                                    Gtk::TextIter& match_end)
+bool Gobby::FindDialog::find_wrap(const GtkTextIter* from,
+                                  SearchDirection direction,
+                                  GtkTextIter* match_start,
+                                  GtkTextIter* match_end)
 {
-	Glib::RefPtr<Gtk::TextBuffer> buf = from.get_buffer();
-	Gtk::TextIter start_pos(from);
+	DocWindow* document = m_folder.get_current_document();
+	g_assert(document != NULL);
 
-	bool result = search_range(start_pos, NULL, match_start, match_end);
+	GtkTextIter start_pos = *from;
+
+	bool result = find_range(&start_pos, NULL, direction,
+	                         match_start, match_end);
 	if(result == true) return true;
 
-	Gtk::TextIter restart_pos;
-	if (m_radio_down.get_active())
-		restart_pos = buf->begin();
-	else
-		restart_pos = buf->end();
+	if(!m_check_wrap_around.get_active()) return false;
 
+	// Wrap around
+	GtkTextIter restart_pos;
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document->get_text_buffer());
+
+	if(direction == SEARCH_FORWARD)
+		gtk_text_buffer_get_start_iter(buffer, &restart_pos);
+	else
+		gtk_text_buffer_get_end_iter(buffer, &restart_pos);
+		
 	// Limit to search to: Normally the position where we started.
-	Gtk::TextIter* relimit = &start_pos;
-	if(m_radio_down.get_active() )
+	GtkTextIter* relimit = &start_pos;
+	if(direction == SEARCH_BACKWARD)
 	{
-		start_pos.forward_chars(m_entry_find.get_text().length() );
-		if(start_pos == buf->end() )
+		// ???
+		gtk_text_iter_forward_chars(&start_pos,
+		                            get_find_text().length());
+		if(gtk_text_iter_is_end(&start_pos))
 			relimit = NULL;
 	}
 
-	return search_range(restart_pos, relimit, match_start, match_end);
+	return find_range(&restart_pos, relimit, direction,
+	                  match_start, match_end);
 }
 
-bool Gobby::FindDialog::search_range(const Gtk::TextIter& from,
-                                     const Gtk::TextIter* to,
-                                     Gtk::TextIter& match_start,
-                                     Gtk::TextIter& match_end)
+bool Gobby::FindDialog::find_range(const GtkTextIter* from,
+                                   const GtkTextIter* to,
+                                   SearchDirection direction,
+                                   GtkTextIter* match_start,
+                                   GtkTextIter* match_end)
 {
-	Gtk::TextIter start_pos(from);
-	while(search_once(start_pos, to, match_start, match_end) )
+	GtkTextIter start_pos = *from;
+	while(find_range_once(&start_pos, to, direction,
+	                      match_start, match_end))
 	{
 		if(m_check_whole_word.get_active() )
 		{
-			if(!match_start.starts_word() || !match_end.ends_word())
+			if(!gtk_text_iter_starts_word(match_start) ||
+			   !gtk_text_iter_ends_word(match_end))
 			{
-				if(m_radio_down.get_active() )
-					start_pos = match_end;
+				if(direction == SEARCH_FORWARD)
+					start_pos = *match_end;
 				else
-					start_pos = match_start;
+					start_pos = *match_start;
 
 				continue;
 			}
@@ -357,39 +443,44 @@ bool Gobby::FindDialog::search_range(const Gtk::TextIter& from,
 	return false;
 }
 
-bool Gobby::FindDialog::search_once(const Gtk::TextIter& from,
-                                    const Gtk::TextIter* to,
-                                    Gtk::TextIter& match_start,
-                                    Gtk::TextIter& match_end)
+bool Gobby::FindDialog::find_range_once(const GtkTextIter* from,
+                                        const GtkTextIter* to,
+                                        SearchDirection direction,
+                                        GtkTextIter* match_start,
+                                        GtkTextIter* match_end)
 {
 	GtkSourceSearchFlags flags = GtkSourceSearchFlags(0);
 	if(!m_check_case.get_active() )
 		flags = GTK_SOURCE_SEARCH_CASE_INSENSITIVE;
 
-	gtk_source_iter_search_func search_func =
-		gtk_source_iter_forward_search;
-
-	if(m_radio_up.get_active() )
-		search_func = gtk_source_iter_backward_search;
+	GtkSourceIterSearchFunc search_func = (direction == SEARCH_FORWARD ?
+		gtk_source_iter_forward_search :
+		gtk_source_iter_backward_search);
 
 	Glib::ustring find_str = m_entry_find.get_text();
-	GtkTextIter match_start_gtk, match_end_gtk;
+
 	gboolean result = search_func(
-		from.gobj(),
+		from,
 		find_str.c_str(),
 		flags,
-		&match_start_gtk,
-		&match_end_gtk,
-		to != NULL ? to->gobj() : NULL
+		match_start,
+		match_end,
+		to != NULL ? to : NULL
 	);
 
-	if(result == TRUE)
-	{
-		match_start = Gtk::TextIter(&match_start_gtk);
-		match_end = Gtk::TextIter(&match_end_gtk);
+	return result;
+}
 
-		return true;
-	}
+void Gobby::FindDialog::update_sensitivity()
+{
+	DocWindow* document = m_folder.get_current_document();
 
-	return false;
+	bool find_sensitivity =
+		(!m_entry_find.get_text().empty() && document != NULL);
+	bool replace_sensitivity =
+		(find_sensitivity && document->get_active_user() != NULL);
+
+	set_response_sensitive(RESPONSE_FIND, find_sensitivity);
+	set_response_sensitive(RESPONSE_REPLACE, replace_sensitivity);
+	set_response_sensitive(RESPONSE_REPLACE_ALL, replace_sensitivity);
 }

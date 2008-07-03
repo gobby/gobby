@@ -19,10 +19,11 @@
 #ifndef _GOBBY_EDIT_COMMANDS_HPP_
 #define _GOBBY_EDIT_COMMANDS_HPP_
 
-#include "operations/operations.hpp"
-#include "dialogs/documentlocationdialog.hpp"
+#include "dialogs/finddialog.hpp"
+
 #include "core/header.hpp"
-#include "core/browser.hpp"
+#include "core/folder.hpp"
+#include "core/statusbar.hpp"
 
 #include <gtkmm/window.h>
 #include <gtkmm/filechooserdialog.h>
@@ -35,7 +36,8 @@ class EditCommands: public sigc::trackable
 {
 public:
 	EditCommands(Gtk::Window& parent, Header& header,
-	             Folder& folder, Preferences& preferences);
+	             Folder& folder, StatusBar& status_bar,
+	             Preferences& preferences);
 	~EditCommands();
 
 protected:
@@ -87,12 +89,25 @@ protected:
 
 	void on_can_undo_changed(InfAdoptedUser* user, bool can_undo);
 	void on_can_redo_changed(InfAdoptedUser* user, bool can_redo);
+	void on_find_text_changed();
 
 	void on_undo();
 	void on_redo();
 	void on_cut();
 	void on_copy();
 	void on_paste();
+	void on_find();
+	void on_find_next();
+	void on_find_prev();
+	void on_find_replace();
+
+	Gtk::Window& m_parent;
+	Header& m_header;
+	Folder& m_folder;
+	StatusBar& m_status_bar;
+	Preferences& m_preferences;
+
+	std::auto_ptr<FindDialog> m_find_dialog;
 
 	DocWindow* m_current_document;
 	// Only valid when m_current_document is nonzero:
@@ -103,10 +118,8 @@ protected:
 	gulong m_mark_set_handler;
 	gulong m_changed_handler;
 
-	Gtk::Window& m_parent;
-	Header& m_header;
-	Folder& m_folder;
-	Preferences& m_preferences;
+private:
+	void ensure_find_dialog();
 };
 
 }

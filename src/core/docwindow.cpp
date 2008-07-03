@@ -232,13 +232,11 @@ void Gobby::DocWindow::get_cursor_position(unsigned int& row,
 	}
 }
 
-void Gobby::DocWindow::set_selection(const Gtk::TextIter& begin,
-                                     const Gtk::TextIter& end)
+void Gobby::DocWindow::set_selection(const GtkTextIter* begin,
+                                     const GtkTextIter* end)
 {
 	gtk_text_buffer_select_range(
-		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)),
-		begin.gobj(),
-		end.gobj());
+		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)), begin, end);
 
 	gtk_text_view_scroll_to_mark(
 		GTK_TEXT_VIEW(m_view),

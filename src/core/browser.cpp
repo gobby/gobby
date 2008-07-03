@@ -191,8 +191,6 @@ void Gobby::Browser::on_hostname_activate()
 
 	m_entry_hostname.set_text("");
 
-	// Translators: That's a Unicode horizontal ellipsis character,
-	// not three dots.
 	StatusBar::MessageHandle message_handle =
 		m_status_bar.add_message(
 			StatusBar::INFO, Glib::ustring::compose(

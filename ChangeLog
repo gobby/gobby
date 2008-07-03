@@ -1,6 +1,32 @@
 2008-07-03  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/edit-commands.hpp:
+	* src/commands/edit-commands.cpp: Take a StatusBar in constructor to
+	hand to find dialog, implemented find and replace.
+
+	* inc/core/docwindow.hpp:
+	* src/core/docwindow.cpp: Changed set_selection paramaters from
+	const Gtk::TextIter& to const GtkTextIter* since we are using the C
+	API of GtkTextBuffer.
+
+	* src/dialogs/gotodialog.cpp: Adapt to API change in DocWindow.
+
+	* inc/dialogs/finddialog.hpp:
+	* src/dialogs/finddialog.cpp: Changed FindDialog to better meet the
+	GNOME HIG, added "Wrap around" option, inherit from Gtk::Dialog
+	instead of Gobby::ToolWindow.
+
+	* src/core/header.cpp: Add a horizontal ellipsis to all menu items
+	that open dialogs.
+
+	* src/dialogs/initialdialog.cpp: Call Gtk::Dialog constructor with
+	parent instead of default constructor.
+
+	* src/window.cpp: Pass statusbar to EditCommands.
+
+2008-07-03  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/edit-commands.hpp:
 	* src/commands/edit-commands.cpp: Implemented Cut/Copy/Paste
 	functionality.
 

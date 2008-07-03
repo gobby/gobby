@@ -202,10 +202,12 @@ Gobby::Header::Header(Preferences& preferences,
 
 	action_file(Gtk::Action::create("MenuFile", _("_File"))),
 	action_file_new(Gtk::Action::create("FileNew", Gtk::Stock::NEW)),
-	action_file_open(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN)),
+	action_file_open(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,
+	                                     _("Open…"))),
 	action_file_save(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)),
 	action_file_save_as(
-		Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS)),
+		Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,
+		                    _("Save As…"))),
 	action_file_save_all(
 		Gtk::Action::create(
 			"FileSaveAll", Gobby::IconManager::STOCK_SAVE_ALL,
@@ -219,7 +221,8 @@ Gobby::Header::Header(Preferences& preferences,
 	action_edit_copy(Gtk::Action::create("EditCopy", Gtk::Stock::COPY)),
 	action_edit_paste(
 		Gtk::Action::create("EditPaste", Gtk::Stock::PASTE)),
-	action_edit_find(Gtk::Action::create("EditFind", Gtk::Stock::FIND)),
+	action_edit_find(Gtk::Action::create("EditFind", Gtk::Stock::FIND,
+	                                     _("Find…"))),
 	action_edit_find_next(
 		Gtk::Action::create("EditFindNext", _("Find next"),
 		                    _("Find next match of phrase "
@@ -230,13 +233,16 @@ Gobby::Header::Header(Preferences& preferences,
 		                      "searched for"))),
 	action_edit_find_replace(
 		Gtk::Action::create("EditFindReplace",
-		                    Gtk::Stock::FIND_AND_REPLACE)),
+		                    Gtk::Stock::FIND_AND_REPLACE,
+		                    _("Find And Replace…"))),
 	action_edit_goto_line(
 		Gtk::Action::create("EditGotoLine",
-		                    Gtk::Stock::JUMP_TO)),
+		                    Gtk::Stock::JUMP_TO,
+				    _("Go To Line…"))),
 	action_edit_preferences(
 		Gtk::Action::create("EditPreferences",
-		                    Gtk::Stock::PREFERENCES)),
+		                    Gtk::Stock::PREFERENCES,
+		                    _("Preferences…"))),
 
 	action_view(Gtk::Action::create("MenuView", _("_View"))),
 	action_view_toolbar(
@@ -260,7 +266,7 @@ Gobby::Header::Header(Preferences& preferences,
 	action_help(Gtk::Action::create("MenuHelp", _("_Help")) ),
 	action_help_about(
 		Gtk::Action::create(
-			"HelpAbout", Gtk::Stock::ABOUT, _("About"),
+			"HelpAbout", Gtk::Stock::ABOUT, _("About…"),
 			_("Shows Gobby's copyright and credits"))),
 
 	m_ui_manager(Gtk::UIManager::create())
@@ -297,7 +303,9 @@ Gobby::Header::Header(Preferences& preferences,
 	group_edit->add(action_edit_find_prev,
 	                Gtk::AccelKey("<control><shift>G",
 			              "<Actions>/MenuEdit/EditFindPrev"));
-	group_edit->add(action_edit_find_replace);
+	group_edit->add(action_edit_find_replace,
+	                Gtk::AccelKey("<control>H",
+			              "<Actions>/MenuEdit/EditFindReplace"));
 	group_edit->add(action_edit_goto_line,
 	                Gtk::AccelKey("<control>I",
 	                              "<Actions>/MenuEdit/EditGotoLine"));

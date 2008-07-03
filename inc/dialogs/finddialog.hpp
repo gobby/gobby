@@ -20,98 +20,116 @@
 #define _GOBBY_FINDDIALOG_HPP_
 
 #include "core/folder.hpp"
+#include "core/statusbar.hpp"
 #include "core/docwindow.hpp"
-#include "core/toolwindow.hpp"
 
-#include <gtkmm/window.h>
-#include <gtkmm/separator.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/box.h>
 #include <gtkmm/table.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/radiobutton.h>
-#include <gtkmm/frame.h>
 
 namespace Gobby
 {
 
-class FindDialog: public ToolWindow
+class FindDialog: public Gtk::Dialog
 {
 public:
-	FindDialog(Gtk::Window& parent, Folder& folder);
+	typedef sigc::signal<void> SignalFindTextChanged;
+	typedef sigc::signal<void> SignalReplaceTextChanged;
 
+	FindDialog(Gtk::Window& parent, Folder& folder,
+	           StatusBar& status_bar);
+
+	bool get_search_only() const;
 	void set_search_only(bool search_only);
+
+	Glib::ustring get_find_text() const;
+	Glib::ustring get_replace_text() const;
+
+	bool find_next();
+	bool find_previous();
+
+	SignalFindTextChanged signal_find_text_changed() const
+	{
+		return m_signal_find_text_changed;
+	}
+
+	SignalReplaceTextChanged signal_replace_text_changed() const
+	{
+		return m_signal_replace_text_changed;
+	}
 protected:
+	enum SearchDirection {
+		SEARCH_FORWARD,
+		SEARCH_BACKWARD
+	};
+
 	virtual void on_show();
+	virtual void on_response(int id);
 
-	virtual void on_find();
-	virtual void on_replace();
-	virtual void on_replace_all();
+	void on_document_changed(DocWindow* document);
+	void on_active_user_changed(InfTextUser* user);
+	void on_find_text_changed();
+	void on_replace_text_changed();
 
-	/** Returns the current document or NULL if none has been opened. An
-	 * error message is shown in this case.
-	 */
-	DocWindow* get_document();
+	SearchDirection get_direction() const;
+	bool find();
+	bool replace();
+	bool replace_all();
 
-	/** Searches for an occurence in the document and selects the text
-	 * in the docmuent if one has been found.
-	 */
-	bool search_sel(const Gtk::TextIter& from);
+	// Searches for an occurence with the provided options, selecting the
+	// result, if any.
+	bool find_and_select(const GtkTextIter* from,
+	                     SearchDirection direction);
 
-	/** Searches for an occurence in the document from the beginning
-	 * position, wrapping around if the end (or beginning, if searching
-	 * backwards) has been reached.
-	 */
-	bool search_wrap(const Gtk::TextIter& from,
-	                 Gtk::TextIter& match_start,
-	                 Gtk::TextIter& match_end);
+	// Searches for a occurence, beginning from from, and wrapping around
+	// if the corresponding checkbutton is checked.
+	bool find_wrap(const GtkTextIter* from,
+	               SearchDirection direction,
+	               GtkTextIter* match_start,
+	               GtkTextIter* match_end);
 
-	/** Searches for an occurence in the document within the given range.
-	 */
-	bool search_range(const Gtk::TextIter& from,
-	                  const Gtk::TextIter* to,
-	                  Gtk::TextIter& match_start,
-	                  Gtk::TextIter& match_end);
+	// Searches for an occurence in the given range
+	bool find_range(const GtkTextIter* from,
+	                const GtkTextIter* to,
+	                SearchDirection direction,
+	                GtkTextIter* match_start,
+	                GtkTextIter* match_end);
 
-	/** Searches for an occurence in the document, not looking at
-	 * whole word stuff.
-	 */
-	bool search_once(const Gtk::TextIter& from,
-	                 const Gtk::TextIter* to,
-	                 Gtk::TextIter& match_start,
-	                 Gtk::TextIter& match_end);
+	// Searches for an occurence, ignoring whole word only option
+	bool find_range_once(const GtkTextIter* from,
+	                     const GtkTextIter* to,
+	                     SearchDirection direction,
+	                     GtkTextIter* match_start,
+	                     GtkTextIter* match_end);
 
 	Folder& m_folder;
+	StatusBar& m_status_bar;
 
-	Gtk::HBox m_box_main;
-	Gtk::VBox m_box_left;
-	Gtk::VSeparator m_separator;
-	Gtk::VBox m_box_btns;
+	sigc::connection m_active_user_changed_connection;
 
+	Gtk::VBox m_box_main;
 	Gtk::Table m_table_entries;
-
 	Gtk::Label m_label_find;
 	Gtk::Label m_label_replace;
-
 	Gtk::Entry m_entry_find;
 	Gtk::Entry m_entry_replace;
 
-	Gtk::HBox m_hbox;
-	Gtk::VBox m_box_options;
-	Gtk::CheckButton m_check_whole_word;
 	Gtk::CheckButton m_check_case;
+	Gtk::CheckButton m_check_whole_word;
+	Gtk::CheckButton m_check_backwards;
+	Gtk::CheckButton m_check_wrap_around;
 
-	Gtk::Frame m_frame_direction;
-	Gtk::VBox m_box_direction;
-	Gtk::RadioButtonGroup m_group_direction;
-	Gtk::RadioButton m_radio_up;
-	Gtk::RadioButton m_radio_down;
+	Gtk::Button* m_button_replace;
+	Gtk::Button* m_button_replace_all;
 
-	Gtk::Button m_btn_find;
-	Gtk::Button m_btn_replace;
-	Gtk::Button m_btn_replace_all;
-	Gtk::Button m_btn_close;
+	SignalFindTextChanged m_signal_find_text_changed;
+	SignalReplaceTextChanged m_signal_replace_text_changed;
+
+private:
+	void update_sensitivity();
 };
 
 }

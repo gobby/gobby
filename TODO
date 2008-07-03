@@ -1,0 +1,3 @@
+ - Subscribing to a for the first time document and clicking into it scrolls
+   the view all way down. Perhaps it is enough to keep the cursor initially at
+   the beginning of the document.

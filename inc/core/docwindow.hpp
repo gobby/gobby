@@ -58,8 +58,8 @@ public:
 	}
 
 	void get_cursor_position(unsigned int& row, unsigned int& col) const;
-	void set_selection(const Gtk::TextIter& begin,
-	                   const Gtk::TextIter& end);
+	void set_selection(const GtkTextIter* begin,
+	                   const GtkTextIter* end);
 	Glib::ustring get_selected_text() const;
 
 	GtkSourceLanguage* get_language() const;

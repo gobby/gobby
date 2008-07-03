@@ -25,9 +25,11 @@ namespace
 } // anonymous namespace
 
 Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
-                                  Folder& folder, Preferences& preferences):
+                                  Folder& folder, StatusBar& status_bar,
+                                  Preferences& preferences):
 	m_parent(parent), m_header(header), m_folder(folder),
-	m_preferences(preferences), m_current_document(NULL)
+	m_preferences(preferences), m_status_bar(status_bar),
+	m_current_document(NULL)
 {
 	m_header.action_edit_undo->signal_activate().connect(
 		sigc::mem_fun(*this, &EditCommands::on_undo));
@@ -39,6 +41,14 @@ Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &EditCommands::on_copy));
 	m_header.action_edit_paste->signal_activate().connect(
 		sigc::mem_fun(*this, &EditCommands::on_paste));
+	m_header.action_edit_find->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_find));
+	m_header.action_edit_find_next->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_find_next));
+	m_header.action_edit_find_prev->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_find_prev));
+	m_header.action_edit_find_replace->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_find_replace));
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &EditCommands::on_document_changed));
 
@@ -142,6 +152,22 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 		on_active_user_changed(active_user);
 		// Set initial sensitivity for cut/copy/paste:
 		on_mark_set();
+
+		// Set initial sensitivity for find/replace:
+		m_header.action_edit_find->set_sensitive(true);
+
+		if(m_find_dialog.get())
+		{
+			on_find_text_changed();
+		}
+		else
+		{
+			m_header.action_edit_find_next->set_sensitive(false);
+			m_header.action_edit_find_prev->set_sensitive(false);
+		}
+
+		m_header.action_edit_find_replace->set_sensitive(true);
+
 	}
 	else
 	{
@@ -150,6 +176,10 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 		m_header.action_edit_cut->set_sensitive(false);
 		m_header.action_edit_copy->set_sensitive(false);
 		m_header.action_edit_paste->set_sensitive(false);
+		m_header.action_edit_find->set_sensitive(false);
+		m_header.action_edit_find_next->set_sensitive(false);
+		m_header.action_edit_find_prev->set_sensitive(false);
+		m_header.action_edit_find_replace->set_sensitive(false);
 	}
 }
 
@@ -248,6 +278,14 @@ void Gobby::EditCommands::on_can_redo_changed(InfAdoptedUser* user,
 		m_header.action_edit_redo->set_sensitive(can_redo);
 }
 
+void Gobby::EditCommands::on_find_text_changed()
+{
+	m_header.action_edit_find_next->set_sensitive(
+		!m_find_dialog->get_find_text().empty());
+	m_header.action_edit_find_prev->set_sensitive(
+		!m_find_dialog->get_find_text().empty());
+}
+
 void Gobby::EditCommands::on_undo()
 {
 	g_assert(m_current_document != NULL);
@@ -297,4 +335,42 @@ void Gobby::EditCommands::on_paste()
 		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
 		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),
 		NULL, TRUE);
+}
+
+void Gobby::EditCommands::on_find()
+{
+	ensure_find_dialog();
+	m_find_dialog->set_search_only(true);
+	m_find_dialog->present();
+}
+
+void Gobby::EditCommands::on_find_next()
+{
+	g_assert(m_find_dialog.get() != NULL);
+	m_find_dialog->find_next();
+}
+
+void Gobby::EditCommands::on_find_prev()
+{
+	g_assert(m_find_dialog.get() != NULL);
+	m_find_dialog->find_previous();
+}
+
+void Gobby::EditCommands::on_find_replace()
+{
+	ensure_find_dialog();
+	m_find_dialog->set_search_only(false);
+	m_find_dialog->present();
+}
+
+void Gobby::EditCommands::ensure_find_dialog()
+{
+	if(!m_find_dialog.get())
+	{
+		m_find_dialog.reset(new FindDialog(m_parent, m_folder,
+		                                   m_status_bar));
+		m_find_dialog->signal_find_text_changed().connect(
+			sigc::mem_fun(
+				*this, &EditCommands::on_find_text_changed));
+	}
 }
