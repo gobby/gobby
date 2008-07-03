@@ -275,7 +275,9 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file_save_as,
 	                Gtk::AccelKey("<control><shift>S",
 			              "<Actions>/MenuFile/FileSaveAs"));
-	group_file->add(action_file_save_all);
+	group_file->add(action_file_save_all,
+	                Gtk::AccelKey("<control><shift>L",
+			              "<Actions>/MenuFile/FileSaveAll"));
 	group_file->add(action_file_quit);
 
 	group_edit->add(action_edit);

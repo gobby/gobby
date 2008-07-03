@@ -131,7 +131,6 @@ namespace
 		                                                GParamSpec* p,
 		                                                gpointer data)
 		{
-			printf("Notify subscr group\n");
 			static_cast<TabLabel*>(data)->update_icon();
 		}
 
@@ -227,11 +226,14 @@ Gobby::Folder::add_document(InfTextSession* session,
 void Gobby::Folder::remove_document(DocWindow& window)
 {
 	m_signal_document_removed.emit(window);
+
+	// TODO: We should actually remove the page here, but destroy the
+	// DocWindow after having emitted signal_document_changed.
+	if(get_n_pages() == 1)
+		m_signal_document_changed.emit(NULL);
+
 	inf_session_close(INF_SESSION(window.get_session()));
 	remove_page(window);
-
-	if(get_n_pages() == 0)
-		m_signal_document_changed.emit(NULL);
 }
 
 Gobby::DocWindow*

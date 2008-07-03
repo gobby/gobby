@@ -33,6 +33,12 @@ Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &EditCommands::on_undo));
 	m_header.action_edit_redo->signal_activate().connect(
 		sigc::mem_fun(*this, &EditCommands::on_redo));
+	m_header.action_edit_cut->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_cut));
+	m_header.action_edit_copy->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_copy));
+	m_header.action_edit_paste->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_paste));
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &EditCommands::on_document_changed));
 
@@ -54,6 +60,8 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 		InfAdoptedAlgorithm* algorithm =
 			inf_adopted_session_get_algorithm(
 				INF_ADOPTED_SESSION(session));
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
 
 		if(m_synchronization_complete_handler != 0)
 		{
@@ -71,6 +79,11 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 				m_can_redo_changed_handler);
 		}
 
+		g_signal_handler_disconnect(G_OBJECT(buffer),
+		                            m_mark_set_handler);
+		g_signal_handler_disconnect(G_OBJECT(buffer),
+		                            m_changed_handler);
+
 		m_active_user_changed_connection.disconnect();
 	}
 
@@ -80,6 +93,8 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 	{
 		InfTextSession* session = document->get_session();
 		InfTextUser* active_user = document->get_active_user();
+		GtkTextBuffer* buffer =
+			GTK_TEXT_BUFFER(document->get_text_buffer());
 
 		m_active_user_changed_connection =
 			document->signal_active_user_changed().connect(
@@ -87,6 +102,16 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 					*this,
 					&EditCommands::
 						on_active_user_changed));
+
+		m_mark_set_handler = g_signal_connect_after(
+			G_OBJECT(buffer), "mark-set",
+			G_CALLBACK(&on_mark_set_static), this);
+		// The selection might change without mark-set being emitted
+		// when the document changes, for example when all
+		// currently selected text is deleted.
+		m_changed_handler = g_signal_connect_after(
+			G_OBJECT(buffer), "changed",
+			G_CALLBACK(&on_changed_static), this);
 
 		if(inf_session_get_status(INF_SESSION(session)) ==
 		   INF_SESSION_RUNNING)
@@ -115,11 +140,16 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 
 		// Set initial sensitivity for active user:
 		on_active_user_changed(active_user);
+		// Set initial sensitivity for cut/copy/paste:
+		on_mark_set();
 	}
 	else
 	{
 		m_header.action_edit_undo->set_sensitive(false);
 		m_header.action_edit_redo->set_sensitive(false);
+		m_header.action_edit_cut->set_sensitive(false);
+		m_header.action_edit_copy->set_sensitive(false);
+		m_header.action_edit_paste->set_sensitive(false);
 	}
 }
 
@@ -151,24 +181,55 @@ void Gobby::EditCommands::on_sync_complete()
 void Gobby::EditCommands::on_active_user_changed(InfTextUser* active_user)
 {
 	g_assert(m_current_document != NULL);
-	InfTextSession* session = m_current_document->get_session();
-	InfAdoptedAlgorithm* algorithm = inf_adopted_session_get_algorithm(
-		INF_ADOPTED_SESSION(session));
 
 	if(active_user != NULL)
 	{
+		InfTextSession* session = m_current_document->get_session();
+		InfAdoptedAlgorithm* algorithm =
+			inf_adopted_session_get_algorithm(
+				INF_ADOPTED_SESSION(session));
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
+
 		m_header.action_edit_undo->set_sensitive(
 			inf_adopted_algorithm_can_undo(
 				algorithm, INF_ADOPTED_USER(active_user)));
 		m_header.action_edit_redo->set_sensitive(
 			inf_adopted_algorithm_can_redo(
 				algorithm, INF_ADOPTED_USER(active_user)));
+
+		m_header.action_edit_cut->set_sensitive(
+			gtk_text_buffer_get_has_selection(buffer));
+		m_header.action_edit_paste->set_sensitive(true);
 	}
 	else
 	{
 		m_header.action_edit_undo->set_sensitive(false);
 		m_header.action_edit_redo->set_sensitive(false);
+		m_header.action_edit_cut->set_sensitive(false);
+		m_header.action_edit_paste->set_sensitive(false);
 	}
+}
+
+void Gobby::EditCommands::on_mark_set()
+{
+	g_assert(m_current_document != NULL);
+	GtkTextBuffer* buffer =
+		GTK_TEXT_BUFFER(m_current_document->get_text_buffer());
+
+	m_header.action_edit_copy->set_sensitive(
+		gtk_text_buffer_get_has_selection(buffer));
+
+	if(m_current_document->get_active_user() != NULL)
+	{
+		m_header.action_edit_cut->set_sensitive(
+			gtk_text_buffer_get_has_selection(buffer));
+	}
+}
+
+void Gobby::EditCommands::on_changed()
+{
+	on_mark_set();
 }
 
 void Gobby::EditCommands::on_can_undo_changed(InfAdoptedUser* user,
@@ -205,4 +266,35 @@ void Gobby::EditCommands::on_redo()
 		INF_ADOPTED_SESSION(m_current_document->get_session()),
 		INF_ADOPTED_USER(m_current_document->get_active_user())
 	);
+}
+
+void Gobby::EditCommands::on_cut()
+{
+	g_assert(m_current_document != NULL);
+	g_assert(m_current_document->get_active_user() != NULL);
+
+	gtk_text_buffer_cut_clipboard(
+		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
+		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),
+		TRUE);
+}
+
+void Gobby::EditCommands::on_copy()
+{
+	g_assert(m_current_document != NULL);
+
+	gtk_text_buffer_copy_clipboard(
+		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
+		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
+}
+
+void Gobby::EditCommands::on_paste()
+{
+	g_assert(m_current_document != NULL);
+	g_assert(m_current_document->get_active_user() != NULL);
+
+	gtk_text_buffer_paste_clipboard(
+		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
+		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),
+		NULL, TRUE);
 }

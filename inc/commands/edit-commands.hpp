@@ -66,13 +66,33 @@ protected:
 		static_cast<EditCommands*>(user_data)->on_sync_complete();
 	}
 
+	static void on_mark_set_static(GtkTextBuffer* buffer,
+	                               GtkTextIter* iter,
+	                               GtkTextMark* mark,
+	                               gpointer user_data)
+	{
+		static_cast<EditCommands*>(user_data)->on_mark_set();
+	}
+
+	static void on_changed_static(GtkTextBuffer* buffer,
+	                              gpointer user_data)
+	{
+		static_cast<EditCommands*>(user_data)->on_changed();
+	}
+
 	void on_sync_complete();
 	void on_active_user_changed(InfTextUser* active_user);
+	void on_mark_set();
+	void on_changed();
+
 	void on_can_undo_changed(InfAdoptedUser* user, bool can_undo);
 	void on_can_redo_changed(InfAdoptedUser* user, bool can_redo);
 
 	void on_undo();
 	void on_redo();
+	void on_cut();
+	void on_copy();
+	void on_paste();
 
 	DocWindow* m_current_document;
 	// Only valid when m_current_document is nonzero:
@@ -80,6 +100,8 @@ protected:
 	gulong m_can_undo_changed_handler;
 	gulong m_can_redo_changed_handler;
 	gulong m_synchronization_complete_handler;
+	gulong m_mark_set_handler;
+	gulong m_changed_handler;
 
 	Gtk::Window& m_parent;
 	Header& m_header;

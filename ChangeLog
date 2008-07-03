@@ -1,3 +1,17 @@
+2008-07-03  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/edit-commands.hpp:
+	* src/commands/edit-commands.cpp: Implemented Cut/Copy/Paste
+	functionality.
+
+	* src/core/folder.cpp: Emit signal_document_changed when the last
+	document is about to be removed before the document has actually been
+	removed, so that signal handlers that still have a reference to the
+	last document can still make use of it.
+
+	* src/core/header.cpp: Added a shortcut (<control><stift>L) for Save
+	All, as in gedit.
+
 2008-07-02  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/core/docwindow.hpp:
