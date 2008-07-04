@@ -1,5 +1,13 @@
 2008-07-04  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/core/toolwindow.hpp:
+	* src/core/toolwindow.cpp: Removed. ToolWindow is no longer used.
+
+	* inc/core/Makefile.am:
+	* src/core/Makefile.am: Adjusted build files.
+
+2008-07-04  Armin Burgmeier  <armin@0x539.de>
+
 	* inc/dialogs/gotodialog.hpp:
 	* src/dialogs/gotodialog.cpp: Redesigned GotoDialog, and limit maximum
 	line number to the line count of the current document.

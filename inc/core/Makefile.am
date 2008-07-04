@@ -9,5 +9,4 @@ noinst_HEADERS = \
 	iconmanager.hpp \
 	noteplugin.hpp \
 	preferences.hpp \
-	statusbar.hpp \
-	toolwindow.hpp
+	statusbar.hpp

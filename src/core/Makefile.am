@@ -10,8 +10,7 @@ libgobby_core_a_SOURCES = \
 	iconmanager.cpp \
 	noteplugin.cpp \
 	preferences.cpp \
-	statusbar.cpp \
-	toolwindow.cpp
+	statusbar.cpp
 
 libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) \
                           -I../../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\" \
