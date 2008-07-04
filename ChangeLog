@@ -1,3 +1,22 @@
+2008-07-04  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/dialogs/gotodialog.hpp:
+	* src/dialogs/gotodialog.cpp: Redesigned GotoDialog, and limit maximum
+	line number to the line count of the current document.
+
+	* inc/commands/edit-commands.hpp:
+	* src/commands/edit-commands.cpp: Show GotoDialog and
+	PreferencesDialog when the corresponding actions have been activated.
+
+	* inc/dialogs/finddialog.hpp:
+	* src/dialogs/finddialog.cpp: Added a destructor disconnecting from
+	the active_user_changed signal of the current document.
+
+	* src/core/header.cpp: Added mnemonics for a few menu items.
+
+	* src/util/file.cpp: Fixed endless recursion in
+	create_directory_with_parents().
+
 2008-07-03  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/edit-commands.hpp:

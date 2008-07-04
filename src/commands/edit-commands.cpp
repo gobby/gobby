@@ -49,6 +49,10 @@ Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &EditCommands::on_find_prev));
 	m_header.action_edit_find_replace->signal_activate().connect(
 		sigc::mem_fun(*this, &EditCommands::on_find_replace));
+	m_header.action_edit_goto_line->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_goto_line));
+	m_header.action_edit_preferences->signal_activate().connect(
+		sigc::mem_fun(*this, &EditCommands::on_preferences));
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &EditCommands::on_document_changed));
 
@@ -153,7 +157,7 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 		// Set initial sensitivity for cut/copy/paste:
 		on_mark_set();
 
-		// Set initial sensitivity for find/replace:
+		// Set initial sensitivity for find/replace/goto:
 		m_header.action_edit_find->set_sensitive(true);
 
 		if(m_find_dialog.get())
@@ -167,7 +171,7 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 		}
 
 		m_header.action_edit_find_replace->set_sensitive(true);
-
+		m_header.action_edit_goto_line->set_sensitive(true);
 	}
 	else
 	{
@@ -180,6 +184,7 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 		m_header.action_edit_find_next->set_sensitive(false);
 		m_header.action_edit_find_prev->set_sensitive(false);
 		m_header.action_edit_find_replace->set_sensitive(false);
+		m_header.action_edit_goto_line->set_sensitive(false);
 	}
 }
 
@@ -361,6 +366,25 @@ void Gobby::EditCommands::on_find_replace()
 	ensure_find_dialog();
 	m_find_dialog->set_search_only(false);
 	m_find_dialog->present();
+}
+
+void Gobby::EditCommands::on_goto_line()
+{
+	if(!m_goto_dialog.get())
+		m_goto_dialog.reset(new GotoDialog(m_parent, m_folder));
+
+	m_goto_dialog->present();
+}
+
+void Gobby::EditCommands::on_preferences()
+{
+	if(!m_preferences_dialog.get())
+	{
+		m_preferences_dialog.reset(
+			new PreferencesDialog(m_parent, m_preferences));
+	}
+
+	m_preferences_dialog->present();
 }
 
 void Gobby::EditCommands::ensure_find_dialog()

@@ -20,6 +20,8 @@
 #define _GOBBY_EDIT_COMMANDS_HPP_
 
 #include "dialogs/finddialog.hpp"
+#include "dialogs/gotodialog.hpp"
+#include "dialogs/preferencesdialog.hpp"
 
 #include "core/header.hpp"
 #include "core/folder.hpp"
@@ -100,6 +102,8 @@ protected:
 	void on_find_next();
 	void on_find_prev();
 	void on_find_replace();
+	void on_goto_line();
+	void on_preferences();
 
 	Gtk::Window& m_parent;
 	Header& m_header;
@@ -108,6 +112,8 @@ protected:
 	Preferences& m_preferences;
 
 	std::auto_ptr<FindDialog> m_find_dialog;
+	std::auto_ptr<GotoDialog> m_goto_dialog;
+	std::auto_ptr<PreferencesDialog> m_preferences_dialog;
 
 	DocWindow* m_current_document;
 	// Only valid when m_current_document is nonzero:

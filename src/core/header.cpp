@@ -222,37 +222,37 @@ Gobby::Header::Header(Preferences& preferences,
 	action_edit_paste(
 		Gtk::Action::create("EditPaste", Gtk::Stock::PASTE)),
 	action_edit_find(Gtk::Action::create("EditFind", Gtk::Stock::FIND,
-	                                     _("Find…"))),
+	                                     _("_Find…"))),
 	action_edit_find_next(
-		Gtk::Action::create("EditFindNext", _("Find next"),
+		Gtk::Action::create("EditFindNext", _("Find Ne_xt"),
 		                    _("Find next match of phrase "
 		                      "searched for"))),
 	action_edit_find_prev(
-		Gtk::Action::create("EditFindPrev", _("Find prev"),
+		Gtk::Action::create("EditFindPrev", _("Find Pre_vious"),
 		                    _("Find previous match of phrase "
 		                      "searched for"))),
 	action_edit_find_replace(
 		Gtk::Action::create("EditFindReplace",
 		                    Gtk::Stock::FIND_AND_REPLACE,
-		                    _("Find And Replace…"))),
+		                    _("Find And Rep_lace…"))),
 	action_edit_goto_line(
 		Gtk::Action::create("EditGotoLine",
 		                    Gtk::Stock::JUMP_TO,
-				    _("Go To Line…"))),
+				    _("Go To _Line…"))),
 	action_edit_preferences(
 		Gtk::Action::create("EditPreferences",
 		                    Gtk::Stock::PREFERENCES,
-		                    _("Preferences…"))),
+		                    _("Pr_eferences…"))),
 
 	action_view(Gtk::Action::create("MenuView", _("_View"))),
 	action_view_toolbar(
 		Gtk::ToggleAction::create(
-			"ViewToolbar", _("View toolbar"),
+			"ViewToolbar", _("View Toolbar"),
 		        _("Whether to show the toolbar"), 
 			preferences.appearance.show_toolbar)),
 	action_view_statusbar(
 		Gtk::ToggleAction::create(
-			"ViewStatusbar", _("View statusbar"),
+			"ViewStatusbar", _("View Statusbar"),
 			_("Whether to show the statusbar"),
 			preferences.appearance.show_statusbar)),
 	action_view_highlight_mode(
@@ -266,7 +266,7 @@ Gobby::Header::Header(Preferences& preferences,
 	action_help(Gtk::Action::create("MenuHelp", _("_Help")) ),
 	action_help_about(
 		Gtk::Action::create(
-			"HelpAbout", Gtk::Stock::ABOUT, _("About…"),
+			"HelpAbout", Gtk::Stock::ABOUT, _("_About…"),
 			_("Shows Gobby's copyright and credits"))),
 
 	m_ui_manager(Gtk::UIManager::create())

@@ -114,6 +114,11 @@ Gobby::FindDialog::FindDialog(Gtk::Window& parent, Folder& folder,
 	on_document_changed(m_folder.get_current_document());
 }
 
+Gobby::FindDialog::~FindDialog()
+{
+	on_document_changed(NULL);
+}
+
 bool Gobby::FindDialog::get_search_only() const
 {
 	return m_label_replace.is_visible();

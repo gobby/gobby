@@ -93,7 +93,7 @@ namespace Gobby
 		std::string path_to = Glib::path_get_dirname(path);
 
 		// Create this path, if it doesn't exists
-		create_directory_with_parents(path);
+		create_directory_with_parents(path_to);
 
 		// Create new directory
 		create_directory(path.c_str() );

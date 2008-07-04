@@ -19,39 +19,45 @@
 #ifndef _GOBBY_GOTODIALOG_HPP_
 #define _GOBBY_GOTODIALOG_HPP_
 
-#include "core/toolwindow.hpp"
 #include "core/folder.hpp"
+#include "core/docwindow.hpp"
 
-#include <gtkmm/separator.h>
-#include <gtkmm/box.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/table.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 
 namespace Gobby
 {
 
-class GotoDialog: public ToolWindow
+class GotoDialog: public Gtk::Dialog
 {
 public:
 	GotoDialog(Gtk::Window& parent, Folder& m_folder);
+	~GotoDialog();
 
 protected:
+	static void on_changed_static(GtkTextBuffer* buffer,
+	                              gpointer user_data)
+	{
+		static_cast<GotoDialog*>(user_data)->on_changed();
+	}
+
 	virtual void on_show();
-	virtual void on_goto();
+	virtual void on_response(int id);
+
+	void on_document_changed(DocWindow* document);
+	void on_changed();
 
 	Folder& m_folder;
 
-	Gtk::VBox m_mainbox;
-	Gtk::HBox m_box_top;
-	Gtk::HBox m_box_bottom;
+	Gtk::Table m_table;
 
-	Gtk::Label m_lbl_info;
-	Gtk::SpinButton m_ent_line;
+	Gtk::Label m_label_line;
+	Gtk::SpinButton m_entry_line;
 
-	Gtk::HSeparator m_sep;
-
-	Gtk::Button m_btn_close;
-	Gtk::Button m_btn_goto;
+	DocWindow* m_current_document;
+	gulong m_changed_handler;
 };
 
 }

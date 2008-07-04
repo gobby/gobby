@@ -24,89 +24,122 @@
 #include <gtkmm/stock.h>
 
 Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, Folder& folder):
-	ToolWindow(parent),
+	Gtk::Dialog(_("Go to line"), parent),
 	m_folder(folder),
-	m_lbl_info(_("Line number:"), Gtk::ALIGN_RIGHT),
-	m_btn_close(Gtk::Stock::CLOSE),
-	m_btn_goto(_("_Go to line") )
+	m_table(1, 2),
+	m_label_line(_("Line _number:"), Gtk::ALIGN_LEFT,
+	             Gtk::ALIGN_CENTER, true),
+	m_current_document(NULL)
 {
-	Gtk::Image* goto_img = Gtk::manage(
-		new Gtk::Image(
-			Gtk::Stock::JUMP_TO,
-			Gtk::ICON_SIZE_BUTTON
-		)
-	);
+	m_label_line.set_mnemonic_widget(m_entry_line);
+	m_label_line.show();
 
-	m_btn_goto.set_image(*goto_img);
+	m_entry_line.set_increments(1, 10);
+	m_entry_line.set_activates_default(true);
+	m_entry_line.show();
 
-	// TODO: Change this value according to line count in current document!
-	m_ent_line.set_range(1, 0x7fffffff);
-	m_ent_line.set_increments(1, 10);
-	m_ent_line.set_activates_default(true);
+	m_table.attach(m_label_line, 0, 1, 0, 1, Gtk::FILL, Gtk::FILL);
+	m_table.attach(m_entry_line, 1, 2, 0, 1,
+	               Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+	m_table.set_spacings(12);
+	m_table.set_border_width(12);
+	m_table.show();
 
-	m_box_top.set_spacing(10);
-	m_box_top.pack_start(m_lbl_info, Gtk::PACK_SHRINK);
-	m_box_top.pack_start(m_ent_line, Gtk::PACK_EXPAND_WIDGET);
+	get_vbox()->pack_start(m_table, Gtk::PACK_EXPAND_WIDGET);
 
-	m_box_bottom.set_homogeneous(true);
-	m_box_bottom.set_spacing(6);
-	m_box_bottom.pack_end(m_btn_goto, Gtk::PACK_SHRINK);
-	m_box_bottom.pack_end(m_btn_close, Gtk::PACK_SHRINK);
+	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	Gtk::Button* button =
+		add_button(_("Go To _Line"), Gtk::RESPONSE_ACCEPT);
 
-	m_mainbox.set_spacing(12);
-	m_mainbox.pack_start(m_box_top, Gtk::PACK_SHRINK);
-	m_mainbox.pack_start(m_sep, Gtk::PACK_SHRINK);
-	m_mainbox.pack_start(m_box_bottom, Gtk::PACK_SHRINK);
+	button->set_image(*Gtk::manage(new Gtk::Image(
+		Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON)));
 
-	add(m_mainbox);
+	m_folder.signal_document_changed().connect(
+		sigc::mem_fun(*this, &GotoDialog::on_document_changed));
 
-	m_btn_close.signal_clicked().connect(
-		sigc::mem_fun(*this, &GotoDialog::hide) );
-	m_btn_goto.signal_clicked().connect(
-		sigc::mem_fun(*this, &GotoDialog::on_goto) );
-	m_ent_line.signal_activate().connect(
-		sigc::mem_fun(*this, &GotoDialog::on_goto) );
-
-	GTK_WIDGET_SET_FLAGS(m_btn_goto.gobj(), GTK_CAN_DEFAULT);
-	set_default(m_btn_goto);
-
-	set_border_width(16);
-
+	set_default_response(Gtk::RESPONSE_ACCEPT);
 	set_resizable(false);
-	set_title(_("Go to line") );
 
-	show_all_children();
+	// For initial sensitivity:
+	on_document_changed(m_folder.get_current_document());
+}
+
+Gobby::GotoDialog::~GotoDialog()
+{
+	on_document_changed(NULL);
 }
 
 void Gobby::GotoDialog::on_show()
 {
-	m_ent_line.grab_focus();
+	Gtk::Dialog::on_show();
+	m_entry_line.grab_focus();
 
-	Gobby::DocWindow* window = m_folder.get_current_document();
-	if(window != NULL)
+	if(m_current_document != NULL)
 	{
-		Glib::RefPtr<Gtk::TextBuffer> buffer =
-			Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()),
-			           true);
-		Gtk::TextIter cursor = buffer->get_insert()->get_iter();
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
+		GtkTextIter cursor;
+		gtk_text_buffer_get_iter_at_mark(
+			buffer, &cursor, gtk_text_buffer_get_insert(buffer));
 
-		m_ent_line.set_value(cursor.get_line() + 1);
-		m_ent_line.select_region(0, m_ent_line.get_text().length());
+		m_entry_line.set_value(gtk_text_iter_get_line(&cursor) + 1);
+		m_entry_line.select_region(
+			0, m_entry_line.get_text().length());
 	}
-
-	ToolWindow::on_show();
 }
 
-void Gobby::GotoDialog::on_goto()
+void Gobby::GotoDialog::on_response(int id)
 {
-	Gobby::DocWindow* window = m_folder.get_current_document();
-	if(window != NULL)
+	if(id == Gtk::RESPONSE_ACCEPT)
 	{
-		int value = m_ent_line.get_value_as_int();
-		Glib::RefPtr<Gtk::TextBuffer> buffer =
-			Glib::wrap(GTK_TEXT_BUFFER(window->get_text_buffer()),
-			           true);
-		Gtk::TextIter begin = buffer->get_iter_at_line(value - 1);
-		window->set_selection(begin.gobj(), begin.gobj());
+		g_assert(m_current_document != NULL);
+
+		int value = m_entry_line.get_value_as_int();
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
+		GtkTextIter begin;
+		gtk_text_buffer_get_iter_at_line(buffer, &begin, value - 1);
+		m_current_document->set_selection(&begin, &begin);
 	}
+	else if(id == Gtk::RESPONSE_CLOSE)
+	{
+		hide();
+	}
+
+	Gtk::Dialog::on_response(id);
+}
+
+void Gobby::GotoDialog::on_document_changed(DocWindow* document)
+{
+	if(m_current_document != NULL)
+	{
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
+		g_signal_handler_disconnect(buffer, m_changed_handler);
+	}
+
+	set_response_sensitive(Gtk::RESPONSE_ACCEPT, document != NULL);
+	m_entry_line.set_sensitive(document != NULL);
+	m_current_document = document;
+
+	if(document != NULL)
+	{
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			document->get_text_buffer());
+
+		m_changed_handler = g_signal_connect_after(
+			G_OBJECT(buffer), "changed",
+			G_CALLBACK(on_changed_static), this);
+
+		on_changed();
+	}
+}
+
+void Gobby::GotoDialog::on_changed()
+{
+	g_assert(m_current_document != NULL);
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+		m_current_document->get_text_buffer());
+
+	m_entry_line.set_range(1, gtk_text_buffer_get_line_count(buffer));
 }

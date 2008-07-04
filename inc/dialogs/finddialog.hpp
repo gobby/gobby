@@ -41,6 +41,7 @@ public:
 
 	FindDialog(Gtk::Window& parent, Folder& folder,
 	           StatusBar& status_bar);
+	~FindDialog();
 
 	bool get_search_only() const;
 	void set_search_only(bool search_only);
