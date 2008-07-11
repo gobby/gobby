@@ -17,6 +17,7 @@
  */
 
 #include "core/statusbar.hpp"
+#include "util/i18n.hpp"
 
 #include <gtkmm/frame.h>
 #include <gtkmm/stock.h>
@@ -56,12 +57,28 @@ protected:
 	sigc::connection m_conn;
 };
 
-Gobby::StatusBar::StatusBar(const Folder& folder):
-	Gtk::HBox(false, 2)
+Gobby::StatusBar::StatusBar(Folder& folder,
+                            const Preferences& preferences):
+	Gtk::HBox(false, 2), m_folder(folder), m_preferences(preferences),
+	m_current_document(NULL), m_position_context_id(0)
 {
 	pack_end(m_bar_position, Gtk::PACK_SHRINK);
 	m_bar_position.set_size_request(200, -1);
 	m_bar_position.show();
+	
+	m_folder.signal_document_changed().connect(
+		sigc::mem_fun(*this, &StatusBar::on_document_changed));
+	m_preferences.appearance.show_statusbar.signal_changed().connect(
+		sigc::mem_fun(*this, &StatusBar::on_view_changed));
+
+	// Initial update
+	on_document_changed(m_folder.get_current_document());
+	on_view_changed();
+}
+
+Gobby::StatusBar::~StatusBar()
+{
+	on_document_changed(NULL);
 }
 
 Gobby::StatusBar::MessageHandle
@@ -122,4 +139,93 @@ void Gobby::StatusBar::remove_message(const MessageHandle& handle)
 	remove(*(*handle)->widget());
 	delete *handle;
 	m_list.erase(handle);
+}
+
+void Gobby::StatusBar::on_document_changed(DocWindow* document)
+{
+	if(m_current_document)
+	{
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
+
+		g_signal_handler_disconnect(G_OBJECT(buffer),
+		                            m_mark_set_handler);
+		g_signal_handler_disconnect(G_OBJECT(buffer),
+		                            m_changed_handler);
+	}
+
+	m_current_document = document;
+
+	if(document)
+	{
+		GtkTextBuffer* buffer =
+			GTK_TEXT_BUFFER(document->get_text_buffer());
+
+		m_mark_set_handler = g_signal_connect_after(
+			G_OBJECT(buffer), "mark-set",
+			G_CALLBACK(on_mark_set_static), this);
+
+		m_changed_handler = g_signal_connect_after(
+			G_OBJECT(buffer), "changed",
+			G_CALLBACK(on_changed_static), this);
+
+		// Initial update
+		update_pos_display();
+	}
+}
+
+void Gobby::StatusBar::on_view_changed()
+{
+	if(m_preferences.appearance.show_statusbar) show();
+	else hide();
+}
+
+void Gobby::StatusBar::on_mark_set(GtkTextMark* mark)
+{
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+		m_current_document->get_text_buffer());
+
+	if(mark == gtk_text_buffer_get_insert(buffer))
+		update_pos_display();
+}
+
+void Gobby::StatusBar::on_changed()
+{
+	update_pos_display();
+}
+
+void Gobby::StatusBar::update_pos_display()
+{
+	if(m_position_context_id)
+		m_bar_position.remove_message(m_position_context_id);
+
+	if(m_current_document != NULL)
+	{
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
+		GtkTextIter iter;
+
+		gtk_text_buffer_get_iter_at_mark(
+			buffer, &iter, gtk_text_buffer_get_insert(buffer));
+
+		guint offset = gtk_text_iter_get_line_offset(&iter);
+
+		unsigned int column = 0;
+		const unsigned int tab_width = m_preferences.editor.tab_width;
+		for(gtk_text_iter_set_line_offset(&iter, 0);
+		    gtk_text_iter_get_line_offset(&iter) < offset;
+		    gtk_text_iter_forward_char(&iter))
+		{
+			if(gtk_text_iter_get_char(&iter) == '\t')
+				column += (tab_width - column % tab_width);
+			else
+				++ column;
+		}
+
+		m_position_context_id = m_bar_position.push(
+			Glib::ustring::compose(
+				_("Ln %1, Col %2"),
+				gtk_text_iter_get_line(&iter) + 1,
+				column + 1));
+	}
 }

@@ -259,6 +259,12 @@ Gobby::Folder::get_current_document()
 	return static_cast<DocWindow*>(get_nth_page(get_current_page()));
 }
 
+const Gobby::DocWindow*
+Gobby::Folder::get_current_document() const
+{
+	return static_cast<const DocWindow*>(get_nth_page(get_current_page()));
+}
+
 void Gobby::Folder::switch_to_document(DocWindow& document)
 {
 	set_current_page(page_num(document));

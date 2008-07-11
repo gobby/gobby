@@ -28,7 +28,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_preferences(m_config), m_icon_mgr(icon_mgr),
 	m_header(m_preferences, m_lang_manager),
 	m_folder(m_preferences, m_lang_manager),
-	m_statusbar(m_folder),
+	m_statusbar(m_folder, m_preferences),
 	m_browser(*this, Plugins::TEXT, m_statusbar, m_preferences),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
 	m_operations(m_info_storage, m_statusbar), 
@@ -37,7 +37,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_commands_file(*this, m_header, m_browser, m_folder, m_operations,
 	                m_info_storage, m_preferences),
 	m_commands_edit(*this, m_header, m_folder, m_statusbar,
-	                m_preferences)
+	                m_preferences),
+	m_commands_view(m_header, m_folder, m_preferences)
 {
 	m_header.show();
 	m_browser.show();

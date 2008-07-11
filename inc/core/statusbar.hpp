@@ -43,7 +43,8 @@ public:
 
 	typedef MessageList::iterator MessageHandle;
 
-	StatusBar(const Folder& folder);
+	StatusBar(Folder& folder, const Preferences& preferences);
+	~StatusBar();
 
 	MessageHandle add_message(MessageType type,
 	                          const Glib::ustring& message,
@@ -52,9 +53,38 @@ public:
 	void remove_message(const MessageHandle& handle);
 
 protected:
+	static void on_mark_set_static(GtkTextBuffer* buffer,
+	                               GtkTextIter* location,
+	                               GtkTextMark* mark,
+	                               gpointer user_data)
+	{
+		static_cast<StatusBar*>(user_data)->on_mark_set(mark);
+	}
+
+	static void on_changed_static(GtkTextBuffer* buffer,
+	                              gpointer user_data)
+	{
+		static_cast<StatusBar*>(user_data)->on_changed();
+	}
+
+	void on_document_changed(DocWindow* document);
+	void on_view_changed();
+	
+	void on_mark_set(GtkTextMark* mark);
+	void on_changed();
+
+	void update_pos_display();
+
+	Folder& m_folder;
+	const Preferences& m_preferences;
 	MessageList m_list;
 
 	Gtk::Statusbar m_bar_position;
+	DocWindow* m_current_document;
+	gulong m_mark_set_handler;
+	gulong m_changed_handler;
+
+	guint m_position_context_id;
 };
 
 }

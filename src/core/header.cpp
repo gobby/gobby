@@ -417,6 +417,7 @@ Gobby::Header::Header(Preferences& preferences,
 	m_toolbar->set_toolbar_style(preferences.appearance.toolbar_style);
 	m_menubar->show();
 	if(preferences.appearance.show_toolbar) m_toolbar->show();
+	else m_toolbar->hide();
 
 	preferences.appearance.toolbar_style.signal_changed().connect(
 		sigc::compose(

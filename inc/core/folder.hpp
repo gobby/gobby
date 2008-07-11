@@ -52,6 +52,7 @@ public:
 
 	DocWindow* lookup_document(InfTextSession* session);
 	DocWindow* get_current_document();
+	const DocWindow* get_current_document() const;
 	void switch_to_document(DocWindow& document);
 
 	SignalDocumentAdded signal_document_added() const {

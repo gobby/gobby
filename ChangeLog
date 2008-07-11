@@ -1,3 +1,25 @@
+2008-07-11  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/view-commands.hpp:
+	* src/commands/view-commands.cpp: Implemented View Toolbar and View
+	Statusbar.
+
+	* inc/commands/Makefile.am:
+	* src/commands/Makefile.am: Add the new files to the build.
+
+	* inc/core/folder.hpp:
+	* src/core/folder.cpp: Added a const version of
+	get_current_document().
+
+	* inc/core/statusbar.hpp:
+	* src/core/statusbar.cpp: Added display of current line and column.
+
+	* src/core/header.cpp: Hide toolbar initially if the show_toolbar
+	preference is not set.
+
+	* inc/window.hpp:
+	* src/window.cpp: Instantiate ViewCommands.
+
 2008-07-04  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/core/toolwindow.hpp:
