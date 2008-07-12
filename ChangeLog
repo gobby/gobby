@@ -1,3 +1,9 @@
+2008-07-12  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/commands/browser-commands.hpp:
+	* src/commands/browser-commands.cpp: Join with an alternative user
+	name if the preferred one is already in use.
+
 2008-07-11  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/view-commands.hpp:

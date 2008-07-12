@@ -20,11 +20,14 @@
 #include "util/i18n.hpp"
 
 #include <libinftext/inf-text-user.h>
+#include <libinfinity/common/inf-error.h>
 
 namespace
 {
 	const char* GOBBY_BROWSER_COMMANDS_SESSION_PROXY =
 		"GOBBY_BROWSER_COMMANDS_SESSION_PROXY";
+	const char* GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY =
+		"GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY";
 
 	enum ErrorType {
 		SYNC_ERROR,
@@ -336,7 +339,7 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 	else
 	{
 		// Already in running state, do user join
-		join_user(proxy);
+		join_user(proxy, m_preferences.user.name);
 	}
 }
 
@@ -383,7 +386,7 @@ void Gobby::BrowserCommands::on_synchronization_complete(InfSession* session,
 	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
 	{
 		iter->second.status = INF_SESSION_RUNNING;
-		join_user(iter->second.proxy);
+		join_user(iter->second.proxy, m_preferences.user.name);
 	}
 }
 
@@ -438,7 +441,8 @@ void Gobby::BrowserCommands::on_notify_connection(InfcSessionProxy* proxy)
 	}
 }
 
-void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy)
+void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
+                                       const Glib::ustring& name)
 {
 	// Check if there is already a local user
 	InfSession* session = infc_session_proxy_get_session(proxy);
@@ -468,10 +472,7 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy)
 		g_value_init(&params[2].value, INF_ADOPTED_TYPE_STATE_VECTOR);
 		g_value_init(&params[3].value, G_TYPE_UINT);
 
-		g_value_set_static_string(
-			&params[0].value,
-			static_cast<const Glib::ustring&>(
-				m_preferences.user.name).c_str());
+		g_value_set_static_string(&params[0].value, name.c_str());
 		g_value_set_double(
 			&params[1].value, m_preferences.user.hue);
 		g_value_take_boxed(
@@ -543,12 +544,45 @@ void Gobby::BrowserCommands::on_user_join_failed(InfcUserRequest* request,
 		INF_TEXT_SESSION(infc_session_proxy_get_session(proxy)));
 	g_assert(window != NULL);
 
-	// TODO: Try join with another name if the name is already in use
-	set_error_text(
-		*window,
-		Glib::ustring::compose("User Join failed: %1",
-		                       error->message),
-		USER_JOIN_ERROR);
+	GQuark quark = g_quark_from_static_string("INF_USER_JOIN_ERROR");
+	if(error->domain == quark &&
+	   error->code == INF_USER_JOIN_ERROR_NAME_IN_USE)
+	{
+		gpointer retry_ptr = g_object_get_data(
+			G_OBJECT(proxy),
+			GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY);
+
+		guint retry;
+		if(retry_ptr)
+			retry = GPOINTER_TO_UINT(retry_ptr);
+		else
+			retry = 2;
+
+		// TODO: Introduce an "alternative name" preference
+		join_user(proxy, Glib::ustring::compose(
+			"%1 %2", m_preferences.user.name, retry));
+
+		g_object_set_data(
+			G_OBJECT(proxy),
+			GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY,
+			GUINT_TO_POINTER(retry + 1));
+	}
+	else
+	{
+		// Remove the user join retry counter as we don't need it
+		// anymore if the user join failed anyway
+		g_object_set_data(G_OBJECT(proxy),
+			          GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY,
+			          NULL);
+
+		// TODO: Try join with another name if the name is
+		// already in use
+		set_error_text(
+			*window,
+			Glib::ustring::compose("User Join failed: %1",
+				               error->message),
+			USER_JOIN_ERROR);
+	}
 }
 
 void Gobby::BrowserCommands::on_user_join_finished(InfcUserRequest* request,
@@ -561,6 +595,12 @@ void Gobby::BrowserCommands::on_user_join_finished(InfcUserRequest* request,
 	                          GOBBY_BROWSER_COMMANDS_SESSION_PROXY);
 
 	InfcSessionProxy* proxy = static_cast<InfcSessionProxy*>(proxy_ptr);
+	
+	// Clear user join retry counter from proxy now that
+	// the user join finished.
+	g_object_set_data(G_OBJECT(proxy),
+	                  GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY, NULL);
+
 	user_joined(proxy, user);
 }
 
@@ -570,6 +610,9 @@ void Gobby::BrowserCommands::user_joined(InfcSessionProxy* proxy,
 	DocWindow* window = m_folder.lookup_document(
 		INF_TEXT_SESSION(infc_session_proxy_get_session(proxy)));
 	g_assert(window != NULL);
+
+	// TODO: Notify the user that he is using an alternative name if
+	// inf_user_get_name(user) does not match m_preferences.user.name.
 
 	window->unset_info();	
 	window->set_active_user(INF_TEXT_USER(user));

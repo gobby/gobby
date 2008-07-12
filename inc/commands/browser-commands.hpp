@@ -154,7 +154,7 @@ protected:
 	void on_close(InfSession* session);
 	void on_notify_connection(InfcSessionProxy* proxy);
 
-	void join_user(InfcSessionProxy* proxy);
+	void join_user(InfcSessionProxy* proxy, const Glib::ustring& name);
 
 	void on_user_join_failed(InfcUserRequest* request,
 	                         const GError* error);
