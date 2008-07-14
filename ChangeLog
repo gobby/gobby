@@ -1,3 +1,8 @@
+2008-07-14  Armin Burgmeier  <armin@0x539.de>
+
+	* configure.in: Require giomm 2.16.4 since this contains a bugfix that
+	allows overwriting files when saving.
+
 2008-07-12  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/commands/browser-commands.hpp:
