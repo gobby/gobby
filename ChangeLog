@@ -1,3 +1,23 @@
+2008-07-16  Armin Burgmeier  <armin@arbur.net>
+
+	* inc/core/header.hpp:
+	* src/core/header.cpp: Added lookup_language_action() to lookup a
+	languagu action by the GtkSourceLanguage.
+
+	* inc/commands/view-commands.hpp:
+	* src/commands/view-commands.cpp: Switch the language of the current
+	document if the user chooses another language in the menu, and make
+	the menu reflect the language for the current document.
+
+	* inc/commands/help-commands.hpp:
+	* src/commands/help-commands.cpp: Implemented the About option.
+
+	* inc/commands/Makefile.am:
+	* src/commands/Makefile.am: Added help-commands to the build.
+
+	* inc/window.hpp:
+	* src/window.cpp: Instantiate HelpCommands.
+
 2008-07-14  Armin Burgmeier  <armin@0x539.de>
 
 	* configure.in: Require giomm 2.16.4 since this contains a bugfix that

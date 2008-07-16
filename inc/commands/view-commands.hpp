@@ -19,16 +19,9 @@
 #ifndef _GOBBY_VIEW_COMMANDS_HPP_
 #define _GOBBY_VIEW_COMMANDS_HPP_
 
-#include "dialogs/finddialog.hpp"
-#include "dialogs/gotodialog.hpp"
-#include "dialogs/preferencesdialog.hpp"
-
 #include "core/header.hpp"
 #include "core/folder.hpp"
-#include "core/statusbar.hpp"
 
-#include <gtkmm/window.h>
-#include <gtkmm/filechooserdialog.h>
 #include <sigc++/trackable.h>
 
 namespace Gobby
@@ -49,12 +42,17 @@ protected:
 	void on_pref_toolbar_changed();
 	void on_pref_statusbar_changed();
 
+	void on_menu_language_changed(
+		const Glib::RefPtr<Gtk::RadioAction>& action);
+	void on_doc_language_changed(GtkSourceLanguage* language);
+
 	Header& m_header;
 	Folder& m_folder;
 	Preferences& m_preferences;
 
 	DocWindow* m_current_document;
 
+	sigc::connection m_menu_language_changed_connection;
 	sigc::connection m_document_language_changed_connection;
 
 	sigc::connection m_menu_view_toolbar_connection;

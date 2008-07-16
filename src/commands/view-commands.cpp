@@ -50,7 +50,11 @@ Gobby::ViewCommands::ViewCommands(Header& header, Folder& folder,
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &ViewCommands::on_document_changed));
 
-	// TODO: Connect language changed stuff
+	m_menu_language_changed_connection =
+		m_header.action_view_highlight_none->signal_changed().connect(
+			sigc::mem_fun(
+				*this,
+				&ViewCommands::on_menu_language_changed));
 
 	// Setup initial sensitivity:
 	on_document_changed(m_folder.get_current_document());
@@ -64,7 +68,29 @@ Gobby::ViewCommands::~ViewCommands()
 
 void Gobby::ViewCommands::on_document_changed(DocWindow* document)
 {
-	// TODO:
+	if(m_current_document != NULL)
+		m_document_language_changed_connection.disconnect();
+
+	m_current_document = document;
+
+	if(document != NULL)
+	{
+		m_header.action_view_highlight_mode->set_sensitive(true);
+
+		m_document_language_changed_connection =
+			document->signal_language_changed().connect(
+				sigc::mem_fun(
+					*this,
+					&ViewCommands::
+						on_doc_language_changed));
+	}
+	else
+	{
+		m_header.action_view_highlight_mode->set_sensitive(false);
+		m_header.action_view_highlight_none->set_active(true);
+	}
+
+	on_doc_language_changed(document ? document->get_language() : NULL);
 }
 
 void Gobby::ViewCommands::on_menu_toolbar_toggled()
@@ -97,4 +123,32 @@ void Gobby::ViewCommands::on_pref_statusbar_changed()
 	m_header.action_view_statusbar->set_active(
 		m_preferences.appearance.show_statusbar);
 	m_menu_view_statusbar_connection.unblock();
+}
+
+void Gobby::ViewCommands::on_menu_language_changed(
+	const Glib::RefPtr<Gtk::RadioAction>& action)
+{
+	Glib::RefPtr<Header::LanguageAction> language_action =
+		Glib::RefPtr<Header::LanguageAction>::cast_static(action);
+
+	g_assert(m_current_document != NULL);
+
+	m_document_language_changed_connection.block();
+	m_current_document->set_language(language_action->get_language());
+	m_document_language_changed_connection.unblock();
+}
+
+void Gobby::ViewCommands::on_doc_language_changed(GtkSourceLanguage* language)
+{
+	// Select the language of document:
+	const Glib::RefPtr<Header::LanguageAction> action =
+		(language != NULL) ?
+			m_header.lookup_language_action(
+				m_current_document->get_language()) :
+			m_header.action_view_highlight_none;
+
+	m_menu_language_changed_connection.block();
+	// lookup_language_action guarantees not to return NULL:
+	action->set_active(true);
+	m_menu_language_changed_connection.unblock();
 }

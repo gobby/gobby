@@ -26,6 +26,7 @@
 #include "commands/file-commands.hpp"
 #include "commands/edit-commands.hpp"
 #include "commands/view-commands.hpp"
+#include "commands/help-commands.hpp"
 #include "operations/operations.hpp"
 
 #include "dialogs/initialdialog.hpp"
@@ -92,6 +93,7 @@ protected:
 	FileCommands m_commands_file;
 	EditCommands m_commands_edit;
 	ViewCommands m_commands_view;
+	HelpCommands m_commands_help;
 
 	// TODO: Can't we use this directly now that the session is
 	// "always open"?

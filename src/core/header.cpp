@@ -459,3 +459,25 @@ Gtk::Toolbar& Gobby::Header::get_toolbar()
 {
 	return *m_toolbar;
 }
+
+Glib::RefPtr<Gobby::Header::LanguageAction>
+Gobby::Header::lookup_language_action(GtkSourceLanguage* language)
+{
+	const Glib::ustring section(
+		gtk_source_language_get_section(language));
+	LanguageMap::const_iterator iter =
+		action_view_highlight_languages.find(section);
+	g_assert(iter != action_view_highlight_languages.end());
+
+	const LanguageList& list = iter->second;
+	for(LanguageList::const_iterator iter = list.begin();
+	    iter != list.end(); ++ iter)
+	{
+		const Glib::RefPtr<LanguageAction> action = *iter;
+		if(action->get_language() == language)
+			return action;
+	}
+
+	g_assert_not_reached();
+	return Glib::RefPtr<LanguageAction>();
+}

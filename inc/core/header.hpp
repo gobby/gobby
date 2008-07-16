@@ -77,6 +77,9 @@ public:
 	Gtk::MenuBar& get_menubar();
 	Gtk::Toolbar& get_toolbar();
 
+	Glib::RefPtr<LanguageAction>
+	lookup_language_action(GtkSourceLanguage* language);
+
 protected:
 	Preferences& m_preferences;
 	Gtk::RadioAction::Group m_highlight_group;
