@@ -86,8 +86,10 @@ void Gobby::ViewCommands::on_document_changed(DocWindow* document)
 	}
 	else
 	{
+		m_menu_language_changed_connection.block();
 		m_header.action_view_highlight_mode->set_sensitive(false);
 		m_header.action_view_highlight_none->set_active(true);
+		m_menu_language_changed_connection.unblock();
 	}
 
 	on_doc_language_changed(document ? document->get_language() : NULL);

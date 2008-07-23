@@ -1,3 +1,8 @@
+2008-07-23  Armin Burgmeier  <armin@arbur.net>
+
+	* src/commands/view-commands.cpp: Block signal_language_changed
+	while closing last document, to avoid a crash in the handler
+
 2008-07-16  Armin Burgmeier  <armin@arbur.net>
 
 	* inc/core/header.hpp:
