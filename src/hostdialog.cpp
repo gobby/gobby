@@ -18,9 +18,13 @@
 
 #include <list>
 #include <gtkmm/stock.h>
+
+#ifdef GTKMM_ATKMM_ENABLED
 #include <atkmm/relationset.h>
 #include <atkmm/relation.h>
 #include <atkmm/object.h>
+#endif
+
 #include "common.hpp"
 #include "hostdialog.hpp"
 
@@ -127,6 +131,7 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent,
 	set_border_width(10);
 	set_resizable(false);
 
+#ifdef GTKMM_ATKMM_ENABLED
 	// Add label associations to get proper accessibility.
 	m_lbl_port.get_accessible()->get_relation_set()->set_add(
 		Atk::Relation::create(
@@ -148,6 +153,7 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent,
 			std::list<Glib::RefPtr<Atk::Object> >(1, m_ent_password.get_accessible()),
 			Atk::RELATION_LABEL_FOR)
 		);
+#endif
 }
 
 Gobby::HostDialog::~HostDialog()
