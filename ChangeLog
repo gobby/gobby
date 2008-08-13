@@ -1,3 +1,8 @@
+2008-08-13  Armin Burgmeier  <armin@arbur.net>
+
+	* src/core/header.cpp: Don't show hidden languages for syntax
+	highlighting.
+
 2008-07-23  Armin Burgmeier  <armin@arbur.net>
 
 	* src/commands/view-commands.cpp: Block signal_language_changed

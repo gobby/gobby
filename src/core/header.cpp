@@ -126,12 +126,14 @@ namespace {
 
 		const gchar* const* language_ids =
 			gtk_source_language_manager_get_language_ids(manager);
+		if(language_ids == NULL) return Gobby::Header::LanguageMap();
 
 		for(const gchar* const* id = language_ids; *id != NULL; ++ id)
 		{
 			GtkSourceLanguage* language =
 				gtk_source_language_manager_get_language(
 					manager, *id);
+			if(gtk_source_language_get_hidden(language)) continue;
 
 			const Glib::ustring name(
 				gtk_source_language_get_name(language));
