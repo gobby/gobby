@@ -626,7 +626,8 @@ Gobby::Header::Header(const ApplicationState& state,
 		for(const gchar* const* id = ids; *id != NULL; ++ id)
 		{
 			GtkSourceLanguage* language = gtk_source_language_manager_get_language(lang_mgr, *id);
-			lang_list = g_slist_prepend(lang_list, language);
+			if(!gtk_source_language_get_hidden(language))
+				lang_list = g_slist_prepend(lang_list, language);
 		}
 	}
 #else

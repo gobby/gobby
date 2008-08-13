@@ -365,6 +365,8 @@ Gobby::PreferencesDialog::FileList::FileList(Gtk::Window& parent,
 		for(const gchar* const* id = ids; *id != NULL; ++ id)
 		{
 			GtkSourceLanguage* language = gtk_source_language_manager_get_language(lang_mgr, *id);
+			if(gtk_source_language_get_hidden(language)) continue;
+
 			languages = g_slist_prepend(languages, language);
 		}
 	}
@@ -546,6 +548,7 @@ void Gobby::PreferencesDialog::FileList::
 		for(const gchar* const* id = ids; *id != NULL; ++ id)
 		{
 			GtkSourceLanguage* language = gtk_source_language_manager_get_language(m_lang_mgr, *id);
+			if(gtk_source_language_get_hidden(language)) continue;
 
 			gchar** mime_types = gtk_source_language_get_mime_types(language);
 			for(gchar** mime_type = mime_types; *mime_type != NULL; ++ mime_type)

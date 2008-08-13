@@ -41,6 +41,7 @@ namespace
 		{
 			GtkSourceLanguage* language = gtk_source_language_manager_get_language(manager, *id);
 			g_assert(language != NULL);
+			if(gtk_source_language_get_hidden(language)) continue;
 
 			gchar** mime_types =
 				gtk_source_language_get_mime_types(
@@ -263,6 +264,7 @@ Gobby::Preferences::FileList::FileList(Config::ParentEntry& entry,
 		for(const gchar* const* id = ids; *id != NULL; ++ id)
 		{
 			GtkSourceLanguage* language = gtk_source_language_manager_get_language(lang_mgr, *id);
+			if(gtk_source_language_get_hidden(language)) continue;
 
 			gchar** globs = gtk_source_language_get_globs(language);
 			if(globs != NULL)
