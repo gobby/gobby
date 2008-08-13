@@ -21,9 +21,13 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/enums.h>
 #include <gtkmm/alignment.h>
+
+#ifdef GTKMM_ATKMM_ENABLED
 #include <atkmm/relationset.h>
 #include <atkmm/relation.h>
 #include <atkmm/object.h>
+#endif
+
 #include "common.hpp"
 #include "joindialog.hpp"
 
@@ -153,6 +157,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 	set_border_width(10);
 	set_resizable(true);
 
+#ifdef GTKMM_ATKMM_ENABLED
 	// Add label associations to get proper accessibility.
 	m_lbl_host.get_accessible()->get_relation_set()->set_add(
 		Atk::Relation::create(
@@ -174,6 +179,7 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 			std::list<Glib::RefPtr<Atk::Object> >(1, m_btn_color.get_accessible()),
 			Atk::RELATION_LABEL_FOR)
 		);
+#endif
 }
 
 Gobby::JoinDialog::~JoinDialog()

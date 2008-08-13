@@ -6,6 +6,13 @@
 	are not meant to be shown to the user, and they could cause a crash
 	(bug #374).
 
+2008-07-24  Armin Burgmeier  <armin@0x539.de>
+
+	* src/joindialog.cpp:
+	* src/hostdialog.cpp: Added #ifdef GTKMM_ATKMM_ENABLED ... #endif
+	pairs around the atkmm includes and usages, so that gobby builds
+	when atkmm is not enabled in gtkmm.
+
 2008-06-25  Yarek Tyshchenko  <yarek@britishgraphics.co.uk>
 
 	* configure.ac: Require ige-mac-integration when Gobby is complied
