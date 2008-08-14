@@ -17,12 +17,16 @@
  */
 
 #include "core/folder.hpp"
+#include "util/file.hpp"
 
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/stock.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdexcept>
+#include <iostream> // For std::cerr
+
+#include <libinfinity/adopted/inf-adopted-session-record.h>
 
 namespace
 {
@@ -192,6 +196,44 @@ namespace
 		Gtk::Label m_label;
 		Gtk::Button m_button;
 	};
+
+	void record(InfTextSession* session, const Glib::ustring& title)
+	{
+		std::string dirname = Glib::build_filename(
+			Glib::get_home_dir(), ".infinote-records");
+		std::string filename = Glib::build_filename(
+			dirname, title + ".record.xml");
+
+		try
+		{
+			Gobby::create_directory_with_parents(dirname);
+
+			InfAdoptedSessionRecord* record =
+				inf_adopted_session_record_new(
+					INF_ADOPTED_SESSION(session));
+
+			GError* error = NULL;
+			inf_adopted_session_record_start_recording(
+				record, filename.c_str(), &error);
+			if(error != NULL)
+			{
+				g_object_unref(record);
+
+				std::string what = error->message;
+				g_error_free(error);
+				throw std::runtime_error(what);
+			}
+
+			g_object_set_data_full(
+				G_OBJECT(session), "GOBBY_SESSION_RECORD",
+				record, g_object_unref);
+		}
+		catch(std::exception& ex)
+		{
+			std::cerr << "Failed to create record '" << filename
+			          << "': " << ex.what() << std::endl;
+		}
+	}
 }
 
 Gobby::Folder::Folder(const Preferences& preferences,
@@ -199,6 +241,14 @@ Gobby::Folder::Folder(const Preferences& preferences,
 	m_preferences(preferences), m_lang_manager(lang_manager)
 {
 	set_scrollable(true);
+}
+
+Gobby::Folder::~Folder()
+{
+	// Remove all documents explicitely, so that all sessions are closed,
+	// and records finished.
+	while(get_n_pages())
+		remove_document(*static_cast<DocWindow*>(get_nth_page(0)));
 }
 
 Gobby::DocWindow&
@@ -219,6 +269,9 @@ Gobby::Folder::add_document(InfTextSession* session,
 	tablabel->show();
 	append_page(*window, *tablabel);
 
+	// Record the session, for debugging purposes:
+	record(session, title);
+
 	m_signal_document_added.emit(*window);
 	return *window;
 }
@@ -231,6 +284,10 @@ void Gobby::Folder::remove_document(DocWindow& window)
 	// DocWindow after having emitted signal_document_changed.
 	if(get_n_pages() == 1)
 		m_signal_document_changed.emit(NULL);
+
+	// Finish the record
+	g_object_set_data(G_OBJECT(window.get_session()),
+	                  "GOBBY_SESSION_RECORD", NULL);
 
 	inf_session_close(INF_SESSION(window.get_session()));
 	remove_page(window);

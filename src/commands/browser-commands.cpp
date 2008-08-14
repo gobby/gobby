@@ -575,8 +575,6 @@ void Gobby::BrowserCommands::on_user_join_failed(InfcUserRequest* request,
 			          GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY,
 			          NULL);
 
-		// TODO: Try join with another name if the name is
-		// already in use
 		set_error_text(
 			*window,
 			Glib::ustring::compose("User Join failed: %1",

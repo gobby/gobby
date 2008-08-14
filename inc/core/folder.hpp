@@ -44,6 +44,7 @@ public:
 
 	Folder(const Preferences& preferences,
 	       GtkSourceLanguageManager* lang_manager);
+	~Folder();
 
 	DocWindow& add_document(InfTextSession* session,
 	                        const Glib::ustring& title,
