@@ -5,6 +5,7 @@ libgobby_core_a_SOURCES = \
 	documentinfostorage.cpp \
 	docwindow.cpp \
 	encodingselector.cpp \
+	filechooser.cpp \
 	folder.cpp \
 	header.cpp \
 	iconmanager.cpp \

@@ -4,6 +4,7 @@ noinst_HEADERS = \
 	documentinfostorage.hpp \
 	docwindow.hpp \
 	encodingselector.hpp \
+	filechooser.hpp \
 	folder.hpp \
 	header.hpp \
 	iconmanager.hpp \

@@ -31,12 +31,13 @@
 
 #include "dialogs/initialdialog.hpp"
 
-#include "core/preferences.hpp"
 #include "core/iconmanager.hpp"
 #include "core/header.hpp"
 #include "core/folder.hpp"
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
+#include "core/preferences.hpp"
+#include "core/filechooser.hpp"
 
 #include "util/config.hpp"
 
@@ -87,6 +88,7 @@ protected:
 
 	// Functionality
 	DocumentInfoStorage m_info_storage;
+	FileChooser m_file_chooser;
 	Operations m_operations;
 
 	BrowserCommands m_commands_browser;

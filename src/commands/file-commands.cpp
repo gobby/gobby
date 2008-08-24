@@ -70,34 +70,24 @@ namespace
 	class TaskOpen: public Gobby::FileCommands::Task
 	{
 	private:
-		Gtk::FileChooserDialog m_file_dialog;
+		FileChooser::Dialog m_file_dialog;
 		std::string m_open_uri;
 
 	public:
 		TaskOpen(FileCommands& file_commands):
 			Task(file_commands),
-			m_file_dialog(get_parent(),
+			m_file_dialog(get_file_chooser(), get_parent(),
 			              _("Choose a text file to open"),
 			              Gtk::FILE_CHOOSER_ACTION_OPEN)
 		{
-			m_file_dialog.add_button(Gtk::Stock::CANCEL,
-		                                 Gtk::RESPONSE_CANCEL);
-			m_file_dialog.add_button(Gtk::Stock::OPEN,
-			                         Gtk::RESPONSE_ACCEPT);
-
 			m_file_dialog.signal_response().connect(sigc::mem_fun(
 				*this, &TaskOpen::on_file_response));
 
-			m_file_dialog.set_current_folder_uri(
-				get_current_folder_uri());
 			m_file_dialog.present();
 		}
 
 		virtual ~TaskOpen()
 		{
-			set_current_folder_uri(
-				m_file_dialog.get_current_folder_uri());
-
 			get_document_location_dialog().hide();
 		}
 
@@ -155,14 +145,15 @@ namespace
 	class TaskSave: public Gobby::FileCommands::Task
 	{
 	private:
-		Gtk::FileChooserDialog m_file_dialog;
+		FileChooser::Dialog m_file_dialog;
 		DocWindow* m_document;
 
 	public:
 		TaskSave(FileCommands& file_commands, DocWindow& document):
 			Task(file_commands),
 			m_file_dialog(
-				get_parent(), Glib::ustring::compose(_(
+				get_file_chooser(), get_parent(),
+				Glib::ustring::compose(_(
 					"Choose a location to save document "
 					"\"%1\" to"),
 					document.get_title()),
@@ -170,12 +161,6 @@ namespace
 			m_document(&document)
 		{
 			
-			m_file_dialog.add_button(Gtk::Stock::CANCEL,
-			                         Gtk::RESPONSE_CANCEL);
-			m_file_dialog.add_button(Gtk::Stock::SAVE,
-			                          Gtk::RESPONSE_ACCEPT);
-			m_file_dialog.set_do_overwrite_confirmation(true);
-
 			m_file_dialog.signal_response().connect(sigc::mem_fun(
 				*this, &TaskSave::on_response));
 			get_folder().signal_document_removed().connect(
@@ -191,19 +176,8 @@ namespace
 			{
 				m_file_dialog.set_uri(info->uri);
 			}
-			else
-			{
-				m_file_dialog.set_current_folder_uri(
-					get_current_folder_uri());
-			}
 
 			m_file_dialog.present();
-		}
-
-		virtual ~TaskSave()
-		{
-			set_current_folder_uri(
-				m_file_dialog.get_current_folder_uri());
 		}
 
 		void on_response(int response_id)
@@ -359,6 +333,11 @@ Gobby::Folder& Gobby::FileCommands::Task::get_folder()
 	return m_file_commands.m_folder;
 }
 
+Gobby::FileChooser& Gobby::FileCommands::Task::get_file_chooser()
+{
+	return m_file_commands.m_file_chooser;
+}
+
 Gobby::Operations& Gobby::FileCommands::Task::get_operations()
 {
 	return m_file_commands.m_operations;
@@ -391,25 +370,16 @@ Gobby::FileCommands::Task::get_document_location_dialog()
 	return *m_file_commands.m_location_dialog;
 }
 
-void Gobby::FileCommands::Task::set_current_folder_uri(const std::string& uri)
-{
-	m_file_commands.m_current_folder_uri = uri;
-}
-
-const std::string& Gobby::FileCommands::Task::get_current_folder_uri() const
-{
-	return m_file_commands.m_current_folder_uri;
-}
-
 Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
                                   const Browser& browser, Folder& folder,
+                                  FileChooser& file_chooser,
                                   Operations& operations,
 				  const DocumentInfoStorage& info_storage,
                                   Preferences& preferences):
 	m_parent(parent), m_header(header), m_browser(browser),
-	m_folder(folder), m_operations(operations),
-	m_document_info_storage(info_storage), m_preferences(preferences),
-	m_current_folder_uri(Glib::filename_to_uri(Glib::get_current_dir()))
+	m_folder(folder), m_file_chooser(file_chooser),
+	m_operations(operations), m_document_info_storage(info_storage),
+	m_preferences(preferences)
 {
 	header.action_file_new->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_new));

@@ -1,5 +1,23 @@
 2008-08-24  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/filechooser.hpp:
+	* src/core/filechooser.cpp: Added a new class that manages a "current
+	folder uri" which specifies at which location the filechooser has been
+	used the last time. This is used as default location for newly opened
+	file chooser dialogs.
+
+	* inc/core/Makefile.am:
+	* src/core/Makefile.am: Add the new files to the build.
+
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Use this when showing open or save
+	dialogs.
+
+	* inc/window.hpp:
+	* src/window.cpp: Instantiate a FileChooser, pass to FileCommands.
+
+2008-08-24  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/browser.hpp:
 	* src/core/browser.cpp: Added the get_selected() and set_selected()
 	methods, using the new inf_gtk_browser_view_set_selected().

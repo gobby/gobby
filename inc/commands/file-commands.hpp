@@ -23,9 +23,10 @@
 #include "dialogs/documentlocationdialog.hpp"
 #include "core/header.hpp"
 #include "core/browser.hpp"
+#include "core/filechooser.hpp"
 
-#include <gtkmm/window.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/window.h>
 #include <sigc++/trackable.h>
 
 namespace Gobby
@@ -36,7 +37,7 @@ class FileCommands: public sigc::trackable
 public:
 	FileCommands(Gtk::Window& parent, Header& header,
 	             const Browser& browser, Folder& folder,
-	             Operations& operations,
+	             FileChooser& file_chooser, Operations& operations,
 	             const DocumentInfoStorage& info_storage,
 	             Preferences& preferences);
 
@@ -49,15 +50,14 @@ public:
 		virtual ~Task() = 0;
 
 		void finish();
+
 		Gtk::Window& get_parent();
 		Folder& get_folder();
+		FileChooser& get_file_chooser();
 		Operations& get_operations();
 		const DocumentInfoStorage& get_document_info_storage();
 		Preferences& get_preferences();
 		DocumentLocationDialog& get_document_location_dialog();
-
-		void set_current_folder_uri(const std::string& uri);
-		const std::string& get_current_folder_uri() const;
 
 		SignalFinished signal_finished() const
 		{
@@ -85,12 +85,10 @@ protected:
 	Header& m_header;
 	const Browser& m_browser;
 	Folder& m_folder;
+	FileChooser& m_file_chooser;
 	Operations& m_operations;
 	const DocumentInfoStorage& m_document_info_storage;
 	Preferences& m_preferences;
-
-	// TODO: This needs also to be available to BrowserCommands
-	std::string m_current_folder_uri;
 
 	std::auto_ptr<Task> m_task;
 	std::auto_ptr<DocumentLocationDialog> m_location_dialog;
