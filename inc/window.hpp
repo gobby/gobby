@@ -23,6 +23,7 @@
 #include "dragdrop.hpp"
 
 #include "commands/browser-commands.hpp"
+#include "commands/browser-context-commands.hpp"
 #include "commands/file-commands.hpp"
 #include "commands/edit-commands.hpp"
 #include "commands/view-commands.hpp"
@@ -92,6 +93,7 @@ protected:
 	Operations m_operations;
 
 	BrowserCommands m_commands_browser;
+	BrowserContextCommands m_commands_browser_context;
 	FileCommands m_commands_file;
 	EditCommands m_commands_edit;
 	ViewCommands m_commands_view;

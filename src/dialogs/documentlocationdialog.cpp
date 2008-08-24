@@ -34,6 +34,7 @@ namespace
 
 Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
                                                       InfGtkBrowserModel* m):
+	Gtk::Dialog(_("Select document's target location"), parent),
 	m_table(3, 2), m_name_label(_("Document Name:"), Gtk::ALIGN_RIGHT),
 	m_location_label(
 		_("Choose a directory to create the document into:"),
@@ -61,7 +62,6 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 	m_table.attach(m_scroll, 0, 2, 2, 3,
 	               Gtk::FILL | Gtk::EXPAND, Gtk::FILL | Gtk::EXPAND);
 	m_table.set_spacings(6);
-	m_table.set_border_width(12);
 	m_table.show();
 
 	g_signal_connect(m_view, "selection-changed",
@@ -85,7 +85,7 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 	set_response_sensitive(Gtk::RESPONSE_ACCEPT, false);
 	set_default_response(Gtk::RESPONSE_ACCEPT);
 	set_default_size(-1, 480);
-	set_title(_("Select document's target location"));
+	set_border_width(12);
 }
 
 Gobby::DocumentLocationDialog::~DocumentLocationDialog()

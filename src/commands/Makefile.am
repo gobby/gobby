@@ -2,6 +2,7 @@ noinst_LIBRARIES = libgobby-commands.a
 
 libgobby_commands_a_SOURCES = \
 	browser-commands.cpp \
+	browser-context-commands.cpp \
 	edit-commands.cpp \
 	file-commands.cpp \
 	help-commands.cpp \

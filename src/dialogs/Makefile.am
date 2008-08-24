@@ -2,6 +2,7 @@ noinst_LIBRARIES = libgobby-dialogs.a
 
 libgobby_dialogs_a_SOURCES = \
 	documentlocationdialog.cpp \
+	entrydialog.cpp \
 	finddialog.cpp \
 	gotodialog.cpp \
 	initialdialog.cpp \

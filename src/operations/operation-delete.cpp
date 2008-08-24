@@ -16,31 +16,18 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "operations/operation-new.hpp"
-
-#include "core/noteplugin.hpp"
+#include "operations/operation-delete.hpp"
 #include "util/i18n.hpp"
 
-Gobby::OperationNew::OperationNew(Operations& operations,
-                                  InfcBrowser* browser,
-                                  InfcBrowserIter* parent,
-                                  const Glib::ustring& name,
-                                  bool directory):
-	Operation(operations), m_name(name), m_directory(directory)
+Gobby::OperationDelete::OperationDelete(Operations& operations,
+                                        InfcBrowser* browser,
+                                        InfcBrowserIter* iter):
+	Operation(operations),
+	m_name(infc_browser_iter_get_name(browser, iter))
 {
-	if(directory)
-	{
-		m_request = infc_browser_add_subdirectory(browser, parent,
-		                                          name.c_str());
-	}
-	else
-	{
-		m_request = infc_browser_add_note(browser, parent,
-		                                  name.c_str(), Plugins::TEXT,
-		                                  TRUE);
-	}
+	m_request = infc_browser_remove_node(browser, iter);
 
-	// Note infc_browser_add_note does not return a
+	// Note infc_browser_remove_node does not return a
 	// new reference.
 	g_object_ref(m_request);
 
@@ -53,12 +40,10 @@ Gobby::OperationNew::OperationNew(Operations& operations,
 
 	m_message_handle = get_status_bar().add_message(
 		StatusBar::INFO,
-		Glib::ustring::compose(
-			directory ? _("Creating directory %1…")
-			          : _("Creating document %1…"), name), 0);
+		Glib::ustring::compose(_("Removing node %1…"), m_name), 0);
 }
 
-Gobby::OperationNew::~OperationNew()
+Gobby::OperationDelete::~OperationDelete()
 {
 	g_signal_handler_disconnect(G_OBJECT(m_request), m_finished_id);
 	g_signal_handler_disconnect(G_OBJECT(m_request), m_failed_id);
@@ -67,19 +52,17 @@ Gobby::OperationNew::~OperationNew()
 	get_status_bar().remove_message(m_message_handle);
 }
 
-void Gobby::OperationNew::on_request_failed(const GError* error)
+void Gobby::OperationDelete::on_request_failed(const GError* error)
 {
 	get_status_bar().add_message(
 		StatusBar::ERROR,
-		Glib::ustring::compose(
-			m_directory ? _("Failed to create directory %1: %2")
-			            : _("Failed to create document %1: %2"),
+		Glib::ustring::compose(_("Failed to delete node %1: %2"),
 			m_name, error->message), 5);
 
 	remove();
 }
 
-void Gobby::OperationNew::on_request_finished(InfcBrowserIter* iter)
+void Gobby::OperationDelete::on_request_finished(InfcBrowserIter* iter)
 {
 	remove();
 }

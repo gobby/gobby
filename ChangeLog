@@ -1,5 +1,50 @@
 2008-08-24  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/nodewatch.hpp:
+	* src/core/nodewatch.cpp: Added a class that watches a node in a
+	InfcBrowser and emits a signal when it is removed.
+
+	* inc/dialogs/entrydialog.hpp:
+	* src/dialogs/entrydialog.cpp: Added a class that shows a dialog with
+	an entry, to prompt the user for a string to enter.
+
+	* inc/operations/operation-delete.hpp:
+	* src/operations/operation-delete.cpp: Added an operation that deletes
+	a node.
+
+	* inc/core/browser.hpp:
+	* src/core/browser.cpp: Added get_view().
+
+	* inc/operations/operation-new.hpp:
+	* src/operations/operation-new.cpp: Allow this to create a directory,
+	via a boolean parameter.
+
+	* inc/operations/operations.hpp:
+	* src/operations/operations.cpp: Added delete_node() and
+	create_directory().
+
+	* src/core/documentinfostorage.cpp (on_node_removed): Don't require
+	the removed node to be in our map.
+
+	* inc/commands/browser-context-commands.hpp:
+	* src/commands/browser-context-commands.cpp: Added a class that shows
+	a context menu for the left browser pane, allowing the user to create
+	or remove nodes.
+
+	* inc/window.hpp:
+	* src/window.cpp: Instantiate a BrowserContextCommands object.
+
+	* inc/core/Makefile.am:
+	* inc/dialogs/Makefile.am:
+	* inc/operations/Makefile.am:
+	* inc/commands/Makefile.am:
+	* src/core/Makefile.am:
+	* src/dialogs/Makefile.am:
+	* src/operations/Makefile.am:
+	* src/commands/Makefile.am: Added the new files to the build.
+
+2008-08-24  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/filechooser.hpp:
 	* src/core/filechooser.cpp: Added a new class that manages a "current
 	folder uri" which specifies at which location the filechooser has been

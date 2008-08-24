@@ -16,22 +16,21 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_OPERATIONS_OPERATIONNEW_HPP_
-#define _GOBBY_OPERATIONS_OPERATIONNEW_HPP_
+#ifndef _GOBBY_OPERATIONS_OPERATIONDELETE_HPP_
+#define _GOBBY_OPERATIONS_OPERATIONDELETE_HPP_
 
 #include "operations/operations.hpp"
 
 namespace Gobby
 {
 
-class OperationNew: public Operations::Operation
+class OperationDelete: public Operations::Operation
 {
 public:
-	OperationNew(Operations& operations, InfcBrowser* browser,
-	             InfcBrowserIter* parent, const Glib::ustring& name,
-	             bool directory);
+	OperationDelete(Operations& operations, InfcBrowser* browser,
+	                InfcBrowserIter* iter);
 
-	virtual ~OperationNew();
+	virtual ~OperationDelete();
 
 protected:
 	static void
@@ -39,7 +38,7 @@ protected:
 	                         const GError* error,
 	                         gpointer user_data)
 	{
-		static_cast<OperationNew*>(user_data)->
+		static_cast<OperationDelete*>(user_data)->
 			on_request_failed(error);
 	}
 
@@ -48,7 +47,7 @@ protected:
 	                           InfcBrowserIter* iter,
 	                           gpointer user_data)
 	{
-		static_cast<OperationNew*>(user_data)->
+		static_cast<OperationDelete*>(user_data)->
 			on_request_finished(iter);
 	}
 
@@ -57,7 +56,6 @@ protected:
 
 protected:
 	Glib::ustring m_name;
-	bool m_directory;
 	InfcNodeRequest* m_request;
 	gulong m_finished_id;
 	gulong m_failed_id;
@@ -67,4 +65,4 @@ protected:
 
 }
 
-#endif // _GOBBY_OPERATIONS_OPERATIONNEW_HPP_
+#endif // _GOBBY_OPERATIONS_OPERATIONDELETE_HPP_

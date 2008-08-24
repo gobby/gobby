@@ -86,7 +86,6 @@ Gobby::FindDialog::FindDialog(Gtk::Window& parent, Folder& folder,
 	m_box_main.pack_start(m_check_backwards, Gtk::PACK_SHRINK);
 	m_box_main.pack_start(m_check_wrap_around, Gtk::PACK_SHRINK);
 	m_box_main.set_spacing(12);
-	m_box_main.set_border_width(12);
 	m_box_main.show();
 
 	get_vbox()->pack_start(m_box_main);
@@ -96,6 +95,7 @@ Gobby::FindDialog::FindDialog(Gtk::Window& parent, Folder& folder,
 	m_entry_replace.signal_changed().connect(
 		sigc::mem_fun(*this, &FindDialog::on_replace_text_changed));
 
+	set_border_width(12);
 	set_resizable(false);
 
 	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);

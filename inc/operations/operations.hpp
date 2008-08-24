@@ -60,14 +60,18 @@ public:
 	Operations(DocumentInfoStorage& info_storage, StatusBar& status_bar);
 	~Operations();
 
-	void create_document(InfcBrowser* browser,
-	                     InfcBrowserIter* parent,
-	                     const Glib::ustring name);
+	void create_directory(InfcBrowser* browser,
+	                      InfcBrowserIter* parent,
+	                      const Glib::ustring& name);
 
 	void create_document(InfcBrowser* browser,
 	                     InfcBrowserIter* parent,
-	                     const Glib::ustring name,
-	                     Preferences& preferences,
+	                     const Glib::ustring& name);
+
+	void create_document(InfcBrowser* browser,
+	                     InfcBrowserIter* parent,
+	                     const Glib::ustring& name,
+	                     const Preferences& preferences,
 	                     const Glib::ustring& from_uri,
 	                     const char* encoding);
 
@@ -76,6 +80,9 @@ public:
 	                   const std::string& uri,
 	                   const std::string& encoding,
 	                   DocumentInfoStorage::EolStyle eol_style);
+
+	void delete_node(InfcBrowser* browser,
+	                 InfcBrowserIter* iter);
 
 protected:
 	void remove_operation(Operation* operation);

@@ -42,7 +42,6 @@ Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, Folder& folder):
 	m_table.attach(m_entry_line, 1, 2, 0, 1,
 	               Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 	m_table.set_spacings(12);
-	m_table.set_border_width(12);
 	m_table.show();
 
 	get_vbox()->pack_start(m_table, Gtk::PACK_EXPAND_WIDGET);
@@ -58,6 +57,7 @@ Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, Folder& folder):
 		sigc::mem_fun(*this, &GotoDialog::on_document_changed));
 
 	set_default_response(Gtk::RESPONSE_ACCEPT);
+	set_border_width(12);
 	set_resizable(false);
 
 	// For initial sensitivity:

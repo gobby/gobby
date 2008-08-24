@@ -318,7 +318,8 @@ void Gobby::DocumentInfoStorage::on_node_removed(InfcBrowser* browser,
 	// Remove info when the corresponding document is removed.
 	std::string key = get_key(browser, iter);
 	InfoMap::iterator map_iter = m_infos.find(key);
-	g_assert(map_iter != m_infos.end());
-	m_infos.erase(map_iter);
+
+	if(map_iter != m_infos.end())
+		m_infos.erase(map_iter);
 }
 

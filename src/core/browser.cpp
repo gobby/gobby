@@ -282,7 +282,15 @@ bool Gobby::Browser::get_selected(InfcBrowser** browser,
 	gtk_tree_model_get(
 		GTK_TREE_MODEL(m_browser_store), &tree_iter,
 		INF_GTK_BROWSER_MODEL_COL_BROWSER, &tmp_browser,
-		INF_GTK_BROWSER_MODEL_COL_NODE, &tmp_iter, -1);
+		-1);
+
+	if(tmp_browser == NULL)
+		return false;
+
+	gtk_tree_model_get(
+		GTK_TREE_MODEL(m_browser_store), &tree_iter,
+		INF_GTK_BROWSER_MODEL_COL_NODE, &tmp_iter,
+		-1);
 
 	*browser = tmp_browser;
 	*iter = *tmp_iter;

@@ -65,6 +65,8 @@ public:
 		return m_browser_store;
 	}
 
+	InfGtkBrowserView* get_view() { return m_browser_view; }
+
 	bool get_selected(InfcBrowser** browser, InfcBrowserIter* iter);
 	void set_selected(InfcBrowser* browser, InfcBrowserIter* iter);
 

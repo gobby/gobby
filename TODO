@@ -6,15 +6,15 @@ perhaps do pre-releases with some of these missing before:
    the beginning of the document, which we should do anyway (in infinote)
  - ^W should close the window
  - Remove references to doclist, userlist and chat in the icon manager
- - Implemente single instance, probably using GtkUnique
+ - Implement single instance, probably using GtkUnique
  - Implement self-hosting, this also requires showing and handling directories
    in InfGtkBrowserModel/Store
  - Sort BrowserModel in Left pane and DocumentLocationDialog
  - Add remove and add directory operations to Operations
- - Add context menu to browser in left pane
  - Add user list to DocWindows.
  - Add close buttons to browser in left pane, user lists and docwindow infos,
    and a way to re-show the former two.
+ - hue-only color selector
 
 These things need to be implemented in infinote, but again would be nice
 to have:

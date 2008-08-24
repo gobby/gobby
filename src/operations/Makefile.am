@@ -2,6 +2,7 @@ noinst_LIBRARIES = libgobby-operations.a
 
 libgobby_operations_a_SOURCES = \
 	operations.cpp \
+	operation-delete.cpp \
 	operation-new.cpp \
 	operation-open.cpp \
 	operation-save.cpp

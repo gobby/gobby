@@ -9,6 +9,7 @@ libgobby_core_a_SOURCES = \
 	folder.cpp \
 	header.cpp \
 	iconmanager.cpp \
+	nodewatch.cpp \
 	noteplugin.cpp \
 	preferences.cpp \
 	statusbar.cpp

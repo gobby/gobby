@@ -34,6 +34,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_operations(m_info_storage, m_statusbar), 
 	m_commands_browser(m_browser, m_folder, m_info_storage, m_statusbar,
 	                   m_preferences),
+	m_commands_browser_context(*this, m_browser, m_file_chooser,
+	                           m_operations, m_preferences),
 	m_commands_file(*this, m_header, m_browser, m_folder, m_file_chooser,
 	                m_operations, m_info_storage, m_preferences),
 	m_commands_edit(*this, m_header, m_folder, m_statusbar,

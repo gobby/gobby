@@ -8,6 +8,7 @@ noinst_HEADERS = \
 	folder.hpp \
 	header.hpp \
 	iconmanager.hpp \
+	nodewatch.hpp \
 	noteplugin.hpp \
 	preferences.hpp \
 	statusbar.hpp

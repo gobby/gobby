@@ -19,6 +19,7 @@
 #include "operations/operation-new.hpp"
 #include "operations/operation-open.hpp"
 #include "operations/operation-save.hpp"
+#include "operations/operation-delete.hpp"
 #include "operations/operations.hpp"
 
 #include "core/noteplugin.hpp"
@@ -41,17 +42,26 @@ Gobby::Operations::~Operations()
 	}
 }
 
-void Gobby::Operations::create_document(InfcBrowser* browser,
-                                        InfcBrowserIter* parent,
-                                        const Glib::ustring name)
+void Gobby::Operations::create_directory(InfcBrowser* browser,
+                                         InfcBrowserIter* parent,
+					 const Glib::ustring& name)
 {
-	m_operations.insert(new OperationNew(*this, browser, parent, name));
+	m_operations.insert(new OperationNew(*this, browser, parent,
+	                                     name, true));
 }
 
 void Gobby::Operations::create_document(InfcBrowser* browser,
                                         InfcBrowserIter* parent,
-                                        const Glib::ustring name,
-                                        Preferences& preferences,
+                                        const Glib::ustring& name)
+{
+	m_operations.insert(new OperationNew(*this, browser, parent,
+	                                     name, false));
+}
+
+void Gobby::Operations::create_document(InfcBrowser* browser,
+                                        InfcBrowserIter* parent,
+                                        const Glib::ustring& name,
+                                        const Preferences& preferences,
                                         const Glib::ustring& from_uri,
 					const char* encoding)
 {
@@ -69,6 +79,12 @@ void Gobby::Operations::save_document(DocWindow& document,
 	m_operations.insert(
 		new OperationSave(*this, document, folder, uri, encoding,
 		                  eol_style));
+}
+
+void Gobby::Operations::delete_node(InfcBrowser* browser,
+                                    InfcBrowserIter* iter)
+{
+	m_operations.insert(new OperationDelete(*this, browser, iter));
 }
 
 void Gobby::Operations::remove_operation(Operation* operation)
