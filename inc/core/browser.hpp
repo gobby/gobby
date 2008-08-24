@@ -65,6 +65,9 @@ public:
 		return m_browser_store;
 	}
 
+	bool get_selected(InfcBrowser** browser, InfcBrowserIter* iter);
+	void set_selected(InfcBrowser* browser, InfcBrowserIter* iter);
+
 	SignalActivate signal_activate() const { return m_signal_activate; }
 
 protected:

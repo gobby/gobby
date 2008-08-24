@@ -288,7 +288,14 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 		INF_TEXT_SESSION(session),
 		infc_browser_iter_get_name(browser, iter),
 		m_info_storage.get_key(browser, iter));
+
+	// For now we always highlight the newly created session...
+	// TODO: If the user issued other browserview events in the meanwhile,
+	// then don't select the item, and if the user did issue other folder
+	// events, then don't switch to the document in the folder.
 	m_folder.switch_to_document(window);
+	gtk_widget_grab_focus(GTK_WIDGET(window.get_text_view()));
+	m_browser.set_selected(browser, iter);
 
 	SessionNode& node = m_session_map[session];
 	node.proxy = proxy;

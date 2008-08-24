@@ -268,3 +268,39 @@ void Gobby::Browser::on_resolv_error(ResolvHandle* handle,
 
 	m_status_bar.add_message(StatusBar::ERROR, error.what(), 5);
 }
+
+bool Gobby::Browser::get_selected(InfcBrowser** browser,
+                                  InfcBrowserIter* iter)
+{
+	GtkTreeIter tree_iter;
+	if(!inf_gtk_browser_view_get_selected(m_browser_view, &tree_iter))
+		return false;
+
+	InfcBrowser* tmp_browser;
+	InfcBrowserIter* tmp_iter;
+
+	gtk_tree_model_get(
+		GTK_TREE_MODEL(m_browser_store), &tree_iter,
+		INF_GTK_BROWSER_MODEL_COL_BROWSER, &tmp_browser,
+		INF_GTK_BROWSER_MODEL_COL_NODE, &tmp_iter, -1);
+
+	*browser = tmp_browser;
+	*iter = *tmp_iter;
+
+	infc_browser_iter_free(tmp_iter);
+	g_object_unref(tmp_browser);
+
+	return true;
+}
+
+void Gobby::Browser::set_selected(InfcBrowser* browser, InfcBrowserIter* iter)
+{
+	GtkTreeIter tree_iter;
+
+	gboolean has_iter = inf_gtk_browser_model_browser_iter_to_tree_iter(
+		INF_GTK_BROWSER_MODEL(m_browser_store),
+		browser, iter, &tree_iter);
+	g_assert(has_iter == TRUE);
+
+	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
+}

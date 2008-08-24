@@ -1,3 +1,13 @@
+2008-08-24  Armin Burgmeier  <armin@arbur.net>
+
+	* inc/core/browser.hpp:
+	* src/core/browser.cpp: Added the get_selected() and set_selected()
+	methods, using the new inf_gtk_browser_view_set_selected().
+
+	* src/commands/browser-commands.cpp: When subscribing to a session,
+	then change the BrowserView selection to the corresponding note, and
+	give focus to the DocWindow, so the user can start typing immediately.
+
 2008-08-14  Armin Burgmeier  <armin@arbur.net>
 
 	* src/commands/browser-commands.cpp: Removed an obsolete TODO item.
