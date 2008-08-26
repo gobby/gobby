@@ -41,6 +41,7 @@ if test "x$build_vendor" = "xapple" ; then
   AC_DEFINE([OSX], 1, [Define whether we are running on Mac OS X.])
   target=`pkg-config --variable=target gtk+-2.0`
   if test "$target" = "quartz" ; then
+    AC_DEFINE([OSX_NATIVE], 1, [Define whether we are running natively on Mac OS X (using the quartz GDK backend)])
     required_libs="$required_libs ige-mac-integration"
   fi
 fi

@@ -24,7 +24,9 @@
 #include "header.hpp"
 #include "icon.hpp"
 
-#ifdef OSX
+#include "features.hpp"
+
+#ifdef OSX_NATIVE
 #include <ige-mac-menu.h>
 #endif
 
@@ -724,7 +726,7 @@ Gobby::Header::Header(const ApplicationState& state,
 			"XML UI definition lacks toolbar"
 		);
 	}
-#ifdef OSX
+#ifdef OSX_NATIVE
 	ige_mac_menu_set_menu_bar(GTK_MENU_SHELL (m_menubar->gobj()));
 	
 	ige_mac_menu_set_quit_menu_item(GTK_MENU_ITEM (

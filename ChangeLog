@@ -1,3 +1,10 @@
+2008-08-26  Armin Burgmeier  <armin@arbur.net>
+
+	* src/header.cpp: Only use the ige-mac-intergration if we are running
+	natively on Mac OS X.
+
+	* configure.ac: Define OSX_NATIVE if we do so.
+
 2008-08-13  Armin Burgmeier  <armin@arbur.net>
 
 	* src/preferences.cpp:
