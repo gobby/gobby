@@ -1,3 +1,7 @@
+2008-08-25  Armin Burgmeier  <armin@arbur.net>
+
+	* src/operations/operation-open.cpp: Fixed a typo in a comment.
+
 2008-08-24  Armin Burgmeier  <armin@arbur.net>
 
 	* inc/core/nodewatch.hpp:

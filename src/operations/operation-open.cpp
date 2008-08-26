@@ -262,7 +262,7 @@ bool Gobby::OperationOpen::on_idle()
 			// text files don't contain nullbytes, this only
 			// occurs when converting for example a UTF-16 from
 			// ISO-8859-1 to UTF-8 (note that the UTF-16 file is
-			// valid ISO-8869-1, it just contains lots of
+			// valid ISO-8859-1, it just contains lots of
 			// nullbytes). We therefore produce an error here.
 			encoding_error();
 			return false;
