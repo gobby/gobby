@@ -541,23 +541,6 @@ void Gobby::Window::on_about()
 	dlg.set_authors(authors);
 	dlg.set_artists(artists);
 
-	dlg.set_translator_credits(
-		"French translation:\n"
-		"  Peer Janssen <peer@baden-online.de>\n"
-		"  Mohammed Adnene Trojette <adn@diwi.org>\n"
-		"\n"
-		"Spanish translation:\n"
-		"  Mario Palomo Torrero <mpalomo@ihman.com>\n"
-		"\n"
-		"Swedish translation:\n"
-		"  Daniel Nylander <po@danielnylander.se>\n"
-		"\n"
-		"German translation:\n"
-		"  Philipp Kern <phil@0x539.de>\n"
-		"  Armin Burgmeier <armin@0x539.de>\n"
-		"  Thomas Glatt <tom@0x539.de>\n"
-		);
-
 	dlg.set_license(
 		"This program is free software; you can redistribute it\n"
 		"and/or modify it under the terms of the GNU General Public\n"
