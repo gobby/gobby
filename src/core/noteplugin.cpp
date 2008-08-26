@@ -32,7 +32,7 @@ namespace
 	InfSession*
 	session_new(InfIo* io, InfConnectionManager* manager,
 	            InfConnectionManagerGroup* sync_group,
-	            InfXmlConnection* sync_connection)
+	            InfXmlConnection* sync_connection, gpointer user_data)
 	{
 		GtkSourceBuffer* textbuffer = gtk_source_buffer_new(NULL);
 		// We never end this non-undoable action since we have our
@@ -53,6 +53,7 @@ namespace
 
 	const InfcNotePlugin TEXT_PLUGIN =
 	{
+		NULL,
 		"InfText",
 		session_new
 	};

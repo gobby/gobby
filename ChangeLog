@@ -1,3 +1,8 @@
+2008-08-26  Armin Burgmeier  <armin@arbur.net>
+
+	* src/core/noteplugin.cpp: Adapt to libinfinity API change (user_data
+	parameter to InfcNotePlugin callback functions).
+
 2008-08-25  Armin Burgmeier  <armin@arbur.net>
 
 	* src/operations/operation-open.cpp: Fixed a typo in a comment.
