@@ -1,5 +1,9 @@
 2008-08-26  Armin Burgmeier  <armin@arbur.net>
 
+	* configure.ac: Use GtkSourceView2 by default.
+
+2008-08-26  Armin Burgmeier  <armin@arbur.net>
+
 	* src/window.cpp: Removed the translator credits. They have not been
 	up-to-date anyway, and other programs don't show translator credits
 	either.

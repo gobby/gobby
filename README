@@ -51,6 +51,10 @@ Gobby: First Contact
 3. Installation
 
    Please see INSTALL for details.
+
+   If you don't have GtkSourceView2 yet, then you can build Gobby
+   against GtkSourceView 1.x, by passing --without-gtksourceview2 to the
+   configure script.
      _________________________________________________________
 
 3.1. Dependencies

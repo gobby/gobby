@@ -51,12 +51,12 @@ AC_CACHE_SAVE
 AC_ARG_WITH([gtksourceview2],
             AS_HELP_STRING([--with-gtksourceview2],
                [whether to use gtksourceview2 instead of
-	        gtksourceview1 [[default=no]]]),
+	        gtksourceview1 [[default=yes]]]),
             [ac_cv_with_gtksourceview2=$withval],
-	    [ac_cv_with_gtksourceview2=no])
+	    [ac_cv_with_gtksourceview2=yes])
 
 AC_CACHE_CHECK([whether to use gtksourceview2 instead of gtksourceview1],
-               [ac_cv_with_gtksourceview2], [ac_cv_with_gtksourceview2=no])
+               [ac_cv_with_gtksourceview2], [ac_cv_with_gtksourceview2=yes])
 
 if test "x$ac_cv_with_gtksourceview2" = "xyes" ; then
   AC_DEFINE([WITH_GTKSOURCEVIEW2], 1,
