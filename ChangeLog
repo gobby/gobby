@@ -1,3 +1,7 @@
+2008-08-26  Philipp Kern  <phil@0x539.de>
+
+	* po/gobby.pot: refreshed the translation template
+
 2008-08-13  Armin Burgmeier  <armin@arbur.net>
 
 	* src/preferences.cpp:
