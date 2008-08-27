@@ -1,3 +1,11 @@
+2008-08-27  Armin Burgmeier  <armin@arbur.net>
+
+	* src/commands/browser-commands.cpp: Set initial status depending
+	on whether the document is currently displayed in the folder.
+
+	* src/operations/operation-open.cpp: Set initial status of user in
+	the document to inactive.
+
 2008-08-26  Armin Burgmeier  <armin@arbur.net>
 
 	* src/core/noteplugin.cpp: Adapt to libinfinity API change (user_data

@@ -356,7 +356,9 @@ void Gobby::OperationOpen::read_finish()
 		"id", 1,
 		"flags", INF_USER_LOCAL,
 		"name", m_preferences.user.name.get().c_str(),
-		"status", INF_USER_AVAILABLE,
+		/* The user is made active when the user
+		 * switches to the document. */
+		"status", INF_USER_INACTIVE,
 		"hue", m_preferences.user.hue.get(),
 		"caret-position", gtk_text_iter_get_offset(&insert_iter),
 		static_cast<void*>(NULL)));

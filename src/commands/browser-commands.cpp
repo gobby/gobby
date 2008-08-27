@@ -467,17 +467,19 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 
 		// TODO: Automatically join with a different name if there is
 		// already a user with the preferred name?
-		GParameter params[4] = {
+		GParameter params[5] = {
 			{ "name", { 0 } },
 			{ "hue", { 0 } },
 			{ "vector", { 0 } },
-			{ "caret-position", { 0 } }
+			{ "caret-position", { 0 } },
+			{ "status", { 0 } }
 		};
 
 		g_value_init(&params[0].value, G_TYPE_STRING);
 		g_value_init(&params[1].value, G_TYPE_DOUBLE);
 		g_value_init(&params[2].value, INF_ADOPTED_TYPE_STATE_VECTOR);
 		g_value_init(&params[3].value, G_TYPE_UINT);
+		g_value_init(&params[4].value, INF_TYPE_USER_STATUS);
 
 		g_value_set_static_string(&params[0].value, name.c_str());
 		g_value_set_double(
@@ -497,14 +499,20 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 		g_value_set_uint(&params[3].value,
 		                 gtk_text_iter_get_offset(&caret_iter));
 
+		if(m_folder.get_current_document() == window)
+			g_value_set_enum(&params[4].value, INF_USER_ACTIVE);
+		else
+			g_value_set_enum(&params[4].value, INF_USER_INACTIVE);
+
 		GError* error = NULL;
 		InfcUserRequest* request = infc_session_proxy_join_user(
-			proxy, params, 4, &error);
+			proxy, params, 5, &error);
 	
 		g_value_unset(&params[0].value);
 		g_value_unset(&params[1].value);
 		g_value_unset(&params[2].value);
 		g_value_unset(&params[3].value);
+		g_value_unset(&params[4].value);
 
 		if(request == NULL)
 		{
@@ -551,9 +559,8 @@ void Gobby::BrowserCommands::on_user_join_failed(InfcUserRequest* request,
 		INF_TEXT_SESSION(infc_session_proxy_get_session(proxy)));
 	g_assert(window != NULL);
 
-	GQuark quark = g_quark_from_static_string("INF_USER_JOIN_ERROR");
-	if(error->domain == quark &&
-	   error->code == INF_USER_JOIN_ERROR_NAME_IN_USE)
+	if(error->domain == inf_user_error_quark() &&
+	   error->code == INF_USER_ERROR_NAME_IN_USE)
 	{
 		gpointer retry_ptr = g_object_get_data(
 			G_OBJECT(proxy),
