@@ -1,3 +1,10 @@
+2008-08-28  Philipp Kern  <phil@0x539.de>
+
+	* po/el.po: add Greek translation from Launchpad
+	* po/he.po: add Hebrew translation from Launchpad
+	* po/nl.po: add Dutch translation from Launchpad
+	* configure.ac: activate el, he and nl translations
+
 2008-08-26  Armin Burgmeier  <armin@arbur.net>
 
 	* configure.ac: Use GtkSourceView2 by default.

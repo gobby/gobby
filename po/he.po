@@ -1,0 +1,777 @@
+# Hebrew translation for gobby
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the gobby package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gobby\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-08-26 13:57+0200\n"
+"PO-Revision-Date: 2008-07-04 10:14+0000\n"
+"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew <he@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2008-08-27 14:44+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: src/chat.cpp:73
+msgid "Send"
+msgstr "שלח"
+
+#: src/chat.cpp:227
+msgid "Command '%0%' not found. Type /help for a list of existing commands."
+msgstr "הפקודה '%0%' לא נמצאה. הקלד /help לרשימת הפקודות הקיימות."
+
+#: src/chat.cpp:238
+msgid "%0%: %1%"
+msgstr "%0%: %1%"
+
+#: src/chat.cpp:252
+msgid "Document %0% does not exist"
+msgstr "המסמך %0% אינו קיים"
+
+#: src/chat.cpp:258
+msgid "Usage: /remove <document>"
+msgstr "שימוש: /remove <document>"
+
+#: src/documentlist.cpp:51
+msgid "Subscribe"
+msgstr "הרשם"
+
+#: src/documentlist.cpp:107 src/header.cpp:409 src/icon.cpp:69
+msgid "Document list"
+msgstr "רשימת המסמכים"
+
+#: src/encoding.cpp:98
+msgid ""
+"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
+"binary input."
+msgstr "כשל בהמרת הקלט ל-UTF-8: או שהקידוד לא ידוע או שזהו קלט בינארי."
+
+#: src/encoding_selector.cpp:145
+msgid "Character Encoding:"
+msgstr "קידוד תווים:"
+
+#: src/finddialog.cpp:43
+msgid "Find what:"
+msgstr "מצא את:"
+
+#: src/finddialog.cpp:44
+msgid "Replace with:"
+msgstr "החלף ב-:"
+
+#: src/finddialog.cpp:45
+msgid "Match whole word only"
+msgstr "התאם מילה שלמה בלבד"
+
+#: src/finddialog.cpp:46
+msgid "Match case"
+msgstr "התאם רישיות"
+
+#: src/finddialog.cpp:47
+msgid "Match as regular expression"
+msgstr "התאם כביטוי רגולארי"
+
+#: src/finddialog.cpp:48
+msgid "Direction"
+msgstr "כיוון"
+
+#: src/finddialog.cpp:49
+msgid "_Up"
+msgstr "מ_עלה"
+
+#: src/finddialog.cpp:50
+msgid "_Down"
+msgstr "מ_טה"
+
+#: src/finddialog.cpp:52
+msgid "_Replace"
+msgstr "ה_חלף"
+
+#: src/finddialog.cpp:53
+msgid "Replace _all"
+msgstr "החלף ה_כל"
+
+#: src/finddialog.cpp:158
+msgid "Search"
+msgstr "חפש"
+
+#: src/finddialog.cpp:158
+msgid "Search and replace"
+msgstr "חפש והחלף"
+
+#: src/finddialog.cpp:182
+msgid "\"%0%\" has not been found in the document."
+msgstr "\"%0%\" לא נמצא במסמך."
+
+#: src/finddialog.cpp:265
+msgid "No occurence has been replaced"
+msgstr "לא הוחלפו מופעים כלל"
+
+#: src/finddialog.cpp:271
+msgid "%0% occurence has been replaced"
+msgid_plural "%0% occurences have been replaced"
+msgstr[0] "הוחלף מופע %0% בלבד"
+msgstr[1] "הוחלפו %0% מופעים"
+
+#: src/finddialog.cpp:301
+msgid "No document currently opened"
+msgstr "אין מסמך פתוח כעת"
+
+#: src/gotodialog.cpp:30
+msgid "Line number:"
+msgstr "מספר השורה:"
+
+#: src/gotodialog.cpp:32
+msgid "_Go to line"
+msgstr "ע_בור לשורה"
+
+#: src/gotodialog.cpp:77
+msgid "Go to line"
+msgstr "עבור לשורה"
+
+#: src/header.cpp:236
+msgid "Create session..."
+msgstr "צור מפגש..."
+
+#: src/header.cpp:237
+msgid "Opens a new obby session"
+msgstr "פותח מפגש obby חדש..."
+
+#: src/header.cpp:245
+msgid "Join session..."
+msgstr "הצטרף למפגש..."
+
+#: src/header.cpp:246
+msgid "Joins an existing obby session"
+msgstr "מצטרף למפגש obby קיים"
+
+#: src/header.cpp:254
+msgid "Save session..."
+msgstr "שמור מפגש..."
+
+#: src/header.cpp:255
+msgid "Saves the complete session for a later restore"
+msgstr "שומר את המפגש כולו לשיחזור מאוחר יותר"
+
+#: src/header.cpp:263
+msgid "Quit session"
+msgstr "צא מהמפגש"
+
+#: src/header.cpp:264
+msgid "Leaves the currently running obby session"
+msgstr "עוזב את המפגש הפעיל הנוכחי"
+
+#: src/header.cpp:272
+msgid "Quit"
+msgstr "יציאה"
+
+#: src/header.cpp:273
+msgid "Quits the application"
+msgstr "יוצא מהיישום"
+
+#: src/header.cpp:277
+msgid "_Session"
+msgstr "_מפגש"
+
+#: src/header.cpp:283
+msgid "Create document..."
+msgstr "צור מסמך..."
+
+#: src/header.cpp:284
+msgid "Creates a new document"
+msgstr "יוצר מסמך חדש"
+
+#: src/header.cpp:292
+msgid "Open document..."
+msgstr "פתח מסמך..."
+
+#: src/header.cpp:293
+msgid "Loads a file into a new document"
+msgstr "טוען קובץ לתוך מסמך חדש"
+
+#: src/header.cpp:301
+msgid "Save document"
+msgstr "שמור מסמך"
+
+#: src/header.cpp:302
+msgid "Saves a document into a file"
+msgstr "שומר מסמך לתוך קובץ"
+
+#: src/header.cpp:310
+msgid "Save document as..."
+msgstr "שמור מסמך בשם..."
+
+#: src/header.cpp:311
+msgid "Saves a document to another location"
+msgstr "שומר מסמך למיקום שונה"
+
+#: src/header.cpp:319
+msgid "Close document"
+msgstr "סגור את המסמך"
+
+#: src/header.cpp:320
+msgid "Closes an opened document"
+msgstr "סוגר את המסמך הפתוח"
+
+#: src/header.cpp:324
+msgid "_Edit"
+msgstr "ע_ריכה"
+
+#: src/header.cpp:330
+msgid "Find..."
+msgstr "חפש..."
+
+#: src/header.cpp:331
+msgid "Search for a text in the current document"
+msgstr "חפש אחר טקסט במסמך הנוכחי"
+
+#: src/header.cpp:339
+msgid "Find and replace..."
+msgstr "חפש והחלף..."
+
+#: src/header.cpp:340
+msgid "Search for a text and replace it with another one"
+msgstr "חפש אחר טקסט והחלף אותו בטקסט אחר"
+
+#: src/header.cpp:348
+msgid "Go to line..."
+msgstr "עבור לשורה..."
+
+#: src/header.cpp:349
+msgid "Move cursor to a specified line"
+msgstr "העבר את הסמן לשורה מסויימת"
+
+#: src/header.cpp:357
+msgid "Preferences..."
+msgstr "העדפות..."
+
+#: src/header.cpp:358
+msgid "Displays a dialog to customise Gobby for your needs"
+msgstr "מציג חלון להתאמת Gobby לצרכיך"
+
+#: src/header.cpp:366
+msgid "Document preferences..."
+msgstr "העדפות המסמך..."
+
+#: src/header.cpp:367
+msgid "Shows a preferences dialog that is just applied to this document"
+msgstr "מציג חלון העדפות התקף למסמך זה בלבד"
+
+#: src/header.cpp:372
+msgid "Syntax"
+msgstr "תחביר"
+
+#: src/header.cpp:374
+msgid "_User"
+msgstr "_משתמש"
+
+#: src/header.cpp:380
+msgid "Set password..."
+msgstr "הגדר סיסמה..."
+
+#: src/header.cpp:381
+msgid "Sets a password for this user"
+msgstr "הגדר סיסמה למשתמש זה"
+
+#: src/header.cpp:389
+msgid "Set colour..."
+msgstr "הגדר צבע..."
+
+#: src/header.cpp:390
+msgid "Sets a new colour for this user"
+msgstr "הגדר צבע חדש למשתמש זה"
+
+#: src/header.cpp:394
+msgid "_Window"
+msgstr "_חלון"
+
+#: src/header.cpp:400 src/icon.cpp:66 src/userlist.cpp:122
+msgid "User list"
+msgstr "רשימת משתמשים"
+
+#: src/header.cpp:401
+msgid "Displays a list of users that are currently joined"
+msgstr "מציג רשימת משתמשים שהצטרפו נכון לעכשיו"
+
+#: src/header.cpp:410
+msgid "Displays a list of documents within the current session"
+msgstr "מציג רשימת מסמכים שבתוך המפגש כעת"
+
+#: src/header.cpp:419 src/icon.cpp:72
+msgid "Chat"
+msgstr "שיחה"
+
+#: src/header.cpp:420
+msgid "Displays a chat to talk to other people in the session"
+msgstr "מציג שיחה כדי לדבר בין הנוכחים במפגש"
+
+#: src/header.cpp:425
+msgid "_Help"
+msgstr "_עזרה"
+
+#: src/header.cpp:431
+msgid "About"
+msgstr "אודות"
+
+#: src/header.cpp:432
+msgid "Shows Gobby's copyright and credits"
+msgstr "מציג את זכויות היוצרים והתודות של Gobby"
+
+#: src/header.cpp:647
+msgid "None"
+msgstr "ללא"
+
+#: src/header.cpp:648
+msgid "Unselects the current language"
+msgstr "מבטל את בחירת השפה הנוכחית"
+
+#. Build description string
+#: src/header.cpp:664
+msgid "Selects %0% as language"
+msgstr "בוחר את %0% כשפה"
+
+#: src/hostdialog.cpp:33
+msgid "Create obby session"
+msgstr "יוצר מפגש obby"
+
+#: src/hostdialog.cpp:36 src/joindialog.cpp:55
+msgid "Port:"
+msgstr "פתחה:"
+
+#: src/hostdialog.cpp:37 src/joindialog.cpp:56
+msgid "Name:"
+msgstr "שם:‏"
+
+#: src/hostdialog.cpp:38 src/joindialog.cpp:57
+msgid "Colour:"
+msgstr "צבע:"
+
+#: src/hostdialog.cpp:39
+msgid "Password:"
+msgstr "סיסמה:"
+
+#: src/hostdialog.cpp:40
+msgid "Restore session:"
+msgstr "שחזר מפגש:"
+
+#: src/hostdialog.cpp:42
+msgid "Restore session"
+msgstr "שחזר מפגש"
+
+#: src/hostdialog.cpp:120
+msgid "_Host"
+msgstr "_מארח"
+
+#: src/hostprogressdialog.cpp:29
+msgid "Opening obby session..."
+msgstr "פותח מפגש obby..."
+
+#: src/joindialog.cpp:51
+msgid "Join obby session"
+msgstr "הצטרף למפגש obby"
+
+#: src/joindialog.cpp:54
+msgid "Host:"
+msgstr "מארח:"
+
+#: src/joindialog.cpp:59
+msgid "Local network"
+msgstr "רשת מקומית"
+
+#. resetup columns
+#: src/joindialog.cpp:319
+msgid "User"
+msgstr "משתמש"
+
+#: src/joindialog.cpp:320
+msgid "Host"
+msgstr "מארח"
+
+#: src/joindialog.cpp:321
+msgid "Port"
+msgstr "פותחה"
+
+#: src/joindialog.cpp:340
+msgid "Failure"
+msgstr "כישלון"
+
+#: src/joinprogressdialog.cpp:34
+msgid ""
+"User password for user '%0%' required. You may either choose another user "
+"name, type in your user password or cancel the connection."
+msgstr ""
+"סיסמת המשתמש עבור המשתמש '%0%' נחוצה. תוכל לבחור בשם משתמש אחר, להקליד את "
+"סיסמת המשתמש שלך או לבטל את החיבור."
+
+#: src/joinprogressdialog.cpp:111
+msgid ""
+"Name is already in use. You may choose another name or cancel the connection."
+msgstr "השם כבר בשימוש. תוכל לבחור בשם אחר או לבטל את החיבור."
+
+#: src/joinprogressdialog.cpp:116 src/joinprogressdialog.cpp:227
+msgid "New name:"
+msgstr "שם חדש:"
+
+#: src/joinprogressdialog.cpp:157
+msgid ""
+"Colour is already in use. You may choose another colour or cancel the "
+"connection."
+msgstr "הצבע כבר בשימוש. תוכל לבחור בצבע אחר או לבטל את החיבור."
+
+#: src/joinprogressdialog.cpp:182
+msgid ""
+"Session password required. You have to type in the password to be able to "
+"join the obby session."
+msgstr ""
+"הכניסה למפגש כרוכה בהזנת סיסמה. עליך להקליד סיסמה על מנת להצטרף למפגש obby "
+"זה."
+
+#: src/joinprogressdialog.cpp:186
+msgid "Session password:"
+msgstr "סיסמת המפגש:"
+
+#: src/joinprogressdialog.cpp:228
+msgid "User password:"
+msgstr "סיסמת המשתמש:"
+
+#: src/joinprogressdialog.cpp:307
+msgid "Joining obby session..."
+msgstr "מצטרף למפגש ה-obby..."
+
+#. Thread has established connection, wait for welcome packet
+#. The welcome event will be emitted as soon as the connection
+#. has been encrypted. Maybe we should have another step before
+#. this that really waits for the welcome packet.
+#: src/joinprogressdialog.cpp:404
+msgid "Setting up connection encryption (TLS)..."
+msgstr "מגדיר את הצפנת החיבור (TLS)..."
+
+#. Update status message
+#: src/joinprogressdialog.cpp:464
+msgid "Login packet sent, waiting for response..."
+msgstr "חבילת התחברות נשלחה, ממתין לתגובה..."
+
+#: src/joinprogressdialog.cpp:546
+msgid "Logged in successfully, synchronising session..."
+msgstr "התחברת בהצלחה, מתאם מפגש..."
+
+#. Connection closed by remote site
+#: src/joinprogressdialog.cpp:559 src/window.cpp:1060
+msgid "Connection lost"
+msgstr "החיבור אבד"
+
+#: src/preferencesdialog.cpp:65
+msgid "Tab Stops"
+msgstr "טאבים לעצירה"
+
+#: src/preferencesdialog.cpp:66
+msgid "Indentation"
+msgstr "הזחה"
+
+#: src/preferencesdialog.cpp:67
+msgid "Home/End behaviour"
+msgstr "התנהגות המקשים Home/End"
+
+#: src/preferencesdialog.cpp:68
+msgid "Tab width:"
+msgstr "רוחב הטאב:"
+
+#: src/preferencesdialog.cpp:69
+msgid "Insert spaces instead of tabs"
+msgstr "הזן רווחים במקום טאבים"
+
+#: src/preferencesdialog.cpp:70
+msgid "Enable automatic indentation"
+msgstr "אפשר הזחה אוטומטית"
+
+#: src/preferencesdialog.cpp:71
+msgid "Smart home/end"
+msgstr "מקשי home/end חכמים"
+
+#: src/preferencesdialog.cpp:85
+msgid ""
+"With this option enabled, Home/End keys move to first/last character before "
+"going to the start/end of the line."
+msgstr ""
+"כשאפשרות זו פעילה, המקשים Home/End מעבירים לתו הראשון/אחרון לפני מעבר "
+"לתחילת/השורה."
+
+#: src/preferencesdialog.cpp:131
+msgid "Text wrapping"
+msgstr "גלישת שורות"
+
+#: src/preferencesdialog.cpp:132
+msgid "Line numbers"
+msgstr "מספרי שורות"
+
+#: src/preferencesdialog.cpp:133
+msgid "Current line"
+msgstr "שורה נוכחית"
+
+#: src/preferencesdialog.cpp:134
+msgid "Right margin"
+msgstr "שול ימני"
+
+#: src/preferencesdialog.cpp:135
+msgid "Bracket matching"
+msgstr "התאמת סוגריים"
+
+#: src/preferencesdialog.cpp:136
+msgid "Enable text wrapping"
+msgstr "אפשר גלישת שורות"
+
+#: src/preferencesdialog.cpp:137
+msgid "Do not split words over two lines"
+msgstr "אל תפצל מילים העולות על שתי שורות"
+
+#: src/preferencesdialog.cpp:138
+msgid "Display line numbers"
+msgstr "הצג את מספרי השורות"
+
+#: src/preferencesdialog.cpp:139
+msgid "Highlight current line"
+msgstr "הדגש את השורה הנוכחית"
+
+#: src/preferencesdialog.cpp:140
+msgid "Display right margin"
+msgstr "הצג את השול הימני"
+
+#: src/preferencesdialog.cpp:141
+msgid "Right margin at column:"
+msgstr "שול ימני בעמודה:"
+
+#: src/preferencesdialog.cpp:142
+msgid "Highlight matching bracket"
+msgstr "הדגש את הסוגר המתאים"
+
+#: src/preferencesdialog.cpp:225
+msgid "Toolbar"
+msgstr "סרגל כלים"
+
+#: src/preferencesdialog.cpp:226
+msgid "Windows"
+msgstr "חלונות"
+
+#: src/preferencesdialog.cpp:227
+msgid "Remember the positions and states"
+msgstr "זכור את המיקומים והמצבים"
+
+#: src/preferencesdialog.cpp:229
+msgid "Highlight the window on incoming chat messages"
+msgstr "הדגש את החלון עם הודעת שיחה נכנסת"
+
+#: src/preferencesdialog.cpp:235
+msgid "Show text only"
+msgstr "הצג טקסט בלבד"
+
+#: src/preferencesdialog.cpp:236
+msgid "Show icons only"
+msgstr "הצג סמלים בלבד"
+
+#: src/preferencesdialog.cpp:237
+msgid "Show both icons and text"
+msgstr "הצג סמלים וטקסט"
+
+#: src/preferencesdialog.cpp:238
+msgid "Show text besides icons"
+msgstr "הצג טקסט נוסף על הסמלים"
+
+#: src/preferencesdialog.cpp:309
+msgid "Document management"
+msgstr "ניהול המסמך"
+
+#: src/preferencesdialog.cpp:310
+msgid "Open new remotely-created documents automatically"
+msgstr "פתח מסמכים הנוצרים מרחוק באופן אוטומטי"
+
+#: src/preferencesdialog.cpp:348
+msgid "Pattern"
+msgstr "תבנית"
+
+#: src/preferencesdialog.cpp:349
+msgid "Language"
+msgstr "שפה"
+
+#: src/preferencesdialog.cpp:350
+msgid "Mime type"
+msgstr "טיפוס ה-Mime"
+
+#: src/preferencesdialog.cpp:352
+msgid "This is a list of all recognized file types"
+msgstr "זוהי רשימה של כל סוגי הקבצים המזוהים"
+
+#: src/preferencesdialog.cpp:513
+msgid "Pattern must not be empty."
+msgstr "התבנית לא יכולה להיות ריקה."
+
+#: src/preferencesdialog.cpp:576
+msgid "There is no language with the mime type '%0%'."
+msgstr "אין שפה בעלת טיפוס ה-mime '%0%'."
+
+#: src/preferencesdialog.cpp:713
+msgid "Preferences"
+msgstr "העדפות"
+
+#: src/preferencesdialog.cpp:725
+msgid "Editor"
+msgstr "עורך"
+
+#: src/preferencesdialog.cpp:726
+msgid "View"
+msgstr "תצוגה"
+
+#. Appearance only affects the global Gobby window
+#: src/preferencesdialog.cpp:729
+msgid "Appearance"
+msgstr "מראה"
+
+#: src/preferencesdialog.cpp:730
+msgid "Font"
+msgstr "גופן"
+
+#: src/preferencesdialog.cpp:731
+msgid "Behaviour"
+msgstr "התנהגות"
+
+#: src/preferencesdialog.cpp:732
+msgid "Files"
+msgstr "קבצים"
+
+#: src/statusbar.cpp:38 src/statusbar.cpp:100
+msgid "Not connected"
+msgstr "לא מחובר"
+
+#: src/statusbar.cpp:56
+msgid "Selected language: %0%"
+msgstr "השפה הנבחרת: %0%"
+
+#: src/statusbar.cpp:62
+msgid "No language selected"
+msgstr "לא נבחרה שפה"
+
+#: src/userlist.cpp:94
+msgid "Online"
+msgstr "מקוון"
+
+#: src/userlist.cpp:95
+msgid "Offline"
+msgstr "מנותק"
+
+#: src/window.cpp:194
+msgid ""
+"Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
+"mDNSResponder, depending on the library you use, as root prior to Gobby. "
+"Zeroconf support is deactivated for this session."
+msgstr ""
+"איתחול פקדי הרשת נכשל. ייתכן ותאלץ להריץ את avahi-daemon או את "
+"mDNSResponder, בהתחשב בספריה המשמשת כתיקיית על עבור Gobby. התמיכה בפקדי רשת "
+"אינה מופעלת למפגש זה."
+
+#: src/window.cpp:276
+msgid "You are still connected to a session"
+msgstr "אתה עדיין מחובר למפגש"
+
+#: src/window.cpp:284
+msgid "Do you want to close Gobby nevertheless?"
+msgstr "האם ברצונך לסגור את Gobby למרות זאת?"
+
+#: src/window.cpp:290
+msgid "C_ancel"
+msgstr ""
+
+#: src/window.cpp:449
+msgid "Use default .obby extension if none is given"
+msgstr "השתמש בסיומת ברירת המחדל .obby במידה ולא הוגדרה סיומת"
+
+#: src/window.cpp:454
+msgid "Save obby session"
+msgstr "שמור את מפגש ה-obby"
+
+#: src/window.cpp:517
+msgid "A collaborative text editor"
+msgstr "עורך טקסט שיתופי"
+
+#: src/window.cpp:674
+msgid "Create document"
+msgstr "צור מסמך"
+
+#: src/window.cpp:674
+msgid "Enter document name"
+msgstr "הזן את שם המסמך"
+
+#: src/window.cpp:696
+msgid "Open new document"
+msgstr "פתח מסמך חדש"
+
+#: src/window.cpp:790
+msgid "Save current document"
+msgstr "שמור את המסמך הנוכחי"
+
+#: src/window.cpp:881
+msgid ""
+"Click on \"Apply\" to apply the new settings to documents that are currently "
+"open. \"OK\" will just store the values to use them with newly created "
+"documents."
+msgstr ""
+"לחץ על \"החל\" כדי להחיל את ההגדרות החדשות למסמכים הפתוחים כעת. \"אישור\" "
+"יאחסן את הנתונים בלבד לשימוש במסמכים חדשים."
+
+#. Build password dialog with info
+#: src/window.cpp:925
+msgid "Set user password"
+msgstr "הגדר את סיסמת השתמש"
+
+#: src/window.cpp:927
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+"הגדר סיסמת משתמש עבור חשבון המשתמש. כאשר תנסה להתחבר בפעם הבאה עם משתמש זה, "
+"אתה תתבקש להזין את סיסמתך."
+
+#: src/window.cpp:988
+msgid ""
+"These preferences affect only the currently active document \"%0%\". If you "
+"want to change global preferences, use the preferences menu item in the "
+"\"Edit\" menu."
+msgstr ""
+"העדפות אלו משפיעות רק על המסמך \"%0%\" הפעיל כעת. אם ברצונך לשנות את ההעדפות "
+"הכלליות, השתמש בפריט העדפות מהתפריט \"עריכה\"."
+
+#: src/window.cpp:1098
+msgid "Colour change failed: Colour already in use"
+msgstr "שינוי הצבע נכשל: הצבע כבר בשימוש"
+
+#: src/window.cpp:1347
+msgid "Connected to %0%:%1%"
+msgstr "מחובר אל %0%:%1%"
+
+#: src/window.cpp:1391
+msgid "Serving on port %0%"
+msgstr "משרת בפותחה %0%"
+
+#: src/window.cpp:1520
+msgid "Save changes to document \"%0%\" before closing?"
+msgstr "לשמור את השינויים למסמך \"%0%\" לפני הסגירה?"
+
+#: src/window.cpp:1530
+msgid ""
+"If you don't save, changes will be discarded, but may still be retrieved if "
+"you re-subscribe to the document as long as the session remains open."
+msgstr ""
+"אם לא תשמור, השינויים שלך יעלמו, אך עדיין ניתן יהיה להרשם שנית למסמך כל עוד "
+"המפגש נשאר פעיל."
+
+#: src/window.cpp:1539
+msgid "If you don't save, changes will be discarded."
+msgstr "אם לא תשמור, השינויים יעלמו."
+
+#. Add button to allow the user to save the dialog
+#: src/window.cpp:1554
+msgid "Close without saving"
+msgstr "סגור מבלי לשמור"
