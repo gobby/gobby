@@ -260,6 +260,7 @@ Gobby::Folder::add_document(InfTextSession* session,
 		new DocWindow(session, title, info_storage_key,
 		              m_preferences, m_lang_manager));
 	window->show();
+	m_signal_document_added.emit(*window);
 
 	TabLabel* tablabel = Gtk::manage(new TabLabel(*window, title));
 	tablabel->signal_close_request().connect(
@@ -272,7 +273,6 @@ Gobby::Folder::add_document(InfTextSession* session,
 	// Record the session, for debugging purposes:
 	record(session, title);
 
-	m_signal_document_added.emit(*window);
 	return *window;
 }
 

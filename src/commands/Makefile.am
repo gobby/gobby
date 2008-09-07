@@ -5,6 +5,7 @@ libgobby_commands_a_SOURCES = \
 	browser-context-commands.cpp \
 	edit-commands.cpp \
 	file-commands.cpp \
+	folder-commands.cpp \
 	help-commands.cpp \
 	view-commands.cpp
 

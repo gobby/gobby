@@ -15,6 +15,8 @@ perhaps do pre-releases with some of these missing before:
  - Add close buttons to browser in left pane, user lists and docwindow infos,
    and a way to re-show the former two.
  - hue-only color selector
+ - Set session title as initial file name in Save As filechooser
+ - drag+drop-bare tabs
 
 These things need to be implemented in infinote, but again would be nice
 to have:
