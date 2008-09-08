@@ -287,6 +287,8 @@ Gobby::Folder::add_document(InfTextSession* session,
 	tablabel->show();
 	append_page(*window, *tablabel);
 
+	set_tab_reorderable(*window, true);
+
 	// Record the session, for debugging purposes:
 	record(session, title);
 

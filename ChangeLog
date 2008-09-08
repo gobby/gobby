@@ -1,5 +1,9 @@
 2008-09-08  Armin Burgmeier  <armin@arbur.net>
 
+	* src/core/folder.cpp: Make tabs reorderable.
+
+2008-09-08  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/preferences.hpp:
 	* src/core/preferences.cpp: Added userlist_width property.
 
