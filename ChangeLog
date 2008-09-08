@@ -1,5 +1,13 @@
 2008-09-08  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/header.hpp:
+	* src/core/header.cpp: Added FileClose action and menu item.
+
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Handle it.
+
+2008-09-08  Armin Burgmeier  <armin@arbur.net>
+
 	* src/core/folder.cpp: Make tabs reorderable.
 
 2008-09-08  Armin Burgmeier  <armin@arbur.net>

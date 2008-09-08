@@ -38,6 +38,7 @@ namespace {
 		"      <menuitem action=\"FileSaveAs\" />"
 		"      <menuitem action=\"FileSaveAll\" />"
 		"      <separator />"
+		"      <menuitem action=\"FileClose\" />"
 		"      <menuitem action=\"FileQuit\" />"
 		"    </menu>"
 		"    <menu action=\"MenuEdit\">"
@@ -214,6 +215,8 @@ Gobby::Header::Header(Preferences& preferences,
 		Gtk::Action::create(
 			"FileSaveAll", Gobby::IconManager::STOCK_SAVE_ALL,
 			_("Save All"), _("Save all open files locally"))),
+	action_file_close(
+		Gtk::Action::create("FileClose", Gtk::Stock::CLOSE)),
 	action_file_quit(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)),
 
 	action_edit(Gtk::Action::create("MenuEdit", _("_Edit"))),
@@ -286,6 +289,7 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file_save_all,
 	                Gtk::AccelKey("<control><shift>L",
 			              "<Actions>/MenuFile/FileSaveAll"));
+	group_file->add(action_file_close);
 	group_file->add(action_file_quit);
 
 	group_edit->add(action_edit);

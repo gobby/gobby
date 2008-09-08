@@ -77,6 +77,8 @@ protected:
 	void on_save();
 	void on_save_as();
 	void on_save_all();
+
+	void on_close();
 	void on_quit();
 
 	void set_sensitivity(bool sensitivity);

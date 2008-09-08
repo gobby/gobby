@@ -391,6 +391,8 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &FileCommands::on_save_as));
 	header.action_file_save_all->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_save_all));
+	header.action_file_close->signal_activate().connect(
+		sigc::mem_fun(*this, &FileCommands::on_close));
 	header.action_file_quit->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_quit));
 	folder.signal_document_changed().connect(
@@ -461,6 +463,14 @@ void Gobby::FileCommands::on_save_all()
 	set_task(new TaskSaveAll(*this));
 }
 
+void Gobby::FileCommands::on_close()
+{
+	DocWindow* document = m_folder.get_current_document();
+	g_assert(document != NULL);
+
+	m_folder.remove_document(*document);
+}
+
 void Gobby::FileCommands::on_quit()
 {
 	m_parent.hide();
@@ -471,4 +481,5 @@ void Gobby::FileCommands::set_sensitivity(bool sensitivity)
 	m_header.action_file_save->set_sensitive(sensitivity);
 	m_header.action_file_save_as->set_sensitive(sensitivity);
 	m_header.action_file_save_all->set_sensitive(sensitivity);
+	m_header.action_file_close->set_sensitive(sensitivity);
 }

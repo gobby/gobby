@@ -101,6 +101,7 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_file_save;
 	const Glib::RefPtr<Gtk::Action> action_file_save_as;
 	const Glib::RefPtr<Gtk::Action> action_file_save_all;
+	const Glib::RefPtr<Gtk::Action> action_file_close;
 	const Glib::RefPtr<Gtk::Action> action_file_quit;
 
         const Glib::RefPtr<Gtk::Action> action_edit;
