@@ -1,3 +1,8 @@
+2008-09-08  Philipp Kern  <phil@0x539.de>
+
+	* src/joindialog.cpp: add a note that the behaviour of the zeroconf
+	list needs to be changed wrt IPv4 and IPv6 address display
+
 2008-08-28  Philipp Kern  <phil@0x539.de>
 
 	* po/el.po: add Greek translation from Launchpad

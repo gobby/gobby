@@ -264,6 +264,9 @@ void Gobby::JoinDialog::on_discover(const std::string& name,
 {
 	// Ignore entries which introduce user names which are already in
 	// the list. The second of the clashing entries is just dropped.
+	// XXX: This is actually wrong.  If there are both IPv6 and IPv4
+	// entries, both ought to be shown, just not loopback and other
+	// devices.
 	if(find_entry(name) != m_session_list->children().end() )
 		return;
 
