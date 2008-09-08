@@ -46,7 +46,7 @@ public:
 
 	DocWindow(InfTextSession* session, const Glib::ustring& title,
 	          const std::string& info_storage_key,
-	          const Preferences& preferences,
+	          Preferences& preferences,
 	          GtkSourceLanguageManager* manager);
 	virtual ~DocWindow();
 
@@ -86,6 +86,9 @@ public:
 	}
 
 protected:
+	virtual void on_realize();
+	virtual void on_size_allocate(Gtk::Allocation& allocation);
+
 	void on_tab_width_changed();
 	void on_tab_spaces_changed();
 	void on_auto_indent_changed();
@@ -100,10 +103,13 @@ protected:
 
 	void on_font_changed();
 
+	void on_doc_userlist_width_changed();
+	void on_pref_userlist_width_changed();
+
 	InfTextSession* m_session;
 	Glib::ustring m_title;
 	std::string m_info_storage_key;
-	const Preferences& m_preferences;
+	Preferences& m_preferences;
 
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;
@@ -115,6 +121,9 @@ protected:
 
 	SignalLanguageChanged m_signal_language_changed;
 	SignalActiveUserChanged m_signal_active_user_changed;
+
+	sigc::connection m_doc_userlist_width_changed_connection;
+	sigc::connection m_pref_userlist_width_changed_connection;
 };
 
 }

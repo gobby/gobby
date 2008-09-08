@@ -92,7 +92,7 @@ namespace
 Gobby::DocWindow::DocWindow(InfTextSession* session,
                             const Glib::ustring& title,
                             const std::string& info_storage_key,
-                            const Preferences& preferences,
+                            Preferences& preferences,
 			    GtkSourceLanguageManager* manager):
 	m_session(session), m_title(title),
 	m_info_storage_key(info_storage_key), m_preferences(preferences),
@@ -310,6 +310,43 @@ void Gobby::DocWindow::set_language(GtkSourceLanguage* language)
 	m_signal_language_changed.emit(language);
 }
 
+void Gobby::DocWindow::on_realize()
+{
+	Gtk::HPaned::on_realize();
+
+	m_doc_userlist_width_changed_connection =
+		property_position().signal_changed().connect(
+			sigc::mem_fun(
+				*this,
+				&DocWindow::on_doc_userlist_width_changed));
+
+	m_pref_userlist_width_changed_connection =
+		m_preferences.appearance.userlist_width.signal_changed().
+			connect(sigc::mem_fun(
+				*this,
+				&DocWindow::on_pref_userlist_width_changed));
+}
+
+void Gobby::DocWindow::on_size_allocate(Gtk::Allocation& allocation)
+{
+	// Make sure the userlist width stays the same when the widget
+	// is resized
+
+	// TODO: Can we tell on_size_allocate directly the
+	// position somehow, to avoid flickering?
+	m_doc_userlist_width_changed_connection.block();
+	Gtk::HPaned::on_size_allocate(allocation);
+	m_doc_userlist_width_changed_connection.unblock();
+
+	unsigned int desired_position =
+		get_width() - m_preferences.appearance.userlist_width;
+	desired_position = std::min<unsigned int>(
+		desired_position, property_max_position());
+
+	if(get_position() != desired_position)
+		set_position(desired_position);
+}
+
 void Gobby::DocWindow::on_tab_width_changed()
 {
 	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
@@ -378,4 +415,19 @@ void Gobby::DocWindow::on_font_changed()
 	gtk_widget_modify_font(
 		GTK_WIDGET(m_view),
 		const_cast<PangoFontDescription*>(desc.gobj()));
+}
+
+void Gobby::DocWindow::on_doc_userlist_width_changed()
+{
+	m_pref_userlist_width_changed_connection.block();
+	m_preferences.appearance.userlist_width =
+		get_width() - get_position();
+	m_pref_userlist_width_changed_connection.unblock();
+}
+
+void Gobby::DocWindow::on_pref_userlist_width_changed()
+{
+	m_doc_userlist_width_changed_connection.block();
+	set_position(get_width() - m_preferences.appearance.userlist_width);
+	m_doc_userlist_width_changed_connection.unblock();
 }

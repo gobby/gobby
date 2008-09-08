@@ -92,6 +92,7 @@ Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
 	),
 	font(Pango::FontDescription(entry.get_value<Glib::ustring>(
 		"font", "Monospace 10"))),
+	userlist_width(entry.get_value<unsigned int>("userlist_width", 150)),
 	show_toolbar(entry.get_value<bool>("show_toolbar", true)),
 	show_statusbar(entry.get_value<bool>("show_statusbar", true))
 {
@@ -106,6 +107,8 @@ void Gobby::Preferences::Appearance::
 		"font",
 		static_cast<const Pango::FontDescription&>(font).to_string()
 	);
+
+	entry.set_value("userlist_width", userlist_width);
 
 	entry.set_value("show_toolbar", show_toolbar);
 	entry.set_value("show_statusbar", show_statusbar);

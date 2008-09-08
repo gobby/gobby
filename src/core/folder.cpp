@@ -253,7 +253,7 @@ namespace
 	}
 }
 
-Gobby::Folder::Folder(const Preferences& preferences,
+Gobby::Folder::Folder(Preferences& preferences,
                       GtkSourceLanguageManager* lang_manager):
 	m_preferences(preferences), m_lang_manager(lang_manager)
 {

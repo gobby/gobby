@@ -1,5 +1,21 @@
 2008-09-08  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/preferences.hpp:
+	* src/core/preferences.cpp: Added userlist_width property.
+
+	* inc/core/docwindow.hpp:
+	* src/core/docwindow.cpp: Honor it by making sure the userlist always
+	has the width specified in the preferences, and update preferences
+	when the user resizes the user list.
+
+	* inc/core/folder.hpp:
+	* src/core/folder.cpp: Make Preferences nonconst, so DocWindow can
+	store the current userlist width in it.
+
+	* src/window.cpp: Increase default window size to 800x600.
+
+2008-09-08  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/util/color.hpp:
 	* src/util/color.cpp: Added hue_to_gdk_color().
 

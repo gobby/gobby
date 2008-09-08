@@ -42,7 +42,7 @@ public:
 		accumulated<default_accumulator<bool, true> >
 			SignalDocumentCloseRequest;
 
-	Folder(const Preferences& preferences,
+	Folder(Preferences& preferences,
 	       GtkSourceLanguageManager* lang_manager);
 	~Folder();
 
@@ -78,7 +78,7 @@ protected:
 
 	void on_tab_close_request(DocWindow& window);
 
-	const Preferences& m_preferences;
+	Preferences& m_preferences;
 	GtkSourceLanguageManager* m_lang_manager;
 
 	SignalDocumentAdded m_signal_document_added;

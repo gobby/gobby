@@ -137,6 +137,8 @@ public:
 		Option<Gtk::ToolbarStyle> toolbar_style;
 		Option<Pango::FontDescription> font;
 
+		Option<unsigned int> userlist_width;
+
 		Option<bool> show_toolbar;
 		Option<bool> show_statusbar;
 	};
