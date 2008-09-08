@@ -175,6 +175,7 @@ protected:
 
 	bool session_join_impl(const Glib::ustring& host,
 	                       unsigned int port,
+			       const net6::address* addr,
 	                       const Glib::ustring& name,
 	                       const Gdk::Color& color);
 

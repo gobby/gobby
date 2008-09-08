@@ -300,14 +300,15 @@ void Gobby::JoinProgressDialog::UserPasswordPrompt::on_change()
 
 Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
                                               Config::ParentEntry& config_entry,
-                                              const Glib::ustring& hostname,
+					      const Glib::ustring& hostname,
                                               unsigned int port,
+                                              const net6::address* addr,
                                               const Glib::ustring& username,
                                               const Gdk::Color& color):
 	ProgressDialog(_("Joining obby session..."), parent),
 	m_config_entry(config_entry), m_hostname(hostname), m_port(port),
-	m_username(username), m_color(color), m_got_welcome(false),
-	m_got_done(false)
+	m_address(addr ? addr->clone() : NULL), m_username(username),
+	m_color(color), m_got_welcome(false), m_got_done(false)
 {
 	obby::format_string str("Connecting to %0%...");
 	str << hostname;
@@ -328,8 +329,10 @@ void Gobby::JoinProgressDialog::on_thread(Thread& thread)
 	Gtk::Window& parent = m_parent;
 #endif
 	// Connection data
-	Glib::ustring hostname = m_hostname; // Remote host name
-	unsigned int port = m_port; // TCP port number
+	const Glib::ustring hostname = m_hostname;
+	unsigned int port = m_port;
+	std::auto_ptr<net6::address> address(
+		m_address.get() ? m_address->clone() : NULL);
 
 	// Dialog may be closed now
 	unlock(thread);
@@ -363,8 +366,11 @@ void Gobby::JoinProgressDialog::on_thread(Thread& thread)
 		buffer->close_event().connect(
 			sigc::mem_fun(*this, &JoinProgressDialog::on_close) );
 
-		// Establish connection
-		buffer->connect(hostname, port);
+		if(address.get())
+			// Establish connection
+			buffer->connect(*address);
+		else
+			buffer->connect(hostname, port);
 	}
 	catch(net6::error& e)
 	{

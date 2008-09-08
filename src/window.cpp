@@ -1238,10 +1238,11 @@ bool Gobby::Window::session_join(bool initial_dialog)
 		// Read settings
 		Glib::ustring host = m_join_dlg->get_host();
 		unsigned int port = m_join_dlg->get_port();
+		const net6::address* addr = m_join_dlg->get_address();
 		Glib::ustring name = m_join_dlg->get_name();
 		Gdk::Color color = m_join_dlg->get_color();
 
-		if(session_join_impl(host, port, name, color) )
+		if(session_join_impl(host, port, addr, name, color) )
 			break;
 		else
 			response = m_join_dlg->run();
@@ -1303,6 +1304,7 @@ bool Gobby::Window::session_open(bool initial_dialog)
 
 bool Gobby::Window::session_join_impl(const Glib::ustring& host,
                                       unsigned int port,
+				      const net6::address* addr,
                                       const Glib::ustring& name,
                                       const Gdk::Color& color)
 {
@@ -1311,6 +1313,7 @@ bool Gobby::Window::session_join_impl(const Glib::ustring& host,
 		m_config.get_root()["session"],
 		host,
 		port,
+		addr,
 		name,
 		color
 	);

@@ -35,7 +35,8 @@ public:
 	JoinProgressDialog(Gtk::Window& parent,
 	                   Config::ParentEntry& config_entry,
 	                   const Glib::ustring& hostname,
-	                   unsigned int port,
+			   unsigned int port,
+	                   const net6::address* addr,
 	                   const Glib::ustring& username,
 	                   const Gdk::Color& color);
 
@@ -149,6 +150,7 @@ private:
 
 	Glib::ustring m_hostname;
 	unsigned int m_port;
+	std::auto_ptr<net6::address> m_address;
 	Glib::ustring m_username;
 	Gdk::Color m_color;
 

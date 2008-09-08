@@ -27,13 +27,15 @@
 #include "config.hpp"
 #include "features.hpp"
 #include "colorsel.hpp"
+
+#include <net6/address.hpp>
+
 #ifdef WITH_ZEROCONF
 #include <gtkmm/box.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/liststore.h>
 #include <sigc++/connection.h>
-#include <net6/address.hpp>
 #include <obby/zeroconf.hpp>
 #endif
 
@@ -52,6 +54,7 @@ public:
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> host;
 		Gtk::TreeModelColumn<unsigned int> port;
+		Gtk::TreeModelColumn<net6::address*> address;
 	};
 #endif
 
@@ -67,6 +70,7 @@ public:
 
 	Glib::ustring get_host() const;
 	unsigned int get_port() const;
+	const net6::address* get_address();
 	Glib::ustring get_name() const;
 	Gdk::Color get_color() const;
 

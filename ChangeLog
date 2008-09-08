@@ -1,3 +1,16 @@
+2008-09-08  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/joindialog.hpp:
+	* src/joindialog.cpp: Added address column to zeroconf session list,
+	return on get_address() if host and port matches the selection.
+
+	* inc/joinprogressdialog.hpp:
+	* src/joinprogressdialog.cpp: Take a net6::address* that is used for
+	connection establishment when set (otherwise hostname/port).
+
+	* inc/window.hpp:
+	* src/window.cpp: Set address of JoinProgressDialog from JoinDialog.
+
 2008-09-08  Philipp Kern  <phil@0x539.de>
 
 	* src/joindialog.cpp: add a note that the behaviour of the zeroconf

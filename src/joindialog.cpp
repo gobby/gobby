@@ -37,6 +37,7 @@ Gobby::JoinDialog::Columns::Columns()
 	add(name);
 	add(host);
 	add(port);
+	add(address);
 }
 #endif
 
@@ -184,6 +185,15 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 
 Gobby::JoinDialog::~JoinDialog()
 {
+#ifdef WITH_ZEROCONF
+	const Gtk::TreeModel::Children& children = m_session_list->children();
+	for(Gtk::TreeIter iter = children.begin();
+	    iter != children.end(); ++ iter)
+	{
+		net6::address* addr = (*iter)[m_session_cols.address];
+		delete addr;
+	}
+#endif
 }
 
 Glib::ustring Gobby::JoinDialog::get_host() const
@@ -194,6 +204,26 @@ Glib::ustring Gobby::JoinDialog::get_host() const
 unsigned int Gobby::JoinDialog::get_port() const
 {
 	return static_cast<unsigned int>(m_ent_port.get_value() );
+}
+
+const net6::address* Gobby::JoinDialog::get_address()
+{
+#ifdef WITH_ZEROCONF
+	// m_session_view.get_selection() is not const, therefore this function
+	// cannot be const.
+	Gtk::TreeModel::iterator iter =
+		m_session_view.get_selection()->get_selected();
+	if(iter != m_session_list->children().end())
+	{
+		// Use address with port info if selected from zeroconf
+		if(get_host() == (*iter)[m_session_cols.host] &&
+		   get_port() == (*iter)[m_session_cols.port])
+		{
+			return (*iter)[m_session_cols.address];
+		}
+	}
+#endif
+	return NULL;
 }
 
 Glib::ustring Gobby::JoinDialog::get_name() const
@@ -276,6 +306,7 @@ void Gobby::JoinDialog::on_discover(const std::string& name,
 	// Generic addresses do not bear ports, thus the passed addr_type
 	// must implement get_port().
 	row[m_session_cols.port] = addr.get_port();
+	row[m_session_cols.address] = addr.clone();
 
 	m_ep_discover.set_expanded(true);
 }
@@ -284,6 +315,10 @@ void Gobby::JoinDialog::on_leave(const std::string& name)
 {
 	Gtk::TreeModel::iterator iter = find_entry(name);
 	if(iter == m_session_list->children().end() ) return;
+
+	net6::address* addr = (*iter)[m_session_cols.address];
+	delete addr;
+
 	m_session_list->erase(iter);
 }
 
