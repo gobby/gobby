@@ -97,7 +97,7 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	m_session(session), m_title(title),
 	m_info_storage_key(info_storage_key), m_preferences(preferences),
 	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
-	m_info_box(false, 0)
+	m_userlist(session), m_info_box(false, 0)
 {
 	g_object_ref(m_session);
 
@@ -189,7 +189,10 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	vbox->pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
 	vbox->show();
 
+	m_userlist.show();
+
 	pack1(*vbox, true, false);
+	pack2(m_userlist, true, false);
 }
 
 Gobby::DocWindow::~DocWindow()

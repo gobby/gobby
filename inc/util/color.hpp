@@ -24,6 +24,9 @@
 namespace Gobby
 {
 	double hue_from_gdk_color(const Gdk::Color& color);
+
+	Gdk::Color hue_to_gdk_color(double hue, double saturation,
+	                            double value);
 }
 
 #endif // _GOBBY_COLORUTIL_HPP_

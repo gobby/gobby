@@ -75,13 +75,13 @@ namespace
 			update_icon();
 			m_icon.show();
 
-			g_signal_connect(
+			m_notify_editable_handle = g_signal_connect(
 				document.get_text_view(), "notify::editable",
 				G_CALLBACK(on_notify_editable_static), this);
-			g_signal_connect(
+			m_notify_status_handle = g_signal_connect(
 				document.get_session(), "notify::status",
 				G_CALLBACK(on_notify_status_static), this);
-			g_signal_connect(
+			m_notify_subscription_group_handle = g_signal_connect(
 				document.get_session(),
 				"notify::subscription-group",
 				G_CALLBACK(
@@ -110,6 +110,19 @@ namespace
 			pack_start(m_icon, Gtk::PACK_SHRINK);
 			pack_start(m_label, Gtk::PACK_EXPAND_WIDGET);
 			pack_start(m_button, Gtk::PACK_SHRINK);
+		}
+
+		~TabLabel()
+		{
+			g_signal_handler_disconnect(
+				m_document.get_text_view(),
+				m_notify_editable_handle);
+			g_signal_handler_disconnect(
+				m_document.get_session(),
+				m_notify_status_handle);
+			g_signal_handler_disconnect(
+				m_document.get_session(),
+				m_notify_subscription_group_handle);
 		}
 
 		SignalCloseRequest signal_close_request() {
@@ -195,6 +208,10 @@ namespace
 		Gtk::Image m_icon;
 		Gtk::Label m_label;
 		Gtk::Button m_button;
+
+		gulong m_notify_editable_handle;
+		gulong m_notify_status_handle;
+		gulong m_notify_subscription_group_handle;
 	};
 
 	void record(InfTextSession* session, const Glib::ustring& title)
@@ -289,8 +306,13 @@ void Gobby::Folder::remove_document(DocWindow& window)
 	g_object_set_data(G_OBJECT(window.get_session()),
 	                  "GOBBY_SESSION_RECORD", NULL);
 
-	inf_session_close(INF_SESSION(window.get_session()));
+	InfTextSession* session = window.get_session();
+	g_object_ref(session);
+
+	inf_session_close(INF_SESSION(session));
 	remove_page(window);
+
+	g_object_unref(session);
 }
 
 Gobby::DocWindow*
@@ -354,6 +376,7 @@ bool Gobby::Folder::on_key_press_event(GdkEventKey* event)
 		}
 	}
 
+#if 0
 	// Is already used by GtkTextView...
 	if( (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) ==
 	    (GDK_CONTROL_MASK | GDK_MOD1_MASK))
@@ -369,6 +392,7 @@ bool Gobby::Folder::on_key_press_event(GdkEventKey* event)
 			return true;
 		}
 	}
+#endif
 
 	return false;
 }

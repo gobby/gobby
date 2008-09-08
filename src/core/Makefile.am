@@ -12,7 +12,8 @@ libgobby_core_a_SOURCES = \
 	nodewatch.cpp \
 	noteplugin.cpp \
 	preferences.cpp \
-	statusbar.cpp
+	statusbar.cpp \
+	userlist.cpp
 
 libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) \
                           -I../../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\" \

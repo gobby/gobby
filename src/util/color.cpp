@@ -20,7 +20,74 @@
 
 namespace
 {
-	void rgb_to_hsv (double *r, double *g, double *b)
+	void hsv_to_rgb(double* h, double* s, double* v)
+	{
+		double hue, saturation, value;
+		double f, p, q, t;
+
+		if (*s == 0.0)
+		{
+			*h = *v;
+			*s = *v;
+			*v = *v; /* heh */
+		}
+		else
+		{
+			hue = *h * 6.0;
+			saturation = *s;
+			value = *v;
+
+			if (hue == 6.0)
+				hue = 0.0;
+      
+			f = hue - (int) hue;
+			p = value * (1.0 - saturation);
+			q = value * (1.0 - saturation * f);
+			t = value * (1.0 - saturation * (1.0 - f));
+
+			switch ((int) hue)
+			{
+			case 0:
+				*h = value;
+				*s = t;
+				*v = p;
+				break;
+			case 1:
+				*h = q;
+				*s = value;
+				*v = p;
+				break;
+			case 2:
+				*h = p;
+				*s = value;
+				*v = t;
+				break;
+			case 3:
+				*h = p;
+				*s = q;
+				*v = value;
+				break;
+
+			case 4:
+				*h = t;
+				*s = p;
+				*v = value;
+				break;
+
+			case 5:
+				*h = value;
+				*s = p;
+				*v = q;
+				break;
+
+			default:
+				g_assert_not_reached ();
+				break;
+			}
+		}
+	}
+
+	void rgb_to_hsv(double* r, double* g, double* b)
 	{
 		double red, green, blue;
 		double h, s, v;
@@ -96,11 +163,22 @@ namespace Gobby
 {
 	double hue_from_gdk_color(const Gdk::Color& color)
 	{
-		double r = color.get_red() / 65536.0;
-		double g = color.get_green() / 65536.0;
-		double b = color.get_blue() / 65536.0;
+		double r = color.get_red() / 65535.0;
+		double g = color.get_green() / 65535.0;
+		double b = color.get_blue() / 65535.0;
 
 		rgb_to_hsv(&r, &g, &b);
 		return r;
+	}
+
+	Gdk::Color hue_to_gdk_color(double hue, double saturation,
+	                            double value)
+	{
+		hsv_to_rgb(&hue, &saturation, &value);
+		Gdk::Color color;
+		color.set_red(static_cast<gushort>(hue * 65535.0));
+		color.set_green(static_cast<gushort>(saturation * 65535.0));
+		color.set_blue(static_cast<gushort>(value * 65535.0));
+		return color;
 	}
 }

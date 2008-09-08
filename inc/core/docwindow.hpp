@@ -19,6 +19,7 @@
 #ifndef _GOBBY_DOCWINDOW_HPP_
 #define _GOBBY_DOCWINDOW_HPP_
 
+#include "userlist.hpp"
 #include "preferences.hpp"
 #include "features.hpp"
 
@@ -106,6 +107,7 @@ protected:
 
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;
+	UserList m_userlist;
 
 	Gtk::Frame m_info_frame;
 	Gtk::VBox m_info_box;

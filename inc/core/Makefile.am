@@ -11,4 +11,5 @@ noinst_HEADERS = \
 	nodewatch.hpp \
 	noteplugin.hpp \
 	preferences.hpp \
-	statusbar.hpp
+	statusbar.hpp \
+	userlist.hpp
