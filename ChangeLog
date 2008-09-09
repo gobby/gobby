@@ -1,3 +1,19 @@
+2008-09-09  Armin Burgmeier  <armin@arbur.net>
+
+	* inc/core/huebutton.hpp:
+	* src/core/huebutton.cpp: Added HueButton widget which is similar to
+	Gtk::ColorButton but launches a InfTextGtkHueChooser instead of a
+	GtkColorSelector on click.
+
+	* inc/core/Makefile.am:
+	* src/core/Makefile.am: Add the new files to the build.
+
+	* inc/dialogs/initialdialog.hpp:
+	* inc/dialogs/preferencesdialog.hpp:
+	* src/dialogs/initialdialog.cpp:
+	* src/dialogs/preferencesdialog.cpp: Use HueButton instead of
+	ColorButton for user color selection.
+
 2008-09-08  Armin Burgmeier  <armin@arbur.net>
 
 	* inc/core/header.hpp:

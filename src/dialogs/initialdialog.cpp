@@ -45,7 +45,8 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_table(2, 2),
 	m_vbox(false, 12),
 	m_hbox(false, 12),
-	m_image(icon_manager.gobby)
+	m_image(icon_manager.gobby),
+	m_color_button(_("Choose a user color"), *this)
 {
 	m_title.set_markup(
 		"<span size=\"x-large\" weight=\"bold\">" +
@@ -89,9 +90,9 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_name_entry.set_activates_default(true);
 	m_name_entry.show();
 
-	Gdk::Color color;
-	color.set_hsv(preferences.user.hue * 360.0, 0.8, 1.0);
-	m_color_button.set_color(color);
+	m_color_button.set_hue(preferences.user.hue);
+	m_color_button.set_saturation(0.35);
+	m_color_button.set_value(1.0);
 	m_color_button.show();
 
 	m_table.set_row_spacings(12);

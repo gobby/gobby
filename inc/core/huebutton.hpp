@@ -16,53 +16,48 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_INITIALDIALOG_HPP_
-#define _GOBBY_INITIALDIALOG_HPP_
+#ifndef _GOBBY_HUE_BUTTON_HPP_
+#define _GOBBY_HUE_BUTTON_HPP_
 
-#include "core/preferences.hpp"
-#include "core/iconmanager.hpp"
-#include "core/huebutton.hpp"
-
+#include <gtkmm/colorbutton.h>
 #include <gtkmm/dialog.h>
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/image.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/table.h>
+
+#include <memory>
 
 namespace Gobby
 {
 
-class InitialDialog : public Gtk::Dialog
+// TODO: This should go to libinftextgtk as InfTextGtkHueButton,
+// inheriting directly from GtkButton to provide a clean API.
+class HueButton: public Gtk::ColorButton
 {
 public:
-	InitialDialog(Gtk::Window& parent,
-	              Preferences& preferences,
-	              const IconManager& icon_manager);
+	HueButton(const Glib::ustring& title, Gtk::Window& parent);
+
+	double get_hue() const;
+	double get_saturation() const;
+	double get_value() const;
+
+	void set_hue(double hue);
+	void set_saturation(double saturation);
+	void set_value(double value);
 
 protected:
-	virtual void on_response(int id);
+	virtual void on_clicked();
 
-	Preferences& m_preferences;
+	void on_parent_hide();
+	void on_dialog_response(int response_id);
 
-	Gtk::VBox m_topbox;
-	Gtk::Label m_title;
+	Glib::ustring m_title;
+	Gtk::Window& m_parent;
 
-	Gtk::HBox m_hbox;
-	Gtk::Image m_image;
+	std::auto_ptr<Gtk::Dialog> m_dialog;
+	GtkWidget* m_hue_chooser;
 
-	Gtk::VBox m_vbox;
-	Gtk::Label m_intro;
-
-	Gtk::Table m_table;
-	Gtk::Label m_name_label;
-	Gtk::Entry m_name_entry;
-
-	Gtk::Label m_color_label;
-	HueButton m_color_button;
+	double m_saturation;
+	double m_value;
 };
 
 }
-
-#endif // _GOBBY_INITIALDIALOG_HPP_
-
+	
+#endif // _GOBBY_HUE_BUTTON_HPP_

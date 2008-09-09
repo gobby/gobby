@@ -8,6 +8,7 @@ libgobby_core_a_SOURCES = \
 	filechooser.cpp \
 	folder.cpp \
 	header.cpp \
+	huebutton.cpp \
 	iconmanager.cpp \
 	nodewatch.cpp \
 	noteplugin.cpp \

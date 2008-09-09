@@ -4,7 +4,6 @@ perhaps do pre-releases with some of these missing before:
  - Subscribing to a for the first time document and clicking into it scrolls
    the view all way down. Perhaps it is enough to keep the cursor initially at
    the beginning of the document, which we should do anyway (in infinote)
- - ^W should close the window
  - Remove references to doclist, userlist and chat in the icon manager
  - Implement single instance, probably using GtkUnique
  - Implement self-hosting, this also requires showing and handling directories
@@ -12,9 +11,7 @@ perhaps do pre-releases with some of these missing before:
  - Sort BrowserModel in Left pane and DocumentLocationDialog
  - Add close buttons to browser in left pane, user lists and docwindow infos,
    and a way to re-show the former two.
- - hue-only color selector
  - Set session title as initial file name in Save As filechooser
- - drag+drop-bare tabs
 
 These things need to be implemented in infinote, but again would be nice
 to have:

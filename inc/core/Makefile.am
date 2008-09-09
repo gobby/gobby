@@ -7,6 +7,7 @@ noinst_HEADERS = \
 	filechooser.hpp \
 	folder.hpp \
 	header.hpp \
+	huebutton.hpp \
 	iconmanager.hpp \
 	nodewatch.hpp \
 	noteplugin.hpp \

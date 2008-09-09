@@ -259,13 +259,15 @@ void Gobby::PreferencesDialog::Page::add(Gtk::Widget& widget)
 	m_box.pack_start(widget, Gtk::PACK_SHRINK);
 }
 
-Gobby::PreferencesDialog::User::User(Preferences& preferences):
+Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
+                                     Preferences& preferences):
 	m_group_settings(_("Settings")),
 	m_group_paths(_("Paths")),
 	m_box_user_name(false, 6),
 	m_lbl_user_name(_("User name:")),
 	m_box_user_color(false, 6),
 	m_lbl_user_color(_("User color:")),
+	m_btn_user_color(_("Choose a new user color"), parent),
 	m_box_path_host_directory(false, 6),
 	m_btn_path_host_directory(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
 	m_lbl_path_host_directory(_("Host directory:"))
@@ -279,10 +281,10 @@ Gobby::PreferencesDialog::User::User(Preferences& preferences):
 	m_box_user_name.pack_start(m_ent_user_name, Gtk::PACK_EXPAND_WIDGET);
 	m_box_user_name.show();
 
-	Gdk::Color color;
-	color.set_hsv(preferences.user.hue * 360, 0.8, 1.0);
+	m_btn_user_color.set_hue(preferences.user.hue);
+	m_btn_user_color.set_saturation(0.35);
+	m_btn_user_color.set_value(1.0);
 	m_lbl_user_color.show();
-	m_btn_user_color.set_color(color);
 	m_btn_user_color.show();
 	connect_hue_option(m_btn_user_color, preferences.user.hue);
 
@@ -514,13 +516,10 @@ Gobby::PreferencesDialog::Appearance::
 }
 
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
-                                            Preferences& preferences)
- : Gtk::Dialog(_("Preferences"), parent),
-   m_preferences(preferences),
-   m_page_user(preferences),
-   m_page_editor(preferences),
-   m_page_view(preferences),
-   m_page_appearance(preferences)
+                                            Preferences& preferences):
+	Gtk::Dialog(_("Preferences"), parent), m_preferences(preferences),
+	m_page_user(*this, preferences), m_page_editor(preferences),
+	m_page_view(preferences), m_page_appearance(preferences)
 {
 	m_notebook.append_page(m_page_user, _("User"));
 	m_notebook.append_page(m_page_editor, _("Editor"));

@@ -20,6 +20,7 @@
 #define _GOBBY_PREFERENCESDIALOG_HPP_
 
 #include "core/preferences.hpp"
+#include "core/huebutton.hpp"
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/frame.h>
@@ -64,7 +65,7 @@ public:
 	class User: public Page
 	{
 	public:
-		User(Preferences& preferences);
+		User(Gtk::Window& parent, Preferences& preferences);
 
 	protected:
 		Group m_group_settings;
@@ -76,8 +77,7 @@ public:
 
 		Gtk::HBox m_box_user_color;
 		Gtk::Label m_lbl_user_color;
-		/* TODO: Use an own color chooser to only choose hue */
-		Gtk::ColorButton m_btn_user_color;
+		HueButton m_btn_user_color;
 
 		Gtk::HBox m_box_path_host_directory;
 		Gtk::Label m_lbl_path_host_directory;
