@@ -1,6 +1,22 @@
 Gobby
 =====
 
+Version 0.4.7:
+ * Some fixes improving Gobby's accessibility.
+ * OS X: add support for the native menu bar, thanks to Yarek Tyshchenko
+ * Enable IPv6 link-local Zeroconf support.
+ * Bugfixes:
+   - Do not crash when no GtkSourceView languages are installed.
+   - Do not show hidden GtkSourceView languages to the user as they are
+     not supposed to be shown and could lead to crashes.
+   - Fix build failures with g++-4.3
+   - Fix crash on Windows when the XML configuration file does not exist.
+ * New translations:
+   - Japanese
+   - Greek
+   - Hebrew
+   - Dutch
+
 Version 0.4.6:
   * Require gtksourceview 1.8 to enable indent-on-tab
   * Require obby 0.4.5 to support IPv6 autodiscovery
