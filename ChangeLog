@@ -1,5 +1,9 @@
 2008-09-09  Philipp Kern  <phil@0x539.de>
 
+	* po/*.po: update string locations
+
+2008-09-09  Philipp Kern  <phil@0x539.de>
+
 	* src/window.cpp: update copyright range to 2008
 
 2008-09-09  Philipp Kern  <phil@0x539.de>
