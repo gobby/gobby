@@ -111,6 +111,8 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	gtk_source_buffer_set_language(
 		m_buffer, get_language_for_title(manager, m_title.c_str()));
 
+	m_preferences.user.hue.signal_changed().connect(
+		sigc::mem_fun(*this, &DocWindow::on_user_color_changed));
 	m_preferences.editor.tab_width.signal_changed().connect(
 		sigc::mem_fun(*this, &DocWindow::on_tab_width_changed));
 	m_preferences.editor.tab_spaces.signal_changed().connect(
@@ -291,6 +293,9 @@ void Gobby::DocWindow::set_active_user(InfTextUser* user)
 			inf_session_get_buffer(INF_SESSION(m_session))),
 		user);
 
+	// TODO: Make sure the active user has the color specified in the
+	// preferences, and set color if not.
+
 	if(user != NULL)
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), TRUE);
 	else
@@ -345,6 +350,17 @@ void Gobby::DocWindow::on_size_allocate(Gtk::Allocation& allocation)
 
 	if(get_position() != desired_position)
 		set_position(desired_position);
+}
+
+void Gobby::DocWindow::on_user_color_changed()
+{
+	InfTextUser* user = get_active_user();
+
+	if(user)
+	{
+		inf_text_session_set_user_color(m_session, user,
+		                                m_preferences.user.hue);
+	}
 }
 
 void Gobby::DocWindow::on_tab_width_changed()

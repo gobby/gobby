@@ -1,5 +1,11 @@
 2008-09-10  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/docwindow.hpp:
+	* src/core/docwindow.cpp: Change user color in running session on
+	preferences color change.
+
+2008-09-10  Armin Burgmeier  <armin@arbur.net>
+
 	* src/dialogs/preferencesdialog.cpp: Use notify::color instead of
 	signal_color_set on ColorButton, because ColorButton::set_color (as
 	used by HueButton) odes not emit the latter.

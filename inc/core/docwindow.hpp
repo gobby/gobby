@@ -89,6 +89,8 @@ protected:
 	virtual void on_realize();
 	virtual void on_size_allocate(Gtk::Allocation& allocation);
 
+	void on_user_color_changed();
+
 	void on_tab_width_changed();
 	void on_tab_spaces_changed();
 	void on_auto_indent_changed();
