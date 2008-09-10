@@ -86,7 +86,6 @@ public:
 	}
 
 protected:
-	virtual void on_realize();
 	virtual void on_size_allocate(Gtk::Allocation& allocation);
 
 	void on_user_color_changed();

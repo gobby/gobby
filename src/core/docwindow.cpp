@@ -194,7 +194,7 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	m_userlist.show();
 
 	pack1(*vbox, true, false);
-	pack2(m_userlist, true, false);
+	pack2(m_userlist, false, false);
 }
 
 Gobby::DocWindow::~DocWindow()
@@ -315,41 +315,40 @@ void Gobby::DocWindow::set_language(GtkSourceLanguage* language)
 	m_signal_language_changed.emit(language);
 }
 
-void Gobby::DocWindow::on_realize()
+void Gobby::DocWindow::on_size_allocate(Gtk::Allocation& allocation)
 {
-	Gtk::HPaned::on_realize();
+	Gtk::HPaned::on_size_allocate(allocation);
 
-	m_doc_userlist_width_changed_connection =
-		property_position().signal_changed().connect(
-			sigc::mem_fun(
+	// Setup initial paned positione. We can't do this simply every time
+	// on_size_allocate() is called since this would lead to an endless
+	// loop somehow when the userlist width is changed forcefully 
+	// (for example by a set_info() requiring much width).
+	if(!m_doc_userlist_width_changed_connection.connected())
+	{
+		Glib::SignalProxyProperty proxy =
+			property_position().signal_changed();
+
+		m_doc_userlist_width_changed_connection =
+			proxy.connect(sigc::mem_fun(
 				*this,
 				&DocWindow::on_doc_userlist_width_changed));
 
-	m_pref_userlist_width_changed_connection =
-		m_preferences.appearance.userlist_width.signal_changed().
-			connect(sigc::mem_fun(
+		Preferences::Option<unsigned int>& option = 
+			m_preferences.appearance.userlist_width;
+
+		m_pref_userlist_width_changed_connection =
+			option.signal_changed().connect(sigc::mem_fun(
 				*this,
 				&DocWindow::on_pref_userlist_width_changed));
-}
 
-void Gobby::DocWindow::on_size_allocate(Gtk::Allocation& allocation)
-{
-	// Make sure the userlist width stays the same when the widget
-	// is resized
+		unsigned int desired_position =
+			get_width() - m_preferences.appearance.userlist_width;
+		desired_position = std::min<unsigned int>(
+			desired_position, property_max_position());
 
-	// TODO: Can we tell on_size_allocate directly the
-	// position somehow, to avoid flickering?
-	m_doc_userlist_width_changed_connection.block();
-	Gtk::HPaned::on_size_allocate(allocation);
-	m_doc_userlist_width_changed_connection.unblock();
-
-	unsigned int desired_position =
-		get_width() - m_preferences.appearance.userlist_width;
-	desired_position = std::min<unsigned int>(
-		desired_position, property_max_position());
-
-	if(get_position() != desired_position)
-		set_position(desired_position);
+		if(get_position() != desired_position)
+			set_position(desired_position);
+	}
 }
 
 void Gobby::DocWindow::on_user_color_changed()
@@ -435,15 +434,25 @@ void Gobby::DocWindow::on_font_changed()
 
 void Gobby::DocWindow::on_doc_userlist_width_changed()
 {
-	m_pref_userlist_width_changed_connection.block();
-	m_preferences.appearance.userlist_width =
-		get_width() - get_position();
-	m_pref_userlist_width_changed_connection.unblock();
+	unsigned int userlist_width = get_width() - get_position();
+
+	if(m_preferences.appearance.userlist_width != userlist_width)
+	{
+		m_pref_userlist_width_changed_connection.block();
+		m_preferences.appearance.userlist_width = userlist_width;
+		m_pref_userlist_width_changed_connection.unblock();
+	}
 }
 
 void Gobby::DocWindow::on_pref_userlist_width_changed()
 {
-	m_doc_userlist_width_changed_connection.block();
-	set_position(get_width() - m_preferences.appearance.userlist_width);
-	m_doc_userlist_width_changed_connection.unblock();
+	unsigned int position =
+		get_width() - m_preferences.appearance.userlist_width;
+
+	if(get_position() != position)
+	{
+		m_doc_userlist_width_changed_connection.block();
+		set_position(position);
+		m_doc_userlist_width_changed_connection.unblock();
+	}
 }

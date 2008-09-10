@@ -1,6 +1,12 @@
 2008-09-10  Armin Burgmeier  <armin@arbur.net>
 
 	* inc/core/docwindow.hpp:
+	* src/core/docwindow.cpp: Fixed an endless loop when the userlist is
+	forcefully resized.
+
+2008-09-10  Armin Burgmeier  <armin@arbur.net>
+
+	* inc/core/docwindow.hpp:
 	* src/core/docwindow.cpp: Change user color in running session on
 	preferences color change.
 
