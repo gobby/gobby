@@ -161,7 +161,7 @@ namespace
 	void connect_hue_option(Gtk::ColorButton& color_button,
 	                        Preferences::Option<double>& option)
 	{
-		color_button.signal_color_set().connect(
+		color_button.property_color().signal_changed().connect(
 			sigc::compose(
 				sigc::mem_fun(
 					option,
