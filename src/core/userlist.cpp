@@ -165,13 +165,13 @@ Gobby::UserList::~UserList()
 	    iter != children.end(); ++ iter)
 	{
 		InfTextUser* user = (*iter)[m_columns.user];
-		gulong notify_color_handle =
-			(*iter)[m_columns.notify_color_handle];
+		gulong notify_hue_handle =
+			(*iter)[m_columns.notify_hue_handle];
 		gulong notify_status_handle =
 			(*iter)[m_columns.notify_status_handle];
 
 		g_signal_handler_disconnect(G_OBJECT(user),
-		                            notify_color_handle);
+		                            notify_hue_handle);
 		g_signal_handler_disconnect(G_OBJECT(user),
 		                            notify_status_handle);
 	}
@@ -272,15 +272,15 @@ void Gobby::UserList::on_add_user(InfTextUser* user)
 	Gtk::TreeIter iter = m_store->append();
 	(*iter)[m_columns.user] = user;
 	(*iter)[m_columns.color] = color_pixbuf;
-	(*iter)[m_columns.notify_color_handle] = g_signal_connect(
-		G_OBJECT(user), "notify::color",
-		G_CALLBACK(on_notify_color_static), this);
+	(*iter)[m_columns.notify_hue_handle] = g_signal_connect(
+		G_OBJECT(user), "notify::hue",
+		G_CALLBACK(on_notify_hue_static), this);
 	(*iter)[m_columns.notify_status_handle] = g_signal_connect(
 		G_OBJECT(user), "notify::status",
 		G_CALLBACK(on_notify_status_static), this);
 }
 
-void Gobby::UserList::on_notify_color(InfTextUser* user)
+void Gobby::UserList::on_notify_hue(InfTextUser* user)
 {
 	Gtk::TreeIter iter = find_user_iter(user);
 	g_assert(iter != m_store->children().end());

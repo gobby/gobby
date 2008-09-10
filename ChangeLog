@@ -1,3 +1,10 @@
+2008-09-10  Armin Burgmeier  <armin@arbur.net>
+
+	* inc/core/userlist.hpp:
+	* src/core/userlist.cpp: Watch notify::hue instead of notify::color
+	on InfTextUser for user color changes. InfTextUser::color does not
+	exist.
+
 2008-09-09  Armin Burgmeier  <armin@arbur.net>
 
 	* inc/core/huebutton.hpp:

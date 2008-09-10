@@ -42,14 +42,14 @@ namespace Gobby
 		public:
 			Gtk::TreeModelColumn<InfTextUser*> user;
 			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > color;
-			Gtk::TreeModelColumn<gulong> notify_color_handle;
+			Gtk::TreeModelColumn<gulong> notify_hue_handle;
 			Gtk::TreeModelColumn<gulong> notify_status_handle;
 
 			Columns()
 			{
 				add(user);
 				add(color);
-				add(notify_color_handle);
+				add(notify_hue_handle);
 				add(notify_status_handle);
 			}
 		};
@@ -62,12 +62,12 @@ namespace Gobby
 				on_add_user(INF_TEXT_USER(user));
 		}
 
-		static void on_notify_color_static(InfUser* user,
-		                                   GParamSpec* pspec,
-		                                   gpointer user_data)
+		static void on_notify_hue_static(InfUser* user,
+		                                 GParamSpec* pspec,
+		                                 gpointer user_data)
 		{
 			static_cast<UserList*>(user_data)->
-				on_notify_color(INF_TEXT_USER(user));
+				on_notify_hue(INF_TEXT_USER(user));
 		}
 
 		static void on_notify_status_static(InfUser* user,
@@ -88,7 +88,7 @@ namespace Gobby
 		              const Gtk::TreeIter& iter2);
 
 		void on_add_user(InfTextUser* user);
-		void on_notify_color(InfTextUser* user);
+		void on_notify_hue(InfTextUser* user);
 		void on_notify_status(InfTextUser* user);
 
 		Gtk::TreeIter find_user_iter(InfTextUser* user);
