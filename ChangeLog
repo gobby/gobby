@@ -1,5 +1,9 @@
 2008-09-10  Armin Burgmeier  <armin@arbur.net>
 
+	* src/window.cpp: Keep browser pane at a fixed width.
+
+2008-09-10  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/docwindow.hpp:
 	* src/core/docwindow.cpp: Fixed an endless loop when the userlist is
 	forcefully resized.

@@ -59,7 +59,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_frame_text.add(m_folder);
 	m_frame_text.show();
 
-	m_paned.pack1(m_frame_browser, true, false);
+	m_paned.pack1(m_frame_browser, false, false);
 	m_paned.pack2(m_frame_text, true, false);
 	m_paned.show();
 
