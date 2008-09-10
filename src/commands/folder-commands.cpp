@@ -71,16 +71,26 @@ protected:
 	{
 		g_assert(m_active_user != NULL);
 
-		if(inf_user_get_status(m_active_user) == INF_USER_INACTIVE)
+		switch(inf_user_get_status(m_active_user))
 		{
+		case INF_USER_INACTIVE:
 			g_assert(m_timeout_connection.connected());
 			m_timeout_connection.disconnect();
-		}
-		else
-		{
+			break;
+		case INF_USER_ACTIVE:
 			inf_session_set_user_status(
 				INF_SESSION(m_document.get_session()),
 				m_active_user, INF_USER_INACTIVE);
+			break;
+		case INF_USER_UNAVAILABLE:
+			// It can happen that the user is already unavailable
+			// here, for example when we have lost the connection
+			// to the server, so this is not an error.
+
+			// TODO: Shouldn't local users stay available on
+			// connection loss? We probably need to fix this
+			// in infinote.
+			break;
 		}
 		
 	}
