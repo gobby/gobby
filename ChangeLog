@@ -1,5 +1,10 @@
 2008-09-10  Armin Burgmeier  <armin@arbur.net>
 
+	* src/core/userlist.cpp: Fixed userlist sorting, sometimes unavailable
+	users were shown above available ones.
+
+2008-09-10  Armin Burgmeier  <armin@arbur.net>
+
 	* src/commands/folder-commands.cpp: Fix a warning when the connection
 	to the server has been lost while being subscribed to a document.
 

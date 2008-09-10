@@ -98,11 +98,10 @@ Gobby::UserList::UserList(InfTextSession* session):
 	m_session(session), m_store(Gtk::ListStore::create(m_columns)),
 	m_view(m_store)
 {
-	m_store->set_default_sort_func(
-		sigc::mem_fun(*this, &UserList::sort_func));
+	m_store->set_sort_func(m_columns.user,
+	                       sigc::mem_fun(*this, &UserList::sort_func));
 
-	m_store->set_sort_column(Gtk::TreeSortable::DEFAULT_SORT_COLUMN_ID,
-	                         Gtk::SORT_ASCENDING);
+	m_store->set_sort_column(m_columns.user, Gtk::SORT_ASCENDING);
 
 	InfUserTable* table =
 		inf_session_get_user_table(INF_SESSION(session));
@@ -251,9 +250,9 @@ int Gobby::UserList::sort_func(const Gtk::TreeIter& iter1,
 
 	if(available1 != available2)
 	{
-		if(available1 == INF_USER_UNAVAILABLE)
-			return -1;
-		return 1;
+		if(!available1)
+			return 1;
+		return -1;
 	}
 	else
 	{
