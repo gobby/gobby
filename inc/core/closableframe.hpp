@@ -30,7 +30,9 @@ namespace Gobby
 class ClosableFrame: public Gtk::Frame
 {
 public:
-	ClosableFrame(Preferences::Option<bool>& option);
+	ClosableFrame(const Glib::ustring& title,
+	              const Gtk::StockID& stock_id,
+	              Preferences::Option<bool>& option);
 
 protected:
 	virtual void on_add(Gtk::Widget* widget);

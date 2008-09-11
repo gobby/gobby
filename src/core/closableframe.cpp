@@ -19,7 +19,12 @@
 #include "core/closableframe.hpp"
 #include "util/closebutton.hpp"
 
-Gobby::ClosableFrame::ClosableFrame(Preferences::Option<bool>& option):
+#include <gtkmm/image.h>
+#include <gtkmm/label.h>
+
+Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
+                                    const Gtk::StockID& stock_id,
+                                    Preferences::Option<bool>& option):
 	m_option(option), m_box(false, 6)
 {
 	CloseButton* button = Gtk::manage(new CloseButton);
@@ -31,7 +36,17 @@ Gobby::ClosableFrame::ClosableFrame(Preferences::Option<bool>& option):
 
 	button->show();
 
+	Gtk::Image* image = Gtk::manage(
+		new Gtk::Image(stock_id, Gtk::ICON_SIZE_MENU));
+	image->show();
+
+	Gtk::Label* label_title = Gtk::manage(
+		new Gtk::Label(title, Gtk::ALIGN_LEFT));
+	label_title->show();
+
 	Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox(false, 6));
+	hbox->pack_start(*image, Gtk::PACK_SHRINK);
+	hbox->pack_start(*label_title, Gtk::PACK_SHRINK);
 	hbox->pack_end(*button, Gtk::PACK_SHRINK);
 	hbox->show();
 

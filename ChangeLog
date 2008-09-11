@@ -1,5 +1,13 @@
 2008-09-11  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/closableframe.hpp:
+	* src/core/closableframe.cpp: Added title and icon for the frame.
+
+	* src/core/docwindow.cpp:
+	* src/window.cpp: Set title and icon for userlist and browser.
+
+2008-09-11  Armin Burgmeier  <armin@arbur.net>
+
 	* pixmaps/chat.png: Removed.
 
 	* pixmaps/Makefile.am: Removed chat.png from distribution.

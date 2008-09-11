@@ -18,10 +18,13 @@
 
 #include "features.hpp"
 #include "window.hpp"
+
 #include "core/docwindow.hpp"
 #include "core/iconmanager.hpp"
 #include "core/noteplugin.hpp"
 #include "core/closableframe.hpp"
+
+#include "util/i18n.hpp"
 
 #include <gtkmm/frame.h>
 
@@ -54,8 +57,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
-	Gtk::Frame* frame_browser = Gtk::manage(
-		new ClosableFrame(m_preferences.appearance.show_browser));
+	Gtk::Frame* frame_browser = Gtk::manage(new ClosableFrame(
+		_("Document Browser"), IconManager::STOCK_DOCLIST,
+		m_preferences.appearance.show_browser));
 	frame_browser->set_shadow_type(Gtk::SHADOW_IN);
 	frame_browser->add(m_browser);
 	// frame_browser manages visibility itself

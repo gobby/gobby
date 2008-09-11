@@ -21,6 +21,9 @@
 #include "core/docwindow.hpp"
 #include "core/preferences.hpp"
 #include "core/closableframe.hpp"
+#include "core/iconmanager.hpp"
+
+#include "util/i18n.hpp"
 
 #include <gtkmm/scrolledwindow.h>
 #include <glibmm/pattern.h>
@@ -203,6 +206,7 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 
 	m_userlist.show();
 	Gtk::Frame* frame = Gtk::manage(new ClosableFrame(
+		_("User List"), IconManager::STOCK_USERLIST,
 		m_preferences.appearance.show_userlist));
 	frame->set_shadow_type(Gtk::SHADOW_IN);
 	frame->add(m_userlist);
