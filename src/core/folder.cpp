@@ -17,10 +17,10 @@
  */
 
 #include "core/folder.hpp"
+#include "util/closebutton.hpp"
 #include "util/file.hpp"
 
 #include <gtkmm/box.h>
-#include <gtkmm/button.h>
 #include <gtkmm/stock.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdexcept>
@@ -90,21 +90,6 @@ namespace
 
 			//m_label.set_ellipsize(Pango::ELLIPSIZE_END);
 			m_label.show();
-
-			m_button.set_relief(Gtk::RELIEF_NONE);
-			m_button.set_focus_on_click(false);
-
-			GtkRcStyle* rc_style = gtk_rc_style_new();
-			rc_style->xthickness = rc_style->ythickness = 0;
-			gtk_widget_modify_style(GTK_WIDGET(m_button.gobj()),
-			                        rc_style);
-			g_object_unref(rc_style);
-
-			Gtk::Image* button_image = Gtk::manage(
-				new Gtk::Image(Gtk::Stock::CLOSE,
-				               Gtk::ICON_SIZE_MENU));
-			button_image->show();
-			m_button.add(*button_image);
 			m_button.show();
 
 			pack_start(m_icon, Gtk::PACK_SHRINK);
@@ -149,17 +134,6 @@ namespace
 		                                                gpointer data)
 		{
 			static_cast<TabLabel*>(data)->update_icon();
-		}
-
-		virtual void on_style_changed(
-			const Glib::RefPtr<Gtk::Style>& previous_style)
-		{
-			int width, height;
-			gtk_icon_size_lookup_for_settings(
-				gtk_widget_get_settings(GTK_WIDGET(gobj())),
-				GTK_ICON_SIZE_MENU, &width, &height);
-
-			m_button.set_size_request(width + 2, height + 2);
 		}
 
 		void update_icon()
@@ -207,7 +181,7 @@ namespace
 
 		Gtk::Image m_icon;
 		Gtk::Label m_label;
-		Gtk::Button m_button;
+		Gobby::CloseButton m_button;
 
 		gulong m_notify_editable_handle;
 		gulong m_notify_status_handle;

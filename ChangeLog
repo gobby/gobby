@@ -1,3 +1,14 @@
+2008-09-11  Armin Burgmeier  <armin@arbur.net>
+
+	* inc/util/closebutton.hpp:
+	* src/util/closebutton.cpp: Added CloseButton class that provides an
+	as-small-as-possible GtkButton with a close icon on it.
+
+	* inc/util/Makefile.am:
+	* src/util/Makefile.am: Added new files to the build.
+
+	* src/core/folder.cpp: Use CloseButton on the tabs.
+
 2008-09-10  Armin Burgmeier  <armin@arbur.net>
 
 	* src/core/userlist.cpp: Fixed userlist sorting, sometimes unavailable

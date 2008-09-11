@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libgobby-util.a
 
 libgobby_util_a_SOURCES = \
+	closebutton.cpp \
 	color.cpp \
 	config.cpp \
 	encoding.cpp \

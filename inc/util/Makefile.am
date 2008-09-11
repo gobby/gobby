@@ -1,5 +1,6 @@
 
 noinst_HEADERS = \
+	closebutton.hpp \
 	color.hpp \
 	config.hpp \
 	defaultaccumulator.hpp \
