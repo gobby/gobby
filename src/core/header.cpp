@@ -61,6 +61,9 @@ namespace {
 		"      <menuitem action=\"ViewToolbar\" />"
 		"      <menuitem action=\"ViewStatusbar\" />"
 		"      <separator />"
+		"      <menuitem action=\"ViewBrowser\" />"
+		"      <menuitem action=\"ViewUserlist\" />"
+		"      <separator />"
 		"      <menu action=\"ViewHighlightMode\">"
 		"        <menuitem"
 		"          action=\"ViewHighlightModeLanguage_None\" />"
@@ -260,6 +263,16 @@ Gobby::Header::Header(Preferences& preferences,
 			"ViewStatusbar", _("View Statusbar"),
 			_("Whether to show the statusbar"),
 			preferences.appearance.show_statusbar)),
+	action_view_browser(
+		Gtk::ToggleAction::create(
+			"ViewBrowser", _("View Document Browser"),
+			_("Whether to show the document browser"),
+			preferences.appearance.show_browser)),
+	action_view_userlist(
+		Gtk::ToggleAction::create(
+			"ViewUserlist", _("View User List"),
+			_("Whether to show the user list"),
+			preferences.appearance.show_userlist)),
 	action_view_highlight_mode(
 		Gtk::Action::create("ViewHighlightMode",
 		                    _("_Highlight Mode"))),
@@ -317,11 +330,17 @@ Gobby::Header::Header(Preferences& preferences,
 	                              "<Actions>/MenuEdit/EditGotoLine"));
 	group_edit->add(action_edit_preferences);
 
-	group_edit->add(action_view);
-	group_edit->add(action_view_toolbar);
-	group_edit->add(action_view_statusbar);
-	group_edit->add(action_view_highlight_mode);
-	group_edit->add(action_view_highlight_none);
+	group_view->add(action_view);
+	group_view->add(action_view_toolbar);
+	group_view->add(action_view_statusbar);
+	group_view->add(action_view_browser,
+	                Gtk::AccelKey("F9",
+			              "<Actions>/MenuView/ViewBrowser"));
+	group_view->add(action_view_userlist,
+	                Gtk::AccelKey("<control>F9",
+			              "<Actions>/MenuView/ViewUserList"));
+	group_view->add(action_view_highlight_mode);
+	group_view->add(action_view_highlight_none);
 	for(LanguageMap::const_iterator iter =
 		action_view_highlight_languages.begin();
 	    iter != action_view_highlight_languages.end();

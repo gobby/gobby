@@ -97,7 +97,6 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	);
 
 	set_spacing(6);
-	set_border_width(6);
 	pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
 	pack_start(m_expander, Gtk::PACK_SHRINK);
 }

@@ -18,8 +18,9 @@
 
 #include "features.hpp"
 
-#include "core/preferences.hpp"
 #include "core/docwindow.hpp"
+#include "core/preferences.hpp"
+#include "core/closableframe.hpp"
 
 #include <gtkmm/scrolledwindow.h>
 #include <glibmm/pattern.h>
@@ -192,9 +193,16 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	vbox->show();
 
 	m_userlist.show();
+	Gtk::Frame* frame = Gtk::manage(new ClosableFrame(
+		m_preferences.appearance.show_userlist));
+	frame->set_shadow_type(Gtk::SHADOW_IN);
+	frame->add(m_userlist);
+	// frame manages visibility itself
 
 	pack1(*vbox, true, false);
-	pack2(m_userlist, false, false);
+	pack2(*frame, false, false);
+
+
 }
 
 Gobby::DocWindow::~DocWindow()

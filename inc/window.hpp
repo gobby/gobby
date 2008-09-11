@@ -45,7 +45,6 @@
 
 #include <gtkmm/window.h>
 #include <gtkmm/paned.h>
-#include <gtkmm/frame.h>
 #include <gtkmm/messagedialog.h>
 
 #include <memory>
@@ -79,9 +78,6 @@ protected:
 	// GUI
 	Gtk::VBox m_mainbox;
 	Gtk::HPaned m_paned;
-
-	Gtk::Frame m_frame_browser;
-	Gtk::Frame m_frame_text;
 
 	Header m_header;
 	Folder m_folder;

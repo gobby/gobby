@@ -21,6 +21,9 @@
 #include "core/docwindow.hpp"
 #include "core/iconmanager.hpp"
 #include "core/noteplugin.hpp"
+#include "core/closableframe.hpp"
+
+#include <gtkmm/frame.h>
 
 Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
@@ -47,20 +50,23 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_header.show();
 	m_browser.show();
 	m_folder.show();
-	m_statusbar.show();
 
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
 
-	m_frame_browser.set_shadow_type(Gtk::SHADOW_IN);
-	m_frame_browser.add(m_browser);
-	m_frame_browser.show();
-	m_frame_text.set_shadow_type(Gtk::SHADOW_IN);
-	m_frame_text.add(m_folder);
-	m_frame_text.show();
+	Gtk::Frame* frame_browser = Gtk::manage(
+		new ClosableFrame(m_preferences.appearance.show_browser));
+	frame_browser->set_shadow_type(Gtk::SHADOW_IN);
+	frame_browser->add(m_browser);
+	// frame_browser manages visibility itself
 
-	m_paned.pack1(m_frame_browser, false, false);
-	m_paned.pack2(m_frame_text, true, false);
+	Gtk::Frame* frame_text = Gtk::manage(new Gtk::Frame);
+	frame_text->set_shadow_type(Gtk::SHADOW_IN);
+	frame_text->add(m_folder);
+	frame_text->show();
+
+	m_paned.pack1(*frame_browser, false, false);
+	m_paned.pack2(*frame_text, true, false);
 	m_paned.show();
 
 	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);

@@ -9,9 +9,9 @@ perhaps do pre-releases with some of these missing before:
  - Implement self-hosting, this also requires showing and handling directories
    in InfGtkBrowserModel/Store
  - Sort BrowserModel in Left pane and DocumentLocationDialog
- - Add close buttons to browser in left pane, user lists and docwindow infos,
-   and a way to re-show the former two.
  - Set session title as initial file name in Save As filechooser
+ - Add base preferences class with Preferences::Option definition to util/,
+   inherit in core/, move ClosableFrame to util/
 
 These things need to be implemented in infinote, but again would be nice
 to have:

@@ -35,7 +35,19 @@ Gobby::ViewCommands::ViewCommands(Header& header, Folder& folder,
 				*this,
 				&ViewCommands::on_menu_statusbar_toggled));
 
-	m_pref_view_statusbar_connection =
+	m_menu_view_browser_connection =
+		m_header.action_view_browser->signal_toggled().connect(
+			sigc::mem_fun(
+				*this,
+				&ViewCommands::on_menu_browser_toggled));
+
+	m_menu_view_userlist_connection =
+		m_header.action_view_userlist->signal_toggled().connect(
+			sigc::mem_fun(
+				*this,
+				&ViewCommands::on_menu_userlist_toggled));
+
+	m_pref_view_toolbar_connection =
 		preferences.appearance.show_toolbar.signal_changed().connect(
 			sigc::mem_fun(
 				*this,
@@ -46,6 +58,18 @@ Gobby::ViewCommands::ViewCommands(Header& header, Folder& folder,
 			sigc::mem_fun(
 				*this,
 				&ViewCommands::on_pref_statusbar_changed));
+
+	m_pref_view_browser_connection =
+		preferences.appearance.show_browser.signal_changed().connect(
+			sigc::mem_fun(
+				*this,
+				&ViewCommands::on_pref_browser_changed));
+
+	m_pref_view_userlist_connection =
+		preferences.appearance.show_userlist.signal_changed().connect(
+			sigc::mem_fun(
+				*this,
+				&ViewCommands::on_pref_userlist_changed));
 
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &ViewCommands::on_document_changed));
@@ -111,6 +135,22 @@ void Gobby::ViewCommands::on_menu_statusbar_toggled()
 	m_pref_view_statusbar_connection.unblock();
 }
 
+void Gobby::ViewCommands::on_menu_browser_toggled()
+{
+	m_pref_view_browser_connection.block();
+	m_preferences.appearance.show_browser =
+		m_header.action_view_browser->get_active();
+	m_pref_view_browser_connection.unblock();
+}
+
+void Gobby::ViewCommands::on_menu_userlist_toggled()
+{
+	m_pref_view_userlist_connection.block();
+	m_preferences.appearance.show_userlist =
+		m_header.action_view_userlist->get_active();
+	m_pref_view_userlist_connection.unblock();
+}
+
 void Gobby::ViewCommands::on_pref_toolbar_changed()
 {
 	m_menu_view_toolbar_connection.block();
@@ -125,6 +165,22 @@ void Gobby::ViewCommands::on_pref_statusbar_changed()
 	m_header.action_view_statusbar->set_active(
 		m_preferences.appearance.show_statusbar);
 	m_menu_view_statusbar_connection.unblock();
+}
+
+void Gobby::ViewCommands::on_pref_browser_changed()
+{
+	m_menu_view_browser_connection.block();
+	m_header.action_view_browser->set_active(
+		m_preferences.appearance.show_browser);
+	m_menu_view_browser_connection.unblock();
+}
+
+void Gobby::ViewCommands::on_pref_userlist_changed()
+{
+	m_menu_view_userlist_connection.block();
+	m_header.action_view_userlist->set_active(
+		m_preferences.appearance.show_userlist);
+	m_menu_view_userlist_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_menu_language_changed(

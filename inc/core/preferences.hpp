@@ -141,6 +141,8 @@ public:
 
 		Option<bool> show_toolbar;
 		Option<bool> show_statusbar;
+		Option<bool> show_browser;
+		Option<bool> show_userlist;
 	};
 
 	User user;

@@ -39,8 +39,12 @@ protected:
 	
 	void on_menu_toolbar_toggled();
 	void on_menu_statusbar_toggled();
+	void on_menu_browser_toggled();
+	void on_menu_userlist_toggled();
 	void on_pref_toolbar_changed();
 	void on_pref_statusbar_changed();
+	void on_pref_browser_changed();
+	void on_pref_userlist_changed();
 
 	void on_menu_language_changed(
 		const Glib::RefPtr<Gtk::RadioAction>& action);
@@ -56,15 +60,19 @@ protected:
 	sigc::connection m_document_language_changed_connection;
 
 	sigc::connection m_menu_view_toolbar_connection;
-	sigc::connection m_pref_view_toolbar_connection;
-
 	sigc::connection m_menu_view_statusbar_connection;
+	sigc::connection m_menu_view_browser_connection;
+	sigc::connection m_menu_view_userlist_connection;
+
 	sigc::connection m_pref_view_statusbar_connection;
+	sigc::connection m_pref_view_toolbar_connection;
+	sigc::connection m_pref_view_browser_connection;
+	sigc::connection m_pref_view_userlist_connection;
 
 private:
 	void ensure_find_dialog();
 };
 
 }
-	
+
 #endif // _GOBBY_VIEW_COMMANDS_HPP_

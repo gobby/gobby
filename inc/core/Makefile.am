@@ -1,6 +1,7 @@
 
 noinst_HEADERS = \
 	browser.hpp \
+	closableframe.hpp \
 	documentinfostorage.hpp \
 	docwindow.hpp \
 	encodingselector.hpp \

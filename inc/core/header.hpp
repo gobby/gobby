@@ -120,6 +120,8 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_view;
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_toolbar;
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_statusbar;
+	const Glib::RefPtr<Gtk::ToggleAction> action_view_browser;
+	const Glib::RefPtr<Gtk::ToggleAction> action_view_userlist;
 	const Glib::RefPtr<Gtk::Action> action_view_highlight_mode;
 	const Glib::RefPtr<LanguageAction> action_view_highlight_none;
         const LanguageMap action_view_highlight_languages;

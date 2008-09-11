@@ -2,6 +2,7 @@ noinst_LIBRARIES = libgobby-core.a
 
 libgobby_core_a_SOURCES = \
 	browser.cpp \
+	closableframe.cpp \
 	documentinfostorage.cpp \
 	docwindow.cpp \
 	encodingselector.cpp \

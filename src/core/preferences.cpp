@@ -94,7 +94,9 @@ Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
 		"font", "Monospace 10"))),
 	userlist_width(entry.get_value<unsigned int>("userlist_width", 150)),
 	show_toolbar(entry.get_value<bool>("show_toolbar", true)),
-	show_statusbar(entry.get_value<bool>("show_statusbar", true))
+	show_statusbar(entry.get_value<bool>("show_statusbar", true)),
+	show_browser(entry.get_value<bool>("show_browser", true)),
+	show_userlist(entry.get_value<bool>("show_userlist", true))
 {
 }
 
@@ -112,6 +114,8 @@ void Gobby::Preferences::Appearance::
 
 	entry.set_value("show_toolbar", show_toolbar);
 	entry.set_value("show_statusbar", show_statusbar);
+	entry.set_value("show_browser", show_browser);
+	entry.set_value("show_userlist", show_userlist);
 }
 
 Gobby::Preferences::Preferences(Config& config):

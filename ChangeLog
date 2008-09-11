@@ -1,5 +1,36 @@
 2008-09-11  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/closableframe.hpp:
+	* src/core/closableframe.cpp: Added a new widget, derived from
+	Gtk::Frame, that shows a close button in the upper right corner, for
+	the frame to be closed.
+
+	* inc/core/Makefile.am:
+	* src/core/Makefile.am: Added the new files to the build.
+
+	* inc/core/preferences.hpp:
+	* src/core/preferences.cpp: Added show_browser and show_userlist
+	options.
+
+	* inc/window.hpp:
+	* src/window.cpp:
+	* src/core/docwindow.cpp: Use a ClosableFrame for the browser and
+	userlist, respectively.
+
+	* src/core/browser.cpp: Removed the border_width. It is now applied by
+	the ClosableFrame. If border_width is desired in certain situations,
+	then it can still be called from elsewhere.
+
+	* inc/core/header.hpp:
+	* src/core/header.cpp: Added "Show Document Browser" and "Show
+	Userlist" items to the View menu.
+
+	* inc/commands/view-commands.hpp:
+	* src/commands/view-commands.cpp: Implemented functionality for these
+	(by setting the preference options).
+
+2008-09-11  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/util/closebutton.hpp:
 	* src/util/closebutton.cpp: Added CloseButton class that provides an
 	as-small-as-possible GtkButton with a close icon on it.
