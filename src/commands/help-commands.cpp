@@ -59,6 +59,7 @@ void Gobby::HelpCommands::on_about()
 
 		std::vector<Glib::ustring> artists;
 		artists.push_back("Benjamin Herr <ben@0x539.de>");
+		artists.push_back("Thomas Glatt <tom@0x539.de>");
 
 		std::vector<Glib::ustring> authors;
 		authors.push_back("Armin Burgmeier <armin@arbur.net>");

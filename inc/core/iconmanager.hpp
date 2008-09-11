@@ -31,7 +31,6 @@ namespace Gobby
 	public:
 		static Gtk::StockID STOCK_USERLIST;
 		static Gtk::StockID STOCK_DOCLIST;
-		static Gtk::StockID STOCK_CHAT;
 		static Gtk::StockID STOCK_SAVE_ALL;
 
 		IconManager();
@@ -39,13 +38,11 @@ namespace Gobby
 		const Glib::RefPtr<Gdk::Pixbuf> gobby;
 		const Glib::RefPtr<Gdk::Pixbuf> userlist;
 		const Glib::RefPtr<Gdk::Pixbuf> doclist;
-		const Glib::RefPtr<Gdk::Pixbuf> chat;
 		const Glib::RefPtr<Gdk::Pixbuf> save_all;
 
 	protected:
 		Gtk::IconSet m_is_userlist;
 		Gtk::IconSet m_is_doclist;
-		Gtk::IconSet m_is_chat;
 		Gtk::IconSet m_is_save_all;
 
 		Glib::RefPtr<Gtk::IconFactory> m_icon_factory;

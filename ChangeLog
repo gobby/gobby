@@ -1,5 +1,17 @@
 2008-09-11  Armin Burgmeier  <armin@arbur.net>
 
+	* pixmaps/chat.png: Removed.
+
+	* pixmaps/Makefile.am: Removed chat.png from distribution.
+
+	* inc/core/iconmanager.hpp:
+	* src/core/iconmanager.cpp: Removed chat icon.
+
+	* src/commands/help-commands.cpp: Added Thomas Glatt to artists
+	because he designed the Gobby logo.
+
+2008-09-11  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/docwindow.hpp:
 	* src/core/docwindow.cpp: Added a boolean parameter to set_info() that
 	specifies whether the info box can be closed by the user.

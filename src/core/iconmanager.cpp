@@ -22,10 +22,6 @@
 #include <gtkmm/stockitem.h>
 #include <glib/gtypes.h>
 
-#ifdef _WIN32
-# include <windows.h>
-#endif
-
 namespace
 {
 	Glib::RefPtr<Gdk::Pixbuf> load_pixbuf(const char* dir, const char* file)
@@ -36,28 +32,28 @@ namespace
 				Glib::build_filename(dir, file)
 			);
 		}
-		catch(Glib::FileError& e)
+		catch(const Glib::FileError& e)
 		{
-			/* Not installed */
-#ifdef _WIN32
-			TCHAR path[MAX_PATH];
-			if(!GetModuleFileNameA(NULL, path, MAX_PATH))
-				throw e;
-
-			std::string utf_path = Glib::locale_to_utf8(path);
+			// Not installed
+#ifdef G_OS_WIN32
+			// Windows: Look on path relative to executable, as
+			// installed by the installer.
+			const gchar* subdir;
+			if(dir == APPICON_DIR)
+				subdir = "share/pixmaps";
+			else
+				subdir = "share/pixmaps/gobby";
+			
+			path = g_win32_get_package_installation_subdirectory(
+				subdir);
+			std::string path_str = path;
+			g_free(path);
 
 			return Gdk::Pixbuf::create_from_file(
-				Glib::build_filename(
-					Glib::build_filename(
-						Glib::path_get_dirname(
-							utf_path
-						),
-						"pixmaps"
-					),
-					file
-				)
-			);
+				Glib::build_filename(path_str, file));
 #else
+			// Unix: Assume we run the program from the build
+			// directory, where stuff is simply in ./pixmaps/
 			return Gdk::Pixbuf::create_from_file(
 				Glib::build_filename("pixmaps", file)
 			);
@@ -68,18 +64,15 @@ namespace
 
 Gtk::StockID Gobby::IconManager::STOCK_USERLIST("gobby-userlist");
 Gtk::StockID Gobby::IconManager::STOCK_DOCLIST("gobby-doclist");
-Gtk::StockID Gobby::IconManager::STOCK_CHAT("gobby-chat");
 Gtk::StockID Gobby::IconManager::STOCK_SAVE_ALL("gobby-save-all");
 
 Gobby::IconManager::IconManager():
 	gobby(load_pixbuf(APPICON_DIR, "gobby.png") ),
 	userlist(load_pixbuf(PIXMAPS_DIR, "userlist.png") ),
 	doclist(load_pixbuf(PIXMAPS_DIR, "doclist.png") ),
-	chat(load_pixbuf(PIXMAPS_DIR, "chat.png") ),
 	save_all(load_pixbuf(PIXMAPS_DIR, "save-all.svg")),
 	m_is_userlist(userlist),
 	m_is_doclist(doclist),
-	m_is_chat(chat),
 	m_is_save_all(save_all),
 	m_icon_factory(Gtk::IconFactory::create() )
 {
@@ -88,9 +81,6 @@ Gobby::IconManager::IconManager():
 
 	Gtk::StockItem doclist_item(STOCK_DOCLIST, _("Document list") );
 	m_icon_factory->add(STOCK_DOCLIST, m_is_doclist);
-
-	Gtk::StockItem chat_item(STOCK_CHAT, _("Chat") );
-	m_icon_factory->add(STOCK_CHAT, m_is_chat);
 
 	Gtk::StockItem save_all_item(STOCK_SAVE_ALL, _("Save All"));
 	m_icon_factory->add(STOCK_SAVE_ALL, m_is_save_all);
