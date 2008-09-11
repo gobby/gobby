@@ -1,3 +1,8 @@
+2008-09-11  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac: require obby 0.4.6 in pkg-config checks
+	* NEWS: document the requirement
+
 2008-09-09  Philipp Kern  <phil@0x539.de>
 
 	* po/*.po: update string locations

@@ -2,6 +2,7 @@ Gobby
 =====
 
 Version 0.4.7:
+ * Please note: This version needs obby 0.4.6 to compile.
  * Some fixes improving Gobby's accessibility.
  * OS X: add support for the native menu bar, thanks to Yarek Tyshchenko
  * Enable IPv6 link-local Zeroconf support.
