@@ -70,7 +70,7 @@ namespace
 
 		window.set_info(
 			initial_text + "\n\n" + type_text + "\n\n" +
-			info_text);
+			info_text, true);
 	}
 
 	void retr_local_user_func(InfUser* user, gpointer user_data)
@@ -341,7 +341,8 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 		window.set_info(
 			Glib::ustring::compose(
 				_("Synchronization in progress… %1%%"),
-				static_cast<unsigned int>(percentage * 100)));
+				static_cast<unsigned int>(percentage * 100)),
+			false);
 	}
 	else
 	{
@@ -413,7 +414,8 @@ void Gobby::BrowserCommands::on_synchronization_progress(InfSession* session,
 		window->set_info(
 			Glib::ustring::compose(
 				_("Synchronization in progress… %1%%"),
-				static_cast<unsigned int>(percentage * 100)));
+				static_cast<unsigned int>(percentage * 100)),
+			false);
 	}
 }
 
@@ -443,7 +445,7 @@ void Gobby::BrowserCommands::on_notify_connection(InfcSessionProxy* proxy)
 			"therefore the document cannot be edited anymore.\n\n"
 			"Please note also that it is possible that not all "
 			"of your latest changes have reached the "
-			"publisher before the connection was lost."));
+			"publisher before the connection was lost."), true);
 		window->set_active_user(NULL);
 	}
 }
@@ -525,7 +527,7 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 		else
 		{
 			window->set_info(
-				_("User Join in progress…"));
+				_("User Join in progress…"), false);
 
 			g_signal_connect(
 				request, "failed",

@@ -19,8 +19,9 @@
 #ifndef _GOBBY_DOCWINDOW_HPP_
 #define _GOBBY_DOCWINDOW_HPP_
 
-#include "userlist.hpp"
-#include "preferences.hpp"
+#include "core/userlist.hpp"
+#include "core/preferences.hpp"
+#include "util/closebutton.hpp"
 #include "features.hpp"
 
 #include <gtkmm/box.h>
@@ -72,7 +73,7 @@ public:
 	GtkSourceView* get_text_view() { return m_view; }
 	GtkSourceBuffer* get_text_buffer() { return m_buffer; }
 
-	void set_info(const Glib::ustring& info);
+	void set_info(const Glib::ustring& info, bool closable);
 	void unset_info();
 
 	SignalLanguageChanged signal_language_changed() const
@@ -118,6 +119,8 @@ protected:
 
 	Gtk::Frame m_info_frame;
 	Gtk::VBox m_info_box;
+	Gtk::HBox m_info_close_button_box;
+	CloseButton m_info_close_button;
 	Gtk::Label m_info_label;
 
 	SignalLanguageChanged m_signal_language_changed;

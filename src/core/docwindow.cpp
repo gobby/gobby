@@ -98,7 +98,8 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	m_session(session), m_title(title),
 	m_info_storage_key(info_storage_key), m_preferences(preferences),
 	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
-	m_userlist(session), m_info_box(false, 0)
+	m_userlist(session), m_info_box(false, 0),
+	m_info_close_button_box(false, 6)
 {
 	g_object_ref(m_session);
 
@@ -172,6 +173,14 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	m_info_label.set_line_wrap(true);
 	m_info_label.show();
 
+	m_info_close_button.signal_clicked().connect(
+		sigc::mem_fun(m_info_frame, &Gtk::Frame::hide));
+	m_info_close_button.show();
+
+	m_info_close_button_box.pack_end(m_info_close_button, Gtk::PACK_SHRINK);
+	// Don't show info close button box by default
+
+	m_info_box.pack_start(m_info_close_button_box, Gtk::PACK_SHRINK);
 	m_info_box.pack_start(m_info_label, Gtk::PACK_SHRINK);
 	m_info_box.set_border_width(6);
 	m_info_box.show();
@@ -269,9 +278,13 @@ Glib::ustring Gobby::DocWindow::get_selected_text() const
 	return start_cpp.get_slice(end_cpp);
 }
 
-void Gobby::DocWindow::set_info(const Glib::ustring& info)
+void Gobby::DocWindow::set_info(const Glib::ustring& info, bool closable)
 {
 	m_info_label.set_text(info);
+
+	if(closable) m_info_close_button_box.show();
+	else m_info_close_button_box.hide();
+
 	m_info_frame.show();
 }
 
