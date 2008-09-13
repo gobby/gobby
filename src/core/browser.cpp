@@ -233,9 +233,7 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 		{
 			xmpp = inf_xmpp_connection_new(
 				connection, INF_XMPP_CONNECTION_CLIENT,
-				static_cast<const Glib::ustring&>(
-					m_preferences.user.name).c_str(),
-				NULL, NULL);
+				NULL, hostname.c_str(), NULL, NULL);
 
 			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
 			g_object_unref(xmpp);

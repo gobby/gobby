@@ -1,10 +1,6 @@
 Some features that would be nice for a final Gobby 0.5 release. We could
 perhaps do pre-releases with some of these missing before:
 
- - Subscribing to a for the first time document and clicking into it scrolls
-   the view all way down. Perhaps it is enough to keep the cursor initially at
-   the beginning of the document, which we should do anyway (in infinote)
- - Remove references to doclist, userlist and chat in the icon manager
  - Implement single instance, probably using GtkUnique
  - Implement self-hosting, this also requires showing and handling directories
    in InfGtkBrowserModel/Store

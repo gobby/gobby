@@ -1,3 +1,7 @@
+2008-09-13  Armin Burgmeier  <armin@arbur.net>
+
+	* src/core/browser.cpp: Adapt to infinote API change.
+
 2008-09-11  Armin Burgmeier  <armin@arbur.net>
 
 	* inc/core/closableframe.hpp:
