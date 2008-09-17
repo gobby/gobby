@@ -17,7 +17,6 @@ libgobby_core_a_SOURCES = \
 	statusbar.cpp \
 	userlist.cpp
 
-libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) \
-                          -I../../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\" \
+libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
                           -DAPPICON_DIR=\""$(appicondir)"\" \
                           -DPIXMAPS_DIR=\""$(pixmapdir)"\"

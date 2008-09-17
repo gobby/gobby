@@ -10,7 +10,6 @@ libgobby_util_a_SOURCES = \
 	resolv.cpp \
 	serialize.cpp
 
-libgobby_util_a_CPPFLAGS = $(gobby_CFLAGS) \
-                          -I../../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\" \
+libgobby_util_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
                           -DAPPICON_DIR=\""$(appicondir)"\" \
                           -DPIXMAPS_DIR=\""$(pixmapdir)"\"

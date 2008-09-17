@@ -10,7 +10,6 @@ libgobby_a_SOURCES = \
 appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby
 
-libgobby_a_CPPFLAGS = $(gobby_CFLAGS) \
-                      -I../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\" \
+libgobby_a_CPPFLAGS = $(gobby_CFLAGS) -I../inc/ \
                       -DAPPICON_DIR=\""$(appicondir)"\" \
                       -DPIXMAPS_DIR=\""$(pixmapdir)"\"

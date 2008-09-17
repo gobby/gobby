@@ -10,6 +10,5 @@ libgobby_commands_a_SOURCES = \
 	view-commands.cpp
 
 libgobby_commands_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
-                              -DLOCALE_DIR=\""$(datadir)/locale"\" \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

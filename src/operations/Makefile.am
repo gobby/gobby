@@ -8,6 +8,5 @@ libgobby_operations_a_SOURCES = \
 	operation-save.cpp
 
 libgobby_operations_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
-                              -DLOCALE_DIR=\""$(datadir)/locale"\" \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

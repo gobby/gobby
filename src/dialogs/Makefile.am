@@ -9,6 +9,5 @@ libgobby_dialogs_a_SOURCES = \
 	preferencesdialog.cpp
 
 libgobby_dialogs_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
-                              -DLOCALE_DIR=\""$(datadir)/locale"\" \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

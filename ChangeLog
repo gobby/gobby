@@ -1,5 +1,19 @@
 2008-09-17  Armin Burgmeier  <armin@arbur.net>
 
+	* src/Makefile.am:
+	* src/commands/Makefile.am:
+	* src/core/Makefile.am:
+	* src/dialogs/Makefile.am:
+	* src/operations/Makefile.am:
+	* src/util/Makefile.am: Removed LOCALE_DIR definition from compiler
+	command line.
+
+	* configure.ac: Use AM_GLIB_DEFINE_LOCALEDIR instead.
+
+	* src/main.cpp: Use GOBBY_LOCALEDIR instead of LOCALE_DIR.
+
+2008-09-17  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/browser.hpp:
 	* src/core/browser.cpp: Instantiate a InfGtkCertificateManager, to
 	handle server certificates.

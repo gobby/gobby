@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) try
 	Gio::init();
 
 	setlocale(LC_ALL, "");
-	bindtextdomain(GETTEXT_PACKAGE, LOCALE_DIR);
+	bindtextdomain(GETTEXT_PACKAGE, GOBBY_LOCALEDIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 
 	bool new_instance = false;
