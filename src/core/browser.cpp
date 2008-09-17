@@ -70,6 +70,12 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	g_object_unref(discovery);
 #endif
 
+	Glib::ustring known_hosts_file = Glib::build_filename(
+		Glib::get_home_dir(), ".gobby/known_hosts");
+	m_cert_manager = inf_gtk_certificate_manager_new(
+		parent.gobj(), m_xmpp_manager,
+		NULL, known_hosts_file.c_str());
+
 	m_browser_view =
 		INF_GTK_BROWSER_VIEW(
 			inf_gtk_browser_view_new_with_model(
@@ -111,6 +117,8 @@ Gobby::Browser::~Browser()
 	}
 
 	g_object_unref(m_browser_store);
+	g_object_unref(m_cert_manager);
+	g_object_unref(m_xmpp_manager);
 	g_object_unref(m_io);
 }
 

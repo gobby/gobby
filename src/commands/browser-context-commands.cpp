@@ -110,7 +110,7 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		Gtk::Image* new_directory_image = Gtk::manage(new Gtk::Image);
 		if(icon_theme->lookup_icon("folder-new",
 		                           Gtk::ICON_SIZE_MENU,
-				 	  Gtk::ICON_LOOKUP_USE_BUILTIN))
+		                           Gtk::ICON_LOOKUP_USE_BUILTIN))
 		{
 			new_directory_image->set_from_icon_name(
 				"folder-new", Gtk::ICON_SIZE_MENU);

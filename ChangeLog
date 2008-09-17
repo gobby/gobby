@@ -1,5 +1,11 @@
 2008-09-17  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/core/browser.hpp:
+	* src/core/browser.cpp: Instantiate a InfGtkCertificateManager, to
+	handle server certificates.
+
+2008-09-17  Armin Burgmeier  <armin@arbur.net>
+
 	* src/commands/view-commands.cpp: Fix usage of an uninitialized
 	variable.
 

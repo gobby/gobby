@@ -26,6 +26,7 @@
 #include <libinfgtk/inf-gtk-io.h>
 #include <libinfgtk/inf-gtk-browser-store.h>
 #include <libinfgtk/inf-gtk-browser-view.h>
+#include <libinfgtk/inf-gtk-certificate-manager.h>
 #include <libinfinity/client/infc-browser.h>
 #include <libinfinity/common/inf-xmpp-manager.h>
 
@@ -111,6 +112,7 @@ protected:
 
 	InfXmppManager* m_xmpp_manager;
 	InfGtkIo* m_io;
+	InfGtkCertificateManager* m_cert_manager;
 	InfGtkBrowserStore* m_browser_store;
 	InfGtkBrowserView* m_browser_view;
 	Gtk::ScrolledWindow m_scroll;
