@@ -1,3 +1,8 @@
+2008-09-17  Armin Burgmeier  <armin@arbur.net>
+
+	* src/commands/view-commands.cpp: Fix usage of an uninitialized
+	variable.
+
 2008-09-13  Armin Burgmeier  <armin@arbur.net>
 
 	* src/core/browser.cpp: Adapt to infinote API change.

@@ -21,7 +21,8 @@
 
 Gobby::ViewCommands::ViewCommands(Header& header, Folder& folder,
                                   Preferences& preferences):
-	m_header(header), m_folder(folder), m_preferences(preferences)
+	m_header(header), m_folder(folder), m_preferences(preferences),
+	m_current_document(NULL)
 {
 	m_menu_view_toolbar_connection = 
 		m_header.action_view_toolbar->signal_toggled().connect(
