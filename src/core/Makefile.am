@@ -5,7 +5,6 @@ libgobby_core_a_SOURCES = \
 	closableframe.cpp \
 	documentinfostorage.cpp \
 	docwindow.cpp \
-	encodingselector.cpp \
 	filechooser.cpp \
 	folder.cpp \
 	header.cpp \

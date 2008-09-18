@@ -1,5 +1,24 @@
 2008-09-18  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/util/encoding.hpp:
+	* inc/core/encodingselector.hpp:
+	* inc/dragdrop.hpp:
+	* src/util/encoding.cpp:
+	* src/core/encodingselector.cpp:
+	* src/dragdrop.cpp: Removed. These remained from Gobby 0.4 but were
+	never used in 0.5.
+
+	* inc/util/Makefile.am:
+	* inc/core/Makefile.am:
+	* inc/Makefile.am:
+	* src/util/Makefile.am:
+	* src/core/Makefile.am:
+	* src/Makefile.am: Removed the files from the build.
+
+	* inc/window.hpp: Removed includes including those files.
+
+2008-09-18  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/dialogs/preferencesdialogs.hpp:
 	* src/dialogs/preferencesdialogs.cpp: Added a security page.
 

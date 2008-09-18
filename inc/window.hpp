@@ -20,7 +20,6 @@
 #define _GOBBY_WINDOW_HPP_
 
 #include "features.hpp"
-#include "dragdrop.hpp"
 
 #include "commands/browser-commands.hpp"
 #include "commands/browser-context-commands.hpp"
@@ -96,10 +95,6 @@ protected:
 	EditCommands m_commands_edit;
 	ViewCommands m_commands_view;
 	HelpCommands m_commands_help;
-
-	// TODO: Can't we use this directly now that the session is
-	// "always open"?
-	std::auto_ptr<DragDrop> m_dnd;
 
 	// Dialogs
 	std::auto_ptr<InitialDialog> m_initial_dlg;

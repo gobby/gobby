@@ -4,7 +4,6 @@ noinst_HEADERS = \
 	closableframe.hpp \
 	documentinfostorage.hpp \
 	docwindow.hpp \
-	encodingselector.hpp \
 	filechooser.hpp \
 	folder.hpp \
 	header.hpp \

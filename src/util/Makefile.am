@@ -4,7 +4,6 @@ libgobby_util_a_SOURCES = \
 	closebutton.cpp \
 	color.cpp \
 	config.cpp \
-	encoding.cpp \
 	file.cpp \
 	i18n.cpp \
 	resolv.cpp \
