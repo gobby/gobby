@@ -88,7 +88,8 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 
 		// Create Document
 		Gtk::ImageMenuItem* new_document_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("Create Do_cument"), true));
+			new Gtk::ImageMenuItem(_("Create Do_cument..."),
+			                       true));
 		new_document_item->set_image(*Gtk::manage(new Gtk::Image(
 			Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU)));
 		new_document_item->signal_activate().connect(sigc::bind(
@@ -122,7 +123,8 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		}
 
 		Gtk::ImageMenuItem* new_directory_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("Create Directory"), true));
+			new Gtk::ImageMenuItem(_("Create Directory..."),
+			                       true));
 		new_directory_item->set_image(*new_directory_image);
 		new_directory_item->signal_activate().connect(sigc::bind(
 			sigc::mem_fun(*this,
@@ -134,7 +136,7 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 
 		// Open Document
 		Gtk::ImageMenuItem* open_document_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("_Open Document"), true));
+			new Gtk::ImageMenuItem(_("_Open Document..."), true));
 		open_document_item->set_image(*Gtk::manage(new Gtk::Image(
 			Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU)));
 		open_document_item->signal_activate().connect(sigc::bind(

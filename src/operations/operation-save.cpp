@@ -63,7 +63,7 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 
 	m_message_handle = get_status_bar().add_message(
 		StatusBar::INFO,
-		Glib::ustring::compose(_("Saving document %1 to %2…"),
+		Glib::ustring::compose(_("Saving document %1 to %2..."),
 			document.get_title(), uri), 0);
 
 	folder.signal_document_removed().connect(

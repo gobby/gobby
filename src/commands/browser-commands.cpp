@@ -246,7 +246,7 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 			node.handle = m_status_bar.add_message(
 				StatusBar::INFO,
 				Glib::ustring::compose(
-					_("Subscribing to %1…"),
+					_("Subscribing to %1..."),
 					Glib::ustring(
 						infc_browser_iter_get_name(
 							browser, iter))), 0);
@@ -340,7 +340,7 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 
 		window.set_info(
 			Glib::ustring::compose(
-				_("Synchronization in progress… %1%%"),
+				_("Synchronization in progress... %1%%"),
 				static_cast<unsigned int>(percentage * 100)),
 			false);
 	}
@@ -413,7 +413,7 @@ void Gobby::BrowserCommands::on_synchronization_progress(InfSession* session,
 		g_assert(window != NULL);
 		window->set_info(
 			Glib::ustring::compose(
-				_("Synchronization in progress… %1%%"),
+				_("Synchronization in progress... %1%%"),
 				static_cast<unsigned int>(percentage * 100)),
 			false);
 	}
@@ -527,7 +527,7 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 		else
 		{
 			window->set_info(
-				_("User Join in progress…"), false);
+				_("User Join in progress..."), false);
 
 			g_signal_connect(
 				request, "failed",

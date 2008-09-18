@@ -40,7 +40,7 @@ Gobby::OperationDelete::OperationDelete(Operations& operations,
 
 	m_message_handle = get_status_bar().add_message(
 		StatusBar::INFO,
-		Glib::ustring::compose(_("Removing node %1…"), m_name), 0);
+		Glib::ustring::compose(_("Removing node %1..."), m_name), 0);
 }
 
 Gobby::OperationDelete::~OperationDelete()

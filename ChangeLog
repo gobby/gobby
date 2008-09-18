@@ -1,5 +1,19 @@
 2008-09-18  Armin Burgmeier  <armin@arbur.net>
 
+	* src/commands/browser-commands.cpp:
+	* src/commands/browser-context-commands.cpp:
+	* src/core/browser.cpp:
+	* src/core/header.cpp:
+	* src/operations/operation-delete.cpp:
+	* src/operations/operation-new.cpp:
+	* src/operations/operation-open.cpp:
+	* src/operations/operation-save.cpp: Changed all "…" character in
+	strings to "...". Gedit does the same, and xgettext does not accept …
+	without complaining. Translators can still choose to translate "..."
+	to "…".
+
+2008-09-18  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/util/encoding.hpp:
 	* inc/core/encodingselector.hpp:
 	* inc/dragdrop.hpp:

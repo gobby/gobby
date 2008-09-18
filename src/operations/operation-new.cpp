@@ -54,8 +54,8 @@ Gobby::OperationNew::OperationNew(Operations& operations,
 	m_message_handle = get_status_bar().add_message(
 		StatusBar::INFO,
 		Glib::ustring::compose(
-			directory ? _("Creating directory %1…")
-			          : _("Creating document %1…"), name), 0);
+			directory ? _("Creating directory %1...")
+			          : _("Creating document %1..."), name), 0);
 }
 
 Gobby::OperationNew::~OperationNew()

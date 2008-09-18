@@ -211,7 +211,7 @@ void Gobby::Browser::on_hostname_activate()
 	StatusBar::MessageHandle message_handle =
 		m_status_bar.add_message(
 			StatusBar::INFO, Glib::ustring::compose(
-				_("Resolving %1…"), host), 0);
+				_("Resolving %1..."), host), 0);
 
 	m_resolv_map[resolv_handle].message_handle = message_handle;
 }

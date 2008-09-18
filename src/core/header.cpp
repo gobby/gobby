@@ -209,11 +209,11 @@ Gobby::Header::Header(Preferences& preferences,
 	action_file(Gtk::Action::create("MenuFile", _("_File"))),
 	action_file_new(Gtk::Action::create("FileNew", Gtk::Stock::NEW)),
 	action_file_open(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,
-	                                     _("Open…"))),
+	                                     _("Open..."))),
 	action_file_save(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)),
 	action_file_save_as(
 		Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,
-		                    _("Save As…"))),
+		                    _("Save As..."))),
 	action_file_save_all(
 		Gtk::Action::create(
 			"FileSaveAll", Gobby::IconManager::STOCK_SAVE_ALL,
@@ -230,7 +230,7 @@ Gobby::Header::Header(Preferences& preferences,
 	action_edit_paste(
 		Gtk::Action::create("EditPaste", Gtk::Stock::PASTE)),
 	action_edit_find(Gtk::Action::create("EditFind", Gtk::Stock::FIND,
-	                                     _("_Find…"))),
+	                                     _("_Find..."))),
 	action_edit_find_next(
 		Gtk::Action::create("EditFindNext", _("Find Ne_xt"),
 		                    _("Find next match of phrase "
@@ -242,15 +242,15 @@ Gobby::Header::Header(Preferences& preferences,
 	action_edit_find_replace(
 		Gtk::Action::create("EditFindReplace",
 		                    Gtk::Stock::FIND_AND_REPLACE,
-		                    _("Find And Rep_lace…"))),
+		                    _("Find And Rep_lace..."))),
 	action_edit_goto_line(
 		Gtk::Action::create("EditGotoLine",
 		                    Gtk::Stock::JUMP_TO,
-				    _("Go To _Line…"))),
+				    _("Go To _Line..."))),
 	action_edit_preferences(
 		Gtk::Action::create("EditPreferences",
 		                    Gtk::Stock::PREFERENCES,
-		                    _("Pr_eferences…"))),
+		                    _("Pr_eferences..."))),
 
 	action_view(Gtk::Action::create("MenuView", _("_View"))),
 	action_view_toolbar(
@@ -284,7 +284,7 @@ Gobby::Header::Header(Preferences& preferences,
 	action_help(Gtk::Action::create("MenuHelp", _("_Help")) ),
 	action_help_about(
 		Gtk::Action::create(
-			"HelpAbout", Gtk::Stock::ABOUT, _("_About…"),
+			"HelpAbout", Gtk::Stock::ABOUT, _("_About..."),
 			_("Shows Gobby's copyright and credits"))),
 
 	m_ui_manager(Gtk::UIManager::create())

@@ -80,7 +80,7 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 
 	m_message_handle = get_status_bar().add_message(
 		StatusBar::INFO,
-		Glib::ustring::compose(_("Opening document %1…"), uri), 0);
+		Glib::ustring::compose(_("Opening document %1..."), uri), 0);
 
 	m_node_removed_id = g_signal_connect(
 		G_OBJECT(m_browser), "node-removed",
