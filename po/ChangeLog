@@ -1,0 +1,6 @@
+2008-09-19  Armin Burgmeier  <armin@arbur.net>
+
+	* POTFILES.in: Regenerated.
+
+	* gobby.pot:
+	* *.po: Updated to the strings of 0.4.90.

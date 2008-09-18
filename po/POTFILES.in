@@ -1,3 +1,22 @@
-# source files
-
-# TODO
+src/commands/browser-commands.cpp
+src/commands/browser-context-commands.cpp
+src/commands/file-commands.cpp
+src/commands/help-commands.cpp
+src/core/browser.cpp
+src/core/docwindow.cpp
+src/core/header.cpp
+src/core/iconmanager.cpp
+src/core/statusbar.cpp
+src/core/userlist.cpp
+src/dialogs/documentlocationdialog.cpp
+src/dialogs/finddialog.cpp
+src/dialogs/gotodialog.cpp
+src/dialogs/initialdialog.cpp
+src/dialogs/preferencesdialog.cpp
+src/operations/operation-delete.cpp
+src/operations/operation-new.cpp
+src/operations/operation-open.cpp
+src/operations/operation-save.cpp
+src/util/file.cpp
+src/util/i18n.cpp
+src/window.cpp

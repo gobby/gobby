@@ -1,0 +1,3 @@
+#!/bin/sh
+grep "_(" src -R | \
+	sed -e 's/:.*//' | grep -v matches | uniq | sort > po/POTFILES.in
