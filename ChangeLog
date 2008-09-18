@@ -1,5 +1,14 @@
 2008-09-18  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/dialogs/preferencesdialogs.hpp:
+	* src/dialogs/preferencesdialogs.cpp: Added a security page.
+
+	* inc/core/browser.hpp:
+	* src/core/browser.cpp: Set discovery's security policy and
+	certificate manager's trust file from preferences.
+
+2008-09-18  Armin Burgmeier  <armin@arbur.net>
+
 	* src/core/preferencesdialog.cpp: Use a Gtk::SizeGroup to align the
 	"User name" and "User color" labels correctly.
 

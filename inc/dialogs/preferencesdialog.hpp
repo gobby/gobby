@@ -28,20 +28,72 @@
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
-#include <gtkmm/comboboxtext.h>
+#include <gtkmm/combobox.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/alignment.h>
 #include <gtkmm/filechooserbutton.h>
 #include <gtkmm/fontbutton.h>
-//#include <gtkmm/colorbutton.h>
 #include <gtkmm/sizegroup.h>
+#include <gtkmm/liststore.h>
 
 namespace Gobby
 {
 
+template<typename OptionType>
+class PreferencesComboBox: public Gtk::ComboBox
+{
+public:
+	PreferencesComboBox(Preferences::Option<OptionType>& option):
+		m_option(option), m_store(Gtk::ListStore::create(m_columns))
+	{
+		set_model(m_store);
+
+		Gtk::CellRendererText* renderer =
+			Gtk::manage(new Gtk::CellRendererText);
+		pack_start(*renderer, true);
+		add_attribute(renderer->property_text(), m_columns.text);
+	}
+
+	void add(const Glib::ustring& text, const OptionType& value)
+	{
+		Gtk::TreeIter iter = m_store->append();
+		(*iter)[m_columns.text] = text;
+		(*iter)[m_columns.value] = value;
+
+		if(m_option == value)
+			set_active(iter);
+	}
+
+private:
+	class Columns: public Gtk::TreeModelColumnRecord
+	{
+	public:
+		Gtk::TreeModelColumn<Glib::ustring> text;
+		Gtk::TreeModelColumn<OptionType> value;
+
+		Columns() { add(text); add(value); }
+	};
+
+	virtual void on_changed()
+	{
+		Gtk::ComboBox::on_changed();
+		m_option = (*get_active())[m_columns.value];
+	}
+
+	Preferences::Option<OptionType>& m_option;
+
+	Columns m_columns;
+	Glib::RefPtr<Gtk::ListStore> m_store;
+};
+
 class PreferencesDialog : public Gtk::Dialog
 {
 public:
+	template<typename OptionType>
+	class ComboColumns: public Gtk::TreeModelColumnRecord
+	{
+	};
+
 	class Group: public Gtk::Frame
 	{
 	public:
@@ -147,9 +199,22 @@ public:
 		Group m_group_toolbar;
 		Group m_group_font;
 
-		Gtk::ComboBoxText m_cmb_toolbar_style;
-
+		PreferencesComboBox<Gtk::ToolbarStyle> m_cmb_toolbar_style;
 		Gtk::FontButton m_btn_font;
+	};
+
+	class Security: public Page
+	{
+	public:
+		Security(Preferences& preferences);
+	
+	protected:
+		Group m_group_trust_file;
+		Group m_group_connection_policy;
+
+		Gtk::FileChooserButton m_btn_path_trust_file;
+		PreferencesComboBox<InfXmppConnectionSecurityPolicy>
+			m_cmb_connection_policy;
 	};
 
 	PreferencesDialog(Gtk::Window& parent,
@@ -166,6 +231,7 @@ protected:
 	Editor m_page_editor;
 	View m_page_view;
 	Appearance m_page_appearance;
+	Security m_page_security;
 };
 
 }

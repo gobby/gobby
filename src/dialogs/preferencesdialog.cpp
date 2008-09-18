@@ -28,17 +28,6 @@ namespace
 {
 	using namespace Gobby;
 
-	Gtk::ToolbarStyle rownum_to_toolstyle(int rownum)
-	{
-		switch(rownum)
-		{
-		case 0: return Gtk::TOOLBAR_TEXT;
-		case 1: return Gtk::TOOLBAR_ICONS;
-		case 3: return Gtk::TOOLBAR_BOTH_HORIZ;
-		case 2: default: return Gtk::TOOLBAR_BOTH;
-		}
-	}
-
 	Gtk::WrapMode
 	wrap_mode_from_check_buttons(Gtk::CheckButton& char_button,
 	                             Gtk::CheckButton& word_button)
@@ -105,30 +94,6 @@ namespace
 				sigc::mem_fun(
 					entry,
 					&Gtk::Entry::get_text
-				)
-			)
-		);
-	}
-
-	void
-	connect_toolbar_style_option(Gtk::ComboBox& box,
-	                             Preferences::Option<Gtk::ToolbarStyle>&
-	                             option)
-	{
-		box.signal_changed().connect(
-			sigc::compose(
-				sigc::mem_fun(
-					option,
-					&Preferences::Option<
-						Gtk::ToolbarStyle>::set
-				),
-				sigc::compose(
-					sigc::ptr_fun(rownum_to_toolstyle),
-					sigc::mem_fun(
-						box,
-						&Gtk::ComboBox::
-							get_active_row_number
-					)
 				)
 			)
 		);
@@ -481,30 +446,22 @@ void Gobby::PreferencesDialog::View::on_margin_display_toggled()
 	m_box_margin_pos.set_sensitive(m_btn_margin_display.get_active());
 }
 
-Gobby::PreferencesDialog::Appearance::
-	Appearance(Gobby::Preferences& preferences):
+Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
 	m_group_toolbar(_("Toolbar") ),
-	m_group_font(_("Font") )
+	m_group_font(_("Font") ),
+	m_cmb_toolbar_style(preferences.appearance.toolbar_style)
 {
-	Gtk::ToolbarStyle style = preferences.appearance.toolbar_style;
 	const Pango::FontDescription& font = preferences.appearance.font;
 
-	m_cmb_toolbar_style.append_text(_("Show text only") );
-	m_cmb_toolbar_style.append_text(_("Show icons only") );
-	m_cmb_toolbar_style.append_text(_("Show both icons and text") );
-	m_cmb_toolbar_style.append_text(_("Show text besides icons") );
+	m_cmb_toolbar_style.add(_("Show text only"),
+	                        Gtk::TOOLBAR_TEXT);
+	m_cmb_toolbar_style.add(_("Show icons only"),
+	                        Gtk::TOOLBAR_ICONS);
+	m_cmb_toolbar_style.add(_("Show both icons and text"),
+	                        Gtk::TOOLBAR_BOTH );
+	m_cmb_toolbar_style.add(_("Show text besides icons"),
+	                        Gtk::TOOLBAR_BOTH_HORIZ );
 	m_cmb_toolbar_style.show();
-	connect_toolbar_style_option(m_cmb_toolbar_style,
-	                             preferences.appearance.toolbar_style);
-
-	switch(style)
-	{
-	case Gtk::TOOLBAR_TEXT: m_cmb_toolbar_style.set_active(0); break;
-	case Gtk::TOOLBAR_ICONS: m_cmb_toolbar_style.set_active(1); break;
-	case Gtk::TOOLBAR_BOTH: m_cmb_toolbar_style.set_active(2); break;
-	case Gtk::TOOLBAR_BOTH_HORIZ: m_cmb_toolbar_style.set_active(3); break;
-	default: break; // Avoids compiler warnings
-	}
 
 	m_btn_font.set_font_name(font.to_string());
 	m_btn_font.show();
@@ -520,21 +477,57 @@ Gobby::PreferencesDialog::Appearance::
 	add(m_group_font);
 }
 
+Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
+	m_group_trust_file(_("Trusted CAs")),
+	m_group_connection_policy(_("Secure Connection")),
+	m_btn_path_trust_file(_("Select a file containing trusted CAs")),
+	m_cmb_connection_policy(preferences.security.policy)
+{
+	const std::string& trust_file = preferences.security.trust_file;
+	if(!trust_file.empty())
+		m_btn_path_trust_file.set_filename(trust_file);
+
+	connect_path_option(m_btn_path_trust_file,
+	                    preferences.security.trust_file);
+	m_btn_path_trust_file.show();
+	m_group_trust_file.add(m_btn_path_trust_file);
+	m_group_trust_file.show();
+
+/*	m_cmb_connection_policy.add(
+		_("Never use a secure connection"),
+		INF_XMPP_CONNECTION_SECURITY_ONLY_UNSECURED);*/
+	m_cmb_connection_policy.add(
+		_("Use TLS if possible"),
+		INF_XMPP_CONNECTION_SECURITY_BOTH_PREFER_TLS);
+	m_cmb_connection_policy.add(
+		_("Always use TLS"),
+		INF_XMPP_CONNECTION_SECURITY_ONLY_TLS);
+	m_cmb_connection_policy.show();
+	m_group_connection_policy.add(m_cmb_connection_policy);
+	m_group_connection_policy.show();
+
+	add(m_group_trust_file);
+	add(m_group_connection_policy);
+}
+
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
                                             Preferences& preferences):
 	Gtk::Dialog(_("Preferences"), parent), m_preferences(preferences),
 	m_page_user(*this, preferences), m_page_editor(preferences),
-	m_page_view(preferences), m_page_appearance(preferences)
+	m_page_view(preferences), m_page_appearance(preferences),
+	m_page_security(preferences)
 {
 	m_notebook.append_page(m_page_user, _("User"));
 	m_notebook.append_page(m_page_editor, _("Editor"));
 	m_notebook.append_page(m_page_view, _("View"));
 	m_notebook.append_page(m_page_appearance, _("Appearance"));
+	m_notebook.append_page(m_page_security, _("Security"));
 
 	m_page_user.show();
 	m_page_editor.show();
 	m_page_view.show();
 	m_page_appearance.show();
+	m_page_security.show();
 
 	get_vbox()->set_spacing(6);
 	get_vbox()->pack_start(m_notebook, Gtk::PACK_EXPAND_WIDGET);
@@ -543,6 +536,7 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
 	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 
 	set_border_width(12);
+	set_resizable(false);
 }
 
 void Gobby::PreferencesDialog::on_response(int id)

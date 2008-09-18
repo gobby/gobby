@@ -28,7 +28,9 @@
 #include <libinfgtk/inf-gtk-browser-view.h>
 #include <libinfgtk/inf-gtk-certificate-manager.h>
 #include <libinfinity/client/infc-browser.h>
+#include <libinfinity/common/inf-discovery-avahi.h>
 #include <libinfinity/common/inf-xmpp-manager.h>
+#include <libinfinity/inf-config.h>
 
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
@@ -105,12 +107,18 @@ protected:
 	void on_resolv_error(ResolvHandle* handle,
 	                     const std::runtime_error& error);
 
+	void on_security_policy_changed();
+	void on_trust_file_changed();
+
 	Gtk::Window& m_parent;
 	const InfcNotePlugin* m_text_plugin;
 	StatusBar& m_status_bar;
 	Preferences& m_preferences;
 
 	InfXmppManager* m_xmpp_manager;
+#ifdef INFINOTE_HAVE_AVAHI
+	InfDiscoveryAvahi* m_discovery;
+#endif
 	InfGtkIo* m_io;
 	InfGtkCertificateManager* m_cert_manager;
 	InfGtkBrowserStore* m_browser_store;

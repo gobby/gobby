@@ -20,7 +20,6 @@
 #include "util/i18n.hpp"
 
 #include <libinfinity/inf-config.h>
-#include <libinfinity/common/inf-discovery-avahi.h>
 
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
@@ -62,19 +61,22 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 
 	m_xmpp_manager = inf_xmpp_manager_new();
 #ifdef INFINOTE_HAVE_AVAHI
-	InfDiscoveryAvahi* discovery =
-		inf_discovery_avahi_new(INF_IO(m_io), m_xmpp_manager,
-		                        NULL, NULL);
+	m_discovery = inf_discovery_avahi_new(INF_IO(m_io), m_xmpp_manager,
+	                                      NULL, NULL);
+	inf_discovery_avahi_set_security_policy(
+		m_discovery, m_preferences.security.policy);
 	inf_gtk_browser_store_add_discovery(m_browser_store,
-	                                    INF_DISCOVERY(discovery));
-	g_object_unref(discovery);
+	                                    INF_DISCOVERY(m_discovery));
 #endif
 
 	Glib::ustring known_hosts_file = Glib::build_filename(
 		Glib::get_home_dir(), GOBBY_CONFIGDIR"/known_hosts");
+
+	const std::string trust_file = m_preferences.security.trust_file;
 	m_cert_manager = inf_gtk_certificate_manager_new(
 		parent.gobj(), m_xmpp_manager,
-		NULL, known_hosts_file.c_str());
+		trust_file.empty() ? NULL : trust_file.c_str(),
+		known_hosts_file.c_str());
 
 	m_browser_view =
 		INF_GTK_BROWSER_VIEW(
@@ -102,6 +104,11 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 		this
 	);
 
+	m_preferences.security.policy.signal_changed().connect(
+		sigc::mem_fun(*this, &Browser::on_security_policy_changed));
+	m_preferences.security.trust_file.signal_changed().connect(
+		sigc::mem_fun(*this, &Browser::on_trust_file_changed));
+
 	set_spacing(6);
 	pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
 	pack_start(m_expander, Gtk::PACK_SHRINK);
@@ -119,6 +126,9 @@ Gobby::Browser::~Browser()
 	g_object_unref(m_browser_store);
 	g_object_unref(m_cert_manager);
 	g_object_unref(m_xmpp_manager);
+#ifdef INFINOTE_HAVE_AVAHI
+	g_object_unref(m_discovery);
+#endif
 	g_object_unref(m_io);
 }
 
@@ -317,4 +327,20 @@ void Gobby::Browser::set_selected(InfcBrowser* browser, InfcBrowserIter* iter)
 	g_assert(has_iter == TRUE);
 
 	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
+}
+
+void Gobby::Browser::on_security_policy_changed()
+{
+#ifdef INFINOTE_HAVE_AVAHI
+	inf_discovery_avahi_set_security_policy(
+		m_discovery, m_preferences.security.policy);
+#endif
+}
+
+void Gobby::Browser::on_trust_file_changed()
+{
+	const std::string trust_file = m_preferences.security.trust_file;
+
+	g_object_set(G_OBJECT(m_cert_manager), "trust-file",
+		     trust_file.empty() ? NULL : trust_file.c_str(), NULL);
 }
