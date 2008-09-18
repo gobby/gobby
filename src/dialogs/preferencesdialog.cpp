@@ -324,7 +324,7 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_tab(_("Tab Stops") ),
 	m_group_indentation(_("Indentation") ),
-	m_group_homeend(_("Home/End behaviour") ),
+	m_group_homeend(_("Home/End Behaviour") ),
 	m_lbl_tab_width(_("Tab width:"), Gtk::ALIGN_RIGHT),
 	m_btn_tab_spaces(_("Insert spaces instead of tabs") ),
 	m_btn_indentation_auto(_("Enable automatic indentation") ),
@@ -380,11 +380,11 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 }
 
 Gobby::PreferencesDialog::View::View(Preferences& preferences):
-	m_group_wrap(_("Text wrapping") ),
-	m_group_linenum(_("Line numbers") ),
-	m_group_curline(_("Current line") ),
-	m_group_margin(_("Right margin") ),
-	m_group_bracket(_("Bracket matching") ),
+	m_group_wrap(_("Text Wrapping") ),
+	m_group_linenum(_("Line Numbers") ),
+	m_group_curline(_("Current Line") ),
+	m_group_margin(_("Right Margin") ),
+	m_group_bracket(_("Bracket Matching") ),
 	m_btn_wrap_text(_("Enable text wrapping") ),
 	m_btn_wrap_words(_("Do not split words over two lines") ),
 	m_btn_linenum_display(_("Display line numbers") ),

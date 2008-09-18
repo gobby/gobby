@@ -19,6 +19,8 @@
 #include "core/documentinfostorage.hpp"
 #include "util/file.hpp"
 
+#include "features.hpp"
+
 #include <libxml++/nodes/textnode.h>
 #include <libxml++/parsers/domparser.h>
 #include <glibmm/miscutils.h>
@@ -87,7 +89,9 @@ namespace
 	{
 		return Glib::build_filename(
 			Glib::get_home_dir(),
-			Glib::build_filename(".gobby", "documents.xml"));
+			Glib::build_filename(
+				GOBBY_CONFIGDIR,
+				"documents.xml"));
 	}
 }
 

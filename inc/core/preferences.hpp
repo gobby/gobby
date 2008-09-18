@@ -25,6 +25,8 @@
 
 #include <gtkmm/toolbar.h>
 
+#include <libinfinity/common/inf-xmpp-connection.h>
+
 namespace Gobby
 {
 
@@ -89,13 +91,13 @@ public:
 
 	/** Serialises preferences back to config.
 	 */
-	void serialise(Config& config) const;
+	void serialize(Config& config) const;
 
 	class User
 	{
 	public:
 		User(Config::ParentEntry& entry);
-		void serialise(Config::ParentEntry& entry) const;
+		void serialize(Config::ParentEntry& entry) const;
 
 		Option<Glib::ustring> name;
 		Option<double> hue;
@@ -106,7 +108,7 @@ public:
 	{
 	public:
 		Editor(Config::ParentEntry& entry);
-		void serialise(Config::ParentEntry& entry) const;
+		void serialize(Config::ParentEntry& entry) const;
 
 		Option<unsigned int> tab_width;
 		Option<bool> tab_spaces;
@@ -118,7 +120,7 @@ public:
 	{
 	public:
 		View(Config::ParentEntry& entry);
-		void serialise(Config::ParentEntry& entry) const;
+		void serialize(Config::ParentEntry& entry) const;
 
 		Option<Gtk::WrapMode> wrap_mode;
 		Option<bool> linenum_display;
@@ -132,8 +134,10 @@ public:
 	{
 	public:
 		Appearance(Config::ParentEntry& entry);
-		void serialise(Config::ParentEntry& entry) const;
+		void serialize(Config::ParentEntry& entry) const;
 
+		// TODO: Option<bool> use_system_default_toolbar_style
+		// (sets toolbar_style by gconf). At least WITH_GNOME.
 		Option<Gtk::ToolbarStyle> toolbar_style;
 		Option<Pango::FontDescription> font;
 
@@ -145,10 +149,21 @@ public:
 		Option<bool> show_userlist;
 	};
 
+	class Security
+	{
+	public:
+		Security(Config::ParentEntry& entry);
+		void serialize(Config::ParentEntry& entry) const;
+
+		Option<std::string> trust_file;
+		Option<InfXmppConnectionSecurityPolicy> policy;
+	};
+
 	User user;
 	Editor editor;
 	View view;
 	Appearance appearance;
+	Security security;
 };
 
 template<typename Type>

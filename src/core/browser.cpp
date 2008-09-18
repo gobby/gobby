@@ -71,7 +71,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 #endif
 
 	Glib::ustring known_hosts_file = Glib::build_filename(
-		Glib::get_home_dir(), ".gobby/known_hosts");
+		Glib::get_home_dir(), GOBBY_CONFIGDIR"/known_hosts");
 	m_cert_manager = inf_gtk_certificate_manager_new(
 		parent.gobj(), m_xmpp_manager,
 		NULL, known_hosts_file.c_str());
@@ -241,7 +241,8 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 		{
 			xmpp = inf_xmpp_connection_new(
 				connection, INF_XMPP_CONNECTION_CLIENT,
-				NULL, hostname.c_str(), NULL, NULL);
+				NULL, hostname.c_str(),
+				m_preferences.security.policy, NULL, NULL);
 
 			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
 			g_object_unref(xmpp);

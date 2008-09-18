@@ -87,7 +87,7 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 Gobby::Window::~Window()
 {
 	// Serialise preferences into config
-	m_preferences.serialise(m_config);
+	m_preferences.serialize(m_config);
 }
 
 bool Gobby::Window::on_delete_event(GdkEventAny* event)

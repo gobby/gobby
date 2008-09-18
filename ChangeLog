@@ -1,3 +1,24 @@
+2008-09-18  Armin Burgmeier  <armin@arbur.net>
+
+	* configure.ac: Added a new define, GOBBY_CONFIGDIR, that specifies
+	where Gobby shall store it's configuration files (preferences, known
+	documents, known hosts)
+
+	* inc/core/preferences.hpp:
+	* src/core/preferences.cpp: Added a security section with trust
+	file and security-policy entries, changed serialise to serialize for
+	consistency.
+
+	* src/window.cpp: Call preferences.serialize instead of serialise.
+
+	* src/core/browser.cpp: Use the security policy to create new XMPP
+	connections. Honor GOBBY_CONFIGDIR for known hosts file.
+
+	* src/core/documentinfostorage: Honor GOBBY_CONFIGDIR for known
+	documents file.
+
+	* src/main.cpp: Honor GOBBY_CONFIGDIR for config file.
+
 2008-09-17  Armin Burgmeier  <armin@arbur.net>
 
 	* src/Makefile.am:
