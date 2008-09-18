@@ -1,5 +1,10 @@
 2008-09-18  Armin Burgmeier  <armin@arbur.net>
 
+	* src/core/preferencesdialog.cpp: Use a Gtk::SizeGroup to align the
+	"User name" and "User color" labels correctly.
+
+2008-09-18  Armin Burgmeier  <armin@arbur.net>
+
 	* configure.ac: Added a new define, GOBBY_CONFIGDIR, that specifies
 	where Gobby shall store it's configuration files (preferences, known
 	documents, known hosts)

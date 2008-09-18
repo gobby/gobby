@@ -33,7 +33,8 @@
 #include <gtkmm/alignment.h>
 #include <gtkmm/filechooserbutton.h>
 #include <gtkmm/fontbutton.h>
-#include <gtkmm/colorbutton.h>
+//#include <gtkmm/colorbutton.h>
+#include <gtkmm/sizegroup.h>
 
 namespace Gobby
 {
@@ -82,6 +83,8 @@ public:
 		Gtk::HBox m_box_path_host_directory;
 		Gtk::Label m_lbl_path_host_directory;
 		Gtk::FileChooserButton m_btn_path_host_directory;
+
+		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
 	};
 
 	class Editor: public Page

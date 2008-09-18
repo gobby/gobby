@@ -264,13 +264,14 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_group_settings(_("Settings")),
 	m_group_paths(_("Paths")),
 	m_box_user_name(false, 6),
-	m_lbl_user_name(_("User name:")),
+	m_lbl_user_name(_("User name:"), Gtk::ALIGN_LEFT),
 	m_box_user_color(false, 6),
-	m_lbl_user_color(_("User color:")),
+	m_lbl_user_color(_("User color:"), Gtk::ALIGN_LEFT),
 	m_btn_user_color(_("Choose a new user color"), parent),
 	m_box_path_host_directory(false, 6),
 	m_btn_path_host_directory(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
-	m_lbl_path_host_directory(_("Host directory:"))
+	m_lbl_path_host_directory(_("Host directory:")),
+	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
 {
 	m_lbl_user_name.show();
 	m_ent_user_name.set_text(preferences.user.name);
@@ -295,6 +296,9 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 
 	m_group_settings.add(m_box_user_name);
 	m_group_settings.add(m_box_user_color);
+
+	m_size_group->add_widget(m_lbl_user_name);
+	m_size_group->add_widget(m_lbl_user_color);
 	m_group_settings.show();
 
 	m_lbl_path_host_directory.show();
@@ -315,7 +319,8 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_box_path_host_directory.show();
 
 	m_group_paths.add(m_box_path_host_directory);
-	m_group_paths.show();
+	// Disable until we support self-hosting:
+	// m_group_paths.show();
 
 	add(m_group_settings);
 	add(m_group_paths);
