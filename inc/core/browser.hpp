@@ -103,7 +103,8 @@ protected:
 	void on_hostname_activate();
 
 	void on_resolv_done(ResolvHandle* handle, InfIpAddress* address,
-	                    guint port, const Glib::ustring& hostname);
+	                    guint port, const Glib::ustring& hostname,
+	                    unsigned int device_index);
 	void on_resolv_error(ResolvHandle* handle,
 	                     const std::runtime_error& error);
 

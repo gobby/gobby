@@ -24,6 +24,8 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
 
+#include <net/if.h>
+
 Gobby::Browser::Browser(Gtk::Window& parent,
                         const InfcNotePlugin* text_plugin,
                         StatusBar& status_bar,
@@ -179,8 +181,26 @@ void Gobby::Browser::on_hostname_activate()
 
 	Glib::ustring host;
 	Glib::ustring service = "6523"; // Default
+	unsigned int device_index = 0; // Default
 
+	// Strip away device name
 	Glib::ustring::size_type pos;
+	if( (pos = str.rfind('%')) != Glib::ustring::npos)
+	{
+		Glib::ustring device_name = str.substr(pos + 1);
+		str.erase(pos);
+
+		device_index = if_nametoindex(device_name.c_str());
+		if(device_index == 0)
+		{
+			m_status_bar.add_message(
+				StatusBar::ERROR,
+				Glib::ustring::compose(
+					_("Device \"%1\" does not exist"),
+					device_name), 5);
+		}
+	}
+
 	if(str[0] == '[' && ((pos = str.find(']', 1)) != Glib::ustring::npos))
 	{
 		// Hostname surrounded by '[...]'
@@ -203,7 +223,8 @@ void Gobby::Browser::on_hostname_activate()
 
 	ResolvHandle* resolv_handle = resolve(host, service,
 	        sigc::bind(
-			sigc::mem_fun(*this, &Browser::on_resolv_done), str),
+			sigc::mem_fun(*this, &Browser::on_resolv_done),
+			host, device_index),
 	        sigc::mem_fun(*this, &Browser::on_resolv_error));
 
 	m_entry_hostname.set_text("");
@@ -218,7 +239,8 @@ void Gobby::Browser::on_hostname_activate()
 
 void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
                                     InfIpAddress* address, guint port,
-                                    const Glib::ustring& hostname)
+                                    const Glib::ustring& hostname,
+                                    unsigned int device_index)
 {
 	ResolvMap::iterator iter = m_resolv_map.find(handle);
 	g_assert(iter != m_resolv_map.end());
@@ -238,6 +260,7 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 			             "io", m_io,
 			             "remote-address", address,
 			             "remote-port", port,
+			             "device-index", device_index,
 			             NULL));
 
 		GError* error = NULL;
@@ -268,9 +291,12 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 	// TODO: Remove erroneous entry with same name, if any, before
 	// adding.
 
-	inf_gtk_browser_store_add_connection(
-		m_browser_store, INF_XML_CONNECTION(xmpp),
-		hostname.c_str());
+	if(xmpp != NULL)
+	{
+		inf_gtk_browser_store_add_connection(
+			m_browser_store, INF_XML_CONNECTION(xmpp),
+			hostname.c_str());
+	}
 }
 
 void Gobby::Browser::on_resolv_error(ResolvHandle* handle,
