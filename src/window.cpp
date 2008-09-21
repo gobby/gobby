@@ -80,8 +80,9 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 
 	add(m_mainbox);
 
-	set_title("Gobby");
 	set_default_size(800, 600);
+	set_title("Gobby");
+	set_role("Gobby");
 }
 
 Gobby::Window::~Window()

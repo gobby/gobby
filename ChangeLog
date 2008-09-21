@@ -1,5 +1,9 @@
 2008-09-21  Armin Burgmeier  <armin@arbur.net>
 
+	* src/window.cpp: Set main window role.
+
+2008-09-21  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/dialogs/preferenceswindow.hpp: Don't notify option if the newly
 	selected option is the same as the already selected one.
 
