@@ -77,7 +77,10 @@ private:
 	virtual void on_changed()
 	{
 		Gtk::ComboBox::on_changed();
-		m_option = (*get_active())[m_columns.value];
+		OptionType value = (*get_active())[m_columns.value];
+
+		if(m_option != value)
+			m_option = value;
 	}
 
 	Preferences::Option<OptionType>& m_option;

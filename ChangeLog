@@ -1,5 +1,10 @@
 2008-09-21  Armin Burgmeier  <armin@arbur.net>
 
+	* inc/dialogs/preferenceswindow.hpp: Don't notify option if the newly
+	selected option is the same as the already selected one.
+
+2008-09-21  Armin Burgmeier  <armin@arbur.net>
+
 	* src/commands/file-fommands.cpp: Use document title as initial
 	filename for Save dialog if no URI is available in info storage.
 
