@@ -21,6 +21,7 @@
 
 #include "core/iconmanager.hpp"
 #include "util/config.hpp"
+#include "util/i18n.hpp"
 
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
@@ -43,6 +44,11 @@ namespace
 
 		std::cerr << "Unhandled exception: " << message << std::endl;
 	}
+
+	const char* _(const char* str)
+	{
+		return Gobby::_(str);
+	}
 }
 
 int main(int argc, char* argv[]) try
@@ -55,16 +61,28 @@ int main(int argc, char* argv[]) try
 	bindtextdomain(GETTEXT_PACKAGE, GOBBY_LOCALEDIR);
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 
-	bool new_instance = false;
-	Glib::ustring join;
+	bool display_version = false;
+
+	Glib::OptionGroup opt_group_gobby("gobby",
+		_("Gobby options"), _("Options related to Gobby"));
+	Glib::OptionEntry opt_version;
+	opt_version.set_short_name('v');
+	opt_version.set_long_name("version");
+	opt_version.set_description(
+		_("Display version information and exit"));
+	opt_group_gobby.add_entry(opt_version, display_version);
 
 	Glib::OptionContext opt_ctx;
 	opt_ctx.set_help_enabled(true);
 	opt_ctx.set_ignore_unknown_options(false);
+	opt_ctx.set_main_group(opt_group_gobby);
 
 	// I would rather like to have Gtk::Main on the stack, but I see
 	// no other chance to catch exceptions from the command line option
 	// parsing. armin.
+	// TODO: Maybe we should parse before initializing GTK+, using
+	// Gtk::Main::add_gtk_option_group() with open_default_display set
+	// to false.
 	std::auto_ptr<Gtk::Main> kit;
 
 	try
@@ -75,6 +93,12 @@ int main(int argc, char* argv[]) try
 	{
 		std::cerr << e.what() << std::endl;
 		return EXIT_FAILURE;
+	}
+
+	if(display_version)
+	{
+		std::cout << "Gobby " << PACKAGE_VERSION << std::endl;
+		return EXIT_SUCCESS;
 	}
 
 	Gobby::IconManager icon_manager;
@@ -93,9 +117,6 @@ int main(int argc, char* argv[]) try
 	Gobby::Window wnd(icon_manager, config);
 	wnd.show();
 
-	// Cannot use just kit.run(wnd) since this would show wnd. If we
-	// are just sending some data to theother gobby, we do not want
-	// the window to be shown.
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
 	kit->run();
 
