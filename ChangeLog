@@ -1,5 +1,10 @@
 2008-09-21  Armin Burgmeier  <armin@arbur.net>
 
+	* src/commands/view-commands.cpp: Set "View Userlist" insensitive if
+	no document is open.
+
+2008-09-21  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/browser.hpp:
 	* src/core/browser.cpp: Support hostname:port%device syntax for
 	direct connections, to be able to establish IPv6 link-local

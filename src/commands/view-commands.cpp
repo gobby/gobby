@@ -101,6 +101,7 @@ void Gobby::ViewCommands::on_document_changed(DocWindow* document)
 	if(document != NULL)
 	{
 		m_header.action_view_highlight_mode->set_sensitive(true);
+		m_header.action_view_userlist->set_sensitive(true);
 
 		m_document_language_changed_connection =
 			document->signal_language_changed().connect(
@@ -115,6 +116,8 @@ void Gobby::ViewCommands::on_document_changed(DocWindow* document)
 		m_header.action_view_highlight_mode->set_sensitive(false);
 		m_header.action_view_highlight_none->set_active(true);
 		m_menu_language_changed_connection.unblock();
+
+		m_header.action_view_userlist->set_sensitive(false);
 	}
 
 	on_doc_language_changed(document ? document->get_language() : NULL);
