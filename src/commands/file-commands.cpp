@@ -176,6 +176,11 @@ namespace
 			{
 				m_file_dialog.set_uri(info->uri);
 			}
+			else
+			{
+				m_file_dialog.set_current_name(
+					document.get_title());
+			}
 
 			m_file_dialog.present();
 		}

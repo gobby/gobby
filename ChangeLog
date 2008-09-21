@@ -1,5 +1,10 @@
 2008-09-21  Armin Burgmeier  <armin@arbur.net>
 
+	* src/commands/file-fommands.cpp: Use document title as initial
+	filename for Save dialog if no URI is available in info storage.
+
+2008-09-21  Armin Burgmeier  <armin@arbur.net>
+
 	* src/commands/view-commands.cpp: Set "View Userlist" insensitive if
 	no document is open.
 
