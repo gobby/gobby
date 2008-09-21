@@ -91,6 +91,33 @@ namespace
 
 		return NULL;
 	}
+
+	bool tags_priority_idle_func(Gobby::DocWindow& window)
+	{
+		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+			inf_session_get_buffer(
+				INF_SESSION(window.get_session())));
+
+		inf_text_gtk_buffer_ensure_author_tags_priority(buffer);
+
+		// I don't know why it does not redraw automatically, perhaps
+		// this is a bug.
+		gtk_widget_queue_draw(GTK_WIDGET(window.get_text_view()));
+		return false;
+	}
+
+	void on_tag_added(GtkTextTagTable* table, GtkTextTag* tag,
+	                  gpointer user_data)
+	{
+		// We do the actual reordering in an idle handler because
+		// the priority of the tag might not yet be set to its final
+		// value.
+		Glib::signal_idle().connect(
+			sigc::bind(
+				sigc::ptr_fun(tags_priority_idle_func),
+				sigc::ref(*static_cast<Gobby::DocWindow*>(
+					user_data))));
+	}
 }
 
 Gobby::DocWindow::DocWindow(InfTextSession* session,
@@ -110,11 +137,20 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	m_buffer = GTK_SOURCE_BUFFER(inf_text_gtk_buffer_get_text_buffer(
 		INF_TEXT_GTK_BUFFER(buffer)));
 
+	// This is a hack to make sure that the author tags in the textview
+	// have lowest priority of all tags, especially lower than
+	// GtkSourceView's FIXME tags. We do this every time a new tag is
+	// added to the tag table since GtkSourceView seems to create tags
+	// that it needs on the fly.
+	GtkTextTagTable* table = gtk_text_buffer_get_tag_table(
+		GTK_TEXT_BUFFER(m_buffer));
+	g_signal_connect(G_OBJECT(table), "tag-added",
+	                 G_CALLBACK(on_tag_added), this);
+
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_view),
 	                         GTK_TEXT_BUFFER(m_buffer));
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
-	gtk_source_buffer_set_language(
-		m_buffer, get_language_for_title(manager, m_title.c_str()));
+	set_language(get_language_for_title(manager, m_title.c_str()));
 
 	m_preferences.user.hue.signal_changed().connect(
 		sigc::mem_fun(*this, &DocWindow::on_user_color_changed));
@@ -214,8 +250,6 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 
 	pack1(*vbox, true, false);
 	pack2(*frame, false, false);
-
-
 }
 
 Gobby::DocWindow::~DocWindow()
@@ -344,7 +378,7 @@ void Gobby::DocWindow::on_size_allocate(Gtk::Allocation& allocation)
 {
 	Gtk::HPaned::on_size_allocate(allocation);
 
-	// Setup initial paned positione. We can't do this simply every time
+	// Setup initial paned position. We can't do this simply every time
 	// on_size_allocate() is called since this would lead to an endless
 	// loop somehow when the userlist width is changed forcefully 
 	// (for example by a set_info() requiring much width).

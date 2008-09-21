@@ -1,5 +1,10 @@
 2008-09-21  Armin Burgmeier  <armin@arbur.net>
 
+	* src/core/docwindow.cpp: Make sure author tags have lower priority
+	than GtkSourceView tags.
+
+2008-09-21  Armin Burgmeier  <armin@arbur.net>
+
 	* src/window.cpp: Set main window role.
 
 2008-09-21  Armin Burgmeier  <armin@arbur.net>
