@@ -45,7 +45,7 @@ Gobby::Preferences::Editor::Editor(Config::ParentEntry& entry):
 void Gobby::Preferences::Editor::serialize(Config::ParentEntry& entry) const
 {
 	entry.set_value("tab-width", tab_width);
-	entry.set_value("tab-insert_spaces", tab_spaces);
+	entry.set_value("tab-insert-spaces", tab_spaces);
 	entry.set_value("auto-indentation", indentation_auto);
 	entry.set_value("smart-homeend", homeend_smart);
 }

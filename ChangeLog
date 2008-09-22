@@ -1,5 +1,10 @@
 2008-09-22  Armin Burgmeier  <armin@arbur.net>
 
+	* src/core/preferences.cpp: Fixed writing the
+	insert-tabs-instead-of-spaces option to the config file.
+
+2008-09-22  Armin Burgmeier  <armin@arbur.net>
+
 	* src/core/huebutton.cpp: Fix button ordering.
 
 2008-09-21  Armin Burgmeier  <armin@arbur.net>
