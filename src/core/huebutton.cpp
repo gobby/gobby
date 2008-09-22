@@ -76,10 +76,10 @@ void Gobby::HueButton::on_clicked()
 		gtk_box_pack_start(GTK_BOX(m_dialog->get_vbox()->gobj()),
 		                   m_hue_chooser, FALSE, FALSE, 0);
 		gtk_widget_show(m_hue_chooser);
-		m_dialog->add_button(Gtk::Stock::OK,
-		                     Gtk::RESPONSE_OK);
 		m_dialog->add_button(Gtk::Stock::CANCEL,
 		                     Gtk::RESPONSE_CANCEL);
+		m_dialog->add_button(Gtk::Stock::OK,
+		                     Gtk::RESPONSE_OK);
 		m_dialog->set_default_response(Gtk::RESPONSE_OK);
 		m_dialog->set_resizable(false);
 		m_dialog->signal_response().connect(
