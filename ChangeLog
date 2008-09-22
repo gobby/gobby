@@ -1,5 +1,11 @@
 2008-09-22  Armin Burgmeier  <armin@arbur.net>
 
+	* src/commands/folder-commands.cpp: Flush pending user requests before
+	setting user inactive, to avoid the user becoming active again due to
+	a delayed caret movement.
+
+2008-09-22  Armin Burgmeier  <armin@arbur.net>
+
 	* src/core/preferences.cpp: Fixed writing the
 	insert-tabs-instead-of-spaces option to the config file.
 

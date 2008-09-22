@@ -78,6 +78,12 @@ protected:
 			m_timeout_connection.disconnect();
 			break;
 		case INF_USER_ACTIVE:
+			/* Flush pending requests, so user is not set active
+			 * again later. */
+			inf_text_session_flush_requests_for_user(
+				m_document.get_session(),
+				INF_TEXT_USER(m_active_user));
+
 			inf_session_set_user_status(
 				INF_SESSION(m_document.get_session()),
 				m_active_user, INF_USER_INACTIVE);
