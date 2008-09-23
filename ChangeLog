@@ -1,3 +1,9 @@
+2008-09-23  Armin Burgmeier  <armin@0x539.de>
+
+	* src/joindialog.cpp: Fixed a crash introduced in the last version
+	that occurs when using the dialog without the avahi daemon being
+	running (Bug #266, Yannick_LM)
+
 2008-09-11  Philipp Kern  <phil@0x539.de>
 
 	* configure.ac: require obby 0.4.6 in pkg-config checks

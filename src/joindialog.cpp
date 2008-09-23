@@ -186,12 +186,17 @@ Gobby::JoinDialog::JoinDialog(Gtk::Window& parent,
 Gobby::JoinDialog::~JoinDialog()
 {
 #ifdef WITH_ZEROCONF
-	const Gtk::TreeModel::Children& children = m_session_list->children();
-	for(Gtk::TreeIter iter = children.begin();
-	    iter != children.end(); ++ iter)
+	if(m_session_list)
 	{
-		net6::address* addr = (*iter)[m_session_cols.address];
-		delete addr;
+		const Gtk::TreeModel::Children& children =
+			m_session_list->children();
+
+		for(Gtk::TreeIter iter = children.begin();
+		    iter != children.end(); ++ iter)
+		{
+			net6::address* addr = (*iter)[m_session_cols.address];
+			delete addr;
+		}
 	}
 #endif
 }
@@ -209,11 +214,14 @@ unsigned int Gobby::JoinDialog::get_port() const
 const net6::address* Gobby::JoinDialog::get_address()
 {
 #ifdef WITH_ZEROCONF
+	if(!m_session_list)
+		return NULL;
+
 	// m_session_view.get_selection() is not const, therefore this function
 	// cannot be const.
 	Gtk::TreeModel::iterator iter =
 		m_session_view.get_selection()->get_selected();
-	if(iter != m_session_list->children().end())
+	if(iter && iter != m_session_list->children().end())
 	{
 		// Use address with port info if selected from zeroconf
 		if(get_host() == (*iter)[m_session_cols.host] &&
