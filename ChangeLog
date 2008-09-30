@@ -1,3 +1,9 @@
+2008-09-30  Armin Burgmeier  <armin@arbur.net>
+
+	* src/commands/folder-commands.cpp: Added another assertion to be able
+	to better track another problem with users becoming active without
+	having the document selected in the notebook.
+
 2008-09-22  Armin Burgmeier  <armin@arbur.net>
 
 	* src/commands/folder-commands.cpp: Flush pending user requests before

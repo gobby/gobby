@@ -147,6 +147,10 @@ protected:
 
 	void on_user_notify_status(InfUser* user)
 	{
+		// User cannot be activated when we are not active
+		g_assert(m_active ||
+		         inf_user_get_status(user) != INF_USER_ACTIVE);
+
 		if(inf_user_get_status(user) == INF_USER_ACTIVE && m_active)
 		{
 			// The user did something (therefore becoming active),
