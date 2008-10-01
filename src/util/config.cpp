@@ -188,7 +188,7 @@ Gobby::Config::Config(const Glib::ustring& file):
 
 	if(!Glib::file_test(file, Glib::FILE_TEST_IS_REGULAR))
 	{
-		m_root.reset(new ParentEntry("gobby_config") );
+		m_root.reset(new ParentEntry("gobby-config") );
 		return;
 	}
 
@@ -199,14 +199,14 @@ Gobby::Config::Config(const Glib::ustring& file):
 	catch(xmlpp::exception& e)
 	{
 		// Empty config
-		m_root.reset(new ParentEntry("gobby_config") );
+		m_root.reset(new ParentEntry("gobby-config") );
 		return;
 	}
 
 	xmlpp::Document* document = parser.get_document();
 	if(document == NULL)
 	{
-		m_root.reset(new ParentEntry("gobby_config") );
+		m_root.reset(new ParentEntry("gobby-config") );
 		return;
 	}
 
@@ -215,7 +215,7 @@ Gobby::Config::Config(const Glib::ustring& file):
 	// Config is present, but contains no root node
 	if(root == NULL)
 	{
-		m_root.reset(new ParentEntry("gobby_config") );
+		m_root.reset(new ParentEntry("gobby-config") );
 		return;
 	}
 
@@ -225,7 +225,7 @@ Gobby::Config::Config(const Glib::ustring& file):
 Gobby::Config::~Config()
 {
 	xmlpp::Document document;
-	xmlpp::Element* root = document.create_root_node("gobby_config");
+	xmlpp::Element* root = document.create_root_node("gobby-config");
 	m_root->save(*root);
 
 	try
