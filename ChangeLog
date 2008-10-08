@@ -1,3 +1,7 @@
+2008-10-08  Armin Burgmeier  <armin@arbur.net>
+
+	* src/core/browser.cpp: Adapt to infinote API changes.
+
 2008-10-01  Armin Burgmeier  <armin@arbur.net>
 
 	* src/util/config.cpp: Renamed the root config from gobby_config to

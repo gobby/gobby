@@ -64,7 +64,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_xmpp_manager = inf_xmpp_manager_new();
 #ifdef INFINOTE_HAVE_AVAHI
 	m_discovery = inf_discovery_avahi_new(INF_IO(m_io), m_xmpp_manager,
-	                                      NULL, NULL);
+	                                      NULL, NULL, NULL);
 	inf_discovery_avahi_set_security_policy(
 		m_discovery, m_preferences.security.policy);
 	inf_gtk_browser_store_add_discovery(m_browser_store,
@@ -275,7 +275,8 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 			xmpp = inf_xmpp_connection_new(
 				connection, INF_XMPP_CONNECTION_CLIENT,
 				NULL, hostname.c_str(),
-				m_preferences.security.policy, NULL, NULL);
+				m_preferences.security.policy,
+				NULL, NULL, NULL);
 
 			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
 			g_object_unref(xmpp);
