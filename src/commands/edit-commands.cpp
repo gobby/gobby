@@ -53,6 +53,8 @@ Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &EditCommands::on_goto_line));
 	m_header.action_edit_preferences->signal_activate().connect(
 		sigc::mem_fun(*this, &EditCommands::on_preferences));
+	m_folder.signal_document_removed().connect(
+		sigc::mem_fun(*this, &EditCommands::on_document_removed));
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &EditCommands::on_document_changed));
 
@@ -64,6 +66,12 @@ Gobby::EditCommands::~EditCommands()
 {
 	// Disconnect handlers from current document:
 	on_document_changed(NULL);
+}
+
+void Gobby::EditCommands::on_document_removed(DocWindow& document)
+{
+	if(&document == m_current_document)
+		on_document_changed(NULL);
 }
 
 void Gobby::EditCommands::on_document_changed(DocWindow* document)

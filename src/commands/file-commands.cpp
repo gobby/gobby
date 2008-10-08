@@ -376,7 +376,7 @@ Gobby::FileCommands::Task::get_document_location_dialog()
 }
 
 Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
-                                  const Browser& browser, Folder& folder,
+                                  Browser& browser, Folder& folder,
                                   FileChooser& file_chooser,
                                   Operations& operations,
 				  const DocumentInfoStorage& info_storage,
@@ -400,10 +400,26 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &FileCommands::on_close));
 	header.action_file_quit->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_quit));
+
 	folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &FileCommands::on_document_changed));
 
-	set_sensitivity(folder.get_current_document() != NULL);
+	InfGtkBrowserStore* store = browser.get_store();
+	m_row_inserted_handler =
+		g_signal_connect(G_OBJECT(store), "row-inserted",
+		                 G_CALLBACK(on_row_inserted_static), this);
+	m_row_deleted_handler =
+		g_signal_connect(G_OBJECT(store), "row-deleted",
+		                 G_CALLBACK(on_row_deleted_static), this);
+
+	update_sensitivity();	
+}
+
+Gobby::FileCommands::~FileCommands()
+{
+	InfGtkBrowserStore* store = m_browser.get_store();
+	g_signal_handler_disconnect(G_OBJECT(store), m_row_inserted_handler);
+	g_signal_handler_disconnect(G_OBJECT(store), m_row_deleted_handler);
 }
 
 void Gobby::FileCommands::set_task(Task* task)
@@ -415,7 +431,17 @@ void Gobby::FileCommands::set_task(Task* task)
 
 void Gobby::FileCommands::on_document_changed(DocWindow* document)
 {
-	set_sensitivity(document != NULL);
+	update_sensitivity();
+}
+
+void Gobby::FileCommands::on_row_inserted()
+{
+	update_sensitivity();
+}
+
+void Gobby::FileCommands::on_row_deleted()
+{
+	update_sensitivity();
 }
 
 void Gobby::FileCommands::on_task_finished()
@@ -481,10 +507,18 @@ void Gobby::FileCommands::on_quit()
 	m_parent.hide();
 }
 
-void Gobby::FileCommands::set_sensitivity(bool sensitivity)
+void Gobby::FileCommands::update_sensitivity()
 {
-	m_header.action_file_save->set_sensitive(sensitivity);
-	m_header.action_file_save_as->set_sensitive(sensitivity);
-	m_header.action_file_save_all->set_sensitive(sensitivity);
-	m_header.action_file_close->set_sensitive(sensitivity);
+	GtkTreeIter dummy_iter;
+	bool create_sensitivity = gtk_tree_model_get_iter_first(
+		GTK_TREE_MODEL(m_browser.get_store()), &dummy_iter);
+	gboolean active_sensitivity = m_folder.get_current_document() != NULL;
+
+	m_header.action_file_new->set_sensitive(create_sensitivity);
+	m_header.action_file_open->set_sensitive(create_sensitivity);
+
+	m_header.action_file_save->set_sensitive(active_sensitivity);
+	m_header.action_file_save_as->set_sensitive(active_sensitivity);
+	m_header.action_file_save_all->set_sensitive(active_sensitivity);
+	m_header.action_file_close->set_sensitive(active_sensitivity);
 }

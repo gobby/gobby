@@ -36,10 +36,11 @@ class FileCommands: public sigc::trackable
 {
 public:
 	FileCommands(Gtk::Window& parent, Header& header,
-	             const Browser& browser, Folder& folder,
+	             Browser& browser, Folder& folder,
 	             FileChooser& file_chooser, Operations& operations,
 	             const DocumentInfoStorage& info_storage,
 	             Preferences& preferences);
+	~FileCommands();
 
 	class Task: public sigc::trackable
 	{
@@ -69,7 +70,25 @@ public:
 	};
 protected:
 	void set_task(Task* task);
+
+	static void on_row_inserted_static(GtkTreeModel* model, 
+	                                   GtkTreePath* path,
+					   GtkTreeIter* iter,
+					   gpointer user_data)
+	{
+		static_cast<FileCommands*>(user_data)->on_row_inserted();
+	}
+
+	static void on_row_deleted_static(GtkTreeModel* model,
+	                                  GtkTreePath* path,
+					  gpointer user_data)
+	{
+		static_cast<FileCommands*>(user_data)->on_row_deleted();
+	}
+
 	void on_document_changed(DocWindow* document);
+	void on_row_inserted();
+	void on_row_deleted();
 	void on_task_finished();
 
 	void on_new();
@@ -81,11 +100,11 @@ protected:
 	void on_close();
 	void on_quit();
 
-	void set_sensitivity(bool sensitivity);
+	void update_sensitivity();
 
 	Gtk::Window& m_parent;
 	Header& m_header;
-	const Browser& m_browser;
+	Browser& m_browser;
 	Folder& m_folder;
 	FileChooser& m_file_chooser;
 	Operations& m_operations;
@@ -94,6 +113,9 @@ protected:
 
 	std::auto_ptr<Task> m_task;
 	std::auto_ptr<DocumentLocationDialog> m_location_dialog;
+
+	gulong m_row_inserted_handler;
+	gulong m_row_deleted_handler;
 };
 
 }

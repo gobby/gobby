@@ -273,22 +273,17 @@ void Gobby::Folder::remove_document(DocWindow& window)
 {
 	m_signal_document_removed.emit(window);
 
-	// TODO: We should actually remove the page here, but destroy the
-	// DocWindow after having emitted signal_document_changed.
-	if(get_n_pages() == 1)
-		m_signal_document_changed.emit(NULL);
-
 	// Finish the record
-	g_object_set_data(G_OBJECT(window.get_session()),
-	                  "GOBBY_SESSION_RECORD", NULL);
-
 	InfTextSession* session = window.get_session();
-	g_object_ref(session);
+	g_object_set_data(G_OBJECT(session), "GOBBY_SESSION_RECORD", NULL);
 
+	g_object_ref(session);
 	inf_session_close(INF_SESSION(session));
 	remove_page(window);
-
 	g_object_unref(session);
+
+	if(get_n_pages() == 0)
+		m_signal_document_changed.emit(NULL);
 }
 
 Gobby::DocWindow*

@@ -1,5 +1,19 @@
 2008-10-08  Armin Burgmeier  <armin@arbur.net>
 
+	* src/core/folder.cpp: Emit document_changed with NULL document after
+	the last document has been removed, not before, so
+	get_current_document() yields the correct result.
+
+	* inc/commands/edit-commands.hpp:
+	* src/commands/edit-commands.cpp: Don't rely on m_current_document
+	being valid until on_document_changed() was called.
+
+	* inc/commands/file-commands.hpp:
+	* src/commands/file-commands.cpp: Make "New" and "Open" actions
+	insensitive when there is no entry in the Document Browser.
+
+2008-10-08  Armin Burgmeier  <armin@arbur.net>
+
 	* src/core/browser.cpp: Adapt to infinote API changes.
 
 2008-10-01  Armin Burgmeier  <armin@arbur.net>

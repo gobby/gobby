@@ -43,6 +43,7 @@ public:
 	~EditCommands();
 
 protected:
+	void on_document_removed(DocWindow& document);
 	void on_document_changed(DocWindow* document);
 
 	static void on_can_undo_changed_static(InfAdoptedAlgorithm* algorithm,
