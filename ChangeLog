@@ -1,5 +1,61 @@
 2008-10-09  Armin Burgmeier  <armin@arbur.net>
 
+	* code/: Moved from src/.
+
+	* code/commands/browser-commands.hpp:
+	* code/commands/browser-context-commands.hpp:
+	* code/commands/edit-commands.hpp:
+	* code/commands/file-commands.hpp:
+	* code/commands/folder-commands.hpp:
+	* code/commands/help-commands.hpp:
+	* code/commands/view-commands.hpp:
+	* code/core/browser.hpp:
+	* code/core/closableframe.hpp:
+	* code/core/documentinfostorage.hpp:
+	* code/core/docwindow.hpp:
+	* code/core/filechooser.hpp:
+	* code/core/folder.hpp:
+	* code/core/header.hpp:
+	* code/core/huebutton.hpp:
+	* code/core/iconmanager.hpp:
+	* code/core/nodewatch.hpp:
+	* code/core/noteplugin.hpp:
+	* code/core/preferences.hpp:
+	* code/core/statusbar.hpp:
+	* code/core/userlist.hpp:
+	* code/dialogs/documentlocationdialog.hpp:
+	* code/dialogs/entrydialog.hpp:
+	* code/dialogs/finddialog.hpp:
+	* code/dialogs/gotodialog.hpp:
+	* code/dialogs/initialdialog.hpp:
+	* code/dialogs/preferencesdialog.hpp:
+	* code/operations/operation-delete.hpp:
+	* code/operations/operation-new.hpp:
+	* code/operations/operation-open.hpp:
+	* code/operations/operation-save.hpp:
+	* code/operations/operations.hpp:
+	* code/util/closebutton.hpp:
+	* code/util/color.hpp:
+	* code/util/config.hpp:
+	* code/util/defaultaccumulator.hpp:
+	* code/util/file.hpp:
+	* code/util/i18n.hpp:
+	* code/util/resolv.hpp:
+	* code/util/serialize.hpp:
+	* code/features.hpp:
+	* code/window.hpp: Moved from inc/.
+
+	* code/commands/Makefile.am:
+	* code/operations/Makefile.am:
+	* code/dialogs/Makefile.am:
+	* code/core/Makefile.am:
+	* code/util/Makefile.am:
+	* code/Makefile.am:
+	* Makefile.am:
+	* configure.ac: Adapt to the new build structure.
+
+2008-10-09  Armin Burgmeier  <armin@arbur.net>
+
 	* src/Makefile.am: Rename the gobby binary to gobby-0.5, to support
 	parallel installation with gobby 0.4.
 

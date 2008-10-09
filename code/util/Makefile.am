@@ -9,6 +9,16 @@ libgobby_util_a_SOURCES = \
 	resolv.cpp \
 	serialize.cpp
 
-libgobby_util_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
+noinst_HEADERS = \
+        closebutton.hpp \
+        color.hpp \
+        config.hpp \
+        defaultaccumulator.hpp \
+        file.hpp \
+        i18n.hpp \
+        resolv.hpp \
+        serialize.hpp
+
+libgobby_util_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
                           -DAPPICON_DIR=\""$(appicondir)"\" \
                           -DPIXMAPS_DIR=\""$(pixmapdir)"\"

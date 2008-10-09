@@ -12,7 +12,7 @@ install-sh
 missing
 mkinstalldirs
 depcomp
-gobby
+gobby-0.5
 autom4te.cache
 .deps
 compile

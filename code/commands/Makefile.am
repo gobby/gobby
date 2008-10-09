@@ -9,6 +9,15 @@ libgobby_commands_a_SOURCES = \
 	help-commands.cpp \
 	view-commands.cpp
 
-libgobby_commands_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
+noinst_HEADERS = \
+        browser-commands.hpp \
+        browser-context-commands.hpp \
+        edit-commands.hpp \
+        file-commands.hpp \
+        folder-commands.hpp \
+        help-commands.hpp \
+        view-commands.hpp
+
+libgobby_commands_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

@@ -6,9 +6,11 @@ libgobby_a_SOURCES = \
 	main.cpp \
 	window.cpp
 
+noinst_HEADERS = window.hpp
+
 appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby
 
-libgobby_a_CPPFLAGS = $(gobby_CFLAGS) -I../inc/ \
+libgobby_a_CPPFLAGS = $(gobby_CFLAGS) -I. \
                       -DAPPICON_DIR=\""$(appicondir)"\" \
                       -DPIXMAPS_DIR=\""$(pixmapdir)"\"

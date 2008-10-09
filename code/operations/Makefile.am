@@ -7,6 +7,13 @@ libgobby_operations_a_SOURCES = \
 	operation-open.cpp \
 	operation-save.cpp
 
-libgobby_operations_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
+noinst_HEADERS = \
+        operations.hpp \
+        operation-delete.hpp \
+        operation-new.hpp \
+        operation-open.hpp \
+        operation-save.hpp
+
+libgobby_operations_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

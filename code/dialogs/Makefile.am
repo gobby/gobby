@@ -8,6 +8,14 @@ libgobby_dialogs_a_SOURCES = \
 	initialdialog.cpp \
 	preferencesdialog.cpp
 
-libgobby_dialogs_a_CPPFLAGS = $(gobby_CFLAGS) -I../../inc/ \
+noinst_HEADERS = \
+        documentlocationdialog.hpp \
+        entrydialog.hpp \
+        finddialog.hpp \
+        gotodialog.hpp \
+        initialdialog.hpp \
+        preferencesdialog.hpp
+
+libgobby_dialogs_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

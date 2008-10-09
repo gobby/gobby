@@ -5,8 +5,8 @@ AC_PREREQ(2.59)
 AC_INIT([gobby], [0.4.90], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9 check-news)
 AM_MAINTAINER_MODE
-AC_CONFIG_SRCDIR([inc/window.hpp])
-AC_CONFIG_HEADER([inc/features.hpp])
+AC_CONFIG_SRCDIR([code/window.hpp])
+AC_CONFIG_HEADER([code/features.hpp])
 
 # Extract host information.
 AC_CANONICAL_HOST
@@ -85,18 +85,12 @@ AC_OUTPUT([
 		m4/Makefile
 		po/Makefile.in
 
-		inc/Makefile
-			inc/util/Makefile
-			inc/core/Makefile
-			inc/dialogs/Makefile
-			inc/operations/Makefile
-			inc/commands/Makefile
-		src/Makefile
-			src/util/Makefile
-			src/core/Makefile
-			src/dialogs/Makefile
-			src/operations/Makefile
-			src/commands/Makefile
+		code/Makefile
+			code/util/Makefile
+			code/core/Makefile
+			code/dialogs/Makefile
+			code/operations/Makefile
+			code/commands/Makefile
 
 		contrib/Makefile
 			contrib/artwork/Makefile
