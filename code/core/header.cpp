@@ -19,11 +19,11 @@
 #include "core/header.hpp"
 #include "core/iconmanager.hpp"
 #include "util/i18n.hpp"
-#include "features.hpp" // For OSX
+#include "features.hpp" // For PLATFORM_OSX_NATIVE
 
 #include <gtkmm/stock.h>
 
-#ifdef OSX
+#ifdef PLATFORM_OSX_NATIVE
 #include <ige-mac-menu.h>
 #endif
 
@@ -415,7 +415,7 @@ Gobby::Header::Header(Preferences& preferences,
 		);
 	}
 
-#ifdef OSX
+#ifdef PLATFORM_OSX_NATIVE
 	ige_mac_menu_set_menu_bar(GTK_MENU_SHELL(m_menubar->gobj()));
 	
 	ige_mac_menu_set_quit_menu_item(GTK_MENU_ITEM(

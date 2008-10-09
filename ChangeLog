@@ -1,5 +1,13 @@
 2008-10-09  Armin Burgmeier  <armin@arbur.net>
 
+	* configure.ac: Renamed the `OSX' define to `PLATFORM_OSX', and added
+	`PLATFORM_OSX_NATIVE' when running with the quartz GDK target.
+
+	* code/core/header.cpp: Adapt, only use ige-mac-integration when
+	running natively on OS X.
+
+2008-10-09  Armin Burgmeier  <armin@arbur.net>
+
 	* code/: Moved from src/.
 
 	* code/commands/browser-commands.hpp:

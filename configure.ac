@@ -40,9 +40,11 @@ required_libs="libxml++-2.6 glibmm-2.4 >= 2.16.0 giomm-2.4 >= 2.16.4 gtkmm-2.4 >
 
 # Check if we are running on OS X, for special link handling.
 if test "x$build_vendor" = "xapple" ; then
-  AC_DEFINE([OSX], 1, [Define whether we are running on Mac OS X.])
+  AC_DEFINE([PLATFORM_OSX], 1, [Define whether we are running on Mac OS X.])
   target=`pkg-config --variable=target gtk+-2.0`
   if test "$target" = "quartz" ; then
+    AC_DEFINE([PLATFORM_OSX_NATIVE], 1, [Define whether we are running on
+                                         Mac OS X with the quartz GDK target])
     required_libs="$required_libs ige-mac-integration"
   fi
 fi
