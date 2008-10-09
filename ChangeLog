@@ -1,5 +1,14 @@
 2008-10-09  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/iconmanager.cpp: Removed the Save All icon from display,
+	because it does not fit to the "Save" icon for Toolbar and Menu sizes.
+
+	* code/core/header.cpp: Remove Save All icon from the toolbar. Items
+	without icons look ugly and the toolbar, and there is a shortcut for
+	quick access.
+
+2008-10-09  Armin Burgmeier  <armin@arbur.net>
+
 	* code/util/file.hpp:
 	* code/util/file.cpp: Added the config_filename() function.
 

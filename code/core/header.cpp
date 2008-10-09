@@ -77,7 +77,7 @@ namespace {
 		"    <toolitem action=\"FileNew\" />"
 		"    <toolitem action=\"FileOpen\" />"
 		"    <toolitem action=\"FileSave\" />"
-		"    <toolitem action=\"FileSaveAll\" />"
+//		"    <toolitem action=\"FileSaveAll\" />"
 		"    <separator />"
 		"    <toolitem action=\"EditUndo\" />"
 		"    <toolitem action=\"EditRedo\" />"
@@ -209,11 +209,11 @@ Gobby::Header::Header(Preferences& preferences,
 	action_file(Gtk::Action::create("MenuFile", _("_File"))),
 	action_file_new(Gtk::Action::create("FileNew", Gtk::Stock::NEW)),
 	action_file_open(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,
-	                                     _("Open..."))),
+	                                     _("_Open..."))),
 	action_file_save(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)),
 	action_file_save_as(
 		Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,
-		                    _("Save As..."))),
+		                    _("Save _As..."))),
 	action_file_save_all(
 		Gtk::Action::create(
 			"FileSaveAll", Gobby::IconManager::STOCK_SAVE_ALL,

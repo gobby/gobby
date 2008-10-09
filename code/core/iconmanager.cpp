@@ -83,7 +83,9 @@ Gobby::IconManager::IconManager():
 	m_icon_factory->add(STOCK_DOCLIST, m_is_doclist);
 
 	Gtk::StockItem save_all_item(STOCK_SAVE_ALL, _("Save All"));
-	m_icon_factory->add(STOCK_SAVE_ALL, m_is_save_all);
+	// TODO: The save-all icon does not match the save icon for toolbar
+	// or menu sized items. This is not yet enabled therefore.
+	//m_icon_factory->add(STOCK_SAVE_ALL, m_is_save_all);
 
 	m_icon_factory->add_default();
 }
