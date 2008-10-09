@@ -17,6 +17,7 @@
  */
 
 #include "core/browser.hpp"
+#include "util/file.hpp"
 #include "util/i18n.hpp"
 
 #include <libinfinity/inf-config.h>
@@ -71,8 +72,8 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	                                    INF_DISCOVERY(m_discovery));
 #endif
 
-	Glib::ustring known_hosts_file = Glib::build_filename(
-		Glib::get_home_dir(), GOBBY_CONFIGDIR"/known_hosts");
+	Glib::ustring known_hosts_file = config_filename(
+		GOBBY_CONFIGDIR, "known_hosts");
 
 	const std::string trust_file = m_preferences.security.trust_file;
 	m_cert_manager = inf_gtk_certificate_manager_new(
@@ -114,6 +115,8 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	set_spacing(6);
 	pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
 	pack_start(m_expander, Gtk::PACK_SHRINK);
+
+	set_focus_child(m_expander);
 }
 
 Gobby::Browser::~Browser()

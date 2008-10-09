@@ -1,5 +1,16 @@
 2008-10-09  Armin Burgmeier  <armin@arbur.net>
 
+	* code/util/file.hpp:
+	* code/util/file.cpp: Added the config_filename() function.
+
+	* code/core/browser.cpp:
+	* code/core/documentinfostorage.cpp:
+	* code/main.cpp: Make use of that function to access config files.
+
+	* code/window.cpp: Give initial focus to browser.
+
+2008-10-09  Armin Burgmeier  <armin@arbur.net>
+
 	* configure.ac: Renamed the `OSX' define to `PLATFORM_OSX', and added
 	`PLATFORM_OSX_NATIVE' when running with the quartz GDK target.
 

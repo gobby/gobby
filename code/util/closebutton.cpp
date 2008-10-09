@@ -26,6 +26,7 @@ Gobby::CloseButton::CloseButton()
 {
         set_relief(Gtk::RELIEF_NONE);
         set_focus_on_click(false);
+	//set_flags(get_flags() & ~Gtk::CAN_FOCUS);
 
         GtkRcStyle* rc_style = gtk_rc_style_new();
         rc_style->xthickness = 0;

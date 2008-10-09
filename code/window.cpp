@@ -78,6 +78,10 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_mainbox.pack_start(m_statusbar, Gtk::PACK_SHRINK);
 	m_mainbox.show();
 
+	// Give initial focus to the browser, which will in turn give focus
+	// to the "Direct Connection" expander, so people can quickly
+	// get going.
+	set_focus_child(m_browser);
 	add(m_mainbox);
 
 	set_default_size(800, 600);

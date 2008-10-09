@@ -87,11 +87,8 @@ namespace
 	// Location to store the documents file:
 	std::string filename()
 	{
-		return Glib::build_filename(
-			Glib::get_home_dir(),
-			Glib::build_filename(
-				GOBBY_CONFIGDIR,
-				"documents.xml"));
+		return Gobby::config_filename(
+			GOBBY_CONFIGDIR, "documents.xml");
 	}
 }
 

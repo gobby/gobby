@@ -24,6 +24,9 @@
 namespace Gobby
 {
 	void create_directory_with_parents(const std::string& path);
+
+	std::string config_filename(const std::string& config_directory,
+	                            const std::string& filename);
 }
 
 #endif // _GOBBY_DIR_HPP_

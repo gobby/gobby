@@ -21,6 +21,7 @@
 
 #include "core/iconmanager.hpp"
 #include "util/config.hpp"
+#include "util/file.hpp"
 #include "util/i18n.hpp"
 
 #include <gtkmm/main.h>
@@ -109,9 +110,8 @@ int main(int argc, char* argv[]) try
 	Gtk::Window::set_default_icon_list(icon_list);
 
 	// Read the configuration
-	Gobby::Config config(Glib::build_filename(
-		Glib::get_home_dir(),
-		GOBBY_CONFIGDIR"/config.xml"));
+	Gobby::Config config(
+		Gobby::config_filename(GOBBY_CONFIGDIR, "config.xml"));
 
 	// Create window
 	Gobby::Window wnd(icon_manager, config);
