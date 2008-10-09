@@ -1,5 +1,10 @@
 2008-10-09  Armin Burgmeier  <armin@arbur.net>
 
+	* src/Makefile.am: Rename the gobby binary to gobby-0.5, to support
+	parallel installation with gobby 0.4.
+
+2008-10-09  Armin Burgmeier  <armin@arbur.net>
+
 	* inc/core/docwindow.hpp:
 	* src/core/docwindow.cpp: Added the scroll_to_cursor_position()
 	function.

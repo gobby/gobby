@@ -5,9 +5,9 @@ ACLOCAL_AMFLAGS = -I m4
 
 dist_man_MANS = gobby.1
 
-bin_PROGRAMS = gobby
+bin_PROGRAMS = gobby-0.5
 
-gobby_LDADD = $(gobby_LIBS) \
+gobby_0_5_LDADD = $(gobby_LIBS) \
 	src/libgobby.a \
 	src/commands/libgobby-commands.a \
 	src/operations/libgobby-operations.a \
@@ -16,8 +16,11 @@ gobby_LDADD = $(gobby_LIBS) \
 	src/util/libgobby-util.a
 
 if WIN32
-gobby_LDADD += -lole32 -luuid
-gobby_LDFLAGS = -Wl,--enable-runtime-pseudo-reloc -mwindows win32/gobby.res
+gobby_0_5_LDADD += -lole32 -luuid
+gobby_0_5_LDFLAGS = \
+	-Wl,--enable-runtime-pseudo-reloc \
+	-mwindows \
+	win32/gobby.res
 endif
 
-gobby_SOURCES = 
+gobby_0_5_SOURCES = 

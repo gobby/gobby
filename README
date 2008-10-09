@@ -32,13 +32,12 @@ Gobby: First Contact
 
      * Realtime collaboration through encrypted connections
      * Each user has its own colour to be identified by others
-     * IRC-like chat for communicating with your partners
+     * Local group Undo
      * Sidebar with all the others having joined the session
      * Syntax highlighting, auto indentation, configurable tab
        width
      * Multiple documnets in one session
      * Document subscriptions
-     * User authentication
      * Zeroconf support (optional)
      * Unicode support
      * Internationalisation
@@ -56,16 +55,13 @@ Gobby: First Contact
 3.1. Dependencies
 
      * libsigc++ (>= 2.0.2)
-     * GNUTLS (>= 1.0.0)
-     * net6 (>= 1.3.0)
-     * obby (>= 0.4.0)
-     * Glib (>= 2.6.0)
-     * Gtk+ (>= 2.6.0)
-     * GtkSourceView
-     * Glibmm (>= 2.6.0)
+     * GNUTLS (>= 1.7.2)
+     * libinfinity (0.1.0)
+     * Gtk+ (>= 2.12.0)
+     * GtkSourceView (>= 2.0)
+     * Glibmm (>= 2.16.0)
      * libxml++ (>= 2.6.0)
-     * Gtkmm (>= 2.6.0)
-     * howl (>= 0.9.8) [optional]
+     * Gtkmm (>= 2.12.0)
      _________________________________________________________
 
 4. More information
@@ -91,7 +87,7 @@ Gobby: First Contact
    We urgently seek all kind of people who could help us in any
    way. Firstly we need documentation writers who could help us
    crafting a help file and some standalone documentation for the
-   web. Secondly, if you are skilled in C++ programming, we could
+   web. Secondly, if you are skilled in C/C++ programming, we could
    need helping hands with programming. You could use our project
    page as a starting point to look for tickets which need
    fixing. And last, but certainly not least, we need translators
@@ -103,7 +99,7 @@ Gobby: First Contact
    of contact to other Gobby users and to the developers.
 
      * obby-announce: A moderated list used to announce new
-       releases of Gobby and its foundation, net6 and obby.
+       releases of Gobby and its foundation, net6, obby and infinote.
        Please refer to
        http://list.0x539.de/mailman/listinfo/obby-announce if you
        want to subscribe it.
@@ -126,4 +122,4 @@ Gobby: First Contact
    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
    PURPOSE. See the GNU General Public License for more details.
 
-   Copyright (C) 2005-2006 0x539 dev group <crew@0x539.de>
+   Copyright (C) 2005-2008 0x539 dev group <crew@0x539.de>
