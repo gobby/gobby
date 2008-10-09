@@ -298,11 +298,7 @@ void Gobby::DocWindow::set_selection(const GtkTextIter* begin,
 	gtk_text_buffer_select_range(
 		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)), begin, end);
 
-	gtk_text_view_scroll_to_mark(
-		GTK_TEXT_VIEW(m_view),
-		gtk_text_buffer_get_insert(gtk_text_view_get_buffer(
-			GTK_TEXT_VIEW(m_view))),
-		0.1, FALSE, 0.0, 0.0);
+	scroll_to_cursor_position(0.1);
 }
 
 Glib::ustring Gobby::DocWindow::get_selected_text() const
@@ -314,6 +310,15 @@ Glib::ustring Gobby::DocWindow::get_selected_text() const
 
 	Gtk::TextIter start_cpp(&start), end_cpp(&end);
 	return start_cpp.get_slice(end_cpp);
+}
+
+void Gobby::DocWindow::scroll_to_cursor_position(double within_margin)
+{
+	gtk_text_view_scroll_to_mark(
+		GTK_TEXT_VIEW(m_view),
+		gtk_text_buffer_get_insert(gtk_text_view_get_buffer(
+			GTK_TEXT_VIEW(m_view))),
+		within_margin, FALSE, 0.0, 0.0);
 }
 
 void Gobby::DocWindow::set_info(const Glib::ustring& info, bool closable)

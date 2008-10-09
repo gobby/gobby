@@ -307,6 +307,8 @@ void Gobby::EditCommands::on_undo()
 		INF_ADOPTED_SESSION(m_current_document->get_session()),
 		INF_ADOPTED_USER(m_current_document->get_active_user())
 	);
+
+	m_current_document->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_redo()
@@ -317,6 +319,8 @@ void Gobby::EditCommands::on_redo()
 		INF_ADOPTED_SESSION(m_current_document->get_session()),
 		INF_ADOPTED_USER(m_current_document->get_active_user())
 	);
+
+	m_current_document->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_cut()

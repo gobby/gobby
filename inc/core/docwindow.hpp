@@ -63,6 +63,7 @@ public:
 	void set_selection(const GtkTextIter* begin,
 	                   const GtkTextIter* end);
 	Glib::ustring get_selected_text() const;
+	void scroll_to_cursor_position(double within_margin);
 
 	GtkSourceLanguage* get_language() const;
 	void set_language(GtkSourceLanguage* language);
