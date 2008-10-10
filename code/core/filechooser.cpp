@@ -44,6 +44,7 @@ Gobby::FileChooser::Dialog::Dialog(Gobby::FileChooser& chooser,
 		break;
 	}
 
+	set_local_only(false);
 	set_current_folder_uri(m_chooser.get_current_folder_uri());
 }
 

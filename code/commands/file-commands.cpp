@@ -20,6 +20,7 @@
 #include "util/i18n.hpp"
 
 #include <gtkmm/stock.h>
+#include <giomm/file.h>
 
 namespace
 {
@@ -93,6 +94,9 @@ namespace
 
 		void on_file_response(int response_id)
 		{
+			const gchar* const ATTR_DISPLAY_NAME =
+				G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME;
+
 			if(response_id == Gtk::RESPONSE_ACCEPT)
 			{
 				DocumentLocationDialog& dialog =
@@ -106,10 +110,16 @@ namespace
 
 				// TODO: Handle multiple selection
 				m_open_uri = m_file_dialog.get_uri();
+				// TODO: Query the display name
+				// asynchronously, and use a default as long
+				// as the query is running.
+				Glib::RefPtr<Gio::File> file =
+					Gio::File::create_for_uri(m_open_uri);
+				Glib::RefPtr<Gio::FileInfo> info =
+					file->query_info(ATTR_DISPLAY_NAME);
+
 				dialog.set_document_name(
-					Glib::path_get_basename(
-						m_file_dialog.
-							get_filename()));
+					info->get_display_name());
 
 				m_file_dialog.hide();
 				dialog.present();

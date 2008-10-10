@@ -21,6 +21,7 @@
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/stock.h>
+#include <giomm/file.h>
 
 Gobby::BrowserContextCommands::BrowserContextCommands(Gtk::Window& parent,
                                                       Browser& browser,
@@ -268,9 +269,14 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
+		Glib::RefPtr<Gio::File> file =
+			Gio::File::create_for_uri(m_file_dialog->get_uri());
+
+		// TODO: Do this asynchronously:
+		Glib::RefPtr<Gio::FileInfo> info = file->query_info(
+			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 		m_operations.create_document(
-			browser, &iter, Glib::path_get_basename(
-				m_file_dialog->get_filename()),
+			browser, &iter, info->get_display_name(),
 			m_preferences, m_file_dialog->get_uri(), NULL);
 	}
 

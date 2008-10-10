@@ -8,6 +8,8 @@ perhaps do pre-releases with some of these missing before:
  - Set session title as initial file name in Save As filechooser
  - Add base preferences class with Preferences::Option definition to util/,
    inherit in core/, move ClosableFrame to util/
+ - Show in tab and userlist when others are typing, using an icon
+ - Typing sounds (libcanberra?)
 
 These things need to be implemented in infinote, but again would be nice
 to have:
