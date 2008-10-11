@@ -14,6 +14,7 @@ libgobby_core_a_SOURCES = \
 	noteplugin.cpp \
 	preferences.cpp \
 	statusbar.cpp \
+	tablabel.cpp \
 	userlist.cpp
 
 noinst_HEADERS = \
@@ -30,6 +31,7 @@ noinst_HEADERS = \
         noteplugin.hpp \
         preferences.hpp \
         statusbar.hpp \
+	tablabel.hpp \
         userlist.hpp
 
 libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \

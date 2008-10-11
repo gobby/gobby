@@ -17,11 +17,10 @@
  */
 
 #include "core/folder.hpp"
+#include "core/tablabel.hpp"
 #include "util/closebutton.hpp"
 #include "util/file.hpp"
 
-#include <gtkmm/box.h>
-#include <gtkmm/stock.h>
 #include <gdk/gdkkeysyms.h>
 #include <stdexcept>
 #include <iostream> // For std::cerr
@@ -59,133 +58,6 @@ namespace
 	private:
 		typedef std::map<guint, unsigned int> map_type;
 		map_type m_keyvals;
-	};
-
-	/* TODO: Put TabLabel into an extra source file */
-	class TabLabel: public Gtk::HBox
-	{
-	public:
-		typedef Glib::SignalProxy0<void> SignalCloseRequest;
-
-		TabLabel(Gobby::DocWindow& document,
-		         const Glib::ustring& title):
-			Gtk::HBox(false, 4), m_document(document),
-			m_title(title), m_label(title)
-		{
-			update_icon();
-			m_icon.show();
-
-			m_notify_editable_handle = g_signal_connect(
-				document.get_text_view(), "notify::editable",
-				G_CALLBACK(on_notify_editable_static), this);
-			m_notify_status_handle = g_signal_connect(
-				document.get_session(), "notify::status",
-				G_CALLBACK(on_notify_status_static), this);
-			m_notify_subscription_group_handle = g_signal_connect(
-				document.get_session(),
-				"notify::subscription-group",
-				G_CALLBACK(
-					on_notify_subscription_group_static),
-				this);
-
-			//m_label.set_ellipsize(Pango::ELLIPSIZE_END);
-			m_label.show();
-			m_button.show();
-
-			pack_start(m_icon, Gtk::PACK_SHRINK);
-			pack_start(m_label, Gtk::PACK_EXPAND_WIDGET);
-			pack_start(m_button, Gtk::PACK_SHRINK);
-		}
-
-		~TabLabel()
-		{
-			g_signal_handler_disconnect(
-				m_document.get_text_view(),
-				m_notify_editable_handle);
-			g_signal_handler_disconnect(
-				m_document.get_session(),
-				m_notify_status_handle);
-			g_signal_handler_disconnect(
-				m_document.get_session(),
-				m_notify_subscription_group_handle);
-		}
-
-		SignalCloseRequest signal_close_request() {
-			return m_button.signal_clicked();
-		}
-
-	private:
-		static void on_notify_editable_static(GObject* object,
-		                                      GParamSpec* pspec,
-		                                      gpointer user_data)
-		{
-			static_cast<TabLabel*>(user_data)->update_icon();
-		}
-
-		static void on_notify_status_static(GObject* object,
-		                                    GParamSpec* pspec,
-		                                    gpointer user_data)
-		{
-			static_cast<TabLabel*>(user_data)->update_icon();
-		}
-
-		static void on_notify_subscription_group_static(GObject* obj,
-		                                                GParamSpec* p,
-		                                                gpointer data)
-		{
-			static_cast<TabLabel*>(data)->update_icon();
-		}
-
-		void update_icon()
-		{
-			InfTextSession* session = m_document.get_session();
-			GtkTextView* view =
-				GTK_TEXT_VIEW(m_document.get_text_view());
-
-			if(inf_session_get_subscription_group(
-				INF_SESSION(session)) == NULL)
-			{
-				m_icon.set(Gtk::Stock::DISCONNECT,
-				           Gtk::ICON_SIZE_MENU);
-				return;
-			}
-
-			switch(inf_session_get_status(INF_SESSION(session)))
-			{
-			case INF_SESSION_SYNCHRONIZING:
-				m_icon.set(Gtk::Stock::EXECUTE,
-				           Gtk::ICON_SIZE_MENU);
-				break;
-			case INF_SESSION_RUNNING:
-				if(gtk_text_view_get_editable(view))
-				{
-					m_icon.set(Gtk::Stock::EDIT,
-					           Gtk::ICON_SIZE_MENU);
-				}
-				else
-				{
-					m_icon.set(Gtk::Stock::FILE,
-					           Gtk::ICON_SIZE_MENU);
-				}
-
-				break;
-			case INF_SESSION_CLOSED:
-				m_icon.set(Gtk::Stock::STOP,
-				           Gtk::ICON_SIZE_MENU);
-				break;
-			}
-		}
-
-		Gobby::DocWindow& m_document;
-		Glib::ustring m_title;
-
-		Gtk::Image m_icon;
-		Gtk::Label m_label;
-		Gobby::CloseButton m_button;
-
-		gulong m_notify_editable_handle;
-		gulong m_notify_status_handle;
-		gulong m_notify_subscription_group_handle;
 	};
 
 	void record(InfTextSession* session, const Glib::ustring& title)
@@ -253,7 +125,7 @@ Gobby::Folder::add_document(InfTextSession* session,
 	window->show();
 	m_signal_document_added.emit(*window);
 
-	TabLabel* tablabel = Gtk::manage(new TabLabel(*window, title));
+	TabLabel* tablabel = Gtk::manage(new TabLabel(*this, *window));
 	tablabel->signal_close_request().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_tab_close_request),

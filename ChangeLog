@@ -1,3 +1,14 @@
+2008-10-11  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/tablabel.hpp:
+	* code/core/tablabel.cpp:
+	* code/core/Makefile.am: Added TabLabel to this extra source file,
+	make color of tab label red on activity, and grey when the document is
+	being synchronized or the connection has been lost.
+
+	* code/core/tablabel.cpp: Removed the TabLabel class in the anonymous
+	namespace, use the one introduced above instead.
+
 2008-10-10  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/filechooser.cpp: Allow selecting non-local files in
