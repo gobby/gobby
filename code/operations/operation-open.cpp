@@ -384,7 +384,6 @@ void Gobby::OperationOpen::read_finish()
 	g_object_unref(io);
 	g_object_unref(text_gtk_buffer);
 
-	g_object_unref(io);
 	m_request = infc_browser_add_note_with_content(
 		m_browser, &m_parent, m_name.c_str(), Plugins::TEXT,
 		INF_SESSION(session), TRUE);

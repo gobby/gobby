@@ -1,3 +1,10 @@
+2008-10-12  Armin Burgmeier  <armin@arbur.net>
+
+	* code/operations/operation-open.cpp: Fixed double unref of IO object.
+
+	* code/core/browser.cpp: Added a TODO comment about initial root node
+	expansion for direct connections.
+
 2008-10-11  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/tablabel.hpp:

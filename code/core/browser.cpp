@@ -300,6 +300,10 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 		inf_gtk_browser_store_add_connection(
 			m_browser_store, INF_XML_CONNECTION(xmpp),
 			hostname.c_str());
+
+		/* TODO: Initial root node expansion for the newly added node.
+		 * This probably requires additional API in
+		 * InfGtkBrowserView */
 	}
 }
 
