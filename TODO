@@ -1,3 +1,7 @@
+Critical bugs:
+ - Gobby crashes when a document that is currently open gets deleted from the
+   server
+
 Some features that would be nice for a final Gobby 0.5 release. We could
 perhaps do pre-releases with some of these missing before:
 
