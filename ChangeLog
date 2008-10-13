@@ -1,3 +1,14 @@
+2008-10-13  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/browser-commands.hpp:
+	* code/commands/browser-commands.cpp:
+	* code/operations/operation-open.cpp:
+	* code/operations/operation-save.cpp: Set the modified flag upon
+	opening or saving a document correctly.
+
+	* code/core/tablabel.hpp:
+	* code/core/tablabel.cpp: Show the modify flag in the tab.
+
 2008-10-12  Armin Burgmeier  <armin@arbur.net>
 
 	* code/operations/operation-open.cpp: Fixed double unref of IO object.

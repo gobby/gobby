@@ -347,6 +347,8 @@ void Gobby::OperationOpen::encoding_error()
 
 void Gobby::OperationOpen::read_finish()
 {
+	gtk_text_buffer_set_modified(m_content, FALSE);
+
 	GtkTextIter insert_iter;
 	GtkTextMark* insert = gtk_text_buffer_get_insert(m_content);
 	gtk_text_buffer_get_iter_at_mark(m_content, &insert_iter, insert);

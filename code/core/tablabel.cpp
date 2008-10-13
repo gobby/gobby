@@ -24,10 +24,13 @@
 Gobby::TabLabel::TabLabel(Folder& folder, DocWindow& document):
 	Gtk::HBox(false, 6),
 	m_folder(folder), m_document(document),
-	m_title(document.get_title(), Gtk::ALIGN_LEFT),
 	m_changed(false)
 {
+	m_title.set_alignment(Gtk::ALIGN_LEFT);
+
 	update_icon();
+	update_color();
+	update_modified();
 
 	m_icon.show();
 	m_title.show();
@@ -81,6 +84,7 @@ void Gobby::TabLabel::on_notify_status()
 {
 	update_icon();
 	update_color();
+	update_modified();
 }
 
 void Gobby::TabLabel::on_notify_subscription_group()
@@ -91,6 +95,7 @@ void Gobby::TabLabel::on_notify_subscription_group()
 
 void Gobby::TabLabel::on_modified_changed()
 {
+	update_modified();
 }
 
 void Gobby::TabLabel::on_changed()
@@ -182,4 +187,19 @@ void Gobby::TabLabel::update_color()
 			Gtk::STATE_NORMAL,
 			default_style->get_fg(Gtk::STATE_NORMAL));
 	}
+}
+
+void Gobby::TabLabel::update_modified()
+{
+	InfSession* session = INF_SESSION(m_document.get_session());
+	bool modified = gtk_text_buffer_get_modified(
+		GTK_TEXT_BUFFER(m_document.get_text_buffer()));
+
+	if(inf_session_get_status(session) == INF_SESSION_SYNCHRONIZING)
+		modified = false;
+
+	if(modified)
+		m_title.set_text("*" + m_document.get_title());
+	else
+		m_title.set_text(m_document.get_title());
 }

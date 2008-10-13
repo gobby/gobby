@@ -90,6 +90,7 @@ protected:
 
 	void update_icon();
 	void update_color();
+	void update_modified();
 
 	Folder& m_folder;
 	DocWindow& m_document;

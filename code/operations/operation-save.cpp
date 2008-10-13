@@ -82,7 +82,7 @@ Gobby::OperationSave::~OperationSave()
 
 	get_status_bar().remove_message(m_message_handle);
 
-	// Reset file explicitenly before closing stream so that, on failure,
+	// Reset file explicitely before closing stream so that, on failure,
 	// existing files are not overriden with the temporary files we
 	// actually wrote to, at least for local files.
 	m_file.reset();
@@ -140,6 +140,8 @@ void Gobby::OperationSave::attempt_next()
 	{
 		if(m_document != NULL)
 		{
+			// TODO: Don't unset modified flag if the document has
+			// changed in the meanwhile.
 			gtk_text_buffer_set_modified(
 				GTK_TEXT_BUFFER(
 					m_document->get_text_buffer()),

@@ -16,6 +16,11 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// TODO: Split this file into multiple smaller files,
+// perhaps browser-commands.cpp (basically on_activate)
+// synchronization-commands.cpp (basically on_subscribe_session)
+// user-join-commands.cpp (basically join_user)
+
 #include "commands/browser-commands.hpp"
 #include "util/i18n.hpp"
 
@@ -138,7 +143,8 @@ Gobby::BrowserCommands::SessionNode::~SessionNode()
 		InfSession* session = infc_session_proxy_get_session(proxy);
 		g_signal_handler_disconnect(proxy, notify_connection_id);
 		g_signal_handler_disconnect(session, failed_id);
-		g_signal_handler_disconnect(session, complete_id);
+		g_signal_handler_disconnect(session, complete_before_id);
+		g_signal_handler_disconnect(session, complete_after_id);
 		g_signal_handler_disconnect(session, progress_id);
 		g_signal_handler_disconnect(session, close_id);
 
@@ -316,16 +322,17 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 	// Connect _after here so that we can access the 
 	// AdoptedAlgorithm the default handler created to perform
 	// the user join.
-	node.complete_id = g_signal_connect_after(
+	node.complete_before_id = g_signal_connect(
 		session, "synchronization-complete",
-		G_CALLBACK(on_synchronization_complete_static), this);
+		G_CALLBACK(on_synchronization_complete_before_static), this);
+	node.complete_after_id = g_signal_connect_after(
+		session, "synchronization-complete",
+		G_CALLBACK(on_synchronization_complete_after_static), this);
 	node.progress_id = g_signal_connect(
 		session, "synchronization-progress",
 		G_CALLBACK(on_synchronization_progress_static), this);
 	node.close_id = g_signal_connect(
 		session, "close", G_CALLBACK(on_close_static), this);
-
-	// TODO: Connect to notify::status of subscription connection
 
 	if(inf_session_get_status(session) == INF_SESSION_SYNCHRONIZING)
 	{
@@ -382,11 +389,44 @@ void Gobby::BrowserCommands::on_synchronization_failed(InfSession* session,
 			*window,
 			Glib::ustring::compose("Synchronization failed: %1",
 			                       error->message), SYNC_ERROR);
+
+		// The document will be of no use anyway, so consider it not
+		// being modified.
+		gtk_text_buffer_set_modified(
+			GTK_TEXT_BUFFER(window->get_text_buffer()), FALSE);
 	}
 }
 
-void Gobby::BrowserCommands::on_synchronization_complete(InfSession* session,
-                                                         InfXmlConnection* c)
+void Gobby::BrowserCommands::
+	on_synchronization_complete_before(InfSession* session,
+                                           InfXmlConnection* connection)
+{
+	SessionMap::iterator iter = m_session_map.find(session);
+	g_assert(iter != m_session_map.end());
+
+	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
+	{
+		// Unset modified flag after synchronization.
+		DocWindow* window = m_folder.lookup_document(
+			INF_TEXT_SESSION(session));
+		g_assert(window != NULL);
+
+		gtk_text_buffer_set_modified(
+			GTK_TEXT_BUFFER(window->get_text_buffer()), FALSE);
+
+		// TODO: Actually we should always set the modified flag,
+		// except the document is either empty, or known in the
+		// document info storage and the version on disk is the same
+		// as the one we got synchronized. We could store a hash and
+		// modification time in the documentinfo storage for this.
+		// We should do this is another source file, such as
+		// synchronization-commands.cpp.
+	}
+}
+
+void Gobby::BrowserCommands::
+	on_synchronization_complete_after(InfSession* session,
+                                          InfXmlConnection* connection)
 {
 	SessionMap::iterator iter = m_session_map.find(session);
 	g_assert(iter != m_session_map.end());

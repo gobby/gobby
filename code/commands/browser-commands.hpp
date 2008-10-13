@@ -85,12 +85,22 @@ protected:
 			on_synchronization_failed(session, conn, error);
 	}
 
-	static void on_synchronization_complete_static(InfSession* session,
-	                                               InfXmlConnection* conn,
-	                                               gpointer user_data)
+	static void
+	on_synchronization_complete_before_static(InfSession* session,
+	                                          InfXmlConnection* conn,
+	                                          gpointer user_data)
 	{
 		static_cast<BrowserCommands*>(user_data)->
-			on_synchronization_complete(session, conn);
+			on_synchronization_complete_before(session, conn);
+	}
+
+	static void
+	on_synchronization_complete_after_static(InfSession* session,
+	                                         InfXmlConnection* conn,
+	                                         gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_synchronization_complete_after(session, conn);
 	}
 
 	static void on_synchronization_progress_static(InfSession* session,
@@ -146,8 +156,10 @@ protected:
 	void on_synchronization_failed(InfSession* session,
 	                               InfXmlConnection* connection,
 	                               const GError* error);
-	void on_synchronization_complete(InfSession* session,
-	                                 InfXmlConnection* connection);
+	void on_synchronization_complete_before(InfSession* session,
+	                                        InfXmlConnection* connection);
+	void on_synchronization_complete_after(InfSession* session,
+	                                       InfXmlConnection* connection);
 	void on_synchronization_progress(InfSession* session,
 	                                 InfXmlConnection* connection,
 	                                 gdouble percentage);
@@ -185,7 +197,8 @@ protected:
 
 		gulong notify_connection_id;
 		gulong failed_id;
-		gulong complete_id;
+		gulong complete_before_id;
+		gulong complete_after_id;
 		gulong progress_id;
 		gulong close_id;
 
