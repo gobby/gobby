@@ -39,6 +39,7 @@
 #include "core/statusbar.hpp"
 #include "core/preferences.hpp"
 #include "core/filechooser.hpp"
+#include "core/titlebar.hpp"
 
 #include "util/config.hpp"
 
@@ -95,6 +96,8 @@ protected:
 	EditCommands m_commands_edit;
 	ViewCommands m_commands_view;
 	HelpCommands m_commands_help;
+
+	TitleBar m_title_bar;
 
 	// Dialogs
 	std::auto_ptr<InitialDialog> m_initial_dlg;

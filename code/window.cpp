@@ -48,7 +48,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_commands_edit(*this, m_header, m_folder, m_statusbar,
 	                m_preferences),
 	m_commands_view(m_header, m_folder, m_preferences),
-	m_commands_help(*this, m_header, m_icon_mgr)
+	m_commands_help(*this, m_header, m_icon_mgr),
+	m_title_bar(*this, m_folder)
 {
 	m_header.show();
 	m_browser.show();
@@ -85,7 +86,6 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	add(m_mainbox);
 
 	set_default_size(800, 600);
-	set_title("Gobby");
 	set_role("Gobby");
 }
 

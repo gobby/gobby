@@ -1,5 +1,17 @@
 2008-10-13  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/titlebar.hpp:
+	* code/core/titlebar.cpp:
+	* code/core/Makefile.am: Added a new class that handles what is
+	displayed in the titel bar of the Gobby window.
+
+	* code/window.hpp:
+	* code/window.cpp: Instantiate a TitleBar.
+
+	* code/core/documentinfostorage.hpp: Added a superflous TODO comment.
+
+2008-10-13  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/browser-commands.hpp:
 	* code/commands/browser-commands.cpp:
 	* code/operations/operation-open.cpp:

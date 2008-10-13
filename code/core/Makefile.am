@@ -15,6 +15,7 @@ libgobby_core_a_SOURCES = \
 	preferences.cpp \
 	statusbar.cpp \
 	tablabel.cpp \
+	titlebar.cpp \
 	userlist.cpp
 
 noinst_HEADERS = \
@@ -32,6 +33,7 @@ noinst_HEADERS = \
         preferences.hpp \
         statusbar.hpp \
 	tablabel.hpp \
+	titlebar.hpp \
         userlist.hpp
 
 libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \

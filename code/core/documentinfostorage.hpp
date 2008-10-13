@@ -30,7 +30,6 @@
 namespace Gobby
 {
 
-// TODO: Move to core?
 class DocumentInfoStorage: public sigc::trackable
 {
 public:
