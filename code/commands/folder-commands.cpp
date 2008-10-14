@@ -18,6 +18,8 @@
 
 #include "commands/folder-commands.hpp"
 
+#include <libinftextgtk/inf-text-gtk-buffer.h>
+
 class Gobby::FolderCommands::DocInfo: public sigc::trackable
 {
 public:
@@ -46,12 +48,26 @@ public:
 	{
 		m_active = false;
 		if(m_active_user) deactivate_user();
+
+		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+			inf_session_get_buffer(
+				INF_SESSION(m_document.get_session())));
+
+		inf_text_gtk_buffer_set_wake_on_cursor_movement(
+			buffer, FALSE);
 	}
 
 	void activate()
 	{
 		m_active = true;
 		if(m_active_user) activate_user();
+
+		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+			inf_session_get_buffer(
+				INF_SESSION(m_document.get_session())));
+
+		inf_text_gtk_buffer_set_wake_on_cursor_movement(
+			buffer, TRUE);
 	}
 
 protected:

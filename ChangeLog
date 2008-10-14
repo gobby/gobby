@@ -1,3 +1,10 @@
+2008-10-14  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/folder-commands.cpp: Only wake inactive users when the
+	corresponding document is the currently active one. This fixes a crash
+	when text has was selected in an inactive document and the selection
+	is erased by selecting something elsewhere.
+
 2008-10-13  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/titlebar.hpp:
