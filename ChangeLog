@@ -1,5 +1,10 @@
 2008-10-14  Armin Burgmeier  <armin@arbur.net>
 
+	* code/main.cpp: Call inf_init() instead of initializing gnutls and
+	the GObject type system directly.
+
+2008-10-14  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/browser-commands.cpp: Fixed a typo in a string.
 
 2008-10-14  Armin Burgmeier  <armin@arbur.net>

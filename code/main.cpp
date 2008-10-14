@@ -24,6 +24,8 @@
 #include "util/file.hpp"
 #include "util/i18n.hpp"
 
+#include <libinfinity/common/inf-init.h>
+
 #include <gtkmm/main.h>
 #include <gtkmm/messagedialog.h>
 #include <giomm/init.h>
@@ -55,7 +57,6 @@ namespace
 int main(int argc, char* argv[]) try
 {
 	g_thread_init(NULL);
-	gnutls_global_init();
 	Gio::init();
 
 	setlocale(LC_ALL, "");
@@ -102,6 +103,14 @@ int main(int argc, char* argv[]) try
 		return EXIT_SUCCESS;
 	}
 
+	GError* error = NULL;
+	if(!inf_init(&error))
+	{
+		std::string message = error->message;
+		g_error_free(error);
+		throw std::runtime_error(message);
+	}
+
 	Gobby::IconManager icon_manager;
 
 	// Set default icon
@@ -120,7 +129,7 @@ int main(int argc, char* argv[]) try
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
 	kit->run();
 
-	//gnutls_global_deinit();
+	//inf_deinit();
 	return 0;
 }
 catch(Glib::Exception& e)
