@@ -62,7 +62,7 @@ namespace
 
 		const Glib::ustring info_text =
 			_("If you have an idea what could have caused the "
-			  "problem, then you may attempt to solve it and try "
+			  "problem, then you may attempt to solve it and "
 			  "try again (after having closed this document). "
 			  "Otherwise it is most likely a bug in the "
 			  "software. In that case, please file a bug report "
