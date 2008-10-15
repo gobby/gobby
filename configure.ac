@@ -70,7 +70,7 @@ AM_CONDITIONAL(WITH_GNOME, test x$ac_cv_with_gnome != xno)
 AC_CACHE_SAVE
 
 # Glib i18n/gettext support.
-ALL_LINGUAS="ca de es fr ko it pl pt pt_BR ru sv zh_CN"
+ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
 AM_GLIB_DEFINE_LOCALEDIR(GOBBY_LOCALEDIR)
 

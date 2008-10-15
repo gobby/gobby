@@ -1,3 +1,11 @@
+2008-10-15  Armin Burgmeier  <armin@arbur.net>
+
+	* po/LINGUAS: Added LINGUAS file that lists all languages. This seems
+	to be required for `make dist'.
+
+	* configure.ac: Use the po/LINGUAS file to set the ALL_LINGUAS
+	variable.
+
 2008-10-14  Armin Burgmeier  <armin@arbur.net>
 
 	* code/main.cpp: Call inf_init() instead of initializing gnutls and
