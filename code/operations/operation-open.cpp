@@ -205,7 +205,10 @@ bool Gobby::OperationOpen::on_idle()
 	gchar* outbuf = outbuffer;
 	gsize outbytes = CONVERT_BUFFER_SIZE;
 
-	const std::size_t result = m_iconv->iconv(
+	/* iconv is defined as libiconv on Windows, or at least when using the
+	 * binary packages from ftp.gnome.org. Therefore we can't propely
+	 * call Glib::IConv::iconv. Therefore, we use the C API here. */
+	const std::size_t result = g_iconv(m_iconv->gobj(),
 		&inbuf, &inbytes, &outbuf, &outbytes);
 	bool more_to_process = (inbytes != 0);
 

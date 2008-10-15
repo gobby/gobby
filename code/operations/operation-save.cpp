@@ -202,7 +202,11 @@ void Gobby::OperationSave::write_next()
 
 	gchar* preserve_inbuf = inbuf;
 
-	std::size_t retval = m_iconv.iconv(&inbuf, &inlen, &outbuf, &outlen);
+	/* iconv is defined as libiconv on Windows, or at least when using the
+	 * binary packages from ftp.gnome.org. Therefore we can't propely
+	 * call Glib::IConv::iconv. Therefore, we use the C API here. */
+	std::size_t retval = g_iconv(
+		m_iconv.gobj(), &inbuf, &inlen, &outbuf, &outlen);
 
 	if(retval == static_cast<std::size_t>(-1))
 	{

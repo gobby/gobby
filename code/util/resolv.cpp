@@ -21,9 +21,16 @@
 #include <glibmm/main.h>
 #include <glibmm/thread.h>
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
+#ifdef G_OS_WIN32
+/* This is required to be able to use getaddrinfo with MinGW
+ * I believe this means that we require Windows XP here. */
+# define _WIN32_WINNT 0x0501
+# include <ws2tcpip.h>
+#else
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netdb.h>
+#endif
 
 struct Gobby::ResolvHandle
 {
@@ -63,10 +70,18 @@ namespace
 	void on_resolv_thread(ResolvHandle* handle)
 	{
 		addrinfo hint;
+#ifdef AI_ADDRCONFIG
 		hint.ai_flags = AI_ADDRCONFIG;
+#else
+		hint.ai_flags = 0;
+#endif
 		hint.ai_family = AF_UNSPEC;
 		hint.ai_socktype = SOCK_STREAM;
 		hint.ai_protocol = 0;
+		hint.ai_addrlen = 0;
+		hint.ai_canonname = NULL;
+		hint.ai_addr = NULL;
+		hint.ai_next = NULL;
 
 		addrinfo* res = NULL;
 		int val = getaddrinfo(handle->hostname.c_str(),

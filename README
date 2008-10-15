@@ -36,7 +36,7 @@ Gobby: First Contact
      * Sidebar with all the others having joined the session
      * Syntax highlighting, auto indentation, configurable tab
        width
-     * Multiple documnets in one session
+     * Multiple documents in one session
      * Document subscriptions
      * Zeroconf support (optional)
      * Unicode support

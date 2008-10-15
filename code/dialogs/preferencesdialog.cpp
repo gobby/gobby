@@ -267,9 +267,11 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_group_settings.show();
 
 	m_lbl_path_host_directory.show();
-	m_btn_path_host_directory.set_current_folder(
+	// Don't call this as long as we are not showing the dialog, to
+	// prevent spurious error messages when the folder does not exist.
+	/*m_btn_path_host_directory.set_current_folder(
 		static_cast<const std::string&>(
-			preferences.user.host_directory));
+			preferences.user.host_directory));*/
 	m_btn_path_host_directory.show();
 	connect_path_option(m_btn_path_host_directory,
 	                    preferences.user.host_directory);

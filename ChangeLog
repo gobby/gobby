@@ -1,5 +1,40 @@
 2008-10-15  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/Makefile.am: Added appicondir and pixmapdir back, so that
+	installed pixmaps can be found.
+
+	* code/util/resolv.cpp: Set all fields in getaddrinfo hint, otherwise
+	the Win32 implementation of getaddrinfo produces an error.
+
+	* code/core/browser.cpp: Commented-out the device name to device index
+	translation for %dev syntax on Windows. It won't be available for now.
+
+	* code/core/iconmanager.cpp: Don't load save-all.svg since GTK+ on
+	Win32 has no SVG loader by defualt. Also, locate pixbufs using the
+	non-deprecated g_win32_get_package_installation_directory_of_module
+	function.
+
+	* code/core/statusbar.cpp: Added code that undefs ERROR, because this
+	is used in an enum, and seems to be defined somewhere in a Windows
+	header.
+
+	* code/dialogs/preferencesdialog.cpp: Don't set current folder of
+	host directory file chooser (which is not shown currently anyway),
+	because this could produce an error message if the directory does not
+	exist.
+
+	* code/operations/operation-open.cpp:
+	* code/operations/operation-save.cpp: Use the C g_iconv API instead of
+	Glib::IConv::iconv, because iconv is a define to libiconv on Windows,
+	but Glib::IConv::libiconv does not exist.
+
+	* Makefile.am: Fixed linking order, link to stdc++ and ws2_32 on
+	Windows.
+
+	* win32/gobby.rc: Fixed path to gobby.res file.
+
+2008-10-15  Armin Burgmeier  <armin@arbur.net>
+
 	* po/LINGUAS: Added LINGUAS file that lists all languages. This seems
 	to be required for `make dist'.
 

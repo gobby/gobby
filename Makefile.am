@@ -7,16 +7,19 @@ dist_man_MANS = gobby.1
 
 bin_PROGRAMS = gobby-0.5
 
-gobby_0_5_LDADD = $(gobby_LIBS) \
+gobby_0_5_LDADD = \
 	code/libgobby.a \
 	code/commands/libgobby-commands.a \
 	code/operations/libgobby-operations.a \
 	code/dialogs/libgobby-dialogs.a \
 	code/core/libgobby-core.a \
-	code/util/libgobby-util.a
+	code/util/libgobby-util.a \
+	$(gobby_LIBS)
 
 if WIN32
-gobby_0_5_LDADD += -lole32 -luuid
+# For some reason it does not link against libstdc++ on Windows. Perhaps
+# that's because we don't specify a source file here, so it guesses C.
+gobby_0_5_LDADD += -lws2_32 -lstdc++
 gobby_0_5_LDFLAGS = \
 	-Wl,--enable-runtime-pseudo-reloc \
 	-mwindows \

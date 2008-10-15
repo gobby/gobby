@@ -26,6 +26,13 @@
 
 #include <glibmm/ustring.h>
 
+/* ARGH!!! */
+#ifdef G_OS_WIN32
+# ifdef ERROR
+#  undef ERROR
+# endif
+#endif
+
 namespace Gobby
 {
 

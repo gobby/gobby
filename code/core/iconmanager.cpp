@@ -24,7 +24,8 @@
 
 namespace
 {
-	Glib::RefPtr<Gdk::Pixbuf> load_pixbuf(const char* dir, const char* file)
+	Glib::RefPtr<Gdk::Pixbuf>
+	load_pixbuf(const char* dir, const char* file)
 	{
 		try
 		{
@@ -43,10 +44,11 @@ namespace
 				subdir = "share/pixmaps";
 			else
 				subdir = "share/pixmaps/gobby";
-			
-			path = g_win32_get_package_installation_subdirectory(
-				subdir);
-			std::string path_str = path;
+
+			gchar* path = g_win32_get_package_installation_directory_of_module(NULL);
+
+			std::string path_str =
+				Glib::build_filename(path, subdir);
 			g_free(path);
 
 			return Gdk::Pixbuf::create_from_file(
@@ -66,14 +68,16 @@ Gtk::StockID Gobby::IconManager::STOCK_USERLIST("gobby-userlist");
 Gtk::StockID Gobby::IconManager::STOCK_DOCLIST("gobby-doclist");
 Gtk::StockID Gobby::IconManager::STOCK_SAVE_ALL("gobby-save-all");
 
+// TODO: The save-all icon does not match the save icon for toolbar
+// or menu sized items. It is not yet enabled therefore.
 Gobby::IconManager::IconManager():
 	gobby(load_pixbuf(APPICON_DIR, "gobby.png") ),
 	userlist(load_pixbuf(PIXMAPS_DIR, "userlist.png") ),
 	doclist(load_pixbuf(PIXMAPS_DIR, "doclist.png") ),
-	save_all(load_pixbuf(PIXMAPS_DIR, "save-all.svg")),
+//	save_all(load_pixbuf(PIXMAPS_DIR, "save-all.svg")),
 	m_is_userlist(userlist),
 	m_is_doclist(doclist),
-	m_is_save_all(save_all),
+//	m_is_save_all(save_all),
 	m_icon_factory(Gtk::IconFactory::create() )
 {
 	Gtk::StockItem userlist_item(STOCK_USERLIST, _("User list") );
@@ -83,8 +87,6 @@ Gobby::IconManager::IconManager():
 	m_icon_factory->add(STOCK_DOCLIST, m_is_doclist);
 
 	Gtk::StockItem save_all_item(STOCK_SAVE_ALL, _("Save All"));
-	// TODO: The save-all icon does not match the save icon for toolbar
-	// or menu sized items. This is not yet enabled therefore.
 	//m_icon_factory->add(STOCK_SAVE_ALL, m_is_save_all);
 
 	m_icon_factory->add_default();

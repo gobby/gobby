@@ -25,7 +25,9 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
 
-#include <net/if.h>
+#ifndef G_OS_WIN32
+# include <net/if.h>
+#endif
 
 Gobby::Browser::Browser(Gtk::Window& parent,
                         const InfcNotePlugin* text_plugin,
@@ -193,6 +195,10 @@ void Gobby::Browser::on_hostname_activate()
 		Glib::ustring device_name = str.substr(pos + 1);
 		str.erase(pos);
 
+#ifdef G_OS_WIN32
+		// TODO: Implement
+		device_index = 0;
+#else
 		device_index = if_nametoindex(device_name.c_str());
 		if(device_index == 0)
 		{
@@ -202,6 +208,7 @@ void Gobby::Browser::on_hostname_activate()
 					_("Device \"%1\" does not exist"),
 					device_name), 5);
 		}
+#endif
 	}
 
 	if(str[0] == '[' && ((pos = str.find(']', 1)) != Glib::ustring::npos))
