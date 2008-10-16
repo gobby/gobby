@@ -1,0 +1,10 @@
+If you want to make changes to gobby, go get hacking. There are no
+strict rules considering code style. It's the code that matters, not the
+style. Just don't kill me if I reformat your code when applying a patch so
+it is consistent with the rest of the file in question.
+
+If you are done with your changes, use `git diff' to create a patch. To
+submit it, please open an issue in our trac at
+http://gobby.0x539.de/trac/newticket and attach your patch to it.
+
+Armin Burgmeier <armin@arbur.net>, 2008-10-16
