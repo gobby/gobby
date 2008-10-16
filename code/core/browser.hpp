@@ -117,7 +117,7 @@ protected:
 	Preferences& m_preferences;
 
 	InfXmppManager* m_xmpp_manager;
-#ifdef INFINOTE_HAVE_AVAHI
+#ifdef LIBINFINITY_HAVE_AVAHI
 	InfDiscoveryAvahi* m_discovery;
 #endif
 	InfGtkIo* m_io;

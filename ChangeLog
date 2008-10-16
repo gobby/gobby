@@ -1,5 +1,11 @@
 2008-10-15  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/browser.hpp:
+	* code/core/browser.cpp: Adapt to libinfinity API change,
+	INFINOTE_HAVE_AVAHI has been renamed to LIBINFINITY_HAVE_AVAHI.
+
+2008-10-15  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/Makefile.am: Added appicondir and pixmapdir back, so that
 	installed pixmaps can be found.
 

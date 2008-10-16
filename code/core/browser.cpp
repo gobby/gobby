@@ -65,7 +65,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	g_object_unref(connection_manager);
 
 	m_xmpp_manager = inf_xmpp_manager_new();
-#ifdef INFINOTE_HAVE_AVAHI
+#ifdef LIBINFINITY_HAVE_AVAHI
 	m_discovery = inf_discovery_avahi_new(INF_IO(m_io), m_xmpp_manager,
 	                                      NULL, NULL, NULL);
 	inf_discovery_avahi_set_security_policy(
@@ -133,7 +133,7 @@ Gobby::Browser::~Browser()
 	g_object_unref(m_browser_store);
 	g_object_unref(m_cert_manager);
 	g_object_unref(m_xmpp_manager);
-#ifdef INFINOTE_HAVE_AVAHI
+#ifdef LIBINFINITY_HAVE_AVAHI
 	g_object_unref(m_discovery);
 #endif
 	g_object_unref(m_io);
@@ -372,7 +372,7 @@ void Gobby::Browser::set_selected(InfcBrowser* browser, InfcBrowserIter* iter)
 
 void Gobby::Browser::on_security_policy_changed()
 {
-#ifdef INFINOTE_HAVE_AVAHI
+#ifdef LIBINFINITY_HAVE_AVAHI
 	inf_discovery_avahi_set_security_policy(
 		m_discovery, m_preferences.security.policy);
 #endif
