@@ -43,7 +43,7 @@ namespace
 			if(dir == APPICON_DIR)
 				subdir = "share/pixmaps";
 			else
-				subdir = "share/pixmaps/gobby";
+				subdir = "share/pixmaps/gobby-0.5";
 
 			gchar* path = g_win32_get_package_installation_directory_of_module(NULL);
 
@@ -71,7 +71,7 @@ Gtk::StockID Gobby::IconManager::STOCK_SAVE_ALL("gobby-save-all");
 // TODO: The save-all icon does not match the save icon for toolbar
 // or menu sized items. It is not yet enabled therefore.
 Gobby::IconManager::IconManager():
-	gobby(load_pixbuf(APPICON_DIR, "gobby.png") ),
+	gobby(load_pixbuf(APPICON_DIR, "gobby-0.5.png") ),
 	userlist(load_pixbuf(PIXMAPS_DIR, "userlist.png") ),
 	doclist(load_pixbuf(PIXMAPS_DIR, "doclist.png") ),
 //	save_all(load_pixbuf(PIXMAPS_DIR, "save-all.svg")),

@@ -16,6 +16,9 @@ noinst_HEADERS = \
         initialdialog.hpp \
         preferencesdialog.hpp
 
-libgobby_dialogs_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
+appicondir = $(datadir)/pixmaps
+pixmapdir = $(datadir)/pixmaps/gobby-0.5
+
+libgobby_dialogs_a_CPPFLAGS = $(gobby_CFLAGS) -I$(top_srcdir)/code \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

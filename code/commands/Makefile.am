@@ -18,6 +18,9 @@ noinst_HEADERS = \
         help-commands.hpp \
         view-commands.hpp
 
-libgobby_commands_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
+appicondir = $(datadir)/pixmaps
+pixmapdir = $(datadir)/pixmaps/gobby-0.5
+
+libgobby_commands_a_CPPFLAGS = $(gobby_CFLAGS) -I$(top_srcdir)/code \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"

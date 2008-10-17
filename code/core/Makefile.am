@@ -37,8 +37,8 @@ noinst_HEADERS = \
         userlist.hpp
 
 appicondir = $(datadir)/pixmaps
-pixmapdir = $(datadir)/pixmaps/gobby
+pixmapdir = $(datadir)/pixmaps/gobby-0.5
 
-libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
+libgobby_core_a_CPPFLAGS = $(gobby_CFLAGS) -I$(top_srcdir)/code \
                           -DAPPICON_DIR=\""$(appicondir)"\" \
                           -DPIXMAPS_DIR=\""$(pixmapdir)"\"

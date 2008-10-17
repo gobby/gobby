@@ -1,5 +1,27 @@
 2008-10-16  Armin Burgmeier  <armin@arbur.net>
 
+	* code/Makefile.am:
+	* code/commands/Makefile.am:
+	* code/core/Makefile.am:
+	* code/dialogs/Makefile.am:
+	* code/operations/Makefile.am:
+	* code/util/Makefile.am: Fix `make distcheck' by using -I$(top_srcdir)
+	instead of a relative path such as -I.. Also, changed pixmapdir to
+	$(datadir)/pixmaps/gobby-0.5.
+
+	* pixmaps/Makefile.am:
+	* pixmaps/gobby-0.5.png: Moved from pixmaps/gobby.png.
+
+	* contrib/Makefile.am:
+	* contrib/gobby-0.5.desktop: Moved from gobby.desktop.
+
+	* configure.ac: Changed GETTEXT_PACKAGE from gobby to gobby05.
+
+	* code/core/iconmanager.cpp: Load gobby-0.5.png for the Gobby logo
+	instead of gobby.png.
+
+2008-10-16  Armin Burgmeier  <armin@arbur.net>
+
 	* NEWS: Update for release.
 
 2008-10-16  Armin Burgmeier  <armin@arbur.net>

@@ -14,6 +14,9 @@ noinst_HEADERS = \
         operation-open.hpp \
         operation-save.hpp
 
-libgobby_operations_a_CPPFLAGS = $(gobby_CFLAGS) -I.. \
+appicondir = $(datadir)/pixmaps
+pixmapdir = $(datadir)/pixmaps/gobby-0.5
+
+libgobby_operations_a_CPPFLAGS = $(gobby_CFLAGS) -I$(top_srcdir)/code \
                               -DAPPICON_DIR=\""$(appicondir)"\" \
                               -DPIXMAPS_DIR=\""$(pixmapdir)"\"
