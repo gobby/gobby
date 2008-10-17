@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-19 00:52+0200\n"
+"POT-Creation-Date: 2008-10-17 03:09+0200\n"
 "PO-Revision-Date: 2007-10-26 03:09+0000\n"
 "Last-Translator: Oh, A-Reum <dhdkfma1016@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -20,44 +20,45 @@ msgstr ""
 
 #. Document cannot be used if an error happened
 #. during synchronization.
-#: src/commands/browser-commands.cpp:49
+#: code/commands/browser-commands.cpp:54
 msgid "This document cannot be used."
 msgstr ""
 
-#: src/commands/browser-commands.cpp:52
+#: code/commands/browser-commands.cpp:57
 msgid ""
 "You can still watch others editing the document, but you cannot edit it "
 "yourself."
 msgstr ""
 
-#: src/commands/browser-commands.cpp:59
+#: code/commands/browser-commands.cpp:64
 msgid ""
 "If you have an idea what could have caused the problem, then you may attempt "
-"to solve it and try try again (after having closed this document). Otherwise "
-"it is most likely a bug in the software. In that case, please file a bug "
-"report at http://gobby.0x539.de/trac/newticket and provide as much "
-"information as you can, including what you did when the problem occurred and "
-"how to reproduce the problem (if possible) so that we can fix the problem in "
-"a later version. Thank you."
+"to solve it and try again (after having closed this document). Otherwise it "
+"is most likely a bug in the software. In that case, please file a bug report "
+"at http://gobby.0x539.de/trac/newticket and provide as much information as "
+"you can, including what you did when the problem occurred and how to "
+"reproduce the problem (if possible) so that we can fix the problem in a "
+"later version. Thank you."
 msgstr ""
 
-#: src/commands/browser-commands.cpp:249
+#: code/commands/browser-commands.cpp:255
 msgid "Subscribing to %1..."
 msgstr ""
 
-#: src/commands/browser-commands.cpp:266
+#: code/commands/browser-commands.cpp:272
 msgid "Subscription already in progress"
 msgstr ""
 
-#: src/commands/browser-commands.cpp:343 src/commands/browser-commands.cpp:416
+#: code/commands/browser-commands.cpp:350
+#: code/commands/browser-commands.cpp:461
 msgid "Synchronization in progress... %1%%"
 msgstr ""
 
-#: src/commands/browser-commands.cpp:364
+#: code/commands/browser-commands.cpp:371
 msgid "Subscription failed: %1"
 msgstr ""
 
-#: src/commands/browser-commands.cpp:442
+#: code/commands/browser-commands.cpp:487
 msgid ""
 "The connection to the publisher of this document has been lost. Further "
 "changes to the document could not be synchronized to others anymore, "
@@ -67,72 +68,72 @@ msgid ""
 "have reached the publisher before the connection was lost."
 msgstr ""
 
-#: src/commands/browser-commands.cpp:530
+#: code/commands/browser-commands.cpp:575
 msgid "User Join in progress..."
 msgstr ""
 
-#: src/commands/browser-context-commands.cpp:91
+#: code/commands/browser-context-commands.cpp:92
 #, fuzzy
 msgid "Create Do_cument..."
 msgstr "문서 만들기..."
 
-#: src/commands/browser-context-commands.cpp:126
+#: code/commands/browser-context-commands.cpp:127
 #, fuzzy
 msgid "Create Directory..."
 msgstr "세션 만들기..."
 
-#: src/commands/browser-context-commands.cpp:139
+#: code/commands/browser-context-commands.cpp:140
 #, fuzzy
 msgid "_Open Document..."
 msgstr "문서 열기.."
 
-#: src/commands/browser-context-commands.cpp:158
+#: code/commands/browser-context-commands.cpp:159
 msgid "D_elete"
 msgstr ""
 
-#: src/commands/browser-context-commands.cpp:184
+#: code/commands/browser-context-commands.cpp:185
 msgid "Choose a name for the directory"
 msgstr ""
 
-#: src/commands/browser-context-commands.cpp:185
+#: code/commands/browser-context-commands.cpp:186
 #, fuzzy
 msgid "Choose a name for the document"
 msgstr "열려있는 문서 종료"
 
-#: src/commands/browser-context-commands.cpp:186
+#: code/commands/browser-context-commands.cpp:187
 msgid "_Directory Name:"
 msgstr ""
 
-#: src/commands/browser-context-commands.cpp:187
+#: code/commands/browser-context-commands.cpp:188
 #, fuzzy
 msgid "_Document Name:"
 msgstr "문서 관리"
 
-#: src/commands/browser-context-commands.cpp:190
+#: code/commands/browser-context-commands.cpp:191
 msgid "C_reate"
 msgstr ""
 
-#: src/commands/browser-context-commands.cpp:194
+#: code/commands/browser-context-commands.cpp:195
 #, fuzzy
 msgid "New Directory"
 msgstr "위치"
 
-#: src/commands/browser-context-commands.cpp:195
-#: src/commands/file-commands.cpp:40
+#: code/commands/browser-context-commands.cpp:196
+#: code/commands/file-commands.cpp:41
 #, fuzzy
 msgid "New Document"
 msgstr "문서 저장"
 
-#: src/commands/browser-context-commands.cpp:213
-#: src/commands/file-commands.cpp:80
+#: code/commands/browser-context-commands.cpp:214
+#: code/commands/file-commands.cpp:81
 msgid "Choose a text file to open"
 msgstr ""
 
-#: src/commands/file-commands.cpp:157
+#: code/commands/file-commands.cpp:167
 msgid "Choose a location to save document \"%1\" to"
 msgstr ""
 
-#: src/commands/help-commands.cpp:72
+#: code/commands/help-commands.cpp:72
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -149,349 +150,354 @@ msgid ""
 "Ave, Cambridge, MA 02139, USA."
 msgstr ""
 
-#: src/core/browser.cpp:35
+#: code/core/browser.cpp:40
 #, fuzzy
 msgid "_Direct connection"
 msgstr "위치"
 
-#: src/core/browser.cpp:37
+#: code/core/browser.cpp:42
 #, fuzzy
 msgid "Host name:"
 msgstr "호스트:"
 
-#: src/core/browser.cpp:214
+#: code/core/browser.cpp:208
+#, fuzzy
+msgid "Device \"%1\" does not exist"
+msgstr "존재하지 않는 문서 %0%"
+
+#: code/core/browser.cpp:245
 msgid "Resolving %1..."
 msgstr ""
 
-#: src/core/docwindow.cpp:209
+#: code/core/docwindow.cpp:245
 #, fuzzy
 msgid "User List"
 msgstr "사용자 목록"
 
-#: src/core/header.cpp:187
+#: code/core/header.cpp:187
 #, fuzzy
 msgid "_None"
 msgstr "아래(D)"
 
-#: src/core/header.cpp:209
+#: code/core/header.cpp:209
 #, fuzzy
 msgid "_File"
 msgstr "파일"
 
-#: src/core/header.cpp:212
+#: code/core/header.cpp:212
 #, fuzzy
-msgid "Open..."
+msgid "_Open..."
 msgstr "문서 열기.."
 
-#: src/core/header.cpp:216
+#: code/core/header.cpp:216
 #, fuzzy
-msgid "Save As..."
+msgid "Save _As..."
 msgstr "세션 저장하기..."
 
-#: src/core/header.cpp:220 src/core/iconmanager.cpp:85
+#: code/core/header.cpp:220 code/core/iconmanager.cpp:89
 msgid "Save All"
 msgstr ""
 
-#: src/core/header.cpp:220
+#: code/core/header.cpp:220
 msgid "Save all open files locally"
 msgstr ""
 
-#: src/core/header.cpp:225
+#: code/core/header.cpp:225
 msgid "_Edit"
 msgstr "편집(_E)"
 
-#: src/core/header.cpp:233
+#: code/core/header.cpp:233
 #, fuzzy
 msgid "_Find..."
 msgstr "찾기..."
 
-#: src/core/header.cpp:235
+#: code/core/header.cpp:235
 #, fuzzy
 msgid "Find Ne_xt"
 msgstr "찾을 문자:"
 
-#: src/core/header.cpp:236
+#: code/core/header.cpp:236
 msgid "Find next match of phrase searched for"
 msgstr ""
 
-#: src/core/header.cpp:239
+#: code/core/header.cpp:239
 msgid "Find Pre_vious"
 msgstr ""
 
-#: src/core/header.cpp:240
+#: code/core/header.cpp:240
 msgid "Find previous match of phrase searched for"
 msgstr ""
 
-#: src/core/header.cpp:245
+#: code/core/header.cpp:245
 #, fuzzy
 msgid "Find And Rep_lace..."
 msgstr "찾아 바꾸기..."
 
-#: src/core/header.cpp:249
+#: code/core/header.cpp:249
 #, fuzzy
 msgid "Go To _Line..."
 msgstr "줄 찾아가기..."
 
-#: src/core/header.cpp:253
+#: code/core/header.cpp:253
 #, fuzzy
 msgid "Pr_eferences..."
 msgstr "속성..."
 
-#: src/core/header.cpp:255
+#: code/core/header.cpp:255
 #, fuzzy
 msgid "_View"
 msgstr "뷰"
 
-#: src/core/header.cpp:258
+#: code/core/header.cpp:258
 #, fuzzy
 msgid "View Toolbar"
 msgstr "툴바"
 
-#: src/core/header.cpp:259
+#: code/core/header.cpp:259
 msgid "Whether to show the toolbar"
 msgstr ""
 
-#: src/core/header.cpp:263
+#: code/core/header.cpp:263
 msgid "View Statusbar"
 msgstr ""
 
-#: src/core/header.cpp:264
+#: code/core/header.cpp:264
 msgid "Whether to show the statusbar"
 msgstr ""
 
-#: src/core/header.cpp:268
+#: code/core/header.cpp:268
 msgid "View Document Browser"
 msgstr ""
 
-#: src/core/header.cpp:269
+#: code/core/header.cpp:269
 msgid "Whether to show the document browser"
 msgstr ""
 
-#: src/core/header.cpp:273
+#: code/core/header.cpp:273
 #, fuzzy
 msgid "View User List"
 msgstr "사용자 목록"
 
-#: src/core/header.cpp:274
+#: code/core/header.cpp:274
 msgid "Whether to show the user list"
 msgstr ""
 
-#: src/core/header.cpp:278
+#: code/core/header.cpp:278
 msgid "_Highlight Mode"
 msgstr ""
 
-#: src/core/header.cpp:284
+#: code/core/header.cpp:284
 msgid "_Help"
 msgstr "도움말(_H)"
 
-#: src/core/header.cpp:287
+#: code/core/header.cpp:287
 #, fuzzy
 msgid "_About..."
 msgstr "Gobby에 대하여"
 
-#: src/core/header.cpp:288
+#: code/core/header.cpp:288
 msgid "Shows Gobby's copyright and credits"
 msgstr "Gobby의 저작권 보기"
 
-#: src/core/iconmanager.cpp:79
+#: code/core/iconmanager.cpp:83
 msgid "User list"
 msgstr "사용자 목록"
 
-#: src/core/iconmanager.cpp:82
+#: code/core/iconmanager.cpp:86
 msgid "Document list"
 msgstr "문서 목록"
 
-#: src/core/statusbar.cpp:227
+#: code/core/statusbar.cpp:227
 msgid "Ln %1, Col %2"
 msgstr ""
 
-#: src/core/userlist.cpp:126
+#: code/core/userlist.cpp:126
 #, fuzzy
 msgid "Users"
 msgstr "사용자"
 
-#: src/dialogs/documentlocationdialog.cpp:37
+#: code/dialogs/documentlocationdialog.cpp:37
 #, fuzzy
 msgid "Select document's target location"
 msgstr "다른위치에 문서 저장하기"
 
-#: src/dialogs/documentlocationdialog.cpp:38
+#: code/dialogs/documentlocationdialog.cpp:38
 #, fuzzy
 msgid "Document Name:"
 msgstr "문서 관리"
 
-#: src/dialogs/documentlocationdialog.cpp:40
+#: code/dialogs/documentlocationdialog.cpp:40
 msgid "Choose a directory to create the document into:"
 msgstr ""
 
-#: src/dialogs/finddialog.cpp:46 src/dialogs/finddialog.cpp:144
+#: code/dialogs/finddialog.cpp:46 code/dialogs/finddialog.cpp:144
 #, fuzzy
 msgid "Find"
 msgstr "찾기..."
 
-#: src/dialogs/finddialog.cpp:49
+#: code/dialogs/finddialog.cpp:49
 #, fuzzy
 msgid "_Search for:"
 msgstr "찾기"
 
-#: src/dialogs/finddialog.cpp:51
+#: code/dialogs/finddialog.cpp:51
 #, fuzzy
 msgid "Replace _with:"
 msgstr "변경할 문자:"
 
-#: src/dialogs/finddialog.cpp:53
+#: code/dialogs/finddialog.cpp:53
 #, fuzzy
 msgid "_Match case"
 msgstr "대/소문자 구분"
 
-#: src/dialogs/finddialog.cpp:54
+#: code/dialogs/finddialog.cpp:54
 #, fuzzy
 msgid "Match _entire word only"
 msgstr "단어 단위로"
 
-#: src/dialogs/finddialog.cpp:55
+#: code/dialogs/finddialog.cpp:55
 msgid "Search _backwards"
 msgstr ""
 
-#: src/dialogs/finddialog.cpp:56
+#: code/dialogs/finddialog.cpp:56
 msgid "Wra_p around"
 msgstr ""
 
-#: src/dialogs/finddialog.cpp:102
+#: code/dialogs/finddialog.cpp:102
 #, fuzzy
 msgid "Replace _All"
 msgstr "모두 바꾸기(_A)"
 
-#: src/dialogs/finddialog.cpp:104
+#: code/dialogs/finddialog.cpp:104
 msgid "_Replace"
 msgstr "바꾸기(R)"
 
-#: src/dialogs/finddialog.cpp:144
+#: code/dialogs/finddialog.cpp:144
 #, fuzzy
 msgid "Replace"
 msgstr "바꾸기(R)"
 
-#: src/dialogs/finddialog.cpp:163 src/dialogs/finddialog.cpp:179
+#: code/dialogs/finddialog.cpp:163 code/dialogs/finddialog.cpp:179
 #, fuzzy
 msgid "Phrase \"%1\" has not been found"
 msgstr "\"%0%\" 을/를 찾을 수 없습니다."
 
-#: src/dialogs/finddialog.cpp:332
+#: code/dialogs/finddialog.cpp:332
 msgid "No occurence has been replaced"
 msgstr "변경사항 없음"
 
-#: src/dialogs/finddialog.cpp:338
+#: code/dialogs/finddialog.cpp:338
 #, fuzzy
 msgid "%1 occurence has been replaced"
 msgid_plural "%1 occurences have been replaced"
 msgstr[0] "변경사항 없음"
 
-#: src/dialogs/gotodialog.cpp:27
+#: code/dialogs/gotodialog.cpp:27
 msgid "Go to line"
 msgstr "줄 찾아가기"
 
-#: src/dialogs/gotodialog.cpp:30
+#: code/dialogs/gotodialog.cpp:30
 #, fuzzy
 msgid "Line _number:"
 msgstr "줄 번호:"
 
-#: src/dialogs/gotodialog.cpp:51
+#: code/dialogs/gotodialog.cpp:51
 #, fuzzy
 msgid "Go To _Line"
 msgstr "줄 찾아가기"
 
-#: src/dialogs/initialdialog.cpp:49
+#: code/dialogs/initialdialog.cpp:49
 msgid "Choose a user color"
 msgstr ""
 
-#: src/dialogs/initialdialog.cpp:53
+#: code/dialogs/initialdialog.cpp:53
 msgid "Welcome to Gobby"
 msgstr ""
 
-#: src/dialogs/initialdialog.cpp:61
+#: code/dialogs/initialdialog.cpp:61
 msgid ""
 "Before we start, a few options need to be configured. You can later change "
 "them by choosing Edit/Preferences from the menu."
 msgstr ""
 
-#: src/dialogs/initialdialog.cpp:68
+#: code/dialogs/initialdialog.cpp:68
 #, fuzzy
 msgid "User Name"
 msgstr "사용자"
 
-#: src/dialogs/initialdialog.cpp:70
+#: code/dialogs/initialdialog.cpp:70
 msgid "Your name as shown to other users."
 msgstr ""
 
-#: src/dialogs/initialdialog.cpp:79
+#: code/dialogs/initialdialog.cpp:79
 #, fuzzy
 msgid "User Color"
 msgstr "사용자 목록"
 
-#: src/dialogs/initialdialog.cpp:81
+#: code/dialogs/initialdialog.cpp:81
 msgid "The color with which text you have written is branded."
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:229
+#: code/dialogs/preferencesdialog.cpp:229
 msgid "Settings"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:230
+#: code/dialogs/preferencesdialog.cpp:230
 msgid "Paths"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:232
+#: code/dialogs/preferencesdialog.cpp:232
 #, fuzzy
 msgid "User name:"
 msgstr "새 이름:"
 
-#: src/dialogs/preferencesdialog.cpp:234
+#: code/dialogs/preferencesdialog.cpp:234
 #, fuzzy
 msgid "User color:"
 msgstr "사용자 비밀번호:"
 
-#: src/dialogs/preferencesdialog.cpp:235
+#: code/dialogs/preferencesdialog.cpp:235
 msgid "Choose a new user color"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:238
+#: code/dialogs/preferencesdialog.cpp:238
 msgid "Host directory:"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:278
+#: code/dialogs/preferencesdialog.cpp:280
 msgid "The directory into which locally hosted sessions are permanently stored"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:295
+#: code/dialogs/preferencesdialog.cpp:297
 msgid "Tab Stops"
 msgstr "탭 간격"
 
-#: src/dialogs/preferencesdialog.cpp:296
+#: code/dialogs/preferencesdialog.cpp:298
 msgid "Indentation"
 msgstr "정렬"
 
-#: src/dialogs/preferencesdialog.cpp:297
+#: code/dialogs/preferencesdialog.cpp:299
 #, fuzzy
 msgid "Home/End Behaviour"
 msgstr "Home/End 키 행동"
 
-#: src/dialogs/preferencesdialog.cpp:298
+#: code/dialogs/preferencesdialog.cpp:300
 msgid "Tab width:"
 msgstr "탭 크기:"
 
-#: src/dialogs/preferencesdialog.cpp:299
+#: code/dialogs/preferencesdialog.cpp:301
 msgid "Insert spaces instead of tabs"
 msgstr "탭 대신에 빈공간 삽입"
 
-#: src/dialogs/preferencesdialog.cpp:300
+#: code/dialogs/preferencesdialog.cpp:302
 msgid "Enable automatic indentation"
 msgstr "자동 정렬"
 
-#: src/dialogs/preferencesdialog.cpp:301
+#: code/dialogs/preferencesdialog.cpp:303
 msgid "Smart home/end"
 msgstr "home/end 키 설정"
 
-#: src/dialogs/preferencesdialog.cpp:316
+#: code/dialogs/preferencesdialog.cpp:318
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
@@ -499,214 +505,226 @@ msgstr ""
 "이 옵션이 선택되면, Home/End 키를 사용했을 경우 문장의 처음과 끝부분에 커서"
 "가 가기 전에 해당 줄의 문장의 시작부분과 끝부분에 커서가 가게 됩니다."
 
-#: src/dialogs/preferencesdialog.cpp:353
+#: code/dialogs/preferencesdialog.cpp:355
 #, fuzzy
 msgid "Text Wrapping"
 msgstr "줄 바꿈"
 
-#: src/dialogs/preferencesdialog.cpp:354
+#: code/dialogs/preferencesdialog.cpp:356
 #, fuzzy
 msgid "Line Numbers"
 msgstr "줄 번호"
 
-#: src/dialogs/preferencesdialog.cpp:355
+#: code/dialogs/preferencesdialog.cpp:357
 #, fuzzy
 msgid "Current Line"
 msgstr "현재 줄"
 
-#: src/dialogs/preferencesdialog.cpp:356
+#: code/dialogs/preferencesdialog.cpp:358
 #, fuzzy
 msgid "Right Margin"
 msgstr "가로 여백"
 
-#: src/dialogs/preferencesdialog.cpp:357
+#: code/dialogs/preferencesdialog.cpp:359
 #, fuzzy
 msgid "Bracket Matching"
 msgstr "괄호 매칭"
 
-#: src/dialogs/preferencesdialog.cpp:358
+#: code/dialogs/preferencesdialog.cpp:360
 msgid "Enable text wrapping"
 msgstr "자동 줄 바꿈"
 
-#: src/dialogs/preferencesdialog.cpp:359
+#: code/dialogs/preferencesdialog.cpp:361
 msgid "Do not split words over two lines"
 msgstr "단어를 두 줄로 나누지 않음"
 
-#: src/dialogs/preferencesdialog.cpp:360
+#: code/dialogs/preferencesdialog.cpp:362
 msgid "Display line numbers"
 msgstr "줄 번호 표시"
 
-#: src/dialogs/preferencesdialog.cpp:361
+#: code/dialogs/preferencesdialog.cpp:363
 msgid "Highlight current line"
 msgstr "현재 줄 강조"
 
-#: src/dialogs/preferencesdialog.cpp:362
+#: code/dialogs/preferencesdialog.cpp:364
 msgid "Display right margin"
 msgstr "가로 여백 표시"
 
-#: src/dialogs/preferencesdialog.cpp:363
+#: code/dialogs/preferencesdialog.cpp:365
 msgid "Right margin at column:"
 msgstr "가로 여백 칸 수:"
 
-#: src/dialogs/preferencesdialog.cpp:364
+#: code/dialogs/preferencesdialog.cpp:366
 msgid "Highlight matching bracket"
 msgstr "매칭되는 괄호 강조"
 
-#: src/dialogs/preferencesdialog.cpp:450
+#: code/dialogs/preferencesdialog.cpp:452
 msgid "Toolbar"
 msgstr "툴바"
 
-#: src/dialogs/preferencesdialog.cpp:451
+#: code/dialogs/preferencesdialog.cpp:453
 msgid "Font"
 msgstr "글자체"
 
-#: src/dialogs/preferencesdialog.cpp:456
+#: code/dialogs/preferencesdialog.cpp:458
 msgid "Show text only"
 msgstr "문자만 보기"
 
-#: src/dialogs/preferencesdialog.cpp:458
+#: code/dialogs/preferencesdialog.cpp:460
 msgid "Show icons only"
 msgstr "아이콘만 보기"
 
-#: src/dialogs/preferencesdialog.cpp:460
+#: code/dialogs/preferencesdialog.cpp:462
 msgid "Show both icons and text"
 msgstr "문자와 아이콘 모두 보기"
 
-#: src/dialogs/preferencesdialog.cpp:462
+#: code/dialogs/preferencesdialog.cpp:464
 msgid "Show text besides icons"
 msgstr "아이콘 위에 텍스트 보여주기"
 
-#: src/dialogs/preferencesdialog.cpp:481
+#: code/dialogs/preferencesdialog.cpp:483
 msgid "Trusted CAs"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:482
+#: code/dialogs/preferencesdialog.cpp:484
 #, fuzzy
 msgid "Secure Connection"
 msgstr "연결 실패"
 
-#: src/dialogs/preferencesdialog.cpp:483
+#: code/dialogs/preferencesdialog.cpp:485
 msgid "Select a file containing trusted CAs"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:500
+#: code/dialogs/preferencesdialog.cpp:502
 msgid "Use TLS if possible"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:503
+#: code/dialogs/preferencesdialog.cpp:505
 msgid "Always use TLS"
 msgstr ""
 
-#: src/dialogs/preferencesdialog.cpp:515
+#: code/dialogs/preferencesdialog.cpp:517
 msgid "Preferences"
 msgstr "속성"
 
-#: src/dialogs/preferencesdialog.cpp:520
+#: code/dialogs/preferencesdialog.cpp:522
 msgid "User"
 msgstr "사용자"
 
-#: src/dialogs/preferencesdialog.cpp:521
+#: code/dialogs/preferencesdialog.cpp:523
 msgid "Editor"
 msgstr "편집기"
 
-#: src/dialogs/preferencesdialog.cpp:522
+#: code/dialogs/preferencesdialog.cpp:524
 msgid "View"
 msgstr "뷰"
 
-#: src/dialogs/preferencesdialog.cpp:523
+#: code/dialogs/preferencesdialog.cpp:525
 msgid "Appearance"
 msgstr "외관"
 
-#: src/dialogs/preferencesdialog.cpp:524
+#: code/dialogs/preferencesdialog.cpp:526
 msgid "Security"
 msgstr ""
 
-#: src/operations/operation-delete.cpp:43
+#: code/main.cpp:69
+msgid "Gobby options"
+msgstr ""
+
+#: code/main.cpp:69
+msgid "Options related to Gobby"
+msgstr ""
+
+#: code/main.cpp:74
+msgid "Display version information and exit"
+msgstr ""
+
+#: code/operations/operation-delete.cpp:43
 msgid "Removing node %1..."
 msgstr ""
 
-#: src/operations/operation-delete.cpp:59
+#: code/operations/operation-delete.cpp:59
 msgid "Failed to delete node %1: %2"
 msgstr ""
 
-#: src/operations/operation-new.cpp:57
+#: code/operations/operation-new.cpp:57
 msgid "Creating directory %1..."
 msgstr ""
 
-#: src/operations/operation-new.cpp:58
+#: code/operations/operation-new.cpp:58
 #, fuzzy
 msgid "Creating document %1..."
 msgstr "문서 만들기..."
 
-#: src/operations/operation-new.cpp:75
+#: code/operations/operation-new.cpp:75
 msgid "Failed to create directory %1: %2"
 msgstr ""
 
-#: src/operations/operation-new.cpp:76
+#: code/operations/operation-new.cpp:76
 #, fuzzy
 msgid "Failed to create document %1: %2"
 msgstr "현재 문서 저장"
 
-#: src/operations/operation-open.cpp:83
+#: code/operations/operation-open.cpp:83
 #, fuzzy
 msgid "Opening document %1..."
 msgstr "문서 열기.."
 
-#: src/operations/operation-open.cpp:123
+#: code/operations/operation-open.cpp:123
 msgid ""
 "The directory into which the new document should have been inserted was "
 "removed"
 msgstr ""
 
-#: src/operations/operation-open.cpp:312
+#: code/operations/operation-open.cpp:315
 msgid "The file contains data not in the specified encoding"
 msgstr ""
 
-#: src/operations/operation-open.cpp:320
+#: code/operations/operation-open.cpp:323
 msgid ""
 "The file either contains data in an unknown encoding, or it contains binary "
 "data."
 msgstr ""
 
-#: src/operations/operation-open.cpp:428
+#: code/operations/operation-open.cpp:432
 #, fuzzy
 msgid "Failed to open document %1: %2"
 msgstr "열려있는 문서 종료"
 
-#: src/operations/operation-save.cpp:66
+#: code/operations/operation-save.cpp:66
 #, fuzzy
 msgid "Saving document %1 to %2..."
 msgstr "다른이름으로 문서 저장하기.."
 
-#: src/operations/operation-save.cpp:212
+#: code/operations/operation-save.cpp:218
 msgid ""
 "The document contains one or more characters that cannot be encoded in the "
 "specified character coding."
 msgstr ""
 
-#: src/operations/operation-save.cpp:274
+#: code/operations/operation-save.cpp:280
 #, fuzzy
 msgid "Failed to save document %1: %2"
 msgstr "새 문서에서 파일 불러오기"
 
-#: src/util/file.cpp:67 src/util/file.cpp:76
+#: code/util/file.cpp:67 code/util/file.cpp:76
 msgid "Could not create directory \"%1\": %2"
 msgstr ""
 
-#: src/window.cpp:61
+#: code/window.cpp:62
 #, fuzzy
 msgid "Document Browser"
 msgstr "문서 목록"
 
-#: src/window.cpp:101
+#: code/window.cpp:106
 msgid "You are still connected to a session"
 msgstr "아직 세션에 연결되어있습니다."
 
-#: src/window.cpp:109
+#: code/window.cpp:114
 msgid "Do you want to close Gobby nevertheless?"
 msgstr "그래도 종료하시겠습니까?"
 
-#: src/window.cpp:115
+#: code/window.cpp:120
 msgid "C_ancel"
 msgstr ""
 
@@ -728,9 +746,6 @@ msgstr ""
 
 #~ msgid "%0%: %1%"
 #~ msgstr "%0%: %1%"
-
-#~ msgid "Document %0% does not exist"
-#~ msgstr "존재하지 않는 문서 %0%"
 
 #~ msgid "Usage: /remove <document>"
 #~ msgstr "사용법 : /remove <문서명>"

@@ -1,3 +1,8 @@
+2008-10-16  Armin Burgmeier  <armin@arbur.net>
+
+	* POTFILES.in:
+	* gobby.pot: Updated for 0.4.90 release.
+
 2008-09-19  Armin Burgmeier  <armin@arbur.net>
 
 	* POTFILES.in: Regenerated.
