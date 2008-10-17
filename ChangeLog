@@ -1,5 +1,11 @@
 2008-10-16  Armin Burgmeier  <armin@arbur.net>
 
+	* contrib/gobby.desktop: Launch the correct executable, added a
+	"(0.5)" to the description to differentiate it from a previous
+	parallel-installed version.
+
+2008-10-16  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/browser-commands.cpp (on_synchronization_failed):
 	Remove the entry from the session map directly instead of waiting for
 	session closure, otherwise the error message is overwritten with a

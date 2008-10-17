@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Gobby Collaborative Editor
-Name[de]=Gobby-Gemeinschaftseditor
+Name=Gobby Collaborative Editor (0.5)
+Name[de]=Gobby-Gemeinschaftseditor (0.5)
 Comment=Edit text files collaboratively
 Comment[de]=Gemeinschaftliches Editieren von Textdateien
-Exec=gobby
+Exec=gobby-0.5
 Terminal=false
 Type=Application
 Icon=gobby.png
