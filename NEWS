@@ -1,6 +1,16 @@
 Gobby
 =====
 
+Version 0.4.90:
+  * Use libinfinity instead of libobby as backend
+  * Allow connection to multiple servers
+  * Redesigned UI to better match normal text editors, and to be more
+    HIG-compliant
+  * Added Undo support (via libinfinity)
+  * Require GtkSourceView 2.x
+  * Some features of the previous versions, especially self-hosting, are not
+    implemented in 0.4.90. This will be added in a later version.
+
 Version 0.4.6:
   * Require gtksourceview 1.8 to enable indent-on-tab
   * Require obby 0.4.5 to support IPv6 autodiscovery
