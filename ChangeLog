@@ -1,5 +1,12 @@
 2008-10-16  Armin Burgmeier  <armin@arbur.net>
 
+	* all source files: Changed description in GPL header since Gobby is
+	no longer libobby driven. Also changed Copyright holder to me and
+	Copyright date to 2008 since 99% of the code was written by me in
+	2008.
+
+2008-10-16  Armin Burgmeier  <armin@arbur.net>
+
 	* contrib/gobby.desktop: Launch the correct executable, added a
 	"(0.5)" to the description to differentiate it from a previous
 	parallel-installed version.

@@ -1,5 +1,5 @@
-/* gobby - A GTKmm driven libobby client
- * Copyright (C) 2005 0x539 dev group
+/* Gobby - GTK-based collaborative text editor
+ * Copyright (C) 2008 Armin Burgmeier <armin@arbur.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
