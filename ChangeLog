@@ -1,3 +1,11 @@
+2008-10-16  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/browser-commands.cpp (on_synchronization_failed):
+	Remove the entry from the session map directly instead of waiting for
+	session closure, otherwise the error message is overwritten with a
+	useless (and incorrent) 'The connection to the publisher has been
+	lost' one.
+
 2008-10-15  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/browser.hpp:

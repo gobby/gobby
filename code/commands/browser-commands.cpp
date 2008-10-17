@@ -394,6 +394,11 @@ void Gobby::BrowserCommands::on_synchronization_failed(InfSession* session,
 		// being modified.
 		gtk_text_buffer_set_modified(
 			GTK_TEXT_BUFFER(window->get_text_buffer()), FALSE);
+
+		// Don't wait until the session is closed because of this,
+		// since this would also cause a connection notify,
+		// overwriting the error message with a useless one.
+		m_session_map.erase(iter);
 	}
 }
 
