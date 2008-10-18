@@ -1,5 +1,10 @@
 2008-10-18  Armin Burgmeier  <armin@arbur.net>
 
+	* code/main.cpp: Set localedir relative to Gobby executable on
+	Windows, so i18n is properly relocatable.
+
+2008-10-18  Armin Burgmeier  <armin@arbur.net>
+
 	* === Released 0.4.90 ===
 
 2008-10-17  Armin Burgmeier  <armin@arbur.net>
