@@ -242,11 +242,11 @@ Gobby::Header::Header(Preferences& preferences,
 	action_edit_find_replace(
 		Gtk::Action::create("EditFindReplace",
 		                    Gtk::Stock::FIND_AND_REPLACE,
-		                    _("Find And Rep_lace..."))),
+		                    _("Find and Rep_lace..."))),
 	action_edit_goto_line(
 		Gtk::Action::create("EditGotoLine",
 		                    Gtk::Stock::JUMP_TO,
-				    _("Go To _Line..."))),
+				    _("Go to _Line..."))),
 	action_edit_preferences(
 		Gtk::Action::create("EditPreferences",
 		                    Gtk::Stock::PREFERENCES,

@@ -37,9 +37,9 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_text_plugin(text_plugin),
 	m_status_bar(status_bar),
 	m_preferences(preferences),
-	m_expander(_("_Direct connection"), true),
+	m_expander(_("_Direct Connection"), true),
 	m_hbox(false, 6),
-	m_label_hostname(_("Host name:"))
+	m_label_hostname(_("Host Name:"))
 {
 	m_label_hostname.show();
 	m_entry_hostname.signal_activate().connect(
