@@ -1,3 +1,8 @@
+2008-11-05  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac:
+	* NEWS: bump version to 0.4.8, document the changes
+
 2008-09-23  Armin Burgmeier  <armin@0x539.de>
 
 	* src/joindialog.cpp: Fixed a crash introduced in the last version

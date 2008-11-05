@@ -1,6 +1,10 @@
 Gobby
 =====
 
+Version 0.4.8:
+ * Bug fix release: fix crash in join dialog when avahi-daemon is not
+   started.
+
 Version 0.4.7:
  * Please note: This version needs obby 0.4.6 to compile.
  * Some fixes improving Gobby's accessibility.
