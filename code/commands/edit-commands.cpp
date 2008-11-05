@@ -299,15 +299,52 @@ void Gobby::EditCommands::on_find_text_changed()
 		!m_find_dialog->get_find_text().empty());
 }
 
+// TODO: The following is basically a hack to set the cursor to the position
+// where a Undo/Redo has happened. This can be properly fixed as soon as
+// libinfinity supports caret-aware requests, by generating undo-caret and
+// redo-caret requests.
+namespace {
+	bool check_set = false;
+	GtkTextIter check;
+
+	void recaret_i(GtkTextBuffer* buffer,
+	               GtkTextIter* location,
+	               gchar* text,
+	               gint len,
+	               gpointer user_data)
+	{
+		check = *location;
+		check_set = true;
+	}
+
+	void recaret_e(GtkTextBuffer* buffer,
+	               GtkTextIter* start,
+	               GtkTextIter* end,
+	               gpointer user_data)
+	{
+		check = *start;
+		check_set = true;
+	}
+}
+
 void Gobby::EditCommands::on_undo()
 {
 	g_assert(m_current_document != NULL);
+
+	gulong i_ = g_signal_connect_after(m_current_document->get_text_buffer(), "insert-text", G_CALLBACK(recaret_i), NULL);
+	gulong e_ = g_signal_connect_after(m_current_document->get_text_buffer(), "delete-range", G_CALLBACK(recaret_e), NULL);
 
 	inf_adopted_session_undo(
 		INF_ADOPTED_SESSION(m_current_document->get_session()),
 		INF_ADOPTED_USER(m_current_document->get_active_user())
 	);
 
+	g_signal_handler_disconnect(m_current_document->get_text_buffer(), i_);
+	g_signal_handler_disconnect(m_current_document->get_text_buffer(), e_);
+
+	if(check_set)
+		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_document->get_text_buffer()), &check, &check);
+	check_set = false;
 	m_current_document->scroll_to_cursor_position(0.0);
 }
 
@@ -315,11 +352,20 @@ void Gobby::EditCommands::on_redo()
 {
 	g_assert(m_current_document != NULL);
 
+	gulong i_ = g_signal_connect_after(m_current_document->get_text_buffer(), "insert-text", G_CALLBACK(recaret_i), NULL);
+	gulong e_ = g_signal_connect_after(m_current_document->get_text_buffer(), "delete-range", G_CALLBACK(recaret_e), NULL);
+
 	inf_adopted_session_redo(
 		INF_ADOPTED_SESSION(m_current_document->get_session()),
 		INF_ADOPTED_USER(m_current_document->get_active_user())
 	);
 
+	g_signal_handler_disconnect(m_current_document->get_text_buffer(), i_);
+	g_signal_handler_disconnect(m_current_document->get_text_buffer(), e_);
+
+	if(check_set)
+		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_document->get_text_buffer()), &check, &check);
+	check_set = false;
 	m_current_document->scroll_to_cursor_position(0.0);
 }
 

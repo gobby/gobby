@@ -1,3 +1,13 @@
+2008-11-05  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/edit-commands.cpp: Added a (hopefully) temporary hack
+	to set the cursor position to the place where a Undo/Redo has
+	occurred. This stopped to work with the latest changes in libinfinity
+	(which in turn fix other caret stuff, such as no longer moving the 
+	caret around on block indent/unindent, or allowing to paste text
+	over a selected area). This can be properly implemented as soon as
+	libinfinity supports caret-aware requests.
+
 2008-10-18  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/browser.cpp:
