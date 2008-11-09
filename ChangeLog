@@ -1,3 +1,8 @@
+2008-11-09  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/edit-commands.cpp: Scroll to cursor after cut or
+	paste.
+
 2008-11-05  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/edit-commands.cpp: Added a (hopefully) temporary hack

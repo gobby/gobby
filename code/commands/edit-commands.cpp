@@ -378,6 +378,8 @@ void Gobby::EditCommands::on_cut()
 		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
 		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),
 		TRUE);
+
+	m_current_document->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_copy()
@@ -398,6 +400,8 @@ void Gobby::EditCommands::on_paste()
 		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
 		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),
 		NULL, TRUE);
+
+	m_current_document->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_find()
