@@ -1,5 +1,10 @@
 2008-11-23  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/browser.cpp: Added <sys/socket.h> include, required on
+	Mac OS X. Bug #399, Markus Wanjura.
+
+2008-11-23  Armin Burgmeier  <armin@arbur.net>
+
 	* code/util/i18n.hpp: Added definition for N_.
 
 	* code/operations/operation-open.cpp: Made 8bit encoding used for auto

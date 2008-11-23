@@ -26,6 +26,7 @@
 #include <gtkmm/image.h>
 
 #ifndef G_OS_WIN32
+# include <sys/socket.h> 
 # include <net/if.h>
 #endif
 
