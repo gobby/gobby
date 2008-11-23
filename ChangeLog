@@ -1,5 +1,10 @@
 2008-11-23  Armin Burgmeier  <armin@arbur.net>
 
+	* Makefile.am: Add a dummy C++ file to nondistributed sources, to
+	cause C++ linking. Bug #399, Markus Wanjura.
+
+2008-11-23  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/browser.cpp: Added <sys/socket.h> include, required on
 	Mac OS X. Bug #399, Markus Wanjura.
 

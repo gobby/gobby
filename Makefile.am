@@ -17,9 +17,7 @@ gobby_0_5_LDADD = \
 	$(gobby_LIBS)
 
 if WIN32
-# For some reason it does not link against libstdc++ on Windows. Perhaps
-# that's because we don't specify a source file here, so it guesses C.
-gobby_0_5_LDADD += -lws2_32 -lstdc++
+gobby_0_5_LDADD += -lws2_32
 gobby_0_5_LDFLAGS = \
 	-Wl,--enable-runtime-pseudo-reloc \
 	-mwindows \
@@ -27,3 +25,8 @@ gobby_0_5_LDFLAGS = \
 endif
 
 gobby_0_5_SOURCES = 
+
+# Dummy C++ source to cause C++ linking, otherwise some platforms don't link
+# correctly against libstdc++. See also #399. Note that this file does not
+# (need to) exist in the source tree.
+nodist_EXTRA_gobby_0_5_SOURCES = dummy.cpp
