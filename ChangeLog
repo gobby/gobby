@@ -1,5 +1,9 @@
 2008-11-23  Armin Burgmeier  <armin@arbur.net>
 
+	* configure.ac: Post-release bump to 0.4.91.
+
+2008-11-23  Armin Burgmeier  <armin@arbur.net>
+
 	* contrib/Makefile.am: Always add gobby-0.5.desktop.in to the
 	distribution.
 
