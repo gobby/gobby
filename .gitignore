@@ -15,3 +15,9 @@ depcomp
 gobby
 autom4te.cache
 .deps
+compile
+intltool-extract.in
+intltool-merge.in
+intltool-update.in
+prjtodo
+prjwc

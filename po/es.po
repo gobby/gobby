@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-26 13:57+0200\n"
+"POT-Creation-Date: 2008-11-23 14:27+0100\n"
 "PO-Revision-Date: 2007-09-23 11:02+0000\n"
 "Last-Translator: Rolando Espinoza La Fuente <darkrho@gmail.com>\n"
 "Language-Team: Mario Palomo Torrero <mpalomo@ihman.com>\n"
@@ -18,36 +18,36 @@ msgstr ""
 "X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: src/chat.cpp:73
+#: ../src/chat.cpp:73
 msgid "Send"
 msgstr "Enviar"
 
-#: src/chat.cpp:227
+#: ../src/chat.cpp:227
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
 "Comando '%0%' no encontrado. Escriba /help para mostrar la lista de comandos."
 
-#: src/chat.cpp:238
+#: ../src/chat.cpp:238
 msgid "%0%: %1%"
 msgstr "%0%: %1%"
 
-#: src/chat.cpp:252
+#: ../src/chat.cpp:252
 msgid "Document %0% does not exist"
 msgstr "El document %0% no existe"
 
-#: src/chat.cpp:258
+#: ../src/chat.cpp:258
 msgid "Usage: /remove <document>"
 msgstr "Uso: /remove <documento>"
 
-#: src/documentlist.cpp:51
+#: ../src/documentlist.cpp:51
 msgid "Subscribe"
 msgstr "Suscribirse"
 
-#: src/documentlist.cpp:107 src/header.cpp:409 src/icon.cpp:69
+#: ../src/documentlist.cpp:107 ../src/header.cpp:407 ../src/icon.cpp:69
 msgid "Document list"
 msgstr "Lista de documentos"
 
-#: src/encoding.cpp:98
+#: ../src/encoding.cpp:98
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
@@ -55,357 +55,357 @@ msgstr ""
 "Error al convertir la entrada a UTF-8: La codificación es desconocida o se "
 "trata de datos binarios."
 
-#: src/encoding_selector.cpp:145
+#: ../src/encoding_selector.cpp:145
 msgid "Character Encoding:"
 msgstr "Codificación de Caracteres"
 
-#: src/finddialog.cpp:43
+#: ../src/finddialog.cpp:43
 msgid "Find what:"
 msgstr "Buscar:"
 
-#: src/finddialog.cpp:44
+#: ../src/finddialog.cpp:44
 msgid "Replace with:"
 msgstr "Reemplazar:"
 
-#: src/finddialog.cpp:45
+#: ../src/finddialog.cpp:45
 msgid "Match whole word only"
 msgstr "Sólo palabras completas"
 
-#: src/finddialog.cpp:46
+#: ../src/finddialog.cpp:46
 msgid "Match case"
 msgstr "Distinguir mayúsculas y minúsculas"
 
-#: src/finddialog.cpp:47
+#: ../src/finddialog.cpp:47
 msgid "Match as regular expression"
 msgstr "Expresión regular"
 
-#: src/finddialog.cpp:48
+#: ../src/finddialog.cpp:48
 msgid "Direction"
 msgstr "Dirección"
 
-#: src/finddialog.cpp:49
+#: ../src/finddialog.cpp:49
 msgid "_Up"
 msgstr "S_ubir"
 
-#: src/finddialog.cpp:50
+#: ../src/finddialog.cpp:50
 msgid "_Down"
 msgstr "_Bajar"
 
-#: src/finddialog.cpp:52
+#: ../src/finddialog.cpp:52
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: src/finddialog.cpp:53
+#: ../src/finddialog.cpp:53
 msgid "Replace _all"
 msgstr "Reemplaz_ar todo"
 
-#: src/finddialog.cpp:158
+#: ../src/finddialog.cpp:158
 msgid "Search"
 msgstr "Buscar"
 
-#: src/finddialog.cpp:158
+#: ../src/finddialog.cpp:158
 msgid "Search and replace"
 msgstr "Buscar y reemplazar"
 
-#: src/finddialog.cpp:182
+#: ../src/finddialog.cpp:182
 msgid "\"%0%\" has not been found in the document."
 msgstr "%0% no encontrado en el documento."
 
-#: src/finddialog.cpp:265
+#: ../src/finddialog.cpp:265
 msgid "No occurence has been replaced"
 msgstr "Ninguna sustitución realizada"
 
-#: src/finddialog.cpp:271
+#: ../src/finddialog.cpp:271
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
 msgstr[0] "%0% sustitución realizada"
 msgstr[1] "%0% sustituciones realizadas"
 
-#: src/finddialog.cpp:301
+#: ../src/finddialog.cpp:301
 msgid "No document currently opened"
 msgstr "Ningún documento abierto actualmente"
 
-#: src/gotodialog.cpp:30
+#: ../src/gotodialog.cpp:30
 msgid "Line number:"
 msgstr "Número de línea:"
 
-#: src/gotodialog.cpp:32
+#: ../src/gotodialog.cpp:32
 msgid "_Go to line"
 msgstr "_Ir a la línea"
 
-#: src/gotodialog.cpp:77
+#: ../src/gotodialog.cpp:77
 msgid "Go to line"
 msgstr "Ir a la línea"
 
-#: src/header.cpp:236
+#: ../src/header.cpp:234
 msgid "Create session..."
 msgstr "Crear sesión..."
 
-#: src/header.cpp:237
+#: ../src/header.cpp:235
 msgid "Opens a new obby session"
 msgstr "Abrir una nueva sesión obby"
 
-#: src/header.cpp:245
+#: ../src/header.cpp:243
 msgid "Join session..."
 msgstr "Unirse a una sesión"
 
-#: src/header.cpp:246
+#: ../src/header.cpp:244
 msgid "Joins an existing obby session"
 msgstr "Unirse a una sesión obby existente"
 
-#: src/header.cpp:254
+#: ../src/header.cpp:252
 msgid "Save session..."
 msgstr "Guardar sesión"
 
-#: src/header.cpp:255
+#: ../src/header.cpp:253
 msgid "Saves the complete session for a later restore"
 msgstr "Guarda la sesión completa para restaurarla más tarde"
 
-#: src/header.cpp:263
+#: ../src/header.cpp:261
 msgid "Quit session"
 msgstr "Cerrar sesión"
 
-#: src/header.cpp:264
+#: ../src/header.cpp:262
 msgid "Leaves the currently running obby session"
 msgstr "Dejar la sesión obby actual abierta"
 
-#: src/header.cpp:272
+#: ../src/header.cpp:270
 msgid "Quit"
 msgstr "Salir"
 
-#: src/header.cpp:273
+#: ../src/header.cpp:271
 msgid "Quits the application"
 msgstr "Salir de la aplicación"
 
-#: src/header.cpp:277
+#: ../src/header.cpp:275
 msgid "_Session"
 msgstr "_Sesión"
 
-#: src/header.cpp:283
+#: ../src/header.cpp:281
 msgid "Create document..."
 msgstr "Crear documento..."
 
-#: src/header.cpp:284
+#: ../src/header.cpp:282
 msgid "Creates a new document"
 msgstr "Crea un nuevo documento"
 
-#: src/header.cpp:292
+#: ../src/header.cpp:290
 msgid "Open document..."
 msgstr "Abrir documento..."
 
-#: src/header.cpp:293
+#: ../src/header.cpp:291
 msgid "Loads a file into a new document"
 msgstr "Carga un archivo dentro un nuevo documento"
 
-#: src/header.cpp:301
+#: ../src/header.cpp:299
 msgid "Save document"
 msgstr "Guardar documento"
 
-#: src/header.cpp:302
+#: ../src/header.cpp:300
 msgid "Saves a document into a file"
 msgstr "Guarda un documento en un archivo"
 
-#: src/header.cpp:310
+#: ../src/header.cpp:308
 msgid "Save document as..."
 msgstr "Guardar documento como..."
 
-#: src/header.cpp:311
+#: ../src/header.cpp:309
 msgid "Saves a document to another location"
 msgstr "Guarda un documento en otro lugar"
 
-#: src/header.cpp:319
+#: ../src/header.cpp:317
 msgid "Close document"
 msgstr "Cerrar documento"
 
-#: src/header.cpp:320
+#: ../src/header.cpp:318
 msgid "Closes an opened document"
 msgstr "Cierra un documento abierto"
 
-#: src/header.cpp:324
+#: ../src/header.cpp:322
 msgid "_Edit"
 msgstr "_Editar"
 
-#: src/header.cpp:330
+#: ../src/header.cpp:328
 msgid "Find..."
 msgstr "Buscar..."
 
-#: src/header.cpp:331
+#: ../src/header.cpp:329
 msgid "Search for a text in the current document"
 msgstr "Guardar documento actual"
 
-#: src/header.cpp:339
+#: ../src/header.cpp:337
 msgid "Find and replace..."
 msgstr "Buscar y reemplazar..."
 
-#: src/header.cpp:340
+#: ../src/header.cpp:338
 msgid "Search for a text and replace it with another one"
 msgstr "Encuentra un texto y lo reemplaza por otro"
 
-#: src/header.cpp:348
+#: ../src/header.cpp:346
 msgid "Go to line..."
 msgstr "Ir a la línea..."
 
-#: src/header.cpp:349
+#: ../src/header.cpp:347
 msgid "Move cursor to a specified line"
 msgstr "Mover el cursor a la línea indicada"
 
-#: src/header.cpp:357
+#: ../src/header.cpp:355
 msgid "Preferences..."
 msgstr "Preferencias..."
 
-#: src/header.cpp:358
+#: ../src/header.cpp:356
 msgid "Displays a dialog to customise Gobby for your needs"
 msgstr "Muestra un diálogo para configurar Gobby con sus preferencias"
 
-#: src/header.cpp:366
+#: ../src/header.cpp:364
 msgid "Document preferences..."
 msgstr "Preferencias del documento..."
 
-#: src/header.cpp:367
+#: ../src/header.cpp:365
 msgid "Shows a preferences dialog that is just applied to this document"
 msgstr ""
 "Muestra un diálogo de preferencias que se aplicarán sólo a este documento"
 
-#: src/header.cpp:372
+#: ../src/header.cpp:370
 msgid "Syntax"
 msgstr "Sintaxis"
 
-#: src/header.cpp:374
+#: ../src/header.cpp:372
 msgid "_User"
 msgstr "_Usuario"
 
-#: src/header.cpp:380
+#: ../src/header.cpp:378
 msgid "Set password..."
 msgstr "Establecer contraseña..."
 
-#: src/header.cpp:381
+#: ../src/header.cpp:379
 msgid "Sets a password for this user"
 msgstr "Establece una contraseña para este usuario"
 
-#: src/header.cpp:389
+#: ../src/header.cpp:387
 msgid "Set colour..."
 msgstr "Establecer color..."
 
-#: src/header.cpp:390
+#: ../src/header.cpp:388
 msgid "Sets a new colour for this user"
 msgstr "Establece un nuevo color para este usuario"
 
-#: src/header.cpp:394
+#: ../src/header.cpp:392
 msgid "_Window"
 msgstr "_Ventana"
 
-#: src/header.cpp:400 src/icon.cpp:66 src/userlist.cpp:122
+#: ../src/header.cpp:398 ../src/icon.cpp:66 ../src/userlist.cpp:122
 msgid "User list"
 msgstr "Lista de usuarios"
 
-#: src/header.cpp:401
+#: ../src/header.cpp:399
 msgid "Displays a list of users that are currently joined"
 msgstr "Muestra la lista de usuarios actualmente conectados"
 
-#: src/header.cpp:410
+#: ../src/header.cpp:408
 msgid "Displays a list of documents within the current session"
 msgstr "Muestra una lista de los documentos dentro de la sesión actual"
 
-#: src/header.cpp:419 src/icon.cpp:72
+#: ../src/header.cpp:417 ../src/icon.cpp:72
 msgid "Chat"
 msgstr "Chat"
 
-#: src/header.cpp:420
+#: ../src/header.cpp:418
 msgid "Displays a chat to talk to other people in the session"
 msgstr "Mostrar un chat para hablar con otras personas en la sesión"
 
-#: src/header.cpp:425
+#: ../src/header.cpp:423
 msgid "_Help"
 msgstr "A_yuda"
 
-#: src/header.cpp:431
+#: ../src/header.cpp:429
 msgid "About"
 msgstr "Acerca de"
 
-#: src/header.cpp:432
+#: ../src/header.cpp:430
 msgid "Shows Gobby's copyright and credits"
 msgstr "Muestra el copyright y los créditos de Gobby"
 
-#: src/header.cpp:647
+#: ../src/header.cpp:645
 msgid "None"
 msgstr "Ninguna"
 
-#: src/header.cpp:648
+#: ../src/header.cpp:646
 msgid "Unselects the current language"
 msgstr "Desactiva el lenguaje actual"
 
 #. Build description string
-#: src/header.cpp:664
+#: ../src/header.cpp:662
 msgid "Selects %0% as language"
 msgstr "Selecciona el lenguaje %0%"
 
-#: src/hostdialog.cpp:33
+#: ../src/hostdialog.cpp:33
 msgid "Create obby session"
 msgstr "Crear sesión obby"
 
-#: src/hostdialog.cpp:36 src/joindialog.cpp:55
+#: ../src/hostdialog.cpp:36 ../src/joindialog.cpp:56
 msgid "Port:"
 msgstr "Puerto:"
 
-#: src/hostdialog.cpp:37 src/joindialog.cpp:56
+#: ../src/hostdialog.cpp:37 ../src/joindialog.cpp:57
 msgid "Name:"
 msgstr "Nombre:"
 
-#: src/hostdialog.cpp:38 src/joindialog.cpp:57
+#: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
 msgid "Colour:"
 msgstr "Color:"
 
-#: src/hostdialog.cpp:39
+#: ../src/hostdialog.cpp:39
 msgid "Password:"
 msgstr "Contraseña:"
 
-#: src/hostdialog.cpp:40
+#: ../src/hostdialog.cpp:40
 msgid "Restore session:"
 msgstr "Crear sesión..."
 
-#: src/hostdialog.cpp:42
+#: ../src/hostdialog.cpp:42
 msgid "Restore session"
 msgstr "Crear sesión..."
 
-#: src/hostdialog.cpp:120
+#: ../src/hostdialog.cpp:120
 msgid "_Host"
 msgstr "_Host"
 
-#: src/hostprogressdialog.cpp:29
+#: ../src/hostprogressdialog.cpp:29
 msgid "Opening obby session..."
 msgstr "Abriendo sesión obby..."
 
-#: src/joindialog.cpp:51
+#: ../src/joindialog.cpp:52
 msgid "Join obby session"
 msgstr "Unirse a una sesión obby"
 
-#: src/joindialog.cpp:54
+#: ../src/joindialog.cpp:55
 msgid "Host:"
 msgstr "Host:"
 
-#: src/joindialog.cpp:59
+#: ../src/joindialog.cpp:60
 msgid "Local network"
 msgstr "Red local"
 
 #. resetup columns
-#: src/joindialog.cpp:319
+#: ../src/joindialog.cpp:365
 msgid "User"
 msgstr "Usuario"
 
-#: src/joindialog.cpp:320
+#: ../src/joindialog.cpp:366
 msgid "Host"
 msgstr "Máquina"
 
-#: src/joindialog.cpp:321
+#: ../src/joindialog.cpp:367
 msgid "Port"
 msgstr "Puerto"
 
-#: src/joindialog.cpp:340
+#: ../src/joindialog.cpp:386
 #, fuzzy
 msgid "Failure"
 msgstr "Fallo"
 
-#: src/joinprogressdialog.cpp:34
+#: ../src/joinprogressdialog.cpp:34
 msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
@@ -413,22 +413,22 @@ msgstr ""
 "Se requiere la contraseña de usuario para %0%. Puede elegir otro nombre de "
 "usuario, escribir la contraseña o cancelar la conexión."
 
-#: src/joinprogressdialog.cpp:111
+#: ../src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
 msgstr "Nombre ya utilizado. Puede elegir otro nombre o cancelar la conexión."
 
-#: src/joinprogressdialog.cpp:116 src/joinprogressdialog.cpp:227
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:227
 msgid "New name:"
 msgstr "Nuevo nombre:"
 
-#: src/joinprogressdialog.cpp:157
+#: ../src/joinprogressdialog.cpp:157
 msgid ""
 "Colour is already in use. You may choose another colour or cancel the "
 "connection."
 msgstr "Color ya utilizado. Puede elegir otro color o cancelar la conexión."
 
-#: src/joinprogressdialog.cpp:182
+#: ../src/joinprogressdialog.cpp:182
 msgid ""
 "Session password required. You have to type in the password to be able to "
 "join the obby session."
@@ -436,15 +436,15 @@ msgstr ""
 "Se requiere contraseña de sesión. Tiene que escribir la contraseña para "
 "poder unirse a la sesión obby."
 
-#: src/joinprogressdialog.cpp:186
+#: ../src/joinprogressdialog.cpp:186
 msgid "Session password:"
 msgstr "Contraseña de sesión:"
 
-#: src/joinprogressdialog.cpp:228
+#: ../src/joinprogressdialog.cpp:228
 msgid "User password:"
 msgstr "Contraseña de usuario:"
 
-#: src/joinprogressdialog.cpp:307
+#: ../src/joinprogressdialog.cpp:308
 msgid "Joining obby session..."
 msgstr "Uniéndose a sesión obby..."
 
@@ -452,53 +452,53 @@ msgstr "Uniéndose a sesión obby..."
 #. The welcome event will be emitted as soon as the connection
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
-#: src/joinprogressdialog.cpp:404
+#: ../src/joinprogressdialog.cpp:410
 msgid "Setting up connection encryption (TLS)..."
 msgstr "Estableciendo cifrado de conexión (TLS)..."
 
 #. Update status message
-#: src/joinprogressdialog.cpp:464
+#: ../src/joinprogressdialog.cpp:470
 msgid "Login packet sent, waiting for response..."
 msgstr "Paquete de ingreso enviado, esperando respuesta..."
 
-#: src/joinprogressdialog.cpp:546
+#: ../src/joinprogressdialog.cpp:552
 msgid "Logged in successfully, synchronising session..."
 msgstr "Ingreso correcto, sincronizando sesión..."
 
 #. Connection closed by remote site
-#: src/joinprogressdialog.cpp:559 src/window.cpp:1060
+#: ../src/joinprogressdialog.cpp:565 ../src/window.cpp:1043
 msgid "Connection lost"
 msgstr "Conexión perdida"
 
-#: src/preferencesdialog.cpp:65
+#: ../src/preferencesdialog.cpp:65
 msgid "Tab Stops"
 msgstr "Tabuladores"
 
-#: src/preferencesdialog.cpp:66
+#: ../src/preferencesdialog.cpp:66
 msgid "Indentation"
 msgstr "Identado"
 
-#: src/preferencesdialog.cpp:67
+#: ../src/preferencesdialog.cpp:67
 msgid "Home/End behaviour"
 msgstr "Comportamiento de Inicio/Fin"
 
-#: src/preferencesdialog.cpp:68
+#: ../src/preferencesdialog.cpp:68
 msgid "Tab width:"
 msgstr "Ancho de tabulador:"
 
-#: src/preferencesdialog.cpp:69
+#: ../src/preferencesdialog.cpp:69
 msgid "Insert spaces instead of tabs"
 msgstr "Insertar espacios en lugar de tabuladores"
 
-#: src/preferencesdialog.cpp:70
+#: ../src/preferencesdialog.cpp:70
 msgid "Enable automatic indentation"
 msgstr "Habilitar identado automático"
 
-#: src/preferencesdialog.cpp:71
+#: ../src/preferencesdialog.cpp:71
 msgid "Smart home/end"
 msgstr "Inicio/Fin inteligente"
 
-#: src/preferencesdialog.cpp:85
+#: ../src/preferencesdialog.cpp:85
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
@@ -506,171 +506,171 @@ msgstr ""
 "Con esta opción habilitada, las teclas Inicio/Fin se mueven al primer/último "
 "caracter antes de ir al inicio/fin de la línea."
 
-#: src/preferencesdialog.cpp:131
+#: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
 msgstr "Ajuste de texto"
 
-#: src/preferencesdialog.cpp:132
+#: ../src/preferencesdialog.cpp:132
 msgid "Line numbers"
 msgstr "Números de línea"
 
-#: src/preferencesdialog.cpp:133
+#: ../src/preferencesdialog.cpp:133
 msgid "Current line"
 msgstr "Línea actual"
 
-#: src/preferencesdialog.cpp:134
+#: ../src/preferencesdialog.cpp:134
 msgid "Right margin"
 msgstr "Margen derecho"
 
-#: src/preferencesdialog.cpp:135
+#: ../src/preferencesdialog.cpp:135
 msgid "Bracket matching"
 msgstr "Corchetes coincidentes"
 
-#: src/preferencesdialog.cpp:136
+#: ../src/preferencesdialog.cpp:136
 msgid "Enable text wrapping"
 msgstr "Habilitar ajuste de texto"
 
-#: src/preferencesdialog.cpp:137
+#: ../src/preferencesdialog.cpp:137
 msgid "Do not split words over two lines"
 msgstr "No dividir palabras en dos líneas"
 
-#: src/preferencesdialog.cpp:138
+#: ../src/preferencesdialog.cpp:138
 msgid "Display line numbers"
 msgstr "Mostrar números de línea"
 
-#: src/preferencesdialog.cpp:139
+#: ../src/preferencesdialog.cpp:139
 msgid "Highlight current line"
 msgstr "Resaltar línea actual"
 
-#: src/preferencesdialog.cpp:140
+#: ../src/preferencesdialog.cpp:140
 msgid "Display right margin"
 msgstr "Mostrar línea en margen derecho"
 
-#: src/preferencesdialog.cpp:141
+#: ../src/preferencesdialog.cpp:141
 msgid "Right margin at column:"
 msgstr "Margen derecho en la columna:"
 
-#: src/preferencesdialog.cpp:142
+#: ../src/preferencesdialog.cpp:142
 msgid "Highlight matching bracket"
 msgstr "Resaltar corchete coincidente"
 
-#: src/preferencesdialog.cpp:225
+#: ../src/preferencesdialog.cpp:225
 msgid "Toolbar"
 msgstr "Barra de Herramientas"
 
-#: src/preferencesdialog.cpp:226
+#: ../src/preferencesdialog.cpp:226
 msgid "Windows"
 msgstr "Ventanas"
 
-#: src/preferencesdialog.cpp:227
+#: ../src/preferencesdialog.cpp:227
 msgid "Remember the positions and states"
 msgstr "Recordar las posiciones y los estados"
 
-#: src/preferencesdialog.cpp:229
+#: ../src/preferencesdialog.cpp:229
 #, fuzzy
 msgid "Highlight the window on incoming chat messages"
 msgstr "Realzar la ventana de mensajes de entrada"
 
-#: src/preferencesdialog.cpp:235
+#: ../src/preferencesdialog.cpp:235
 msgid "Show text only"
 msgstr "Mostrar sólo texto"
 
-#: src/preferencesdialog.cpp:236
+#: ../src/preferencesdialog.cpp:236
 msgid "Show icons only"
 msgstr "Mostrar sólo iconos"
 
-#: src/preferencesdialog.cpp:237
+#: ../src/preferencesdialog.cpp:237
 msgid "Show both icons and text"
 msgstr "Mostrar texto e iconos"
 
-#: src/preferencesdialog.cpp:238
+#: ../src/preferencesdialog.cpp:238
 #, fuzzy
 msgid "Show text besides icons"
 msgstr "Mostrar texto además de iconos"
 
-#: src/preferencesdialog.cpp:309
+#: ../src/preferencesdialog.cpp:309
 #, fuzzy
 msgid "Document management"
 msgstr "Gestionar documento"
 
-#: src/preferencesdialog.cpp:310
+#: ../src/preferencesdialog.cpp:310
 msgid "Open new remotely-created documents automatically"
 msgstr "Abrir automáticamente nuevos documentos crados remotamente"
 
-#: src/preferencesdialog.cpp:348
+#: ../src/preferencesdialog.cpp:348
 msgid "Pattern"
 msgstr "Patrón"
 
-#: src/preferencesdialog.cpp:349
+#: ../src/preferencesdialog.cpp:349
 msgid "Language"
 msgstr "Lenguaje"
 
-#: src/preferencesdialog.cpp:350
+#: ../src/preferencesdialog.cpp:350
 msgid "Mime type"
 msgstr "Tipo MIME"
 
-#: src/preferencesdialog.cpp:352
+#: ../src/preferencesdialog.cpp:352
 msgid "This is a list of all recognized file types"
 msgstr "Esto es una lista de todos los tipos de fichero reconocidos"
 
-#: src/preferencesdialog.cpp:513
+#: ../src/preferencesdialog.cpp:513
 msgid "Pattern must not be empty."
 msgstr "El patrón no debe estar vacio"
 
-#: src/preferencesdialog.cpp:576
+#: ../src/preferencesdialog.cpp:576
 msgid "There is no language with the mime type '%0%'."
 msgstr "No hay lenguaje con el tipo MIME '%0%'"
 
-#: src/preferencesdialog.cpp:713
+#: ../src/preferencesdialog.cpp:713
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: src/preferencesdialog.cpp:725
+#: ../src/preferencesdialog.cpp:725
 msgid "Editor"
 msgstr "Editor"
 
-#: src/preferencesdialog.cpp:726
+#: ../src/preferencesdialog.cpp:726
 msgid "View"
 msgstr "Ver"
 
 #. Appearance only affects the global Gobby window
-#: src/preferencesdialog.cpp:729
+#: ../src/preferencesdialog.cpp:729
 msgid "Appearance"
 msgstr "Apariencia"
 
-#: src/preferencesdialog.cpp:730
+#: ../src/preferencesdialog.cpp:730
 msgid "Font"
 msgstr "Tipo de letra"
 
-#: src/preferencesdialog.cpp:731
+#: ../src/preferencesdialog.cpp:731
 msgid "Behaviour"
 msgstr "Comportamiento"
 
-#: src/preferencesdialog.cpp:732
+#: ../src/preferencesdialog.cpp:732
 msgid "Files"
 msgstr "Ficheros"
 
-#: src/statusbar.cpp:38 src/statusbar.cpp:100
+#: ../src/statusbar.cpp:38 ../src/statusbar.cpp:100
 msgid "Not connected"
 msgstr "No conectado"
 
-#: src/statusbar.cpp:56
+#: ../src/statusbar.cpp:56
 msgid "Selected language: %0%"
 msgstr "Lenguaje seleccionado: %0%"
 
-#: src/statusbar.cpp:62
+#: ../src/statusbar.cpp:62
 msgid "No language selected"
 msgstr "Ningún lenguaje seleccionado"
 
-#: src/userlist.cpp:94
+#: ../src/userlist.cpp:94
 msgid "Online"
 msgstr "Conectado"
 
-#: src/userlist.cpp:95
+#: ../src/userlist.cpp:95
 msgid "Offline"
 msgstr "Desconectado"
 
-#: src/window.cpp:194
+#: ../src/window.cpp:194
 #, fuzzy
 msgid ""
 "Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
@@ -681,47 +681,47 @@ msgstr ""
 "mDNSResponder como root antes de ejecutar Gobby. El soporte Zeroconf está "
 "desactivado para esta sesión."
 
-#: src/window.cpp:276
+#: ../src/window.cpp:276
 msgid "You are still connected to a session"
 msgstr "Todavía está conectado a una sesión"
 
-#: src/window.cpp:284
+#: ../src/window.cpp:284
 msgid "Do you want to close Gobby nevertheless?"
 msgstr "¿Quiere cerrar Gobby de todas formas?"
 
-#: src/window.cpp:290
+#: ../src/window.cpp:290
 msgid "C_ancel"
 msgstr ""
 
-#: src/window.cpp:449
+#: ../src/window.cpp:449
 msgid "Use default .obby extension if none is given"
 msgstr "Usar extensión .obby si no se pone ninguna"
 
-#: src/window.cpp:454
+#: ../src/window.cpp:454
 msgid "Save obby session"
 msgstr "Guardar sesión obby"
 
-#: src/window.cpp:517
+#: ../src/window.cpp:517
 msgid "A collaborative text editor"
 msgstr "Un editor de texto colaborativo"
 
-#: src/window.cpp:674
+#: ../src/window.cpp:657
 msgid "Create document"
 msgstr "Crear documento"
 
-#: src/window.cpp:674
+#: ../src/window.cpp:657
 msgid "Enter document name"
 msgstr "Introducir el nombre del documento"
 
-#: src/window.cpp:696
+#: ../src/window.cpp:679
 msgid "Open new document"
 msgstr "Abrir nuevo documento"
 
-#: src/window.cpp:790
+#: ../src/window.cpp:773
 msgid "Save current document"
 msgstr "Guardar documento actual"
 
-#: src/window.cpp:881
+#: ../src/window.cpp:864
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
@@ -732,11 +732,11 @@ msgstr ""
 "usarlos cuando se creen nuevos documentos."
 
 #. Build password dialog with info
-#: src/window.cpp:925
+#: ../src/window.cpp:908
 msgid "Set user password"
 msgstr "Establecer contraseña de usuario"
 
-#: src/window.cpp:927
+#: ../src/window.cpp:910
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
@@ -744,7 +744,7 @@ msgstr ""
 "Establezca la contraseña de usuario para su cuenta. Cuando intente acceder "
 "de nuevo con este usuario se le preguntará por su contraseña."
 
-#: src/window.cpp:988
+#: ../src/window.cpp:971
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
@@ -754,23 +754,23 @@ msgstr ""
 "cambiar las preferencias globales, utilice el submenú de preferencias en el "
 "menu \"Editar\"."
 
-#: src/window.cpp:1098
+#: ../src/window.cpp:1081
 msgid "Colour change failed: Colour already in use"
 msgstr "Error al cambiar de color: ese color ya se está usando"
 
-#: src/window.cpp:1347
+#: ../src/window.cpp:1333
 msgid "Connected to %0%:%1%"
 msgstr "Conectado a %0%:%1%"
 
-#: src/window.cpp:1391
+#: ../src/window.cpp:1377
 msgid "Serving on port %0%"
 msgstr "Servidor en puerto %0%"
 
-#: src/window.cpp:1520
+#: ../src/window.cpp:1506
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "¿Guardar cambios al documento %0% antes de cerrar?"
 
-#: src/window.cpp:1530
+#: ../src/window.cpp:1516
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
@@ -778,14 +778,23 @@ msgstr ""
 "Si no se guarda, los cambios se perderán, pero aún se podrán recuperar si se "
 "vuelve a suscribir al documento mientras las sesión permanezca abierta."
 
-#: src/window.cpp:1539
+#: ../src/window.cpp:1525
 msgid "If you don't save, changes will be discarded."
 msgstr "Si no se guarda, los cambios se perderán."
 
 #. Add button to allow the user to save the dialog
-#: src/window.cpp:1554
+#: ../src/window.cpp:1540
 msgid "Close without saving"
 msgstr "Cerrar sin guardar"
+
+#: ../contrib/gobby.desktop.in.h:1
+msgid "Edit text files collaboratively"
+msgstr ""
+
+#: ../contrib/gobby.desktop.in.h:2
+#, fuzzy
+msgid "Gobby Collaborative Editor"
+msgstr "Un editor de texto colaborativo"
 
 #~ msgid "Shows up a dialog to customise Gobby for your needs"
 #~ msgstr "Muestra un diálogo para configurar Gobby con sus preferencias"

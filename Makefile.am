@@ -131,13 +131,15 @@ dist_pixmap_DATA += pixmaps/chat.png
 if WITH_GNOME
 # GNOME-specific installation.
 desktopdir = $(datadir)/applications
-desktop_DATA = contrib/gobby.desktop
+desktop_in_files = contrib/gobby.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 endif
 
 EXTRA_DIST =  contrib/artwork/CREDITS
 EXTRA_DIST += contrib/artwork/gobby.svg
 EXTRA_DIST += contrib/artwork/gobby.xpm.gz
-EXTRA_DIST += contrib/gobby.desktop
+EXTRA_DIST += contrib/gobby.desktop.in
 EXTRA_DIST += win32/gobby.ico
 EXTRA_DIST += win32/gobby.rc
 

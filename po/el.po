@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-26 13:57+0200\n"
+"POT-Creation-Date: 2008-11-23 14:27+0100\n"
 "PO-Revision-Date: 2008-04-15 12:30+0000\n"
 "Last-Translator: Kainourgiakis Giorgos <kaingeo@yahoo.gr>\n"
 "Language-Team: Greek <el@li.org>\n"
@@ -18,37 +18,37 @@ msgstr ""
 "X-Launchpad-Export-Date: 2008-08-27 14:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: src/chat.cpp:73
+#: ../src/chat.cpp:73
 msgid "Send"
 msgstr "Αποστολή"
 
-#: src/chat.cpp:227
+#: ../src/chat.cpp:227
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
 "Η εντολή '%0%' δεν βρέθηκε. Πληκτρολογήστε /help για να δείτε τις υπάρχουσες "
 "εντολές."
 
-#: src/chat.cpp:238
+#: ../src/chat.cpp:238
 msgid "%0%: %1%"
 msgstr "%0%: %1%"
 
-#: src/chat.cpp:252
+#: ../src/chat.cpp:252
 msgid "Document %0% does not exist"
 msgstr "Το έγγραφο %0% δεν υπάρχει"
 
-#: src/chat.cpp:258
+#: ../src/chat.cpp:258
 msgid "Usage: /remove <document>"
 msgstr "Χρήση: /remove <έγγραφο>"
 
-#: src/documentlist.cpp:51
+#: ../src/documentlist.cpp:51
 msgid "Subscribe"
 msgstr "Εγγραφή"
 
-#: src/documentlist.cpp:107 src/header.cpp:409 src/icon.cpp:69
+#: ../src/documentlist.cpp:107 ../src/header.cpp:407 ../src/icon.cpp:69
 msgid "Document list"
 msgstr "Λίστα εγγράφων"
 
-#: src/encoding.cpp:98
+#: ../src/encoding.cpp:98
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
@@ -56,358 +56,358 @@ msgstr ""
 "Αποτυχία μετατροπής της εισόδου σε κωδικοποίηση UTF-8: Είτε η κωδικοποίηση "
 "είναι άγνωστη, είτε η είσοδος είναι δυαδική."
 
-#: src/encoding_selector.cpp:145
+#: ../src/encoding_selector.cpp:145
 msgid "Character Encoding:"
 msgstr "Κωδικοποίηση χαρακτήρων:"
 
-#: src/finddialog.cpp:43
+#: ../src/finddialog.cpp:43
 msgid "Find what:"
 msgstr "Εύρεση:"
 
-#: src/finddialog.cpp:44
+#: ../src/finddialog.cpp:44
 msgid "Replace with:"
 msgstr "Αντικατάσταση με:"
 
-#: src/finddialog.cpp:45
+#: ../src/finddialog.cpp:45
 msgid "Match whole word only"
 msgstr "Ταιριάστε μόνο με ολόκληρη την λέξη"
 
-#: src/finddialog.cpp:46
+#: ../src/finddialog.cpp:46
 msgid "Match case"
 msgstr "Ταιριάστε πεζα,κεφαλαία"
 
-#: src/finddialog.cpp:47
+#: ../src/finddialog.cpp:47
 msgid "Match as regular expression"
 msgstr "Ταιριάστε ως κανονική έκφραση"
 
-#: src/finddialog.cpp:48
+#: ../src/finddialog.cpp:48
 msgid "Direction"
 msgstr "Κατεύθυνση"
 
-#: src/finddialog.cpp:49
+#: ../src/finddialog.cpp:49
 msgid "_Up"
 msgstr "_Πάνω"
 
-#: src/finddialog.cpp:50
+#: ../src/finddialog.cpp:50
 msgid "_Down"
 msgstr "_Κάτω"
 
-#: src/finddialog.cpp:52
+#: ../src/finddialog.cpp:52
 msgid "_Replace"
 msgstr "_Αντικατάσταση"
 
-#: src/finddialog.cpp:53
+#: ../src/finddialog.cpp:53
 msgid "Replace _all"
 msgstr "Αντικατάσταση _όλων"
 
-#: src/finddialog.cpp:158
+#: ../src/finddialog.cpp:158
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: src/finddialog.cpp:158
+#: ../src/finddialog.cpp:158
 msgid "Search and replace"
 msgstr "Αναζήτηση και αντικατάσταση"
 
-#: src/finddialog.cpp:182
+#: ../src/finddialog.cpp:182
 msgid "\"%0%\" has not been found in the document."
 msgstr "Το \"%0%\" δεν έχει βρεθεί στο έγγραφο."
 
-#: src/finddialog.cpp:265
+#: ../src/finddialog.cpp:265
 msgid "No occurence has been replaced"
 msgstr "Καμιά εμφάνιση δεν έχει αντικατασταθεί."
 
-#: src/finddialog.cpp:271
+#: ../src/finddialog.cpp:271
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
 msgstr[0] "Η εμφάνιση %0% αντικαταστάθηκε"
 msgstr[1] "Οι εμφανίσεις %0% αντικαταστάθηκαν"
 
-#: src/finddialog.cpp:301
+#: ../src/finddialog.cpp:301
 msgid "No document currently opened"
 msgstr "Κανένα έγγραφο δεν έχει ανοιχτεί"
 
-#: src/gotodialog.cpp:30
+#: ../src/gotodialog.cpp:30
 msgid "Line number:"
 msgstr "Αριθμός γραμμής:"
 
-#: src/gotodialog.cpp:32
+#: ../src/gotodialog.cpp:32
 msgid "_Go to line"
 msgstr "_Μεταφορά στην γραμμή"
 
-#: src/gotodialog.cpp:77
+#: ../src/gotodialog.cpp:77
 msgid "Go to line"
 msgstr "Μεταφορά στην γραμμή"
 
-#: src/header.cpp:236
+#: ../src/header.cpp:234
 msgid "Create session..."
 msgstr "Δημιουργήστε συνεδρία"
 
-#: src/header.cpp:237
+#: ../src/header.cpp:235
 msgid "Opens a new obby session"
 msgstr "Ανοίγει μια νέα συνεδρία obby"
 
-#: src/header.cpp:245
+#: ../src/header.cpp:243
 msgid "Join session..."
 msgstr "Συμμετοχή στην συνεδρία..."
 
-#: src/header.cpp:246
+#: ../src/header.cpp:244
 msgid "Joins an existing obby session"
 msgstr "Συμμετοχή σε υπάρχουσα συνεδρία obby"
 
-#: src/header.cpp:254
+#: ../src/header.cpp:252
 msgid "Save session..."
 msgstr "Αποθήκευση συνεδρίας..."
 
-#: src/header.cpp:255
+#: ../src/header.cpp:253
 msgid "Saves the complete session for a later restore"
 msgstr "Αποθηκεύει ολόκληρη την συνεδρία για επαναφορά αργότερα"
 
-#: src/header.cpp:263
+#: ../src/header.cpp:261
 msgid "Quit session"
 msgstr "Έξοδος από την συνεδρία"
 
-#: src/header.cpp:264
+#: ../src/header.cpp:262
 msgid "Leaves the currently running obby session"
 msgstr "Έξοδος από την τρέχουσα συνεδρία obby"
 
-#: src/header.cpp:272
+#: ../src/header.cpp:270
 msgid "Quit"
 msgstr "Έξοδος"
 
-#: src/header.cpp:273
+#: ../src/header.cpp:271
 msgid "Quits the application"
 msgstr "Κλείνει την εφαρμογή"
 
-#: src/header.cpp:277
+#: ../src/header.cpp:275
 msgid "_Session"
 msgstr "Συνε_δρία"
 
-#: src/header.cpp:283
+#: ../src/header.cpp:281
 msgid "Create document..."
 msgstr "Δημιουργία εγγράφου..."
 
-#: src/header.cpp:284
+#: ../src/header.cpp:282
 msgid "Creates a new document"
 msgstr "Δημιουργία ενός νέου εγγράφου"
 
-#: src/header.cpp:292
+#: ../src/header.cpp:290
 msgid "Open document..."
 msgstr "Άνοιγμα εγγράφου"
 
-#: src/header.cpp:293
+#: ../src/header.cpp:291
 msgid "Loads a file into a new document"
 msgstr "Φορτώνει ένα αρχείο σ' ένα έγγραφο"
 
-#: src/header.cpp:301
+#: ../src/header.cpp:299
 msgid "Save document"
 msgstr "Αποθήκευση εγγράφου"
 
-#: src/header.cpp:302
+#: ../src/header.cpp:300
 msgid "Saves a document into a file"
 msgstr "Αποθηκεύει ένα έγγραφο σε ένα αρχείο"
 
-#: src/header.cpp:310
+#: ../src/header.cpp:308
 msgid "Save document as..."
 msgstr "Αποθήκευση εγγράφου ως..."
 
-#: src/header.cpp:311
+#: ../src/header.cpp:309
 msgid "Saves a document to another location"
 msgstr "Αποθηκεύει ένα έγγραφο σε μια άλλη τοποθεσία"
 
-#: src/header.cpp:319
+#: ../src/header.cpp:317
 msgid "Close document"
 msgstr "Κλείσιμο εγγράφου"
 
-#: src/header.cpp:320
+#: ../src/header.cpp:318
 msgid "Closes an opened document"
 msgstr "Κλείσιμο ενός ανοιγμένου αρχείου"
 
-#: src/header.cpp:324
+#: ../src/header.cpp:322
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: src/header.cpp:330
+#: ../src/header.cpp:328
 msgid "Find..."
 msgstr "Εύρεση..."
 
-#: src/header.cpp:331
+#: ../src/header.cpp:329
 msgid "Search for a text in the current document"
 msgstr "Αναζήτηση για ένα κείμενο στο τρέχον έγγραφο"
 
-#: src/header.cpp:339
+#: ../src/header.cpp:337
 msgid "Find and replace..."
 msgstr "Εύρεση και αντικατάσταση..."
 
-#: src/header.cpp:340
+#: ../src/header.cpp:338
 msgid "Search for a text and replace it with another one"
 msgstr "Αναζήτηση για ένα κείμενο και αντικατάσταση του με ένα άλλο"
 
-#: src/header.cpp:348
+#: ../src/header.cpp:346
 msgid "Go to line..."
 msgstr "Μεταφορά στην γραμμή..."
 
-#: src/header.cpp:349
+#: ../src/header.cpp:347
 msgid "Move cursor to a specified line"
 msgstr "Μετακίνηση του κέρσορα σε μια συγκεκριμένη γραμμή"
 
-#: src/header.cpp:357
+#: ../src/header.cpp:355
 msgid "Preferences..."
 msgstr "Προτιμήσεις..."
 
-#: src/header.cpp:358
+#: ../src/header.cpp:356
 msgid "Displays a dialog to customise Gobby for your needs"
 msgstr "Παρουσιάζει έναν διάλογο για να ρυθμίσετε το Gobby στις ανάγκες σας"
 
-#: src/header.cpp:366
+#: ../src/header.cpp:364
 msgid "Document preferences..."
 msgstr "Προτιμήσεις εγγράφου..."
 
-#: src/header.cpp:367
+#: ../src/header.cpp:365
 msgid "Shows a preferences dialog that is just applied to this document"
 msgstr ""
 "Παρουσιάζει έναν διάλογο προτιμήσεων που μόλις εφαρμόστηκαν στο έγγραφο"
 
-#: src/header.cpp:372
+#: ../src/header.cpp:370
 msgid "Syntax"
 msgstr "Σύνταξη"
 
-#: src/header.cpp:374
+#: ../src/header.cpp:372
 msgid "_User"
 msgstr "_Χρήστης"
 
-#: src/header.cpp:380
+#: ../src/header.cpp:378
 msgid "Set password..."
 msgstr "Ορισμός κωδικού πρόσβασης..."
 
-#: src/header.cpp:381
+#: ../src/header.cpp:379
 msgid "Sets a password for this user"
 msgstr "Ορίζει ένα κωδικό πρόσβασης για τον χρήστη"
 
-#: src/header.cpp:389
+#: ../src/header.cpp:387
 msgid "Set colour..."
 msgstr "Ορισμός χρώματος..."
 
-#: src/header.cpp:390
+#: ../src/header.cpp:388
 msgid "Sets a new colour for this user"
 msgstr "Ορίζει ένα νέο χρώμα για τον χρήστη"
 
-#: src/header.cpp:394
+#: ../src/header.cpp:392
 msgid "_Window"
 msgstr "_Παράθυρο"
 
-#: src/header.cpp:400 src/icon.cpp:66 src/userlist.cpp:122
+#: ../src/header.cpp:398 ../src/icon.cpp:66 ../src/userlist.cpp:122
 msgid "User list"
 msgstr "Λίστα χρηστών"
 
-#: src/header.cpp:401
+#: ../src/header.cpp:399
 msgid "Displays a list of users that are currently joined"
 msgstr "Παρουσιάζει μια λίστα χρηστών που έχουν συνδεθεί"
 
-#: src/header.cpp:410
+#: ../src/header.cpp:408
 msgid "Displays a list of documents within the current session"
 msgstr "Παρουσιάζει μια λίστα εγγράφων μέσα στην τρέχουσα συνεδρία"
 
-#: src/header.cpp:419 src/icon.cpp:72
+#: ../src/header.cpp:417 ../src/icon.cpp:72
 msgid "Chat"
 msgstr "Συνομιλία"
 
-#: src/header.cpp:420
+#: ../src/header.cpp:418
 msgid "Displays a chat to talk to other people in the session"
 msgstr ""
 "Παρουσιάζεται μια συνομιλία για να μιλάτε με άλλους συμμετέχοντες στην "
 "συνεδρία"
 
-#: src/header.cpp:425
+#: ../src/header.cpp:423
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: src/header.cpp:431
+#: ../src/header.cpp:429
 msgid "About"
 msgstr "Σχετικά"
 
-#: src/header.cpp:432
+#: ../src/header.cpp:430
 msgid "Shows Gobby's copyright and credits"
 msgstr "Παρουσιάζει τους συντελεστές και την άδειας χρήσης του Gobby"
 
-#: src/header.cpp:647
+#: ../src/header.cpp:645
 msgid "None"
 msgstr "Κανένα"
 
-#: src/header.cpp:648
+#: ../src/header.cpp:646
 msgid "Unselects the current language"
 msgstr "Αποεπιλέγει την τρέχουσα γλώσσα"
 
 #. Build description string
-#: src/header.cpp:664
+#: ../src/header.cpp:662
 msgid "Selects %0% as language"
 msgstr "Επιλέγει την %0% ως γλώσσα"
 
-#: src/hostdialog.cpp:33
+#: ../src/hostdialog.cpp:33
 msgid "Create obby session"
 msgstr "Δημιουργία συνεδρίας obby"
 
-#: src/hostdialog.cpp:36 src/joindialog.cpp:55
+#: ../src/hostdialog.cpp:36 ../src/joindialog.cpp:56
 msgid "Port:"
 msgstr "Θύρα:"
 
-#: src/hostdialog.cpp:37 src/joindialog.cpp:56
+#: ../src/hostdialog.cpp:37 ../src/joindialog.cpp:57
 msgid "Name:"
 msgstr "Όνομα:"
 
-#: src/hostdialog.cpp:38 src/joindialog.cpp:57
+#: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
 msgid "Colour:"
 msgstr "Χρώμα:"
 
-#: src/hostdialog.cpp:39
+#: ../src/hostdialog.cpp:39
 msgid "Password:"
 msgstr "Κωδικός πρόσβασης:"
 
-#: src/hostdialog.cpp:40
+#: ../src/hostdialog.cpp:40
 msgid "Restore session:"
 msgstr "Επαναφορά συνεδρίας:"
 
-#: src/hostdialog.cpp:42
+#: ../src/hostdialog.cpp:42
 msgid "Restore session"
 msgstr "Επαναφορά συνεδρίας"
 
-#: src/hostdialog.cpp:120
+#: ../src/hostdialog.cpp:120
 msgid "_Host"
 msgstr "_Κόμβος"
 
-#: src/hostprogressdialog.cpp:29
+#: ../src/hostprogressdialog.cpp:29
 msgid "Opening obby session..."
 msgstr "Άνοιγμα συνεδρίας obby...."
 
-#: src/joindialog.cpp:51
+#: ../src/joindialog.cpp:52
 msgid "Join obby session"
 msgstr "Συμμετοχή στην συνεδρία obby"
 
-#: src/joindialog.cpp:54
+#: ../src/joindialog.cpp:55
 msgid "Host:"
 msgstr "Κόμβος:"
 
-#: src/joindialog.cpp:59
+#: ../src/joindialog.cpp:60
 msgid "Local network"
 msgstr "Τοπικό δίκτυο"
 
 #. resetup columns
-#: src/joindialog.cpp:319
+#: ../src/joindialog.cpp:365
 msgid "User"
 msgstr "Χρήστης"
 
-#: src/joindialog.cpp:320
+#: ../src/joindialog.cpp:366
 msgid "Host"
 msgstr "Κόμβος"
 
-#: src/joindialog.cpp:321
+#: ../src/joindialog.cpp:367
 msgid "Port"
 msgstr "Θύρα"
 
-#: src/joindialog.cpp:340
+#: ../src/joindialog.cpp:386
 msgid "Failure"
 msgstr "Αποτυχία"
 
-#: src/joinprogressdialog.cpp:34
+#: ../src/joinprogressdialog.cpp:34
 msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
@@ -416,18 +416,18 @@ msgstr ""
 "χρησιμοποιήσετε ένα άλλο όνομα χρήστη και να πληκτρολογήσετε τον κωδικό "
 "πρόσβασης σας ή να ακυρώστε την σύνδεση."
 
-#: src/joinprogressdialog.cpp:111
+#: ../src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
 msgstr ""
 "Το όνομα χρησιμοποιείται ήδη. Μπορείτε να διαλέξετε ένα νέο όνομα ή να "
 "ακυρώσετε την σύνδεση."
 
-#: src/joinprogressdialog.cpp:116 src/joinprogressdialog.cpp:227
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:227
 msgid "New name:"
 msgstr "Νέο όνομα:"
 
-#: src/joinprogressdialog.cpp:157
+#: ../src/joinprogressdialog.cpp:157
 msgid ""
 "Colour is already in use. You may choose another colour or cancel the "
 "connection."
@@ -435,7 +435,7 @@ msgstr ""
 "Το χρώμα χρησιμοποιείται ήδη. Μπορείτε να διαλέξετε ένα άλλο χρώμα ή να "
 "ακυρώσετε την σύνδεση."
 
-#: src/joinprogressdialog.cpp:182
+#: ../src/joinprogressdialog.cpp:182
 msgid ""
 "Session password required. You have to type in the password to be able to "
 "join the obby session."
@@ -443,15 +443,15 @@ msgstr ""
 "Απαιτείται κωδικός πρόσβασης της συνεδρίας. Πρέπει να πληκτρολογήσετε τον "
 "κωδικό πρόσβασης για να μπορέσετε να συμμετάσχετε στην συνεδρία obby."
 
-#: src/joinprogressdialog.cpp:186
+#: ../src/joinprogressdialog.cpp:186
 msgid "Session password:"
 msgstr "Κωδικός πρόσβασης συνεδρίας:"
 
-#: src/joinprogressdialog.cpp:228
+#: ../src/joinprogressdialog.cpp:228
 msgid "User password:"
 msgstr "Κωδικός πρόσβασης χρήστη:"
 
-#: src/joinprogressdialog.cpp:307
+#: ../src/joinprogressdialog.cpp:308
 msgid "Joining obby session..."
 msgstr "Συμμετοχή στην συνεδρία obby..."
 
@@ -459,53 +459,53 @@ msgstr "Συμμετοχή στην συνεδρία obby..."
 #. The welcome event will be emitted as soon as the connection
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
-#: src/joinprogressdialog.cpp:404
+#: ../src/joinprogressdialog.cpp:410
 msgid "Setting up connection encryption (TLS)..."
 msgstr "Ρύθμιση της κρυπτογράφησης της σύνδεσης (TLS)..."
 
 #. Update status message
-#: src/joinprogressdialog.cpp:464
+#: ../src/joinprogressdialog.cpp:470
 msgid "Login packet sent, waiting for response..."
 msgstr "Το πακέτο της διαδικασίας εισόδου στάλθηκε, αναμονή για απάντηση..."
 
-#: src/joinprogressdialog.cpp:546
+#: ../src/joinprogressdialog.cpp:552
 msgid "Logged in successfully, synchronising session..."
 msgstr "Η διαδικασία εισόδου ήταν επιτυχής, συγχρονισμός της συνεδρίας..."
 
 #. Connection closed by remote site
-#: src/joinprogressdialog.cpp:559 src/window.cpp:1060
+#: ../src/joinprogressdialog.cpp:565 ../src/window.cpp:1043
 msgid "Connection lost"
 msgstr "Η σύνδεση διακόπηκε"
 
-#: src/preferencesdialog.cpp:65
+#: ../src/preferencesdialog.cpp:65
 msgid "Tab Stops"
 msgstr "Στηλοθέτες"
 
-#: src/preferencesdialog.cpp:66
+#: ../src/preferencesdialog.cpp:66
 msgid "Indentation"
 msgstr "Εσοχές"
 
-#: src/preferencesdialog.cpp:67
+#: ../src/preferencesdialog.cpp:67
 msgid "Home/End behaviour"
 msgstr "Συμπεριφορά πλήκτρων Home και End"
 
-#: src/preferencesdialog.cpp:68
+#: ../src/preferencesdialog.cpp:68
 msgid "Tab width:"
 msgstr "Πλάτος στηλοθέτη:"
 
-#: src/preferencesdialog.cpp:69
+#: ../src/preferencesdialog.cpp:69
 msgid "Insert spaces instead of tabs"
 msgstr "Εισάγετε κενά αντί tabs"
 
-#: src/preferencesdialog.cpp:70
+#: ../src/preferencesdialog.cpp:70
 msgid "Enable automatic indentation"
 msgstr "Ενεργοποίηση αυτόματες εσοχές"
 
-#: src/preferencesdialog.cpp:71
+#: ../src/preferencesdialog.cpp:71
 msgid "Smart home/end"
 msgstr "Έξυπνη λειτουργία των πλήκτρων Home και End"
 
-#: src/preferencesdialog.cpp:85
+#: ../src/preferencesdialog.cpp:85
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
@@ -514,168 +514,168 @@ msgstr ""
 "στον πρώτο και στον τελευταίο χαρακτήρα της λέξης, πριν μετακινηθεί στην "
 "αρχή και στο τέλος της γραμμής."
 
-#: src/preferencesdialog.cpp:131
+#: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
 msgstr "Αναδίπλωση κειμένου"
 
-#: src/preferencesdialog.cpp:132
+#: ../src/preferencesdialog.cpp:132
 msgid "Line numbers"
 msgstr "Νούμερα γραμμών"
 
-#: src/preferencesdialog.cpp:133
+#: ../src/preferencesdialog.cpp:133
 msgid "Current line"
 msgstr "Τρέχουσα γραμμή"
 
-#: src/preferencesdialog.cpp:134
+#: ../src/preferencesdialog.cpp:134
 msgid "Right margin"
 msgstr "Δεξί περιθώριο"
 
-#: src/preferencesdialog.cpp:135
+#: ../src/preferencesdialog.cpp:135
 msgid "Bracket matching"
 msgstr "Ταίριασμα παρενθέσεων"
 
-#: src/preferencesdialog.cpp:136
+#: ../src/preferencesdialog.cpp:136
 msgid "Enable text wrapping"
 msgstr "Ενεργοποίηση αναδίπλωσης κειμένου"
 
-#: src/preferencesdialog.cpp:137
+#: ../src/preferencesdialog.cpp:137
 msgid "Do not split words over two lines"
 msgstr "Μην χωρίζετε λέξεις σε δύο γραμμές"
 
-#: src/preferencesdialog.cpp:138
+#: ../src/preferencesdialog.cpp:138
 msgid "Display line numbers"
 msgstr "Εμφάνιση αριθμών γραμμών"
 
-#: src/preferencesdialog.cpp:139
+#: ../src/preferencesdialog.cpp:139
 msgid "Highlight current line"
 msgstr "Επισήμανση τρέχουσας γραμμής"
 
-#: src/preferencesdialog.cpp:140
+#: ../src/preferencesdialog.cpp:140
 msgid "Display right margin"
 msgstr "Εμφάνιση δεξιού περιθωρίου"
 
-#: src/preferencesdialog.cpp:141
+#: ../src/preferencesdialog.cpp:141
 msgid "Right margin at column:"
 msgstr "Δεξί περιθώριο στην στήλη:"
 
-#: src/preferencesdialog.cpp:142
+#: ../src/preferencesdialog.cpp:142
 msgid "Highlight matching bracket"
 msgstr "Επισήμανση παρένθεσης που ταιριάζει"
 
-#: src/preferencesdialog.cpp:225
+#: ../src/preferencesdialog.cpp:225
 msgid "Toolbar"
 msgstr "Γραμμή Εργαλείων"
 
-#: src/preferencesdialog.cpp:226
+#: ../src/preferencesdialog.cpp:226
 msgid "Windows"
 msgstr "Παράθυρα"
 
-#: src/preferencesdialog.cpp:227
+#: ../src/preferencesdialog.cpp:227
 msgid "Remember the positions and states"
 msgstr "Απομνημόνευση θέσεων και καταστάσεων"
 
-#: src/preferencesdialog.cpp:229
+#: ../src/preferencesdialog.cpp:229
 msgid "Highlight the window on incoming chat messages"
 msgstr "Επισήμανση του παραθύρου σε εισερχόμενα μηνυμάτων συνομιλίας."
 
-#: src/preferencesdialog.cpp:235
+#: ../src/preferencesdialog.cpp:235
 msgid "Show text only"
 msgstr "Εμφάνιση μόνο κειμένου"
 
-#: src/preferencesdialog.cpp:236
+#: ../src/preferencesdialog.cpp:236
 msgid "Show icons only"
 msgstr "Εμφάνιση μόνο εικονιδίων"
 
-#: src/preferencesdialog.cpp:237
+#: ../src/preferencesdialog.cpp:237
 msgid "Show both icons and text"
 msgstr "Εμφάνιση εικονιδίων και κειμένου"
 
-#: src/preferencesdialog.cpp:238
+#: ../src/preferencesdialog.cpp:238
 msgid "Show text besides icons"
 msgstr "Εμφάνιση κειμένου δίπλα σε εικονίδια"
 
-#: src/preferencesdialog.cpp:309
+#: ../src/preferencesdialog.cpp:309
 msgid "Document management"
 msgstr "Διαχείριση εγγράφου"
 
-#: src/preferencesdialog.cpp:310
+#: ../src/preferencesdialog.cpp:310
 msgid "Open new remotely-created documents automatically"
 msgstr "Άνοιγμα νέων απομακρυσμένων εγγράφων αυτόματα"
 
-#: src/preferencesdialog.cpp:348
+#: ../src/preferencesdialog.cpp:348
 msgid "Pattern"
 msgstr "Πρότυπο"
 
-#: src/preferencesdialog.cpp:349
+#: ../src/preferencesdialog.cpp:349
 msgid "Language"
 msgstr "Γλώσσα"
 
-#: src/preferencesdialog.cpp:350
+#: ../src/preferencesdialog.cpp:350
 msgid "Mime type"
 msgstr "Τύπος mime"
 
-#: src/preferencesdialog.cpp:352
+#: ../src/preferencesdialog.cpp:352
 msgid "This is a list of all recognized file types"
 msgstr "Αυτή είναι η λίστα με όλους του τύπους αρχείων που αναγνωρίζονται"
 
-#: src/preferencesdialog.cpp:513
+#: ../src/preferencesdialog.cpp:513
 msgid "Pattern must not be empty."
 msgstr "Το πρότυπο δεν πρέπει να είναι άδειο."
 
-#: src/preferencesdialog.cpp:576
+#: ../src/preferencesdialog.cpp:576
 msgid "There is no language with the mime type '%0%'."
 msgstr "Δεν υπάρχει γλώσσα για τον τύπο mime '%0%'."
 
-#: src/preferencesdialog.cpp:713
+#: ../src/preferencesdialog.cpp:713
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
-#: src/preferencesdialog.cpp:725
+#: ../src/preferencesdialog.cpp:725
 msgid "Editor"
 msgstr "Επεξεργαστής"
 
-#: src/preferencesdialog.cpp:726
+#: ../src/preferencesdialog.cpp:726
 msgid "View"
 msgstr "Προ_βολή"
 
 #. Appearance only affects the global Gobby window
-#: src/preferencesdialog.cpp:729
+#: ../src/preferencesdialog.cpp:729
 msgid "Appearance"
 msgstr "Εμφάνιση"
 
-#: src/preferencesdialog.cpp:730
+#: ../src/preferencesdialog.cpp:730
 msgid "Font"
 msgstr "Γραμματοσειρά"
 
-#: src/preferencesdialog.cpp:731
+#: ../src/preferencesdialog.cpp:731
 msgid "Behaviour"
 msgstr "Συμπεριφορά"
 
-#: src/preferencesdialog.cpp:732
+#: ../src/preferencesdialog.cpp:732
 msgid "Files"
 msgstr "Αρχεία"
 
-#: src/statusbar.cpp:38 src/statusbar.cpp:100
+#: ../src/statusbar.cpp:38 ../src/statusbar.cpp:100
 msgid "Not connected"
 msgstr "Χωρίς σύνδεση"
 
-#: src/statusbar.cpp:56
+#: ../src/statusbar.cpp:56
 msgid "Selected language: %0%"
 msgstr "Επιλεγμένη γλώσσα: %0%"
 
-#: src/statusbar.cpp:62
+#: ../src/statusbar.cpp:62
 msgid "No language selected"
 msgstr "Δεν επιλέχθηκε γλώσσα"
 
-#: src/userlist.cpp:94
+#: ../src/userlist.cpp:94
 msgid "Online"
 msgstr "Συνδεδεμένος"
 
-#: src/userlist.cpp:95
+#: ../src/userlist.cpp:95
 msgid "Offline"
 msgstr "Εκτός σύνδεσης"
 
-#: src/window.cpp:194
+#: ../src/window.cpp:194
 msgid ""
 "Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
@@ -685,48 +685,48 @@ msgstr ""
 "avahi-daemon ή τον mDNSResponder, ανάλογα με ποια βιβλιοθήκη χρησιμοποιείτε, "
 "ως χρήστης root πριν εκκινήσετε τον Gobby."
 
-#: src/window.cpp:276
+#: ../src/window.cpp:276
 msgid "You are still connected to a session"
 msgstr "Είστε ακόμα συνδεδεμένοι στην συνεδρία"
 
-#: src/window.cpp:284
+#: ../src/window.cpp:284
 msgid "Do you want to close Gobby nevertheless?"
 msgstr "Θέλετε να κλείσετε το Gobby παρ' όλα αυτά;"
 
-#: src/window.cpp:290
+#: ../src/window.cpp:290
 msgid "C_ancel"
 msgstr ""
 
-#: src/window.cpp:449
+#: ../src/window.cpp:449
 msgid "Use default .obby extension if none is given"
 msgstr ""
 "Χρησιμοποιήστε την προεπιλεγμένη επέκταση .obby αν δεν έχει δοθεί καμία"
 
-#: src/window.cpp:454
+#: ../src/window.cpp:454
 msgid "Save obby session"
 msgstr "Αποθήκευση την συνεδρίας obby"
 
-#: src/window.cpp:517
+#: ../src/window.cpp:517
 msgid "A collaborative text editor"
 msgstr "Ένας συνεργατικός επεξεργαστής κειμένου"
 
-#: src/window.cpp:674
+#: ../src/window.cpp:657
 msgid "Create document"
 msgstr "Δημιουργία εγγράφου"
 
-#: src/window.cpp:674
+#: ../src/window.cpp:657
 msgid "Enter document name"
 msgstr "Εισάγετε το όνομα του εγγράφου"
 
-#: src/window.cpp:696
+#: ../src/window.cpp:679
 msgid "Open new document"
 msgstr "Άνοιγμα ενός νέου εγγράφου"
 
-#: src/window.cpp:790
+#: ../src/window.cpp:773
 msgid "Save current document"
 msgstr "Αποθήκευση τρέχοντος εγγράφου"
 
-#: src/window.cpp:881
+#: ../src/window.cpp:864
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
@@ -737,11 +737,11 @@ msgstr ""
 "να χρησιμοποιηθούν στα έγγραφα που θα δημιουργηθούν από εδώ και πέρα."
 
 #. Build password dialog with info
-#: src/window.cpp:925
+#: ../src/window.cpp:908
 msgid "Set user password"
 msgstr "Ορισμός κωδικού πρόσβασης του χρήστη"
 
-#: src/window.cpp:927
+#: ../src/window.cpp:910
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
@@ -750,7 +750,7 @@ msgstr ""
 "προσπαθήσετε να συνδεθείτε με τον χρήστη αυτό, θα σας ζητείται ο κωδικός "
 "πρόσβασης."
 
-#: src/window.cpp:988
+#: ../src/window.cpp:971
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
@@ -760,23 +760,23 @@ msgstr ""
 "αλλάξετε συνολικά τις ρυθμίσεις, χρησιμοποιήστε την επιλογή των προτιμήσεων "
 "στο μενού \"Επεξεργασία\""
 
-#: src/window.cpp:1098
+#: ../src/window.cpp:1081
 msgid "Colour change failed: Colour already in use"
 msgstr "Η αλλαγή του χρώματος απέτυχε: Το χρώμα χρησιμοποιείται ήδη"
 
-#: src/window.cpp:1347
+#: ../src/window.cpp:1333
 msgid "Connected to %0%:%1%"
 msgstr "Συνδέθηκε στο %0%:%1%"
 
-#: src/window.cpp:1391
+#: ../src/window.cpp:1377
 msgid "Serving on port %0%"
 msgstr "Εξυπηρέτηση στην θύρα %0%"
 
-#: src/window.cpp:1520
+#: ../src/window.cpp:1506
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "Αποθήκευση των αλλαγών στο έγγραφο \"%0%\" πριν την έξοδο;"
 
-#: src/window.cpp:1530
+#: ../src/window.cpp:1516
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
@@ -784,11 +784,20 @@ msgstr ""
 "Αν δεν το σώσετε, οι αλλαγές θα χαθούν, αλλά θα μπορέσουν να ανακτηθούν αν "
 "εγγραφείτε ξανά στο έγγραφο, εφόσον η συνεδρία παραμένει ανοικτή."
 
-#: src/window.cpp:1539
+#: ../src/window.cpp:1525
 msgid "If you don't save, changes will be discarded."
 msgstr "Αν δεν αποθηκεύσετε, οι αλλαγές θα χαθούν."
 
 #. Add button to allow the user to save the dialog
-#: src/window.cpp:1554
+#: ../src/window.cpp:1540
 msgid "Close without saving"
 msgstr "Κλείσιμο χωρίς αποθήκευση"
+
+#: ../contrib/gobby.desktop.in.h:1
+msgid "Edit text files collaboratively"
+msgstr ""
+
+#: ../contrib/gobby.desktop.in.h:2
+#, fuzzy
+msgid "Gobby Collaborative Editor"
+msgstr "Ένας συνεργατικός επεξεργαστής κειμένου"

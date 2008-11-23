@@ -1,3 +1,22 @@
+2008-11-23  Armin Burgmeier  <armin@0x539.de>
+
+	* contrib/gobby.desktop: Removed.
+
+	* contrib/gobby.desktop.in: Added, with name and comment marked as
+	translatable.
+
+	* configure.ac: Require intltool.
+
+	* autogen.sh: Run intltoolize.
+
+	* po/POTFILES.in: Added contrib/gobby.desktop.in for translation.
+
+	* po/*.po: Updated for the new translation strings.
+
+	* Makefile.am: Use intltool to generate contrib/gobby.desktop from
+	contrib/gobby.desktop.in. Bug #396, based on a patch from
+	Takao Fujiwara.
+
 2008-11-05  Philipp Kern  <phil@0x539.de>
 
 	* configure.ac:

@@ -1,4 +1,6 @@
 POTFILES
 Makefile.in
 Makefile.in.in
+stamp-it
+.intltool-merge-cache
 *.gmo
