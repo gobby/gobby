@@ -1,0 +1,10 @@
+[Desktop Entry]
+_Name=Gobby Collaborative Editor (0.5)
+_Comment=Edit text files collaboratively
+Exec=gobby-0.5
+Terminal=false
+Type=Application
+Icon=gobby-0.5.png
+Categories=TextEditor;Network;
+StartupNotify=true
+MimeType=text/plain;

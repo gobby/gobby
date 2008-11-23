@@ -1,4 +1,7 @@
 #!/bin/sh
 
-autoreconf -f -i && automake -a -f && glib-gettextize -f
+glib-gettextize --copy --force
+intltoolize --copy --force --automake
+
+autoreconf -f -i && automake -a -f
 

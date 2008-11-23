@@ -1,3 +1,4 @@
 #!/bin/sh
 grep "_(" code -R | \
 	sed -e 's/:.*//' | grep -v matches | uniq | sort > po/POTFILES.in
+echo contrib/gobby-0.5.desktop.in >> po/POTFILES.in

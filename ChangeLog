@@ -1,3 +1,22 @@
+2008-11-23  Armin Burgmeier  <armin@arbur.net>
+
+	* contrib/gobby-0.5.desktop: Removed.
+
+	* contrib/gobby-0.5.desktop.in: Added, marking name and comment for
+	translation.
+
+	* contrib/Makefile.am: Generate contrib/gobby-0.5.desktop from
+	contrib/gobby-0.5.desktop.in via intltool. This allows the desktop
+	file to be translated via po files. Bug #396, based on a patch from
+	Takao Fujiwara.
+
+	* autogen.sh: Run intltoolize.
+
+	* configure.ac: Require intltool.
+
+	* update-potfiles: Added contrib/gobby-0.5.desktop.in to list of files
+	scanned for translatable strings.
+
 2008-11-09  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/edit-commands.cpp: Scroll to cursor after cut or

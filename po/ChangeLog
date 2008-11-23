@@ -1,3 +1,10 @@
+2008-11-23  Armin Burgmeier  <armin@arbur.net>
+
+	* POTFILES.in: Added contrib/gobby-0.5.desktop.in.
+
+	* gobby05.pot: Regenerated.
+	* *.po: Updated for the new strings.
+
 2008-10-16  Armin Burgmeier  <armin@arbur.net>
 
 	* POTFILES.in:

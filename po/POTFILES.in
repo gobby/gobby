@@ -22,3 +22,4 @@ code/util/file.cpp
 code/util/i18n.cpp
 code/util/i18n.hpp
 code/window.cpp
+contrib/gobby-0.5.desktop.in

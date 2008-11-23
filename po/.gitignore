@@ -1,4 +1,7 @@
 POTFILES
 Makefile.in
 Makefile.in.in
+gobby05.pot
+stamp-it
+.intltool-merge-cache
 *.gmo
