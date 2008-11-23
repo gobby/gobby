@@ -41,23 +41,38 @@ Glib::ustring convert_to_utf8(const std::string& str, const std::string& from)
 
 const std::vector<std::string>& Gobby::Encoding::get_encodings()
 {
-	static const std::string encodings[] = {
-		"UTF-8",
-		"ISO-8859-1",
-		"ISO-8859-15",
-		"UTF-7",
-		"UTF-16",
-		"UCS-2",
-		"UCS-4"
-	};
+	static std::vector<std::string> encoding_vec;
 
-	static const std::size_t encoding_count =
-		sizeof(encodings) / sizeof(encodings[0]);
+	if(!encoding_vec.empty())
+		return encoding_vec;
 
-	static std::vector<std::string> encoding_vec(
-		encodings,
-		encodings + encoding_count
-	);
+	static const char *encoding_list =
+	/* Translators: the msgid should not be localized.
+	 * The msgstr is the list of encodings separated by bar. e.g.
+	 * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4" */
+		N_("UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4");
+
+	static gchar **encodings = g_strsplit(_(encoding_list), "|", 0);
+
+	unsigned int encoding_count = g_strv_length(encodings);
+
+	encoding_vec.reserve(encoding_count);
+	for(int i = 0; i < encoding_count; i++)
+		encoding_vec.push_back(encodings[i]);
+
+	g_strfreev(encodings);
+
+	std::string current_encoding;
+	if(!Glib::get_charset(current_encoding))
+	{
+		const std::vector<std::string>::const_iterator begin =
+			encoding_vec.begin();
+		const std::vector<std::string>::const_iterator end =
+			encoding_vec.end();
+
+		if(std::find(begin, end, current_encoding) == end)
+			encoding_vec.push_back(current_encoding);
+	}
 
 	return encoding_vec;
 }

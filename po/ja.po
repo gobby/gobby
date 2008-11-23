@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-23 14:27+0100\n"
+"POT-Creation-Date: 2008-11-23 15:30+0100\n"
 "PO-Revision-Date: 2007-12-17 13:56+0000\n"
 "Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
 "Language-Team: Chikahiro Masami <cmasa.z321@gmail.com>\n"
@@ -48,7 +48,14 @@ msgstr "購読"
 msgid "Document list"
 msgstr "文書一覧"
 
-#: ../src/encoding.cpp:98
+#. Translators: the msgid should not be localized.
+#. * The msgstr is the list of encodings separated by bar. e.g.
+#. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
+#: ../src/encoding.cpp:53
+msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
+msgstr ""
+
+#: ../src/encoding.cpp:113
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."

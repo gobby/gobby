@@ -1,5 +1,15 @@
 2008-11-23  Armin Burgmeier  <armin@0x539.de>
 
+	* inc/common.hpp: Added a define for N_.
+
+	* src/encoding.cpp: Mark available encodings for translation, and
+	always make the encoding of the current locale available. Bug #397,
+	based on a patch from Takao Fujiwara.
+
+	* po/*.po: Regenerated for the new translatable encoding string.
+
+2008-11-23  Armin Burgmeier  <armin@0x539.de>
+
 	* contrib/gobby.desktop: Removed.
 
 	* contrib/gobby.desktop.in: Added, with name and comment marked as

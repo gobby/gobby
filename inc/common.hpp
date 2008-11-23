@@ -21,6 +21,10 @@
 
 #include "net6/gettext_package.hpp"
 
+#ifndef N_
+# define N_(id) (id)
+#endif
+
 namespace Gobby
 {
 
