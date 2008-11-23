@@ -19,6 +19,10 @@
 #ifndef _GOBBY_I18N_HPP_
 #define _GOBBY_I18N_HPP_
 
+#ifndef N_
+# define N_(id) (id)
+#endif
+
 namespace Gobby
 {
 

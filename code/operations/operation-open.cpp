@@ -36,17 +36,29 @@ namespace
 		       iter1.node_id == iter2.node_id;
 	}
 
-	const char* AUTODETECT_ENCODINGS[] = {
-		"UTF-8",
-		"ISO-8859-1",
-		"ISO-8859-15",
-		"UTF-16",
-		"UCS-2",
-		"UCS-4"
-	};
+	// These are the charsets that we try to convert a file from when
+	// autodetecting the encoding.
+	const char* get_autodetect_encoding(unsigned int index)
+	{
+		// Translators: This is the 8 bit encoding that is tried when
+		// autodetecting a file's encoding.
+		static const char* DEFAULT_8BIT_ENCODING = N_("ISO-8859-1");
 
-	const unsigned int N_AUTODETECT_ENCODINGS =
-		sizeof(AUTODETECT_ENCODINGS)/sizeof(AUTODETECT_ENCODINGS[0]);
+		static const char* ENCODINGS[] = {
+			"UTF-8",
+			DEFAULT_8BIT_ENCODING,
+			"UTF-16",
+			"UCS-2",
+			"UCS-4"
+		};
+
+		static const unsigned int N_ENCODINGS =
+			sizeof(ENCODINGS)/sizeof(ENCODINGS[0]);
+
+		if(index == 1) return Gobby::_(ENCODINGS[index]);
+		if(index < N_ENCODINGS) return ENCODINGS[index];
+		return NULL;
+	}
 }
 
 Gobby::OperationOpen::OperationOpen(Operations& operations,
@@ -69,7 +81,7 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 	else
 	{
 		m_encoding_auto_detect_index = 0;
-		m_encoding = AUTODETECT_ENCODINGS[0];
+		m_encoding = get_autodetect_encoding(0);
 	}
 
 	m_iconv.reset(new Glib::IConv("UTF-8", m_encoding));
@@ -318,7 +330,10 @@ void Gobby::OperationOpen::encoding_error()
 	else
 	{
 		++ m_encoding_auto_detect_index;
-		if(m_encoding_auto_detect_index == N_AUTODETECT_ENCODINGS)
+		const char* next_encoding = get_autodetect_encoding(
+			m_encoding_auto_detect_index);
+
+		if(next_encoding == NULL)
 		{
 			error(_("The file either contains data in an unknown "
 			        "encoding, or it contains binary data."));
@@ -336,8 +351,7 @@ void Gobby::OperationOpen::encoding_error()
 			
 			m_raw_pos = 0;
 
-			m_encoding = AUTODETECT_ENCODINGS[
-				m_encoding_auto_detect_index];
+			m_encoding = next_encoding;
 			m_iconv.reset(new Glib::IConv("UTf-8", m_encoding));
 
 			// Read again, try with next encoding.

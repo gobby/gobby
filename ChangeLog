@@ -1,5 +1,13 @@
 2008-11-23  Armin Burgmeier  <armin@arbur.net>
 
+	* code/util/i18n.hpp: Added definition for N_.
+
+	* code/operations/operation-open.cpp: Made 8bit encoding used for auto
+	detection translatable, so that locales with other default 8bit
+	encodings than iso-8859-1 get better results for auto detection.
+
+2008-11-23  Armin Burgmeier  <armin@arbur.net>
+
 	* contrib/gobby-0.5.desktop: Removed.
 
 	* contrib/gobby-0.5.desktop.in: Added, marking name and comment for
