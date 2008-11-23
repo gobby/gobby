@@ -1,5 +1,10 @@
 2008-11-23  Armin Burgmeier  <armin@arbur.net>
 
+	* contrib/Makefile.am: Always add gobby-0.5.desktop.in to the
+	distribution.
+
+2008-11-23  Armin Burgmeier  <armin@arbur.net>
+
 	* Makefile.am: Add a dummy C++ file to nondistributed sources, to
 	cause C++ linking. Bug #399, Markus Wanjura.
 
