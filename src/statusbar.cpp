@@ -69,7 +69,7 @@ void Gobby::StatusBar::update_cursor(DocWindow& wnd)
 	wnd.get_cursor_position(row, col);
 
 	m_bar_position.pop();
-	obby::format_string str("Line: %0%, Column: %1%");
+	obby::format_string str(_("Line: %0%, Column: %1%"));
 	str << (row + 1) << (col + 1);
 	m_bar_position.push(str.str() );
 }

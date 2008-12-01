@@ -103,9 +103,9 @@ Gobby::HostDialog::HostDialog(Gtk::Window& parent,
 	Gtk::FileFilter obby_filter;
 	Gtk::FileFilter all_filter;
 
-	obby_filter.set_name(".obby files");
+	obby_filter.set_name(_(".obby files"));
 	obby_filter.add_pattern("*.obby");
-	all_filter.set_name("All files");
+	all_filter.set_name(_("All files"));
 	all_filter.add_pattern("*");
 
 	m_ent_session.get_file_chooser().add_filter(obby_filter);

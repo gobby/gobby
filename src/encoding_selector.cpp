@@ -23,7 +23,7 @@
 #include "encoding.hpp"
 #include "encoding_selector.hpp"
 
-const std::string Gobby::EncodingSelector::AUTO_DETECT = "Auto Detect";
+const std::string Gobby::EncodingSelector::AUTO_DETECT = N_("Auto Detect");
 
 Gobby::EncodingSelector::EncodingSelector():
 	m_show_automatic(false)
@@ -43,11 +43,19 @@ Gobby::EncodingSelector::EncodingSelector():
 
 void Gobby::EncodingSelector::set_encoding(const std::string& encoding)
 {
+	if(encoding == AUTO_DETECT)
+		return set_active(0);
+
 	set_active_text(encoding);
 }
 
 std::string Gobby::EncodingSelector::get_encoding() const
-{
+{	
+	// Return untranslated "auto detection" encoding. This is meant as an
+	// opaque object.
+	if(get_active_row_number() == 0)
+		return AUTO_DETECT;
+
 	return get_active_text();
 }
 
@@ -59,11 +67,11 @@ void Gobby::EncodingSelector::set_show_automatic(bool show_automatic)
 	if(m_show_automatic)
 	{
 		prepend_text("Separator");
-		prepend_text(AUTO_DETECT);
+		prepend_text(_(AUTO_DETECT.c_str()));
 	}
 	else
 	{
-		remove_text(AUTO_DETECT);
+		remove_text(_(AUTO_DETECT.c_str()));
 		remove_text("Separator");
 	}
 }

@@ -30,7 +30,7 @@ Gobby::HostProgressDialog::HostProgressDialog(Gtk::Window& parent,
 	m_port(port), m_username(username), m_color(color), m_session(session),
 	m_error("")
 {
-	set_status_text("Opening obby session...");
+	set_status_text(_("Opening obby session..."));
 }
 
 std::auto_ptr<Gobby::HostBuffer> Gobby::HostProgressDialog::get_buffer()

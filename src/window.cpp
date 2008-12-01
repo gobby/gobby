@@ -542,7 +542,7 @@ void Gobby::Window::on_about()
 	dlg.set_artists(artists);
 
 	dlg.set_license(
-		"This program is free software; you can redistribute it\n"
+		_("This program is free software; you can redistribute it\n"
 		"and/or modify it under the terms of the GNU General Public\n"
 		"License as published by the Free Software Foundation; either\n"
 		"version 2 of the License, or (at your option) any later\n"
@@ -551,7 +551,7 @@ void Gobby::Window::on_about()
 		"This program is distributed in the hope that it will be\n"
 		"useful, but WITHOUT ANY WARRANTY; without even the implied\n"
 		"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
-		"PURPOSE.  See the GNU General Public License for more details."
+		"PURPOSE.  See the GNU General Public License for more details.")
 	);
 	dlg.run();
 }
@@ -700,14 +700,12 @@ void Gobby::Window::on_document_open()
 		m_last_path = dlg.get_current_folder();
 		// Open chosen files
 		std::list<Glib::ustring> list = dlg.get_filenames();
+                std::string encoding = dlg.get_selector().get_encoding();
 		for(std::list<Glib::ustring>::iterator iter = list.begin();
 		    iter != list.end();
 		    ++ iter)
 		{
-			open_local_file(
-				*iter,
-				dlg.get_selector().get_encoding()
-			);
+			open_local_file(*iter, encoding);
 		}
 	}
 }

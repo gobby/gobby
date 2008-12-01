@@ -1,3 +1,12 @@
+2008-12-01  Armin Burgmeier  <armin@0x539.de>
+
+	* src/encoding_selector.cpp:
+	* src/hostdialog.cpp:
+	* src/hostprogressdialog.cpp:
+	* src/statusbar.cpp:
+	* src/window.cpp: Marked a few more strings for translation. Bug #403,
+	patch from Takao Fujiwara.
+
 2008-11-23  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/common.hpp: Added a define for N_.
