@@ -92,6 +92,8 @@ Gobby::Chat::Chat(Gtk::Window& parent, const Preferences& preferences)
 
 	set_spacing(5);
 	set_sensitive(false);
+	//m_ent_chat.set_sensitive(false);
+	//m_btn_chat.set_sensitive(false);
 
 #ifdef GTKMM_GEQ_28
 	m_parent.signal_focus_in_event().connect(
@@ -102,6 +104,8 @@ Gobby::Chat::Chat(Gtk::Window& parent, const Preferences& preferences)
 		sigc::mem_fun(*this, &Chat::on_focus_out)
 	);
 #endif
+
+	set_focus_child(m_log_chat);
 }
 
 Gobby::Chat::~Chat()
@@ -239,7 +243,7 @@ void Gobby::Chat::on_help(const std::string& name, const std::string& desc)
 	);
 
 	str << name << desc;
-	m_log_chat.log(str.str(), "black", std::time(NULL) );
+	m_log_chat.log(str.str(), "", std::time(NULL) );
 }
 
 void Gobby::Chat::on_remove_result(const obby::command_query& query,
@@ -328,7 +332,7 @@ void Gobby::Chat::recv_user_line(const std::string& line,
                                  const obby::chat::user_message& message)
 {
 	// Check each line for highlighting occurence
-	Glib::ustring colour = "black";
+	Glib::ustring colour = "";
 	if(&message.get_user() != &m_buffer->get_self())
 		if(is_highlighted(line, m_buffer->get_self().get_name()) )
 			colour = "darkred";

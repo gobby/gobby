@@ -101,7 +101,8 @@ void Gobby::LogView::log(const Glib::ustring& text,
                          std::time_t timestamp)
 {
 	Glib::RefPtr<Gtk::TextBuffer> buffer = get_buffer();
-	Glib::RefPtr<Gtk::TextTag> tag = buffer->get_tag_table()->lookup(color);
+	Glib::RefPtr<Gtk::TextTag> tag;
+	if(!color.empty()) buffer->get_tag_table()->lookup(color);
 
 	Glib::ustring ins_text = text;
 	if(ins_text[ins_text.length() - 1] != '\n') ins_text += "\n";
@@ -123,7 +124,7 @@ void Gobby::LogView::log(const Glib::ustring& text,
 	obby::format_string str("[%0%] %1%");
 	str << buf << ins_text.raw();
 
-	if(!tag)
+	if(!tag && !color.empty())
 	{
 		tag = Gtk::TextTag::create();
 		tag->property_foreground() = color;
@@ -131,11 +132,11 @@ void Gobby::LogView::log(const Glib::ustring& text,
 		tag->set_priority(0);
 	}
 
-	Gtk::TextIter end = buffer->insert_with_tag(
-		buffer->end(),
-		str.str(),
-		tag
-	);
+	Gtk::TextIter end;
+	if(tag)
+		end = buffer->insert_with_tag(buffer->end(), str.str(), tag);
+	else
+		end = buffer->insert(buffer->end(), str.str());
 
 	scroll_to(m_end_mark, 0.0f);
 

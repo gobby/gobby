@@ -1,3 +1,9 @@
+2008-12-05  Armin Burgmeier  <armin@0x539.de>
+
+	* src/chat.cpp:
+	* src/logview.cpp: Don't force black as default chat color, but use
+	the theme's default text color (Bug #411).
+
 2008-12-01  Armin Burgmeier  <armin@0x539.de>
 
 	* src/encoding_selector.cpp:
