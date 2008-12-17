@@ -100,8 +100,10 @@ AC_OUTPUT([
 
 		icons/Makefile
 			icons/hicolor/Makefile
+				icons/hicolor/48x48/Makefile
 				icons/hicolor/scalable/Makefile
 			icons/HighContrastLargePrintInverse/Makefile
+				icons/HighContrastLargePrintInverse/48x48/Makefile
 				icons/HighContrastLargePrintInverse/scalable/Makefile
 
 		pixmaps/Makefile
