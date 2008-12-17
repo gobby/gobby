@@ -126,5 +126,5 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT([po/Makefile.in m4/Makefile])
+AC_OUTPUT([po/Makefile.in m4/Makefile icons/Makefile icons/hicolor/Makefile icons/hicolor/scalable/Makefile icons/HighContrastLargePrintInverse/Makefile icons/HighContrastLargePrintInverse/scalable/Makefile])
 

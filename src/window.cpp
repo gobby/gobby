@@ -520,7 +520,7 @@ void Gobby::Window::on_about()
 		"Copyright (C) 2005-2008 0x539 dev group <crew@0x539.de>"
 	);
 
-	dlg.set_logo(m_icon_mgr.gobby);
+	dlg.set_logo_icon_name("gobby");
 
 	std::deque<Glib::ustring> authors;
 	authors.push_back("Developers:");

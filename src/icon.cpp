@@ -54,7 +54,7 @@ Gtk::StockID Gobby::IconManager::STOCK_DOCLIST("gobby-doclist");
 Gtk::StockID Gobby::IconManager::STOCK_CHAT("gobby-chat");
 
 Gobby::IconManager::IconManager():
-	gobby(load_pixbuf(APPICON_DIR, "gobby.png") ),
+	//gobby(load_pixbuf(APPICON_DIR, "gobby.png") ),
 	userlist(load_pixbuf(PIXMAPS_DIR, "userlist.png") ),
 	doclist(load_pixbuf(PIXMAPS_DIR, "doclist.png") ),
 	chat(load_pixbuf(PIXMAPS_DIR, "chat.png") ),

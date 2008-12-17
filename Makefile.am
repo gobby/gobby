@@ -1,4 +1,4 @@
-SUBDIRS = m4 . po
+SUBDIRS = m4 . po icons
 
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4
@@ -119,11 +119,8 @@ gobby_SOURCES += src/dragdrop.cpp
 gobby_SOURCES += src/window.cpp
 gobby_SOURCES += src/main.cpp
 
-appicondir        = $(datadir)/pixmaps
 pixmapdir         = $(datadir)/pixmaps/gobby
-gobby_CPPFLAGS   += -DAPPICON_DIR=\""$(appicondir)"\"
 gobby_CPPFLAGS   += -DPIXMAPS_DIR=\""$(pixmapdir)"\"
-dist_appicon_DATA = pixmaps/gobby.png
 dist_pixmap_DATA  = pixmaps/userlist.png
 dist_pixmap_DATA += pixmaps/doclist.png
 dist_pixmap_DATA += pixmaps/chat.png
