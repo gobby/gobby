@@ -1,5 +1,18 @@
 2008-12-17  Armin Burgmeier  <armin@0x539.de>
 
+	* icons/hicolor/48x48/gobby.png:
+	* icons/hicolor/48x48/Makefile.am:
+	* icons/hicolor/Makefile.am:Added fixed-size version of gobby icon.
+
+	* icons/HighContrastLargePrintInverse/48x48/gobby.png:
+	* icons/HighContrastLargePrintInverse/48x48/Makefile.am:
+	* icons/hicolor/Makefile.am: Added fixed-size version of HCLPI gobby
+	icon.
+
+	* configure.ac: Generate the new Makefiles.
+
+2008-12-17  Armin Burgmeier  <armin@0x539.de>
+
 	* contrib/artwork/gobby.svg: Centered the gobby icon into the
 	document.
 
