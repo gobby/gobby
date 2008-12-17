@@ -1,3 +1,36 @@
+2008-12-17  Armin Burgmeier  <armin@0x539.de>
+
+	* contrib/artwork/gobby.svg: Centered the gobby icon into the
+	document.
+
+	* code/core/iconmanager.hpp:
+	* code/core/iconmanager.cpp: Removed the gobby icon pixbuf.
+
+	* code/dialogs/initialdialog.cpp:
+	* code/commands/help-commands.cpp:
+	* code/main.cpp: Lookup the gobby icon by its icon name.
+
+	* pixmaps/gobby-0.5.png: Deleted.
+
+	* icons/hicolor/scalable/gobby-0.5.svg: Added scalable gobby icon.
+	* icons/hicolor/scalable/Makefile.am: Install it into a proper
+	location.
+	* icons/hicolor/Makefile.am: Run update-icon-cache on hicolor theme
+	after (un)intall.
+	* icons/HighContrastLargePrintInverse/scalable/gobby-0.5.svg: Added
+	scalable gobby icon for HCLPI theme (Thomas Glatt, Bug #413).
+	* icons/HighContrastLargePrintInverse/scalable/Makefile.am: Install
+	it.
+	* icons/HighContrastLargePrintInverse/Makefile.am: Run
+	update-icon-cache on HighContrastLargePrintInverse after (un)install.
+
+	* Makefile.am: Decend into the icons/ subdir.
+
+	* pixmaps/Makefile.am: Don't install gobby-0.5.png to share/pixmaps
+	anymore.
+
+	* configure.ac: Generate the new Makefiles.
+
 2008-11-23  Armin Burgmeier  <armin@arbur.net>
 
 	* configure.ac: Post-release bump to 0.4.91.

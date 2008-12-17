@@ -71,7 +71,6 @@ Gtk::StockID Gobby::IconManager::STOCK_SAVE_ALL("gobby-save-all");
 // TODO: The save-all icon does not match the save icon for toolbar
 // or menu sized items. It is not yet enabled therefore.
 Gobby::IconManager::IconManager():
-	gobby(load_pixbuf(APPICON_DIR, "gobby-0.5.png") ),
 	userlist(load_pixbuf(PIXMAPS_DIR, "userlist.png") ),
 	doclist(load_pixbuf(PIXMAPS_DIR, "doclist.png") ),
 //	save_all(load_pixbuf(PIXMAPS_DIR, "save-all.svg")),

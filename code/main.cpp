@@ -136,9 +136,7 @@ int main(int argc, char* argv[]) try
 	Gobby::IconManager icon_manager;
 
 	// Set default icon
-	std::list<Glib::RefPtr<Gdk::Pixbuf> > icon_list;
-	icon_list.push_back(icon_manager.gobby);
-	Gtk::Window::set_default_icon_list(icon_list);
+	Gtk::Window::set_default_icon_name("gobby-0.5");
 
 	// Read the configuration
 	Gobby::Config config(

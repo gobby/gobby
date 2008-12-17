@@ -45,7 +45,6 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_table(2, 2),
 	m_vbox(false, 12),
 	m_hbox(false, 12),
-	m_image(icon_manager.gobby),
 	m_color_button(_("Choose a user color"), *this)
 {
 	m_title.set_markup(
@@ -54,6 +53,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		"</span>");
 	m_title.show();
 
+	m_image.set_from_icon_name("gobby-0.5", Gtk::ICON_SIZE_DIALOG);
 	m_image.set_alignment(Gtk::ALIGN_CENTER, Gtk::ALIGN_TOP);
 	m_image.show();
 

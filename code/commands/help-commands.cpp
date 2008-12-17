@@ -85,7 +85,7 @@ void Gobby::HelpCommands::on_about()
 			"Public License along with this program; if not, "
 			"write to the Free Software Foundation, Inc., 675 "
 			"Mass Ave, Cambridge, MA 02139, USA."));
-		m_about_dialog->set_logo(m_icon_manager.gobby);
+		m_about_dialog->set_logo_icon_name("gobby-0.5");
 		m_about_dialog->set_name("Gobby");
 		m_about_dialog->set_program_name("Gobby");
 		m_about_dialog->set_version(PACKAGE_VERSION);

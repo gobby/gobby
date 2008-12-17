@@ -97,7 +97,14 @@ AC_OUTPUT([
 
 		contrib/Makefile
 			contrib/artwork/Makefile
+
+		icons/Makefile
+			icons/hicolor/Makefile
+				icons/hicolor/scalable/Makefile
+			icons/HighContrastLargePrintInverse/Makefile
+				icons/HighContrastLargePrintInverse/scalable/Makefile
+
 		pixmaps/Makefile
+
 		win32/Makefile
 ])
-
