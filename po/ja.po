@@ -53,7 +53,7 @@ msgstr "文書一覧"
 #. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
 #: ../src/encoding.cpp:53
 msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-msgstr ""
+msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
 
 #: ../src/encoding.cpp:113
 msgid ""
@@ -63,9 +63,13 @@ msgstr ""
 "入力をUTF-8に変換するのに失敗しました。入力エンコーディングが不明かバイナリの"
 "入力です。"
 
+#: ../src/encoding_selector.cpp:26
+msgid "Auto Detect"
+msgstr "自動検知"
+
 #: ../src/encoding_selector.cpp:145
 msgid "Character Encoding:"
-msgstr "文字のエンコーディング"
+msgstr "文字のエンコーディング:"
 
 #: ../src/finddialog.cpp:43
 msgid "Find what:"
@@ -373,6 +377,14 @@ msgstr "セッションを復元:"
 msgid "Restore session"
 msgstr "セッションを復元"
 
+#: ../src/hostdialog.cpp:106
+msgid ".obby files"
+msgstr ".obby ファイル"
+
+#: ../src/hostdialog.cpp:108
+msgid "All files"
+msgstr "すべてのファイル"
+
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
 msgstr "ホスト(_H)"
@@ -667,6 +679,10 @@ msgstr "選択構文: %0%"
 msgid "No language selected"
 msgstr "構文が選択されていません"
 
+#: ../src/statusbar.cpp:72
+msgid "Line: %0%, Column: %1%"
+msgstr "行: %0%、列: %1%"
+
 #: ../src/userlist.cpp:94
 msgid "Online"
 msgstr "オンライン"
@@ -791,9 +807,8 @@ msgstr "保存せずに閉じる"
 
 #: ../contrib/gobby.desktop.in.h:1
 msgid "Edit text files collaboratively"
-msgstr ""
+msgstr "共同でテキストファイルを編集する"
 
 #: ../contrib/gobby.desktop.in.h:2
-#, fuzzy
 msgid "Gobby Collaborative Editor"
-msgstr "コラボレーティブ・テキスト・エディタ"
+msgstr "Gobby コラボレーティブ・エディタ"

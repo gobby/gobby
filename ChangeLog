@@ -1,5 +1,9 @@
 2008-12-18  Armin Burgmeier  <armin@0x539.de>
 
+	* po/ja.po: Updated Japanese translation by Takao Fujiwara, Bug #397.
+
+2008-12-18  Armin Burgmeier  <armin@0x539.de>
+
 	* src/window.cpp: When opening a file, convert filename to UTF-8
 	for document title.
 
