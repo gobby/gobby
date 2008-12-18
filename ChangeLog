@@ -1,3 +1,13 @@
+2008-12-18  Armin Burgmeier  <armin@0x539.de>
+
+	* src/window.cpp: When opening a file, convert filename to UTF-8
+	for document title.
+
+	* src/logview.cpp: Convert the date as returned by strftime() from the
+	current locale to UTF-8.
+
+	Patch by Takao Fujiwara, Bug #403.
+
 2008-12-17  Armin Burgmeier  <armin@0x539.de>
 
 	* icons/hicolor/48x48/gobby.png:

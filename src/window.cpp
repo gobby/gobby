@@ -1425,7 +1425,8 @@ void Gobby::Window::open_local_file(const Glib::ustring& file,
 		convert2unix(utf8_content);
 
 		m_buffer->document_create(
-			Glib::path_get_basename(file), "UTF-8", utf8_content
+			Glib::filename_to_utf8(Glib::path_get_basename(file)),
+			"UTF-8", utf8_content
 		);
 
 		// Clear local path
