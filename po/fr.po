@@ -808,12 +808,11 @@ msgstr "Fermer sans enregistrer"
 
 #: ../contrib/gobby.desktop.in.h:1
 msgid "Edit text files collaboratively"
-msgstr ""
+msgstr "Edition collaborative de fichier texte"
 
 #: ../contrib/gobby.desktop.in.h:2
-#, fuzzy
 msgid "Gobby Collaborative Editor"
-msgstr "Un éditeur de texte collaboratif"
+msgstr "Gobby - Editeur collaboratif"
 
 #~ msgid "Shows up a dialog to customise Gobby for your needs"
 #~ msgstr "Afficher un dialogue pour personnaliser Gobby"
