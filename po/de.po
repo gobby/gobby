@@ -808,4 +808,4 @@ msgstr "Gemeinschaftliches Editieren von Textdateien"
 
 #: ../contrib/gobby.desktop.in.h:2
 msgid "Gobby Collaborative Editor"
-msgstr "Gobby-Gemeinschaftseditor"
+msgstr "Gobby Gemeinschaftseditor"
