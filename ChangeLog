@@ -1,5 +1,10 @@
 2008-12-19  Armin Burgmeier  <armin@0x539.de>
 
+	* po/fr.po: Changed application name to "Editeur collaboratif Gobby"
+	to meet French Gnome standard.
+
+2008-12-19  Armin Burgmeier  <armin@0x539.de>
+
 	* po/fr.po: Updated translation by Christian Perrier (Debian Bug
 	#507034).
 
