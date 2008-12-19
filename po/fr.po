@@ -744,7 +744,7 @@ msgstr "Edition collaborative de fichier texte"
 #: ../contrib/gobby-0.5.desktop.in.h:2
 #, fuzzy
 msgid "Gobby Collaborative Editor (0.5)"
-msgstr "Gobby - Editeur collaboratif (0.5)"
+msgstr "Editeur collaboratif Gobby (0.5)"
 
 #~ msgid ""
 #~ "Failed to convert input into UTF-8: Either the encoding is unknown or it "
