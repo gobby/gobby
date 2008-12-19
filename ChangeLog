@@ -1,3 +1,8 @@
+2008-12-19  Armin Burgmeier  <armin@0x539.de>
+
+	* po/de.po: Removed dash from application name, as other GNOME
+	programs do.
+
 2008-12-17  Armin Burgmeier  <armin@0x539.de>
 
 	* icons/hicolor/48x48/gobby-0.5.png:

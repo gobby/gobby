@@ -740,7 +740,7 @@ msgstr "Gemeinschaftliches Editieren von Textdateien"
 
 #: ../contrib/gobby-0.5.desktop.in.h:2
 msgid "Gobby Collaborative Editor (0.5)"
-msgstr "Gobby-Gemeinschaftseditor (0.5)"
+msgstr "Gobby Gemeinschaftseditor (0.5)"
 
 #~ msgid ""
 #~ "Failed to convert input into UTF-8: Either the encoding is unknown or it "
