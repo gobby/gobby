@@ -1,3 +1,12 @@
+2008-12-23  Philipp Kern  <phil@0x539.de>
+
+	* code/Makefile.am:
+	* code/commands/Makefile.am:
+	* code/core/Makefile.am:
+	* code/dialogs/Makefile.am:
+	* code/operations/Makefile.am:
+	* code/util/Makefile.am: Include top-level CFLAGS.
+
 2008-12-19  Armin Burgmeier  <armin@0x539.de>
 
 	* po/fr.po: Changed application name to "Editeur collaboratif Gobby"
