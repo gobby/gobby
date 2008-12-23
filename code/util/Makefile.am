@@ -19,6 +19,8 @@ noinst_HEADERS = \
         resolv.hpp \
         serialize.hpp
 
-libgobby_util_a_CPPFLAGS = $(CFLAGS) $(gobby_CFLAGS) -I$(top_srcdir)/code \
-                          -DAPPICON_DIR=\""$(appicondir)"\" \
-                          -DPIXMAPS_DIR=\""$(pixmapdir)"\"
+AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
+              -I$(top_srcdir)/code \
+              -DAPPICON_DIR=\""$(appicondir)"\" \
+              -DPIXMAPS_DIR=\""$(pixmapdir)"\"
+

@@ -14,7 +14,9 @@ gobby_0_5_LDADD = \
 	code/dialogs/libgobby-dialogs.a \
 	code/core/libgobby-core.a \
 	code/util/libgobby-util.a \
-	$(gobby_LIBS)
+	$(gobby_LIBS) \
+	$(infinote_LIBS) \
+	$(LIBS)
 
 if WIN32
 gobby_0_5_LDADD += -lws2_32
