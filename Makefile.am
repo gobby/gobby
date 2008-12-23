@@ -3,7 +3,7 @@ SUBDIRS = m4 contrib pixmaps icons win32 code . po
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4
 
-dist_man_MANS = gobby.1
+dist_man_MANS = gobby-0.5.1
 
 bin_PROGRAMS = gobby-0.5
 
