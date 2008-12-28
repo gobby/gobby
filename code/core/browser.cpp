@@ -57,13 +57,12 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 		sigc::mem_fun(*this, &Browser::on_expanded_changed));
 	
 	m_io = inf_gtk_io_new();
-	InfConnectionManager* connection_manager =
-		inf_connection_manager_new();
+	InfCommunicationManager* communication_manager =
+		inf_communication_manager_new();
 
 	m_browser_store = inf_gtk_browser_store_new(INF_IO(m_io),
-	                                            connection_manager,
-	                                            NULL);
-	g_object_unref(connection_manager);
+	                                            communication_manager);
+	g_object_unref(communication_manager);
 
 	m_xmpp_manager = inf_xmpp_manager_new();
 #ifdef LIBINFINITY_HAVE_AVAHI

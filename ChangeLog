@@ -1,3 +1,10 @@
+2008-12-28  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/browser.cpp:
+	* code/core/noteplugin.cpp:
+	* code/operations/operation-open.cpp: Adapt to libinfinity's new
+	communication API.
+
 2008-12-23  Philipp Kern  <phil@0x539.de>
 
 	* configure.ac: separate infinote pkg-config from those determining

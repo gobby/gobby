@@ -390,14 +390,14 @@ void Gobby::OperationOpen::read_finish()
 		inf_text_gtk_buffer_new(m_content, user_table);
 	g_object_unref(user_table);
 
-	InfConnectionManager* connection_manager =
-		infc_browser_get_connection_manager(m_browser);
+	InfCommunicationManager* communication_manager =
+		infc_browser_get_communication_manager(m_browser);
 
 	InfIo* io;
 	g_object_get(G_OBJECT(m_browser), "io", &io, NULL);
 
 	InfTextSession* session = inf_text_session_new_with_user_table(
-		connection_manager, INF_TEXT_BUFFER(text_gtk_buffer), io,
+		communication_manager, INF_TEXT_BUFFER(text_gtk_buffer), io,
 		user_table, NULL, NULL);
 
 	g_object_unref(io);

@@ -30,8 +30,8 @@
 namespace
 {
 	InfSession*
-	session_new(InfIo* io, InfConnectionManager* manager,
-	            InfConnectionManagerGroup* sync_group,
+	session_new(InfIo* io, InfCommunicationManager* manager,
+	            InfCommunicationJoinedGroup* sync_group,
 	            InfXmlConnection* sync_connection, gpointer user_data)
 	{
 		GtkSourceBuffer* textbuffer = gtk_source_buffer_new(NULL);
@@ -47,7 +47,9 @@ namespace
 		InfTextSession* session =
 			inf_text_session_new_with_user_table(
 				manager, INF_TEXT_BUFFER(buffer), io,
-				user_table, sync_group, sync_connection);
+				user_table,
+				INF_COMMUNICATION_GROUP(sync_group),
+				sync_connection);
 		return INF_SESSION(session);
 	}
 
