@@ -1,5 +1,9 @@
 2008-12-28  Armin Burgmeier  <armin@arbur.net>
 
+	* configure.ac: Require libinfinity >= 0.2.
+
+2008-12-28  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/browser.cpp:
 	* code/core/noteplugin.cpp:
 	* code/operations/operation-open.cpp: Adapt to libinfinity's new
