@@ -80,9 +80,9 @@ protected:
 	Gtk::HPaned m_paned;
 
 	Header m_header;
+	Browser m_browser;
 	Folder m_folder;
 	StatusBar m_statusbar;
-	Browser m_browser;
 
 	// Functionality
 	DocumentInfoStorage m_info_storage;

@@ -1,5 +1,13 @@
 2008-12-28  Armin Burgmeier  <armin@arbur.net>
 
+	* code/window.hpp:
+	* code/window.cpp: Changed (de)initialization order so that browser is
+	freed after folder. This is required to avoid a warning when an
+	InfSession holds a reference to a connection (such as during
+	synchronization) and Gobby is closed.
+
+2008-12-28  Armin Burgmeier  <armin@arbur.net>
+
 	* configure.ac: Require libinfinity >= 0.2.
 
 2008-12-28  Armin Burgmeier  <armin@arbur.net>
