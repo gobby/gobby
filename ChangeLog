@@ -1,4 +1,13 @@
-2008-12-28  Armin Burgmeier  <armin@arbur.net>
+2008-12-30  Armin Burgmeier  <armin@arbur.net>
+
+	* code/operations/operations.hpp:
+	* code/operations/operations.cpp: Added signal_finished to the
+	operation base class, and the various functions creating operations
+	now return them.
+
+	* code/operations/operation-save.cpp: Fixed a typo in a comment.
+
+2008-12-29  Armin Burgmeier  <armin@arbur.net>
 
 	* code/window.hpp:
 	* code/window.cpp: Changed (de)initialization order so that browser is

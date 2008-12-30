@@ -38,6 +38,8 @@ public:
 	class Operation
 	{
 	public:
+		typedef sigc::signal<void> SignalFinished;
+
 		Operation(Operations& operations):
 			m_operations(operations) {}
 		virtual ~Operation() = 0;
@@ -52,37 +54,47 @@ public:
 			return m_operations.m_info_storage;
 		}
 
-		void remove() { m_operations.remove_operation(this); }
+		void remove()
+		{
+			m_signal_finished.emit();
+			m_operations.remove_operation(this);
+		}
+
+		SignalFinished signal_finished() const
+		{
+			return m_signal_finished;
+		}
 	private:
+		SignalFinished m_signal_finished;
 		Operations& m_operations;
 	};
 
 	Operations(DocumentInfoStorage& info_storage, StatusBar& status_bar);
 	~Operations();
 
-	void create_directory(InfcBrowser* browser,
-	                      InfcBrowserIter* parent,
-	                      const Glib::ustring& name);
+	Operation* create_directory(InfcBrowser* browser,
+	                            InfcBrowserIter* parent,
+	                            const Glib::ustring& name);
 
-	void create_document(InfcBrowser* browser,
-	                     InfcBrowserIter* parent,
-	                     const Glib::ustring& name);
+	Operation* create_document(InfcBrowser* browser,
+	                           InfcBrowserIter* parent,
+	                           const Glib::ustring& name);
 
-	void create_document(InfcBrowser* browser,
-	                     InfcBrowserIter* parent,
-	                     const Glib::ustring& name,
-	                     const Preferences& preferences,
-	                     const Glib::ustring& from_uri,
-	                     const char* encoding);
+	Operation* create_document(InfcBrowser* browser,
+	                           InfcBrowserIter* parent,
+	                           const Glib::ustring& name,
+	                           const Preferences& preferences,
+	                           const Glib::ustring& from_uri,
+	                           const char* encoding);
 
-	void save_document(DocWindow& document,
-	                   Folder& folder,
-	                   const std::string& uri,
-	                   const std::string& encoding,
-	                   DocumentInfoStorage::EolStyle eol_style);
+	Operation* save_document(DocWindow& document,
+	                         Folder& folder,
+	                         const std::string& uri,
+	                         const std::string& encoding,
+	                         DocumentInfoStorage::EolStyle eol_style);
 
-	void delete_node(InfcBrowser* browser,
-	                 InfcBrowserIter* iter);
+	Operation* delete_node(InfcBrowser* browser,
+	                       InfcBrowserIter* iter);
 
 protected:
 	void remove_operation(Operation* operation);

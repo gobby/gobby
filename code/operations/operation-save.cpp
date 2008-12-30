@@ -138,16 +138,6 @@ void Gobby::OperationSave::attempt_next()
 
 	if(done)
 	{
-		if(m_document != NULL)
-		{
-			// TODO: Don't unset modified flag if the document has
-			// changed in the meanwhile.
-			gtk_text_buffer_set_modified(
-				GTK_TEXT_BUFFER(
-					m_document->get_text_buffer()),
-				FALSE);
-		}
-
 		DocumentInfoStorage::Info info;
 		info.uri = m_file->get_uri();
 		info.encoding = m_encoding;
@@ -155,6 +145,18 @@ void Gobby::OperationSave::attempt_next()
 		get_info_storage().set_info(m_storage_key, info);
 
 		m_stream->close();
+
+		if(m_document != NULL)
+		{
+			// TODO: Don't unset modified flag if the document has
+			// changed in the meanwhile, but set
+			// buffer-modified-time in algorithm.
+			gtk_text_buffer_set_modified(
+				GTK_TEXT_BUFFER(
+					m_document->get_text_buffer()),
+				FALSE);
+		}
+
 		remove();
 	}
 	else
@@ -203,7 +205,7 @@ void Gobby::OperationSave::write_next()
 	gchar* preserve_inbuf = inbuf;
 
 	/* iconv is defined as libiconv on Windows, or at least when using the
-	 * binary packages from ftp.gnome.org. Therefore we can't propely
+	 * binary packages from ftp.gnome.org. Therefore we can't properly
 	 * call Glib::IConv::iconv. Therefore, we use the C API here. */
 	std::size_t retval = g_iconv(
 		m_iconv.gobj(), &inbuf, &inlen, &outbuf, &outlen);
