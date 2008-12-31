@@ -38,6 +38,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_statusbar(m_folder, m_preferences),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
 	m_operations(m_info_storage, m_statusbar), 
+	m_commands_autosave(m_folder, m_operations, m_info_storage,
+	                    m_preferences),
 	m_commands_browser(m_browser, m_folder, m_info_storage, m_statusbar,
 	                   m_preferences),
 	m_commands_browser_context(*this, m_browser, m_file_chooser,

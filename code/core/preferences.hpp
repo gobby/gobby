@@ -114,6 +114,8 @@ public:
 		Option<bool> tab_spaces;
 		Option<bool> indentation_auto;
 		Option<bool> homeend_smart;
+		Option<bool> autosave_enabled;
+		Option<unsigned int> autosave_interval;
 	};
 
 	class View

@@ -1,5 +1,25 @@
 2008-12-31  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/preferences.hpp:
+	* code/core/preferences.cpp: Added autosave_enabled and
+	autosave_interval properties.
+
+	* code/dialogs/preferencesdialog.hpp:
+	* code/dialogs/preferencesdialog.cpp: Added the two preferences to the
+	user interface.
+
+	* code/commands/autosave-commands.hpp:
+	* code/commands/autosave-commands.cpp:
+	* code/commands/Makefile.am: Implemented autosave.
+
+	* code/window.hpp:
+	* code/window.cpp: Instantiate AutosaveCommands.
+
+	* code/commands/file-commands.cpp: Added a TODO comment about
+	defaulting to CRLF on Windows.
+
+2008-12-31  Armin Burgmeier  <armin@arbur.net>
+
 	* code/operations/operations.hpp:
 	* code/operations/operations.cpp: Added a begin_save_operation signal,
 	and added a boolean parameter to base operation's finished signal

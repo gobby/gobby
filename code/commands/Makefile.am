@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libgobby-commands.a
 
 libgobby_commands_a_SOURCES = \
+	autosave-commands.cpp \
 	browser-commands.cpp \
 	browser-context-commands.cpp \
 	edit-commands.cpp \
@@ -10,6 +11,7 @@ libgobby_commands_a_SOURCES = \
 	view-commands.cpp
 
 noinst_HEADERS = \
+	autosave-commands.hpp \
         browser-commands.hpp \
         browser-context-commands.hpp \
         edit-commands.hpp \

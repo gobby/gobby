@@ -38,7 +38,10 @@ Gobby::Preferences::Editor::Editor(Config::ParentEntry& entry):
 	tab_width(entry.get_value<unsigned int>("tab-width", 8)),
 	tab_spaces(entry.get_value<bool>("tab-insert-spaces", false)),
 	indentation_auto(entry.get_value<bool>("auto-indentation", true)),
-	homeend_smart(entry.get_value<bool>("smart-homeend", false) )
+	homeend_smart(entry.get_value<bool>("smart-homeend", false) ),
+	autosave_enabled(entry.get_value<bool>("autosave-enabled", false) ),
+	autosave_interval(
+		entry.get_value<unsigned int>("autosave-interval", 10))
 {
 }
 
@@ -48,6 +51,8 @@ void Gobby::Preferences::Editor::serialize(Config::ParentEntry& entry) const
 	entry.set_value("tab-insert-spaces", tab_spaces);
 	entry.set_value("auto-indentation", indentation_auto);
 	entry.set_value("smart-homeend", homeend_smart);
+	entry.set_value("autosave-enabled", autosave_enabled);
+	entry.set_value("autosave-interval", autosave_interval);
 }
 
 Gobby::Preferences::View::View(Config::ParentEntry& entry):

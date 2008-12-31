@@ -294,19 +294,30 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 }
 
 Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
-	m_group_tab(_("Tab Stops") ),
-	m_group_indentation(_("Indentation") ),
-	m_group_homeend(_("Home/End Behaviour") ),
-	m_lbl_tab_width(_("Tab width:"), Gtk::ALIGN_RIGHT),
-	m_btn_tab_spaces(_("Insert spaces instead of tabs") ),
-	m_btn_indentation_auto(_("Enable automatic indentation") ),
-	m_btn_homeend_smart(_("Smart home/end") )
+	m_group_tab(_("Tab Stops")),
+	m_group_indentation(_("Indentation")),
+	m_group_homeend(_("Home/End Behaviour")),
+	m_group_saving(_("File Saving")),
+	m_lbl_tab_width(_("_Tab width:"), Gtk::ALIGN_RIGHT,
+	                Gtk::ALIGN_CENTER, true),
+	m_btn_tab_spaces(_("Insert _spaces instead of tabs"), true),
+	m_btn_indentation_auto(_("Enable automatic _indentation"), true),
+	m_btn_homeend_smart(_("Smart _home/end"), true),
+	m_btn_autosave_enabled(_("Enable _automatic saving of documents"),
+	                       true),
+	m_lbl_autosave_interval(_("Autosave interval in _minutes:"), true)
 {
 	unsigned int tab_width = preferences.editor.tab_width;
 	bool tab_spaces = preferences.editor.tab_spaces;
 	bool indentation_auto = preferences.editor.indentation_auto;
 	bool homeend_smart = preferences.editor.homeend_smart;
+	unsigned int autosave_enabled = preferences.editor.autosave_enabled;
+	unsigned int autosave_interval = preferences.editor.autosave_interval;
 
+	m_btn_autosave_enabled.signal_toggled().connect(
+		sigc::mem_fun(*this, &Editor::on_autosave_enabled_toggled));
+
+	m_lbl_tab_width.set_mnemonic_widget(m_ent_tab_width);
 	m_lbl_tab_width.show();
 	m_ent_tab_width.set_range(1, 8);
 	m_ent_tab_width.set_value(tab_width);
@@ -322,7 +333,7 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 
 	m_box_tab_width.set_spacing(6);
 	m_box_tab_width.pack_start(m_lbl_tab_width, Gtk::PACK_SHRINK);
-	m_box_tab_width.pack_start(m_ent_tab_width, Gtk::PACK_EXPAND_WIDGET);
+	m_box_tab_width.pack_start(m_ent_tab_width, Gtk::PACK_SHRINK);
 	m_box_tab_width.show();
 
 	m_btn_tab_spaces.set_active(tab_spaces);
@@ -336,6 +347,28 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_btn_homeend_smart.show();
 	connect_option(m_btn_homeend_smart, preferences.editor.homeend_smart);
 
+	m_btn_autosave_enabled.set_active(autosave_enabled);
+	m_btn_autosave_enabled.show();
+	connect_option(m_btn_autosave_enabled,
+	               preferences.editor.autosave_enabled);
+
+	m_lbl_autosave_interval.set_mnemonic_widget(m_ent_autosave_interval);
+	m_lbl_autosave_interval.show();
+	m_ent_autosave_interval.set_range(1,60);
+	m_ent_autosave_interval.set_value(autosave_interval);
+	m_ent_autosave_interval.set_increments(1,10);
+	m_ent_autosave_interval.set_sensitive(autosave_enabled);
+	m_ent_autosave_interval.show();
+	connect_option(m_ent_autosave_interval,
+	               preferences.editor.autosave_interval);
+
+	m_box_autosave_interval.set_spacing(6);
+	m_box_autosave_interval.pack_start(m_lbl_autosave_interval,
+	                                   Gtk::PACK_SHRINK);
+	m_box_autosave_interval.pack_start(m_ent_autosave_interval,
+	                                   Gtk::PACK_SHRINK);
+	m_box_autosave_interval.show();
+
 	m_group_tab.add(m_box_tab_width);
 	m_group_tab.add(m_btn_tab_spaces);
 	m_group_tab.show();
@@ -346,9 +379,20 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_homeend.add(m_btn_homeend_smart);
 	m_group_homeend.show();
 
+	m_group_saving.add(m_btn_autosave_enabled);
+	m_group_saving.add(m_box_autosave_interval);
+	m_group_saving.show();
+
 	add(m_group_tab);
 	add(m_group_indentation);
 	add(m_group_homeend);
+	add(m_group_saving);
+}
+
+void Gobby::PreferencesDialog::Editor::on_autosave_enabled_toggled()
+{
+	m_ent_autosave_interval.set_sensitive(
+		m_btn_autosave_enabled.get_active());
 }
 
 Gobby::PreferencesDialog::View::View(Preferences& preferences):

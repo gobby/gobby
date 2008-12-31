@@ -21,6 +21,7 @@
 
 #include "features.hpp"
 
+#include "commands/autosave-commands.hpp"
 #include "commands/browser-commands.hpp"
 #include "commands/browser-context-commands.hpp"
 #include "commands/folder-commands.hpp"
@@ -89,6 +90,7 @@ protected:
 	FileChooser m_file_chooser;
 	Operations m_operations;
 
+	AutosaveCommands m_commands_autosave;
 	BrowserCommands m_commands_browser;
 	BrowserContextCommands m_commands_browser_context;
 	FolderCommands m_commands_folder;

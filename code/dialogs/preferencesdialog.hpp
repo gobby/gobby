@@ -148,9 +148,12 @@ public:
 		Editor(Preferences& preferences);
 
 	protected:
+		void on_autosave_enabled_toggled();
+
 		Group m_group_tab;
 		Group m_group_indentation;
 		Group m_group_homeend;
+		Group m_group_saving;
 
 		Gtk::HBox m_box_tab_width;
 		Gtk::Label m_lbl_tab_width;
@@ -160,6 +163,12 @@ public:
 		Gtk::CheckButton m_btn_indentation_auto;
 
 		Gtk::CheckButton m_btn_homeend_smart;
+
+		Gtk::CheckButton m_btn_autosave_enabled;
+		Gtk::HBox m_box_autosave_interval;
+		Gtk::Label m_lbl_autosave_interval;
+		Gtk::Label m_lbl_autosave_interval_suffix;
+		Gtk::SpinButton m_ent_autosave_interval;
 	};
 
 	class View: public Page

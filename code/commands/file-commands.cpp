@@ -207,6 +207,7 @@ namespace
 						info_storage_key);
 
 				// TODO: Get encoding from file dialog
+				// TODO: Default to CRLF on Windows
 				get_operations().save_document(
 					*m_document, get_folder(),
 					m_file_dialog.get_uri(),
