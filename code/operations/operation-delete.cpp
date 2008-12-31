@@ -59,10 +59,10 @@ void Gobby::OperationDelete::on_request_failed(const GError* error)
 		Glib::ustring::compose(_("Failed to delete node %1: %2"),
 			m_name, error->message), 5);
 
-	remove();
+	fail();
 }
 
 void Gobby::OperationDelete::on_request_finished(InfcBrowserIter* iter)
 {
-	remove();
+	finish();
 }

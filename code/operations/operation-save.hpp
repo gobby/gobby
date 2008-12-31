@@ -25,10 +25,12 @@
 #include <giomm/file.h>
 #include <giomm/outputstream.h>
 
+#include <ctime>
+
 namespace Gobby
 {
 
-class OperationSave: public Operations::Operation
+class OperationSave: public Operations::Operation, public sigc::trackable
 {
 public:
 	OperationSave(Operations& operations, DocWindow& document,
@@ -37,6 +39,13 @@ public:
 	              DocumentInfoStorage::EolStyle eol_style);
 
 	virtual ~OperationSave();
+
+	// Note these can return NULL in case the document has been removed
+	// in the meanwhile.
+	DocWindow* get_document() { return m_document; }
+	const DocWindow* get_document() const { return m_document; }
+
+	std::time_t get_start_time() const { return m_start_time; }
 
 protected:
 	void on_document_removed(DocWindow& document);
@@ -48,6 +57,7 @@ protected:
 	void error(const Glib::ustring& message);
 protected:
 	DocWindow* m_document;
+	std::time_t m_start_time;
 
 	typedef std::pair<gchar*, std::size_t> Line;
 	std::list<Line> m_lines;

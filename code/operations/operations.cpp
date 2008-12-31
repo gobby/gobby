@@ -43,7 +43,7 @@ Gobby::Operations::~Operations()
 	}
 }
 
-Gobby::Operations::Operation*
+Gobby::OperationNew*
 Gobby::Operations::create_directory(InfcBrowser* browser,
                                     InfcBrowserIter* parent,
                                     const Glib::ustring& name)
@@ -55,7 +55,7 @@ Gobby::Operations::create_directory(InfcBrowser* browser,
 	return op;
 }
 
-Gobby::Operations::Operation*
+Gobby::OperationNew*
 Gobby::Operations::create_document(InfcBrowser* browser,
                                    InfcBrowserIter* parent,
                                    const Glib::ustring& name)
@@ -67,7 +67,7 @@ Gobby::Operations::create_document(InfcBrowser* browser,
 	return op;
 }
 
-Gobby::Operations::Operation*
+Gobby::OperationOpen*
 Gobby::Operations::create_document(InfcBrowser* browser,
                                    InfcBrowserIter* parent,
                                    const Glib::ustring& name,
@@ -83,21 +83,28 @@ Gobby::Operations::create_document(InfcBrowser* browser,
 	return op;
 }
 
-Gobby::Operations::Operation*
+Gobby::OperationSave*
 Gobby::Operations::save_document(DocWindow& document,
                                  Folder& folder,
                                  const std::string& uri,
                                  const std::string& encoding,
                                  DocumentInfoStorage::EolStyle eol_style)
 {
+	OperationSave* prev_op = get_save_operation_for_document(document);
+
+	// Cancel previous save operation:
+	if(prev_op != NULL)
+		fail_operation(prev_op);
+
 	OperationSave* op = new OperationSave(*this, document, folder, uri,
 	                                      encoding, eol_style);
 
 	m_operations.insert(op);
+	m_signal_begin_save_operation.emit(op);
 	return op;
 }
 
-Gobby::Operations::Operation*
+Gobby::OperationDelete*
 Gobby::Operations::delete_node(InfcBrowser* browser,
                                InfcBrowserIter* iter)
 {
@@ -106,8 +113,34 @@ Gobby::Operations::delete_node(InfcBrowser* browser,
 	return op;
 }
 
-void Gobby::Operations::remove_operation(Operation* operation)
+Gobby::OperationSave*
+Gobby::Operations::get_save_operation_for_document(DocWindow& document)
+{
+	for(OperationSet::iterator iter = m_operations.begin();
+	    iter != m_operations.end(); ++ iter)
+	{
+		Operation* op = *iter;
+		OperationSave* save_op = dynamic_cast<OperationSave*>(op);
+		if(save_op != NULL)
+		{
+			if(save_op->get_document() == &document)
+				return save_op;
+		}
+	}
+
+	return NULL;
+}
+
+void Gobby::Operations::finish_operation(Operation* operation)
 {
 	m_operations.erase(operation);
+	operation->signal_finished().emit(true);
+	delete operation;
+}
+
+void Gobby::Operations::fail_operation(Operation* operation)
+{
+	m_operations.erase(operation);
+	operation->signal_finished().emit(false);
 	delete operation;
 }

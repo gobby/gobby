@@ -76,10 +76,10 @@ void Gobby::OperationNew::on_request_failed(const GError* error)
 			            : _("Failed to create document %1: %2"),
 			m_name, error->message), 5);
 
-	remove();
+	fail();
 }
 
 void Gobby::OperationNew::on_request_finished(InfcBrowserIter* iter)
 {
-	remove();
+	finish();
 }

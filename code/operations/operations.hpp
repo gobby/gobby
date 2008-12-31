@@ -32,13 +32,18 @@
 namespace Gobby
 {
 
+class OperationNew;
+class OperationOpen;
+class OperationSave;
+class OperationDelete;
+
 class Operations: public sigc::trackable
 {
 public:
 	class Operation
 	{
 	public:
-		typedef sigc::signal<void> SignalFinished;
+		typedef sigc::signal<void, bool> SignalFinished;
 
 		Operation(Operations& operations):
 			m_operations(operations) {}
@@ -54,56 +59,74 @@ public:
 			return m_operations.m_info_storage;
 		}
 
-		void remove()
-		{
-			m_signal_finished.emit();
-			m_operations.remove_operation(this);
-		}
-
 		SignalFinished signal_finished() const
 		{
 			return m_signal_finished;
 		}
+
+	protected:
+		void fail()
+		{
+			m_operations.fail_operation(this);
+		}
+
+		void finish()
+		{
+			m_operations.finish_operation(this);
+		}
+
 	private:
 		SignalFinished m_signal_finished;
 		Operations& m_operations;
 	};
 
+	typedef sigc::signal<void, OperationSave*> SignalBeginSaveOperation;
+
 	Operations(DocumentInfoStorage& info_storage, StatusBar& status_bar);
 	~Operations();
 
-	Operation* create_directory(InfcBrowser* browser,
-	                            InfcBrowserIter* parent,
-	                            const Glib::ustring& name);
+	OperationNew* create_directory(InfcBrowser* browser,
+	                               InfcBrowserIter* parent,
+	                               const Glib::ustring& name);
 
-	Operation* create_document(InfcBrowser* browser,
-	                           InfcBrowserIter* parent,
-	                           const Glib::ustring& name);
+	OperationNew* create_document(InfcBrowser* browser,
+	                              InfcBrowserIter* parent,
+	                              const Glib::ustring& name);
 
-	Operation* create_document(InfcBrowser* browser,
-	                           InfcBrowserIter* parent,
-	                           const Glib::ustring& name,
-	                           const Preferences& preferences,
-	                           const Glib::ustring& from_uri,
-	                           const char* encoding);
+	OperationOpen* create_document(InfcBrowser* browser,
+	                               InfcBrowserIter* parent,
+	                               const Glib::ustring& name,
+	                               const Preferences& preferences,
+	                               const Glib::ustring& from_uri,
+	                               const char* encoding);
 
-	Operation* save_document(DocWindow& document,
-	                         Folder& folder,
-	                         const std::string& uri,
-	                         const std::string& encoding,
-	                         DocumentInfoStorage::EolStyle eol_style);
+	OperationSave* save_document(DocWindow& document,
+	                             Folder& folder,
+	                             const std::string& uri,
+	                             const std::string& encoding,
+	                             DocumentInfoStorage::EolStyle eol_style);
 
-	Operation* delete_node(InfcBrowser* browser,
-	                       InfcBrowserIter* iter);
+	OperationDelete* delete_node(InfcBrowser* browser,
+	                             InfcBrowserIter* iter);
+
+	OperationSave* get_save_operation_for_document(DocWindow& window);
+
+	SignalBeginSaveOperation signal_begin_save_operation() const
+	{
+		return m_signal_begin_save_operation;
+	}
 
 protected:
-	void remove_operation(Operation* operation);
+	void fail_operation(Operation* operation);
+	void finish_operation(Operation* operation);
 
 	DocumentInfoStorage& m_info_storage;
 	StatusBar& m_status_bar;
 
 	typedef std::set<Operation*> OperationSet;
 	OperationSet m_operations;
+
+	SignalBeginSaveOperation m_signal_begin_save_operation;
 };
 
 }

@@ -1,3 +1,23 @@
+2008-12-31  Armin Burgmeier  <armin@arbur.net>
+
+	* code/operations/operations.hpp:
+	* code/operations/operations.cpp: Added a begin_save_operation signal,
+	and added a boolean parameter to base operation's finished signal
+	which indicates whether the operation was performed successfully or
+	not. Removed the remove() function, and added finish() and fail()
+	instead.
+
+	* code/operations/operation-open.hpp: Derive from sigc::trackable.
+
+	* code/operations/operation-save.hpp:
+	* code/operations/operation-save.cpp: Added get_document(),
+	get_start_time() and derive from sigc::trackable, adapt to finish()
+	and fail().
+
+	* code/operations/operation-new.cpp:
+	* code/operations/operation-open.cpp:
+	* code/operations/operation-delete.cpp: Adapt to finish() and fail().
+
 2008-12-30  Armin Burgmeier  <armin@arbur.net>
 
 	* code/operations/operations.hpp:

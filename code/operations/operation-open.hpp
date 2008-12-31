@@ -28,7 +28,7 @@
 namespace Gobby
 {
 
-class OperationOpen: public Operations::Operation
+class OperationOpen: public Operations::Operation, public sigc::trackable
 {
 public:
 	OperationOpen(Operations& operations, const Preferences& preferences,

@@ -28,7 +28,8 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 				    const std::string& uri,
 				    const std::string& encoding,
 				    DocumentInfoStorage::EolStyle eol_style):
-	Operation(operations), m_document(&document), m_current_line_index(0),
+	Operation(operations), m_document(&document),
+	m_start_time(std::time(NULL)), m_current_line_index(0),
 	m_iconv(encoding.c_str(), "UTF-8"), m_encoding(encoding),
 	m_eol_style(eol_style),
 	m_storage_key(document.get_info_storage_key()), m_buffer_size(0),
@@ -157,7 +158,7 @@ void Gobby::OperationSave::attempt_next()
 				FALSE);
 		}
 
-		remove();
+		finish();
 	}
 	else
 	{
@@ -282,5 +283,5 @@ void Gobby::OperationSave::error(const Glib::ustring& message)
 		Glib::ustring::compose(_("Failed to save document %1: %2"),
 		                         m_file->get_uri(), message), 5);
 
-	remove();
+	fail();
 }

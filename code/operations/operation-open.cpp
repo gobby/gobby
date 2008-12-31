@@ -436,7 +436,7 @@ void Gobby::OperationOpen::on_request_finished(InfcBrowserIter* iter)
 	info.eol_style = m_eol_style;
 	get_info_storage().set_info(m_browser, iter, info);
 
-	remove();
+	finish();
 }
 
 void Gobby::OperationOpen::error(const Glib::ustring& message)
@@ -446,5 +446,5 @@ void Gobby::OperationOpen::error(const Glib::ustring& message)
 		Glib::ustring::compose(_("Failed to open document %1: %2"),
 		                         m_file->get_uri(), message), 5);
 
-	remove();
+	fail();
 }
