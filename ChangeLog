@@ -1,5 +1,27 @@
 2009-01-01  Philipp Kern  <phil@0x539.de>
 
+	* src/window.cpp: translator note that only the English version
+	  of the license statement is actually legally binding
+	* po/gobby.pot:
+	* po/ca.po:
+	* po/de.po:
+	* po/el.po:
+	* po/es.po:
+	* po/fr.po:
+	* po/he.po:
+	* po/it.po:
+	* po/ja.po:
+	* po/ko.po:
+	* po/nl.po:
+	* po/pl.po:
+	* po/pt.po:
+	* po/pt_BR.po:
+	* po/ru.po:
+	* po/sv.po:
+	* po/zh_CN.po: template and translations refreshed
+
+2009-01-01  Philipp Kern  <phil@0x539.de>
+
 	* configure.ac:
 	* NEWS: bump version to 0.4.9, document the changes
 

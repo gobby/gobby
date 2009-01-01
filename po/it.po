@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-23 15:30+0100\n"
+"POT-Creation-Date: 2009-01-01 17:22+0100\n"
 "PO-Revision-Date: 2007-06-17 15:05+0000\n"
 "Last-Translator: Milo Casagrande <milo_casagrande@yahoo.it>\n"
 "Language-Team: Italian <it@li.org>\n"
@@ -22,20 +22,20 @@ msgstr ""
 msgid "Send"
 msgstr "Invia"
 
-#: ../src/chat.cpp:227
+#: ../src/chat.cpp:231
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
 "Comando «%0%» non trovato. Digitare /help per l'elenco dei comandi esistenti."
 
-#: ../src/chat.cpp:238
+#: ../src/chat.cpp:242
 msgid "%0%: %1%"
 msgstr "%0%: %1%"
 
-#: ../src/chat.cpp:252
+#: ../src/chat.cpp:256
 msgid "Document %0% does not exist"
 msgstr "Il documento %0% non esiste"
 
-#: ../src/chat.cpp:258
+#: ../src/chat.cpp:262
 msgid "Usage: /remove <document>"
 msgstr "Uso: /remove <documento>"
 
@@ -61,7 +61,11 @@ msgid ""
 msgstr ""
 "Conversione input in UTF-8 fallita: codifica sconosciuta o input binario."
 
-#: ../src/encoding_selector.cpp:145
+#: ../src/encoding_selector.cpp:26
+msgid "Auto Detect"
+msgstr ""
+
+#: ../src/encoding_selector.cpp:153
 msgid "Character Encoding:"
 msgstr "Codifica caratteri:"
 
@@ -372,11 +376,19 @@ msgstr "Ripristina sessione:"
 msgid "Restore session"
 msgstr "Ripristina sessione"
 
+#: ../src/hostdialog.cpp:106
+msgid ".obby files"
+msgstr ""
+
+#: ../src/hostdialog.cpp:108
+msgid "All files"
+msgstr ""
+
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
 msgstr "A_vvia"
 
-#: ../src/hostprogressdialog.cpp:29
+#: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
 msgid "Opening obby session..."
 msgstr "Apertura sessione obby..."
 
@@ -663,6 +675,10 @@ msgstr "Linguaggio selezionato: %0%"
 msgid "No language selected"
 msgstr "Nessun linguaggio selezionato"
 
+#: ../src/statusbar.cpp:72
+msgid "Line: %0%, Column: %1%"
+msgstr ""
+
 #: ../src/userlist.cpp:94
 msgid "Online"
 msgstr "Online"
@@ -705,15 +721,31 @@ msgstr "Salva la sessione obby"
 msgid "A collaborative text editor"
 msgstr "Un editor di testo collaborativo"
 
-#: ../src/window.cpp:657
+#. Please note in the translation that only the English version is
+#. legally binding.
+#: ../src/window.cpp:547
+msgid ""
+"This program is free software; you can redistribute it\n"
+"and/or modify it under the terms of the GNU General Public\n"
+"License as published by the Free Software Foundation; either\n"
+"version 2 of the License, or (at your option) any later\n"
+"version.\n"
+"\n"
+"This program is distributed in the hope that it will be\n"
+"useful, but WITHOUT ANY WARRANTY; without even the implied\n"
+"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+"PURPOSE.  See the GNU General Public License for more details."
+msgstr ""
+
+#: ../src/window.cpp:659
 msgid "Create document"
 msgstr "Crea documento"
 
-#: ../src/window.cpp:657
+#: ../src/window.cpp:659
 msgid "Enter document name"
 msgstr "Inserire il nome del documento"
 
-#: ../src/window.cpp:679
+#: ../src/window.cpp:681
 msgid "Open new document"
 msgstr "Apri nuovo documento"
 
@@ -765,11 +797,11 @@ msgstr "Connesso a %0%:%1%"
 msgid "Serving on port %0%"
 msgstr "Sulla porta %0%"
 
-#: ../src/window.cpp:1506
+#: ../src/window.cpp:1507
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "Salvare i cambiamenti al documento «%0%» prima di uscire?"
 
-#: ../src/window.cpp:1516
+#: ../src/window.cpp:1517
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
@@ -777,12 +809,12 @@ msgstr ""
 "Non salvando, i cambiamenti andranno persi, ma potranno essere recuperati "
 "riaprendo il documento fintantoché la sessione rimane aperta."
 
-#: ../src/window.cpp:1525
+#: ../src/window.cpp:1526
 msgid "If you don't save, changes will be discarded."
 msgstr "Non salvando, i cambiamenti andranno persi."
 
 #. Add button to allow the user to save the dialog
-#: ../src/window.cpp:1540
+#: ../src/window.cpp:1541
 msgid "Close without saving"
 msgstr "Chiudi senza salvare"
 

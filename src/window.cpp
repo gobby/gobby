@@ -542,6 +542,8 @@ void Gobby::Window::on_about()
 	dlg.set_artists(artists);
 
 	dlg.set_license(
+		// Please note in the translation that only the English version is
+		// legally binding.
 		_("This program is free software; you can redistribute it\n"
 		"and/or modify it under the terms of the GNU General Public\n"
 		"License as published by the Free Software Foundation; either\n"

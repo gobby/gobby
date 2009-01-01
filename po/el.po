@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-23 15:30+0100\n"
+"POT-Creation-Date: 2009-01-01 17:22+0100\n"
 "PO-Revision-Date: 2008-04-15 12:30+0000\n"
 "Last-Translator: Kainourgiakis Giorgos <kaingeo@yahoo.gr>\n"
 "Language-Team: Greek <el@li.org>\n"
@@ -22,21 +22,21 @@ msgstr ""
 msgid "Send"
 msgstr "Αποστολή"
 
-#: ../src/chat.cpp:227
+#: ../src/chat.cpp:231
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
 "Η εντολή '%0%' δεν βρέθηκε. Πληκτρολογήστε /help για να δείτε τις υπάρχουσες "
 "εντολές."
 
-#: ../src/chat.cpp:238
+#: ../src/chat.cpp:242
 msgid "%0%: %1%"
 msgstr "%0%: %1%"
 
-#: ../src/chat.cpp:252
+#: ../src/chat.cpp:256
 msgid "Document %0% does not exist"
 msgstr "Το έγγραφο %0% δεν υπάρχει"
 
-#: ../src/chat.cpp:258
+#: ../src/chat.cpp:262
 msgid "Usage: /remove <document>"
 msgstr "Χρήση: /remove <έγγραφο>"
 
@@ -63,7 +63,11 @@ msgstr ""
 "Αποτυχία μετατροπής της εισόδου σε κωδικοποίηση UTF-8: Είτε η κωδικοποίηση "
 "είναι άγνωστη, είτε η είσοδος είναι δυαδική."
 
-#: ../src/encoding_selector.cpp:145
+#: ../src/encoding_selector.cpp:26
+msgid "Auto Detect"
+msgstr ""
+
+#: ../src/encoding_selector.cpp:153
 msgid "Character Encoding:"
 msgstr "Κωδικοποίηση χαρακτήρων:"
 
@@ -377,11 +381,19 @@ msgstr "Επαναφορά συνεδρίας:"
 msgid "Restore session"
 msgstr "Επαναφορά συνεδρίας"
 
+#: ../src/hostdialog.cpp:106
+msgid ".obby files"
+msgstr ""
+
+#: ../src/hostdialog.cpp:108
+msgid "All files"
+msgstr ""
+
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
 msgstr "_Κόμβος"
 
-#: ../src/hostprogressdialog.cpp:29
+#: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
 msgid "Opening obby session..."
 msgstr "Άνοιγμα συνεδρίας obby...."
 
@@ -674,6 +686,10 @@ msgstr "Επιλεγμένη γλώσσα: %0%"
 msgid "No language selected"
 msgstr "Δεν επιλέχθηκε γλώσσα"
 
+#: ../src/statusbar.cpp:72
+msgid "Line: %0%, Column: %1%"
+msgstr ""
+
 #: ../src/userlist.cpp:94
 msgid "Online"
 msgstr "Συνδεδεμένος"
@@ -717,15 +733,31 @@ msgstr "Αποθήκευση την συνεδρίας obby"
 msgid "A collaborative text editor"
 msgstr "Ένας συνεργατικός επεξεργαστής κειμένου"
 
-#: ../src/window.cpp:657
+#. Please note in the translation that only the English version is
+#. legally binding.
+#: ../src/window.cpp:547
+msgid ""
+"This program is free software; you can redistribute it\n"
+"and/or modify it under the terms of the GNU General Public\n"
+"License as published by the Free Software Foundation; either\n"
+"version 2 of the License, or (at your option) any later\n"
+"version.\n"
+"\n"
+"This program is distributed in the hope that it will be\n"
+"useful, but WITHOUT ANY WARRANTY; without even the implied\n"
+"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+"PURPOSE.  See the GNU General Public License for more details."
+msgstr ""
+
+#: ../src/window.cpp:659
 msgid "Create document"
 msgstr "Δημιουργία εγγράφου"
 
-#: ../src/window.cpp:657
+#: ../src/window.cpp:659
 msgid "Enter document name"
 msgstr "Εισάγετε το όνομα του εγγράφου"
 
-#: ../src/window.cpp:679
+#: ../src/window.cpp:681
 msgid "Open new document"
 msgstr "Άνοιγμα ενός νέου εγγράφου"
 
@@ -779,11 +811,11 @@ msgstr "Συνδέθηκε στο %0%:%1%"
 msgid "Serving on port %0%"
 msgstr "Εξυπηρέτηση στην θύρα %0%"
 
-#: ../src/window.cpp:1506
+#: ../src/window.cpp:1507
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "Αποθήκευση των αλλαγών στο έγγραφο \"%0%\" πριν την έξοδο;"
 
-#: ../src/window.cpp:1516
+#: ../src/window.cpp:1517
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
@@ -791,12 +823,12 @@ msgstr ""
 "Αν δεν το σώσετε, οι αλλαγές θα χαθούν, αλλά θα μπορέσουν να ανακτηθούν αν "
 "εγγραφείτε ξανά στο έγγραφο, εφόσον η συνεδρία παραμένει ανοικτή."
 
-#: ../src/window.cpp:1525
+#: ../src/window.cpp:1526
 msgid "If you don't save, changes will be discarded."
 msgstr "Αν δεν αποθηκεύσετε, οι αλλαγές θα χαθούν."
 
 #. Add button to allow the user to save the dialog
-#: ../src/window.cpp:1540
+#: ../src/window.cpp:1541
 msgid "Close without saving"
 msgstr "Κλείσιμο χωρίς αποθήκευση"
 

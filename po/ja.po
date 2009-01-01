@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-23 15:30+0100\n"
+"POT-Creation-Date: 2009-01-01 17:22+0100\n"
 "PO-Revision-Date: 2007-12-17 13:56+0000\n"
 "Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
 "Language-Team: Chikahiro Masami <cmasa.z321@gmail.com>\n"
@@ -22,21 +22,21 @@ msgstr ""
 msgid "Send"
 msgstr "送信"
 
-#: ../src/chat.cpp:227
+#: ../src/chat.cpp:231
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
 "コマンド「%0%」はありません。/help と入力すると利用可能なコマンドを表示しま"
 "す。"
 
-#: ../src/chat.cpp:238
+#: ../src/chat.cpp:242
 msgid "%0%: %1%"
 msgstr "%0% : %1%"
 
-#: ../src/chat.cpp:252
+#: ../src/chat.cpp:256
 msgid "Document %0% does not exist"
 msgstr "文書「%0%」はありません"
 
-#: ../src/chat.cpp:258
+#: ../src/chat.cpp:262
 msgid "Usage: /remove <document>"
 msgstr "使用法: /remove <document>"
 
@@ -67,7 +67,7 @@ msgstr ""
 msgid "Auto Detect"
 msgstr "自動検知"
 
-#: ../src/encoding_selector.cpp:145
+#: ../src/encoding_selector.cpp:153
 msgid "Character Encoding:"
 msgstr "文字のエンコーディング:"
 
@@ -389,7 +389,7 @@ msgstr "すべてのファイル"
 msgid "_Host"
 msgstr "ホスト(_H)"
 
-#: ../src/hostprogressdialog.cpp:29
+#: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
 msgid "Opening obby session..."
 msgstr "obbyセッションを開いています..."
 
@@ -725,15 +725,31 @@ msgstr "obby セッションを保存"
 msgid "A collaborative text editor"
 msgstr "コラボレーティブ・テキスト・エディタ"
 
-#: ../src/window.cpp:657
+#. Please note in the translation that only the English version is
+#. legally binding.
+#: ../src/window.cpp:547
+msgid ""
+"This program is free software; you can redistribute it\n"
+"and/or modify it under the terms of the GNU General Public\n"
+"License as published by the Free Software Foundation; either\n"
+"version 2 of the License, or (at your option) any later\n"
+"version.\n"
+"\n"
+"This program is distributed in the hope that it will be\n"
+"useful, but WITHOUT ANY WARRANTY; without even the implied\n"
+"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+"PURPOSE.  See the GNU General Public License for more details."
+msgstr ""
+
+#: ../src/window.cpp:659
 msgid "Create document"
 msgstr "文書を作成"
 
-#: ../src/window.cpp:657
+#: ../src/window.cpp:659
 msgid "Enter document name"
 msgstr "文書名を入力"
 
-#: ../src/window.cpp:679
+#: ../src/window.cpp:681
 msgid "Open new document"
 msgstr "新しい文書を開く"
 
@@ -784,11 +800,11 @@ msgstr "%0%:%1% に接続しました"
 msgid "Serving on port %0%"
 msgstr "ポート番号 %0% にてサービス提供中"
 
-#: ../src/window.cpp:1506
+#: ../src/window.cpp:1507
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "「%0%」を閉じる前に保存しますか？"
 
-#: ../src/window.cpp:1516
+#: ../src/window.cpp:1517
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
@@ -796,12 +812,12 @@ msgstr ""
 "保存しない場合は、変更点は破棄されます。しかしセッションが開いている間は、文"
 "書を再度取得することで復元できます。"
 
-#: ../src/window.cpp:1525
+#: ../src/window.cpp:1526
 msgid "If you don't save, changes will be discarded."
 msgstr "保存しない場合、変更点は破棄されます。"
 
 #. Add button to allow the user to save the dialog
-#: ../src/window.cpp:1540
+#: ../src/window.cpp:1541
 msgid "Close without saving"
 msgstr "保存せずに閉じる"
 
