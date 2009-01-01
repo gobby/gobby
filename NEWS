@@ -1,6 +1,20 @@
 Gobby
 =====
 
+Version 0.4.9:
+ * Accessibility:
+   - Use the theme's default text color instead of black to improve
+     accessibility.
+   - Added a scalable gobby icon and a new HighContrastLargePrintInverse-
+     compliant one, thanks to Thomas Glatt.
+ * Convert filename to UTF-8 for document title and convert the output
+   of strftime to UTF-8.
+ * Made file encodings and gobby.desktop's strings translatable, thanks to
+   Takao Fujiwara.
+ * Translation roundup
+   - Updated Japanese (thanks to Takao Fujiwara)
+   - Updated French (thanks to Christian Perrier and Pascal Kreyer)
+
 Version 0.4.8:
  * Bug fix release: fix crash in join dialog when avahi-daemon is not
    started.

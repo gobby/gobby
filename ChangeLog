@@ -1,3 +1,8 @@
+2009-01-01  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac:
+	* NEWS: bump version to 0.4.9, document the changes
+
 2008-12-19  Armin Burgmeier  <armin@0x539.de>
 
 	* po/fr.po: Changed application name to "Editeur collaboratif Gobby"
