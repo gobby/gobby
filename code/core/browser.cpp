@@ -40,7 +40,8 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_preferences(preferences),
 	m_expander(_("_Direct Connection"), true),
 	m_hbox(false, 6),
-	m_label_hostname(_("Host Name:"))
+	m_label_hostname(_("Host Name:")),
+	m_entry_hostname(config_filename(GOBBY_CONFIGDIR, "recent_hosts"), 5)
 {
 	m_label_hostname.show();
 	m_entry_hostname.signal_activate().connect(
@@ -237,6 +238,7 @@ void Gobby::Browser::on_hostname_activate()
 			host, device_index),
 	        sigc::mem_fun(*this, &Browser::on_resolv_error));
 
+	m_entry_hostname.commit();
 	m_entry_hostname.set_text("");
 
 	StatusBar::MessageHandle message_handle =

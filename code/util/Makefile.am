@@ -5,6 +5,7 @@ libgobby_util_a_SOURCES = \
 	color.cpp \
 	config.cpp \
 	file.cpp \
+	historyentry.cpp \
 	i18n.cpp \
 	resolv.cpp \
 	serialize.cpp
@@ -15,6 +16,7 @@ noinst_HEADERS = \
         config.hpp \
         defaultaccumulator.hpp \
         file.hpp \
+	historyentry.hpp \
         i18n.hpp \
         resolv.hpp \
         serialize.hpp

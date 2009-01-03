@@ -1,3 +1,14 @@
+2009-01-02  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/historyentry.hpp:
+	* code/util/historyentry.cpp:
+	* code/util/Makefile.am: Added a HistoryEntry class which allows
+	scrolling through past entries in a GtkEntry, optionally saving and
+	restoring the history from/to disk.
+
+	* code/core/browser.hpp:
+	* code/core/browser.cpp: Use a history entry for the hostname entry.
+
 2008-12-31  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/preferences.hpp:

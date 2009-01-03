@@ -22,6 +22,7 @@
 #include "core/statusbar.hpp"
 #include "core/preferences.hpp"
 #include "util/resolv.hpp"
+#include "util/historyentry.hpp"
 
 #include <libinfgtk/inf-gtk-io.h>
 #include <libinfgtk/inf-gtk-browser-store.h>
@@ -129,7 +130,7 @@ protected:
 	Gtk::Expander m_expander;
 	Gtk::HBox m_hbox;
 	Gtk::Label m_label_hostname;
-	Gtk::Entry m_entry_hostname;
+	HistoryEntry m_entry_hostname;
 
 	ResolvMap m_resolv_map;
 	SignalActivate m_signal_activate;
