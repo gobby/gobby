@@ -17,22 +17,27 @@
  */
 
 #include "dialogs/openlocationdialog.hpp"
+
+#include "util/file.hpp"
 #include "util/i18n.hpp"
+
+#include "features.hpp"
 
 Gobby::OpenLocationDialog::OpenLocationDialog(Gtk::Window& parent):
 	Gtk::Dialog(_("Open Location"), parent), m_box(false, 6),
 	m_label(_("Enter the _location (URI) of the file you would "
-	          "like to open:"), Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER, true)
+	          "like to open:"), Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER, true),
+	m_combo(config_filename(GOBBY_CONFIGDIR, "recent_uris"), 8)
 {
-	m_label.set_mnemonic_widget(m_entry);
+	m_label.set_mnemonic_widget(m_combo);
 	m_box.pack_start(m_label, Gtk::PACK_SHRINK);
 	m_label.show();
 
-	m_entry.set_activates_default(true);
-	m_box.pack_start(m_entry, Gtk::PACK_SHRINK);
-	m_entry.show();
+	m_combo.get_entry()->set_activates_default(true);
+	m_box.pack_start(m_combo, Gtk::PACK_SHRINK);
+	m_combo.show();
 
-	m_entry.signal_changed().connect(
+	m_combo.get_entry()->signal_changed().connect(
 		sigc::mem_fun(*this, &OpenLocationDialog::on_entry_changed));
 
 	m_box.show();
@@ -46,18 +51,18 @@ Gobby::OpenLocationDialog::OpenLocationDialog(Gtk::Window& parent):
 
 Glib::ustring Gobby::OpenLocationDialog::get_uri() const
 {
-	return m_entry.get_text();
+	return m_combo.get_entry()->get_text();
 }
 
 void Gobby::OpenLocationDialog::set_uri(const Glib::ustring& uri)
 {
-	m_entry.set_text(uri);
+	m_combo.get_entry()->set_text(uri);
 }
 
 void Gobby::OpenLocationDialog::on_response(int response_id)
 {
-	/*if(response_id == Gtk::RESPONSE_ACCEPT)
-		m_entry.commit();*/
+	if(response_id == Gtk::RESPONSE_ACCEPT)
+		m_combo.commit();
 
 	Gtk::Dialog::on_response(response_id);
 }
@@ -71,12 +76,14 @@ void Gobby::OpenLocationDialog::on_show()
 	set_default_response(Gtk::RESPONSE_ACCEPT);
 	on_entry_changed();
 
-	m_entry.select_region(0, m_entry.get_text_length());
-	m_entry.grab_focus();
+	m_combo.get_entry()->select_region(
+		0, m_combo.get_entry()->get_text().length());
+	m_combo.grab_focus();
 }
 
 void Gobby::OpenLocationDialog::on_entry_changed()
 {
 	set_response_sensitive(
-		Gtk::RESPONSE_ACCEPT, !m_entry.get_text().empty());
+		Gtk::RESPONSE_ACCEPT,
+		!m_combo.get_entry()->get_text().empty());
 }

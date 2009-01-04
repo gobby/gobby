@@ -59,6 +59,6 @@ void Gobby::EntryDialog::on_show()
 	// by the caller after the widget has been constructed.
 	set_default_response(Gtk::RESPONSE_ACCEPT);
 
-	m_entry.select_region(0, m_entry.get_text_length());
+	m_entry.select_region(0, m_entry.get_text().length());
 	m_entry.grab_focus();
 }

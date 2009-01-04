@@ -21,8 +21,9 @@
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/label.h>
-#include <gtkmm/entry.h>
 #include <gtkmm/box.h>
+
+#include "util/historyentry.hpp"
 
 namespace Gobby
 {
@@ -43,7 +44,7 @@ protected:
 
 	Gtk::VBox m_box;
 	Gtk::Label m_label;
-	Gtk::Entry m_entry;
+	HistoryComboBoxEntry m_combo;
 };
 
 }

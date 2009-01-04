@@ -170,6 +170,50 @@ Gobby::History::History(unsigned int length):
 {
 }
 
+Gobby::History::~History()
+{
+	try
+	{
+		if(!m_history_file.empty())
+		{
+			Glib::RefPtr<Gio::File> file =
+				Gio::File::create_for_path(m_history_file);
+			Glib::RefPtr<Gio::OutputStream> stream =
+				file->replace();
+
+			const Gtk::TreeNodeChildren& children =
+				m_history->children();
+			for(Gtk::TreeIter iter = children.begin();
+			    iter != children.end(); ++ iter)
+			{
+				const Glib::ustring& str =
+					(*iter)[m_history_columns.text];
+
+				gsize bytes_written;
+				stream->write_all(str, bytes_written);
+				g_assert(bytes_written == str.length());
+
+				stream->write_all("\n", bytes_written);
+				g_assert(bytes_written == 1);
+			}
+		}
+	}
+	catch(const Glib::Exception& error)
+	{
+		// Ignore
+	}
+}
+
+Glib::RefPtr<Gtk::ListStore> Gobby::History::get_store()
+{
+	return m_history;
+}
+
+const Gobby::History::Columns& Gobby::History::get_columns() const
+{
+	return m_history_columns;
+}
+
 bool Gobby::History::up(const Glib::ustring& current, Glib::ustring& entry)
 {
 	if(m_current == m_history->children().end())
@@ -250,40 +294,6 @@ void Gobby::History::commit_noscroll(const Glib::ustring& str)
 	}
 }
 
-Gobby::History::~History()
-{
-	try
-	{
-		if(!m_history_file.empty())
-		{
-			Glib::RefPtr<Gio::File> file =
-				Gio::File::create_for_path(m_history_file);
-			Glib::RefPtr<Gio::OutputStream> stream =
-				file->replace();
-
-			const Gtk::TreeNodeChildren& children =
-				m_history->children();
-			for(Gtk::TreeIter iter = children.begin();
-			    iter != children.end(); ++ iter)
-			{
-				const Glib::ustring& str =
-					(*iter)[m_history_columns.text];
-
-				gsize bytes_written;
-				stream->write_all(str, bytes_written);
-				g_assert(bytes_written == str.length());
-
-				stream->write_all("\n", bytes_written);
-				g_assert(bytes_written == 1);
-			}
-		}
-	}
-	catch(const Glib::Exception& error)
-	{
-		// Ignore
-	}
-}
-
 Gobby::HistoryEntry::HistoryEntry(const std::string& history_file,
                                   unsigned int length):
 	m_history(history_file, length)
@@ -321,4 +331,59 @@ bool Gobby::HistoryEntry::on_key_press_event(GdkEventKey* event)
 	}
 
 	return Gtk::Entry::on_key_press_event(event);
+}
+
+Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry(
+	const std::string& history_file, unsigned int length):
+	m_history(history_file, length)
+{
+	set_model(m_history.get_store());
+	set_text_column(m_history.get_columns().text);
+
+	get_entry()->signal_key_press_event().connect(
+		sigc::mem_fun(
+			*this,
+			&HistoryComboBoxEntry::on_entry_key_press_event),
+		false);
+}
+
+Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry(unsigned int length):
+	m_history(length)
+{
+	set_model(m_history.get_store());
+	set_text_column(m_history.get_columns().text);
+
+	get_entry()->signal_key_press_event().connect(
+		sigc::mem_fun(
+			*this,
+			&HistoryComboBoxEntry::on_entry_key_press_event),
+		false);
+}
+
+void Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry::commit()
+{
+	m_history.commit(get_entry()->get_text());
+}
+
+bool Gobby::HistoryComboBoxEntry::on_entry_key_press_event(GdkEventKey* event)
+{
+	Glib::ustring entry;
+
+	if(event->keyval == GDK_Up)
+	{
+		if(m_history.up(get_entry()->get_text(), entry))
+			get_entry()->set_text(entry);
+
+		return true;
+	}
+
+	if(event->keyval == GDK_Down)
+	{
+		if(m_history.down(get_entry()->get_text(), entry))
+			get_entry()->set_text(entry);
+
+		return true;
+	}
+
+	return false;
 }

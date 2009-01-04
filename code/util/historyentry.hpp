@@ -43,6 +43,9 @@ public:
   History(unsigned int length);
   ~History();
 
+  Glib::RefPtr<Gtk::ListStore> get_store();
+  const Columns& get_columns() const;
+
   bool up(const Glib::ustring& current, Glib::ustring& entry);
   bool down(const Glib::ustring& current, Glib::ustring& entry);
   void commit(const Glib::ustring& str);
@@ -72,6 +75,20 @@ public:
 
 protected:
   virtual bool on_key_press_event(GdkEventKey* event);
+
+  History m_history;
+};
+
+class HistoryComboBoxEntry: public Gtk::ComboBoxEntry
+{
+public:
+  HistoryComboBoxEntry(const std::string& history_file, unsigned int length);
+  HistoryComboBoxEntry(unsigned int length);
+
+  void commit();
+
+protected:
+  bool on_entry_key_press_event(GdkEventKey* event);
 
   History m_history;
 };

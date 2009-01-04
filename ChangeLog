@@ -1,5 +1,19 @@
 2009-01-03  Armin Burgmeier  <armin@arbur.net>
 
+	* code/util/historyentry.hpp:
+	* code/util/historyentry.cpp: Added HistoryComboBoxEntry, which allows
+	to select the history entries via a combo box.
+
+	* code/dialogs/openlocationdialog.hpp:
+	* code/dialogs/openlocationdialog.cpp: Use a HistoryComboBoxEntry
+	instead of a simple GtkEntry.
+
+	* code/dialogs/entrydialog.cpp: Don't use
+	Gtk::Entry::get_text_length() since this is available only since gtkmm
+	2.14, but we require only 2.12.
+
+2009-01-03  Armin Burgmeier  <armin@arbur.net>
+
 	* code/dialogs/openlocationdialog.hpp:
 	* code/dialogs/openlocationdialog.cpp:
 	* code/dialogs/Makefile.am: Added a dialog which queries the user for
