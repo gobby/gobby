@@ -65,6 +65,8 @@ public:
 protected:
 	// Gtk::Window overrides
 	virtual bool on_delete_event(GdkEventAny* event);
+	virtual bool on_key_press_event(GdkEventKey* event);
+
 	virtual void on_realize();
 	virtual void on_show();
 

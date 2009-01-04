@@ -1,5 +1,13 @@
 2009-01-04  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/window.hpp:
+	* code/core/window.cpp: Fixed pasting text into the direct connection
+	entry when having open a document. Before, the text was pasted into
+	the document even though the entry was focused. We use the same
+	workaround as gedit.
+
+2009-01-04  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/folder.cpp: Re-enable Ctrl+Alt+PgDown/Ctrl+Alt+PgUp to
 	cycle between tabs.
 

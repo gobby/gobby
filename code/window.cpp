@@ -130,6 +130,24 @@ bool Gobby::Window::on_delete_event(GdkEventAny* event)
 	return false;
 }
 
+// GtkWindow catches keybindings for the menu items _before_ passing them to
+// the focused widget. This is unfortunate and means that pressing ctrl+V
+// in an entry on the browser ends up pasting text in the TextView.
+// Here we override GtkWindow's handler to do the same things that it
+// does, but in the opposite order and then we chain up to the grand
+// parent handler, skipping Gtk::Window::key_press_event().
+// This code is basically stolen from gedit, but ported to C++.
+bool Gobby::Window::on_key_press_event(GdkEventKey* event)
+{
+	bool handled = gtk_window_propagate_key_event(gobj(), event);
+	if(!handled) handled = gtk_window_activate_key(gobj(), event);
+
+	// Skip Gtk::Window default handler here:
+	if(!handled) handled = Gtk::Container::on_key_press_event(event);
+
+	return handled;
+}
+
 void Gobby::Window::on_realize()
 {
 	Gtk::Window::on_realize();
