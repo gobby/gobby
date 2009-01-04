@@ -59,6 +59,8 @@ public:
 
 	void remove_message(const MessageHandle& handle);
 
+	MessageHandle invalid_handle();
+
 protected:
 	static void on_mark_set_static(GtkTextBuffer* buffer,
 	                               GtkTextIter* location,
@@ -74,6 +76,7 @@ protected:
 		static_cast<StatusBar*>(user_data)->on_changed();
 	}
 
+	void on_document_removed(DocWindow& document);
 	void on_document_changed(DocWindow* document);
 	void on_view_changed();
 	

@@ -23,6 +23,8 @@
 #include <gtkmm/stock.h>
 #include <giomm/file.h>
 
+// TODO: Use file tasks for the commands, once we made them public
+
 Gobby::BrowserContextCommands::BrowserContextCommands(Gtk::Window& parent,
                                                       Browser& browser,
                                                       FileChooser& chooser,
@@ -265,7 +267,7 @@ void Gobby::BrowserContextCommands::on_open_node_removed()
 
 void Gobby::BrowserContextCommands::on_open_response(int response_id,
                                                      InfcBrowser* browser,
-					 	    InfcBrowserIter iter)
+                                                     InfcBrowserIter iter)
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{

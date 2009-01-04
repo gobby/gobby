@@ -72,14 +72,18 @@ namespace
 	class TaskOpen: public Gobby::FileCommands::Task
 	{
 	private:
+		StatusBar::MessageHandle m_handle;
 		Glib::RefPtr<Gio::File> m_file;
 
 	public:
 		TaskOpen(FileCommands& file_commands):
-			Task(file_commands) {}
+			Task(file_commands),
+			m_handle(get_status_bar().invalid_handle()) {}
 
 		virtual ~TaskOpen()
 		{
+			if(m_handle != get_status_bar().invalid_handle())
+				get_status_bar().remove_message(m_handle);
 			get_document_location_dialog().hide();
 		}
 
@@ -88,24 +92,63 @@ namespace
 		{
 			m_file = file;
 
-			const gchar* const ATTR_DISPLAY_NAME =
+			static const gchar* const ATTR_DISPLAY_NAME =
 				G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME;
+
+			try
+			{
+				// TODO: Show DocumentLocationDialog with a
+				// default name as long as the query is
+				// running.
+				m_file->query_info_async(
+					sigc::mem_fun(
+						*this,
+						&TaskOpen::on_query_info),
+					ATTR_DISPLAY_NAME);
+
+				m_handle = get_status_bar().add_message(
+					StatusBar::INFO,
+					Glib::ustring::compose(
+						_("Querying \"%1\"..."),
+						m_file->get_uri()), 0);
+
+			}
+			catch(const Gio::Error& ex)
+			{
+				error(ex.what());
+			}
+		}
+
+	private:
+		void on_query_info(
+			const Glib::RefPtr<Gio::AsyncResult>& result)
+		{
+			g_assert(m_handle !=
+			         get_status_bar().invalid_handle());
+
+			get_status_bar().remove_message(m_handle);
+			m_handle = get_status_bar().invalid_handle();
 
 			DocumentLocationDialog& dialog =
 				get_document_location_dialog();
 			dialog.signal_response().connect(sigc::mem_fun(
 				*this, &TaskOpen::on_location_response));
 
-			// TODO: Query the display name asynchronously, and
-			// use a default as long as the query is running.
-			Glib::RefPtr<Gio::FileInfo> info =
-				m_file->query_info(ATTR_DISPLAY_NAME);
+			try
+			{
+				Glib::RefPtr<Gio::FileInfo> info =
+					m_file->query_info_finish(result);
 
-			dialog.set_document_name(info->get_display_name());
-			dialog.present();
+				dialog.set_document_name(
+					info->get_display_name());
+				dialog.present();
+			}
+			catch(const Gio::Error& ex)
+			{
+				error(ex.what());
+			}
 		}
 
-	private:
 		void on_location_response(int response_id)
 		{
 			if(response_id == Gtk::RESPONSE_ACCEPT)
@@ -124,6 +167,16 @@ namespace
 					get_preferences(), m_file->get_uri(),
 					NULL);
 			}
+
+			finish();
+		}
+
+		void error(const Glib::ustring& message)
+		{
+			get_status_bar().add_message(StatusBar::ERROR,
+				Glib::ustring::compose(
+					"Failed to open document \"%1\": %2",
+					m_file->get_uri(), message), 5);
 
 			finish();
 		}
@@ -198,26 +251,9 @@ namespace
 				Glib::RefPtr<Gio::File> file =
 					Gio::File::create_for_uri(uri);
 
-				try
-				{
-					m_location_dialog.hide();
+				m_location_dialog.hide();
 
-					set_file(file);
-				}
-				catch(const Gio::Error& ex)
-				{
-					// If the uri is not supported, then
-					// query_info() in set_file() will
-					// throw.
-					get_status_bar().add_message(
-						StatusBar::ERROR,
-						Glib::ustring::compose(
-							"Failed to open "
-							"document \"%1\": %2",
-							uri, ex.what()), 5);
-
-					finish();
-				}
+				set_file(file);
 			}
 			else
 			{

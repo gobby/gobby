@@ -1,3 +1,16 @@
+2009-01-04  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/statusbar.hpp:
+	* code/core/statusbar.cpp: Added an invalid_handle() function, so
+	other code can keep around invalid message handles, and fixed invalid
+	memory access when a document was removed.
+
+	* code/commands/browser-context-commands.cpp: Added a TODO comment
+	about using file-tasks for common operations.
+
+	* code/commands/file-commands.cpp: Query file info asynchronously, to
+	avoid UI hangs when opening unresponsive remote files.
+
 2009-01-03  Armin Burgmeier  <armin@arbur.net>
 
 	* code/util/historyentry.hpp:

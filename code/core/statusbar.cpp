@@ -65,7 +65,9 @@ Gobby::StatusBar::StatusBar(Folder& folder,
 	pack_end(m_bar_position, Gtk::PACK_SHRINK);
 	m_bar_position.set_size_request(200, -1);
 	m_bar_position.show();
-	
+
+	m_folder.signal_document_removed().connect(
+		sigc::mem_fun(*this, &StatusBar::on_document_removed));
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &StatusBar::on_document_changed));
 	m_preferences.appearance.show_statusbar.signal_changed().connect(
@@ -141,6 +143,25 @@ void Gobby::StatusBar::remove_message(const MessageHandle& handle)
 	m_list.erase(handle);
 }
 
+Gobby::StatusBar::MessageHandle Gobby::StatusBar::invalid_handle()
+{
+	return m_list.end();
+}
+
+void Gobby::StatusBar::on_document_removed(DocWindow& document)
+{
+	if(m_current_document == &document)
+	{
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_document->get_text_buffer());
+
+		g_signal_handler_disconnect(buffer, m_mark_set_handler);
+		g_signal_handler_disconnect(buffer, m_changed_handler);
+
+		m_current_document = NULL;
+	}
+}
+
 void Gobby::StatusBar::on_document_changed(DocWindow* document)
 {
 	if(m_current_document)
@@ -148,10 +169,8 @@ void Gobby::StatusBar::on_document_changed(DocWindow* document)
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
 			m_current_document->get_text_buffer());
 
-		g_signal_handler_disconnect(G_OBJECT(buffer),
-		                            m_mark_set_handler);
-		g_signal_handler_disconnect(G_OBJECT(buffer),
-		                            m_changed_handler);
+		g_signal_handler_disconnect(buffer, m_mark_set_handler);
+		g_signal_handler_disconnect(buffer, m_changed_handler);
 	}
 
 	m_current_document = document;
