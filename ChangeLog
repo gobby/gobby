@@ -1,3 +1,22 @@
+2009-01-03  Armin Burgmeier  <armin@arbur.net>
+
+	* code/dialogs/openlocationdialog.hpp:
+	* code/dialogs/openlocationdialog.cpp:
+	* code/dialogs/Makefile.am: Added a dialog which queries the user for
+	an URI to open.
+
+	* code/core/header.hpp:
+	* code/core/header.cpp: Added an "Open Location" menu item.
+
+	* code/commands/file-commands.hpp:
+	* code/commands/file-commands.cpp: Handle the "Open Location" menu
+	item, fixed deinitialization order.
+
+	* code/window.cpp: Pass statusbar to file commands.
+
+	* code/operations/operation-open.cpp: Added error handling for the
+	initial read_async operation.
+
 2009-01-02  Armin Burgmeier  <armin@arbur.net>
 
 	* code/util/historyentry.hpp:

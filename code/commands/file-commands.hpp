@@ -23,6 +23,7 @@
 #include "dialogs/documentlocationdialog.hpp"
 #include "core/header.hpp"
 #include "core/browser.hpp"
+#include "core/statusbar.hpp"
 #include "core/filechooser.hpp"
 
 #include <gtkmm/filechooserdialog.h>
@@ -36,7 +37,7 @@ class FileCommands: public sigc::trackable
 {
 public:
 	FileCommands(Gtk::Window& parent, Header& header,
-	             Browser& browser, Folder& folder,
+	             Browser& browser, Folder& folder, StatusBar& status_bar,
 	             FileChooser& file_chooser, Operations& operations,
 	             const DocumentInfoStorage& info_storage,
 	             Preferences& preferences);
@@ -54,6 +55,7 @@ public:
 
 		Gtk::Window& get_parent();
 		Folder& get_folder();
+		StatusBar& get_status_bar();
 		FileChooser& get_file_chooser();
 		Operations& get_operations();
 		const DocumentInfoStorage& get_document_info_storage();
@@ -93,6 +95,7 @@ protected:
 
 	void on_new();
 	void on_open();
+	void on_open_location();
 	void on_save();
 	void on_save_as();
 	void on_save_all();
@@ -106,13 +109,17 @@ protected:
 	Header& m_header;
 	Browser& m_browser;
 	Folder& m_folder;
+	StatusBar& m_status_bar;
 	FileChooser& m_file_chooser;
 	Operations& m_operations;
 	const DocumentInfoStorage& m_document_info_storage;
 	Preferences& m_preferences;
 
-	std::auto_ptr<Task> m_task;
+	// Note: Order is important to get deinitialization right: Task may
+	// access the location dialog in its destructor, so make sure the task
+	// is freed before the location dialog.
 	std::auto_ptr<DocumentLocationDialog> m_location_dialog;
+	std::auto_ptr<Task> m_task;
 
 	gulong m_row_inserted_handler;
 	gulong m_row_deleted_handler;

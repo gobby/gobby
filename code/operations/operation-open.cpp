@@ -86,21 +86,28 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 
 	m_iconv.reset(new Glib::IConv("UTF-8", m_encoding));
 
-	m_file = Gio::File::create_for_uri(uri);
-	m_file->read_async(sigc::mem_fun(*this,
-	                                 &OperationOpen::on_file_read));
+	try
+	{
+		m_file = Gio::File::create_for_uri(uri);
+		m_file->read_async(sigc::mem_fun(
+			*this, &OperationOpen::on_file_read));
 
-	m_message_handle = get_status_bar().add_message(
-		StatusBar::INFO,
-		Glib::ustring::compose(_("Opening document %1..."), uri), 0);
+		m_message_handle = get_status_bar().add_message(
+			StatusBar::INFO,
+			Glib::ustring::compose(
+				_("Opening document %1..."), uri), 0);
 
-	m_node_removed_id = g_signal_connect(
-		G_OBJECT(m_browser), "node-removed",
-		G_CALLBACK(&on_node_removed_static), this);
+		m_node_removed_id = g_signal_connect(
+			G_OBJECT(m_browser), "node-removed",
+			G_CALLBACK(&on_node_removed_static), this);
 
-	m_content = GTK_TEXT_BUFFER(gtk_source_buffer_new(NULL));
-
-	g_object_ref(m_browser);
+		m_content = GTK_TEXT_BUFFER(gtk_source_buffer_new(NULL));
+		g_object_ref(m_browser);
+	}
+	catch(const Gio::Error& err)
+	{
+		error(err.what());
+	}
 }
 
 Gobby::OperationOpen::~OperationOpen()
@@ -443,7 +450,7 @@ void Gobby::OperationOpen::error(const Glib::ustring& message)
 {
 	get_status_bar().add_message(
 		StatusBar::ERROR,
-		Glib::ustring::compose(_("Failed to open document %1: %2"),
+		Glib::ustring::compose(_("Failed to open document \"%1\": %2"),
 		                         m_file->get_uri(), message), 5);
 
 	fail();

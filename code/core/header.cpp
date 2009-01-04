@@ -34,6 +34,8 @@ namespace {
 		"    <menu action=\"MenuFile\">"
 		"      <menuitem action=\"FileNew\" />"
 		"      <menuitem action=\"FileOpen\" />"
+		"      <menuitem action=\"FileOpenLocation\" />"
+		"      <separator />"
 		"      <menuitem action=\"FileSave\" />"
 		"      <menuitem action=\"FileSaveAs\" />"
 		"      <menuitem action=\"FileSaveAll\" />"
@@ -210,6 +212,9 @@ Gobby::Header::Header(Preferences& preferences,
 	action_file_new(Gtk::Action::create("FileNew", Gtk::Stock::NEW)),
 	action_file_open(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,
 	                                     _("_Open..."))),
+	action_file_open_location(
+		Gtk::Action::create("FileOpenLocation",
+		                    _("Open _Location..."))),
 	action_file_save(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)),
 	action_file_save_as(
 		Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,
@@ -295,6 +300,9 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file);
 	group_file->add(action_file_new);
 	group_file->add(action_file_open);
+	group_file->add(action_file_open_location,
+	                Gtk::AccelKey("<control>L",
+			              "<Actions>/MenuFile/FileOpenLocation"));
 	group_file->add(action_file_save);
 	group_file->add(action_file_save_as,
 	                Gtk::AccelKey("<control><shift>S",

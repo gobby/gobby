@@ -17,6 +17,7 @@
  */
 
 #include "commands/file-commands.hpp"
+#include "dialogs/openlocationdialog.hpp"
 #include "util/i18n.hpp"
 
 #include <gtkmm/stock.h>
@@ -26,7 +27,7 @@ namespace
 {
 	using namespace Gobby;
 
-	// TODO: Split tasks into separate files in commands/file-tasks?
+	// TODO: Split tasks into separate files in commands/file-tasks
 	class TaskNew: public Gobby::FileCommands::Task
 	{
 	public:
@@ -71,65 +72,40 @@ namespace
 	class TaskOpen: public Gobby::FileCommands::Task
 	{
 	private:
-		FileChooser::Dialog m_file_dialog;
-		std::string m_open_uri;
+		Glib::RefPtr<Gio::File> m_file;
 
 	public:
 		TaskOpen(FileCommands& file_commands):
-			Task(file_commands),
-			m_file_dialog(get_file_chooser(), get_parent(),
-			              _("Choose a text file to open"),
-			              Gtk::FILE_CHOOSER_ACTION_OPEN)
-		{
-			m_file_dialog.signal_response().connect(sigc::mem_fun(
-				*this, &TaskOpen::on_file_response));
-
-			m_file_dialog.present();
-		}
+			Task(file_commands) {}
 
 		virtual ~TaskOpen()
 		{
 			get_document_location_dialog().hide();
 		}
 
-		void on_file_response(int response_id)
+	protected:
+		void set_file(const Glib::RefPtr<Gio::File>& file)
 		{
+			m_file = file;
+
 			const gchar* const ATTR_DISPLAY_NAME =
 				G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME;
 
-			if(response_id == Gtk::RESPONSE_ACCEPT)
-			{
-				DocumentLocationDialog& dialog =
-					get_document_location_dialog();
+			DocumentLocationDialog& dialog =
+				get_document_location_dialog();
+			dialog.signal_response().connect(sigc::mem_fun(
+				*this, &TaskOpen::on_location_response));
 
-				dialog.signal_response().connect(
-					sigc::mem_fun(
-						*this,
-						&TaskOpen::
-							on_location_response));
+			// TODO: Query the display name asynchronously, and
+			// use a default as long as the query is running.
+			Glib::RefPtr<Gio::FileInfo> info =
+				m_file->query_info(ATTR_DISPLAY_NAME);
 
-				// TODO: Handle multiple selection
-				m_open_uri = m_file_dialog.get_uri();
-				// TODO: Query the display name
-				// asynchronously, and use a default as long
-				// as the query is running.
-				Glib::RefPtr<Gio::File> file =
-					Gio::File::create_for_uri(m_open_uri);
-				Glib::RefPtr<Gio::FileInfo> info =
-					file->query_info(ATTR_DISPLAY_NAME);
-
-				dialog.set_document_name(
-					info->get_display_name());
-
-				m_file_dialog.hide();
-				dialog.present();
-			}
-			else
-			{
-				finish();
-			}
+			dialog.set_document_name(info->get_display_name());
+			dialog.present();
 		}
 
+	private:
 		void on_location_response(int response_id)
 		{
 			if(response_id == Gtk::RESPONSE_ACCEPT)
@@ -145,10 +121,108 @@ namespace
 				get_operations().create_document(
 					browser, &iter,
 					dialog.get_document_name(),
-					get_preferences(), m_open_uri, NULL);
+					get_preferences(), m_file->get_uri(),
+					NULL);
 			}
 
 			finish();
+		}
+	};
+
+	class TaskOpenFile: public TaskOpen
+	{
+	private:
+		FileChooser::Dialog m_file_dialog;
+
+	public:
+		TaskOpenFile(FileCommands& file_commands):
+			TaskOpen(file_commands),
+			m_file_dialog(get_file_chooser(), get_parent(),
+			              _("Choose a text file to open"),
+			              Gtk::FILE_CHOOSER_ACTION_OPEN)
+		{
+			m_file_dialog.signal_response().connect(sigc::mem_fun(
+				*this, &TaskOpenFile::on_file_response));
+
+			m_file_dialog.present();
+		}
+
+	private:
+		void on_file_response(int response_id)
+		{
+			const gchar* const ATTR_DISPLAY_NAME =
+				G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME;
+
+			if(response_id == Gtk::RESPONSE_ACCEPT)
+			{
+				m_file_dialog.hide();
+				// TODO: Handle multiple selection
+				set_file(m_file_dialog.get_file());
+			}
+			else
+			{
+				finish();
+			}
+		}
+	};
+
+	class TaskOpenLocation: public TaskOpen
+	{
+	private:
+		OpenLocationDialog m_location_dialog;
+
+	public:
+		TaskOpenLocation(FileCommands& file_commands):
+			TaskOpen(file_commands),
+			m_location_dialog(get_parent())
+		{
+			m_location_dialog.signal_response().connect(
+				sigc::mem_fun(
+					*this,
+					&TaskOpenLocation::on_response));
+
+			m_location_dialog.add_button(Gtk::Stock::CLOSE,
+			                             Gtk::RESPONSE_CLOSE);
+			m_location_dialog.add_button(Gtk::Stock::OPEN,
+			                             Gtk::RESPONSE_ACCEPT);
+
+			m_location_dialog.present();
+		}
+
+	private:
+		void on_response(int response_id)
+		{
+			if(response_id == Gtk::RESPONSE_ACCEPT)
+			{
+				std::string uri = m_location_dialog.get_uri();
+				Glib::RefPtr<Gio::File> file =
+					Gio::File::create_for_uri(uri);
+
+				try
+				{
+					m_location_dialog.hide();
+
+					set_file(file);
+				}
+				catch(const Gio::Error& ex)
+				{
+					// If the uri is not supported, then
+					// query_info() in set_file() will
+					// throw.
+					get_status_bar().add_message(
+						StatusBar::ERROR,
+						Glib::ustring::compose(
+							"Failed to open "
+							"document \"%1\": %2",
+							uri, ex.what()), 5);
+
+					finish();
+				}
+			}
+			else
+			{
+				finish();
+			}
 		}
 	};
 
@@ -349,6 +423,11 @@ Gobby::Folder& Gobby::FileCommands::Task::get_folder()
 	return m_file_commands.m_folder;
 }
 
+Gobby::StatusBar& Gobby::FileCommands::Task::get_status_bar()
+{
+	return m_file_commands.m_status_bar;
+}
+
 Gobby::FileChooser& Gobby::FileCommands::Task::get_file_chooser()
 {
 	return m_file_commands.m_file_chooser;
@@ -388,19 +467,22 @@ Gobby::FileCommands::Task::get_document_location_dialog()
 
 Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
                                   Browser& browser, Folder& folder,
+				  StatusBar& status_bar,
                                   FileChooser& file_chooser,
                                   Operations& operations,
 				  const DocumentInfoStorage& info_storage,
                                   Preferences& preferences):
 	m_parent(parent), m_header(header), m_browser(browser),
-	m_folder(folder), m_file_chooser(file_chooser),
-	m_operations(operations), m_document_info_storage(info_storage),
-	m_preferences(preferences)
+	m_folder(folder), m_status_bar(status_bar),
+	m_file_chooser(file_chooser), m_operations(operations),
+	m_document_info_storage(info_storage), m_preferences(preferences)
 {
 	header.action_file_new->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_new));
 	header.action_file_open->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_open));
+	header.action_file_open_location->signal_activate().connect(
+		sigc::mem_fun(*this, &FileCommands::on_open_location));
 	header.action_file_save->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_save));
 	header.action_file_save_as->signal_activate().connect(
@@ -467,7 +549,12 @@ void Gobby::FileCommands::on_new()
 
 void Gobby::FileCommands::on_open()
 {
-	set_task(new TaskOpen(*this));
+	set_task(new TaskOpenFile(*this));
+}
+
+void Gobby::FileCommands::on_open_location()
+{
+	set_task(new TaskOpenLocation(*this));
 }
 
 void Gobby::FileCommands::on_save()
@@ -527,6 +614,7 @@ void Gobby::FileCommands::update_sensitivity()
 
 	m_header.action_file_new->set_sensitive(create_sensitivity);
 	m_header.action_file_open->set_sensitive(create_sensitivity);
+	m_header.action_file_open_location->set_sensitive(create_sensitivity);
 
 	m_header.action_file_save->set_sensitive(active_sensitivity);
 	m_header.action_file_save_as->set_sensitive(active_sensitivity);
