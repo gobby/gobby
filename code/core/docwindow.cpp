@@ -32,6 +32,10 @@
 
 #include <gtksourceview/gtksourcebuffer.h>
 
+// TODO: Consider using a single user list for all DocWindows, reparenting
+// into the current DocWindow's frame. Keep dummy widgets in other docwindows,
+// so text does not resize.
+
 namespace
 {
 	GtkWrapMode wrap_mode_from_preferences(const Gobby::Preferences& pref)

@@ -219,8 +219,6 @@ bool Gobby::Folder::on_key_press_event(GdkEventKey* event)
 		}
 	}
 
-#if 0
-	// Is already used by GtkTextView...
 	if( (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) ==
 	    (GDK_CONTROL_MASK | GDK_MOD1_MASK))
 	{
@@ -235,7 +233,6 @@ bool Gobby::Folder::on_key_press_event(GdkEventKey* event)
 			return true;
 		}
 	}
-#endif
 
 	return false;
 }

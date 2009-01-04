@@ -1,5 +1,13 @@
 2009-01-04  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/folder.cpp: Re-enable Ctrl+Alt+PgDown/Ctrl+Alt+PgUp to
+	cycle between tabs.
+
+	* code/core/docwindow.cpp: Added a TODO comment about using a single
+	UserList widget for all documents.
+
+2009-01-04  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/statusbar.hpp:
 	* code/core/statusbar.cpp: Added an invalid_handle() function, so
 	other code can keep around invalid message handles, and fixed invalid
