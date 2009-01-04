@@ -139,6 +139,14 @@ bool Gobby::Window::on_delete_event(GdkEventAny* event)
 // This code is basically stolen from gedit, but ported to C++.
 bool Gobby::Window::on_key_press_event(GdkEventKey* event)
 {
+	// We can't let GtkSourceView handle this, since we override
+	// Undo/Redo. TODO: This is a bit of a hack. A proper solution would
+	// perhaps be to subclass GtkSourceView, and either
+	// unregister/reregister the keybinding there, or making sure the
+	// key-press-event default handler returns false.
+	if(event->keyval == GDK_z || event->keyval == GDK_Z)
+		return Gtk::Window::on_key_press_event(event);
+
 	bool handled = gtk_window_propagate_key_event(gobj(), event);
 	if(!handled) handled = gtk_window_activate_key(gobj(), event);
 
