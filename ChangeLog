@@ -1,5 +1,11 @@
 2009-01-04  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/docwindow.hpp:
+	* code/core/docwindow.cpp: Show a tooltip when hovering over text,
+	saying what user wrote the hovered text.
+
+2009-01-04  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/window.hpp:
 	* code/core/window.cpp: Fixed pasting text into the direct connection
 	entry when having open a document. Before, the text was pasted into

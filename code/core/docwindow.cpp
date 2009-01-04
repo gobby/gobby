@@ -151,6 +151,10 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	g_signal_connect(G_OBJECT(table), "tag-added",
 	                 G_CALLBACK(on_tag_added), this);
 
+	gtk_widget_set_has_tooltip(GTK_WIDGET(m_view), TRUE);
+	g_signal_connect(m_view, "query-tooltip",
+	                 G_CALLBACK(on_query_tooltip_static), this);
+
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_view),
 	                         GTK_TEXT_BUFFER(m_buffer));
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
@@ -523,4 +527,60 @@ void Gobby::DocWindow::on_pref_userlist_width_changed()
 		set_position(position);
 		m_doc_userlist_width_changed_connection.unblock();
 	}
+}
+
+bool
+Gobby::DocWindow::on_query_tooltip(int x, int y, bool keyboard_mode,
+                                   const Glib::RefPtr<Gtk::Tooltip>& tooltip)
+{
+	if(keyboard_mode) return false;
+
+	int buffer_x, buffer_y;
+	gtk_text_view_window_to_buffer_coords(
+		GTK_TEXT_VIEW(m_view),
+		GTK_TEXT_WINDOW_WIDGET, x, y, &buffer_x, &buffer_y);
+
+	// Pointer is in line number display
+	if(buffer_x < 0) return false;
+
+	// Get the character at the mouse position
+	GtkTextIter iter;
+	int trailing;
+	gtk_text_view_get_iter_at_position(
+		GTK_TEXT_VIEW(m_view), &iter, &trailing, buffer_x, buffer_y);
+
+	// Don't show a tooltip if the character is a newline character */
+	//if(gtk_text_iter_is_end(&iter)) return false;
+	if(gtk_text_iter_ends_line(&iter)) return false;
+
+	// Don't show a tooltip if we are past the end of the line
+	GdkRectangle newline_location;
+	GtkTextIter line_end = iter;
+	gtk_text_iter_forward_to_line_end(&line_end);
+	gtk_text_view_get_iter_location(
+		GTK_TEXT_VIEW(m_view), &line_end, &newline_location);
+
+	if(buffer_x >= newline_location.x &&
+	   buffer_y >= newline_location.y)
+	{
+		return false;
+	}
+
+	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+		inf_session_get_buffer(INF_SESSION(m_session)));
+
+	InfTextUser* author = inf_text_gtk_buffer_get_author(buffer, &iter);
+	if(author != NULL)
+	{
+		tooltip->set_markup(Glib::ustring::compose(
+			_("Text written by <b>%1</b>"),
+			Glib::Markup::escape_text(
+				inf_user_get_name(INF_USER(author)))));
+	}
+	else
+	{
+		tooltip->set_text(_("Unowned text"));
+	}
+
+	return true;
 }

@@ -109,6 +109,18 @@ protected:
 	void on_doc_userlist_width_changed();
 	void on_pref_userlist_width_changed();
 
+	bool on_query_tooltip(int x, int y, bool keyboard_mode,
+	                      const Glib::RefPtr<Gtk::Tooltip>& tooltip);
+
+	static gboolean on_query_tooltip_static(GtkWidget* widget, int x,
+	                                        int y, gboolean keyboard_mode,
+	                                        GtkTooltip* tooltip,
+	                                        gpointer user_data)
+	{
+		return static_cast<DocWindow*>(user_data)->on_query_tooltip(
+			x, y, keyboard_mode, Glib::wrap(tooltip, true));
+	}
+
 	InfTextSession* m_session;
 	Glib::ustring m_title;
 	std::string m_info_storage_key;
