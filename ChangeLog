@@ -1,5 +1,11 @@
 2009-01-04  Armin Burgmeier  <armin@arbur.net>
 
+	* === Released 0.4.91 ===
+
+	* NEWS: Update for release.
+
+2009-01-04  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/window.cpp: Re-enable shortcuts for Undo and Redo. These
 	have been accidentally disabled when pasting text in the "Direct
 	Connection" entry has been fixed.

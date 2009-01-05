@@ -1,6 +1,15 @@
 Gobby
 =====
 
+Version 0.4.91:
+  * Keep track of a document's modified state between Undo/Redo operations
+  * Scroll to Cursor after Cut or Paste
+  * Added HCLPI icon of the Gobby Logo (Thanks to Thomas Glatt)
+  * Added an Autosave Option in the preferences
+  * Remember previous host names in "Direct Connection" entry
+  * Added an "Open Location" dialog to open arbitrary URIs
+  * Added a tooltip when hovering text, showing the author of that text
+
 Version 0.4.90:
   * Use libinfinity instead of libobby as backend
   * Allow connection to multiple servers

@@ -12,6 +12,7 @@ code/dialogs/documentlocationdialog.cpp
 code/dialogs/finddialog.cpp
 code/dialogs/gotodialog.cpp
 code/dialogs/initialdialog.cpp
+code/dialogs/openlocationdialog.cpp
 code/dialogs/preferencesdialog.cpp
 code/main.cpp
 code/operations/operation-delete.cpp

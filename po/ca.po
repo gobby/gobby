@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-23 16:01+0100\n"
+"POT-Creation-Date: 2009-01-05 02:37+0100\n"
 "PO-Revision-Date: 2007-11-26 11:53+0000\n"
 "Last-Translator: Jordi Mallach <jordi@canonical.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -72,64 +72,68 @@ msgstr ""
 msgid "User Join in progress..."
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:92
+#: ../code/commands/browser-context-commands.cpp:94
 #, fuzzy
 msgid "Create Do_cument..."
 msgstr "Crea un document..."
 
-#: ../code/commands/browser-context-commands.cpp:127
+#: ../code/commands/browser-context-commands.cpp:129
 #, fuzzy
 msgid "Create Directory..."
 msgstr "Crea una sessió..."
 
-#: ../code/commands/browser-context-commands.cpp:140
+#: ../code/commands/browser-context-commands.cpp:142
 #, fuzzy
 msgid "_Open Document..."
 msgstr "Obre un document..."
 
-#: ../code/commands/browser-context-commands.cpp:159
+#: ../code/commands/browser-context-commands.cpp:161
 msgid "D_elete"
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:185
-msgid "Choose a name for the directory"
-msgstr ""
-
-#: ../code/commands/browser-context-commands.cpp:186
-#, fuzzy
-msgid "Choose a name for the document"
-msgstr "Tanca un document obert"
-
 #: ../code/commands/browser-context-commands.cpp:187
-msgid "_Directory Name:"
+msgid "Choose a name for the directory"
 msgstr ""
 
 #: ../code/commands/browser-context-commands.cpp:188
 #, fuzzy
+msgid "Choose a name for the document"
+msgstr "Tanca un document obert"
+
+#: ../code/commands/browser-context-commands.cpp:189
+msgid "_Directory Name:"
+msgstr ""
+
+#: ../code/commands/browser-context-commands.cpp:190
+#, fuzzy
 msgid "_Document Name:"
 msgstr "Entrodueix el nom del document"
 
-#: ../code/commands/browser-context-commands.cpp:191
+#: ../code/commands/browser-context-commands.cpp:193
 msgid "C_reate"
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:195
+#: ../code/commands/browser-context-commands.cpp:197
 #, fuzzy
 msgid "New Directory"
 msgstr "Direcció"
 
-#: ../code/commands/browser-context-commands.cpp:196
-#: ../code/commands/file-commands.cpp:41
+#: ../code/commands/browser-context-commands.cpp:198
+#: ../code/commands/file-commands.cpp:42
 #, fuzzy
 msgid "New Document"
 msgstr "Desa el document"
 
-#: ../code/commands/browser-context-commands.cpp:214
-#: ../code/commands/file-commands.cpp:81
+#: ../code/commands/browser-context-commands.cpp:216
+#: ../code/commands/file-commands.cpp:194
 msgid "Choose a text file to open"
 msgstr ""
 
-#: ../code/commands/file-commands.cpp:167
+#: ../code/commands/file-commands.cpp:112
+msgid "Querying \"%1\"..."
+msgstr ""
+
+#: ../code/commands/file-commands.cpp:277
 msgid "Choose a location to save document \"%1\" to"
 msgstr ""
 
@@ -150,164 +154,177 @@ msgid ""
 "Ave, Cambridge, MA 02139, USA."
 msgstr ""
 
-#: ../code/core/browser.cpp:40
+#: ../code/core/browser.cpp:41
 #, fuzzy
 msgid "_Direct Connection"
 msgstr "Direcció"
 
-#: ../code/core/browser.cpp:42
+#: ../code/core/browser.cpp:43
 #, fuzzy
 msgid "Host Name:"
 msgstr "Servidor:"
 
-#: ../code/core/browser.cpp:208
+#: ../code/core/browser.cpp:209
 #, fuzzy
 msgid "Device \"%1\" does not exist"
 msgstr "El document %0% no existeix."
 
-#: ../code/core/browser.cpp:245
+#: ../code/core/browser.cpp:247
 msgid "Resolving %1..."
 msgstr ""
 
-#: ../code/core/docwindow.cpp:245
+#: ../code/core/docwindow.cpp:253
 #, fuzzy
 msgid "User List"
 msgstr "Llista d'usuaris"
 
-#: ../code/core/header.cpp:187
+#: ../code/core/docwindow.cpp:576
+msgid "Text written by <b>%1</b>"
+msgstr ""
+
+#: ../code/core/docwindow.cpp:582
+msgid "Unowned text"
+msgstr ""
+
+#: ../code/core/header.cpp:189
 #, fuzzy
 msgid "_None"
 msgstr "Cap"
 
-#: ../code/core/header.cpp:209
+#: ../code/core/header.cpp:211
 #, fuzzy
 msgid "_File"
 msgstr "Arxius"
 
-#: ../code/core/header.cpp:212
+#: ../code/core/header.cpp:214
 #, fuzzy
 msgid "_Open..."
 msgstr "Obre un document..."
 
-#: ../code/core/header.cpp:216
+#: ../code/core/header.cpp:217
+#, fuzzy
+msgid "Open _Location..."
+msgstr "Obre un document..."
+
+#: ../code/core/header.cpp:221
 #, fuzzy
 msgid "Save _As..."
 msgstr "Desa la sessió..."
 
-#: ../code/core/header.cpp:220 ../code/core/iconmanager.cpp:89
+#: ../code/core/header.cpp:225 ../code/core/iconmanager.cpp:88
 msgid "Save All"
 msgstr ""
 
-#: ../code/core/header.cpp:220
+#: ../code/core/header.cpp:225
 msgid "Save all open files locally"
 msgstr ""
 
-#: ../code/core/header.cpp:225
+#: ../code/core/header.cpp:230
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../code/core/header.cpp:233
+#: ../code/core/header.cpp:238
 #, fuzzy
 msgid "_Find..."
 msgstr "Cerca..."
 
-#: ../code/core/header.cpp:235
+#: ../code/core/header.cpp:240
 #, fuzzy
 msgid "Find Ne_xt"
 msgstr "Cerca:"
 
-#: ../code/core/header.cpp:236
+#: ../code/core/header.cpp:241
 msgid "Find next match of phrase searched for"
 msgstr ""
 
-#: ../code/core/header.cpp:239
+#: ../code/core/header.cpp:244
 msgid "Find Pre_vious"
 msgstr ""
 
-#: ../code/core/header.cpp:240
+#: ../code/core/header.cpp:245
 msgid "Find previous match of phrase searched for"
 msgstr ""
 
-#: ../code/core/header.cpp:245
+#: ../code/core/header.cpp:250
 #, fuzzy
 msgid "Find and Rep_lace..."
 msgstr "Cerca i reemplaça..."
 
-#: ../code/core/header.cpp:249
+#: ../code/core/header.cpp:254
 #, fuzzy
 msgid "Go to _Line..."
 msgstr "Vés a la línia..."
 
-#: ../code/core/header.cpp:253
+#: ../code/core/header.cpp:258
 #, fuzzy
 msgid "Pr_eferences..."
 msgstr "Preferències"
 
-#: ../code/core/header.cpp:255
+#: ../code/core/header.cpp:260
 #, fuzzy
 msgid "_View"
 msgstr "Visualitza"
 
-#: ../code/core/header.cpp:258
+#: ../code/core/header.cpp:263
 #, fuzzy
 msgid "View Toolbar"
 msgstr "Barra d'eines"
 
-#: ../code/core/header.cpp:259
+#: ../code/core/header.cpp:264
 msgid "Whether to show the toolbar"
 msgstr ""
 
-#: ../code/core/header.cpp:263
+#: ../code/core/header.cpp:268
 msgid "View Statusbar"
 msgstr ""
 
-#: ../code/core/header.cpp:264
+#: ../code/core/header.cpp:269
 msgid "Whether to show the statusbar"
 msgstr ""
 
-#: ../code/core/header.cpp:268
+#: ../code/core/header.cpp:273
 msgid "View Document Browser"
 msgstr ""
 
-#: ../code/core/header.cpp:269
+#: ../code/core/header.cpp:274
 msgid "Whether to show the document browser"
 msgstr ""
 
-#: ../code/core/header.cpp:273
+#: ../code/core/header.cpp:278
 #, fuzzy
 msgid "View User List"
 msgstr "Llista d'usuaris"
 
-#: ../code/core/header.cpp:274
+#: ../code/core/header.cpp:279
 msgid "Whether to show the user list"
 msgstr ""
 
-#: ../code/core/header.cpp:278
+#: ../code/core/header.cpp:283
 msgid "_Highlight Mode"
 msgstr ""
 
-#: ../code/core/header.cpp:284
+#: ../code/core/header.cpp:289
 msgid "_Help"
 msgstr "A_juda"
 
-#: ../code/core/header.cpp:287
+#: ../code/core/header.cpp:292
 #, fuzzy
 msgid "_About..."
 msgstr "Quant a"
 
-#: ../code/core/header.cpp:288
+#: ../code/core/header.cpp:293
 msgid "Shows Gobby's copyright and credits"
 msgstr "Mostra el copyright del Gobby i els crèdits"
 
-#: ../code/core/iconmanager.cpp:83
+#: ../code/core/iconmanager.cpp:82
 msgid "User list"
 msgstr "Llista d'usuaris"
 
-#: ../code/core/iconmanager.cpp:86
+#: ../code/core/iconmanager.cpp:85
 msgid "Document list"
 msgstr "Llista de documents"
 
-#: ../code/core/statusbar.cpp:227
+#: ../code/core/statusbar.cpp:246
 msgid "Ln %1, Col %2"
 msgstr ""
 
@@ -407,11 +424,11 @@ msgstr "Número de línia:"
 msgid "Go To _Line"
 msgstr "Vés a la línia"
 
-#: ../code/dialogs/initialdialog.cpp:49
+#: ../code/dialogs/initialdialog.cpp:48
 msgid "Choose a user color"
 msgstr ""
 
-#: ../code/dialogs/initialdialog.cpp:53
+#: ../code/dialogs/initialdialog.cpp:52
 msgid "Welcome to Gobby"
 msgstr ""
 
@@ -437,6 +454,14 @@ msgstr "Llista d'usuaris"
 
 #: ../code/dialogs/initialdialog.cpp:81
 msgid "The color with which text you have written is branded."
+msgstr ""
+
+#: ../code/dialogs/openlocationdialog.cpp:27
+msgid "Open Location"
+msgstr ""
+
+#: ../code/dialogs/openlocationdialog.cpp:28
+msgid "Enter the _location (URI) of the file you would like to open:"
 msgstr ""
 
 #: ../code/dialogs/preferencesdialog.cpp:229
@@ -483,22 +508,39 @@ msgid "Home/End Behaviour"
 msgstr "Comportament d'Inici/Fi"
 
 #: ../code/dialogs/preferencesdialog.cpp:300
-msgid "Tab width:"
-msgstr "Amplada del tabulador:"
+msgid "File Saving"
+msgstr ""
 
 #: ../code/dialogs/preferencesdialog.cpp:301
-msgid "Insert spaces instead of tabs"
-msgstr "Insereix espais en comptes de tabulacions"
-
-#: ../code/dialogs/preferencesdialog.cpp:302
-msgid "Enable automatic indentation"
-msgstr "Habilita el sagnat automàtic"
+#, fuzzy
+msgid "_Tab width:"
+msgstr "Amplada del tabulador:"
 
 #: ../code/dialogs/preferencesdialog.cpp:303
-msgid "Smart home/end"
+#, fuzzy
+msgid "Insert _spaces instead of tabs"
+msgstr "Insereix espais en comptes de tabulacions"
+
+#: ../code/dialogs/preferencesdialog.cpp:304
+#, fuzzy
+msgid "Enable automatic _indentation"
+msgstr "Habilita el sagnat automàtic"
+
+#: ../code/dialogs/preferencesdialog.cpp:305
+#, fuzzy
+msgid "Smart _home/end"
 msgstr "Inici/fi intel·ligent"
 
-#: ../code/dialogs/preferencesdialog.cpp:318
+#: ../code/dialogs/preferencesdialog.cpp:306
+#, fuzzy
+msgid "Enable _automatic saving of documents"
+msgstr "Habilita el sagnat automàtic"
+
+#: ../code/dialogs/preferencesdialog.cpp:308
+msgid "Autosave interval in _minutes:"
+msgstr ""
+
+#: ../code/dialogs/preferencesdialog.cpp:329
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
@@ -506,126 +548,126 @@ msgstr ""
 "Amb aquesta opció habilitada, les tecles Inici/Fi mouen al primer/últim "
 "caràcter abans d'anar al principi/final de la línia."
 
-#: ../code/dialogs/preferencesdialog.cpp:355
+#: ../code/dialogs/preferencesdialog.cpp:399
 #, fuzzy
 msgid "Text Wrapping"
 msgstr "Ajustament del text"
 
-#: ../code/dialogs/preferencesdialog.cpp:356
+#: ../code/dialogs/preferencesdialog.cpp:400
 #, fuzzy
 msgid "Line Numbers"
 msgstr "Números de línies"
 
-#: ../code/dialogs/preferencesdialog.cpp:357
+#: ../code/dialogs/preferencesdialog.cpp:401
 #, fuzzy
 msgid "Current Line"
 msgstr "Línia actual"
 
-#: ../code/dialogs/preferencesdialog.cpp:358
+#: ../code/dialogs/preferencesdialog.cpp:402
 #, fuzzy
 msgid "Right Margin"
 msgstr "Marge dret"
 
-#: ../code/dialogs/preferencesdialog.cpp:359
+#: ../code/dialogs/preferencesdialog.cpp:403
 #, fuzzy
 msgid "Bracket Matching"
 msgstr "Emparellament de claus"
 
-#: ../code/dialogs/preferencesdialog.cpp:360
+#: ../code/dialogs/preferencesdialog.cpp:404
 msgid "Enable text wrapping"
 msgstr "Habilita l'ajustament del text"
 
-#: ../code/dialogs/preferencesdialog.cpp:361
+#: ../code/dialogs/preferencesdialog.cpp:405
 msgid "Do not split words over two lines"
 msgstr "No separes paraules en dos línies"
 
-#: ../code/dialogs/preferencesdialog.cpp:362
+#: ../code/dialogs/preferencesdialog.cpp:406
 msgid "Display line numbers"
 msgstr "Mostra els números de línia"
 
-#: ../code/dialogs/preferencesdialog.cpp:363
+#: ../code/dialogs/preferencesdialog.cpp:407
 msgid "Highlight current line"
 msgstr "Ressalta la línia actual"
 
-#: ../code/dialogs/preferencesdialog.cpp:364
+#: ../code/dialogs/preferencesdialog.cpp:408
 msgid "Display right margin"
 msgstr "Mostra el marge dret"
 
-#: ../code/dialogs/preferencesdialog.cpp:365
+#: ../code/dialogs/preferencesdialog.cpp:409
 msgid "Right margin at column:"
 msgstr "Marge dret a la columna:"
 
-#: ../code/dialogs/preferencesdialog.cpp:366
+#: ../code/dialogs/preferencesdialog.cpp:410
 msgid "Highlight matching bracket"
 msgstr "Ressalta la clau emparellada"
 
-#: ../code/dialogs/preferencesdialog.cpp:452
+#: ../code/dialogs/preferencesdialog.cpp:496
 msgid "Toolbar"
 msgstr "Barra d'eines"
 
-#: ../code/dialogs/preferencesdialog.cpp:453
+#: ../code/dialogs/preferencesdialog.cpp:497
 msgid "Font"
 msgstr "Tipus lletra"
 
-#: ../code/dialogs/preferencesdialog.cpp:458
+#: ../code/dialogs/preferencesdialog.cpp:502
 msgid "Show text only"
 msgstr "Mostra només text"
 
-#: ../code/dialogs/preferencesdialog.cpp:460
+#: ../code/dialogs/preferencesdialog.cpp:504
 msgid "Show icons only"
 msgstr "Mostra només icones"
 
-#: ../code/dialogs/preferencesdialog.cpp:462
+#: ../code/dialogs/preferencesdialog.cpp:506
 msgid "Show both icons and text"
 msgstr "Mostra icones i text"
 
-#: ../code/dialogs/preferencesdialog.cpp:464
+#: ../code/dialogs/preferencesdialog.cpp:508
 #, fuzzy
 msgid "Show text besides icons"
 msgstr "Mostra només text"
 
-#: ../code/dialogs/preferencesdialog.cpp:483
+#: ../code/dialogs/preferencesdialog.cpp:527
 msgid "Trusted CAs"
 msgstr ""
 
-#: ../code/dialogs/preferencesdialog.cpp:484
+#: ../code/dialogs/preferencesdialog.cpp:528
 #, fuzzy
 msgid "Secure Connection"
 msgstr "S'ha perdut la connexió"
 
-#: ../code/dialogs/preferencesdialog.cpp:485
+#: ../code/dialogs/preferencesdialog.cpp:529
 msgid "Select a file containing trusted CAs"
 msgstr ""
 
-#: ../code/dialogs/preferencesdialog.cpp:502
+#: ../code/dialogs/preferencesdialog.cpp:546
 msgid "Use TLS if possible"
 msgstr ""
 
-#: ../code/dialogs/preferencesdialog.cpp:505
+#: ../code/dialogs/preferencesdialog.cpp:549
 msgid "Always use TLS"
 msgstr ""
 
-#: ../code/dialogs/preferencesdialog.cpp:517
+#: ../code/dialogs/preferencesdialog.cpp:561
 msgid "Preferences"
 msgstr "Preferències"
 
-#: ../code/dialogs/preferencesdialog.cpp:522
+#: ../code/dialogs/preferencesdialog.cpp:566
 msgid "User"
 msgstr "Usuari"
 
-#: ../code/dialogs/preferencesdialog.cpp:523
+#: ../code/dialogs/preferencesdialog.cpp:567
 msgid "Editor"
 msgstr "Editor"
 
-#: ../code/dialogs/preferencesdialog.cpp:524
+#: ../code/dialogs/preferencesdialog.cpp:568
 msgid "View"
 msgstr "Visualitza"
 
-#: ../code/dialogs/preferencesdialog.cpp:525
+#: ../code/dialogs/preferencesdialog.cpp:569
 msgid "Appearance"
 msgstr "Aparença"
 
-#: ../code/dialogs/preferencesdialog.cpp:526
+#: ../code/dialogs/preferencesdialog.cpp:570
 msgid "Security"
 msgstr ""
 
@@ -667,50 +709,50 @@ msgstr ""
 msgid "Failed to create document %1: %2"
 msgstr "Desa el document actual"
 
-#. Translators: This is the 8 bit encoding that is used when
+#. Translators: This is the 8 bit encoding that is tried when
 #. autodetecting a file's encoding.
 #: ../code/operations/operation-open.cpp:45
 msgid "ISO-8859-1"
 msgstr ""
 
-#: ../code/operations/operation-open.cpp:95
+#: ../code/operations/operation-open.cpp:98
 #, fuzzy
 msgid "Opening document %1..."
 msgstr "Obre un document..."
 
-#: ../code/operations/operation-open.cpp:135
+#: ../code/operations/operation-open.cpp:142
 msgid ""
 "The directory into which the new document should have been inserted was "
 "removed"
 msgstr ""
 
-#: ../code/operations/operation-open.cpp:327
+#: ../code/operations/operation-open.cpp:334
 msgid "The file contains data not in the specified encoding"
 msgstr ""
 
-#: ../code/operations/operation-open.cpp:338
+#: ../code/operations/operation-open.cpp:345
 msgid ""
 "The file either contains data in an unknown encoding, or it contains binary "
 "data."
 msgstr ""
 
-#: ../code/operations/operation-open.cpp:446
+#: ../code/operations/operation-open.cpp:453
 #, fuzzy
-msgid "Failed to open document %1: %2"
+msgid "Failed to open document \"%1\": %2"
 msgstr "Tanca un document obert"
 
-#: ../code/operations/operation-save.cpp:66
+#: ../code/operations/operation-save.cpp:67
 #, fuzzy
 msgid "Saving document %1 to %2..."
 msgstr "Anomena i desa el document..."
 
-#: ../code/operations/operation-save.cpp:218
+#: ../code/operations/operation-save.cpp:221
 msgid ""
 "The document contains one or more characters that cannot be encoded in the "
 "specified character coding."
 msgstr ""
 
-#: ../code/operations/operation-save.cpp:280
+#: ../code/operations/operation-save.cpp:283
 #, fuzzy
 msgid "Failed to save document %1: %2"
 msgstr "Carrega un fitxer a un document nou"
@@ -719,20 +761,20 @@ msgstr "Carrega un fitxer a un document nou"
 msgid "Could not create directory \"%1\": %2"
 msgstr ""
 
-#: ../code/window.cpp:62
+#: ../code/window.cpp:65
 #, fuzzy
 msgid "Document Browser"
 msgstr "Llista de documents"
 
-#: ../code/window.cpp:106
+#: ../code/window.cpp:109
 msgid "You are still connected to a session"
 msgstr "Encara esteu connectats a una sessió"
 
-#: ../code/window.cpp:114
+#: ../code/window.cpp:117
 msgid "Do you want to close Gobby nevertheless?"
 msgstr "Voleu tancar el Gobby igualment?"
 
-#: ../code/window.cpp:120
+#: ../code/window.cpp:123
 msgid "C_ancel"
 msgstr ""
 
