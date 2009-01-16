@@ -240,9 +240,11 @@ void dump_buffer(DocWindow& document,
                  std::set<InfTextUser*>& users,
                  unsigned int& line_counter) {
   users.clear();
-  line_counter = 0;
+  line_counter = 1;
 	xmlpp::Element* last_node = content;
-	last_node->add_child("span")->set_attribute("class", "line_no");
+	xmlpp::Element* line_no = last_node->add_child("span");
+	line_no->set_attribute("class", "line_no");
+	line_no->set_attribute("id", "line_1");
 
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document.get_text_buffer());
 	InfTextGtkBuffer* inf_buffer
@@ -304,9 +306,11 @@ void dump_buffer(DocWindow& document,
 				// drop author <span/> for a moment for the line number <span/>
 				if (user)
 					last_node = last_node->get_parent();
-			 	last_node
-			 	  ->add_child("span")
-			 	  ->set_attribute("class", "line_no");
+			 	line_no = last_node->add_child("span");
+			 	line_no->set_attribute("class", "line_no");
+			 	line_no->set_attribute(
+			 	  "id",
+			 	  Glib::ustring::compose("line_%1", line_counter));
 				if (user) {
 					last_node = last_node->add_child("span");
 					last_node->set_attribute(
