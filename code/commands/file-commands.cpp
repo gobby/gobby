@@ -253,11 +253,36 @@ void dump_buffer(DocWindow& document,
 
 	GtkTextIter begin;
 	gtk_text_buffer_get_start_iter(buffer, &begin);
-	
-	if (gtk_text_iter_is_end(&begin))
-		return;
 
-	for (;;) {
+	while (!gtk_text_iter_is_end(&begin)) {
+		// check author, insert new <span/> if necessary
+		InfTextUser* new_user
+			= inf_text_gtk_buffer_get_author(inf_buffer, &begin);
+
+		if (new_user) {
+			guint new_id = inf_user_get_id(INF_USER(new_user));
+			if (!user || user != new_user) {
+				if (user)
+					last_node = last_node->get_parent();
+
+				last_node = last_node->add_child("span");
+				last_node->set_attribute(
+					"class",
+					Glib::ustring::compose("user_%1", new_id));
+				last_node->set_attribute(
+				  "title",
+				  Glib::ustring::compose(_("written by: %1"),
+				                         inf_user_get_name(INF_USER(new_user))));
+			}
+
+			user = new_user;
+			users.insert(user);
+		} else {
+			if (user)
+				last_node = last_node->get_parent();
+			user = 0;
+		}
+
 		GtkTextIter next = begin;
 		gtk_text_iter_forward_to_tag_toggle(&next, 0);
 
@@ -302,37 +327,6 @@ void dump_buffer(DocWindow& document,
 		g_free(text);
 
 		begin = next;
-
-		if (gtk_text_iter_is_end(&begin))
-			break;
-
-		// check author, insert new <span/> if necessary
-		InfTextUser* new_user
-			= inf_text_gtk_buffer_get_author(inf_buffer, &next);
-
-		if (new_user) {
-			guint new_id = inf_user_get_id(INF_USER(new_user));
-			if (!user || user != new_user) {
-				if (user)
-					last_node = last_node->get_parent();
-
-				last_node = last_node->add_child("span");
-				last_node->set_attribute(
-					"class",
-					Glib::ustring::compose("user_%1", new_id));
-				last_node->set_attribute(
-				  "title",
-				  Glib::ustring::compose(_("written by: %1"),
-				                         inf_user_get_name(INF_USER(new_user))));
-			}
-
-			user = new_user;
-			users.insert(user);
-		} else {
-			if (user)
-				last_node = last_node->get_parent();
-			user = 0;
-		}
 	}
 }
 
