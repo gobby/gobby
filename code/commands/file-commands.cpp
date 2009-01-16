@@ -225,6 +225,7 @@ void Gobby::FileCommands::on_save_all()
 
 #include <ctime>
 #include <cstring>
+#include <cmath>
 
 #include <gtkmm/textbuffer.h>
 #include <libxml++/libxml++.h>
@@ -241,17 +242,14 @@ void dump_buffer(DocWindow& document,
   users.clear();
   line_counter = 0;
 	xmlpp::Element* last_node = content;
-	last_node->add_child("div")->set_attribute("class", "line_no");
+	last_node->add_child("span")->set_attribute("class", "line_no");
 
-	//Glib::RefPtr<Gtk::TextBuffer> buffer(
-	//	Glib::wrap(
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document.get_text_buffer());
 	InfTextGtkBuffer* inf_buffer
 		= INF_TEXT_GTK_BUFFER(
 				inf_session_get_buffer(INF_SESSION(document.get_session())));
 
-	guint user_id;
-	bool user_active = false;
+	InfTextUser* user = 0;
 
 	GtkTextIter begin;
 	gtk_text_buffer_get_start_iter(buffer, &begin);
@@ -259,8 +257,6 @@ void dump_buffer(DocWindow& document,
 	if (gtk_text_iter_is_end(&begin))
 		return;
 
-	// TODO: I just made this use the Gtk+ API instead of Gtkmm at like 2 am,
-	//       surely there are a bunch of segfaults/memleaks lurking
 	for (;;) {
 		GtkTextIter next = begin;
 		gtk_text_iter_forward_to_tag_toggle(&next, 0);
@@ -281,16 +277,21 @@ void dump_buffer(DocWindow& document,
 				last_pos = next_pos;
 
 				// drop author <span/> for a moment for the line number <span/>
-				if (user_active)
+				if (user)
 					last_node = last_node->get_parent();
 			 	last_node
-			 	  ->add_child("div")
+			 	  ->add_child("span")
 			 	  ->set_attribute("class", "line_no");
-				if (user_active) {
+				if (user) {
 					last_node = last_node->add_child("span");
 					last_node->set_attribute(
 						"class",
-						Glib::ustring::compose("user_%1", user_id));
+						Glib::ustring::compose("user_%1",
+						                       inf_user_get_id(INF_USER(user))));
+					last_node->set_attribute(
+					  "title",
+					  Glib::ustring::compose(_("written by: %1"),
+					                         inf_user_get_name(INF_USER(user))));
 				}
 			}
 			last_node->add_child_text(Glib::ustring(last_pos));
@@ -306,28 +307,31 @@ void dump_buffer(DocWindow& document,
 			break;
 
 		// check author, insert new <span/> if necessary
-		InfTextUser* user
+		InfTextUser* new_user
 			= inf_text_gtk_buffer_get_author(inf_buffer, &next);
 
-		if (user) {
-			guint new_id = inf_user_get_id(INF_USER(user));
-			if (!user_active || new_id != user_id) {
-				if (user_active)
+		if (new_user) {
+			guint new_id = inf_user_get_id(INF_USER(new_user));
+			if (!user || user != new_user) {
+				if (user)
 					last_node = last_node->get_parent();
 
 				last_node = last_node->add_child("span");
 				last_node->set_attribute(
 					"class",
 					Glib::ustring::compose("user_%1", new_id));
+				last_node->set_attribute(
+				  "title",
+				  Glib::ustring::compose(_("written by: %1"),
+				                         inf_user_get_name(INF_USER(new_user))));
 			}
 
-			user_id = new_id;
-			user_active = true;
+			user = new_user;
 			users.insert(user);
 		} else {
-			if (user_active)
+			if (user)
 				last_node = last_node->get_parent();
-			user_active = false;
+			user = 0;
 		}
 	}
 }
@@ -380,13 +384,11 @@ void add_user_colours(xmlpp::Element* css,
 			 ++i) {
 		guint id = inf_user_get_id(INF_USER(*i));
 		gdouble hue = inf_text_user_get_hue(*i);
-		if (hue == 1)
-			hue = 0;
+		hue = std::fmod(hue, 1);
 
 		Gdk::Color c;
 		c.set_hsv(360.0 * hue, 0.35, 1.0);
 		gchar const* name = inf_user_get_name(INF_USER(*i));
-		// TODO: figure out if we can get "written by <name>" tooltips easily
 		unsigned int rgb =
 			  ((c.get_red()   & 0xff00) << 8)
 			|  (c.get_green() & 0xff00)
@@ -410,6 +412,11 @@ void add_user_colours(xmlpp::Element* css,
 // specified location in the filesystem
 void export_html(DocWindow& document, const Glib::ustring& output_path) {
 	xmlpp::Document output;
+
+  output.set_internal_subset("html",
+    "-//W3C//DTD XHTML 1.1//EN",
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd");
+
 	xmlpp::Element
 		* root      = output.create_root_node("html", "http://www.w3.org/1999/xhtml"),
 		* head      = root->add_child("head"),
@@ -477,7 +484,7 @@ void export_html(DocWindow& document, const Glib::ustring& output_path) {
 			"}\n",
 	  static_cast<unsigned int>(std::log(line_counter)/std::log(10))+1));
 
-	output.write_to_file(output_path);
+	output.write_to_file(output_path, "utf-8");
 }
 
 void Gobby::FileCommands::on_export_html() {
