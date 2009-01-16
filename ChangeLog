@@ -1,3 +1,7 @@
+2009-01-16  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/file-commands.cpp: Marked a string for localization.
+
 2009-01-15  Armin Burgmeier  <armin@arbur.net>
 
 	* all source files: Added 2009 to copyright years.

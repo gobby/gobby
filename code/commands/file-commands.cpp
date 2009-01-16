@@ -175,7 +175,8 @@ namespace
 		{
 			get_status_bar().add_message(StatusBar::ERROR,
 				Glib::ustring::compose(
-					"Failed to open document \"%1\": %2",
+					_("Failed to open document "
+					  "\"%1\": %2"),
 					m_file->get_uri(), message), 5);
 
 			finish();
