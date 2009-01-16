@@ -211,7 +211,10 @@ namespace
 			{
 				m_file_dialog.hide();
 				// TODO: Handle multiple selection
-				set_file(m_file_dialog.get_file());
+				Glib::ustring uri = m_file_dialog.get_uri();
+				Glib::RefPtr<Gio::File> file =
+					Gio::File::create_for_uri(uri);
+				set_file(file);
 			}
 			else
 			{

@@ -1,5 +1,10 @@
 2009-01-16  Armin Burgmeier  <armin@arbur.net>
 
+	* code/commands/file-commands.cpp: Don't use
+	Gtk::FileChooser::get_file(), so that we don't require gtkmm 2.14.
+
+2009-01-16  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/file-commands.cpp: Marked a string for localization.
 
 2009-01-15  Armin Burgmeier  <armin@arbur.net>
