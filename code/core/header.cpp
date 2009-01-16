@@ -1,5 +1,5 @@
 /* Gobby - GTK-based collaborative text editor
- * Copyright (C) 2008, 2009 Armin Burgmeier <armin@arbur.net>
+ * Copyright (C) 2008 Armin Burgmeier <armin@arbur.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -39,6 +39,7 @@ namespace {
 		"      <menuitem action=\"FileSave\" />"
 		"      <menuitem action=\"FileSaveAs\" />"
 		"      <menuitem action=\"FileSaveAll\" />"
+		"      <menuitem action=\"FileExportHtml\" />"
 		"      <separator />"
 		"      <menuitem action=\"FileClose\" />"
 		"      <menuitem action=\"FileQuit\" />"
@@ -225,6 +226,8 @@ Gobby::Header::Header(Preferences& preferences,
 		Gtk::Action::create(
 			"FileSaveAll", Gobby::IconManager::STOCK_SAVE_ALL,
 			_("Save All"), _("Save all open files locally"))),
+	action_file_export_html(
+		Gtk::Action::create("FileExportHtml", _("Export As _HTML..."))),
 	action_file_close(
 		Gtk::Action::create("FileClose", Gtk::Stock::CLOSE)),
 	action_file_quit(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)),
@@ -316,6 +319,9 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file_save_all,
 	                Gtk::AccelKey("<control><shift>L",
 			              "<Actions>/MenuFile/FileSaveAll"));
+	group_file->add(action_file_export_html,
+	                Gtk::AccelKey("<control><shift>H",
+			              "<Actions>/MenuFile/FileExportHtml"));
 	group_file->add(action_file_close);
 	group_file->add(action_file_quit);
 

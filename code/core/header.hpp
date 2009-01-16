@@ -1,5 +1,5 @@
 /* Gobby - GTK-based collaborative text editor
- * Copyright (C) 2008, 2009 Armin Burgmeier <armin@arbur.net>
+ * Copyright (C) 2008 Armin Burgmeier <armin@arbur.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -102,6 +102,7 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_file_save;
 	const Glib::RefPtr<Gtk::Action> action_file_save_as;
 	const Glib::RefPtr<Gtk::Action> action_file_save_all;
+	const Glib::RefPtr<Gtk::Action> action_file_export_html;
 	const Glib::RefPtr<Gtk::Action> action_file_close;
 	const Glib::RefPtr<Gtk::Action> action_file_quit;
 
