@@ -39,6 +39,7 @@ namespace {
 		"      <menuitem action=\"FileSave\" />"
 		"      <menuitem action=\"FileSaveAs\" />"
 		"      <menuitem action=\"FileSaveAll\" />"
+		"      <separator />"
 		"      <menuitem action=\"FileExportHtml\" />"
 		"      <separator />"
 		"      <menuitem action=\"FileClose\" />"
