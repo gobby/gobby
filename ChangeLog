@@ -1,3 +1,8 @@
+2009-01-20  Armin Burgmeier  <armin@0x539.de>
+
+	* src/encoding_selector.cpp: Fixed get_encoding() and set_encoding()
+	in case the automatic encoding detection field is not shown. Bug #423.
+
 2009-01-01  Philipp Kern  <phil@0x539.de>
 
 	* src/window.cpp: translator note that only the English version

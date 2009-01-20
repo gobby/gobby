@@ -44,16 +44,21 @@ Gobby::EncodingSelector::EncodingSelector():
 void Gobby::EncodingSelector::set_encoding(const std::string& encoding)
 {
 	if(encoding == AUTO_DETECT)
-		return set_active(0);
-
-	set_active_text(encoding);
+	{
+		if(m_show_automatic)
+			set_active(0);
+	}
+	else
+	{
+		set_active_text(encoding);
+	}
 }
 
 std::string Gobby::EncodingSelector::get_encoding() const
 {	
 	// Return untranslated "auto detection" encoding. This is meant as an
 	// opaque object.
-	if(get_active_row_number() == 0)
+	if(get_active_row_number() == 0 && m_show_automatic)
 		return AUTO_DETECT;
 
 	return get_active_text();
