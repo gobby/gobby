@@ -1,6 +1,10 @@
 Gobby
 =====
 
+Version 0.4.10:
+ * Bugfix release: Fixed a bug which made saving of newly-created
+   documents impossible.
+
 Version 0.4.9:
  * Accessibility:
    - Use the theme's default text color instead of black to improve

@@ -1,3 +1,8 @@
+2009-01-23  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac:
+	* NEWS: bump version to 0.4.10, document the changes
+
 2009-01-20  Armin Burgmeier  <armin@0x539.de>
 
 	* src/encoding_selector.cpp: Fixed get_encoding() and set_encoding()
