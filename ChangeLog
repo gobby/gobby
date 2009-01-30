@@ -1,5 +1,10 @@
 2009-01-30  Armin Burgmeier  <armin@arbur.net>
 
+	* code/util/resolv.cpp: Removed the _WIN32_WINNT #define which is no
+	longer required now that we use <wspiapi.h> for getaddrinfo support.
+
+2009-01-30  Armin Burgmeier  <armin@arbur.net>
+
 	* icons/HighContrastLargePrintInverse/48x48/Makefile.am:
 	* icons/HighContrastLargePrintInverse/48x48/apps/Makefile.am:
 	* icons/HighContrastLargePrintInverse/48x48/apps/gobby.png:

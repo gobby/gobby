@@ -22,9 +22,6 @@
 #include <glibmm/thread.h>
 
 #ifdef G_OS_WIN32
-/* This is required to be able to use getaddrinfo with MinGW
- * I believe this means that we require Windows XP here. */
-# define _WIN32_WINNT 0x0501
 # include <ws2tcpip.h>
 /* We need to include wspiapi.h to support getaddrinfo on Windows 2000.
  * See the MSDN article for getaddrinfo
