@@ -1,3 +1,19 @@
+2009-01-30  Armin Burgmeier  <armin@0x539.de>
+
+	* icons/HighContrastLargePrintInverse/48x48/Makefile.am:
+	* icons/HighContrastLargePrintInverse/48x48/apps/Makefile.am:
+	* icons/HighContrastLargePrintInverse/48x48/apps/gobby.png:
+	* icons/HighContrastLargePrintInverse/scalable/Makefile.am:
+	* icons/HighContrastLargePrintInverse/scalable/apps/Makefile.am:
+	* icons/HighContrastLargePrintInverse/scalable/apps/gobby.svg:
+	* icons/hicolor/48x48/Makefile.am:
+	* icons/hicolor/48x48/apps/Makefile.am:
+	* icons/hicolor/48x48/apps/gobby.png:
+	* icons/hicolor/scalable/Makefile.am:
+	* icons/hicolor/scalable/apps/Makefile.am:
+	* icons/hicolor/scalable/apps/gobby.svg:
+	* configure.ac: Added context ("apps") to icons directory structure.
+
 2009-01-23  Philipp Kern  <phil@0x539.de>
 
 	* configure.ac:
