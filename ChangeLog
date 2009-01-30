@@ -1,3 +1,8 @@
+2009-01-30  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/resolv.cpp: Include the <wspiapi.h> header file on Windows
+	to support Windows 2000. Bug #425.
+
 2009-01-16  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/file-commands.cpp: Don't use

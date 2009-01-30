@@ -26,6 +26,11 @@
  * I believe this means that we require Windows XP here. */
 # define _WIN32_WINNT 0x0501
 # include <ws2tcpip.h>
+/* We need to include wspiapi.h to support getaddrinfo on Windows 2000.
+ * See the MSDN article for getaddrinfo
+ * http://msdn.microsoft.com/en-us/library/ms738520(VS.85).aspx
+ * and bug #425. */
+# include <wspiapi.h>
 #else
 # include <sys/types.h>
 # include <sys/socket.h>
