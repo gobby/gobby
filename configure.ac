@@ -27,12 +27,12 @@ case "$host_os" in
 *mingw*)
         win32=true
         AC_MSG_RESULT([yes])
-	AC_CHECK_TOOL(WINDRES, windres)
-	;;
+  AC_CHECK_TOOL(WINDRES, windres)
+  ;;
 *)
         win32=false
         AC_MSG_RESULT([no])
-	;;
+  ;;
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
@@ -82,32 +82,38 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 
 AC_DEFINE(GOBBY_CONFIGDIR, [".gobby-0.5"],
           [where to store Gobby's config files,
-	   relative to the user's home directory])
+           relative to the user's home directory])
 
 AC_OUTPUT([
-	Makefile
-		m4/Makefile
-		po/Makefile.in
+  Makefile
+    m4/Makefile
+    po/Makefile.in
 
-		code/Makefile
-			code/util/Makefile
-			code/core/Makefile
-			code/dialogs/Makefile
-			code/operations/Makefile
-			code/commands/Makefile
+    code/Makefile
+      code/util/Makefile
+      code/core/Makefile
+      code/dialogs/Makefile
+      code/operations/Makefile
+      code/commands/Makefile
 
-		contrib/Makefile
-			contrib/artwork/Makefile
+    contrib/Makefile
+      contrib/artwork/Makefile
 
-		icons/Makefile
-			icons/hicolor/Makefile
-				icons/hicolor/48x48/Makefile
-				icons/hicolor/scalable/Makefile
-			icons/HighContrastLargePrintInverse/Makefile
-				icons/HighContrastLargePrintInverse/48x48/Makefile
-				icons/HighContrastLargePrintInverse/scalable/Makefile
+    icons/Makefile
+      icons/hicolor/Makefile
+        icons/hicolor/48x48/Makefile
+          icons/hicolor/48x48/apps/Makefile
+        icons/hicolor/scalable/Makefile
+          icons/hicolor/scalable/apps/Makefile
+      icons/HighContrastLargePrintInverse/Makefile
+        icons/HighContrastLargePrintInverse/48x48/Makefile
+          icons/HighContrastLargePrintInverse/48x48/apps/Makefile
+        icons/HighContrastLargePrintInverse/scalable/Makefile
+          icons/HighContrastLargePrintInverse/scalable/apps/Makefile
 
-		pixmaps/Makefile
+    pixmaps/Makefile
 
-		win32/Makefile
+    win32/Makefile
 ])
+
+# vim:set et sw=2 ts=2:
