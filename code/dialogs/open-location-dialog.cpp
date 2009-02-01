@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "dialogs/openlocationdialog.hpp"
+#include "dialogs/open-location-dialog.hpp"
 
 #include "util/file.hpp"
 #include "util/i18n.hpp"

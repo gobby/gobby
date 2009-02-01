@@ -19,9 +19,9 @@
 #ifndef _GOBBY_EDIT_COMMANDS_HPP_
 #define _GOBBY_EDIT_COMMANDS_HPP_
 
-#include "dialogs/finddialog.hpp"
-#include "dialogs/gotodialog.hpp"
-#include "dialogs/preferencesdialog.hpp"
+#include "dialogs/find-dialog.hpp"
+#include "dialogs/goto-dialog.hpp"
+#include "dialogs/preferences-dialog.hpp"
 
 #include "core/header.hpp"
 #include "core/folder.hpp"

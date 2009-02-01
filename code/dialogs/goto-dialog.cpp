@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "dialogs/gotodialog.hpp"
+#include "dialogs/goto-dialog.hpp"
 #include "util/i18n.hpp"
 
 #include <gtkmm/messagedialog.h>

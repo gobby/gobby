@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "dialogs/entrydialog.hpp"
+#include "dialogs/entry-dialog.hpp"
 
 Gobby::EntryDialog::EntryDialog(Gtk::Window& parent,
                                 const Glib::ustring& title,

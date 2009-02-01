@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "dialogs/preferencesdialog.hpp"
+#include "dialogs/preferences-dialog.hpp"
 #include "util/color.hpp"
 #include "util/i18n.hpp"
 

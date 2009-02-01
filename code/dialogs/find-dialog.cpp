@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "dialogs/finddialog.hpp"
+#include "dialogs/find-dialog.hpp"
 #include "core/folder.hpp"
 #include "util/i18n.hpp"
 

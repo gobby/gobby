@@ -31,7 +31,7 @@
 #include "commands/help-commands.hpp"
 #include "operations/operations.hpp"
 
-#include "dialogs/initialdialog.hpp"
+#include "dialogs/initial-dialog.hpp"
 
 #include "core/iconmanager.hpp"
 #include "core/header.hpp"

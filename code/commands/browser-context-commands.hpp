@@ -21,7 +21,7 @@
 
 #include "operations/operations.hpp"
 
-#include "dialogs/entrydialog.hpp"
+#include "dialogs/entry-dialog.hpp"
 
 #include "core/nodewatch.hpp"
 #include "core/browser.hpp"

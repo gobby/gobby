@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "dialogs/documentlocationdialog.hpp"
+#include "dialogs/document-location-dialog.hpp"
 #include "util/i18n.hpp"
 
 #include <gtkmm/stock.h>

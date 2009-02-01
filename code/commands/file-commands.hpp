@@ -20,7 +20,7 @@
 #define _GOBBY_FILE_COMMANDS_HPP_
 
 #include "operations/operations.hpp"
-#include "dialogs/documentlocationdialog.hpp"
+#include "dialogs/document-location-dialog.hpp"
 #include "core/header.hpp"
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"

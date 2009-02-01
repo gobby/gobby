@@ -1,22 +1,22 @@
 noinst_LIBRARIES = libgobby-dialogs.a
 
 libgobby_dialogs_a_SOURCES = \
-	documentlocationdialog.cpp \
-	entrydialog.cpp \
-	finddialog.cpp \
-	gotodialog.cpp \
-	initialdialog.cpp \
-	openlocationdialog.cpp \
-	preferencesdialog.cpp
+	document-location-dialog.cpp \
+	entry-dialog.cpp \
+	find-dialog.cpp \
+	goto-dialog.cpp \
+	initial-dialog.cpp \
+	open-location-dialog.cpp \
+	preferences-dialog.cpp
 
 noinst_HEADERS = \
-        documentlocationdialog.hpp \
-        entrydialog.hpp \
-        finddialog.hpp \
-        gotodialog.hpp \
-        initialdialog.hpp \
-	openlocationdialog.hpp \
-        preferencesdialog.hpp
+        document-location-dialog.hpp \
+        entry-dialog.hpp \
+        find-dialog.hpp \
+        goto-dialog.hpp \
+        initial-dialog.hpp \
+	open-location-dialog.hpp \
+        preferences-dialog.hpp
 
 appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby-0.5
@@ -25,4 +25,3 @@ AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code \
               -DAPPICON_DIR=\""$(appicondir)"\" \
               -DPIXMAPS_DIR=\""$(pixmapdir)"\"
-

@@ -16,7 +16,8 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "dialogs/initialdialog.hpp"
+#include "dialogs/initial-dialog.hpp"
+
 #include "util/color.hpp"
 #include "util/i18n.hpp"
 #include "features.hpp"

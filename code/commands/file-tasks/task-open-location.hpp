@@ -21,7 +21,7 @@
 
 #include "commands/file-commands.hpp"
 #include "commands/file-tasks/task-open.hpp"
-#include "dialogs/openlocationdialog.hpp"
+#include "dialogs/open-location-dialog.hpp"
 
 namespace Gobby
 {
