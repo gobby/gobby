@@ -231,14 +231,16 @@ void Gobby::FileCommands::on_save_all()
 #include <libxml++/libxml++.h>
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
+#include "util/i18n.hpp"
 
 // write the Gtk::TextBuffer from document into content, inserting <span/>s for
 // line breaks and authorship of chunks of text, also save all users
 // encountered and the total number of lines dumped
-void dump_buffer(DocWindow& document,
+void dump_buffer(Gobby::DocWindow& document,
                  xmlpp::Element* content,
                  std::set<InfTextUser*>& users,
                  unsigned int& line_counter) {
+  using namespace Gobby;
   users.clear();
   line_counter = 1;
 	xmlpp::Element* last_node = content;
@@ -336,9 +338,10 @@ void dump_buffer(DocWindow& document,
 
 // some random interesting information/advertisement to be put at the end of
 // the html output
-void dump_info(xmlpp::Element* node, DocWindow& document) {
+void dump_info(xmlpp::Element* node, Gobby::DocWindow& document) {
+	using namespace Gobby;
 	// put current time
-  char const* time_str;
+	char const* time_str;
 	int const n = 128;
 	char buf[n];
   {
@@ -408,7 +411,8 @@ void add_user_colours(xmlpp::Element* css,
 
 // generate xhtml representation of the document and write it to the
 // specified location in the filesystem
-void export_html(DocWindow& document, const Glib::ustring& output_path) {
+void export_html(Gobby::DocWindow& document, const Glib::ustring& output_path) {
+	using namespace Gobby;
 	xmlpp::Document output;
 
   output.set_internal_subset("html",
