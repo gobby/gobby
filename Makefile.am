@@ -10,6 +10,7 @@ bin_PROGRAMS = gobby-0.5
 gobby_0_5_LDADD = \
 	code/libgobby.a \
 	code/commands/libgobby-commands.a \
+	code/commands/file-tasks/libgobby-file-tasks.a \
 	code/operations/libgobby-operations.a \
 	code/dialogs/libgobby-dialogs.a \
 	code/core/libgobby-core.a \

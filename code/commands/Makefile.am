@@ -1,3 +1,5 @@
+SUBDIRS = file-tasks
+
 noinst_LIBRARIES = libgobby-commands.a
 
 libgobby_commands_a_SOURCES = \
@@ -27,4 +29,3 @@ AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code \
               -DAPPICON_DIR=\""$(appicondir)"\" \
               -DPIXMAPS_DIR=\""$(pixmapdir)"\"
-

@@ -95,6 +95,7 @@ AC_OUTPUT([
       code/dialogs/Makefile
       code/operations/Makefile
       code/commands/Makefile
+        code/commands/file-tasks/Makefile
 
     contrib/Makefile
       contrib/artwork/Makefile

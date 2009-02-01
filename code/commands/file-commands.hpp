@@ -26,7 +26,6 @@
 #include "core/statusbar.hpp"
 #include "core/filechooser.hpp"
 
-#include <gtkmm/filechooserdialog.h>
 #include <gtkmm/window.h>
 #include <sigc++/trackable.h>
 
