@@ -9,7 +9,8 @@ bin_PROGRAMS = gobby
 
 gobby_LDADD     = $(gobby_LIBS) $(gtksourceview_LIBS)
 gobby_CPPFLAGS  = $(gobby_CFLAGS) $(gtksourceview_CFLAGS)
-gobby_CPPFLAGS += -I../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\"
+gobby_CPPFLAGS += -I../inc/ -DLOCALE_DIR=\""$(datadir)/locale"\" \
+	-DICONS_DIR=\""$(pkgdatadir)/icons"\"
 
 if WITH_AVAHI
 gobby_LDADD += $(avahi_LIBS)
@@ -118,12 +119,6 @@ gobby_SOURCES += src/gotodialog.cpp
 gobby_SOURCES += src/dragdrop.cpp
 gobby_SOURCES += src/window.cpp
 gobby_SOURCES += src/main.cpp
-
-pixmapdir         = $(datadir)/pixmaps/gobby
-gobby_CPPFLAGS   += -DPIXMAPS_DIR=\""$(pixmapdir)"\"
-dist_pixmap_DATA  = pixmaps/userlist.png
-dist_pixmap_DATA += pixmaps/doclist.png
-dist_pixmap_DATA += pixmaps/chat.png
 
 if WITH_GNOME
 # GNOME-specific installation.

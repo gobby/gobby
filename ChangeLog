@@ -1,3 +1,58 @@
+2009-02-02  Armin Burgmeier  <armin@0x539.de>
+
+	* pixmaps/: Removed.
+	* Makefile.am: Removed pixmaps from distribution.
+
+	* icons/hicolor/48x48/actions/chat.png:
+	* icons/hicolor/48x48/actions/document-list.png:
+	* icons/hicolor/48x48/actions/user-list.png:
+	* icons/hicolor/48x48/actions/Makefile.am:
+	* icons/hicolor/48x48/Makefile.am:
+	* icons/hicolor/scalable/actions/chat.svg:
+	* icons/hicolor/scalable/actions/document-list.svg:
+	* icons/hicolor/scalable/actions/user-list.svg:
+	* icons/hicolor/scalable/actions/Makefile.am:
+	* icons/hicolor/scalable/Makefile.am: Added previous pixmaps as icons,
+	so they are themeable.
+
+	* icons/HighContrastLargePrintInverse/48x48/actions/chat.png:
+	* icons/HighContrastLargePrintInverse/48x48/actions/document-list.png:
+	* icons/HighContrastLargePrintInverse/48x48/actions/user-list.png:
+	* icons/HighContrastLargePrintInverse/48x48/actions/Makefile.am:
+	* icons/HighContrastLargePrintInverse/48x48/apps/gobby.png:
+	* icons/HighContrastLargePrintInverse/48x48/Makefile.am:
+	* icons/HighContrastLargePrintInverse/scalable/actions/chat.svg:
+	* icons/HighContrastLargePrintInverse/scalable/actions/document-list.svg:
+	* icons/HighContrastLargePrintInverse/scalable/actions/user-list.svg:
+	* icons/HighContrastLargePrintInverse/scalable/actions/Makefile.am:
+	* icons/HighContrastLargePrintInverse/scalable/apps/gobby.svg:
+	* icons/HighContrastLargePrintInverse/scalable/Makefile.am: Added
+	corresponding HCLPI icons (thanks Tom).
+
+	* icons/HighContrastLargePrint/48x48/actions/chat.png:
+	* icons/HighContrastLargePrint/48x48/actions/document-list.png:
+	* icons/HighContrastLargePrint/48x48/actions/user-list.png:
+	* icons/HighContrastLargePrint/48x48/actions/Makefile.am:
+	* icons/HighContrastLargePrint/48x48/apps/gobby.png:
+	* icons/HighContrastLargePrint/48x48/apps/Makefile.am:
+	* icons/HighContrastLargePrint/48x48/Makefile.am:
+	* icons/HighContrastLargePrint/scalable/actions/chat.svg:
+	* icons/HighContrastLargePrint/scalable/actions/document-list.svg:
+	* icons/HighContrastLargePrint/scalable/actions/user-list.svg:
+	* icons/HighContrastLargePrint/scalable/actions/Makefile.am:
+	* icons/HighContrastLargePrint/scalable/apps/gobby.svg:
+	* icons/HighContrastLargePrint/scalable/apps/Makefile.am:
+	* icons/HighContrastLargePrint/scalable/Makefile.am:
+	* icons/HighContrastLargePrint/Makefile.am: Added corresponding HCLP
+	icons (again, thanks Tom).
+
+	* icons/Makefile.am: Descend into HigtContrastLargePrint subdirectory.
+
+	* inc/icon.hpp:
+	* src/icon.cpp: Load the custom stock item images from icon name
+	instead of loading the pixbufs directly, add package icons path to
+	icon theme search path.
+
 2009-01-30  Armin Burgmeier  <armin@0x539.de>
 
 	* icons/HighContrastLargePrintInverse/48x48/Makefile.am:
