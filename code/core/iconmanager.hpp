@@ -35,11 +35,6 @@ namespace Gobby
 
 		IconManager();
 
-		//const Glib::RefPtr<Gdk::Pixbuf> gobby;
-		const Glib::RefPtr<Gdk::Pixbuf> userlist;
-		const Glib::RefPtr<Gdk::Pixbuf> doclist;
-		const Glib::RefPtr<Gdk::Pixbuf> save_all;
-
 	protected:
 		Gtk::IconSet m_is_userlist;
 		Gtk::IconSet m_is_doclist;

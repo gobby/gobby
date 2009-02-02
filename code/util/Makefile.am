@@ -22,7 +22,4 @@ noinst_HEADERS = \
         serialize.hpp
 
 AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
-              -I$(top_srcdir)/code \
-              -DAPPICON_DIR=\""$(appicondir)"\" \
-              -DPIXMAPS_DIR=\""$(pixmapdir)"\"
-
+              -I$(top_srcdir)/code

@@ -1,1 +1,1 @@
-SUBDIRS = hicolor HighContrastLargePrintInverse
+SUBDIRS = hicolor HighContrastLargePrint HighContrastLargePrintInverse

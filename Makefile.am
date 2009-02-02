@@ -1,4 +1,4 @@
-SUBDIRS = m4 contrib pixmaps icons win32 code . po
+SUBDIRS = m4 contrib win32 code . icons po
 
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4

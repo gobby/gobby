@@ -1,3 +1,77 @@
+2009-02-02  Armin Burgmeier  <armin@arbur.net>
+
+	* pixmaps/: Removed the pixmaps directory. The pixmaps are now
+	installed as icons, to respect theme settings.
+
+	* contrib/artwork/: Removed as well, since all artwork is now
+	contained in icons/ anyway.
+
+	* contrib/Makefile.am:
+	* Makefile.am: Adapt for the removal of the above directories.
+
+	* icons/hicolor/48x48/actions/chat.png:
+	* icons/hicolor/48x48/actions/document-list.png:
+	* icons/hicolor/48x48/actions/user-list.png:
+	* icons/hicolor/48x48/actions/Makefile.am:
+	* icons/hicolor/48x48/Makefile.am:
+	* icons/hicolor/scalable/actions/chat.svg:
+	* icons/hicolor/scalable/actions/document-list.svg:
+	* icons/hicolor/scalable/actions/user-list.svg:
+	* icons/hicolor/scalable/actions/Makefile.am:
+	* icons/hicolor/scalable/Makefile.am: Added previous pixmaps as icons,
+	so they are themeable.
+
+	* icons/HighContrastLargePrintInverse/48x48/actions/chat.png:
+	* icons/HighContrastLargePrintInverse/48x48/actions/document-list.png:
+	* icons/HighContrastLargePrintInverse/48x48/actions/user-list.png:
+	* icons/HighContrastLargePrintInverse/48x48/actions/Makefile.am:
+	* icons/HighContrastLargePrintInverse/48x48/apps/gobby.png:
+	* icons/HighContrastLargePrintInverse/48x48/Makefile.am:
+	* icons/HighContrastLargePrintInverse/scalable/actions/chat.svg:
+	* icons/HighContrastLargePrintInverse/scalable/actions/document-list.svg:
+	* icons/HighContrastLargePrintInverse/scalable/actions/user-list.svg:
+	* icons/HighContrastLargePrintInverse/scalable/actions/Makefile.am:
+	* icons/HighContrastLargePrintInverse/scalable/apps/gobby.svg:
+	* icons/HighContrastLargePrintInverse/scalable/Makefile.am: Added
+	corresponding HCLPI icons (thanks Tom).
+
+	* icons/HighContrastLargePrint/48x48/actions/chat.png:
+	* icons/HighContrastLargePrint/48x48/actions/document-list.png:
+	* icons/HighContrastLargePrint/48x48/actions/user-list.png:
+	* icons/HighContrastLargePrint/48x48/actions/Makefile.am:
+	* icons/HighContrastLargePrint/48x48/apps/gobby.png:
+	* icons/HighContrastLargePrint/48x48/apps/Makefile.am:
+	* icons/HighContrastLargePrint/48x48/Makefile.am:
+	* icons/HighContrastLargePrint/scalable/actions/chat.svg:
+	* icons/HighContrastLargePrint/scalable/actions/document-list.svg:
+	* icons/HighContrastLargePrint/scalable/actions/user-list.svg:
+	* icons/HighContrastLargePrint/scalable/actions/Makefile.am:
+	* icons/HighContrastLargePrint/scalable/apps/gobby.svg:
+	* icons/HighContrastLargePrint/scalable/apps/Makefile.am:
+	* icons/HighContrastLargePrint/scalable/Makefile.am:
+	* icons/HighContrastLargePrint/Makefile.am: Added corresponding HCLP
+	icons (again, thanks Tom).
+
+	* icons/Makefile.am: Descend into HigtContrastLargePrint subdirectory.
+
+	* code/core/iconmanager.hpp:
+	* code/core/iconmanager.cpp: Load icons from icon name instead of
+	directly from their path, added priate icons directory to icon theme
+	search path.
+
+	* code/util/Makefile.am:
+	* code/core/Makefile.am:
+	* code/dialogs/Makefile.am:
+	* code/operations/Makefile.am:
+	* code/commands/file-tasks/Makefile.am:
+	* code/commands/Makefile.am:
+	* code/Makefile.am: Removed APPICON_DIR and PIXMAPS_DIR definitions,
+	as these are no longer required.
+	
+	* configure.ac: Generate newly added Makefiles, changed package name
+	to gobby-0.5, so that the private icons end up in their own directory,
+	parallel-installable with the 0.4 line.
+
 2009-02-01  Armin Burgmeier  <armin@arbur.net>
 
 	* code/dialogs/find-dialog.hpp:

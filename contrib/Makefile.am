@@ -1,5 +1,3 @@
-SUBDIRS = artwork
-
 if WITH_GNOME
 # GNOME-specific installation.
 desktopdir = $(datadir)/applications
