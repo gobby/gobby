@@ -1,3 +1,8 @@
+2009-02-03  Armin Burgmeier  <armin@arbur.net>
+
+	* code/operations/operation-save.cpp: Make sure terminating newline
+	characters are saved correctly.
+
 2009-02-02  Armin Burgmeier  <armin@arbur.net>
 
 	* pixmaps/: Removed the pixmaps directory. The pixmaps are now

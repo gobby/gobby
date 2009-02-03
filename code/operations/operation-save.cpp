@@ -39,6 +39,7 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document.get_text_buffer());
 	GtkTextIter prev;
 	GtkTextIter pos;
+	GtkTextIter old_pos;
 
 	gtk_text_buffer_get_start_iter(buffer, &prev);
 	pos = prev;
@@ -52,9 +53,13 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 		line.second = gtk_text_iter_get_line_index(&pos);
 		m_lines.push_back(line);
 
+		//if(gtk_text_iter_is_end(&prev))
+		//	break;
+
+		old_pos = pos;
 		gtk_text_iter_forward_line(&prev);
 		gtk_text_iter_forward_to_line_end(&pos);
-	} while(!gtk_text_iter_is_end(&prev));
+	} while(!gtk_text_iter_equal(&pos, &old_pos));
 
 	m_current_line = m_lines.begin();
 
