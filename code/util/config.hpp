@@ -43,7 +43,7 @@ public:
 	{
 	public:
 		Entry(const Glib::ustring& name);
-		virtual ~Entry() {} // compiler complains without
+		virtual ~Entry() {}
 
 		/** @brief Saves this entry into the given element.
 		 */
@@ -200,6 +200,11 @@ public:
 		 */
 		const ValueEntry*
 		get_value_child(const Glib::ustring& name) const;
+
+		/** @brief: Returns whether there is a child ValueEntry with
+		 * the given name.
+		 */
+		bool has_value(const Glib::ustring& name);
 
 		/** @brief Returns the value from the child with the given
 		 * name.

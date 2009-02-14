@@ -140,6 +140,11 @@ const Gobby::Config::ValueEntry* Gobby::Config::ParentEntry::
 	return dynamic_cast<const ValueEntry*>(get_child(name) );
 }
 
+bool Gobby::Config::ParentEntry::has_value(const Glib::ustring& name)
+{
+	return get_value_child(name) != NULL;
+}
+
 Gobby::Config::ParentEntry& Gobby::Config::ParentEntry::
 	operator[](const Glib::ustring& name)
 {

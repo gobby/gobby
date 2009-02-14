@@ -1,3 +1,11 @@
+2009-02-14  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/config.hpp:
+	* code/util/config.cpp: Added ParentEntry::has_value().
+
+	* code/core/preferences.cpp: Added /etc/ssl/certs/ca-certificates.crt
+	as default value for the trust-file, if the file exists.
+
 2009-02-03  Armin Burgmeier  <armin@arbur.net>
 
 	* code/operations/operation-save.cpp: Make sure terminating newline
