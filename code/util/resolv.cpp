@@ -31,6 +31,7 @@
 #else
 # include <sys/types.h>
 # include <sys/socket.h>
+# include <netinet/in.h> /* Required for FreeBSD. See bug #431. */
 # include <netdb.h>
 #endif
 

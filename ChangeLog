@@ -1,3 +1,8 @@
+2009-02-26  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/resolv.cpp: Added <netinet/in.h> include to fix the build
+	on Free BSD. Bug #431. Patch by Romain Tartière.
+
 2009-02-14  Armin Burgmeier  <armin@arbur.net>
 
 	* code/util/config.hpp:
