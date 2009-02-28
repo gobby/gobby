@@ -1,3 +1,8 @@
+2009-02-28  Armin Burgmeier  <armin@arbur.net>
+
+	* code/operations/operation-save.cpp: When saving files, don't write
+	almost every line twice if the first line is empty.
+
 2009-02-26  Armin Burgmeier  <armin@arbur.net>
 
 	* code/util/resolv.cpp: Added <netinet/in.h> include to fix the build

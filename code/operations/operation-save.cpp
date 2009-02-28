@@ -43,7 +43,9 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 
 	gtk_text_buffer_get_start_iter(buffer, &prev);
 	pos = prev;
-	gtk_text_iter_forward_to_line_end(&pos);
+
+	if(!gtk_text_iter_ends_line(&pos))
+		gtk_text_iter_forward_to_line_end(&pos);
 
 	do
 	{
