@@ -1,3 +1,13 @@
+2009-03-03  Armin Burgmeier  <armin@0x539.de>
+
+	* inc/header.hpp:
+	* src/header.cpp: Added a "Save Session As" menu option.
+
+	* inc/window.hpp:
+	* src/window.cpp: Added corresponding functionality. Now "Save
+	Session" saves to a known location, if any, and "Save Session As"
+	brings up a File Chooser. Patch by Nick <gentuu@gmail.com>.
+
 2009-02-02  Armin Burgmeier  <armin@0x539.de>
 
 	* pixmaps/: Removed.

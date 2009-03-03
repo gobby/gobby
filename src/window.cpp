@@ -85,6 +85,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		sigc::mem_fun(*this, &Window::on_session_join) );
 	m_header.action_app_session_save->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_session_save) );
+	m_header.action_app_session_save_as->signal_activate().connect(
+		sigc::mem_fun(*this, &Window::on_session_save_as) );
 	m_header.action_app_session_quit->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_session_quit) );
 	m_header.action_app_quit->signal_activate().connect(
@@ -444,6 +446,24 @@ void Gobby::Window::on_session_join()
 }
 
 void Gobby::Window::on_session_save()
+{
+	// Call the dialog if we have no previos filename
+	if(m_prev_session.empty()) {
+		on_session_save_as();
+	} else {
+		// Just overwrite if we already were writing there
+		try
+		{
+			m_buffer->serialise(m_prev_session);
+		}
+		catch(std::exception& e)
+		{
+			display_error(e.what() );
+		}
+	}
+}
+
+void Gobby::Window::on_session_save_as()
 {
 	Gtk::CheckButton m_chk_default_ext(
 		_("Use default .obby extension if none is given")

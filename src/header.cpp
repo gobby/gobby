@@ -38,6 +38,7 @@ namespace {
 		"      <menuitem action=\"AppSessionCreate\" />"
 		"      <menuitem action=\"AppSessionJoin\" />"
 		"      <menuitem action=\"AppSessionSave\" />"
+		"      <menuitem action=\"AppSessionSaveAs\" />"
 		"      <menuitem action=\"AppSessionQuit\" />"
 		"      <separator />"
 		"      <menuitem action=\"AppQuit\" />"
@@ -249,8 +250,17 @@ Gobby::Header::Header(const ApplicationState& state,
 		Gtk::Action::create(
 			"AppSessionSave",
 			Gtk::Stock::SAVE,
-			_("Save session..."),
+			_("Save session"),
 			_("Saves the complete session for a later restore")
+		)
+	),
+
+	action_app_session_save_as(
+		Gtk::Action::create(
+			"AppSessionSaveAs",
+			Gtk::Stock::SAVE_AS,
+			_("Save session as..."),
+			_("\"Saves as...\" the complete session for a later restore")
 		)
 	),
 
@@ -455,6 +465,11 @@ Gobby::Header::Header(const ApplicationState& state,
 	);
 
 	set_action_auto(
+		action_app_session_save_as, state,
+		APPLICATION_NONE, APPLICATION_INITIAL
+	);
+
+	set_action_auto(
 		action_app_session_quit, state,
 		APPLICATION_SESSION, APPLICATION_NONE
 	);
@@ -580,7 +595,9 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_app->add(action_app);
 	group_app->add(action_app_session_create);
 	group_app->add(action_app_session_join);
-	group_app->add(action_app_session_save, Gtk::AccelKey("") );
+	group_app->add(action_app_session_save,
+		Gtk::AccelKey("<control>E", "<Actions>/MenuApp/AppSessionSave") );
+	group_app->add(action_app_session_save_as);
 	group_app->add(action_app_session_quit);
 	group_app->add(action_app_quit);
 

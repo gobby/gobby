@@ -134,6 +134,7 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_app_session_create;
 	const Glib::RefPtr<Gtk::Action> action_app_session_join;
 	const Glib::RefPtr<Gtk::Action> action_app_session_save;
+	const Glib::RefPtr<Gtk::Action> action_app_session_save_as;
 	const Glib::RefPtr<Gtk::Action> action_app_session_quit;
 	const Glib::RefPtr<Gtk::Action> action_app_quit;
 
