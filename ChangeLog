@@ -1,3 +1,8 @@
+2009-04-12  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac:
+	* po/cs.po: add Czech translation, thanks to Petr Pulc
+
 2009-03-03  Armin Burgmeier  <armin@0x539.de>
 
 	* inc/header.hpp:
