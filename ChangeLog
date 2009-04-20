@@ -1,3 +1,7 @@
+2009-02-40  Armin Burgmeier  <armin@arbur.net>
+
+	* configure.ac: Adapt to libinfinity becoming parallel-installable.
+
 2009-02-28  Armin Burgmeier  <armin@arbur.net>
 
 	* code/operations/operation-save.cpp: When saving files, don't write

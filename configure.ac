@@ -52,7 +52,7 @@ AC_CACHE_SAVE
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [$required_libs])
-PKG_CHECK_MODULES([infinote], [libinfinity-1.0 >= 0.2 libinftext-1.0 >= 0.2 libinfgtk-1.0 >= 0.2 libinftextgtk-1.0 >= 0.2])
+PKG_CHECK_MODULES([infinote], [libinfinity-0.3 libinftext-0.3 libinfgtk-0.3 libinftextgtk-0.3])
 AC_CACHE_SAVE
 
 # As we could not yet auto-detect the GNOME desktop environment, it's the
