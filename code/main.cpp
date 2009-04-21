@@ -139,8 +139,7 @@ int main(int argc, char* argv[]) try
 	Gtk::Window::set_default_icon_name("gobby-0.5");
 
 	// Read the configuration
-	Gobby::Config config(
-		Gobby::config_filename(GOBBY_CONFIGDIR, "config.xml"));
+	Gobby::Config config(Gobby::config_filename("config.xml"));
 
 	// Create window
 	Gobby::Window wnd(icon_manager, config);

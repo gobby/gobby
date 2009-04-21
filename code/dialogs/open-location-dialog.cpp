@@ -27,7 +27,7 @@ Gobby::OpenLocationDialog::OpenLocationDialog(Gtk::Window& parent):
 	Gtk::Dialog(_("Open Location"), parent), m_box(false, 6),
 	m_label(_("Enter the _location (URI) of the file you would "
 	          "like to open:"), Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER, true),
-	m_combo(config_filename(GOBBY_CONFIGDIR, "recent_uris"), 8)
+	m_combo(config_filename("recent_uris"), 8)
 {
 	m_label.set_mnemonic_widget(m_combo);
 	m_box.pack_start(m_label, Gtk::PACK_SHRINK);

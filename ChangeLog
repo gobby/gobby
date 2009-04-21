@@ -1,5 +1,16 @@
 2009-04-20  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/browser.cpp:
+	* code/core/documentinfostorage.cpp:
+	* code/dialogs/open-location-dialog.cpp:
+	* code/main.cpp:
+	* code/util/file.cpp:
+	* code/util/file.hpp:
+	* configure.ac: Store config in Glib::get_user_config_dir() everywhere
+	instead of only on Win32 (Bug #437 by Cristian Klein).
+
+2009-04-20  Armin Burgmeier  <armin@arbur.net>
+
 	* configure.ac: Adapt to libinfinity becoming parallel-installable.
 
 2009-02-28  Armin Burgmeier  <armin@arbur.net>

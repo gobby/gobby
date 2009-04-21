@@ -87,8 +87,7 @@ namespace
 	// Location to store the documents file:
 	std::string filename()
 	{
-		return Gobby::config_filename(
-			GOBBY_CONFIGDIR, "documents.xml");
+		return Gobby::config_filename("documents.xml");
 	}
 }
 

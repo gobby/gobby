@@ -99,20 +99,12 @@ namespace Gobby
 		create_directory(path.c_str() );
 	}
 
-	std::string config_filename(const std::string& config_directory,
-	                            const std::string& filename)
+	std::string config_filename(const std::string& filename)
 	{
-#ifdef G_OS_WIN32
 		return Glib::build_filename(
 			Glib::build_filename(
 				Glib::get_user_config_dir(),
-				config_directory),
+				"gobby"),
 			filename);
-#else
-		return Glib::build_filename(
-			Glib::build_filename(
-				Glib::get_home_dir(), config_directory),
-			filename);
-#endif
 	}
 }

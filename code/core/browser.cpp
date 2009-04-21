@@ -41,7 +41,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_expander(_("_Direct Connection"), true),
 	m_hbox(false, 6),
 	m_label_hostname(_("Host Name:")),
-	m_entry_hostname(config_filename(GOBBY_CONFIGDIR, "recent_hosts"), 5)
+	m_entry_hostname(config_filename("recent_hosts"), 5)
 {
 	m_label_hostname.show();
 	m_entry_hostname.signal_activate().connect(
@@ -75,8 +75,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	                                    INF_DISCOVERY(m_discovery));
 #endif
 
-	Glib::ustring known_hosts_file = config_filename(
-		GOBBY_CONFIGDIR, "known_hosts");
+	Glib::ustring known_hosts_file = config_filename("known_hosts");
 
 	const std::string trust_file = m_preferences.security.trust_file;
 	m_cert_manager = inf_gtk_certificate_manager_new(
