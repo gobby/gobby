@@ -1,3 +1,7 @@
+2009-04-20  Benjamin Herr  <ben@0x539.de>
+	
+	* code/commands/file-tasks/task-new.cpp: Removed spurious semicolon.
+
 2009-04-20  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/browser.cpp:

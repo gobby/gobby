@@ -51,4 +51,4 @@ void Gobby::TaskNew::on_response(int response_id)
 	}
 
 	finish();
-};
+}
