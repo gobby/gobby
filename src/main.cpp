@@ -194,7 +194,9 @@ int main(int argc, char* argv[]) try
 	Gtk::Window::set_default_icon_name("gobby");
 
 	// Read the configuration
-	Gobby::Config config(Glib::get_home_dir() + "/.gobby/config.xml");
+	Gobby::Config config(
+		Glib::get_user_config_dir() + "/gobby-0.4/config.xml",
+		Glib::get_home_dir() + "/.gobby/config.xml");
 
 	// Set join parameters if we want to join a session
 	if(!join.empty())

@@ -34,6 +34,8 @@
 #include <libxml++/parsers/domparser.h>
 #include <libxml++/exceptions/exception.h>
 
+#include <glib/gstdio.h>
+
 #include "config.hpp"
 
 namespace
@@ -263,20 +265,31 @@ Gobby::Config::ParentEntry::const_iterator Gobby::Config::ParentEntry::
 	return const_iterator(m_map.end() );
 }
 
-Gobby::Config::Config(const Glib::ustring& file):
+Gobby::Config::Config(const Glib::ustring& file,
+                      const Glib::ustring& old_file):
 	m_filename(file)
 {
 	xmlpp::DomParser parser;
+	const Glib::ustring* actual_file = &file;
 
 	if(!Glib::file_test(file, Glib::FILE_TEST_IS_REGULAR))
 	{
-		m_root.reset(new ParentEntry("gobby_config") );
-		return;
+		if (Glib::file_test(old_file, Glib::FILE_TEST_IS_REGULAR))
+		{
+			actual_file = &old_file;
+		}
+		else
+		{
+			m_root.reset(new ParentEntry("gobby_config") );
+			return;
+		}
 	}
 
 	try
 	{
-		parser.parse_file(file);
+		parser.parse_file(*actual_file);
+		if (actual_file != &file)
+			g_unlink(old_file.c_str());
 	}
 	catch(xmlpp::exception& e)
 	{

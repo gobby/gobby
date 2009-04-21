@@ -295,7 +295,7 @@ public:
 		map_type m_map;
 	};
 
-	Config(const Glib::ustring& file);
+	Config(const Glib::ustring& file, const Glib::ustring& old_file);
 	~Config();
 
 	ParentEntry& get_root();
