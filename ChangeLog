@@ -1,5 +1,12 @@
+2009-04-22  Benjamin Herr  <ben@0x539.de>
+
+	* code/core/tablabel.hpp:
+	* code/core/tablabel.cpp: Display pencil icons in user hue for each
+	user that has edited a document since it was last viewed (Bug #66 by
+	Mattis Manzel).
+
 2009-04-20  Benjamin Herr  <ben@0x539.de>
-	
+
 	* code/commands/file-tasks/task-new.cpp: Removed spurious semicolon.
 
 2009-04-20  Armin Burgmeier  <armin@arbur.net>

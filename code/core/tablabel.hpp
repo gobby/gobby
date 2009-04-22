@@ -26,6 +26,8 @@
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
 
+#include <list>
+
 namespace Gobby
 {
 
@@ -73,10 +75,22 @@ protected:
 		static_cast<TabLabel*>(user_data)->on_modified_changed();
 	}
 
-	static void on_changed_static(GtkTextBuffer* buffer,
-	                              gpointer user_data)
+	static void on_erase_text_static(InfTextBuffer* buffer,
+	                                 guint position,
+	                                 guint length,
+	                                 InfTextUser* author,
+	                                 gpointer user_data)
 	{
-		static_cast<TabLabel*>(user_data)->on_changed();
+		static_cast<TabLabel*>(user_data)->on_changed(author);
+	}
+
+	static void on_insert_text_static(InfTextBuffer* buffer,
+	                                  guint position,
+	                                  InfTextChunk* text,
+	                                  InfTextUser* author,
+	                                  gpointer user_data)
+	{
+		static_cast<TabLabel*>(user_data)->on_changed(author);
 	}
 
 	void on_notify_editable();
@@ -84,19 +98,21 @@ protected:
 	void on_notify_subscription_group();
 
 	void on_modified_changed();
-	void on_changed();
+	void on_changed(InfTextUser* author);
 
 	void on_folder_document_changed(DocWindow* document);
 
 	void update_icon();
 	void update_color();
 	void update_modified();
+	void update_dots();
 
 	Folder& m_folder;
 	DocWindow& m_document;
 
 	Gtk::Image m_icon;
 	Gtk::Label m_title;
+	Gtk::Label m_dots;
 	CloseButton m_button;
 
 	// Whether the document was changed since it has been active.
@@ -106,7 +122,39 @@ protected:
 	gulong m_notify_status_handle;
 	gulong m_notify_subscription_group_handle;
 	gulong m_modified_changed_handle;
-	gulong m_changed_handle;
+	gulong m_erase_text_handle;
+	gulong m_insert_text_handle;
+
+	class UserWatcher
+	{
+	public:
+		UserWatcher(TabLabel* l, InfTextUser* u);
+
+		UserWatcher(const UserWatcher& other);
+
+		~UserWatcher();
+
+		InfTextUser* get_user() const;
+
+		bool operator==(InfTextUser* other_user) const;
+
+		// UserWatcher& operator=(const UserWatcher& other);
+
+	private:
+		void connect();
+
+		void disconnect();
+
+		static void on_notify_hue(GObject* user_object,
+		                          GParamSpec* spec,
+		                          gpointer user_data);
+
+		TabLabel* label;
+		InfTextUser* user;
+		gulong handle;
+	};
+
+	std::list<UserWatcher> m_changed_by;
 };
 
 }
