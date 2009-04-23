@@ -36,7 +36,10 @@ public:
 	~NodeWatch();
 
 	InfcBrowser* get_browser() const { return m_browser; }
-	bool get_browser_iter(InfcBrowserIter* iter) const;
+	const InfcBrowserIter& get_browser_iter() const {
+		g_assert(m_browser);
+		return m_iter;
+	}
 
 	SignalNodeRemoved signal_node_removed() const
 	{

@@ -43,6 +43,7 @@ public:
 	void set_document_name(const Glib::ustring& document_name);
 
 	InfcBrowser* get_selected_directory(InfcBrowserIter* iter) const;
+  InfGtkBrowserModel* get_browser_model() const;
 protected:
 	virtual void on_show();
 
@@ -56,7 +57,7 @@ protected:
 
 	static void on_row_changed_static(GtkTreeModel* model,
 	                                  GtkTreePath* path,
-					  GtkTreeIter* iter,
+	                                  GtkTreeIter* iter,
 	                                  gpointer user_data)
 	{
 		static_cast<DocumentLocationDialog*>(

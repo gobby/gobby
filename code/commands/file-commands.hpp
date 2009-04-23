@@ -16,6 +16,8 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// TODO: Someone else should do task management
+
 #ifndef _GOBBY_FILE_COMMANDS_HPP_
 #define _GOBBY_FILE_COMMANDS_HPP_
 
@@ -70,8 +72,10 @@ public:
 		FileCommands& m_file_commands;
 		SignalFinished m_signal_finished;
 	};
-protected:
+
 	void set_task(Task* task);
+
+protected:
 
 	static void on_row_inserted_static(GtkTreeModel* model, 
 	                                   GtkTreePath* path,

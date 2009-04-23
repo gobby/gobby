@@ -48,6 +48,8 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
 
+#include <unique/unique.h>
+
 #include <memory>
 
 namespace Gobby
@@ -56,7 +58,7 @@ namespace Gobby
 class Window : public Gtk::Window
 {
 public:
-	Window(const IconManager& icon_mgr, Config& config);
+	Window(const IconManager& icon_mgr, Config& config, UniqueApp* app);
 	~Window();
 
 	const Folder& get_folder() const { return m_folder; }
@@ -71,12 +73,26 @@ protected:
 	virtual void on_show();
 
 	void on_initial_dialog_hide();
+	UniqueResponse on_message_received(UniqueCommand command,
+	                                   UniqueMessageData* message,
+	                                   guint time);
+	static UniqueResponse
+	on_message_received_static(UniqueApp* app,
+	                           UniqueCommand command,
+	                           UniqueMessageData* message,
+	                           guint time,
+	                           gpointer user_data)
+	{
+		return static_cast<Window*>(user_data)->on_message_received(
+			command, message, time);
+	}
 
 	// Config
 	Config& m_config;
 	GtkSourceLanguageManager* m_lang_manager;
 	Preferences m_preferences;
 	const IconManager& m_icon_mgr;
+  UniqueApp* m_app;
 
 	// GUI
 	Gtk::VBox m_mainbox;

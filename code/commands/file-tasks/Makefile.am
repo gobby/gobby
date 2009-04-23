@@ -5,6 +5,7 @@ libgobby_file_tasks_a_SOURCES = \
 	task-open.cpp \
 	task-open-file.cpp \
 	task-open-location.cpp \
+	task-open-multiple.cpp \
 	task-save.cpp \
 	task-save-all.cpp
 
@@ -13,6 +14,7 @@ noinst_HEADERS = \
 	task-open.hpp \
 	task-open-file.hpp \
 	task-open-location.hpp \
+	task-open-multiple.hpp \
 	task-save.hpp \
 	task-save-all.hpp
 

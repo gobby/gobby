@@ -19,6 +19,7 @@
 #include "features.hpp"
 #include "window.hpp"
 
+#include "commands/file-tasks/task-open-multiple.hpp"
 #include "core/docwindow.hpp"
 #include "core/iconmanager.hpp"
 #include "core/noteplugin.hpp"
@@ -28,10 +29,12 @@
 
 #include <gtkmm/frame.h>
 
-Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
+Gobby::Window::Window(const IconManager& icon_mgr,
+	                    Config& config,
+	                    UniqueApp* app):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
-	m_preferences(m_config), m_icon_mgr(icon_mgr),
+	m_preferences(m_config), m_icon_mgr(icon_mgr), m_app(app),
 	m_header(m_preferences, m_lang_manager),
 	m_browser(*this, Plugins::TEXT, m_statusbar, m_preferences),
 	m_folder(m_preferences, m_lang_manager),
@@ -54,6 +57,12 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 	m_commands_help(*this, m_header, m_icon_mgr),
 	m_title_bar(*this, m_folder)
 {
+	g_object_ref(app);
+
+	unique_app_watch_window(app, gobj());
+	g_signal_connect(app, "message-received",
+	                 G_CALLBACK(on_message_received_static), this);
+
 	m_header.show();
 	m_browser.show();
 	m_folder.show();
@@ -96,6 +105,7 @@ Gobby::Window::~Window()
 {
 	// Serialise preferences into config
 	m_preferences.serialize(m_config);
+	g_object_unref(m_app);
 }
 
 bool Gobby::Window::on_delete_event(GdkEventAny* event)
@@ -183,4 +193,32 @@ void Gobby::Window::on_initial_dialog_hide()
 	m_initial_dlg.reset(NULL);
 	// Don't show again
 	m_config.get_root()["initial"].set_value("run", true);
+}
+
+UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
+                                                  UniqueMessageData* message,
+                                                  guint time)
+{
+	UniqueResponse res;
+	switch (command) {
+	case UNIQUE_ACTIVATE:
+		gtk_window_set_screen(gobj(),
+													unique_message_data_get_screen(message));
+		present(time);
+		return UNIQUE_RESPONSE_OK;
+	case UNIQUE_OPEN:
+		{
+			gchar** uris = unique_message_data_get_uris(message);
+			if (!uris)
+				return UNIQUE_RESPONSE_FAIL;
+			TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
+			m_commands_file.set_task(task);
+			for (const gchar* const* p = uris; p; ++p)
+				task->add_file(Gio::File::create_for_uri(*p));
+			g_strfreev(uris);
+			return UNIQUE_RESPONSE_OK;
+		}
+	default:
+		return UNIQUE_RESPONSE_PASSTHROUGH;
+	}
 }

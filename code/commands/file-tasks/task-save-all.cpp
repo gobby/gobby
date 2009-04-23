@@ -16,6 +16,10 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// TODO: This should not be a task because the asynchronous IO operations
+// should not be interrupted by tasks like "save as".
+// Possibly do the should-not-abort part in an self-maintaining object?
+
 #include "commands/file-tasks/task-save-all.hpp"
 
 Gobby::TaskSaveAll::TaskSaveAll(FileCommands& file_commands):

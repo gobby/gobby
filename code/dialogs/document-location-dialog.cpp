@@ -142,6 +142,11 @@ InfcBrowser* Gobby::DocumentLocationDialog::get_selected_directory(
 	}
 }
 
+InfGtkBrowserModel* Gobby::DocumentLocationDialog::get_browser_model() const
+{
+	return INF_GTK_BROWSER_MODEL(
+		gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(m_filter_model)));
+}
 void Gobby::DocumentLocationDialog::on_show()
 {
 	Gtk::Dialog::on_show();

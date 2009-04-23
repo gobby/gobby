@@ -33,6 +33,8 @@
 #include <glibmm/optiongroup.h>
 #include <glibmm/optioncontext.h>
 
+#include <unique/unique.h>
+
 #include <libintl.h> // bindtextdomain
 #include <iostream>
 
@@ -125,6 +127,51 @@ int main(int argc, char* argv[]) try
 		return EXIT_SUCCESS;
 	}
 
+	bool new_instance = false;
+
+	// TODO: add --new-instance option to disable unique
+	UniqueApp* app = unique_app_new_with_commands("de.ox539.gobby", NULL, NULL);
+
+	if (!new_instance && unique_app_is_running(app))
+	{
+		UniqueResponse response;
+		if (argc < 2)
+		{
+			response = unique_app_send_message(app, UNIQUE_ACTIVATE, NULL);
+		}
+		else
+		{
+			UniqueMessageData* message = unique_message_data_new();
+			std::vector<const gchar*> uris(argc);
+			std::vector<Glib::ustring> uri_strs(argc-1);
+			for (int i = 0; i < argc - 1; ++i) {
+				uri_strs[i] =
+					Gio::File::create_for_commandline_arg(argv[i+1])->get_uri();
+				uris[i] = uri_strs[i].c_str();
+			}
+
+			unique_message_data_set_uris(message, const_cast<gchar**>(&uris[0]));
+
+			response = unique_app_send_message(app, UNIQUE_OPEN, message);
+			unique_message_data_free(message);
+		}
+
+		g_object_unref(app);
+
+		if (response == UNIQUE_RESPONSE_OK)
+		{
+			return 0;
+		}
+		else 
+		{
+			std::cerr
+				<< "uniqueapp error: "
+				<< static_cast<int>(response)
+				<< std::endl;
+			return -1;
+		}
+	}
+
 	GError* error = NULL;
 	if(!inf_init(&error))
 	{
@@ -142,7 +189,8 @@ int main(int argc, char* argv[]) try
 	Gobby::Config config(Gobby::config_filename("config.xml"));
 
 	// Create window
-	Gobby::Window wnd(icon_manager, config);
+	Gobby::Window wnd(icon_manager, config, app);
+	g_object_unref(app);
 	wnd.show();
 
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
