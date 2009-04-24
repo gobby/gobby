@@ -44,4 +44,4 @@ pixmapdir = $(datadir)/pixmaps/gobby-0.5
 # prefix/share/icons.
 AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code \
-	      -DICONS_DIR=\""$(pkgdatadir)/icons"\"
+	      -DICONS_DIR=\""$(datadir)/gobby-0.5/icons"\"

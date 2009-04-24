@@ -1,3 +1,17 @@
+2009-04-24  Armin Burgmeier  <armin@arbur.net>
+
+	* configure.ac: Changed PACKAGE name back to gobby.
+
+	* icons/HighContrastLargePrint/48x48/actions/Makefile.am:
+	* icons/HighContrastLargePrint/scalable/actions/Makefile.am:
+	* icons/HighContrastLargePrintInverse/48x48/actions/Makefile.am:
+	* icons/HighContrastLargePrintInverse/scalable/actions/Makefile.am:
+	* icons/hicolor/48x48/actions/Makefile.am:
+	* icons/hicolor/scalable/actions/Makefile.am:
+	* code/core/Makefile.am: Use $(datadir)/gobby-0.5 instead of
+	$(pkgdatadir), so we still install the private icons into a separate
+	directory.
+
 2009-04-22  Benjamin Herr  <ben@0x539.de>
 
 	* code/core/tablabel.hpp:
