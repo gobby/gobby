@@ -198,7 +198,7 @@ void Gobby::Window::on_initial_dialog_hide()
 UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
                                                   UniqueMessageData* message,
                                                   guint time)
-{
+try {
 	UniqueResponse res;
 	switch (command) {
 	case UNIQUE_ACTIVATE:
@@ -213,7 +213,7 @@ UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
 				return UNIQUE_RESPONSE_FAIL;
 			TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
 			m_commands_file.set_task(task);
-			for (const gchar* const* p = uris; p; ++p)
+			for (const gchar* const* p = uris; *p; ++p)
 				task->add_file(Gio::File::create_for_uri(*p));
 			g_strfreev(uris);
 			return UNIQUE_RESPONSE_OK;
@@ -221,4 +221,6 @@ UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
 	default:
 		return UNIQUE_RESPONSE_PASSTHROUGH;
 	}
+} catch (...) {
+  g_assert_not_reached();
 }
