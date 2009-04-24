@@ -1,5 +1,10 @@
 2009-04-24  Armin Burgmeier  <armin@arbur.net>
 
+	* code/main.cpp: Changed locale lookup directory on Windows from
+	lib/locale to share/locale.
+
+2009-04-24  Armin Burgmeier  <armin@arbur.net>
+
 	* configure.ac: Changed PACKAGE name back to gobby.
 
 	* icons/HighContrastLargePrint/48x48/actions/Makefile.am:

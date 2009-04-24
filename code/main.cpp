@@ -60,7 +60,7 @@ namespace
 			g_win32_get_package_installation_directory_of_module(
 				NULL);
 
-		gchar* temp = g_build_filename(root, "lib", "locale", NULL);
+		gchar* temp = g_build_filename(root, "share", "locale", NULL);
 		g_free(root);
 
 		gchar* result = g_win32_locale_filename_from_utf8(temp);
