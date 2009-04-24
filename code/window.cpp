@@ -30,9 +30,9 @@
 #include <gtkmm/frame.h>
 
 Gobby::Window::Window(const IconManager& icon_mgr,
-	                    Config& config,
-	                    UniqueApp* app,
-											const char* const* commandline_args):
+                      Config& config,
+                      UniqueApp* app,
+                      const char* const* commandline_args):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
 	m_preferences(m_config), m_icon_mgr(icon_mgr), m_app(app),
