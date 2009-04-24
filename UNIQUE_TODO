@@ -1,0 +1,8 @@
+[ ] Make an OperationOpenMultiple, and launch this in TaskOpenMultiple once
+    the target directory has been chosen
+[ ] Use TaskOpen if we are opening a single file, so the user can rename it
+[ ] Hide "Document Name" field in TaskOpenMultiple
+[ ] Implement --new-instance
+[ ] Support infinote://-URLs
+[ ] configure option
+[ ] Windows support
