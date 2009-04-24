@@ -31,7 +31,8 @@
 
 Gobby::Window::Window(const IconManager& icon_mgr,
 	                    Config& config,
-	                    UniqueApp* app):
+	                    UniqueApp* app,
+											const char* const* commandline_args):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
 	m_preferences(m_config), m_icon_mgr(icon_mgr), m_app(app),
@@ -99,6 +100,18 @@ Gobby::Window::Window(const IconManager& icon_mgr,
 
 	set_default_size(800, 600);
 	set_role("Gobby");
+
+	// TODO: specialcase a single argument by respecting the file name
+	// entered into the location dialog (probably requires argc too)
+	if(*commandline_args)
+	{
+		TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
+		m_commands_file.set_task(task);
+		do {
+			task->add_file(
+				Gio::File::create_for_commandline_arg(*commandline_args++));
+		} while (*commandline_args);
+	}
 }
 
 Gobby::Window::~Window()

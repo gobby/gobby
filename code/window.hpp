@@ -58,7 +58,8 @@ namespace Gobby
 class Window : public Gtk::Window
 {
 public:
-	Window(const IconManager& icon_mgr, Config& config, UniqueApp* app);
+	Window(const IconManager& icon_mgr, Config& config, UniqueApp* app,
+	       const char* const* commandline_args);
 	~Window();
 
 	const Folder& get_folder() const { return m_folder; }
