@@ -45,7 +45,9 @@ void Gobby::TaskOpenMultiple::add_file(const Glib::RefPtr<Gio::File>& file)
 	try
 	{
 		file->query_info_async(
-			sigc::mem_fun(*this, &TaskOpenMultiple::on_query_info),
+			sigc::bind(
+				sigc::mem_fun(*this, &TaskOpenMultiple::on_query_info),
+				file),
 			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 		++m_query_counter;
 	}
@@ -70,14 +72,13 @@ void Gobby::TaskOpenMultiple::on_idle()
 }
 
 void Gobby::TaskOpenMultiple::on_query_info(
-	const Glib::RefPtr<Gio::AsyncResult>& result)
+	const Glib::RefPtr<Gio::AsyncResult>& result,
+	Glib::RefPtr<Gio::File> file)
 {
 	--m_query_counter;
 
 	try
 	{
-    const Glib::RefPtr<Gio::File>& file = 
-      Glib::RefPtr<Gio::File>::cast_dynamic(result->get_source_object());
 		Glib::RefPtr<Gio::FileInfo> info =
 			file->query_info_finish(result);
 

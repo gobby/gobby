@@ -37,7 +37,8 @@ public:
 
 private:
 	void on_idle();
-	void on_query_info(const Glib::RefPtr<Gio::AsyncResult>& result);
+	void on_query_info(const Glib::RefPtr<Gio::AsyncResult>& result,
+	                   Glib::RefPtr<Gio::File> file);
 	void on_location_response(int response_id);
 	void flush();
 	void error(const Glib::ustring& message);
