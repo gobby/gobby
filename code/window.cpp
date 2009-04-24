@@ -199,7 +199,6 @@ UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
                                                   UniqueMessageData* message,
                                                   guint time)
 try {
-	UniqueResponse res;
 	switch (command) {
 	case UNIQUE_ACTIVATE:
 		gtk_window_set_screen(gobj(),
@@ -222,5 +221,6 @@ try {
 		return UNIQUE_RESPONSE_PASSTHROUGH;
 	}
 } catch (...) {
-  g_assert_not_reached();
+	g_assert_not_reached();
+	return UNIQUE_RESPONSE_FAIL;
 }
