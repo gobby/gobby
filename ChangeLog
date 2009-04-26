@@ -1,3 +1,10 @@
+2009-04-26  Armin Burgmeier  <armin@arbur.net>
+
+	* === Released 0.4.92 ===
+
+	* README:
+	* NEWS: Update for release.
+
 2009-04-25  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/tablabel.hpp:

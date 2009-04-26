@@ -15,6 +15,7 @@ Gobby: First Contact
         4.2. How to get involved
 
    5. Licensing
+   6. Development
 
 1. Synopsis
 
@@ -56,7 +57,7 @@ Gobby: First Contact
 
      * libsigc++ (>= 2.0.2)
      * GNUTLS (>= 1.7.2)
-     * libinfinity (0.2.0)
+     * libinfinity (0.3.x)
      * Gtk+ (>= 2.12.0)
      * GtkSourceView (>= 2.0)
      * Glibmm (>= 2.16.0)
@@ -122,4 +123,14 @@ Gobby: First Contact
    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
    PURPOSE. See the GNU General Public License for more details.
 
-   Copyright (C) 2005-2008 0x539 dev group <crew@0x539.de>
+   Copyright (C) 2005-2009 0x539 dev group <crew@0x539.de>
+
+     _________________________________________________________
+
+6. Development
+
+   To get in contact with the developers, either use the obby-users mailing
+   list mentioned above or drop by in our IRC channel #0x539 on
+   irc.blitzed.org. To get the up-to-date Gobby code to hack on, use
+   `git clone git://git.0x539.de/git/gobby.git'. Patches should be filed
+   in our bug tracker on http://gobby.0x539.de/trac/newticket.

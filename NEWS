@@ -1,6 +1,19 @@
 Gobby
 =====
 
+Version 0.4.92:
+  * Support running Gobby on Windows 2000.
+  * Added Icons for HCLP and HCLPI icon themes (Bug #413, Patrick Wade).
+  * Make sure terminating newline characters are saved correctly
+  * Added /etc/ssl/certs/ca-certificates.crt as default trust file, if
+    available.
+  * Don't mess up saving documents whose first line is empty.
+  * Write config files in $XDG_CONFIG_HOME instead of $HOME (Bug #437,
+    Cristian Klein).
+  * Display colored pencil icons in a document's tab for each user that made
+    a change since the document has been viewed the last time (Bug #66,
+    Mattis Manzel).
+
 Version 0.4.91:
   * Keep track of a document's modified state between Undo/Redo operations
   * Scroll to Cursor after Cut or Paste
