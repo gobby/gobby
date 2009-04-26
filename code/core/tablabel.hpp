@@ -93,6 +93,8 @@ protected:
 		static_cast<TabLabel*>(user_data)->on_changed(author);
 	}
 
+	virtual void on_style_changed(const Glib::RefPtr<Gtk::Style>& prev);
+
 	void on_notify_editable();
 	void on_notify_status();
 	void on_notify_subscription_group();
@@ -114,6 +116,8 @@ protected:
 	Gtk::Label m_title;
 	Gtk::Label m_dots;
 	CloseButton m_button;
+
+	gunichar m_dot_char;
 
 	// Whether the document was changed since it has been active.
 	bool m_changed;

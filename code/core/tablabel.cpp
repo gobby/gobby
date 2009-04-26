@@ -66,7 +66,7 @@ void Gobby::TabLabel::UserWatcher::on_notify_hue(GObject* user_object,
 Gobby::TabLabel::TabLabel(Folder& folder, DocWindow& document):
 	Gtk::HBox(false, 6),
 	m_folder(folder), m_document(document),
-	m_changed(false)
+	m_dot_char(0), m_changed(false)
 {
 	m_title.set_alignment(Gtk::ALIGN_LEFT);
 
@@ -94,7 +94,8 @@ Gobby::TabLabel::TabLabel(Folder& folder, DocWindow& document):
 
 	InfTextBuffer* buffer = 
 		INF_TEXT_BUFFER(
-			inf_session_get_buffer(INF_SESSION(document.get_session())));
+			inf_session_get_buffer(
+				INF_SESSION(document.get_session())));
 	m_insert_text_handle = g_signal_connect_after(
 		G_OBJECT(buffer), "insert-text",
 		G_CALLBACK(on_insert_text_static), this);
@@ -123,9 +124,37 @@ Gobby::TabLabel::~TabLabel()
 	                            m_modified_changed_handle);
 	InfTextBuffer* buffer = 
 		INF_TEXT_BUFFER(
-			inf_session_get_buffer(INF_SESSION(m_document.get_session())));
+			inf_session_get_buffer(
+				INF_SESSION(m_document.get_session())));
 	g_signal_handler_disconnect(buffer, m_erase_text_handle);
 	g_signal_handler_disconnect(buffer, m_insert_text_handle);
+}
+
+void Gobby::TabLabel::on_style_changed(const Glib::RefPtr<Gtk::Style>& prev)
+{
+	Gtk::HBox::on_style_changed(prev);
+
+	static const gunichar dot_chars[] = {
+		0x270E, /* pencil */
+		0x26AB, /* medium black circle */
+		0x25CF, /* black circle */
+		0x002A, /* asterisk */
+		0x0000
+	};
+
+	// Find a glyph for the user dots
+	const gunichar* c;
+	for(c = dot_chars; *c; ++c)
+	{
+		m_dots.set_text(Glib::ustring(1, *c));
+		if(m_dots.get_layout()->get_unknown_glyphs_count() == 0)
+			break;
+	}
+
+	m_dot_char = *c;
+
+	// Update dots using this char
+	update_dots();
 }
 
 void Gobby::TabLabel::on_notify_editable()
@@ -155,7 +184,8 @@ void Gobby::TabLabel::on_changed(InfTextUser* author)
 {
 	if(m_folder.get_current_document() != &m_document)
 	{
-		// TODO: remove dot if all the user's new contributions where undone
+		// TODO: remove dot if all the user's
+		// new contributions where undone
 		if (std::find(m_changed_by.begin(), m_changed_by.end(), author)
 		    == m_changed_by.end())
 		{
@@ -165,8 +195,10 @@ void Gobby::TabLabel::on_changed(InfTextUser* author)
 
 		if(!m_changed)
 		{
-			InfSession* session = INF_SESSION(m_document.get_session());
-			if(inf_session_get_status(session) == INF_SESSION_RUNNING)
+			InfSession* session =
+				INF_SESSION(m_document.get_session());
+			if(inf_session_get_status(session) ==
+			   INF_SESSION_RUNNING)
 			{
 				m_changed = true;
 				update_color();
@@ -285,7 +317,7 @@ void Gobby::TabLabel::update_dots()
 		{
 			Gdk::Color c;
 			c.set_hsv(360.0 * inf_text_user_get_hue(i->get_user()), 0.6, 0.6);
-			markup += "<span color=\"" + c.to_string() + "\">\342\234\216</span>";
+			markup += "<span color=\"" + c.to_string() + "\">" + m_dot_char + "</span>";
 		}
 		m_dots.set_markup(markup);
 		m_dots.show();
