@@ -1,5 +1,10 @@
 2009-04-26  Armin Burgmeier  <armin@arbur.net>
 
+	* README:
+	* configure.ac: Post-release bump to 0.4.93, require libfinity-0.4.
+
+2009-04-26  Armin Burgmeier  <armin@arbur.net>
+
 	* === Released 0.4.92 ===
 
 	* README:
