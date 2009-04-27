@@ -26,18 +26,24 @@ Gobby::TaskSave::TaskSave(FileCommands& file_commands, DocWindow& document):
 			_("Choose a location to save document \"%1\" to"),
 			document.get_title()),
 		Gtk::FILE_CHOOSER_ACTION_SAVE),
-	m_document(&document)
+	m_document(&document),
+	m_running(false)
 {
 	get_folder().signal_document_removed().connect(
 		sigc::mem_fun( *this, &TaskSave::on_document_removed));
 }
 
-void Gobby::TaskSave::run() {
+void Gobby::TaskSave::run()
+{
+	// m_document will be set to NULL if it has been removed before run
+	// was called.
 	if(!m_document)
 	{
 		finish();
 		return;
 	}
+
+	m_running = true;
 
 	m_file_dialog.signal_response().connect(sigc::mem_fun(
 		*this, &TaskSave::on_response));
