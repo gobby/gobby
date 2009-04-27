@@ -50,6 +50,7 @@ public:
 		Task(FileCommands& file_commands);
 		virtual ~Task() = 0;
 
+		virtual void run() = 0;
 		void finish();
 
 		Gtk::Window& get_parent();

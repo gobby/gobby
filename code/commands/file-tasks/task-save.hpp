@@ -29,9 +29,11 @@ class TaskSave: public FileCommands::Task
 private:
 	FileChooser::Dialog m_file_dialog;
 	DocWindow* m_document;
+	bool m_running;
 
 public:
 	TaskSave(FileCommands& file_commands, DocWindow& document);
+	virtual void run();
 
 	void on_response(int response_id);
 	void on_document_removed(DocWindow& document);

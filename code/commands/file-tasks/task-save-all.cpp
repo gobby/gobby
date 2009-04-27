@@ -21,6 +21,9 @@
 Gobby::TaskSaveAll::TaskSaveAll(FileCommands& file_commands):
 	Task(file_commands)
 {
+}
+
+void Gobby::TaskSaveAll::run() {
 	typedef Gtk::Notebook_Helpers::PageList PageList;
 	PageList& pages = get_folder().pages();
 
@@ -91,6 +94,7 @@ void Gobby::TaskSaveAll::process_current()
 
 			m_task->signal_finished().connect(sigc::mem_fun(
 				*this, &TaskSaveAll::on_finished));
+			m_task->run();
 		}
 	}
 }

@@ -29,6 +29,7 @@ class TaskNew: public FileCommands::Task
 public:
 	TaskNew(FileCommands& file_commands);
 	virtual ~TaskNew();
+	virtual void run();
 
 protected:
 	void on_response(int response_id);

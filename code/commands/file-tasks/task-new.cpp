@@ -22,17 +22,21 @@
 Gobby::TaskNew::TaskNew(FileCommands& file_commands):
 	Task(file_commands)
 {
+}
+
+Gobby::TaskNew::~TaskNew()
+{
+	get_document_location_dialog().hide();
+}
+
+void Gobby::TaskNew::run()
+{
 	DocumentLocationDialog& dialog = get_document_location_dialog();
 
 	dialog.signal_response().connect(
 		sigc::mem_fun(*this, &TaskNew::on_response));
 	dialog.set_document_name(_("New Document"));
 	dialog.present();
-}
-
-Gobby::TaskNew::~TaskNew()
-{
-	get_document_location_dialog().hide();
 }
 
 void Gobby::TaskNew::on_response(int response_id)

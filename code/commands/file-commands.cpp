@@ -146,6 +146,7 @@ void Gobby::FileCommands::set_task(Task* task)
 	task->signal_finished().connect(sigc::mem_fun(
 		*this, &FileCommands::on_task_finished));
 	m_task.reset(task);
+  task->run();
 }
 
 void Gobby::FileCommands::on_document_changed(DocWindow* document)

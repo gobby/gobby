@@ -23,6 +23,17 @@ Gobby::TaskOpen::TaskOpen(FileCommands& file_commands,
                           const Glib::RefPtr<Gio::File>& file):
 	Task(file_commands), m_file(file)
 {
+}
+
+Gobby::TaskOpen::~TaskOpen()
+{
+	if(m_handle != get_status_bar().invalid_handle())
+		get_status_bar().remove_message(m_handle);
+	get_document_location_dialog().hide();
+}
+
+void Gobby::TaskOpen::run()
+{
 	static const gchar* const ATTR_DISPLAY_NAME =
 		G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME;
 
@@ -49,13 +60,6 @@ Gobby::TaskOpen::TaskOpen(FileCommands& file_commands,
 				sigc::mem_fun(*this, &TaskOpen::error),
 				ex.what()), false));
 	}
-}
-
-Gobby::TaskOpen::~TaskOpen()
-{
-	if(m_handle != get_status_bar().invalid_handle())
-		get_status_bar().remove_message(m_handle);
-	get_document_location_dialog().hide();
 }
 
 void Gobby::TaskOpen::on_query_info(

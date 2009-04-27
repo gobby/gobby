@@ -30,6 +30,8 @@ class TaskOpenFile: public FileCommands::Task
 public:
 	TaskOpenFile(FileCommands& file_commands);
 
+	virtual void run();
+
 private:
 	void on_file_response(int response_id);
 

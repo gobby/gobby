@@ -24,6 +24,10 @@ Gobby::TaskOpenFile::TaskOpenFile(FileCommands& file_commands):
 		_("Choose a text file to open"),
 		Gtk::FILE_CHOOSER_ACTION_OPEN)
 {
+}
+
+void Gobby::TaskOpenFile::run()
+{
 	m_file_dialog.signal_response().connect(sigc::mem_fun(
 		*this, &TaskOpenFile::on_file_response));
 
@@ -43,6 +47,7 @@ void Gobby::TaskOpenFile::on_file_response(int response_id)
 		m_open_task.reset(new TaskOpen(m_file_commands, file));
 		m_open_task->signal_finished().connect(
 			sigc::mem_fun(*this, &TaskOpenFile::finish));
+		m_open_task->run();
 	}
 	else
 	{

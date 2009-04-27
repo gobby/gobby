@@ -28,14 +28,23 @@ Gobby::TaskSave::TaskSave(FileCommands& file_commands, DocWindow& document):
 		Gtk::FILE_CHOOSER_ACTION_SAVE),
 	m_document(&document)
 {
-	m_file_dialog.signal_response().connect(sigc::mem_fun(
-		*this, &TaskSave::on_response));
 	get_folder().signal_document_removed().connect(
 		sigc::mem_fun( *this, &TaskSave::on_document_removed));
+}
+
+void Gobby::TaskSave::run() {
+	if(!m_document)
+	{
+		finish();
+		return;
+	}
+
+	m_file_dialog.signal_response().connect(sigc::mem_fun(
+		*this, &TaskSave::on_response));
 
 	const DocumentInfoStorage::Info* info =
 		get_document_info_storage().get_info(
-			document.get_info_storage_key());
+			m_document->get_info_storage_key());
 
 	if(info != NULL && !info->uri.empty())
 	{
@@ -44,7 +53,7 @@ Gobby::TaskSave::TaskSave(FileCommands& file_commands, DocWindow& document):
 	else
 	{
 		m_file_dialog.set_current_name(
-			document.get_title());
+			m_document->get_title());
 	}
 
 	m_file_dialog.present();
@@ -76,5 +85,10 @@ void Gobby::TaskSave::on_document_removed(DocWindow& document)
 {
 	// The document we are about to save was removed.
 	if(m_document == &document)
-		finish();
+	{
+		if(m_running)
+			finish();
+		else
+			m_document = NULL;
+	}
 }

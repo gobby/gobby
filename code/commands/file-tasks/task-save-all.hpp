@@ -30,6 +30,8 @@ class TaskSaveAll: public Gobby::FileCommands::Task
 public:
 	TaskSaveAll(FileCommands& file_commands);
 
+	virtual void run();
+
 private:
 	void on_document_removed(DocWindow& document);
 	void on_finished();

@@ -31,6 +31,8 @@ class TaskOpenLocation: public FileCommands::Task
 public:
 	TaskOpenLocation(FileCommands& file_commands);
 
+	virtual void run();
+
 private:
 	void on_response(int response_id);
 

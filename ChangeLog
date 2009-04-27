@@ -1,3 +1,24 @@
+2009-04-27  Benjamin Herr  <ben@0x539.de>
+
+	* code/commands/file-commands.cpp:
+	* code/commands/file-commands.hpp:
+	* code/commands/file-tasks/task-new.cpp:
+	* code/commands/file-tasks/task-new.hpp:
+	* code/commands/file-tasks/task-open-file.cpp:
+	* code/commands/file-tasks/task-open-file.hpp:
+	* code/commands/file-tasks/task-open-location.cpp:
+	* code/commands/file-tasks/task-open-location.hpp:
+	* code/commands/file-tasks/task-open.cpp:
+	* code/commands/file-tasks/task-open.hpp:
+	* code/commands/file-tasks/task-save-all.cpp:
+	* code/commands/file-tasks/task-save-all.hpp:
+	* code/commands/file-tasks/task-save.cpp:
+	* code/commands/file-tasks/task-save.hpp: Split most of all Task
+	constructors into a separate run() member function that is called by
+	FileCommands::set_task after resetting its current task. This ensures
+	that a new task only gets to mess with stuff after the old one's
+	destructor has been run.
+
 2009-04-26  Armin Burgmeier  <armin@arbur.net>
 
 	* README:

@@ -31,6 +31,8 @@ public:
 	         const Glib::RefPtr<Gio::File>& file);
 	virtual ~TaskOpen();
 
+	virtual void run();
+
 private:
 	void on_query_info(const Glib::RefPtr<Gio::AsyncResult>& result);
 	void on_location_response(int response_id);
