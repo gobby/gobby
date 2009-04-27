@@ -154,7 +154,7 @@ InfGtkBrowserModel* Gobby::DocumentLocationDialog::get_browser_model() const
 void Gobby::DocumentLocationDialog::set_single_document_mode()
 {
 	set_title(_("Select document's target location"));
-	m_name_label.set_text(
+	m_location_label.set_text(
 		_("Choose a directory to create the document into:"));
 	m_name_box.show();
 }
@@ -162,7 +162,7 @@ void Gobby::DocumentLocationDialog::set_single_document_mode()
 void Gobby::DocumentLocationDialog::set_multiple_document_mode()
 {
 	set_title(_("Select documents' target location"));
-	m_name_label.set_text(
+	m_location_label.set_text(
 		_("Choose a directory to create the documents into:"));
 	m_name_box.hide();
 }
