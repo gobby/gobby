@@ -21,17 +21,6 @@
 
 #include <gtkmm/stock.h>
 
-namespace
-{
-	bool operator==(const GtkTreeIter& iter1, const GtkTreeIter& iter2)
-	{
-		return iter1.stamp == iter2.stamp &&
-		       iter1.user_data == iter2.user_data &&
-		       iter1.user_data2 == iter2.user_data2 &&
-		       iter1.user_data3 == iter2.user_data3;
-	}
-}
-
 Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
                                                       InfGtkBrowserModel* m):
 	Gtk::Dialog(_("Select document's target location"), parent),

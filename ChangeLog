@@ -1,5 +1,11 @@
 2009-04-27  Armin Burgmeier  <armin@arbur.net>
 
+	* code/dialogs/document-location-dialog.cpp: Removed operator== for
+	two GtkTextIters, as it is not used anymore. We are forced to compare
+	TextPaths anyway.
+
+2009-04-27  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/file-tasks/task-save.cpp: Initialize m_running to
 	false in constructor, and set m_running to true in run().
 
