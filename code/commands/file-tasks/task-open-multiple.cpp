@@ -47,7 +47,7 @@ void Gobby::TaskOpenMultiple::run()
 		_("Opening multiple files..."),
 		0);
 
-	dialog.hide_document_name_entry();
+	dialog.set_multiple_document_mode();
 	dialog.present();
 }
 
@@ -57,7 +57,9 @@ void Gobby::TaskOpenMultiple::add_file(const Glib::RefPtr<Gio::File>& file)
 	{
 		file->query_info_async(
 			sigc::bind(
-				sigc::mem_fun(*this, &TaskOpenMultiple::on_query_info),
+				sigc::mem_fun(
+					*this,
+					&TaskOpenMultiple::on_query_info),
 				file),
 			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 		++m_query_counter;
@@ -81,7 +83,7 @@ void Gobby::TaskOpenMultiple::on_query_info(
 
 		m_files.push(FileInfo(file, info->get_display_name()));
 
-    // TODO: hide document name field in dialog
+		// TODO: hide document name field in dialog
 		// dialog.set_document_name(info->get_display_name());
 	}
 	catch(const Gio::Error& ex)
@@ -106,11 +108,13 @@ void Gobby::TaskOpenMultiple::on_location_response(int response_id)
 		g_assert(browser != NULL);
 
 		m_location.reset(
-			new NodeWatch(dialog.get_browser_model(), browser, &iter));
+			new NodeWatch(
+				dialog.get_browser_model(), browser, &iter));
 		m_location->signal_node_removed().connect(
 			sigc::bind(
 				sigc::mem_fun(*this, &TaskOpenMultiple::error),
-				_("Destination directory was deleted while opening documents")));
+				_("Destination directory was deleted while "
+				  "opening documents")));
 
 		if (m_query_counter == 0)
 			flush();

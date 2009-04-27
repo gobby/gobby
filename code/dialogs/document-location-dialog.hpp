@@ -45,8 +45,8 @@ public:
 	InfcBrowser* get_selected_directory(InfcBrowserIter* iter) const;
 	InfGtkBrowserModel* get_browser_model() const;
 
-	void show_document_name_entry();
-	void hide_document_name_entry();
+	void set_single_document_mode();
+	void set_multiple_document_mode();
 protected:
 	virtual void on_show();
 

@@ -73,7 +73,7 @@ void Gobby::TaskOpen::on_query_info(
 			m_file->query_info_finish(result);
 
 		dialog.set_document_name(info->get_display_name());
-    dialog.show_document_name_entry();
+		dialog.set_single_document_mode();
 		dialog.present();
 	}
 	catch(const Gio::Error& ex)

@@ -23,16 +23,18 @@
 
 Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
                                                       InfGtkBrowserModel* m):
-	Gtk::Dialog(_("Select document's target location"), parent),
+	Gtk::Dialog("", parent),
 	m_box(false, 6),
-	m_name_box(false, 6), m_name_label(_("Document Name:"), Gtk::ALIGN_RIGHT),
-	m_location_label(
-		_("Choose a directory to create the document into:"),
-		Gtk::ALIGN_LEFT),
+	m_name_box(false, 6),
+	m_name_label(_("Document Name:"), Gtk::ALIGN_RIGHT),
+	m_location_label("", Gtk::ALIGN_LEFT),
 	m_filter_model(inf_gtk_browser_model_filter_new(m)),
 	m_view(INF_GTK_BROWSER_VIEW(inf_gtk_browser_view_new_with_model(
 		INF_GTK_BROWSER_MODEL(m_filter_model))))
 {
+	// Default is single document mode:
+	set_single_document_mode();
+
 	m_name_label.show();
 	m_name_entry.show();
 	m_name_entry.set_activates_default(true);
@@ -145,16 +147,23 @@ InfcBrowser* Gobby::DocumentLocationDialog::get_selected_directory(
 InfGtkBrowserModel* Gobby::DocumentLocationDialog::get_browser_model() const
 {
 	return INF_GTK_BROWSER_MODEL(
-		gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(m_filter_model)));
+		gtk_tree_model_filter_get_model(
+			GTK_TREE_MODEL_FILTER(m_filter_model)));
 }
 
-void Gobby::DocumentLocationDialog::show_document_name_entry()
+void Gobby::DocumentLocationDialog::set_single_document_mode()
 {
+	set_title(_("Select document's target location"));
+	m_name_label.set_text(
+		_("Choose a directory to create the document into:"));
 	m_name_box.show();
 }
 
-void Gobby::DocumentLocationDialog::hide_document_name_entry()
+void Gobby::DocumentLocationDialog::set_multiple_document_mode()
 {
+	set_title(_("Select documents' target location"));
+	m_name_label.set_text(
+		_("Choose a directory to create the documents into:"));
 	m_name_box.hide();
 }
 

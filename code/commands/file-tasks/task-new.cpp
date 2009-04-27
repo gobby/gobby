@@ -36,7 +36,7 @@ void Gobby::TaskNew::run()
 	dialog.signal_response().connect(
 		sigc::mem_fun(*this, &TaskNew::on_response));
 	dialog.set_document_name(_("New Document"));
-  dialog.show_document_name_entry();
+	dialog.set_single_document_mode();
 	dialog.present();
 }
 
