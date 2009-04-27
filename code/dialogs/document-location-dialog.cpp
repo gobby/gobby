@@ -162,7 +162,7 @@ void Gobby::DocumentLocationDialog::on_show()
 {
 	Gtk::Dialog::on_show();
 
-	if (m_name_entry.is_visible())
+	if (m_name_box.is_visible())
 	{
 		m_name_entry.select_region(0, m_name_entry.get_text_length());
 		m_name_entry.grab_focus();
