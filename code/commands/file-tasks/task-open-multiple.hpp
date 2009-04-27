@@ -33,10 +33,11 @@ public:
 	TaskOpenMultiple(FileCommands& file_commands);
 	virtual ~TaskOpenMultiple();
 
+	virtual void run();
+
 	void add_file(const Glib::RefPtr<Gio::File>& file);
 
 private:
-	void on_idle();
 	void on_query_info(const Glib::RefPtr<Gio::AsyncResult>& result,
 	                   Glib::RefPtr<Gio::File> file);
 	void on_location_response(int response_id);

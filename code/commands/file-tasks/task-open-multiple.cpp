@@ -27,10 +27,6 @@
 Gobby::TaskOpenMultiple::TaskOpenMultiple(FileCommands& file_commands):
 	Task(file_commands), m_query_counter(0)
 {
-	Glib::signal_idle().connect(
-		sigc::bind_return(
-			sigc::mem_fun(*this, &TaskOpenMultiple::on_idle),
-			false));
 }
 
 Gobby::TaskOpenMultiple::~TaskOpenMultiple()
@@ -38,6 +34,21 @@ Gobby::TaskOpenMultiple::~TaskOpenMultiple()
 	if(m_handle != get_status_bar().invalid_handle())
 		get_status_bar().remove_message(m_handle);
 	get_document_location_dialog().hide();
+}
+
+void Gobby::TaskOpenMultiple::run()
+{
+	DocumentLocationDialog& dialog = get_document_location_dialog();
+	dialog.signal_response().connect(sigc::mem_fun(
+		*this, &TaskOpenMultiple::on_location_response));
+
+	m_handle = get_status_bar().add_message(
+		StatusBar::INFO,
+		_("Opening multiple files..."),
+		0);
+
+	dialog.hide_document_name_entry();
+	dialog.present();
 }
 
 void Gobby::TaskOpenMultiple::add_file(const Glib::RefPtr<Gio::File>& file)
@@ -55,21 +66,6 @@ void Gobby::TaskOpenMultiple::add_file(const Glib::RefPtr<Gio::File>& file)
 	{
 		error(ex.what());
 	}
-}
-
-void Gobby::TaskOpenMultiple::on_idle()
-{
-	DocumentLocationDialog& dialog = get_document_location_dialog();
-	dialog.signal_response().connect(sigc::mem_fun(
-		*this, &TaskOpenMultiple::on_location_response));
-
-	m_handle = get_status_bar().add_message(
-		StatusBar::INFO,
-		_("Opening multiple files..."),
-		0);
-
-	dialog.hide_document_name_entry();
-	dialog.present();
 }
 
 void Gobby::TaskOpenMultiple::on_query_info(
