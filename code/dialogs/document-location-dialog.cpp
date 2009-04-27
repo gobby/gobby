@@ -24,7 +24,8 @@
 Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
                                                       InfGtkBrowserModel* m):
 	Gtk::Dialog(_("Select document's target location"), parent),
-	m_table(3, 2), m_name_label(_("Document Name:"), Gtk::ALIGN_RIGHT),
+	m_box(false, 6),
+	m_name_box(false, 6), m_name_label(_("Document Name:"), Gtk::ALIGN_RIGHT),
 	m_location_label(
 		_("Choose a directory to create the document into:"),
 		Gtk::ALIGN_LEFT),
@@ -43,15 +44,14 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 	m_scroll.set_shadow_type(Gtk::SHADOW_IN);
 	m_scroll.show();
 
-	m_table.attach(m_name_label, 0, 1, 0, 1, Gtk::FILL, Gtk::FILL);
-	m_table.attach(m_name_entry, 1, 2, 0, 1,
-	               Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
-	m_table.attach(m_location_label, 0, 2, 1, 2,
-	               Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
-	m_table.attach(m_scroll, 0, 2, 2, 3,
-	               Gtk::FILL | Gtk::EXPAND, Gtk::FILL | Gtk::EXPAND);
-	m_table.set_spacings(6);
-	m_table.show();
+	m_name_box.pack_start(m_name_label, Gtk::PACK_SHRINK);
+	m_name_box.pack_start(m_name_entry, Gtk::PACK_EXPAND_WIDGET);
+	m_name_box.show();
+
+	m_box.pack_start(m_name_box, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_location_label, Gtk::PACK_SHRINK);
+	m_box.pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
+	m_box.show();
 
 	g_signal_connect(m_view, "selection-changed",
 	                 G_CALLBACK(on_selection_changed_static), this);
@@ -66,7 +66,7 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 	// Required to filter initial content:
 	gtk_tree_model_filter_refilter(GTK_TREE_MODEL_FILTER(m_filter_model));
 
-	get_vbox()->pack_start(m_table, Gtk::PACK_EXPAND_WIDGET);
+	get_vbox()->pack_start(m_box, Gtk::PACK_EXPAND_WIDGET);
 
 	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_ACCEPT);
@@ -147,12 +147,30 @@ InfGtkBrowserModel* Gobby::DocumentLocationDialog::get_browser_model() const
 	return INF_GTK_BROWSER_MODEL(
 		gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(m_filter_model)));
 }
+
+void Gobby::DocumentLocationDialog::show_document_name_entry()
+{
+	m_name_box.show();
+}
+
+void Gobby::DocumentLocationDialog::hide_document_name_entry()
+{
+	m_name_box.hide();
+}
+
 void Gobby::DocumentLocationDialog::on_show()
 {
 	Gtk::Dialog::on_show();
 
-	m_name_entry.select_region(0, m_name_entry.get_text_length());
-	m_name_entry.grab_focus();
+	if (m_name_entry.is_visible())
+	{
+		m_name_entry.select_region(0, m_name_entry.get_text_length());
+		m_name_entry.grab_focus();
+	}
+	else
+	{
+		gtk_widget_grab_focus(GTK_WIDGET(m_view));
+	}
 }
 
 void Gobby::DocumentLocationDialog::on_selection_changed(GtkTreeIter* iter)

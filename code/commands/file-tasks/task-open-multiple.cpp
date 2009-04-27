@@ -68,6 +68,7 @@ void Gobby::TaskOpenMultiple::on_idle()
 		_("Opening multiple files..."),
 		0);
 
+	dialog.hide_document_name_entry();
 	dialog.present();
 }
 

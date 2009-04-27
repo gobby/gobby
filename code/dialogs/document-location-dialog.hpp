@@ -43,7 +43,10 @@ public:
 	void set_document_name(const Glib::ustring& document_name);
 
 	InfcBrowser* get_selected_directory(InfcBrowserIter* iter) const;
-  InfGtkBrowserModel* get_browser_model() const;
+	InfGtkBrowserModel* get_browser_model() const;
+
+	void show_document_name_entry();
+	void hide_document_name_entry();
 protected:
 	virtual void on_show();
 
@@ -77,7 +80,9 @@ protected:
 
 	bool filter_visible_func(GtkTreeModel* model, GtkTreeIter* iter);
 
-	Gtk::Table m_table;
+  Gtk::VBox m_box;
+
+  Gtk::HBox m_name_box;
 	Gtk::Label m_name_label;
 	Gtk::Entry m_name_entry;
 
