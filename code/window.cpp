@@ -19,6 +19,7 @@
 #include "features.hpp"
 #include "window.hpp"
 
+#include "commands/file-tasks/task-open.hpp"
 #include "commands/file-tasks/task-open-multiple.hpp"
 #include "core/docwindow.hpp"
 #include "core/iconmanager.hpp"
@@ -32,7 +33,8 @@
 Gobby::Window::Window(const IconManager& icon_mgr,
                       Config& config,
                       UniqueApp* app,
-                      const char* const* commandline_args):
+                      const char* const* commandline_args,
+                      int commandline_args_size):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
 	m_preferences(m_config), m_icon_mgr(icon_mgr), m_app(app),
@@ -101,9 +103,14 @@ Gobby::Window::Window(const IconManager& icon_mgr,
 	set_default_size(800, 600);
 	set_role("Gobby");
 
-	// TODO: specialcase a single argument by respecting the file name
-	// entered into the location dialog (probably requires argc too)
-	if(*commandline_args)
+	if(commandline_args_size == 1)
+	{
+		TaskOpen* task = new TaskOpen(
+			m_commands_file,
+			Gio::File::create_for_commandline_arg(*commandline_args));
+		m_commands_file.set_task(task);
+	}
+	else if(commandline_args_size > 1)
 	{
 		TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
 		do {
@@ -221,12 +228,22 @@ try {
 	case UNIQUE_OPEN:
 		{
 			gchar** uris = unique_message_data_get_uris(message);
-			if (!uris)
+			if (!uris || !uris[0])
 				return UNIQUE_RESPONSE_FAIL;
-			TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
-			for (const gchar* const* p = uris; *p; ++p)
-				task->add_file(Gio::File::create_for_uri(*p));
-			m_commands_file.set_task(task);
+			if(uris[1]) // multiple files?
+			{
+				TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
+				for (const gchar* const* p = uris; *p; ++p)
+					task->add_file(Gio::File::create_for_uri(*p));
+				m_commands_file.set_task(task);
+			}
+			else
+			{
+				TaskOpen* task = new TaskOpen(
+					m_commands_file,
+					Gio::File::create_for_uri(*uris));
+				m_commands_file.set_task(task);
+			}
 			g_strfreev(uris);
 			return UNIQUE_RESPONSE_OK;
 		}
