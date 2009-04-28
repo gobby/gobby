@@ -82,9 +82,6 @@ void Gobby::TaskOpenMultiple::on_query_info(
 			file->query_info_finish(result);
 
 		m_files.push(FileInfo(file, info->get_display_name()));
-
-		// TODO: hide document name field in dialog
-		// dialog.set_document_name(info->get_display_name());
 	}
 	catch(const Gio::Error& ex)
 	{
