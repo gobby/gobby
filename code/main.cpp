@@ -130,8 +130,7 @@ int main(int argc, char* argv[]) try
 	bool new_instance = false;
 
 	// TODO: add --new-instance option to disable unique
-	UniqueApp* app = unique_app_new_with_commands(
-		"de.ox539.gobby", NULL, NULL);
+	UniqueApp* app = unique_app_new("de._0x539.gobby", NULL);
 
 	if (!new_instance && unique_app_is_running(app))
 	{
