@@ -30,12 +30,12 @@
 
 #include <gtkmm/frame.h>
 
-Gobby::Window::Window(const IconManager& icon_mgr,
+Gobby::Window::Window(unsigned int argc, const char* const argv[],
+                      const IconManager& icon_mgr,
                       Config& config,
-                      UniqueApp* app,
-                      const char* const* commandline_args,
-                      int commandline_args_size):
-	Gtk::Window(Gtk::WINDOW_TOPLEVEL), m_config(config),
+                      UniqueApp* app):
+	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
+	m_argc(argc), m_argv(argv), m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
 	m_preferences(m_config), m_icon_mgr(icon_mgr), m_app(app),
 	m_header(m_preferences, m_lang_manager),
@@ -102,28 +102,6 @@ Gobby::Window::Window(const IconManager& icon_mgr,
 
 	set_default_size(800, 600);
 	set_role("Gobby");
-
-	if(commandline_args_size == 1)
-	{
-		TaskOpen* task = new TaskOpen(
-			m_commands_file,
-			Gio::File::create_for_commandline_arg(
-				*commandline_args));
-		m_commands_file.set_task(task);
-	}
-	else if(commandline_args_size > 1)
-	{
-		TaskOpenMultiple* task =
-			new TaskOpenMultiple(m_commands_file);
-
-		do
-		{
-			task->add_file(
-				Gio::File::create_for_commandline_arg(
-					*commandline_args++));
-		} while(*commandline_args);
-		m_commands_file.set_task(task);
-	}
 }
 
 Gobby::Window::~Window()
@@ -211,6 +189,31 @@ void Gobby::Window::on_show()
 			sigc::mem_fun(*this,
 			              &Window::on_initial_dialog_hide));
 	}
+
+	// Open files passed on the command line
+	// TODO: Only do this when the Window is shown the first time
+	if(m_argc == 1)
+	{
+		Glib::RefPtr<Gio::File> file(
+			Gio::File::create_for_commandline_arg(m_argv[0]));
+		m_commands_file.set_task(new TaskOpen(m_commands_file, file));
+	}
+	else if(m_argc > 1)
+	{
+		TaskOpenMultiple* task =
+			new TaskOpenMultiple(m_commands_file);
+
+		const char* const* arg = m_argv;
+		do
+		{
+			Glib::RefPtr<Gio::File> file(
+				Gio::File::create_for_commandline_arg(*arg));
+			task->add_file(file);
+		} while(*++arg);
+
+		m_commands_file.set_task(task);
+	}
+
 }
 
 void Gobby::Window::on_initial_dialog_hide()

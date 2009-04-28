@@ -194,7 +194,7 @@ int main(int argc, char* argv[]) try
 	Gobby::Config config(Gobby::config_filename("config.xml"));
 
 	// Create window
-	Gobby::Window wnd(icon_manager, config, app, argv+1, argc-1);
+	Gobby::Window wnd(argc-1, argv+1, icon_manager, config, app);
 	g_object_unref(app);
 	wnd.show();
 

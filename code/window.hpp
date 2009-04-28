@@ -58,25 +58,14 @@ namespace Gobby
 class Window : public Gtk::Window
 {
 public:
-	Window(const IconManager& icon_mgr, Config& config, UniqueApp* app,
-	       const char* const* commandline_args, int commandline_args_size);
+	Window(unsigned int argc, const char* const argv[],
+	       const IconManager& icon_mgr, Config& config, UniqueApp* app);
 	~Window();
 
 	const Folder& get_folder() const { return m_folder; }
 	Folder& get_folder() { return m_folder; }
 
 protected:
-	// Gtk::Window overrides
-	virtual bool on_delete_event(GdkEventAny* event);
-	virtual bool on_key_press_event(GdkEventKey* event);
-
-	virtual void on_realize();
-	virtual void on_show();
-
-	void on_initial_dialog_hide();
-	UniqueResponse on_message_received(UniqueCommand command,
-	                                   UniqueMessageData* message,
-	                                   guint time);
 	static UniqueResponse
 	on_message_received_static(UniqueApp* app,
 	                           UniqueCommand command,
@@ -88,12 +77,34 @@ protected:
 			command, message, time);
 	}
 
+	// Gtk::Window overrides
+	virtual bool on_delete_event(GdkEventAny* event);
+	virtual bool on_key_press_event(GdkEventKey* event);
+
+	virtual void on_realize();
+	virtual void on_show();
+
+	void on_initial_dialog_hide();
+	UniqueResponse on_message_received(UniqueCommand command,
+	                                   UniqueMessageData* message,
+	                                   guint time);
+
+	// Command line arguments
+	// TODO: We only require these in on_show to initially open files
+	// passed on the command line. We can't do it in the constructor
+	// already, because otherwise the main window is shown after the
+	// document location dialog, and therefore ends up having focus,
+	// which it shouldn't. Maybe we'll find a better solution which does
+	// not require these member variables.
+	const char* const* m_argv;
+	const unsigned int m_argc;
+
 	// Config
 	Config& m_config;
 	GtkSourceLanguageManager* m_lang_manager;
 	Preferences m_preferences;
 	const IconManager& m_icon_mgr;
-  UniqueApp* m_app;
+	UniqueApp* m_app;
 
 	// GUI
 	Gtk::VBox m_mainbox;
