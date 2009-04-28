@@ -130,29 +130,34 @@ int main(int argc, char* argv[]) try
 	bool new_instance = false;
 
 	// TODO: add --new-instance option to disable unique
-	UniqueApp* app = unique_app_new_with_commands("de.ox539.gobby", NULL, NULL);
+	UniqueApp* app = unique_app_new_with_commands(
+		"de.ox539.gobby", NULL, NULL);
 
 	if (!new_instance && unique_app_is_running(app))
 	{
 		UniqueResponse response;
 		if (argc < 2)
 		{
-			response = unique_app_send_message(app, UNIQUE_ACTIVATE, NULL);
+			response = unique_app_send_message(
+				app, UNIQUE_ACTIVATE, NULL);
 		}
 		else
 		{
-			UniqueMessageData* message = unique_message_data_new();
+			UniqueMessageData* message =
+				unique_message_data_new();
 			std::vector<const gchar*> uris(argc);
 			std::vector<Glib::ustring> uri_strs(argc-1);
 			for (int i = 0; i < argc - 1; ++i) {
 				uri_strs[i] =
-					Gio::File::create_for_commandline_arg(argv[i+1])->get_uri();
+					Gio::File::create_for_commandline_arg(
+						argv[i+1])->get_uri();
 				uris[i] = uri_strs[i].c_str();
 			}
 
-			unique_message_data_set_uris(message, const_cast<gchar**>(&uris[0]));
-
-			response = unique_app_send_message(app, UNIQUE_OPEN, message);
+			unique_message_data_set_uris(
+				message, const_cast<gchar**>(&uris[0]));
+			response = unique_app_send_message(
+				app, UNIQUE_OPEN, message);
 			unique_message_data_free(message);
 		}
 

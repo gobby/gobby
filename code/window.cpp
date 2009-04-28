@@ -107,16 +107,21 @@ Gobby::Window::Window(const IconManager& icon_mgr,
 	{
 		TaskOpen* task = new TaskOpen(
 			m_commands_file,
-			Gio::File::create_for_commandline_arg(*commandline_args));
+			Gio::File::create_for_commandline_arg(
+				*commandline_args));
 		m_commands_file.set_task(task);
 	}
 	else if(commandline_args_size > 1)
 	{
-		TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
-		do {
+		TaskOpenMultiple* task =
+			new TaskOpenMultiple(m_commands_file);
+
+		do
+		{
 			task->add_file(
-				Gio::File::create_for_commandline_arg(*commandline_args++));
-		} while (*commandline_args);
+				Gio::File::create_for_commandline_arg(
+					*commandline_args++));
+		} while(*commandline_args);
 		m_commands_file.set_task(task);
 	}
 }
@@ -218,11 +223,13 @@ void Gobby::Window::on_initial_dialog_hide()
 UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
                                                   UniqueMessageData* message,
                                                   guint time)
-try {
-	switch (command) {
+try
+{
+	switch (command)
+	{
 	case UNIQUE_ACTIVATE:
 		gtk_window_set_screen(gobj(),
-													unique_message_data_get_screen(message));
+			unique_message_data_get_screen(message));
 		present(time);
 		return UNIQUE_RESPONSE_OK;
 	case UNIQUE_OPEN:
@@ -232,9 +239,12 @@ try {
 				return UNIQUE_RESPONSE_FAIL;
 			if(uris[1]) // multiple files?
 			{
-				TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
+				TaskOpenMultiple* task =
+					new TaskOpenMultiple(m_commands_file);
 				for (const gchar* const* p = uris; *p; ++p)
-					task->add_file(Gio::File::create_for_uri(*p));
+					task->add_file(
+						Gio::File::create_for_uri(
+							*p));
 				m_commands_file.set_task(task);
 			}
 			else
