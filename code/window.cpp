@@ -106,11 +106,11 @@ Gobby::Window::Window(const IconManager& icon_mgr,
 	if(*commandline_args)
 	{
 		TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
-		m_commands_file.set_task(task);
 		do {
 			task->add_file(
 				Gio::File::create_for_commandline_arg(*commandline_args++));
 		} while (*commandline_args);
+		m_commands_file.set_task(task);
 	}
 }
 
@@ -224,9 +224,9 @@ try {
 			if (!uris)
 				return UNIQUE_RESPONSE_FAIL;
 			TaskOpenMultiple* task = new TaskOpenMultiple(m_commands_file);
-			m_commands_file.set_task(task);
 			for (const gchar* const* p = uris; *p; ++p)
 				task->add_file(Gio::File::create_for_uri(*p));
+			m_commands_file.set_task(task);
 			g_strfreev(uris);
 			return UNIQUE_RESPONSE_OK;
 		}
