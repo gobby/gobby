@@ -53,12 +53,7 @@ void Gobby::TaskOpen::run()
 	}
 	catch(const Gio::Error& ex)
 	{
-		// Delay error report via idle handler, to give users a chance
-		// to connect to signal_finished().
-		Glib::signal_idle().connect(
-			sigc::bind_return(sigc::bind(
-				sigc::mem_fun(*this, &TaskOpen::error),
-				ex.what()), false));
+		error(ex.what());
 	}
 }
 

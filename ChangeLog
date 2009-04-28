@@ -1,3 +1,9 @@
+2009-04-28  Benjamin Herr  <ben@0x539.de>
+
+	* code/commands/file-tasks/task-open.cpp: Do not delay reporting
+	errors in Gobby::TaskOpen::run() anymore, since signal_finished will
+	already be connected to.
+
 2009-04-27  Armin Burgmeier  <armin@arbur.net>
 
 	* code/dialogs/document-location-dialog.cpp: Removed operator== for
