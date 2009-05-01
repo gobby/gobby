@@ -1,3 +1,8 @@
+2008-05-01  Armin Burgmeier  <armin@arbur.net>
+
+	* gobby-0.5.xpm: Added a 32x32 XPM of the gobby icon.
+	* Makefile.am: Distribute it.
+
 2009-04-28  Benjamin Herr  <ben@0x539.de>
 
 	* code/commands/file-tasks/task-open.cpp: Do not delay reporting

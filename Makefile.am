@@ -33,3 +33,7 @@ gobby_0_5_SOURCES =
 # correctly against libstdc++. See also #399. Note that this file does not
 # (need to) exist in the source tree.
 nodist_EXTRA_gobby_0_5_SOURCES = dummy.cpp
+
+# Debian seems to need an XPM of the program icon, so we provide one here.
+# It's currently not used for anything else, though.
+EXTRA_DIST = gobby-0.5.xpm
