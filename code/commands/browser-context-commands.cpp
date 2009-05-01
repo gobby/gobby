@@ -80,9 +80,7 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 			
 		// Watch the node, and close the popup menu when the node
 		// it refers to is removed.
-		m_watch.reset(new NodeWatch(
-			INF_GTK_BROWSER_MODEL(m_browser.get_store()),
-			browser, &iter));
+		m_watch.reset(new NodeWatch(browser, &iter));
 		m_watch->signal_node_removed().connect(sigc::mem_fun(
 			*this, &BrowserContextCommands::on_node_removed));
 
@@ -175,9 +173,7 @@ void Gobby::BrowserContextCommands::on_new(InfcBrowser* browser,
                                            InfcBrowserIter iter,
                                            bool directory)
 {
-	m_watch.reset(new NodeWatch(
-		INF_GTK_BROWSER_MODEL(m_browser.get_store()),
-		browser, &iter));
+	m_watch.reset(new NodeWatch(browser, &iter));
 	m_watch->signal_node_removed().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_new_node_removed));
 
@@ -206,9 +202,7 @@ void Gobby::BrowserContextCommands::on_new(InfcBrowser* browser,
 void Gobby::BrowserContextCommands::on_open(InfcBrowser* browser,
                                             InfcBrowserIter iter)
 {
-	m_watch.reset(new NodeWatch(
-		INF_GTK_BROWSER_MODEL(m_browser.get_store()),
-		browser, &iter));
+	m_watch.reset(new NodeWatch(browser, &iter));
 	m_watch->signal_node_removed().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_open_node_removed));
 

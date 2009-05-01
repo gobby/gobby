@@ -32,11 +32,9 @@ class NodeWatch
 public:
 	typedef sigc::signal<void> SignalNodeRemoved;
 
-	NodeWatch(InfGtkBrowserModel* model, InfcBrowser* browser,
-	          InfcBrowserIter* iter);
+	NodeWatch(InfcBrowser* browser, InfcBrowserIter* iter);
 	~NodeWatch();
 
-	InfGtkBrowserModel* get_model() const { return m_model; }
 	InfcBrowser* get_browser() const { return m_browser; }
 	bool get_browser_iter(InfcBrowserIter* iter) const;
 
@@ -45,14 +43,20 @@ public:
 		return m_signal_node_removed;
 	}
 protected:
-	static void on_set_browser_static(InfGtkBrowserModel* model,
-	                                  GtkTreePath* path,
-					  GtkTreeIter* iter,
-					  InfcBrowser* browser,
-					  gpointer user_data)
+	static void on_connection_notify_status_static(GObject* object,
+	                                               GParamSpec* pspec,
+	                                               gpointer user_data)
 	{
 		static_cast<NodeWatch*>(user_data)->
-			on_set_browser(model, iter, browser);
+			on_connection_notify_status();
+	}
+
+	static void on_browser_notify_connection_static(GObject* object,
+	                                                GParamSpec* pspec,
+							gpointer user_data)
+	{
+		static_cast<NodeWatch*>(user_data)->
+			on_browser_notify_connection();
 	}
 
 	static void on_node_removed_static(InfcBrowser* browser,
@@ -63,20 +67,23 @@ protected:
 			on_node_removed(browser, iter);
 	}
 
-	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
-	                    InfcBrowser* browser);
+	void on_connection_notify_status();
+	void on_browser_notify_connection();
 	void on_node_removed(InfcBrowser* browser, InfcBrowserIter* iter);
 
 	void reset();
 
-	InfGtkBrowserModel* m_model;
 	InfcBrowser* m_browser;
+	InfXmlConnection* m_connection;
 	InfcBrowserIter m_iter;
 
-	gulong m_set_browser_handler;
+	gulong m_connection_notify_status_handler;
+	gulong m_browser_notify_connection_handler;
 	gulong m_node_removed_handler;
 
 	SignalNodeRemoved m_signal_node_removed;
+private:
+	void set_connection(InfXmlConnection* connection);
 };
 
 }

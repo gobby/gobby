@@ -1,3 +1,12 @@
+2009-05-01  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/nodewatch.hpp:
+	* code/core/nodewatch.cpp: Removed the model from NodeWatch, instead
+	connect to browser's connection's notify::status to detect
+	disconnection.
+
+	* code/commands/browser-context-commands.cpp: Adapt.
+
 2008-05-01  Armin Burgmeier  <armin@arbur.net>
 
 	* gobby-0.5.xpm: Added a 32x32 XPM of the gobby icon.

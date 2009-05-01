@@ -18,50 +18,78 @@
 
 #include "core/nodewatch.hpp"
 
-Gobby::NodeWatch::NodeWatch(InfGtkBrowserModel* model, InfcBrowser* browser,
-                            InfcBrowserIter* iter):
-	m_model(model), m_browser(browser), m_iter(*iter)
+Gobby::NodeWatch::NodeWatch(InfcBrowser* browser, InfcBrowserIter* iter):
+	m_browser(browser), m_iter(*iter)
 {
-	m_set_browser_handler = g_signal_connect(m_model, "set-browser",
-	                 G_CALLBACK(on_set_browser_static), this);
+	// Need to have a connection for the browser, otherwise we can't
+	// reach that node anyway.
+
+	// TODO: (weak-)ref connection and browser?
+	m_connection = infc_browser_get_connection(browser);
+	g_assert(m_connection);
+
+	InfXmlConnectionStatus status;
+	g_object_get(G_OBJECT(m_connection), "status", &status, NULL);
+	g_assert(status == INF_XML_CONNECTION_OPEN);
+
+	m_browser_notify_connection_handler = g_signal_connect(
+		browser, "notify::connection",
+		G_CALLBACK(on_browser_notify_connection_static), this);
 	m_node_removed_handler = g_signal_connect(m_browser, "node-removed",
 	                 G_CALLBACK(on_node_removed_static), this);
+	m_connection_notify_status_handler = g_signal_connect(
+		m_connection, "notify::status",
+		G_CALLBACK(on_connection_notify_status_static), this);
 }
 
 Gobby::NodeWatch::~NodeWatch()
 {
-	if(m_model != NULL)
+	if(m_browser != NULL)
 		reset();
 }
 
-void Gobby::NodeWatch::on_set_browser(InfGtkBrowserModel* model,
-                                      GtkTreeIter* iter,
-				      InfcBrowser* browser)
+void Gobby::NodeWatch::on_browser_notify_connection()
 {
-        if(browser == NULL)
-        {
-                InfcBrowser* old_browser;
-                gtk_tree_model_get(
-                        GTK_TREE_MODEL(model), iter,
-                        INF_GTK_BROWSER_MODEL_COL_BROWSER, &old_browser,
-                        -1);
+	InfXmlConnection* connection = infc_browser_get_connection(m_browser);
 
-                if(old_browser == m_browser)
-		{
-			reset();
-			// Note that we want to allow signal handlers to
-			// delete the watch, so make sure we don't access
-			// member variables anymore after having emitted this.
-			m_signal_node_removed.emit();
-		}
+	if(connection)
+	{
+		// Connection changed on-the-fly. This isn't a problem for
+		// us if the watched node is still available (though I don't
+		// think this can happen currently).
+		InfXmlConnectionStatus status;
+		g_object_get(G_OBJECT(connection), "status", &status, NULL);
+		if(status == INF_XML_CONNECTION_OPEN)
+			set_connection(connection);
+		else
+			connection = NULL;
+	}
 
-                g_object_unref(old_browser);
-        }
+	if(!connection)
+	{
+		reset();
+		m_signal_node_removed.emit();
+	}
+}
+
+void Gobby::NodeWatch::on_connection_notify_status()
+{
+	InfXmlConnectionStatus status;
+	g_object_get(G_OBJECT(m_connection), "status", &status, NULL);
+
+	// Connection was closed: Node is no longer reachable
+	if(status != INF_XML_CONNECTION_OPEN)
+	{
+		reset();
+		m_signal_node_removed.emit();
+	}
 }
 
 void Gobby::NodeWatch::on_node_removed(InfcBrowser* browser,
                                        InfcBrowserIter* iter)
 {
+	g_assert(browser == m_browser);
+
         InfcBrowserIter test_iter = m_iter;
 
         do
@@ -81,9 +109,32 @@ void Gobby::NodeWatch::on_node_removed(InfcBrowser* browser,
 
 void Gobby::NodeWatch::reset()
 {
-	g_signal_handler_disconnect(m_model, m_set_browser_handler);
-	g_signal_handler_disconnect(m_browser, m_node_removed_handler);
+	g_assert(m_browser != NULL);
 
-	m_model = NULL;
+	set_connection(NULL);
+
+	g_signal_handler_disconnect(
+		m_browser, m_browser_notify_connection_handler);
+	g_signal_handler_disconnect(
+		m_browser, m_node_removed_handler);
+
 	m_browser = NULL;
+}
+
+void Gobby::NodeWatch::set_connection(InfXmlConnection* connection)
+{
+	if(m_connection != NULL)
+	{
+		g_signal_handler_disconnect(
+			m_connection, m_connection_notify_status_handler);
+	}
+
+	m_connection = connection;
+
+	if(connection != NULL)
+	{
+		m_connection_notify_status_handler = g_signal_connect(
+			m_connection, "notify::status",
+			G_CALLBACK(on_connection_notify_status_static), this);
+	}
 }
