@@ -33,7 +33,7 @@ class OperationOpen: public Operations::Operation, public sigc::trackable
 {
 public:
 	OperationOpen(Operations& operations, const Preferences& preferences,
-	              InfcBrowser* browser, InfcBrowserIter* parent,
+	              InfcBrowser* browser, const InfcBrowserIter* parent,
 	              const std::string& name, const std::string& uri,
 		      const char* encoding /* NULL means auto-detect */);
 

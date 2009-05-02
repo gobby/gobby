@@ -57,7 +57,7 @@ namespace
 Gobby::OperationOpen::OperationOpen(Operations& operations,
                                     const Preferences& preferences,
                                     InfcBrowser* browser,
-                                    InfcBrowserIter* parent,
+                                    const InfcBrowserIter* parent,
                                     const std::string& name,
                                     const std::string& uri,
                                     const char* encoding):
@@ -431,8 +431,9 @@ void Gobby::OperationOpen::error(const Glib::ustring& message)
 {
 	get_status_bar().add_message(
 		StatusBar::ERROR,
-		Glib::ustring::compose(_("Failed to open document \"%1\": %2"),
-		                         m_file->get_uri(), message), 5);
+		Glib::ustring::compose(
+			_("Failed to open document \"%1\": %2"),
+			m_file->get_uri(), message), 5);
 
 	fail();
 }

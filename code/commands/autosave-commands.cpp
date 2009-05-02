@@ -208,8 +208,8 @@ Gobby::AutosaveCommands::AutosaveCommands(Folder& folder,
                                           Operations& operations,
                                           const DocumentInfoStorage& storage,
 					  const Preferences& preferences):
-	m_folder(folder), m_info_storage(storage),
-	m_operations(operations), m_preferences(preferences)
+	m_folder(folder), m_operations(operations),
+	m_info_storage(storage), m_preferences(preferences)
 {
 	m_folder.signal_document_added().connect(
 		sigc::mem_fun(*this, &AutosaveCommands::on_document_added));
@@ -284,7 +284,9 @@ void Gobby::AutosaveCommands::on_autosave_enabled_changed()
 {
 	if(m_preferences.editor.autosave_enabled)
 	{
-		for(unsigned int i = 0; i < m_folder.get_n_pages(); ++ i)
+		for(unsigned int i = 0;
+		    i < static_cast<unsigned int>(m_folder.get_n_pages());
+		    ++i)
 		{
 			DocWindow* document = static_cast<DocWindow*>(
 				m_folder.get_nth_page(i));

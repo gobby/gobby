@@ -28,7 +28,7 @@ class OperationDelete: public Operations::Operation
 {
 public:
 	OperationDelete(Operations& operations, InfcBrowser* browser,
-	                InfcBrowserIter* iter);
+	                const InfcBrowserIter* iter);
 
 	virtual ~OperationDelete();
 

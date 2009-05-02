@@ -23,7 +23,7 @@
 
 Gobby::OperationNew::OperationNew(Operations& operations,
                                   InfcBrowser* browser,
-                                  InfcBrowserIter* parent,
+                                  const InfcBrowserIter* parent,
                                   const Glib::ustring& name,
                                   bool directory):
 	Operation(operations), m_name(name), m_directory(directory)

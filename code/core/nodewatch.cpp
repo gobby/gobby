@@ -18,7 +18,8 @@
 
 #include "core/nodewatch.hpp"
 
-Gobby::NodeWatch::NodeWatch(InfcBrowser* browser, InfcBrowserIter* iter):
+Gobby::NodeWatch::NodeWatch(InfcBrowser* browser,
+                            const InfcBrowserIter* iter):
 	m_browser(browser), m_iter(*iter)
 {
 	// Need to have a connection for the browser, otherwise we can't

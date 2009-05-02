@@ -34,6 +34,7 @@ namespace Gobby
 
 class OperationNew;
 class OperationOpen;
+class OperationOpenMultiple;
 class OperationSave;
 class OperationDelete;
 
@@ -75,9 +76,10 @@ public:
 			m_operations.finish_operation(this);
 		}
 
+		Operations& m_operations;
+
 	private:
 		SignalFinished m_signal_finished;
-		Operations& m_operations;
 	};
 
 	typedef sigc::signal<void, OperationSave*> SignalBeginSaveOperation;
@@ -86,19 +88,24 @@ public:
 	~Operations();
 
 	OperationNew* create_directory(InfcBrowser* browser,
-	                               InfcBrowserIter* parent,
+	                               const InfcBrowserIter* parent,
 	                               const Glib::ustring& name);
 
 	OperationNew* create_document(InfcBrowser* browser,
-	                              InfcBrowserIter* parent,
+	                              const InfcBrowserIter* parent,
 	                              const Glib::ustring& name);
 
 	OperationOpen* create_document(InfcBrowser* browser,
-	                               InfcBrowserIter* parent,
+	                               const InfcBrowserIter* parent,
 	                               const Glib::ustring& name,
 	                               const Preferences& preferences,
 	                               const Glib::ustring& from_uri,
 	                               const char* encoding);
+
+	OperationOpenMultiple* create_documents(InfcBrowser* browser,
+	                                        const InfcBrowserIter* parent,
+	                                        const Preferences& prefs,
+	                                        unsigned int num_uris);
 
 	OperationSave* save_document(DocWindow& document,
 	                             Folder& folder,
@@ -107,7 +114,7 @@ public:
 	                             DocumentInfoStorage::EolStyle eol_style);
 
 	OperationDelete* delete_node(InfcBrowser* browser,
-	                             InfcBrowserIter* iter);
+	                             const InfcBrowserIter* iter);
 
 	OperationSave* get_save_operation_for_document(DocWindow& window);
 

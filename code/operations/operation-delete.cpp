@@ -21,7 +21,7 @@
 
 Gobby::OperationDelete::OperationDelete(Operations& operations,
                                         InfcBrowser* browser,
-                                        InfcBrowserIter* iter):
+                                        const InfcBrowserIter* iter):
 	Operation(operations),
 	m_name(infc_browser_iter_get_name(browser, iter))
 {

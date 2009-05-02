@@ -18,6 +18,7 @@
 
 #include "operations/operation-new.hpp"
 #include "operations/operation-open.hpp"
+#include "operations/operation-open-multiple.hpp"
 #include "operations/operation-save.hpp"
 #include "operations/operation-delete.hpp"
 
@@ -45,7 +46,7 @@ Gobby::Operations::~Operations()
 
 Gobby::OperationNew*
 Gobby::Operations::create_directory(InfcBrowser* browser,
-                                    InfcBrowserIter* parent,
+                                    const InfcBrowserIter* parent,
                                     const Glib::ustring& name)
 {
 	OperationNew* op = new OperationNew(*this, browser, parent,
@@ -57,7 +58,7 @@ Gobby::Operations::create_directory(InfcBrowser* browser,
 
 Gobby::OperationNew*
 Gobby::Operations::create_document(InfcBrowser* browser,
-                                   InfcBrowserIter* parent,
+                                   const InfcBrowserIter* parent,
                                    const Glib::ustring& name)
 {
 	OperationNew* op = new OperationNew(*this, browser, parent,
@@ -69,7 +70,7 @@ Gobby::Operations::create_document(InfcBrowser* browser,
 
 Gobby::OperationOpen*
 Gobby::Operations::create_document(InfcBrowser* browser,
-                                   InfcBrowserIter* parent,
+                                   const InfcBrowserIter* parent,
                                    const Glib::ustring& name,
                                    const Preferences& preferences,
                                    const Glib::ustring& from_uri,
@@ -78,6 +79,20 @@ Gobby::Operations::create_document(InfcBrowser* browser,
 	OperationOpen* op = new OperationOpen(*this, preferences, browser,
 	                                      parent, name, from_uri,
 	                                      encoding);
+
+	m_operations.insert(op);
+	return op;
+}
+
+Gobby::OperationOpenMultiple*
+Gobby::Operations::create_documents(InfcBrowser* browser,
+                                    const InfcBrowserIter* parent,
+                                    const Preferences& prefs,
+                                    unsigned int num_uris)
+{
+	OperationOpenMultiple* op = new OperationOpenMultiple(*this, prefs,
+	                                                      browser, parent,
+	                                                      num_uris);
 
 	m_operations.insert(op);
 	return op;
@@ -106,7 +121,7 @@ Gobby::Operations::save_document(DocWindow& document,
 
 Gobby::OperationDelete*
 Gobby::Operations::delete_node(InfcBrowser* browser,
-                               InfcBrowserIter* iter)
+                               const InfcBrowserIter* iter)
 {
 	OperationDelete* op = new OperationDelete(*this, browser, iter);
 	m_operations.insert(op);

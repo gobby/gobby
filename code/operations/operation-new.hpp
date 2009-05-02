@@ -28,7 +28,7 @@ class OperationNew: public Operations::Operation
 {
 public:
 	OperationNew(Operations& operations, InfcBrowser* browser,
-	             InfcBrowserIter* parent, const Glib::ustring& name,
+	             const InfcBrowserIter* parent, const Glib::ustring& name,
 	             bool directory);
 
 	virtual ~OperationNew();

@@ -32,7 +32,7 @@ class NodeWatch
 public:
 	typedef sigc::signal<void> SignalNodeRemoved;
 
-	NodeWatch(InfcBrowser* browser, InfcBrowserIter* iter);
+	NodeWatch(InfcBrowser* browser, const InfcBrowserIter* iter);
 	~NodeWatch();
 
 	InfcBrowser* get_browser() const { return m_browser; }

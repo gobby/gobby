@@ -208,7 +208,7 @@ void Gobby::Window::on_show()
 		{
 			Glib::RefPtr<Gio::File> file(
 				Gio::File::create_for_commandline_arg(*arg));
-			task->add_file(file);
+			task->add_file(file->get_uri());
 		} while(*++arg);
 
 		m_commands_file.set_task(task);
@@ -245,9 +245,7 @@ try
 				TaskOpenMultiple* task =
 					new TaskOpenMultiple(m_commands_file);
 				for (const gchar* const* p = uris; *p; ++p)
-					task->add_file(
-						Gio::File::create_for_uri(
-							*p));
+					task->add_file(*p);
 				m_commands_file.set_task(task);
 			}
 			else

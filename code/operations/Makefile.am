@@ -5,6 +5,7 @@ libgobby_operations_a_SOURCES = \
 	operation-delete.cpp \
 	operation-new.cpp \
 	operation-open.cpp \
+	operation-open-multiple.cpp \
 	operation-save.cpp
 
 noinst_HEADERS = \
@@ -12,6 +13,7 @@ noinst_HEADERS = \
         operation-delete.hpp \
         operation-new.hpp \
         operation-open.hpp \
+	operation-open-multiple.hpp \
         operation-save.hpp
 
 appicondir = $(datadir)/pixmaps

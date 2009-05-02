@@ -20,9 +20,8 @@
 #define _GOBBY_FILE_TASK_OPEN_MULTIPLE_HPP_
 
 #include "commands/file-commands.hpp"
-#include "core/nodewatch.hpp"
 
-#include <queue>
+#include <vector>
 
 namespace Gobby
 {
@@ -35,16 +34,11 @@ public:
 
 	virtual void run();
 
-	void add_file(const Glib::RefPtr<Gio::File>& file);
+	void add_file(const Glib::ustring& uri);
 
 private:
-	void on_query_info(const Glib::RefPtr<Gio::AsyncResult>& result,
-	                   Glib::RefPtr<Gio::File> file);
 	void on_location_response(int response_id);
-	void flush();
-	void error(const Glib::ustring& message);
 
-	StatusBar::MessageHandle m_handle;
 	struct FileInfo {
 		FileInfo(const Glib::RefPtr<Gio::File>& f,
 		         const Glib::ustring& n) : file(f), name(n) {}
@@ -53,9 +47,8 @@ private:
 		Glib::ustring name;
 	};
 
-	std::queue<FileInfo> m_files;
-	unsigned int m_query_counter;
-	std::auto_ptr<NodeWatch> m_location;
+	typedef std::vector<Glib::ustring> uri_list;
+	uri_list m_uris;
 };
 
 } // namespace Gobby
