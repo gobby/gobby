@@ -21,6 +21,7 @@
 
 #include "operations/operations.hpp"
 #include "core/documentinfostorage.hpp"
+#include "core/nodewatch.hpp"
 
 #include <giomm/file.h>
 #include <giomm/inputstream.h>
@@ -40,15 +41,6 @@ public:
 
 protected:
 	static void
-	on_node_removed_static(InfcBrowser* browser,
-	                       InfcBrowserIter* iter,
-	                       gpointer user_data)
-	{
-		static_cast<OperationOpen*>(user_data)->
-			on_node_removed(iter);
-	}
-
-	static void
 	on_request_failed_static(InfcNodeRequest* request,
 	                         const GError* error,
 	                         gpointer user_data)
@@ -66,7 +58,7 @@ protected:
 			on_request_finished(iter);
 	}
 
-	void on_node_removed(InfcBrowserIter* iter);
+	void on_node_removed();
 
 	void on_file_read(const Glib::RefPtr<Gio::AsyncResult>& result);
 	void on_stream_read(const Glib::RefPtr<Gio::AsyncResult>& result);
@@ -82,9 +74,7 @@ protected:
 protected:
 	const Preferences& m_preferences;
 	std::string m_name;
-	InfcBrowser* m_browser;
-	InfcBrowserIter m_parent;
-	gulong m_node_removed_id;
+	NodeWatch m_parent;
 
 	int m_encoding_auto_detect_index;
 	std::auto_ptr<Glib::IConv> m_iconv;

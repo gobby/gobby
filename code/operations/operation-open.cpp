@@ -29,13 +29,6 @@
 
 namespace
 {
-	bool operator==(const InfcBrowserIter& iter1,
-	                const InfcBrowserIter& iter2)
-	{
-		return iter1.node == iter2.node &&
-		       iter1.node_id == iter2.node_id;
-	}
-
 	// These are the charsets that we try to convert a file from when
 	// autodetecting the encoding.
 	const char* get_autodetect_encoding(unsigned int index)
@@ -69,8 +62,7 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
                                     const std::string& uri,
                                     const char* encoding):
 	Operation(operations), m_preferences(preferences), m_name(name),
-	m_browser(browser), m_parent(*parent),
-	m_encoding_auto_detect_index(-1),
+	m_parent(browser, parent), m_encoding_auto_detect_index(-1),
 	m_eol_style(DocumentInfoStorage::EOL_CR), m_request(NULL),
 	m_finished_id(0), m_failed_id(0), m_raw_pos(0)
 {
@@ -97,12 +89,11 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 			Glib::ustring::compose(
 				_("Opening document %1..."), uri), 0);
 
-		m_node_removed_id = g_signal_connect(
-			G_OBJECT(m_browser), "node-removed",
-			G_CALLBACK(&on_node_removed_static), this);
+		m_parent.signal_node_removed().connect(
+			sigc::mem_fun(
+				*this, &OperationOpen::on_node_removed));
 
 		m_content = GTK_TEXT_BUFFER(gtk_source_buffer_new(NULL));
-		g_object_ref(m_browser);
 	}
 	catch(const Gio::Error& err)
 	{
@@ -113,12 +104,6 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 Gobby::OperationOpen::~OperationOpen()
 {
 	// TODO: Cancel outstanding async operations?
-
-	if(m_browser != NULL)
-	{
-		g_signal_handler_disconnect(m_browser, m_node_removed_id);
-		g_object_unref(m_browser);
-	}
 
 	if(m_request != NULL)
 	{
@@ -131,19 +116,10 @@ Gobby::OperationOpen::~OperationOpen()
 	get_status_bar().remove_message(m_message_handle);
 }
 
-void Gobby::OperationOpen::on_node_removed(InfcBrowserIter* iter)
+void Gobby::OperationOpen::on_node_removed()
 {
-	InfcBrowserIter check = m_parent;
-
-	do
-	{
-		if(*iter == check)
-		{
-			error(_("The directory into which the new document "
-			        "should have been inserted was removed"));
-			return;
-		}
-	} while(infc_browser_iter_get_parent(m_browser, &check));
+	error(_("The directory into which the new document "
+	        "was supposed to be inserted has been removed"));
 }
 
 void Gobby::OperationOpen::on_file_read(
@@ -397,11 +373,12 @@ void Gobby::OperationOpen::read_finish()
 		inf_text_gtk_buffer_new(m_content, user_table);
 	g_object_unref(user_table);
 
+	InfcBrowser* browser = m_parent.get_browser();
 	InfCommunicationManager* communication_manager =
-		infc_browser_get_communication_manager(m_browser);
+		infc_browser_get_communication_manager(browser);
 
 	InfIo* io;
-	g_object_get(G_OBJECT(m_browser), "io", &io, NULL);
+	g_object_get(G_OBJECT(browser), "io", &io, NULL);
 
 	InfTextSession* session = inf_text_session_new_with_user_table(
 		communication_manager, INF_TEXT_BUFFER(text_gtk_buffer), io,
@@ -411,8 +388,8 @@ void Gobby::OperationOpen::read_finish()
 	g_object_unref(text_gtk_buffer);
 
 	m_request = infc_browser_add_note_with_content(
-		m_browser, &m_parent, m_name.c_str(), Plugins::TEXT,
-		INF_SESSION(session), TRUE);
+		m_parent.get_browser(), &m_parent.get_browser_iter(),
+		m_name.c_str(), Plugins::TEXT, INF_SESSION(session), TRUE);
 	g_object_unref(session);
 
 	// Note infc_browser_add_note_with_content does not return a
@@ -425,6 +402,10 @@ void Gobby::OperationOpen::read_finish()
 	m_finished_id = g_signal_connect(
 		G_OBJECT(m_request), "finished",
 		G_CALLBACK(on_request_finished_static), this);
+
+	// TODO: We can remove the node watch here, but need to have the
+	// browser available in on_request_finished then. Maybe just
+	// disconnect the signal, or bind it.
 }
 
 void Gobby::OperationOpen::on_request_failed(const GError* error)
@@ -441,7 +422,7 @@ void Gobby::OperationOpen::on_request_finished(InfcBrowserIter* iter)
 	info.uri = m_file->get_uri();
 	info.encoding = m_encoding;
 	info.eol_style = m_eol_style;
-	get_info_storage().set_info(m_browser, iter, info);
+	get_info_storage().set_info(m_parent.get_browser(), iter, info);
 
 	finish();
 }
