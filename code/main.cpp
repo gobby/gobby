@@ -87,6 +87,7 @@ int main(int argc, char* argv[]) try
 	bindtextdomain(GETTEXT_PACKAGE, gobby_localedir().c_str());
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 
+	bool new_instance = false;
 	bool display_version = false;
 
 	Glib::OptionGroup opt_group_gobby("gobby",
@@ -97,6 +98,14 @@ int main(int argc, char* argv[]) try
 	opt_version.set_description(
 		_("Display version information and exit"));
 	opt_group_gobby.add_entry(opt_version, display_version);
+
+	Glib::OptionEntry opt_new_instance;
+	opt_new_instance.set_short_name('n');
+	opt_new_instance.set_long_name("new-instance");
+	opt_new_instance.set_description(
+		_("Also start a new Gobby instance when there is one "
+		  "running already"));
+	opt_group_gobby.add_entry(opt_new_instance, new_instance);
 
 	Glib::OptionContext opt_ctx;
 	opt_ctx.set_help_enabled(true);
@@ -127,9 +136,6 @@ int main(int argc, char* argv[]) try
 		return EXIT_SUCCESS;
 	}
 
-	bool new_instance = false;
-
-	// TODO: add --new-instance option to disable unique
 	UniqueApp* app = unique_app_new("de._0x539.gobby", NULL);
 
 	if (!new_instance && unique_app_is_running(app))
