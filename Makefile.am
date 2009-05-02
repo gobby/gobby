@@ -16,6 +16,7 @@ gobby_0_5_LDADD = \
 	code/core/libgobby-core.a \
 	code/util/libgobby-util.a \
 	$(gobby_LIBS) \
+	$(unique_LIBS) \
 	$(infinote_LIBS) \
 	$(LIBS)
 

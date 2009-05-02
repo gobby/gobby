@@ -42,6 +42,6 @@ pixmapdir = $(datadir)/pixmaps/gobby-0.5
 # ICONS_DIR is required by iconmanager.cpp to get access to the private icons
 # that are installed into prefix/share/gobby-0.5/icons instead of
 # prefix/share/icons.
-AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
+AM_CPPFLAGS = $(gobby_CFLAGS) $(unique_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code \
 	      -DICONS_DIR=\""$(datadir)/gobby-0.5/icons"\"

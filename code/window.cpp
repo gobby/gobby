@@ -32,12 +32,18 @@
 
 Gobby::Window::Window(unsigned int argc, const char* const argv[],
                       const IconManager& icon_mgr,
-                      Config& config,
-                      UniqueApp* app):
+                      Config& config
+#ifdef WITH_UNIQUE
+                      , UniqueApp* app
+#endif
+                      ):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
 	m_argc(argc), m_argv(argv), m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
-	m_preferences(m_config), m_icon_mgr(icon_mgr), m_app(app),
+	m_preferences(m_config), m_icon_mgr(icon_mgr),
+#ifdef WITH_UNIQUE
+	m_app(app),
+#endif
 	m_header(m_preferences, m_lang_manager),
 	m_browser(*this, Plugins::TEXT, m_statusbar, m_preferences),
 	m_folder(m_preferences, m_lang_manager),
@@ -60,11 +66,13 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_commands_help(*this, m_header, m_icon_mgr),
 	m_title_bar(*this, m_folder)
 {
+#ifdef WITH_UNIQUE
 	g_object_ref(app);
 
 	unique_app_watch_window(app, gobj());
 	g_signal_connect(app, "message-received",
 	                 G_CALLBACK(on_message_received_static), this);
+#endif // WITH_UNIQUE
 
 	m_header.show();
 	m_browser.show();
@@ -108,7 +116,10 @@ Gobby::Window::~Window()
 {
 	// Serialise preferences into config
 	m_preferences.serialize(m_config);
+
+#ifdef WITH_UNIQUE
 	g_object_unref(m_app);
+#endif
 }
 
 bool Gobby::Window::on_delete_event(GdkEventAny* event)
@@ -223,6 +234,7 @@ void Gobby::Window::on_initial_dialog_hide()
 	m_config.get_root()["initial"].set_value("run", true);
 }
 
+#ifdef WITH_UNIQUE
 UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
                                                   UniqueMessageData* message,
                                                   guint time)
@@ -265,3 +277,4 @@ try
 	g_assert_not_reached();
 	return UNIQUE_RESPONSE_FAIL;
 }
+#endif // WITH_UNIQUE

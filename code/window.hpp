@@ -48,7 +48,9 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
 
-#include <unique/unique.h>
+#ifdef WITH_UNIQUE
+# include <unique/unique.h>
+#endif
 
 #include <memory>
 
@@ -59,13 +61,18 @@ class Window : public Gtk::Window
 {
 public:
 	Window(unsigned int argc, const char* const argv[],
-	       const IconManager& icon_mgr, Config& config, UniqueApp* app);
+	       const IconManager& icon_mgr, Config& config
+#ifdef WITH_UNIQUE
+	       , UniqueApp* app
+#endif
+	       );
 	~Window();
 
 	const Folder& get_folder() const { return m_folder; }
 	Folder& get_folder() { return m_folder; }
 
 protected:
+#ifdef WITH_UNIQUE
 	static UniqueResponse
 	on_message_received_static(UniqueApp* app,
 	                           UniqueCommand command,
@@ -76,6 +83,7 @@ protected:
 		return static_cast<Window*>(user_data)->on_message_received(
 			command, message, time);
 	}
+#endif
 
 	// Gtk::Window overrides
 	virtual bool on_delete_event(GdkEventAny* event);
@@ -85,9 +93,12 @@ protected:
 	virtual void on_show();
 
 	void on_initial_dialog_hide();
+
+#ifdef WITH_UNIQUE
 	UniqueResponse on_message_received(UniqueCommand command,
 	                                   UniqueMessageData* message,
 	                                   guint time);
+#endif
 
 	// Command line arguments
 	// TODO: We only require these in on_show to initially open files
@@ -104,7 +115,10 @@ protected:
 	GtkSourceLanguageManager* m_lang_manager;
 	Preferences m_preferences;
 	const IconManager& m_icon_mgr;
+
+#ifdef WITH_UNIQUE
 	UniqueApp* m_app;
+#endif
 
 	// GUI
 	Gtk::VBox m_mainbox;

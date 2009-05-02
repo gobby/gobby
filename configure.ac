@@ -36,7 +36,7 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-required_libs="libxml++-2.6 glibmm-2.4 >= 2.16.0 giomm-2.4 >= 2.16.4 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0 unique-1.0"
+required_libs="libxml++-2.6 glibmm-2.4 >= 2.16.0 giomm-2.4 >= 2.16.4 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0"
 
 # Check if we are running on OS X, for special link handling.
 if test "x$build_vendor" = "xapple" ; then
@@ -53,6 +53,23 @@ AC_CACHE_SAVE
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [$required_libs])
 PKG_CHECK_MODULES([infinote], [libinfinity-0.4 libinftext-0.4 libinfgtk-0.4 libinftextgtk-0.4])
+AC_CACHE_SAVE
+
+# Check for unique (optional)
+AC_ARG_WITH([unique], AS_HELP_STRING([--with-unique],
+            [Enables support for single-instance [[default=auto]]]),
+            [use_unique=$withval], [use_unique=auto])
+if test "x$use_unique" = "xauto"; then
+  PKG_CHECK_MODULES([unique], [unique-1.0], [use_unique=yes], [use_unique=no])
+elif test "x$use_unique" = "xyes"; then
+  PKG_CHECK_MODULES([unique], [unique-1.0])
+fi
+
+if test "x$use_unique" = "xyes"; then
+  AC_DEFINE([WITH_UNIQUE], 1, [Whether support for unique is enabled])
+fi
+
+AM_CONDITIONAL([WITH_UNIQUE], test "x$use_unique" = "xyes")
 AC_CACHE_SAVE
 
 # As we could not yet auto-detect the GNOME desktop environment, it's the

@@ -33,7 +33,9 @@
 #include <glibmm/optiongroup.h>
 #include <glibmm/optioncontext.h>
 
-#include <unique/unique.h>
+#ifdef WITH_UNIQUE
+# include <unique/unique.h>
+#endif
 
 #include <libintl.h> // bindtextdomain
 #include <iostream>
@@ -136,6 +138,7 @@ int main(int argc, char* argv[]) try
 		return EXIT_SUCCESS;
 	}
 
+#ifdef WITH_UNIQUE
 	UniqueApp* app = unique_app_new("de._0x539.gobby", NULL);
 
 	if (!new_instance && unique_app_is_running(app))
@@ -181,6 +184,7 @@ int main(int argc, char* argv[]) try
 			return -1;
 		}
 	}
+#endif // WITH_UNIQUE
 
 	GError* error = NULL;
 	if(!inf_init(&error))
@@ -199,8 +203,20 @@ int main(int argc, char* argv[]) try
 	Gobby::Config config(Gobby::config_filename("config.xml"));
 
 	// Create window
-	Gobby::Window wnd(argc-1, argv+1, icon_manager, config, app);
+	Gobby::Window wnd(
+		argc-1,
+		argv+1,
+		icon_manager,
+		config
+#ifdef WITH_UNIQUE
+		, app
+#endif
+		);
+
+#ifdef WITH_UNIQUE
 	g_object_unref(app);
+#endif
+
 	wnd.show();
 
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
