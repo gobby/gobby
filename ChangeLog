@@ -1,3 +1,78 @@
+2009-05-03  Armin Burgmeier  <armin@arbur.net>, Benjamin Herr  <ben@0x539.de>
+
+	* configure.ac: Added a --with-unique configure option, require
+	unique-1.0 if set.
+
+	* code/core/nodewatch.hpp:
+	* code/core/nodewatch.cpp: Accept a const InfcBrowserIter, and
+	changed the signature of get_browser_iter() to return the BrowserIter
+	instead of setting a reference parameter.
+
+	* code/operations/operation-new.cpp:
+	* code/operations/operation-new.hpp:
+	* code/operations/operation-open.cpp:
+	* code/operations/operation-open.hpp:
+	* code/operations/operation-delete.cpp:
+	* code/operations/operation-delete.hpp: Accept a const InfcBrowserIter
+	in the constructor.
+
+	* code/operations/operation-open-multiple.hpp:
+	* code/operations/operation-open-multiple.cpp: Added an operation
+	which opens multiple files into the same directory. This is nothing
+	which can't be achieved by creating multiple OperationOpen operations,
+	but it creates the documents one-after-the-other, and therefore
+	does not clutter the statusbar, plus it queries the display name of
+	a file automatically to use as document name, if no document name is
+	given explicitely.
+
+	* code/operations/operations.hpp:
+	* code/operations/operations.cpp: Accept a const InfcBrowserIter for
+	most operations, added the create_documents() method which creates an
+	OperationOpenMultiple.
+
+	* code/commands/file-commands.hpp: Make set_task() public. We should
+	later make a separate class for managing the file tasks.
+
+	* code/dialogs/document-location-dialog.hpp:
+	* code/dialogs/document-location-dialog.cpp: Added a multiple document
+	mode to load multiple files. This basically hides the document name
+	entry.
+
+	* code/commands/file-tasks/task-new.cpp:
+	* code/commands/file-tasks/task-open.cpp: Explicitely set single
+	document mode on the document location dialog.
+
+	* code/commands/file-tasks/task-open-multiple.hpp:
+	* code/commands/file-tasks/task-open-multiple.cpp: Added a new task to
+	open multiple files. This shows a document location dialog in multiple
+	document mode and launches an OperationOpenMultiple when the user is
+	done with the dialog.
+
+	* code/commands/file-tasks/task-save-all.cpp: Added a TODO comment
+	about splitting parts of this into an OperationSaveAll.
+
+	* code/window.hpp:
+	* code/window.cpp: Take command line arguments in the constructor, and
+	open documents passed on the command line using a TaskOpenMultiple. If
+	unique support is enabled, then react on incoming messages and
+	activate the application window, or open files received in a message.
+
+	* code/main.cpp: Added a --new-instance command line option. If not
+	set and compiled with unique support, and if another instance is
+	already running, then send a message to the running instance and exit.
+
+	* Makefile.am:
+	* code/Makefile.am:
+	* code/util/Makefile.am:
+	* code/core/Makefile.am:
+	* code/dialogs/Makefile.am:
+	* code/operations/Makefile.am:
+	* code/commands/Makefile.am:
+	* code/commands/file-tasks/Makefile.am: Added compiler and linker
+	flags for unique, added the new files to the build.
+
+	* code/commands/autosave-commands.cpp: Fixed two compiler warnings.
+
 2009-05-01  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/nodewatch.hpp:

@@ -18,7 +18,7 @@
 
 // TODO: This should not be a task because the asynchronous IO operations
 // should not be interrupted by tasks like "save as".
-// Possibly do the should-not-abort part in an self-maintaining object?
+// The should-not-abort part should be an operation.
 
 #include "commands/file-tasks/task-save-all.hpp"
 
