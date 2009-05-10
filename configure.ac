@@ -97,6 +97,9 @@ GETTEXT_PACKAGE=gobby05
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 
+# Help file building
+GNOME_DOC_INIT
+
 # AC_DEFINE(GOBBY_CONFIGDIR, [".gobby-0.5"],
 #           [where to store Gobby's config files,
 #            relative to the user's home directory])
@@ -136,6 +139,8 @@ AC_OUTPUT([
         icons/HighContrastLargePrintInverse/scalable/Makefile
           icons/HighContrastLargePrintInverse/scalable/apps/Makefile
           icons/HighContrastLargePrintInverse/scalable/actions/Makefile
+
+    help/Makefile
 
     win32/Makefile
 ])

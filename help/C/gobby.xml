@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+	"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY appversion "0.5">
+<!ENTITY manrevision "0.1">
+<!ENTITY appname "Gobby">
+]>
+<!--<?yelp:chunk-depth 4?>-->
+<!-- =============Document Header ============================= -->
+<article id="index" lang="en">
+  <!-- please do not change the id; for translations, change lang to -->
+  <!-- appropriate code -->
+  <articleinfo>
+    <title>&appname; Manual</title>
+    <abstract role="description">
+      <para>&appname; is a text editor that allows multiple
+        persons to edit documents collaboratively over the network.</para>
+    </abstract>
+    <copyright>
+      <year>2009</year>
+      <holder>Philipp Kern</holder>
+    </copyright>
+    <authorgroup>
+      <author role="maintainer">
+        <firstname>Philipp</firstname>
+        <surname>Kern</surname>
+        <affiliation>
+          <orgname>0x539 dev group</orgname>
+          <address>
+            <email>phil@0x539.de</email>
+          </address>
+        </affiliation>
+      </author>
+    </authorgroup>
+    <revhistory>
+      <revision>
+        <revnumber>&appname; Manual &manrevision;</revnumber>
+        <date>2009-05-10</date>
+      </revision>
+    </revhistory>
+    <releaseinfo>This manual explains how to use Gobby &appversion;, a collaborative
+      editor.</releaseinfo>
+    <legalnotice>
+      <title>Feedback</title>
+      <para>To report a bug or make a suggestion regarding this manual,
+        please file a ticket on <ulink url="http://gobby.0x539.de/">
+        http://gobby.0x539.de</ulink>.</para>
+      <!-- Translators may also add here feedback address for translations -->
+    </legalnotice>
+  </articleinfo>
+  <!-- ============= Document Body ============================= -->
+  <!-- ============= Introduction ============================== -->
+  <sect1 id="intro">
+    <title>Introduction</title>
+    <para>
+      <application>Gobby</application> is a text editor that allows multiple
+      persons to edit documents collaboratively over the network.  Changes
+      to the documents are instantly synced to other interested parties.
+      It uses an algorithm which does not require locking or a central
+      coordinator but instead merges the changes on all peers.    </para>
+    <para>
+      That said, <application>Gobby</application> is currently relying on a
+      central server that relays the editing actions to other users.      A
+      public server can be found on <command>gobby.0x539.de</command>.  If you
+      want to host such a server yourself, please look at the
+      <application>infinoted</application> daemon.  As it is not needed
+      algorithmically future versions might be able to do real peer-to-peer
+      communication.  Support for editing over the instant messaging
+      protocol <application>Jabber/XMPP</application> is planed.
+    </para>
+    <para>
+      Depending on the setup of the server, connections can be encrypted
+      through <application>Transport Layer Security (TLS)</application>.
+      There is no support for user authentication yet.
+    </para>
+    <para>
+      In contrast to the older <application>Gobby 0.4</application> this
+      version also supports local undo and redo, which means that you can undo
+      your own changes regardless if someone else changed the document in the
+      meantime.
+    </para>
+
+  </sect1>
+  <sect1 id="getting-started">
+    <title>Getting Started</title>
+    <sect2 id="starting-gobby">
+      <title>Starting Gobby</title>
+      <para>Choose <menuchoice>
+          <guimenu>Applications</guimenu>
+          <guisubmenu>Internet</guisubmenu>
+          <guimenuitem>Gobby Collaborative Editor (0.5)</guimenuitem>
+        </menuchoice> to start the application.</para>
+      <para>You may also start <application>Gobby</application> from
+        the command line:</para>
+<programlisting>
+gobby
+</programlisting>
+    </sect2>
+    <sect2 id="main-window">
+      <title>Main Window</title>
+      <para>The <application>Gobby</application> main window is split into
+        two parts: a document and server browser on the left and an editor
+        part on the right.</para>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/main_window.png"
+              format="PNG"/>
+          </imageobject>
+          <caption>
+            <para>Main Window</para>
+          </caption>
+        </mediaobject>
+      </screenshot>
+    </sect2>
+  </sect1>
+  <sect1 id="setting-preferences">
+    <title>Setting Preferences</title>
+    <para>Choose <menuchoice>
+      <guimenu>Edit</guimenu>
+      <guimenuitem>Preferences</guimenuitem>
+      </menuchoice> to open <application>Gobby</application>'s
+      <guilabel>Preferences</guilabel> window.  The window has five tabs:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>User</emphasis> -
+          personal settings like user name and user color (see 
+          <xref linkend="user-settings" />)
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Editor</emphasis> -
+          text editor settings like indentation and auto saving
+          (see <xref linkend="editor-settings" />)</para>
+      </listitem>
+      <listitem>
+        <para><emphasis>View</emphasis> -
+          control how the text files being edited should be presented
+          on the screen (see <xref linkend="view-settings"/>)</para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Appearance</emphasis> -
+          font and window layout settings (see <xref linkend="appearance-settings"/>)</para>
+      </listitem>
+      <listitem>
+        <para><emphasis>Security</emphasis> -
+          controls security parameters like trusted certificates and
+          encryption enforcing (see <xref linkend="security-settings"/>)</para>
+      </listitem>
+    </itemizedlist>
+    <sect2 id="user-settings">
+      <title>Personalization</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/preferences_user.png" format="PNG"/>
+          </imageobject>
+          <caption>
+            <para>Preferences: User tab</para>
+          </caption>
+        </mediaobject>
+      </screenshot>
+    </sect2>
+    <sect2 id="editor-settings">
+      <title>Text Editing Preferences</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/preferences_editor.png" format="PNG"/>
+          </imageobject>
+          <caption>
+            <para>Preferences: Editor tab</para>
+          </caption>
+        </mediaobject>
+      </screenshot>
+    </sect2>
+  </sect1>
+  <sect1 id="about">
+    <title>About Gobby</title>
+    <para><application>Gobby</application> was written by Armin Burgmeier.</para>
+    <para>To report a bug or make a suggestion regarding this application or this
+      manual, please file a ticket on
+      <ulink url="http://gobby.0x539.de/">http://gobby.0x539.de</ulink>.</para>
+  </sect1>
+</article>

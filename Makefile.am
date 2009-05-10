@@ -1,4 +1,4 @@
-SUBDIRS = m4 win32 code . icons po
+SUBDIRS = m4 win32 code . icons po help
 
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4
@@ -48,3 +48,9 @@ nodist_EXTRA_gobby_0_5_SOURCES = dummy.cpp
 # Debian seems to need an XPM of the program icon, so we provide one here.
 # It's currently not used for anything else, though.
 EXTRA_DIST = gobby-0.5.xpm
+
+# For the manual
+EXTRA_DIST = gnome-doc-utils.make
+DISTCLEANFILES = gnome-doc-utils.make
+DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
+

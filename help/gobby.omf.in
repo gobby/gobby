@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="no"?>
+<omf>
+  <resource>
+    <subject category="GNOME|Applications|Internet"/>
+    <type>manual</type>
+    <relation seriesid="225c736e-dba3-4bbe-b222-c3d98f86bf64"/>
+    <rights type="GNU GPL" license.version="2" holder="Philipp Kern"/>
+  </resource>
+</omf>

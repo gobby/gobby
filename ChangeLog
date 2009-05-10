@@ -1,5 +1,20 @@
 2009-05-10  Philipp Kern  <phil@0x539.de>
 
+	* help/C/gobby.xml: initial manual draft, still pretty empty
+	* help/Makefile.am:
+	* Makefile.am:
+	* autogen.sh:
+	* configure.ac: use gnome-doc-utils as specified in their manual
+	* help/C/figures/main_window.png:
+	* help/C/figures/preferences_appearance.png:
+	* help/C/figures/preferences_editor.png:
+	* help/C/figures/preferences_security.png:
+	* help/C/figures/preferences_user.png:
+	* help/C/figures/preferences_view.png: add an initial set of
+	screenshots (main window and preference panes)
+
+2009-05-10  Philipp Kern  <phil@0x539.de>
+
 	* contrib/gobby-0.5.desktop.in: moved to the toplevel
 	* Makefile.am: install the .desktop file unconditionally (i.e. not
 	  only WITH_GNOME)
