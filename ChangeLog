@@ -1,3 +1,10 @@
+2009-05-11  Philipp Kern  <phil@0x539.de>
+
+	* code/core/header.hpp:
+	* code/core/header.cpp: add HelpContents action
+	* code/commands/help-commands.hpp: 
+	* code/commands/help-commands.cpp: invoke help through gtk_show_uri
+
 2009-05-10  Philipp Kern  <phil@0x539.de>
 
 	* help/C/gobby.xml: initial manual draft, still pretty empty

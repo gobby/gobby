@@ -128,6 +128,7 @@ public:
         const LanguageMap action_view_highlight_languages;
 
 	const Glib::RefPtr<Gtk::Action> action_help;
+	const Glib::RefPtr<Gtk::Action> action_help_contents;
 	const Glib::RefPtr<Gtk::Action> action_help_about;
 };
 

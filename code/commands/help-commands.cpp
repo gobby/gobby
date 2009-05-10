@@ -20,6 +20,7 @@
 #include "util/i18n.hpp"
 
 #include <gio/gio.h>
+#include <gtkmm/messagedialog.h>
 
 namespace
 {
@@ -46,8 +47,31 @@ Gobby::HelpCommands::HelpCommands(Gtk::Window& parent, Header& header,
 	Gtk::AboutDialog::set_url_hook(sigc::ptr_fun(url_hook));
 	Gtk::AboutDialog::set_email_hook(sigc::ptr_fun(email_hook));
 
+	header.action_help_contents->signal_activate().connect(
+		sigc::mem_fun(*this, &HelpCommands::on_contents));
 	header.action_help_about->signal_activate().connect(
 		sigc::mem_fun(*this, &HelpCommands::on_about));
+}
+
+void Gobby::HelpCommands::on_contents()
+{
+	GError* error = NULL;
+
+	gtk_show_uri(m_parent.get_screen()->gobj(),
+		"ghelp:gobby",
+		GDK_CURRENT_TIME,
+		&error);
+
+	if(error == NULL)
+		return;
+
+	// Help browser could not be invoked, show an error message to the user.
+	Gtk::MessageDialog dlg(m_parent, _("There was an error displaying help."),
+		false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+	dlg.set_secondary_text(error->message);
+	dlg.run();
+
+	g_error_free(error);
 }
 
 void Gobby::HelpCommands::on_about()

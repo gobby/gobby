@@ -72,6 +72,8 @@ namespace {
 		"      </menu>"
 		"    </menu>"
 		"    <menu action=\"MenuHelp\">"
+		"      <menuitem action=\"HelpContents\" />"
+		"      <separator />"
 		"      <menuitem action=\"HelpAbout\" />"
 		"    </menu>"
 		"  </menubar>"
@@ -287,6 +289,10 @@ Gobby::Header::Header(Preferences& preferences,
 		load_highlight_languages(lang_mgr, m_highlight_group)),
 
 	action_help(Gtk::Action::create("MenuHelp", _("_Help")) ),
+	action_help_contents(
+		Gtk::Action::create(
+			"HelpContents", Gtk::Stock::HELP, _("_Contents"),
+			_("Opens the Gobby manual"))),
 	action_help_about(
 		Gtk::Action::create(
 			"HelpAbout", Gtk::Stock::ABOUT, _("_About..."),
@@ -395,6 +401,7 @@ Gobby::Header::Header(Preferences& preferences,
 	}
 
 	group_help->add(action_help);
+	group_help->add(action_help_contents);
 	group_help->add(action_help_about);
 
 	m_ui_manager->insert_action_group(group_file);

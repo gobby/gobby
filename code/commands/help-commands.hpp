@@ -38,6 +38,8 @@ public:
 	             const IconManager& icon_manager);
 
 protected:
+	void on_contents();
+
 	void on_about();
 	void on_about_response(int response_id);
 
