@@ -114,8 +114,6 @@ AC_OUTPUT([
       code/commands/Makefile
         code/commands/file-tasks/Makefile
 
-    contrib/Makefile
-
     icons/Makefile
       icons/hicolor/Makefile
         icons/hicolor/48x48/Makefile

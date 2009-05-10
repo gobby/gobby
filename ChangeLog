@@ -1,3 +1,10 @@
+2009-05-10  Philipp Kern  <phil@0x539.de>
+
+	* contrib/gobby-0.5.desktop.in: moved to the toplevel
+	* Makefile.am: install the .desktop file unconditionally (i.e. not
+	  only WITH_GNOME)
+	* contrib/*: removed
+
 2009-05-03  Armin Burgmeier  <armin@arbur.net>, Benjamin Herr  <ben@0x539.de>
 
 	* configure.ac: Added a --with-unique configure option, require

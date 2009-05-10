@@ -1,4 +1,4 @@
-SUBDIRS = m4 contrib win32 code . icons po
+SUBDIRS = m4 win32 code . icons po
 
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4
@@ -29,6 +29,16 @@ gobby_0_5_LDFLAGS = \
 endif
 
 gobby_0_5_SOURCES = 
+
+# .desktop file
+desktopdir = $(datadir)/applications
+desktop_in_files = gobby-0.5.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
+clean-local:
+	-rm -rf gobby-0.5.desktop
+
+@INTLTOOL_DESKTOP_RULE@
 
 # Dummy C++ source to cause C++ linking, otherwise some platforms don't link
 # correctly against libstdc++. See also #399. Note that this file does not
