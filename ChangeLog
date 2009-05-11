@@ -1,5 +1,10 @@
 2009-05-11  Philipp Kern  <phil@0x539.de>
 
+	* code/core/header.cpp: use F1 for HelpContents, instead of the
+	stock Ctrl-H
+
+2009-05-11  Philipp Kern  <phil@0x539.de>
+
 	* code/core/header.hpp:
 	* code/core/header.cpp: add HelpContents action
 	* code/commands/help-commands.hpp: 

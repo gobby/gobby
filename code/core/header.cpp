@@ -401,7 +401,10 @@ Gobby::Header::Header(Preferences& preferences,
 	}
 
 	group_help->add(action_help);
-	group_help->add(action_help_contents);
+	group_help->add(action_help_contents,
+	                Gtk::AccelKey("F1",
+			              "<Actions>/MenuHelp/HelpContents"));
+
 	group_help->add(action_help_about);
 
 	m_ui_manager->insert_action_group(group_file);
