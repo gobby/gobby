@@ -60,7 +60,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 
 	m_intro.set_text(
 		_("Before we start, a few options need to be configured. "
-		  "You can later change them by choosing Edit/Preferences "
+		  "You can later change them by choosing Edit ▸ Preferences "
 		  "from the menu."));
 	m_intro.set_line_wrap(true);
 	m_intro.show();

@@ -1,5 +1,10 @@
 2009-05-12  Philipp Kern  <phil@0x539.de>
 
+	* code/dialogs/initial-dialog.cpp: match menuchoice style with
+	manual
+
+2009-05-12  Philipp Kern  <phil@0x539.de>
+
 	* configure.ac: get rid of WITH_GNOME, as it is currently unused
 
 2009-05-12  Philipp Kern  <phil@0x539.de>
