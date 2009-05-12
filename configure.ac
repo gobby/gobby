@@ -72,21 +72,6 @@ fi
 AM_CONDITIONAL([WITH_UNIQUE], test "x$use_unique" = "xyes")
 AC_CACHE_SAVE
 
-# As we could not yet auto-detect the GNOME desktop environment, it's the
-# user's choice to enable GNOME integration or not.
-AC_ARG_WITH([gnome],
-            AS_HELP_STRING([--with-gnome],
-               [integrate into the GNOME desktop environment [[default=no]]]),
-            [ac_cv_with_gnome=$withval], [ac_cv_with_gnome=no])
-AC_CACHE_CHECK([whether to integrate into the GNOME desktop environment],
-               [ac_cv_with_gnome], [ac_cv_with_gnome=no])
-if test "x$ac_cv_with_gnome" = "xyes" ; then
-  AC_DEFINE([WITH_GNOME], 1,
-    [Define whether to integrate into the GNOME desktop environment.])
-fi
-AM_CONDITIONAL(WITH_GNOME, test x$ac_cv_with_gnome != xno)
-AC_CACHE_SAVE
-
 # Glib i18n/gettext support.
 ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
