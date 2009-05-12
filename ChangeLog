@@ -1,3 +1,8 @@
+2009-05-12  Philipp Kern  <phil@0x539.de>
+
+	* autogen.sh: let autogen fail if some command is not available
+	or returns with a failure
+
 2009-05-11  Philipp Kern  <phil@0x539.de>
 
 	* code/core/header.cpp: use F1 for HelpContents, instead of the

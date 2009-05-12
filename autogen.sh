@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 glib-gettextize --copy --force
 intltoolize --copy --force --automake
