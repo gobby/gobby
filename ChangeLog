@@ -1,5 +1,10 @@
 2009-05-16  Armin Burgmeier  <armin@arbur.net>
 
+	* docs/: Removed. This was outdated anyway. It should be updated and
+	merged into the new DocBook help in help/. See also #448.
+
+2009-05-16  Armin Burgmeier  <armin@arbur.net>
+
 	* Makefile.am: Don't define EXTRA_DIST twice.
 
 2009-05-16  Armin Burgmeier  <armin@arbur.net>
