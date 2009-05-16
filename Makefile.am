@@ -50,7 +50,7 @@ nodist_EXTRA_gobby_0_5_SOURCES = dummy.cpp
 EXTRA_DIST = gobby-0.5.xpm
 
 # For the manual
-EXTRA_DIST = gnome-doc-utils.make
+EXTRA_DIST += gnome-doc-utils.make
 DISTCLEANFILES = gnome-doc-utils.make
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
 

@@ -1,5 +1,9 @@
 2009-05-16  Armin Burgmeier  <armin@arbur.net>
 
+	* Makefile.am: Don't define EXTRA_DIST twice.
+
+2009-05-16  Armin Burgmeier  <armin@arbur.net>
+
 	* help/C/gobby.xml: Fixed Gobby command line invocation instruction:
 	The executable is called gobby-0.5, not gobby.
 
