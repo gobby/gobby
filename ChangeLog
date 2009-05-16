@@ -1,5 +1,10 @@
 2009-05-16  Armin Burgmeier  <armin@arbur.net>
 
+	* help/C/gobby.xml: Fixed Gobby command line invocation instruction:
+	The executable is called gobby-0.5, not gobby.
+
+2009-05-16  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/tablabel.cpp: Use gdk_color_to_string instead of
 	Gdk::Color::to_string so that Gobby continues to compile with gtkmm
 	2.12. Bug #447 (Philipp Kern).

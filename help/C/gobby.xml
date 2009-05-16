@@ -93,7 +93,7 @@
       <para>You may also start <application>Gobby</application> from
         the command line:</para>
 <programlisting>
-gobby
+gobby-0.5
 </programlisting>
     </sect2>
     <sect2 id="main-window">
