@@ -1,3 +1,9 @@
+2009-05-16  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/tablabel.cpp: Use gdk_color_to_string instead of
+	Gdk::Color::to_string so that Gobby continues to compile with gtkmm
+	2.12. Bug #447 (Philipp Kern).
+
 2009-05-12  Philipp Kern  <phil@0x539.de>
 
 	* code/dialogs/initial-dialog.cpp: match menuchoice style with

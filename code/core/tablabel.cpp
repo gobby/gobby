@@ -317,7 +317,17 @@ void Gobby::TabLabel::update_dots()
 		{
 			Gdk::Color c;
 			c.set_hsv(360.0 * inf_text_user_get_hue(i->get_user()), 0.6, 0.6);
-			markup += "<span color=\"" + c.to_string() + "\">" + m_dot_char + "</span>";
+
+			// We are using the C API here since
+			// gdk_color_to_string is available since GTK 2.12,
+			// but Gdk::Color::to_string only since gtkmm 2.14,
+			// and we want to require nothing more recent than
+			// 2.12 for now. See also bug #447.
+			gchar* color_str = gdk_color_to_string(c.gobj());
+			Glib::ustring cpp_color_str(color_str);
+			g_free(color_str);
+
+			markup += "<span color=\"" + cpp_color_str + "\">" + m_dot_char + "</span>";
 		}
 		m_dots.set_markup(markup);
 		m_dots.show();
