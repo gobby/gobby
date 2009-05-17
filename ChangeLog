@@ -1,5 +1,12 @@
 2009-05-16  Armin Burgmeier  <armin@arbur.net>
 
+	* code/commands/file-tasks/task-open.hpp: Include <giomm/file.h> to
+	make sure Gio::File is known.
+
+	* code/commands/file-tasks/task-open.cpp: Removed an unused variable.
+
+2009-05-16  Armin Burgmeier  <armin@arbur.net>
+
 	* docs/: Removed. This was outdated anyway. It should be updated and
 	merged into the new DocBook help in help/. See also #448.
 

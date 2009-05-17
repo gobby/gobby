@@ -21,6 +21,8 @@
 
 #include "commands/file-commands.hpp"
 
+#include <giomm/file.h>
+
 namespace Gobby
 {
 

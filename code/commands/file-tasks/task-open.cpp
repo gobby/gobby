@@ -34,9 +34,6 @@ Gobby::TaskOpen::~TaskOpen()
 
 void Gobby::TaskOpen::run()
 {
-	static const gchar* const ATTR_DISPLAY_NAME =
-		G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME;
-
 	try
 	{
 		// TODO: Show DocumentLocationDialog with a
