@@ -45,6 +45,12 @@
       <para>To report a bug or make a suggestion regarding this manual,
         please file a ticket on <ulink url="http://gobby.0x539.de/">
         http://gobby.0x539.de</ulink>.</para>
+      <para>The application <application>&appname;</application> and this manual
+        are both licensed under the GNU General Public License (GPL) version 2
+        or any later version.  They are distributed in the hope that they will
+        be useful, but WITHOUT ANY WARRANTY; without even the implied warrenty
+        of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  Please see
+        the GNU General Public License for more details.</para>
       <!-- Translators may also add here feedback address for translations -->
     </legalnotice>
   </articleinfo>
@@ -53,15 +59,16 @@
   <sect1 id="intro">
     <title>Introduction</title>
     <para>
-      <application>Gobby</application> is a text editor that allows multiple
+      <application>&appname;</application> is a text editor that allows multiple
       persons to edit documents collaboratively over the network.  Changes
       to the documents are instantly synced to other interested parties.
       It uses an algorithm which does not require locking or a central
-      coordinator but instead merges the changes on all peers.    </para>
+      coordinator but instead merges the changes on all participating peers.
+    </para>
     <para>
-      That said, <application>Gobby</application> is currently relying on a
-      central server that relays the editing actions to other users.      A
-      public server can be found on <command>gobby.0x539.de</command>.  If you
+      That said, <application>&appname;</application> is currently relying on a
+      central server that relays the editing actions to other users.
+      A public server can be found on <command>gobby.0x539.de</command>.  If you
       want to host such a server yourself, please look at the
       <application>infinoted</application> daemon.  As it is not needed
       algorithmically future versions might be able to do real peer-to-peer
@@ -74,12 +81,18 @@
       There is no support for user authentication yet.
     </para>
     <para>
+      <application>&appname;</application> is cross-platform and supports so far
+      Microsoft Windows, Linux, Mac OS X and other Unix-like platforms.  It
+      is developed on Linux and regularly tested on Windows.  As it is developed
+      using the Gtk+ toolkit it integrates nicely into the GNOME desktop
+      environment.
+    </para>
+    <para>
       In contrast to the older <application>Gobby 0.4</application> this
       version also supports local undo and redo, which means that you can undo
       your own changes regardless if someone else changed the document in the
       meantime.
     </para>
-
   </sect1>
   <sect1 id="getting-started">
     <title>Getting Started</title>
@@ -181,6 +194,17 @@ gobby-0.5
     <para><application>Gobby</application> was written by Armin Burgmeier.</para>
     <para>To report a bug or make a suggestion regarding this application or this
       manual, please file a ticket on
-      <ulink url="http://gobby.0x539.de/">http://gobby.0x539.de</ulink>.</para>
+      <ulink url="http://gobby.0x539.de/">http://gobby.0x539.de</ulink>.
+      Please include a reachable email address in your bug report as we often
+      need to contact the reporters for further clarifications.</para>
+    <sect2 id="mailinglists">
+      <title>Mailinglists</title>
+      <para>There are also two mailing lists which should provide a means of contact to other Gobby users and to the developers.</para>
+      <itemizedlist>
+        <listitem><para><literal>obby-announce</literal>: A moderated list used to announce new releases of Gobby and its foundation libraries.</para></listitem>
+       <listitem><para><literal>obby-users</literal>: Discussions about Gobby's usage and installation problems. The announcements are also posted there.</para></listitem>
+      </itemizedlist>
+      <para>More information about how to subscribe can be found on <ulink url="http://gobby.0x539.de/trac/wiki/MailingLists"><literal>http://gobby.0x539.de/trac/wiki/MailingLists</literal></ulink>.</para>
+    </sect2>
   </sect1>
 </article>

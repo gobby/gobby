@@ -1,3 +1,7 @@
+2009-05-17  Philipp Kern  <phil@0x539.de>
+
+	* help/C/gobby.xml: ported content from the old readme to the help file
+
 2009-05-16  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/file-tasks/task-open.hpp: Include <giomm/file.h> to
