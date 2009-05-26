@@ -130,7 +130,7 @@ protected:
 	Gtk::Expander m_expander;
 	Gtk::HBox m_hbox;
 	Gtk::Label m_label_hostname;
-	HistoryEntry m_entry_hostname;
+	HistoryComboBoxEntry m_entry_hostname;
 
 	ResolvMap m_resolv_map;
 	SignalActivate m_signal_activate;

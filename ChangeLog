@@ -1,3 +1,10 @@
+2009-05-26  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/browser.hpp:
+	* code/core/browser.cpp: Changed the HistoryEntry to a
+	HistoryComboBoxEntry, so that we have a dropdown list for recently
+	used hosts. Bug #451.
+
 2009-05-17  Philipp Kern  <phil@0x539.de>
 
 	* help/C/gobby.xml: ported content from the old readme to the help file

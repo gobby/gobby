@@ -44,7 +44,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_entry_hostname(config_filename("recent_hosts"), 5)
 {
 	m_label_hostname.show();
-	m_entry_hostname.signal_activate().connect(
+	m_entry_hostname.get_entry()->signal_activate().connect(
 		sigc::mem_fun(*this, &Browser::on_hostname_activate));
 	m_entry_hostname.show();
 
@@ -181,7 +181,7 @@ void Gobby::Browser::on_activate(GtkTreeIter* iter)
 
 void Gobby::Browser::on_hostname_activate()
 {
-	Glib::ustring str = m_entry_hostname.get_text();
+	Glib::ustring str = m_entry_hostname.get_entry()->get_text();
 	if(str.empty()) return;
 
 	Glib::ustring host;
@@ -238,7 +238,7 @@ void Gobby::Browser::on_hostname_activate()
 	        sigc::mem_fun(*this, &Browser::on_resolv_error));
 
 	m_entry_hostname.commit();
-	m_entry_hostname.set_text("");
+	m_entry_hostname.get_entry()->set_text("");
 
 	StatusBar::MessageHandle message_handle =
 		m_status_bar.add_message(
