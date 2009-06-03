@@ -1,3 +1,10 @@
+2009-06-03  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/header.cpp: Replace localized section string by a
+	numerical ID for the action names of the various language sections, to
+	prevent a crash when starting Gobby on a Japanese system. Based on a
+	patch by Takahiro Sunaga.
+
 2009-05-26  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/browser.hpp:

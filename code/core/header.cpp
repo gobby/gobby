@@ -355,13 +355,20 @@ Gobby::Header::Header(Preferences& preferences,
 			              "<Actions>/MenuView/ViewUserList"));
 	group_view->add(action_view_highlight_mode);
 	group_view->add(action_view_highlight_none);
+	
+	unsigned int language_menu_counter = 0;
 	for(LanguageMap::const_iterator iter =
 		action_view_highlight_languages.begin();
 	    iter != action_view_highlight_languages.end();
 	    ++ iter)
 	{
+		// We cannot use iter->first for the action name, since this
+		// is a localized string.
 		Glib::ustring section_action_name =
-			"ViewHighlightModeSection_" + iter->first;
+ 			Glib::ustring::compose("ViewHighlightModeSection_%1",
+				language_menu_counter);
+		++language_menu_counter;
+
 		Glib::ustring section_action_xml =
 			Glib::Markup::escape_text(section_action_name);
 
