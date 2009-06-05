@@ -1,3 +1,8 @@
+2009-06-05  Philipp Kern  <phil@0x539.de>
+
+	* gobby-0.5.desktop.in: fix icon to not specify the extension, which is
+	discouraged by the icon theme specification
+
 2009-06-03  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/header.cpp: Replace localized section string by a
