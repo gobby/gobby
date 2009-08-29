@@ -1,3 +1,10 @@
+2009-08-29  Armin Burgmeier  <armin@arbur.net>
+
+	* update-potfiles: Fixed path of the desktop file, and use
+	--binary-file=without-matches instead of a checking for the string
+	'matches', so that it also works in non-english environments (Nicolás
+	Alvarez).
+
 2009-06-05  Philipp Kern  <phil@0x539.de>
 
 	* gobby-0.5.desktop.in: fix icon to not specify the extension, which is

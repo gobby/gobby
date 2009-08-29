@@ -8,6 +8,7 @@ code/commands/help-commands.cpp
 code/core/browser.cpp
 code/core/docwindow.cpp
 code/core/header.cpp
+code/core/header.cpp.orig
 code/core/iconmanager.cpp
 code/core/statusbar.cpp
 code/core/userlist.cpp
@@ -21,9 +22,10 @@ code/main.cpp
 code/operations/operation-delete.cpp
 code/operations/operation-new.cpp
 code/operations/operation-open.cpp
+code/operations/operation-open-multiple.cpp
 code/operations/operation-save.cpp
 code/util/file.cpp
 code/util/i18n.cpp
 code/util/i18n.hpp
 code/window.cpp
-contrib/gobby-0.5.desktop.in
+gobby-0.5.desktop.in
