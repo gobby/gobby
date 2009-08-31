@@ -1,3 +1,8 @@
+2009-08-31  Philipp Kern  <phil@0x539.de>
+
+	* src/finddialog.cpp: initialize replace (all) buttons with
+	  mnemonic=true
+
 2009-05-03  Sebastian Morr  <blinry@tux-mail.de>
 
 	* po/de.po: Updated German translation.

@@ -49,8 +49,8 @@ Gobby::FindDialog::FindDialog(Gobby::Window& parent):
 	m_radio_up(m_group_direction, _("_Up"), true),
 	m_radio_down(m_group_direction, _("_Down"), true),
 	m_btn_find(Gtk::Stock::FIND),
-	m_btn_replace(_("_Replace") ),
-	m_btn_replace_all(_("Replace _all") ),
+	m_btn_replace(_("_Replace"), true),
+	m_btn_replace_all(_("Replace _all"), true),
 	m_btn_close(Gtk::Stock::CLOSE),
 	m_regex("")
 {
