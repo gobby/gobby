@@ -21,12 +21,10 @@ Gobby: First Contact
 
    Gobby is a free collaborative editor. This means that it
    provides you with the possibility to edit files simultaneously
-   with other users over a network. It supports multiple
-   documents in one session and a multi-user chat. The platforms
-   on which you could use Gobby are so far Microsoft Windows,
-   Linux, Mac OS X and other Unix-like ones. Developed with the
-   Gtk+ toolkit it integrates nicely into the GNOME desktop
-   environment if you want it to.
+   with other users over a network. The platforms on which you could use
+   Gobby are so far Microsoft Windows, Linux, Mac OS X and other
+   Unix-like ones. Developed with the GTK+ toolkit it integrates
+   nicely into the GNOME desktop environment if you want it to.
      _________________________________________________________
 
 2. Features
@@ -60,7 +58,7 @@ Gobby: First Contact
      * libinfinity (0.4.x)
      * Gtk+ (>= 2.12.0)
      * GtkSourceView (>= 2.0)
-     * Glibmm (>= 2.16.0)
+     * Glibmm (>= 2.16.4)
      * libxml++ (>= 2.6.0)
      * Gtkmm (>= 2.12.0)
      _________________________________________________________
@@ -68,14 +66,13 @@ Gobby: First Contact
 4. More information
 
    The development of the obby family is coordinated on its Trac
-   project page on http://darcs.0x539.de/trac/obby/. The primary
-   distribution point is http://releases.0x539.de/.
+   project page on http://gobby.0x539.de/. The primary distribution point is
+   http://releases.0x539.de/.
      _________________________________________________________
 
 4.1. How to report bugs
 
-   Bugs could be filed as tickets at
-   http://darcs.0x539.de/trac/obby/cgi-bin/trac.cgi/newticket or
+   Bugs could be filed as tickets at http://gobby.0x539.de/trac/newticket or
    submitted directly to us at crew@0x539.de. Please include a
    reachable email address in your bug report as we often need to
    contact the reporters for clarifications. Commonly bugs are
@@ -100,7 +97,7 @@ Gobby: First Contact
    of contact to other Gobby users and to the developers.
 
      * obby-announce: A moderated list used to announce new
-       releases of Gobby and its foundation, net6, obby and infinote.
+       releases of Gobby and its foundation, net6, obby and libinfinity.
        Please refer to
        http://list.0x539.de/mailman/listinfo/obby-announce if you
        want to subscribe it.

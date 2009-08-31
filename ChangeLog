@@ -1,3 +1,8 @@
+2009-08-30  Armin Burgmeier  <armin@arbur.net>
+
+	* README: Updated the text, parts of it were still from when we used
+	darcs (Nicolás Alvarez).
+
 2009-08-29  Armin Burgmeier  <armin@arbur.net>
 
 	* update-potfiles: Fixed path of the desktop file, and use
