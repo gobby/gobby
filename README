@@ -57,6 +57,7 @@ Gobby: First Contact
      * GNUTLS (>= 1.7.2)
      * libinfinity (0.4.x)
      * Gtk+ (>= 2.12.0)
+     * Glib (>= 2.18.0)
      * GtkSourceView (>= 2.0)
      * Glibmm (>= 2.16.4)
      * libxml++ (>= 2.6.0)

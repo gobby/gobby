@@ -1,5 +1,12 @@
 2009-08-30  Armin Burgmeier  <armin@arbur.net>
 
+	* configure.ac: Require glib-2.18, as replacing existing files while
+	saving does not work with lower versions.
+
+	* README: Added the new dependency to the README.
+
+2009-08-30  Armin Burgmeier  <armin@arbur.net>
+
 	* README: Updated the text, parts of it were still from when we used
 	darcs (Nicolás Alvarez).
 
