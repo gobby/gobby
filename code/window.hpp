@@ -71,6 +71,11 @@ public:
 	const Folder& get_folder() const { return m_folder; }
 	Folder& get_folder() { return m_folder; }
 
+	void connect_to_host(const Glib::ustring& hostname)
+	{
+		m_browser.connect_to_host(hostname);
+	}
+
 protected:
 #ifdef WITH_UNIQUE
 	static UniqueResponse
