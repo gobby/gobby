@@ -153,6 +153,8 @@ int main(int argc, char* argv[]) try
 
 	if (!new_instance && unique_app_is_running(app))
 	{
+		// TODO: Also send the hostnames to connect to to the remote
+		// Gobby.
 		UniqueResponse response;
 		if (argc < 2)
 		{
