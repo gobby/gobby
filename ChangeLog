@@ -1,3 +1,12 @@
+2009-09-08  Benjamin Herr  <ben@0x539.de>
+
+	* code/core/browser.hpp:
+	* code/core/browser.cpp:
+	* code/window.hpp:
+	* code/window.cpp:
+	* code/main.cpp: Added --connect=HOSTNAME command line flag to
+	connect to the given hostnames on startup.
+
 2009-08-30  Armin Burgmeier  <armin@arbur.net>
 
 	* configure.ac: Require glib-2.18, as replacing existing files while

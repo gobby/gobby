@@ -39,6 +39,7 @@
 
 #include <libintl.h> // bindtextdomain
 #include <iostream>
+#include <vector>
 
 namespace
 {
@@ -91,6 +92,7 @@ int main(int argc, char* argv[]) try
 
 	bool new_instance = false;
 	bool display_version = false;
+	std::vector<Glib::ustring> hostnames;
 
 	Glib::OptionGroup opt_group_gobby("gobby",
 		_("Gobby options"), _("Options related to Gobby"));
@@ -108,6 +110,14 @@ int main(int argc, char* argv[]) try
 		_("Also start a new Gobby instance when there is one "
 		  "running already"));
 	opt_group_gobby.add_entry(opt_new_instance, new_instance);
+
+	Glib::OptionEntry opt_connect;
+	opt_connect.set_short_name('c');
+	opt_connect.set_long_name("connect");
+	opt_connect.set_description(
+		_("Connect to given host on startup, can be given multiple times"));
+	opt_connect.set_arg_description(_("HOSTNAME"));
+	opt_group_gobby.add_entry(opt_connect, hostnames);
 
 	Glib::OptionContext opt_ctx;
 	opt_ctx.set_help_enabled(true);
@@ -218,6 +228,13 @@ int main(int argc, char* argv[]) try
 #endif
 
 	wnd.show();
+
+	for(std::vector<Glib::ustring>::const_iterator i = hostnames.begin();
+	    i != hostnames.end();
+			++ i)
+	{
+		wnd.connect_to_host(*i);
+	}
 
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
 	kit->run();
