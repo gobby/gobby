@@ -184,68 +184,10 @@ void Gobby::Browser::on_hostname_activate()
 	Glib::ustring str = m_entry_hostname.get_entry()->get_text();
 	if(str.empty()) return;
 
-	Glib::ustring host;
-	Glib::ustring service = "6523"; // Default
-	unsigned int device_index = 0; // Default
-
-	// Strip away device name
-	Glib::ustring::size_type pos;
-	if( (pos = str.rfind('%')) != Glib::ustring::npos)
-	{
-		Glib::ustring device_name = str.substr(pos + 1);
-		str.erase(pos);
-
-#ifdef G_OS_WIN32
-		// TODO: Implement
-		device_index = 0;
-#else
-		device_index = if_nametoindex(device_name.c_str());
-		if(device_index == 0)
-		{
-			m_status_bar.add_message(
-				StatusBar::ERROR,
-				Glib::ustring::compose(
-					_("Device \"%1\" does not exist"),
-					device_name), 5);
-		}
-#endif
-	}
-
-	if(str[0] == '[' && ((pos = str.find(']', 1)) != Glib::ustring::npos))
-	{
-		// Hostname surrounded by '[...]'
-		host = str.substr(1, pos-1);
-		++ pos;
-		if(pos < str.length() && str[pos] == ':')
-			service = str.substr(pos + 1);
-	}
-	else
-	{
-		pos = str.find(':');
-		if(pos != Glib::ustring::npos)
-		{
-			host = str.substr(0, pos);
-			service = str.substr(pos + 1);
-		}
-		else
-			host = str;
-	}
-
-	ResolvHandle* resolv_handle = resolve(host, service,
-	        sigc::bind(
-			sigc::mem_fun(*this, &Browser::on_resolv_done),
-			host, device_index),
-	        sigc::mem_fun(*this, &Browser::on_resolv_error));
+	connect_to_host(str);
 
 	m_entry_hostname.commit();
 	m_entry_hostname.get_entry()->set_text("");
-
-	StatusBar::MessageHandle message_handle =
-		m_status_bar.add_message(
-			StatusBar::INFO, Glib::ustring::compose(
-				_("Resolving %1..."), host), 0);
-
-	m_resolv_map[resolv_handle].message_handle = message_handle;
 }
 
 void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
@@ -369,6 +311,69 @@ void Gobby::Browser::set_selected(InfcBrowser* browser, InfcBrowserIter* iter)
 	g_assert(has_iter == TRUE);
 
 	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
+}
+
+void Gobby::Browser::connect_to_host(Glib::ustring str)
+{
+	Glib::ustring host;
+	Glib::ustring service = "6523"; // Default
+	unsigned int device_index = 0; // Default
+
+	// Strip away device name
+	Glib::ustring::size_type pos;
+	if( (pos = str.rfind('%')) != Glib::ustring::npos)
+	{
+		Glib::ustring device_name = str.substr(pos + 1);
+		str.erase(pos);
+
+#ifdef G_OS_WIN32
+		// TODO: Implement
+		device_index = 0;
+#else
+		device_index = if_nametoindex(device_name.c_str());
+		if(device_index == 0)
+		{
+			m_status_bar.add_message(
+				StatusBar::ERROR,
+				Glib::ustring::compose(
+					_("Device \"%1\" does not exist"),
+					device_name), 5);
+		}
+#endif
+	}
+
+	if(str[0] == '[' && ((pos = str.find(']', 1)) != Glib::ustring::npos))
+	{
+		// Hostname surrounded by '[...]'
+		host = str.substr(1, pos-1);
+		++ pos;
+		if(pos < str.length() && str[pos] == ':')
+			service = str.substr(pos + 1);
+	}
+	else
+	{
+		pos = str.find(':');
+		if(pos != Glib::ustring::npos)
+		{
+			host = str.substr(0, pos);
+			service = str.substr(pos + 1);
+		}
+		else
+			host = str;
+	}
+
+	ResolvHandle* resolv_handle = resolve(host, service,
+	        sigc::bind(
+			sigc::mem_fun(*this, &Browser::on_resolv_done),
+			host, device_index),
+	        sigc::mem_fun(*this, &Browser::on_resolv_error));
+
+	StatusBar::MessageHandle message_handle =
+		m_status_bar.add_message(
+			StatusBar::INFO, Glib::ustring::compose(
+				_("Resolving %1..."), host), 0);
+
+	m_resolv_map[resolv_handle].message_handle = message_handle;
 }
 
 void Gobby::Browser::on_security_policy_changed()

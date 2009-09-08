@@ -74,6 +74,8 @@ public:
 	bool get_selected(InfcBrowser** browser, InfcBrowserIter* iter);
 	void set_selected(InfcBrowser* browser, InfcBrowserIter* iter);
 
+	void connect_to_host(Glib::ustring str);
+
 	SignalActivate signal_activate() const { return m_signal_activate; }
 
 protected:
