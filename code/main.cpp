@@ -142,16 +142,35 @@ namespace
 		return send_message_with_uris(app, UNIQUE_OPEN, uris);
 	}
 
-	int my_unique_check_other(UniqueApp* app,
-	                          int argc, const char* const* argv)
+	int my_unique_send_hostname_args(
+		UniqueApp* app,
+		const std::vector<Glib::ustring>& hostnames)
 	{
-		if(argc == 0)
+		std::vector<Glib::ustring> uris(hostnames);
+		for(int i = 0; i < uris.size(); ++i)
+		{
+			uris[i].insert(0, "infinote://");
+		}
+		return send_message_with_uris(
+			app, Gobby::UNIQUE_GOBBY_CONNECT, uris);
+	}
+
+	int my_unique_check_other(UniqueApp* app,
+	                          int argc, const char* const* argv,
+	                          const std::vector<Glib::ustring>& hostnames)
+	{
+		if(argc == 0 && hostnames.empty())
 		{
 			return my_unique_activate(app);
 		}
-		else
-		{
+		
+		if(argc) {
 			if(my_unique_send_file_args(app, argc, argv) != 0)
+				return -1;
+		}
+
+		if(!hostnames.empty()) {
+			if (my_unique_send_hostname_args(app, hostnames))
 				return -1;
 		}
 
@@ -228,11 +247,17 @@ int main(int argc, char* argv[]) try
 	}
 
 #ifdef WITH_UNIQUE
-	UniqueApp* app = unique_app_new("de._0x539.gobby", NULL);
+	UniqueApp* app = unique_app_new_with_commands(
+		"de._0x539.gobby", NULL,
+		"UNIQUE_GOBBY_CONNECT", Gobby::UNIQUE_GOBBY_CONNECT,
+		NULL);
 
 	if(!new_instance && unique_app_is_running(app))
 	{
-		int exit_code = my_unique_check_other(app, argc - 1, argv + 1);
+		int exit_code = my_unique_check_other(
+			app,
+			argc - 1, argv + 1,
+			hostnames);
 		g_object_unref(app);
 		return exit_code;
 	}

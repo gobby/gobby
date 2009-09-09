@@ -270,6 +270,26 @@ try
 			g_strfreev(uris);
 			return UNIQUE_RESPONSE_OK;
 		}
+	case UNIQUE_GOBBY_CONNECT:
+		{
+			gchar** uris = unique_message_data_get_uris(message);
+			if(!uris || !uris[0])
+				return UNIQUE_RESPONSE_FAIL;
+			// TODO: I do not have a very strong intuition that
+			// this is not going to throw, ever. We should
+			// probably handle that.
+			for(const gchar* const* p = uris; *p; ++p)
+			{
+				if(!g_str_has_prefix(*p, "infinote://"))
+				{
+					g_strfreev(uris);
+					return UNIQUE_RESPONSE_FAIL;
+				}
+				connect_to_host(*p + sizeof("infinote://")-1);
+			}
+			g_strfreev(uris);
+			return UNIQUE_RESPONSE_OK;
+		}
 	default:
 		return UNIQUE_RESPONSE_PASSTHROUGH;
 	}

@@ -57,6 +57,10 @@
 namespace Gobby
 {
 
+#ifdef WITH_UNIQUE
+const int UNIQUE_GOBBY_CONNECT = 1;
+#endif
+
 class Window : public Gtk::Window
 {
 public:
