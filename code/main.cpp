@@ -79,6 +79,81 @@ namespace
 		return GOBBY_LOCALEDIR;
 #endif
 	}
+
+#ifdef WITH_UNIQUE
+	int send_message_with_uris(UniqueApp* app,
+	                            gint message_id,
+	                            const std::vector<Glib::ustring>& uris)
+	{
+		std::vector<const gchar*> uri_cstrs(uris.size() + 1);
+		for(int i = 0; i < uris.size(); ++i)
+			uri_cstrs[i] = uris[i].c_str();
+
+		UniqueMessageData* message = unique_message_data_new();
+		unique_message_data_set_uris(
+			message, const_cast<gchar**>(&uri_cstrs[0]));
+		UniqueResponse response = unique_app_send_message(
+			app, message_id, message);
+		unique_message_data_free(message);
+
+		if(response == UNIQUE_RESPONSE_OK)
+		{
+			return 0;
+		}
+		else
+		{
+			std::cerr
+				<< "error sending URIs to existing gobby "
+				   "instance (libunique): "
+				<< static_cast<int>(response)
+				<< std::endl;
+			return -1;
+		}
+	}
+
+	int my_unique_activate(UniqueApp* app) {
+		UniqueResponse response =
+			unique_app_send_message(app, UNIQUE_ACTIVATE, NULL);
+		if(response != UNIQUE_RESPONSE_OK)
+		{
+			std::cerr
+				<< "error activating existing gobby "
+				   "instance (libunique): "
+				<< static_cast<int>(response)
+				<< std::endl;
+			return -1;
+		}
+	}
+
+	int my_unique_send_file_args(UniqueApp* app,
+	                             int argc,
+	                             const char* const* argv)
+	{
+		std::vector<Glib::ustring> uris(argc);
+		for(int i = 0; i < argc; ++i)
+		{
+			uris[i] = Gio::File::create_for_commandline_arg(
+					argv[i])->get_uri();
+		}
+		return send_message_with_uris(app, UNIQUE_OPEN, uris);
+	}
+
+	int my_unique_check_other(UniqueApp* app,
+	                          int argc, const char* const* argv)
+	{
+		if(argc == 0)
+		{
+			return my_unique_activate(app);
+		}
+		else
+		{
+			if(my_unique_send_file_args(app, argc, argv) != 0)
+				return -1;
+		}
+
+		return 0;
+	}
+#endif // WITH_UNIQUE
 }
 
 int main(int argc, char* argv[]) try
@@ -151,50 +226,11 @@ int main(int argc, char* argv[]) try
 #ifdef WITH_UNIQUE
 	UniqueApp* app = unique_app_new("de._0x539.gobby", NULL);
 
-	if (!new_instance && unique_app_is_running(app))
+	if(!new_instance && unique_app_is_running(app))
 	{
-		// TODO: Also send the hostnames to connect to to the remote
-		// Gobby.
-		UniqueResponse response;
-		if (argc < 2)
-		{
-			response = unique_app_send_message(
-				app, UNIQUE_ACTIVATE, NULL);
-		}
-		else
-		{
-			UniqueMessageData* message =
-				unique_message_data_new();
-			std::vector<const gchar*> uris(argc);
-			std::vector<Glib::ustring> uri_strs(argc-1);
-			for (int i = 0; i < argc - 1; ++i) {
-				uri_strs[i] =
-					Gio::File::create_for_commandline_arg(
-						argv[i+1])->get_uri();
-				uris[i] = uri_strs[i].c_str();
-			}
-
-			unique_message_data_set_uris(
-				message, const_cast<gchar**>(&uris[0]));
-			response = unique_app_send_message(
-				app, UNIQUE_OPEN, message);
-			unique_message_data_free(message);
-		}
-
+		int exit_code = my_unique_check_other(app, argc - 1, argv + 1);
 		g_object_unref(app);
-
-		if (response == UNIQUE_RESPONSE_OK)
-		{
-			return 0;
-		}
-		else 
-		{
-			std::cerr
-				<< "uniqueapp error: "
-				<< static_cast<int>(response)
-				<< std::endl;
-			return -1;
-		}
+		return exit_code;
 	}
 #endif // WITH_UNIQUE
 
