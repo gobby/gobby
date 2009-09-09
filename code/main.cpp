@@ -123,6 +123,10 @@ namespace
 				<< std::endl;
 			return -1;
 		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	int my_unique_send_file_args(UniqueApp* app,
