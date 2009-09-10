@@ -240,6 +240,19 @@ UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
                                                   guint time)
 try
 {
+	struct uris_holder
+	{
+		uris_holder(gchar** uris): uris(uris) {}
+		~uris_holder() { if(uris) g_strfreev(uris); }
+		operator gchar* const*() const { return uris; }
+
+		gchar** uris;
+
+	private:
+		uris_holder(const uris_holder&);
+		uris_holder& operator=(const uris_holder&);
+	};
+
 	switch (command)
 	{
 	case UNIQUE_ACTIVATE:
@@ -249,14 +262,15 @@ try
 		return UNIQUE_RESPONSE_OK;
 	case UNIQUE_OPEN:
 		{
-			gchar** uris = unique_message_data_get_uris(message);
-			if (!uris || !uris[0])
+			uris_holder uris(
+				unique_message_data_get_uris(message));
+			if(!uris || !uris[0])
 				return UNIQUE_RESPONSE_FAIL;
 			if(uris[1]) // multiple files?
 			{
 				TaskOpenMultiple* task =
 					new TaskOpenMultiple(m_commands_file);
-				for (const gchar* const* p = uris; *p; ++p)
+				for(const gchar* const* p = uris; *p; ++p)
 					task->add_file(*p);
 				m_commands_file.set_task(task);
 			}
@@ -267,33 +281,35 @@ try
 					Gio::File::create_for_uri(*uris));
 				m_commands_file.set_task(task);
 			}
-			g_strfreev(uris);
 			return UNIQUE_RESPONSE_OK;
 		}
 	case UNIQUE_GOBBY_CONNECT:
 		{
-			gchar** uris = unique_message_data_get_uris(message);
+			uris_holder uris(unique_message_data_get_uris(message));
 			if(!uris || !uris[0])
 				return UNIQUE_RESPONSE_FAIL;
-			// TODO: I do not have a very strong intuition that
-			// this is not going to throw, ever. We should
-			// probably handle that.
 			for(const gchar* const* p = uris; *p; ++p)
 			{
-				if(!g_str_has_prefix(*p, "infinote://"))
-				{
-					g_strfreev(uris);
+				const gchar protocol[] = "infinote://";
+				if(!g_str_has_prefix(*p, protocol))
 					return UNIQUE_RESPONSE_FAIL;
-				}
-				connect_to_host(*p + sizeof("infinote://")-1);
+				connect_to_host(*p + sizeof(protocol) - 1);
 			}
-			g_strfreev(uris);
 			return UNIQUE_RESPONSE_OK;
 		}
 	default:
 		return UNIQUE_RESPONSE_PASSTHROUGH;
 	}
-} catch (...) {
+}
+// For example, connect_to_host might throw Glib::ThreadError
+catch(const Glib::Exception& error)
+{
+	// TODO: Do we want to show a dialog here?
+	g_warning("Failed to process IPC message: %s", error.what().c_str());
+	return UNIQUE_RESPONSE_FAIL;
+}
+catch (...)
+{
 	g_assert_not_reached();
 	return UNIQUE_RESPONSE_FAIL;
 }
