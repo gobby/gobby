@@ -60,9 +60,9 @@ AC_ARG_WITH([unique], AS_HELP_STRING([--with-unique],
             [Enables support for single-instance [[default=auto]]]),
             [use_unique=$withval], [use_unique=auto])
 if test "x$use_unique" = "xauto"; then
-  PKG_CHECK_MODULES([unique], [unique-1.0], [use_unique=yes], [use_unique=no])
+  PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2], [use_unique=yes], [use_unique=no])
 elif test "x$use_unique" = "xyes"; then
-  PKG_CHECK_MODULES([unique], [unique-1.0])
+  PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2])
 fi
 
 if test "x$use_unique" = "xyes"; then
