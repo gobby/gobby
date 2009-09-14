@@ -1,3 +1,8 @@
+2009-09-14  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/file-tasks/task-open-multiple.hpp: Added an include to
+	fix the build. Bug #469.
+
 2009-09-09  Armin Burgmeier  <armin@arbur.net>
 
 	* code/window.cpp (on_message_received): Don't leak the uris vector
