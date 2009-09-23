@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-01 17:22+0100\n"
-"PO-Revision-Date: 2007-09-27 14:38+0000\n"
-"Last-Translator: Nkolay Parukhin <nik@sevpinro.ru>\n"
+"PO-Revision-Date: 2009-06-12 12:36+0000\n"
+"Last-Translator: Nkolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/chat.cpp:73
@@ -53,7 +53,7 @@ msgstr "Список документов"
 #. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
 #: ../src/encoding.cpp:53
 msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-msgstr ""
+msgstr "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
 
 #: ../src/encoding.cpp:113
 msgid ""
@@ -65,7 +65,7 @@ msgstr ""
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
-msgstr ""
+msgstr "Автоопределение"
 
 #: ../src/encoding_selector.cpp:153
 msgid "Character Encoding:"
@@ -382,11 +382,11 @@ msgstr "Восстановить сеанс"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
-msgstr ""
+msgstr ".obby файлы"
 
 #: ../src/hostdialog.cpp:108
 msgid "All files"
-msgstr ""
+msgstr "Все файлы"
 
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
@@ -684,7 +684,7 @@ msgstr "Язык не выбран"
 
 #: ../src/statusbar.cpp:72
 msgid "Line: %0%, Column: %1%"
-msgstr ""
+msgstr "Строка: %0%, столбец: %1%"
 
 #: ../src/userlist.cpp:94
 msgid "Online"
@@ -714,7 +714,7 @@ msgstr "Вы всё равно хотите закрыть Gobby?"
 
 #: ../src/window.cpp:290
 msgid "C_ancel"
-msgstr ""
+msgstr "О_тмена"
 
 #: ../src/window.cpp:449
 msgid "Use default .obby extension if none is given"
@@ -743,6 +743,17 @@ msgid ""
 "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
 "PURPOSE.  See the GNU General Public License for more details."
 msgstr ""
+"Данная программа является свободным программным \n"
+"обеспечением; вы можете распространять и/или модифицировать\n"
+"её в соответствии с GNU General PublicLicense, опубликованной \n"
+"Free Software Foundation; либо версии 2 Лицензии, \n"
+"либо (по вашему выбору) любой более поздней версии.\n"
+"\n"
+"Эта программа распространяется в надежде, что он будет \n"
+"полезна, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, даже без \n"
+"подразумеваемых гарантия ТОВАРНОЙ ПРИГОДНОСТИ \n"
+"или ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ. \n"
+"См. GNU General Public License для более подробной информации."
 
 #: ../src/window.cpp:659
 msgid "Create document"
@@ -829,12 +840,8 @@ msgstr "Закрыть без сохранения"
 
 #: ../contrib/gobby.desktop.in.h:1
 msgid "Edit text files collaboratively"
-msgstr ""
+msgstr "Редактируйте текстовые файлы совместно"
 
 #: ../contrib/gobby.desktop.in.h:2
-#, fuzzy
 msgid "Gobby Collaborative Editor"
-msgstr "Совместный текстовый редактор"
-
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Невозможно открыть файл '%0%' для записи"
+msgstr "Совместный редактор Gobby"

@@ -10,6 +10,7 @@ Version 0.4.11:
  * Translation roundup:
    - Added Czech (thanks to Petr Pulc)
    - Updated German (thanks to Sebastian Morr)
+   - Various translation updates from Launchpad
 
 Version 0.4.10:
  * Bugfix release: Fixed a bug which made saving of newly-created

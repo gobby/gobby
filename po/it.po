@@ -1,22 +1,30 @@
-# Italian translation for gobby
+# Italian translation for obby
 # Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
-# This file is distributed under the same license as the gobby package.
+# This file is distributed under the same license as the obby package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gobby\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: obby\n"
+"Report-Msgid-Bugs-To: http://gobby.0x539.de/\n"
 "POT-Creation-Date: 2009-01-01 17:22+0100\n"
-"PO-Revision-Date: 2007-06-17 15:05+0000\n"
-"Last-Translator: Milo Casagrande <milo_casagrande@yahoo.it>\n"
+"PO-Revision-Date: 2009-07-14 13:57+0000\n"
+"Last-Translator: Milo Casagrande <milo@casagrande.name>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#: ../src/encoding.cpp:113
+msgid ""
+"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
+"binary input."
+msgstr ""
+"Conversione input in UTF-8 non riuscita: codifica sconosciuta o input "
+"binario."
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -52,18 +60,11 @@ msgstr "Elenco documenti"
 #. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
 #: ../src/encoding.cpp:53
 msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-msgstr ""
-
-#: ../src/encoding.cpp:113
-msgid ""
-"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
-"binary input."
-msgstr ""
-"Conversione input in UTF-8 fallita: codifica sconosciuta o input binario."
+msgstr "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
-msgstr ""
+msgstr "Rileva automaticamente"
 
 #: ../src/encoding_selector.cpp:153
 msgid "Character Encoding:"
@@ -321,7 +322,8 @@ msgstr "Chat"
 
 #: ../src/header.cpp:418
 msgid "Displays a chat to talk to other people in the session"
-msgstr "Visualizza una chat per parlare con altre persone durante la sessione"
+msgstr ""
+"Visualizza una chat per parlare con altre persone durante la sessione"
 
 #: ../src/header.cpp:423
 msgid "_Help"
@@ -378,11 +380,11 @@ msgstr "Ripristina sessione"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
-msgstr ""
+msgstr "file .obby"
 
 #: ../src/hostdialog.cpp:108
 msgid "All files"
-msgstr ""
+msgstr "Tutti i file"
 
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
@@ -677,7 +679,7 @@ msgstr "Nessun linguaggio selezionato"
 
 #: ../src/statusbar.cpp:72
 msgid "Line: %0%, Column: %1%"
-msgstr ""
+msgstr "Linea: %0%, Colonna: %1%"
 
 #: ../src/userlist.cpp:94
 msgid "Online"
@@ -707,7 +709,7 @@ msgstr "Chiudere Gobby in ogni caso?"
 
 #: ../src/window.cpp:290
 msgid "C_ancel"
-msgstr ""
+msgstr "A_nnulla"
 
 #: ../src/window.cpp:449
 msgid "Use default .obby extension if none is given"
@@ -820,12 +822,8 @@ msgstr "Chiudi senza salvare"
 
 #: ../contrib/gobby.desktop.in.h:1
 msgid "Edit text files collaboratively"
-msgstr ""
+msgstr "Modifica file di testo in modo collaborativo"
 
 #: ../contrib/gobby.desktop.in.h:2
-#, fuzzy
 msgid "Gobby Collaborative Editor"
-msgstr "Un editor di testo collaborativo"
-
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Impossibile aprire il file «%0%» in scrittura"
+msgstr "Gobby - Editor collaborativo"

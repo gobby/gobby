@@ -1,5 +1,11 @@
 2009-09-23  Philipp Kern  <phil@0x539.de>
 
+	* po/gobby.pot: refreshed
+	* po/{ca,el,it,ja,ko,nl,pl,pt,pt_BR,ru,sv,zh_CN}.po: reimported
+	  from Launchpad
+
+2009-09-23  Philipp Kern  <phil@0x539.de>
+
 	* test/test_document.cpp:
 	* Makefile.am: remove document test, we are fairly confident that
 	  this works now; causes make check to fail because of incomplete

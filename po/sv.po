@@ -9,14 +9,55 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-01 17:22+0100\n"
 "PO-Revision-Date: 2007-09-01 23:52+0000\n"
-"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#: ../src/finddialog.cpp:49
+msgid "_Up"
+msgstr "_Uppåt"
+
+#: ../src/finddialog.cpp:50
+msgid "_Down"
+msgstr "_Nedåt"
+
+#: ../src/header.cpp:378
+msgid "Set password..."
+msgstr "Ange lösenord..."
+
+#: ../src/header.cpp:379
+msgid "Sets a password for this user"
+msgstr "Anger ett lösenord för denna användare"
+
+#: ../src/joinprogressdialog.cpp:34
+msgid ""
+"User password for user '%0%' required. You may either choose another user "
+"name, type in your user password or cancel the connection."
+msgstr ""
+"Ett lösenord för användaren \"%0%\" krävs. Du kan antingen välja ett annat "
+"användarnamn, ange ditt lösenord eller avbryta anslutningen."
+
+#: ../src/preferencesdialog.cpp:139
+msgid "Highlight current line"
+msgstr "Färgmarkera aktuell rad"
+
+#. Build password dialog with info
+#: ../src/window.cpp:908
+msgid "Set user password"
+msgstr "Ange användarlösenord"
+
+#: ../src/window.cpp:910
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+"Anger ett användarlösenord för ditt användarkonto. Nästa gång du försöker "
+"logga in med denna användare kommer ditt lösenord att efterfrågas."
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -94,14 +135,6 @@ msgstr "Matcha som ett reguljärt sökuttryck"
 #: ../src/finddialog.cpp:48
 msgid "Direction"
 msgstr "Riktning"
-
-#: ../src/finddialog.cpp:49
-msgid "_Up"
-msgstr "_Uppåt"
-
-#: ../src/finddialog.cpp:50
-msgid "_Down"
-msgstr "_Nedåt"
 
 #: ../src/finddialog.cpp:52
 msgid "_Replace"
@@ -285,14 +318,6 @@ msgstr "Syntax"
 msgid "_User"
 msgstr "_Användare"
 
-#: ../src/header.cpp:378
-msgid "Set password..."
-msgstr "Ange lösenord..."
-
-#: ../src/header.cpp:379
-msgid "Sets a password for this user"
-msgstr "Anger ett lösenord för denna användare"
-
 #: ../src/header.cpp:387
 msgid "Set colour..."
 msgstr "Välj färg..."
@@ -424,14 +449,6 @@ msgstr "Port"
 msgid "Failure"
 msgstr "Fel"
 
-#: ../src/joinprogressdialog.cpp:34
-msgid ""
-"User password for user '%0%' required. You may either choose another user "
-"name, type in your user password or cancel the connection."
-msgstr ""
-"Ett lösenord för användaren \"%0%\" krävs. Du kan antingen välja ett annat "
-"användarnamn, ange ditt lösenord eller avbryta anslutningen."
-
 #: ../src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
@@ -560,10 +577,6 @@ msgstr "Dela inte ord över två rader"
 #: ../src/preferencesdialog.cpp:138
 msgid "Display line numbers"
 msgstr "Visa radnummer"
-
-#: ../src/preferencesdialog.cpp:139
-msgid "Highlight current line"
-msgstr "Färgmarkera aktuell rad"
 
 #: ../src/preferencesdialog.cpp:140
 msgid "Display right margin"
@@ -770,19 +783,6 @@ msgstr ""
 "som för närvarande är öppna. \"OK\" sparar bara inställningarna för att "
 "använda dem med nya dokument."
 
-#. Build password dialog with info
-#: ../src/window.cpp:908
-msgid "Set user password"
-msgstr "Ange användarlösenord"
-
-#: ../src/window.cpp:910
-msgid ""
-"Set a user password for your user account. When you try to login next time "
-"with this user, you will be prompted for your password."
-msgstr ""
-"Anger ett användarlösenord för ditt användarkonto. Nästa gång du försöker "
-"logga in med denna användare kommer ditt lösenord att efterfrågas."
-
 #: ../src/window.cpp:971
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
@@ -831,81 +831,5 @@ msgid "Edit text files collaboratively"
 msgstr ""
 
 #: ../contrib/gobby.desktop.in.h:2
-#, fuzzy
 msgid "Gobby Collaborative Editor"
-msgstr "En kollaborativ textredigerare"
-
-#~ msgid "Shows up a dialog to customise Gobby for your needs"
-#~ msgstr "Öppnar en dialogruta för att anpassa Gobby efter dina behov"
-
-#~ msgid "_View"
-#~ msgstr "_Visa"
-
-#~ msgid "Shows up a list of users that are currently joined"
-#~ msgstr "Visar en lista på användare som är anslutna för tillfället"
-
-#~ msgid "Shows up a list of documents within the current session"
-#~ msgstr "Visar en lista på dokument i den aktuella sessionen"
-
-#~ msgid ""
-#~ "Howl initialisation failed. Probably you need to run mDNSResponder as "
-#~ "root prior to Gobby. Zeroconf support is deactivated for this session."
-#~ msgstr ""
-#~ "Initieringen av Howl misslyckades. Du måste antagligen köra mDNSResponder "
-#~ "som root innan du startar Gobby. Stöd för Zeroconf är deaktiverat för "
-#~ "denna session."
-
-#~ msgid "Could not open file '%0%' for writing"
-#~ msgstr "Kunde inte öppna filen '%0%' för skrivning"
-
-#~ msgid "Passwords do not match"
-#~ msgstr "Lösenorden stämmer ej överens"
-
-#~ msgid "%0% has joined"
-#~ msgstr "%0% har anslutit"
-
-#~ msgid "%0% has left"
-#~ msgstr "%0% har lämn<t"
-
-#~ msgid "Gobby"
-#~ msgstr "Gobby"
-
-#~ msgid "Colour"
-#~ msgstr "Färg"
-
-#~ msgid "Name"
-#~ msgstr "Namn"
-
-#~ msgid "Subscribed"
-#~ msgstr "Prenumererar"
-
-#~ msgid "Waiting for welcome packet..."
-#~ msgstr "Väntar på välkomstpaket..."
-
-#~ msgid ""
-#~ "You are not subscribed to the document \"%0%\".\n"
-#~ "\n"
-#~ "To view changes that others make or to edit the document yourself, you "
-#~ "have to subscribe to this document. Use the following button to perform "
-#~ "this.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Du prenumererar inte på dokumentet \"%0%\".\n"
-#~ "\n"
-#~ "För att se ändringar andra gör eller för att ändra dokumentet själv måste "
-#~ "du prenumerera på det här dokumentet. Använd följande knapp för att göra "
-#~ "detta.\n"
-#~ "\n"
-
-#~ msgid "Enter user password"
-#~ msgstr "Ange användarlösenord"
-
-#~ msgid "Could not save file '%0%': %1%"
-#~ msgstr "Kunde inte spara filen '%0%': %1%"
-
-#~ msgid ""
-#~ "The document \"%0%\" has been changed since it was saved to disk. Are you "
-#~ "sure that you want to close it?"
-#~ msgstr ""
-#~ "Dokumentet \"%0%\" har ändrats sedan det sparades till disk. Är du säker "
-#~ "på att du vill stänga det?"
+msgstr ""

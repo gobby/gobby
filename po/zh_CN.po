@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/chat.cpp:73
@@ -35,9 +35,8 @@ msgid "Document %0% does not exist"
 msgstr ""
 
 #: ../src/chat.cpp:262
-#, fuzzy
 msgid "Usage: /remove <document>"
-msgstr "保存文档"
+msgstr ""
 
 #: ../src/documentlist.cpp:51
 msgid "Subscribe"
@@ -45,7 +44,7 @@ msgstr "订阅"
 
 #: ../src/documentlist.cpp:107 ../src/header.cpp:407 ../src/icon.cpp:69
 msgid "Document list"
-msgstr ""
+msgstr "文档列表"
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
@@ -58,8 +57,7 @@ msgstr ""
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
-msgstr ""
-"无法将输入字符转换为 UTF-8 编码：您使用的是未知的编码方式或者二进制输入。"
+msgstr "无法将输入字符转换为 UTF-8 编码：您使用的是未知的编码方式或者二进制输入。"
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
@@ -71,83 +69,80 @@ msgstr ""
 
 #: ../src/finddialog.cpp:43
 msgid "Find what:"
-msgstr ""
+msgstr "查找："
 
 #: ../src/finddialog.cpp:44
-#, fuzzy
 msgid "Replace with:"
-msgstr "制表位宽度："
+msgstr "替换为："
 
 #: ../src/finddialog.cpp:45
 msgid "Match whole word only"
-msgstr ""
+msgstr "仅匹配完整单词"
 
 #: ../src/finddialog.cpp:46
 msgid "Match case"
-msgstr ""
+msgstr "区分大小写"
 
 #: ../src/finddialog.cpp:47
 msgid "Match as regular expression"
-msgstr ""
+msgstr "用正则表达式匹配"
 
 #: ../src/finddialog.cpp:48
 msgid "Direction"
-msgstr ""
+msgstr "方向"
 
 #: ../src/finddialog.cpp:49
 msgid "_Up"
-msgstr ""
+msgstr "向上(_U)"
 
 #: ../src/finddialog.cpp:50
 msgid "_Down"
-msgstr ""
+msgstr "向下(_D)"
 
 #: ../src/finddialog.cpp:52
 msgid "_Replace"
-msgstr ""
+msgstr "替换(_R)"
 
 #: ../src/finddialog.cpp:53
 msgid "Replace _all"
-msgstr ""
+msgstr "全部替换(_A)"
 
 #: ../src/finddialog.cpp:158
 msgid "Search"
-msgstr ""
+msgstr "查找"
 
 #: ../src/finddialog.cpp:158
 msgid "Search and replace"
-msgstr ""
+msgstr "查找并替换"
 
 #: ../src/finddialog.cpp:182
 msgid "\"%0%\" has not been found in the document."
-msgstr ""
+msgstr "没有在文档中发现“%0%”."
 
 #: ../src/finddialog.cpp:265
 msgid "No occurence has been replaced"
-msgstr ""
+msgstr "没有替换任何内容。"
 
 #: ../src/finddialog.cpp:271
 msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "替换了 %0% 条"
 
 #: ../src/finddialog.cpp:301
 msgid "No document currently opened"
-msgstr ""
+msgstr "当前没有打开文档"
 
 #: ../src/gotodialog.cpp:30
-#, fuzzy
 msgid "Line number:"
-msgstr "行号"
+msgstr "行号："
 
 #: ../src/gotodialog.cpp:32
 msgid "_Go to line"
-msgstr ""
+msgstr "跳转到行(_G)"
 
 #: ../src/gotodialog.cpp:77
 msgid "Go to line"
-msgstr ""
+msgstr "跳转到行"
 
 #: ../src/header.cpp:234
 msgid "Create session..."
@@ -163,15 +158,15 @@ msgstr "加入会话..."
 
 #: ../src/header.cpp:244
 msgid "Joins an existing obby session"
-msgstr ""
+msgstr "加入到一个已存在的 obby 会话"
 
 #: ../src/header.cpp:252
 msgid "Save session..."
-msgstr ""
+msgstr "保存会话..."
 
 #: ../src/header.cpp:253
 msgid "Saves the complete session for a later restore"
-msgstr ""
+msgstr "保存完成的会话以便以后恢复"
 
 #: ../src/header.cpp:261
 msgid "Quit session"
@@ -190,9 +185,8 @@ msgid "Quits the application"
 msgstr "退出程序"
 
 #: ../src/header.cpp:275
-#, fuzzy
 msgid "_Session"
-msgstr "会话"
+msgstr ""
 
 #: ../src/header.cpp:281
 msgid "Create document..."
@@ -232,45 +226,43 @@ msgstr "关闭文档"
 
 #: ../src/header.cpp:318
 msgid "Closes an opened document"
-msgstr ""
+msgstr "关闭一个已打开的文档"
 
 #: ../src/header.cpp:322
-#, fuzzy
 msgid "_Edit"
-msgstr "编辑"
+msgstr ""
 
 #: ../src/header.cpp:328
 msgid "Find..."
-msgstr ""
+msgstr "查找..."
 
 #: ../src/header.cpp:329
 msgid "Search for a text in the current document"
-msgstr ""
+msgstr "在当前文档内搜索"
 
 #: ../src/header.cpp:337
 msgid "Find and replace..."
-msgstr ""
+msgstr "查找并替换..."
 
 #: ../src/header.cpp:338
 msgid "Search for a text and replace it with another one"
-msgstr ""
+msgstr "查找一段文字并将其替换为其它内容"
 
 #: ../src/header.cpp:346
 msgid "Go to line..."
-msgstr ""
+msgstr "跳转到某行..."
 
 #: ../src/header.cpp:347
 msgid "Move cursor to a specified line"
-msgstr ""
+msgstr "移动光标到指定行"
 
 #: ../src/header.cpp:355
 msgid "Preferences..."
 msgstr "首选项..."
 
 #: ../src/header.cpp:356
-#, fuzzy
 msgid "Displays a dialog to customise Gobby for your needs"
-msgstr "显示对话框以按您的需要自定义 Gobby"
+msgstr ""
 
 #: ../src/header.cpp:364
 msgid "Document preferences..."
@@ -285,9 +277,8 @@ msgid "Syntax"
 msgstr "语法"
 
 #: ../src/header.cpp:372
-#, fuzzy
 msgid "_User"
-msgstr "用户"
+msgstr ""
 
 #: ../src/header.cpp:378
 msgid "Set password..."
@@ -311,7 +302,7 @@ msgstr ""
 
 #: ../src/header.cpp:398 ../src/icon.cpp:66 ../src/userlist.cpp:122
 msgid "User list"
-msgstr ""
+msgstr "用户列表"
 
 #: ../src/header.cpp:399
 msgid "Displays a list of users that are currently joined"
@@ -330,18 +321,16 @@ msgid "Displays a chat to talk to other people in the session"
 msgstr ""
 
 #: ../src/header.cpp:423
-#, fuzzy
 msgid "_Help"
-msgstr "帮助"
+msgstr ""
 
 #: ../src/header.cpp:429
 msgid "About"
 msgstr "关于"
 
 #: ../src/header.cpp:430
-#, fuzzy
 msgid "Shows Gobby's copyright and credits"
-msgstr "显示 Gobby 版权及"
+msgstr "显示 Gobby 版权及致谢"
 
 #: ../src/header.cpp:645
 msgid "None"
@@ -378,11 +367,11 @@ msgstr "密码："
 
 #: ../src/hostdialog.cpp:40
 msgid "Restore session:"
-msgstr ""
+msgstr "恢复会话："
 
 #: ../src/hostdialog.cpp:42
 msgid "Restore session"
-msgstr ""
+msgstr "恢复会话"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
@@ -393,9 +382,8 @@ msgid "All files"
 msgstr ""
 
 #: ../src/hostdialog.cpp:120
-#, fuzzy
 msgid "_Host"
-msgstr "主机"
+msgstr ""
 
 #: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
 msgid "Opening obby session..."
@@ -434,36 +422,36 @@ msgstr ""
 msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
-msgstr ""
+msgstr "用户“%0%”需要用户密码。您可能要选择其他的用户名，输入您的密码或取消连接。"
 
 #: ../src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
-msgstr ""
+msgstr "您选择的名字已经被使用。你可以选择另外的名字或取消连接。"
 
 #: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:227
 msgid "New name:"
-msgstr ""
+msgstr "新名称："
 
 #: ../src/joinprogressdialog.cpp:157
 msgid ""
 "Colour is already in use. You may choose another colour or cancel the "
 "connection."
-msgstr ""
+msgstr "您选择的色彩已经被使用。你可以选择另外的色彩或取消连接。"
 
 #: ../src/joinprogressdialog.cpp:182
 msgid ""
 "Session password required. You have to type in the password to be able to "
 "join the obby session."
-msgstr ""
+msgstr "需要会话密码。您必须输入密码来加入到 obby 会话中。"
 
 #: ../src/joinprogressdialog.cpp:186
 msgid "Session password:"
-msgstr ""
+msgstr "会话密码："
 
 #: ../src/joinprogressdialog.cpp:228
 msgid "User password:"
-msgstr ""
+msgstr "用户密码："
 
 #: ../src/joinprogressdialog.cpp:308
 msgid "Joining obby session..."
@@ -493,7 +481,7 @@ msgstr "连接丢失"
 
 #: ../src/preferencesdialog.cpp:65
 msgid "Tab Stops"
-msgstr ""
+msgstr "制表符"
 
 #: ../src/preferencesdialog.cpp:66
 msgid "Indentation"
@@ -508,9 +496,8 @@ msgid "Tab width:"
 msgstr "制表位宽度："
 
 #: ../src/preferencesdialog.cpp:69
-#, fuzzy
 msgid "Insert spaces instead of tabs"
-msgstr "插入空格而非 tab"
+msgstr "插入空格而非制表符"
 
 #: ../src/preferencesdialog.cpp:70
 msgid "Enable automatic indentation"
@@ -524,8 +511,7 @@ msgstr "智能 home/end"
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
-msgstr ""
-"开启此选项，Home/End 键将在移动至 行首/行尾 之前先移动至 最前/最后 一个字符"
+msgstr "开启此选项，Home/End 键将在移动至 行首/行尾 之前先移动至 最前/最后 一个字符"
 
 #: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
@@ -552,9 +538,8 @@ msgid "Enable text wrapping"
 msgstr "开启自动换行"
 
 #: ../src/preferencesdialog.cpp:137
-#, fuzzy
 msgid "Do not split words over two lines"
-msgstr "不将词语拆分至两行"
+msgstr "行间不分割单词"
 
 #: ../src/preferencesdialog.cpp:138
 msgid "Display line numbers"
@@ -566,11 +551,11 @@ msgstr "高亮当前行"
 
 #: ../src/preferencesdialog.cpp:140
 msgid "Display right margin"
-msgstr ""
+msgstr "显示右边界"
 
 #: ../src/preferencesdialog.cpp:141
 msgid "Right margin at column:"
-msgstr ""
+msgstr "右边界列数："
 
 #: ../src/preferencesdialog.cpp:142
 msgid "Highlight matching bracket"
@@ -582,11 +567,11 @@ msgstr "工具栏"
 
 #: ../src/preferencesdialog.cpp:226
 msgid "Windows"
-msgstr ""
+msgstr "窗口"
 
 #: ../src/preferencesdialog.cpp:227
 msgid "Remember the positions and states"
-msgstr ""
+msgstr "记住当前的位置和状态"
 
 #: ../src/preferencesdialog.cpp:229
 msgid "Highlight the window on incoming chat messages"
@@ -605,14 +590,12 @@ msgid "Show both icons and text"
 msgstr "显示图标和文字"
 
 #: ../src/preferencesdialog.cpp:238
-#, fuzzy
 msgid "Show text besides icons"
-msgstr "仅显示文字"
+msgstr ""
 
 #: ../src/preferencesdialog.cpp:309
-#, fuzzy
 msgid "Document management"
-msgstr "输入文档名"
+msgstr ""
 
 #: ../src/preferencesdialog.cpp:310
 msgid "Open new remotely-created documents automatically"
@@ -672,9 +655,8 @@ msgid "Files"
 msgstr ""
 
 #: ../src/statusbar.cpp:38 ../src/statusbar.cpp:100
-#, fuzzy
 msgid "Not connected"
-msgstr "已连接"
+msgstr ""
 
 #: ../src/statusbar.cpp:56
 msgid "Selected language: %0%"
@@ -690,29 +672,26 @@ msgstr ""
 
 #: ../src/userlist.cpp:94
 msgid "Online"
-msgstr ""
+msgstr "在线"
 
 #: ../src/userlist.cpp:95
 msgid "Offline"
-msgstr ""
+msgstr "离线"
 
 #: ../src/window.cpp:194
-#, fuzzy
 msgid ""
 "Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
-"Howl 初始化失败。您可能需要以在 Gobby 之前以 root 权限运行 mDNSResponder。本"
-"会话的 Zeroconf 支持已被禁用。"
 
 #: ../src/window.cpp:276
 msgid "You are still connected to a session"
-msgstr ""
+msgstr "你当前仍然连接到一个会话"
 
 #: ../src/window.cpp:284
 msgid "Do you want to close Gobby nevertheless?"
-msgstr ""
+msgstr "你仍然要关闭 Gobby 吗？"
 
 #: ../src/window.cpp:290
 msgid "C_ancel"
@@ -720,15 +699,15 @@ msgstr ""
 
 #: ../src/window.cpp:449
 msgid "Use default .obby extension if none is given"
-msgstr ""
+msgstr "如果没有指定，使用 .obby 作为默认扩展。"
 
 #: ../src/window.cpp:454
 msgid "Save obby session"
-msgstr ""
+msgstr "保存 obby 会话"
 
 #: ../src/window.cpp:517
 msgid "A collaborative text editor"
-msgstr ""
+msgstr "共享文本编辑器"
 
 #. Please note in the translation that only the English version is
 #. legally binding.
@@ -767,7 +746,7 @@ msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
-msgstr ""
+msgstr "点击“应用”来使新设置在当前已经打开的文档中生效。“确定”将只保存设置并只对新打开的会话有效。"
 
 #. Build password dialog with info
 #: ../src/window.cpp:908
@@ -778,14 +757,14 @@ msgstr "设置用户密码"
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
-msgstr ""
+msgstr "为您的用户账户设置密码。当您再次尝试登陆时，将会被要求输入密码。"
 
 #: ../src/window.cpp:971
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
-msgstr ""
+msgstr "这些设置仅对当前活动的文档“%0%”有效。如果你希望更改全局设置，请使用在“编辑”菜单的“首选项”。"
 
 #: ../src/window.cpp:1081
 msgid "Colour change failed: Colour already in use"
@@ -797,11 +776,11 @@ msgstr "连接至 %0%:%1%"
 
 #: ../src/window.cpp:1377
 msgid "Serving on port %0%"
-msgstr ""
+msgstr "服务端口 %0%"
 
 #: ../src/window.cpp:1507
 msgid "Save changes to document \"%0%\" before closing?"
-msgstr ""
+msgstr "关闭前保存对“%0%”的更改？"
 
 #: ../src/window.cpp:1517
 msgid ""

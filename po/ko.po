@@ -9,65 +9,24 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-01 17:22+0100\n"
 "PO-Revision-Date: 2007-10-26 03:09+0000\n"
-"Last-Translator: Oh, A-Reum <dhdkfma1016@gmail.com>\n"
+"Last-Translator: A Reum <Unknown>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
+"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: ../src/chat.cpp:73
-msgid "Send"
-msgstr "보내기"
-
-#: ../src/chat.cpp:231
-msgid "Command '%0%' not found. Type /help for a list of existing commands."
-msgstr ""
-"'%0%' 명령어가 없습니다. /help 명령어로 사용 가능한 명령어를 확인하시기 바랍"
-"니다."
-
-#: ../src/chat.cpp:242
-msgid "%0%: %1%"
-msgstr "%0%: %1%"
-
-#: ../src/chat.cpp:256
-msgid "Document %0% does not exist"
-msgstr "존재하지 않는 문서 %0%"
-
-#: ../src/chat.cpp:262
-msgid "Usage: /remove <document>"
-msgstr "사용법 : /remove <문서명>"
 
 #: ../src/documentlist.cpp:51
 msgid "Subscribe"
 msgstr "문서참여"
-
-#: ../src/documentlist.cpp:107 ../src/header.cpp:407 ../src/icon.cpp:69
-msgid "Document list"
-msgstr "문서 목록"
-
-#. Translators: the msgid should not be localized.
-#. * The msgstr is the list of encodings separated by bar. e.g.
-#. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
-#: ../src/encoding.cpp:53
-msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-msgstr ""
 
 #: ../src/encoding.cpp:113
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
 msgstr "UTF-8로 변환 실패: 인코딩을 알 수 없거나 2진 입력 입니다."
-
-#: ../src/encoding_selector.cpp:26
-msgid "Auto Detect"
-msgstr ""
-
-#: ../src/encoding_selector.cpp:153
-msgid "Character Encoding:"
-msgstr "문자 인코딩:"
 
 #: ../src/finddialog.cpp:43
 msgid "Find what:"
@@ -110,10 +69,6 @@ msgid "Replace _all"
 msgstr "모두 바꾸기(_A)"
 
 #: ../src/finddialog.cpp:158
-msgid "Search"
-msgstr "찾기"
-
-#: ../src/finddialog.cpp:158
 msgid "Search and replace"
 msgstr "찾아 바꾸기"
 
@@ -124,12 +79,6 @@ msgstr "\"%0%\" 을/를 찾을 수 없습니다."
 #: ../src/finddialog.cpp:265
 msgid "No occurence has been replaced"
 msgstr "변경사항 없음"
-
-#: ../src/finddialog.cpp:271
-msgid "%0% occurence has been replaced"
-msgid_plural "%0% occurences have been replaced"
-msgstr[0] ""
-msgstr[1] ""
 
 #: ../src/finddialog.cpp:301
 msgid "No document currently opened"
@@ -187,10 +136,6 @@ msgstr "종료"
 msgid "Quits the application"
 msgstr "어플리케이션 종료"
 
-#: ../src/header.cpp:275
-msgid "_Session"
-msgstr "세션(_S)"
-
 #: ../src/header.cpp:281
 msgid "Create document..."
 msgstr "문서 만들기..."
@@ -207,10 +152,6 @@ msgstr "문서 열기.."
 msgid "Loads a file into a new document"
 msgstr "새 문서에서 파일 불러오기"
 
-#: ../src/header.cpp:299
-msgid "Save document"
-msgstr "문서 저장"
-
 #: ../src/header.cpp:300
 msgid "Saves a document into a file"
 msgstr "문서를 파일로 저장"
@@ -223,21 +164,9 @@ msgstr "다른이름으로 문서 저장하기.."
 msgid "Saves a document to another location"
 msgstr "다른위치에 문서 저장하기"
 
-#: ../src/header.cpp:317
-msgid "Close document"
-msgstr "문서 닫기"
-
 #: ../src/header.cpp:318
 msgid "Closes an opened document"
 msgstr "열려있는 문서 종료"
-
-#: ../src/header.cpp:322
-msgid "_Edit"
-msgstr "편집(_E)"
-
-#: ../src/header.cpp:328
-msgid "Find..."
-msgstr "찾기..."
 
 #: ../src/header.cpp:329
 msgid "Search for a text in the current document"
@@ -263,10 +192,6 @@ msgstr "커서를 특정 줄로 옮김"
 msgid "Preferences..."
 msgstr "속성..."
 
-#: ../src/header.cpp:356
-msgid "Displays a dialog to customise Gobby for your needs"
-msgstr ""
-
 #: ../src/header.cpp:364
 msgid "Document preferences..."
 msgstr "문서 속성..."
@@ -278,10 +203,6 @@ msgstr "이 문서에 적용된 대화 속성 보기"
 #: ../src/header.cpp:370
 msgid "Syntax"
 msgstr "언어"
-
-#: ../src/header.cpp:372
-msgid "_User"
-msgstr "사용자(_U)"
 
 #: ../src/header.cpp:378
 msgid "Set password..."
@@ -299,34 +220,6 @@ msgstr "색 선택..."
 msgid "Sets a new colour for this user"
 msgstr "이 사용자의 색 설정"
 
-#: ../src/header.cpp:392
-msgid "_Window"
-msgstr "창(_W)"
-
-#: ../src/header.cpp:398 ../src/icon.cpp:66 ../src/userlist.cpp:122
-msgid "User list"
-msgstr "사용자 목록"
-
-#: ../src/header.cpp:399
-msgid "Displays a list of users that are currently joined"
-msgstr "현재 참석하고 있는 사용자 목록을 보여줌"
-
-#: ../src/header.cpp:408
-msgid "Displays a list of documents within the current session"
-msgstr "현재 세션에 속해있는 문서 목록을 보여줌"
-
-#: ../src/header.cpp:417 ../src/icon.cpp:72
-msgid "Chat"
-msgstr "채팅"
-
-#: ../src/header.cpp:418
-msgid "Displays a chat to talk to other people in the session"
-msgstr "세션의 다른 사람들과의 대화를 보여줌"
-
-#: ../src/header.cpp:423
-msgid "_Help"
-msgstr "도움말(_H)"
-
 #: ../src/header.cpp:429
 msgid "About"
 msgstr "Gobby에 대하여"
@@ -334,10 +227,6 @@ msgstr "Gobby에 대하여"
 #: ../src/header.cpp:430
 msgid "Shows Gobby's copyright and credits"
 msgstr "Gobby의 저작권 보기"
-
-#: ../src/header.cpp:645
-msgid "None"
-msgstr ""
 
 #: ../src/header.cpp:646
 msgid "Unselects the current language"
@@ -352,41 +241,13 @@ msgstr "%0% 언어 선택"
 msgid "Create obby session"
 msgstr "obby 세션 생성하기"
 
-#: ../src/hostdialog.cpp:36 ../src/joindialog.cpp:56
-msgid "Port:"
-msgstr "포트:"
-
-#: ../src/hostdialog.cpp:37 ../src/joindialog.cpp:57
-msgid "Name:"
-msgstr "이름:"
-
-#: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-msgid "Colour:"
-msgstr "색상:"
-
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
 msgstr "비밀번호:"
 
-#: ../src/hostdialog.cpp:40
-msgid "Restore session:"
-msgstr "세션 복구:"
-
 #: ../src/hostdialog.cpp:42
 msgid "Restore session"
 msgstr "세션 복구"
-
-#: ../src/hostdialog.cpp:106
-msgid ".obby files"
-msgstr ""
-
-#: ../src/hostdialog.cpp:108
-msgid "All files"
-msgstr ""
-
-#: ../src/hostdialog.cpp:120
-msgid "_Host"
-msgstr "호스트(_H)"
 
 #: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
 msgid "Opening obby session..."
@@ -396,61 +257,33 @@ msgstr "obby 세션 열기..."
 msgid "Join obby session"
 msgstr "obby 세션에 참석"
 
-#: ../src/joindialog.cpp:55
-msgid "Host:"
-msgstr "호스트:"
-
 #: ../src/joindialog.cpp:60
 msgid "Local network"
 msgstr "로컬네트워크"
-
-#. resetup columns
-#: ../src/joindialog.cpp:365
-msgid "User"
-msgstr "사용자"
-
-#: ../src/joindialog.cpp:366
-msgid "Host"
-msgstr "호스트"
-
-#: ../src/joindialog.cpp:367
-msgid "Port"
-msgstr "포트"
-
-#: ../src/joindialog.cpp:386
-msgid "Failure"
-msgstr "실패"
 
 #: ../src/joinprogressdialog.cpp:34
 msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
 msgstr ""
-"'%0%'의 사용자 비밀번호가 필요합니다.  다른 사용자 이름을 선택하고, 당신의 사"
-"용자 비밀번호를 입력하거나 연겨를 취소하세요."
+"'%0%'의 사용자 비밀번호가 필요합니다.  다른 사용자 이름을 선택하고, 당신의 사용자 비밀번호를 입력하거나 연겨를 취소하세요."
 
 #: ../src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
 msgstr "이미 사용중인 이름입니다. 다른 이름을 선택하거나 연결을 취소하십시오."
 
-#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:227
-msgid "New name:"
-msgstr "새 이름:"
-
 #: ../src/joinprogressdialog.cpp:157
 msgid ""
 "Colour is already in use. You may choose another colour or cancel the "
 "connection."
-msgstr ""
-"현재 색상은 이미 사용중입니다. 다른 색상을 고르시거나 연결을 취소하세요."
+msgstr "현재 색상은 이미 사용중입니다. 다른 색상을 고르시거나 연결을 취소하세요."
 
 #: ../src/joinprogressdialog.cpp:182
 msgid ""
 "Session password required. You have to type in the password to be able to "
 "join the obby session."
-msgstr ""
-"세션 비밀번호가 필요합니다. obby 세션에 참여할 수 있는 비밀번호를 입력하세요."
+msgstr "세션 비밀번호가 필요합니다. obby 세션에 참여할 수 있는 비밀번호를 입력하세요."
 
 #: ../src/joinprogressdialog.cpp:186
 msgid "Session password:"
@@ -463,14 +296,6 @@ msgstr "사용자 비밀번호:"
 #: ../src/joinprogressdialog.cpp:308
 msgid "Joining obby session..."
 msgstr "obby 세션에 참석..."
-
-#. Thread has established connection, wait for welcome packet
-#. The welcome event will be emitted as soon as the connection
-#. has been encrypted. Maybe we should have another step before
-#. this that really waits for the welcome packet.
-#: ../src/joinprogressdialog.cpp:410
-msgid "Setting up connection encryption (TLS)..."
-msgstr "연결 암호화 설정 (TLS)..."
 
 #. Update status message
 #: ../src/joinprogressdialog.cpp:470
@@ -519,8 +344,8 @@ msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
 msgstr ""
-"이 옵션이 선택되면, Home/End 키를 사용했을 경우 문장의 처음과 끝부분에 커서"
-"가 가기 전에 해당 줄의 문장의 시작부분과 끝부분에 커서가 가게 됩니다."
+"이 옵션이 선택되면, Home/End 키를 사용했을 경우 문장의 처음과 끝부분에 커서가 가기 전에 해당 줄의 문장의 시작부분과 끝부분에 "
+"커서가 가게 됩니다."
 
 #: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
@@ -529,10 +354,6 @@ msgstr "줄 바꿈"
 #: ../src/preferencesdialog.cpp:132
 msgid "Line numbers"
 msgstr "줄 번호"
-
-#: ../src/preferencesdialog.cpp:133
-msgid "Current line"
-msgstr "현재 줄"
 
 #: ../src/preferencesdialog.cpp:134
 msgid "Right margin"
@@ -554,10 +375,6 @@ msgstr "단어를 두 줄로 나누지 않음"
 msgid "Display line numbers"
 msgstr "줄 번호 표시"
 
-#: ../src/preferencesdialog.cpp:139
-msgid "Highlight current line"
-msgstr "현재 줄 강조"
-
 #: ../src/preferencesdialog.cpp:140
 msgid "Display right margin"
 msgstr "가로 여백 표시"
@@ -574,17 +391,9 @@ msgstr "매칭되는 괄호 강조"
 msgid "Toolbar"
 msgstr "툴바"
 
-#: ../src/preferencesdialog.cpp:226
-msgid "Windows"
-msgstr "창"
-
 #: ../src/preferencesdialog.cpp:227
 msgid "Remember the positions and states"
 msgstr "위치와 상태 기억하기"
-
-#: ../src/preferencesdialog.cpp:229
-msgid "Highlight the window on incoming chat messages"
-msgstr "새로 받은 채팅 메시지 강조"
 
 #: ../src/preferencesdialog.cpp:235
 msgid "Show text only"
@@ -597,6 +406,274 @@ msgstr "아이콘만 보기"
 #: ../src/preferencesdialog.cpp:237
 msgid "Show both icons and text"
 msgstr "문자와 아이콘 모두 보기"
+
+#: ../src/preferencesdialog.cpp:713
+msgid "Preferences"
+msgstr "속성"
+
+#: ../src/preferencesdialog.cpp:726
+msgid "View"
+msgstr "뷰"
+
+#. Appearance only affects the global Gobby window
+#: ../src/preferencesdialog.cpp:729
+msgid "Appearance"
+msgstr "외관"
+
+#: ../src/statusbar.cpp:62
+msgid "No language selected"
+msgstr "선택된 언어 없음"
+
+#: ../src/window.cpp:276
+msgid "You are still connected to a session"
+msgstr "아직 세션에 연결되어있습니다."
+
+#: ../src/window.cpp:284
+msgid "Do you want to close Gobby nevertheless?"
+msgstr "그래도 종료하시겠습니까?"
+
+#: ../src/window.cpp:449
+msgid "Use default .obby extension if none is given"
+msgstr "확장자명이 주어지지 않은 경우 기본 확장자 .obby를 사용하세요."
+
+#: ../src/window.cpp:454
+msgid "Save obby session"
+msgstr "obby 세션 저장하기"
+
+#: ../src/window.cpp:517
+msgid "A collaborative text editor"
+msgstr "공동 제작 문서 편집기"
+
+#: ../src/window.cpp:864
+msgid ""
+"Click on \"Apply\" to apply the new settings to documents that are currently "
+"open. \"OK\" will just store the values to use them with newly created "
+"documents."
+msgstr ""
+"\"적용\" 을 클릭하면 현재 열려있는 문서에 새로운 설정이 적용됩니다. \"확인\" 을 클릭하면 설정이 저장되고 새로 생성되는 문서들 "
+"부터 그 설정이 사용됩니다."
+
+#. Build password dialog with info
+#: ../src/window.cpp:908
+msgid "Set user password"
+msgstr "사용자 비밀번호 설정"
+
+#: ../src/window.cpp:910
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+"당신의 사용자 계정에 비밀번호를 설정하세요. 이 사용자가 다음에 로그인 했을 경우 , 당신은 당신의 비밀번호를 입력해야 합니다."
+
+#: ../src/window.cpp:971
+msgid ""
+"These preferences affect only the currently active document \"%0%\". If you "
+"want to change global preferences, use the preferences menu item in the "
+"\"Edit\" menu."
+msgstr ""
+"이 속성은 현재 사용중인 문서 \"%0%\" 에만 적용됩니다. 만약 모든 문서의 속성을 바꾸고 싶으시면, \"편집\" 메뉴에 속성에서 "
+"변경하세요."
+
+#: ../src/window.cpp:1081
+msgid "Colour change failed: Colour already in use"
+msgstr "색 바꾸기 실패: 이미 사용중인 색"
+
+#: ../src/window.cpp:1333
+msgid "Connected to %0%:%1%"
+msgstr "%0%:%1% 에 연결"
+
+#: ../src/window.cpp:1377
+msgid "Serving on port %0%"
+msgstr "%0% 포트에 저장"
+
+#: ../src/window.cpp:1507
+msgid "Save changes to document \"%0%\" before closing?"
+msgstr "종료하기 전에 \"%0%\" 문서의 변경사항을 저장하시겠습니까?"
+
+#: ../src/chat.cpp:73
+msgid "Send"
+msgstr "보내기"
+
+#: ../src/chat.cpp:231
+msgid "Command '%0%' not found. Type /help for a list of existing commands."
+msgstr "'%0%' 명령어가 없습니다. /help 명령어로 사용 가능한 명령어를 확인하시기 바랍니다."
+
+#: ../src/chat.cpp:242
+msgid "%0%: %1%"
+msgstr "%0%: %1%"
+
+#: ../src/chat.cpp:256
+msgid "Document %0% does not exist"
+msgstr "존재하지 않는 문서 %0%"
+
+#: ../src/chat.cpp:262
+msgid "Usage: /remove <document>"
+msgstr "사용법 : /remove <문서명>"
+
+#: ../src/documentlist.cpp:107 ../src/header.cpp:407 ../src/icon.cpp:69
+msgid "Document list"
+msgstr "문서 목록"
+
+#. Translators: the msgid should not be localized.
+#. * The msgstr is the list of encodings separated by bar. e.g.
+#. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
+#: ../src/encoding.cpp:53
+msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
+msgstr ""
+
+#: ../src/encoding_selector.cpp:26
+msgid "Auto Detect"
+msgstr ""
+
+#: ../src/encoding_selector.cpp:153
+msgid "Character Encoding:"
+msgstr "문자 인코딩:"
+
+#: ../src/finddialog.cpp:158
+msgid "Search"
+msgstr "찾기"
+
+#: ../src/finddialog.cpp:271
+msgid "%0% occurence has been replaced"
+msgid_plural "%0% occurences have been replaced"
+msgstr[0] "%0% 회 바뀌어졌습니다"
+
+#: ../src/header.cpp:275
+msgid "_Session"
+msgstr "세션(_S)"
+
+#: ../src/header.cpp:299
+msgid "Save document"
+msgstr "문서 저장"
+
+#: ../src/header.cpp:317
+msgid "Close document"
+msgstr "문서 닫기"
+
+#: ../src/header.cpp:322
+msgid "_Edit"
+msgstr "편집(_E)"
+
+#: ../src/header.cpp:328
+msgid "Find..."
+msgstr "찾기..."
+
+#: ../src/header.cpp:356
+msgid "Displays a dialog to customise Gobby for your needs"
+msgstr ""
+
+#: ../src/header.cpp:372
+msgid "_User"
+msgstr "사용자(_U)"
+
+#: ../src/header.cpp:392
+msgid "_Window"
+msgstr "창(_W)"
+
+#: ../src/header.cpp:398 ../src/icon.cpp:66 ../src/userlist.cpp:122
+msgid "User list"
+msgstr "사용자 목록"
+
+#: ../src/header.cpp:399
+msgid "Displays a list of users that are currently joined"
+msgstr "현재 참석하고 있는 사용자 목록을 보여줌"
+
+#: ../src/header.cpp:408
+msgid "Displays a list of documents within the current session"
+msgstr "현재 세션에 속해있는 문서 목록을 보여줌"
+
+#: ../src/header.cpp:417 ../src/icon.cpp:72
+msgid "Chat"
+msgstr "채팅"
+
+#: ../src/header.cpp:418
+msgid "Displays a chat to talk to other people in the session"
+msgstr "세션의 다른 사람들과의 대화를 보여줌"
+
+#: ../src/header.cpp:423
+msgid "_Help"
+msgstr "도움말(_H)"
+
+#: ../src/header.cpp:645
+msgid "None"
+msgstr "없음"
+
+#: ../src/hostdialog.cpp:36 ../src/joindialog.cpp:56
+msgid "Port:"
+msgstr "포트:"
+
+#: ../src/hostdialog.cpp:37 ../src/joindialog.cpp:57
+msgid "Name:"
+msgstr "이름:"
+
+#: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
+msgid "Colour:"
+msgstr "색상:"
+
+#: ../src/hostdialog.cpp:40
+msgid "Restore session:"
+msgstr "세션 복구:"
+
+#: ../src/hostdialog.cpp:106
+msgid ".obby files"
+msgstr ""
+
+#: ../src/hostdialog.cpp:108
+msgid "All files"
+msgstr ""
+
+#: ../src/hostdialog.cpp:120
+msgid "_Host"
+msgstr "호스트(_H)"
+
+#: ../src/joindialog.cpp:55
+msgid "Host:"
+msgstr "호스트:"
+
+#. resetup columns
+#: ../src/joindialog.cpp:365
+msgid "User"
+msgstr "사용자"
+
+#: ../src/joindialog.cpp:366
+msgid "Host"
+msgstr "호스트"
+
+#: ../src/joindialog.cpp:367
+msgid "Port"
+msgstr "포트"
+
+#: ../src/joindialog.cpp:386
+msgid "Failure"
+msgstr "실패"
+
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:227
+msgid "New name:"
+msgstr "새 이름:"
+
+#. Thread has established connection, wait for welcome packet
+#. The welcome event will be emitted as soon as the connection
+#. has been encrypted. Maybe we should have another step before
+#. this that really waits for the welcome packet.
+#: ../src/joinprogressdialog.cpp:410
+msgid "Setting up connection encryption (TLS)..."
+msgstr "연결 암호화 설정 (TLS)..."
+
+#: ../src/preferencesdialog.cpp:133
+msgid "Current line"
+msgstr "현재 줄"
+
+#: ../src/preferencesdialog.cpp:139
+msgid "Highlight current line"
+msgstr "현재 줄 강조"
+
+#: ../src/preferencesdialog.cpp:226
+msgid "Windows"
+msgstr "창"
+
+#: ../src/preferencesdialog.cpp:229
+msgid "Highlight the window on incoming chat messages"
+msgstr "새로 받은 채팅 메시지 강조"
 
 #: ../src/preferencesdialog.cpp:238
 msgid "Show text besides icons"
@@ -634,22 +711,9 @@ msgstr "패턴을 채워주세요."
 msgid "There is no language with the mime type '%0%'."
 msgstr "MIME 유형 '%0%'에 해당하는 언어가 없습니다."
 
-#: ../src/preferencesdialog.cpp:713
-msgid "Preferences"
-msgstr "속성"
-
 #: ../src/preferencesdialog.cpp:725
 msgid "Editor"
 msgstr "편집기"
-
-#: ../src/preferencesdialog.cpp:726
-msgid "View"
-msgstr "뷰"
-
-#. Appearance only affects the global Gobby window
-#: ../src/preferencesdialog.cpp:729
-msgid "Appearance"
-msgstr "외관"
 
 #: ../src/preferencesdialog.cpp:730
 msgid "Font"
@@ -671,10 +735,6 @@ msgstr "연결되지 않음"
 msgid "Selected language: %0%"
 msgstr "선택된 언어: %0%"
 
-#: ../src/statusbar.cpp:62
-msgid "No language selected"
-msgstr "선택된 언어 없음"
-
 #: ../src/statusbar.cpp:72
 msgid "Line: %0%, Column: %1%"
 msgstr ""
@@ -694,29 +754,9 @@ msgid ""
 "Zeroconf support is deactivated for this session."
 msgstr ""
 
-#: ../src/window.cpp:276
-msgid "You are still connected to a session"
-msgstr "아직 세션에 연결되어있습니다."
-
-#: ../src/window.cpp:284
-msgid "Do you want to close Gobby nevertheless?"
-msgstr "그래도 종료하시겠습니까?"
-
 #: ../src/window.cpp:290
 msgid "C_ancel"
 msgstr ""
-
-#: ../src/window.cpp:449
-msgid "Use default .obby extension if none is given"
-msgstr "확장자명이 주어지지 않은 경우 기본 확장자 .obby를 사용하세요."
-
-#: ../src/window.cpp:454
-msgid "Save obby session"
-msgstr "obby 세션 저장하기"
-
-#: ../src/window.cpp:517
-msgid "A collaborative text editor"
-msgstr "공동 제작 문서 편집기"
 
 #. Please note in the translation that only the English version is
 #. legally binding.
@@ -750,60 +790,13 @@ msgstr "새 문서 열기"
 msgid "Save current document"
 msgstr "현재 문서 저장"
 
-#: ../src/window.cpp:864
-msgid ""
-"Click on \"Apply\" to apply the new settings to documents that are currently "
-"open. \"OK\" will just store the values to use them with newly created "
-"documents."
-msgstr ""
-"\"적용\" 을 클릭하면 현재 열려있는 문서에 새로운 설정이 적용됩니다. \"확인\" "
-"을 클릭하면 설정이 저장되고 새로 생성되는 문서들 부터 그 설정이 사용됩니다."
-
-#. Build password dialog with info
-#: ../src/window.cpp:908
-msgid "Set user password"
-msgstr "사용자 비밀번호 설정"
-
-#: ../src/window.cpp:910
-msgid ""
-"Set a user password for your user account. When you try to login next time "
-"with this user, you will be prompted for your password."
-msgstr ""
-"당신의 사용자 계정에 비밀번호를 설정하세요. 이 사용자가 다음에 로그인 했을 경"
-"우 , 당신은 당신의 비밀번호를 입력해야 합니다."
-
-#: ../src/window.cpp:971
-msgid ""
-"These preferences affect only the currently active document \"%0%\". If you "
-"want to change global preferences, use the preferences menu item in the "
-"\"Edit\" menu."
-msgstr ""
-"이 속성은 현재 사용중인 문서 \"%0%\" 에만 적용됩니다. 만약 모든 문서의 속성"
-"을 바꾸고 싶으시면, \"편집\" 메뉴에 속성에서 변경하세요."
-
-#: ../src/window.cpp:1081
-msgid "Colour change failed: Colour already in use"
-msgstr "색 바꾸기 실패: 이미 사용중인 색"
-
-#: ../src/window.cpp:1333
-msgid "Connected to %0%:%1%"
-msgstr "%0%:%1% 에 연결"
-
-#: ../src/window.cpp:1377
-msgid "Serving on port %0%"
-msgstr "%0% 포트에 저장"
-
-#: ../src/window.cpp:1507
-msgid "Save changes to document \"%0%\" before closing?"
-msgstr "종료하기 전에 \"%0%\" 문서의 변경사항을 저장하시겠습니까?"
-
 #: ../src/window.cpp:1517
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
 msgstr ""
-"저장하지 않으면 변경사항은 적용되지 않습니다. 하지만 세션이 아직 열려있으면 "
-"문서를 다시 불러올 수 있기 때문에 문서를 다시 부활시킬 수 있습니다."
+"저장하지 않으면 변경사항은 적용되지 않습니다. 하지만 세션이 아직 열려있으면 문서를 다시 불러올 수 있기 때문에 문서를 다시 부활시킬 수 "
+"있습니다."
 
 #: ../src/window.cpp:1526
 msgid "If you don't save, changes will be discarded."
@@ -819,6 +812,5 @@ msgid "Edit text files collaboratively"
 msgstr ""
 
 #: ../contrib/gobby.desktop.in.h:2
-#, fuzzy
 msgid "Gobby Collaborative Editor"
-msgstr "공동 제작 문서 편집기"
+msgstr ""
