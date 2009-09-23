@@ -1,6 +1,16 @@
 Gobby
 =====
 
+Version 0.4.11:
+ * Gobby now adheres to the XDG specification for its configuration file.
+ * Remove spurious underscores on "replace" buttons.
+ * A "Save Session As" menu item has been introduced.
+ * Add High Contrast Large Print icons for Gobby and its custom toolbar
+   items.
+ * Translation roundup:
+   - Added Czech (thanks to Petr Pulc)
+   - Updated German (thanks to Sebastian Morr)
+
 Version 0.4.10:
  * Bugfix release: Fixed a bug which made saving of newly-created
    documents impossible.
