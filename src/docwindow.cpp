@@ -26,9 +26,12 @@
 #endif
 
 #ifdef WITH_GTKSPELL
+# include <obby/format_string.hpp>
+# include <gtkmm/messagedialog.h>
 # include <gtkspell/gtkspell.h>
 #endif
 
+#include "common.hpp"
 #include "preferences.hpp"
 #include "docwindow.hpp"
 
@@ -153,16 +156,17 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	GError *error = NULL;
 	if(gtkspell_new_attach(GTK_TEXT_VIEW(m_view), NULL, &error) == NULL)
 	{
+		obby::format_string str(_("GtkSpell error: %0%") );
+		str << error->message;
+
 		// Initialization failed, show error message.
-		GtkWidget *dlg;
-		dlg = gtk_message_dialog_new(
-				GTK_WINDOW(gobj() ),
-				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_ERROR,
-				GTK_BUTTONS_CLOSE,
-				"GtkSpell error: %s", error->message);
-		gtk_dialog_run(GTK_DIALOG(dlg));
-		gtk_widget_destroy(dlg);
+		Gtk::MessageDialog dlg(
+			str.str(),
+			false,
+			Gtk::MESSAGE_ERROR,
+			Gtk::BUTTONS_CLOSE,
+			true);
+		dlg.run();
 	}
 #endif
 }

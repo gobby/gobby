@@ -1,5 +1,9 @@
 2009-09-30  Philipp Kern  <phil@0x539.de>
 
+	* src/docwindow.cpp: use the Gtkmm API for the message dialog
+
+2009-09-30  Philipp Kern  <phil@0x539.de>
+
 	* configure.ac: add a --with-gtkspell option
 	* src/docwindow.cpp: wire up the gtksourceview widget with gtkspell
 
