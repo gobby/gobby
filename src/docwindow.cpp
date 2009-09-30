@@ -25,6 +25,10 @@
 # include <gtksourceview/gtksourcebuffer.h>
 #endif
 
+#ifdef WITH_GTKSPELL
+# include <gtkspell/gtkspell.h>
+#endif
+
 #include "preferences.hpp"
 #include "docwindow.hpp"
 
@@ -143,6 +147,24 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	set_shadow_type(Gtk::SHADOW_IN);
 	set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(gobj()), GTK_WIDGET(m_view));
+
+#ifdef WITH_GTKSPELL
+	// Set up spell checking.
+	GError *error = NULL;
+	if(gtkspell_new_attach(GTK_TEXT_VIEW(m_view), NULL, &error) == NULL)
+	{
+		// Initialization failed, show error message.
+		GtkWidget *dlg;
+		dlg = gtk_message_dialog_new(
+				GTK_WINDOW(gobj() ),
+				GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR,
+				GTK_BUTTONS_CLOSE,
+				"GtkSpell error: %s", error->message);
+		gtk_dialog_run(GTK_DIALOG(dlg));
+		gtk_widget_destroy(dlg);
+	}
+#endif
 }
 
 void Gobby::DocWindow::get_cursor_position(unsigned int& row,

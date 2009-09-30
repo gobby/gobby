@@ -1,3 +1,8 @@
+2009-09-30  Philipp Kern  <phil@0x539.de>
+
+	* configure.ac: add a --with-gtkspell option
+	* src/docwindow.cpp: wire up the gtksourceview widget with gtkspell
+
 2009-09-23  Philipp Kern  <phil@0x539.de>
 
 	* po/gobby.pot: refreshed

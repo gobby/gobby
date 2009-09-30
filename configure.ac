@@ -69,6 +69,22 @@ fi
 AM_CONDITIONAL(WITH_GTKSOURCEVIEW2, test x$ac_cv_with_gtksourceview2 != xno)
 AC_CACHE_SAVE
 
+# GtkSpell support
+AC_ARG_WITH([gtkspell],
+            AS_HELP_STRING([--with-gtkspell],
+               [whether to use gtkspell [[default=no]]]),
+            [ac_cv_with_gtkspell=$withval],
+	    [ac_cv_with_gtkspell=no])
+
+AC_CACHE_CHECK([whether to use gtkspell],
+               [ac_cv_with_gtkspell], [ac_cv_with_gtkspell=no])
+
+if test "x$ac_cv_with_gtkspell" = "xyes" ; then
+  AC_DEFINE([WITH_GTKSPELL], 1,
+    [Define whether to use gtkspell])
+  required_libs="$required_libs gtkspell-2.0"
+fi
+
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [$required_libs])
 AC_CACHE_SAVE
