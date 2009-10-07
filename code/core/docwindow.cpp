@@ -210,7 +210,7 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	gtk_source_view_set_right_margin_position(
 		m_view, m_preferences.view.margin_pos);
 	gtk_source_buffer_set_highlight_matching_brackets(
-		m_buffer, m_preferences.view.margin_pos);
+		m_buffer, m_preferences.view.bracket_highlight);
 	const Pango::FontDescription& desc = m_preferences.appearance.font;
 	gtk_widget_modify_font(
 		GTK_WIDGET(m_view),
