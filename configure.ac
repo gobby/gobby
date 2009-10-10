@@ -133,7 +133,7 @@ fi
 AM_CONDITIONAL(WITH_AVAHI, test x$ac_cv_lib_obby_obby_has_avahi = xyes)
 
 # Glib i18n/gettext support.
-ALL_LINGUAS="ca cs de el es fr he it ja ko nl pl pt pt_BR ru sv zh_CN"
+ALL_LINGUAS="ca cs de el es fr he it ja ko nl pl pt pt_BR ru sv uk zh_CN"
 AM_GLIB_GNU_GETTEXT
 IT_PROG_INTLTOOL([0.35.0])
 

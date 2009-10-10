@@ -1,3 +1,9 @@
+2009-10-10  Armin Burgmeier  <armin@arbur.net>
+
+	* po/uk.po: Added Ukrainian translation by Yuri Chornoivan. Bug #478.
+
+	* configure.ac: Added uk to ALL_LINGUAS.
+
 2009-09-30  Philipp Kern  <phil@0x539.de>
 
 	* src/docwindow.cpp: use the Gtkmm API for the message dialog
