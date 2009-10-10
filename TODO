@@ -1,7 +1,6 @@
 Some features that would be nice for a final Gobby 0.5 release. We could
 perhaps do pre-releases with some of these missing before:
 
- - Implement single instance, probably using GtkUnique
  - Implement self-hosting, this also requires showing and handling directories
    in InfGtkBrowserModel/Store
  - Sort BrowserModel in Left pane and DocumentLocationDialog
