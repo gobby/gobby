@@ -13,6 +13,8 @@ libgobby_core_a_SOURCES = \
 	nodewatch.cpp \
 	noteplugin.cpp \
 	preferences.cpp \
+	sessionuserview.cpp \
+	sessionview.cpp \
 	statusbar.cpp \
 	tablabel.cpp \
 	titlebar.cpp \
@@ -31,6 +33,8 @@ noinst_HEADERS = \
         nodewatch.hpp \
         noteplugin.hpp \
         preferences.hpp \
+	sessionuserview.hpp \
+	sessionview.hpp \
         statusbar.hpp \
 	tablabel.hpp \
 	titlebar.hpp \
