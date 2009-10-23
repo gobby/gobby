@@ -23,7 +23,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/box.h>
 
-#include <libinftext/inf-text-session.h>
+#include <libinfinity/common/inf-user-table.h>
 #include <libinftext/inf-text-user.h>
 
 namespace Gobby
@@ -31,16 +31,16 @@ namespace Gobby
 	class UserList: public Gtk::VBox
 	{
 	public:
-		UserList(InfTextSession* session);
+		UserList(InfUserTable* table);
 		~UserList();
 
 	protected:
-		InfTextSession* m_session;
+		InfUserTable* m_table;
 
 		class Columns: public Gtk::TreeModelColumnRecord
 		{
 		public:
-			Gtk::TreeModelColumn<InfTextUser*> user;
+			Gtk::TreeModelColumn<InfUser*> user;
 			Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > color;
 			Gtk::TreeModelColumn<gulong> notify_hue_handle;
 			Gtk::TreeModelColumn<gulong> notify_status_handle;
@@ -59,7 +59,15 @@ namespace Gobby
 		                               gpointer user_data)
 		{
 			static_cast<UserList*>(user_data)->
-				on_add_user(INF_TEXT_USER(user));
+				on_add_user(user);
+		}
+
+		static void on_notify_status_static(InfUser* user,
+		                                    GParamSpec* pspec,
+		                                    gpointer user_data)
+		{
+			static_cast<UserList*>(user_data)->
+				on_notify_status(user);
 		}
 
 		static void on_notify_hue_static(InfUser* user,
@@ -68,14 +76,6 @@ namespace Gobby
 		{
 			static_cast<UserList*>(user_data)->
 				on_notify_hue(INF_TEXT_USER(user));
-		}
-
-		static void on_notify_status_static(InfUser* user,
-		                                    GParamSpec* pspec,
-		                                    gpointer user_data)
-		{
-			static_cast<UserList*>(user_data)->
-				on_notify_status(INF_TEXT_USER(user));
 		}
 
 		void icon_cell_data_func(Gtk::CellRenderer* renderer,
@@ -87,11 +87,11 @@ namespace Gobby
 		int sort_func(const Gtk::TreeIter& iter1,
 		              const Gtk::TreeIter& iter2);
 
-		void on_add_user(InfTextUser* user);
+		void on_add_user(InfUser* user);
+		void on_notify_status(InfUser* user);
 		void on_notify_hue(InfTextUser* user);
-		void on_notify_status(InfTextUser* user);
 
-		Gtk::TreeIter find_user_iter(InfTextUser* user);
+		Gtk::TreeIter find_user_iter(InfUser* user);
 
 		Columns m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_store;

@@ -135,8 +135,8 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	m_hostname(hostname), m_info_storage_key(info_storage_key),
 	m_preferences(preferences),
 	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
-	m_userlist(session), m_info_box(false, 0),
-	m_info_close_button_box(false, 6)
+	m_userlist(inf_session_get_user_table(INF_SESSION(session))),
+	m_info_box(false, 0), m_info_close_button_box(false, 6)
 {
 	g_object_ref(m_session);
 

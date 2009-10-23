@@ -1,3 +1,11 @@
+2009-10-23  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/userlist.hpp:
+	* code/core/userlist.cpp: Made UserList work with non-InfText users.
+
+	* code/core/docwindow.cpp: Only pass InfUserTable to the userlist, not
+	the whole session.
+
 2009-11-09  Gabríel A. Pétursson  <gabrielp@simnet.is>
 
 	* code/commands/browser-commands.cpp:
