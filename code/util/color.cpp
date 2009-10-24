@@ -161,20 +161,30 @@ namespace
 
 namespace Gobby
 {
+	double hsv_to_rgb(double& rh, double &gs, double &gv)
+	{
+		::hsv_to_rgb(&rh, &gs, &gv);
+	}
+
+	double rgb_to_hsv(double &rh, double &gs, double &gv)
+	{
+		::rgb_to_hsv(&rh, &gs, &gv);
+	}
+
 	double hue_from_gdk_color(const Gdk::Color& color)
 	{
 		double r = color.get_red() / 65535.0;
 		double g = color.get_green() / 65535.0;
 		double b = color.get_blue() / 65535.0;
 
-		rgb_to_hsv(&r, &g, &b);
+		::rgb_to_hsv(&r, &g, &b);
 		return r;
 	}
 
 	Gdk::Color hue_to_gdk_color(double hue, double saturation,
 	                            double value)
 	{
-		hsv_to_rgb(&hue, &saturation, &value);
+		::hsv_to_rgb(&hue, &saturation, &value);
 		Gdk::Color color;
 		color.set_red(static_cast<gushort>(hue * 65535.0));
 		color.set_green(static_cast<gushort>(saturation * 65535.0));

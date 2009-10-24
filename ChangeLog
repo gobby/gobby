@@ -1,3 +1,25 @@
+2009-10-24  Armin Burgmeier  <armin@arbur.net>
+
+	* icons/hicolor/scalable/status/user-color-indicator.svg: Removed
+	blur, so that rsvg renders it correctly.
+
+	* icons/hicolor/scalable/Makefile.am:
+	* icons/hicolor/48x48/Makefile.am:
+	* icons/hicolor/48x48/status/Makefile.am:
+	* icons/hicolor/scalable/status/Makefile.am:
+	* configure.ac: Added the new item to the build system.
+
+	* code/util/color.hpp:
+	* code/util/color.cpp: Added public rgb_to_hsv() and hsv_to_rgb()
+	functions.
+
+	* code/core/iconmanager.hpp:
+	* code/core/iconmanager.cpp: Added a stock item for the user color
+	indicator.
+
+	* code/core/userlist.cpp: Show the user color indicator for the user
+	color instead of a boring monochromatic square.
+
 2009-10-24  Benjamin Herr  <ben@0x539.de>
 
 	* icons/hicolor/48x48/status/user-color-indicator.png:

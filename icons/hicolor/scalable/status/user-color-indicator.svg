@@ -135,14 +135,6 @@
        fx="15.889519"
        fy="23.794725"
        r="6.65625" />
-    <filter
-       inkscape:collect="always"
-       id="filter3737">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.064470153"
-         id="feGaussianBlur3739" />
-    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -155,15 +147,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="8"
-     inkscape:cx="17.162175"
+     inkscape:cx="-4.400325"
      inkscape:cy="18.546187"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="821"
-     inkscape:window-height="809"
-     inkscape:window-x="792"
-     inkscape:window-y="155" />
+     inkscape:window-width="1280"
+     inkscape:window-height="725"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -205,7 +197,7 @@
          transform="translate(-19.5625,24.6875)" />
       <path
          sodipodi:type="arc"
-         style="fill:url(#linearGradient3707);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter3737)"
+         style="fill:url(#linearGradient3707);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;"
          id="path6538"
          sodipodi:cx="10.1875"
          sodipodi:cy="16.8125"

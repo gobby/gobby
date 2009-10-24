@@ -23,6 +23,9 @@
 
 namespace Gobby
 {
+	double hsv_to_rgb(double& rh, double &gs, double &gv);
+	double rgb_to_hsv(double &rh, double &gs, double &gv);
+
 	double hue_from_gdk_color(const Gdk::Color& color);
 
 	Gdk::Color hue_to_gdk_color(double hue, double saturation,

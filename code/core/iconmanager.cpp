@@ -25,6 +25,8 @@
 Gtk::StockID Gobby::IconManager::STOCK_USERLIST("gobby-user-list");
 Gtk::StockID Gobby::IconManager::STOCK_DOCLIST("gobby-document-list");
 Gtk::StockID Gobby::IconManager::STOCK_SAVE_ALL("gobby-save-all");
+Gtk::StockID Gobby::IconManager::STOCK_USER_COLOR_INDICATOR(
+	"gobby-user-color-indicator");
 
 // TODO: The save-all icon does not match the save icon for toolbar
 // or menu sized items. It is not yet enabled therefore.
@@ -46,6 +48,14 @@ Gobby::IconManager::IconManager():
 	m_icon_factory->add(STOCK_DOCLIST, m_is_doclist);
 
 	Gtk::StockItem save_all_item(STOCK_SAVE_ALL, _("Save All"));
+
+	Gtk::IconSource user_color_indicator_source;
+	user_color_indicator_source.set_icon_name("user-color-indicator");
+	m_is_user_color_indicator.add_source(user_color_indicator_source);
+	Gtk::StockItem user_color_indicator_item(STOCK_USER_COLOR_INDICATOR,
+	                                         _("User Color Indicator"));
+	m_icon_factory->add(STOCK_USER_COLOR_INDICATOR,
+	                    m_is_user_color_indicator);
 
 	m_icon_factory->add_default();
 }

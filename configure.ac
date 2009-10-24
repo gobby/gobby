@@ -107,9 +107,11 @@ AC_OUTPUT([
         icons/hicolor/48x48/Makefile
           icons/hicolor/48x48/apps/Makefile
           icons/hicolor/48x48/actions/Makefile
+          icons/hicolor/48x48/status/Makefile
         icons/hicolor/scalable/Makefile
           icons/hicolor/scalable/apps/Makefile
           icons/hicolor/scalable/actions/Makefile
+          icons/hicolor/scalable/status/Makefile
       icons/HighContrastLargePrint/Makefile
         icons/HighContrastLargePrint/48x48/Makefile
           icons/HighContrastLargePrint/48x48/apps/Makefile

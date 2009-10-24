@@ -17,6 +17,7 @@
  */
 
 #include "core/userlist.hpp"
+#include "core/iconmanager.hpp"
 
 #include "util/i18n.hpp"
 #include "util/color.hpp"
@@ -36,59 +37,41 @@ namespace
 			(INF_TEXT_USER(user));
 	}
 
-	void draw_pixel(const Glib::RefPtr<Gdk::Pixbuf>& pixbuf, int x, int y,
-	                const Gdk::Color& color)
+	Glib::RefPtr<Gdk::Pixbuf> generate_user_color_pixbuf(Gtk::Widget& w,
+	                                                     gdouble hue)
 	{
-		guint8* pixels = pixbuf->get_pixels();
-		guint8* pixel = pixels + y * pixbuf->get_rowstride() +
-		                         x * pixbuf->get_n_channels();
-		*pixel++ = (color.get_red() >> 8);
-		*pixel++ = (color.get_green() >> 8);
-		*pixel++ = (color.get_blue() >> 8);
-	}
+		Glib::RefPtr<Gdk::Pixbuf> pixbuf = w.render_icon(
+			Gobby::IconManager::STOCK_USER_COLOR_INDICATOR,
+			Gtk::ICON_SIZE_MENU);
 
-	void draw_vline(const Glib::RefPtr<Gdk::Pixbuf>& pixbuf, int x,
-	                int y1, int y2, const Gdk::Color& color)
-	{
-		for(int y = y1; y < y2; ++ y)
-			draw_pixel(pixbuf, x, y, color);
-	}
+		// pixbuf is shared, though we want to mess with it here
+		pixbuf = pixbuf->copy();
 
-	void draw_hline(const Glib::RefPtr<Gdk::Pixbuf>& pixbuf, int x1,
-	                int x2, int y, const Gdk::Color& color)
-	{
-		for(int x = x1; x < x2; ++ x)
-			draw_pixel(pixbuf, x, y, color);
-	}
+		for(unsigned int y = 0; y < pixbuf->get_height(); ++y)
+		{
+			for(unsigned int x = 0; x < pixbuf->get_width(); ++x)
+			{
+				guint8* pixels = pixbuf->get_pixels();
+				guint8* pixel =
+					pixels + y * pixbuf->get_rowstride() +
+					         x * pixbuf->get_n_channels();
 
-	void draw_rectangle(const Glib::RefPtr<Gdk::Pixbuf>& pixbuf, int x1,
-	                    int y1, int x2, int y2, const Gdk::Color& color)
-	{
-		for(int y = y1; y < y2; ++ y)
-			for(int x = x1; x < x2; ++ x)
-				draw_pixel(pixbuf, x, y, color);
-	}
+				double r = pixel[0]/255.0;
+				double g = pixel[1]/255.0;
+				double b = pixel[2]/255.0;
 
-	Glib::RefPtr<Gdk::Pixbuf> generate_user_color_pixbuf(gdouble hue)
-	{
-		// TODO: Play around with hue, saturation and value to get
-		// a cool effect instead of a monochromatic icon.
-		Gdk::Color color = Gobby::hue_to_gdk_color(hue, 0.35, 1.0);
-		Gdk::Color black("#000000");
+				Gobby::rgb_to_hsv(r,g,b);
+				r = hue;
+				Gobby::hsv_to_rgb(r,g,b);
 
-		int width, height;
-		Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
-
-		Glib::RefPtr<Gdk::Pixbuf> pixbuf(
-			Gdk::Pixbuf::create(
-				Gdk::COLORSPACE_RGB, false, 8,
-				width, height));
-
-		draw_hline(pixbuf, 0, width, 0, black);
-		draw_hline(pixbuf, 0, width, height - 1, black);
-		draw_vline(pixbuf, 0, 1, height - 1, black);
-		draw_vline(pixbuf, width-1, 1, height - 1, black);
-		draw_rectangle(pixbuf, 1, 1, width - 1, height - 1, color);
+				pixel[0] =
+					static_cast<guint8>(r * 255.0 + 0.5);
+				pixel[1] =
+					static_cast<guint8>(g * 255.0 + 0.5);
+				pixel[2] =
+					static_cast<guint8>(b * 255.0 + 0.5);
+			}
+		}
 
 		return pixbuf;
 	}
@@ -265,8 +248,8 @@ void Gobby::UserList::on_add_user(InfTextUser* user)
 {
 	g_assert(find_user_iter(user) == m_store->children().end());
 
-	Glib::RefPtr<Gdk::Pixbuf> color_pixbuf =
-		generate_user_color_pixbuf(inf_text_user_get_hue(user));
+	Glib::RefPtr<Gdk::Pixbuf> color_pixbuf = generate_user_color_pixbuf(
+		*this, inf_text_user_get_hue(user));
 
 	Gtk::TreeIter iter = m_store->append();
 	(*iter)[m_columns.user] = user;
@@ -284,8 +267,8 @@ void Gobby::UserList::on_notify_hue(InfTextUser* user)
 	Gtk::TreeIter iter = find_user_iter(user);
 	g_assert(iter != m_store->children().end());
 
-	(*iter)[m_columns.color] =
-		generate_user_color_pixbuf(inf_text_user_get_hue(user));
+	(*iter)[m_columns.color] = generate_user_color_pixbuf(
+		*this, inf_text_user_get_hue(user));
 }
 
 void Gobby::UserList::on_notify_status(InfTextUser* user)
@@ -312,4 +295,3 @@ Gtk::TreeIter Gobby::UserList::find_user_iter(InfTextUser* user)
 
 	return children.end();
 }
-
