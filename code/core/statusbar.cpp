@@ -63,7 +63,7 @@ protected:
 Gobby::StatusBar::StatusBar(Folder& folder,
                             const Preferences& preferences):
 	Gtk::HBox(false, 2), m_folder(folder), m_preferences(preferences),
-	m_current_document(NULL), m_position_context_id(0)
+	m_current_view(NULL), m_position_context_id(0)
 {
 	pack_end(m_bar_position, Gtk::PACK_SHRINK);
 	m_bar_position.set_size_request(200, -1);
@@ -194,37 +194,37 @@ void Gobby::StatusBar::on_message_clicked(GdkEventButton* button,
 	}
 }
 
-void Gobby::StatusBar::on_document_removed(DocWindow& document)
+void Gobby::StatusBar::on_document_removed(SessionView& view)
 {
-	if(m_current_document == &document)
+	if(m_current_view == &view)
 	{
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 
 		g_signal_handler_disconnect(buffer, m_mark_set_handler);
 		g_signal_handler_disconnect(buffer, m_changed_handler);
 
-		m_current_document = NULL;
+		m_current_view = NULL;
 	}
 }
 
-void Gobby::StatusBar::on_document_changed(DocWindow* document)
+void Gobby::StatusBar::on_document_changed(SessionView* view)
 {
-	if(m_current_document)
+	if(m_current_view)
 	{
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 
 		g_signal_handler_disconnect(buffer, m_mark_set_handler);
 		g_signal_handler_disconnect(buffer, m_changed_handler);
 	}
 
-	m_current_document = document;
+	m_current_view = dynamic_cast<TextSessionView*>(view);
 
-	if(document)
+	if(m_current_view)
 	{
-		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(document->get_text_buffer());
+		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
+			m_current_view->get_text_buffer());
 
 		m_mark_set_handler = g_signal_connect_after(
 			G_OBJECT(buffer), "mark-set",
@@ -248,7 +248,7 @@ void Gobby::StatusBar::on_view_changed()
 void Gobby::StatusBar::on_mark_set(GtkTextMark* mark)
 {
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-		m_current_document->get_text_buffer());
+		m_current_view->get_text_buffer());
 
 	if(mark == gtk_text_buffer_get_insert(buffer))
 		update_pos_display();
@@ -264,12 +264,13 @@ void Gobby::StatusBar::update_pos_display()
 	if(m_position_context_id)
 		m_bar_position.remove_message(m_position_context_id);
 
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 	{
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 		GtkTextIter iter;
 
+		// TODO: Use TextSessionView::get_cursor_position()?
 		gtk_text_buffer_get_iter_at_mark(
 			buffer, &iter, gtk_text_buffer_get_insert(buffer));
 

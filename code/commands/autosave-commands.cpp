@@ -20,15 +20,17 @@
 
 #include "operations/operation-save.hpp"
 
+#include "core/sessionuserview.hpp"
+
 #include <ctime>
 
 class Gobby::AutosaveCommands::Info
 {
 public:
-	Info(AutosaveCommands& commands, DocWindow& doc):
-		m_commands(commands), m_document(doc), m_save_op(NULL)
+	Info(AutosaveCommands& commands, TextSessionView& view):
+		m_commands(commands), m_view(view), m_save_op(NULL)
 	{
-		GtkSourceBuffer* buffer = m_document.get_text_buffer();
+		GtkSourceBuffer* buffer = m_view.get_text_buffer();
 
 		m_modified_changed_handler = g_signal_connect_after(
 			G_OBJECT(buffer), "modified-changed",
@@ -41,7 +43,7 @@ public:
 
 		Operations& operations = m_commands.m_operations;
 		OperationSave* save_op =
-			operations.get_save_operation_for_document(doc);
+			operations.get_save_operation_for_document(view);
 		if(save_op != NULL)
 			begin_save_operation(save_op);
 		else if(gtk_text_buffer_get_modified(GTK_TEXT_BUFFER(buffer)))
@@ -50,7 +52,7 @@ public:
 
 	~Info()
 	{
-		GtkSourceBuffer* buffer = m_document.get_text_buffer();
+		GtkSourceBuffer* buffer = m_view.get_text_buffer();
 
 		g_signal_handler_disconnect(G_OBJECT(buffer),
 		                            m_modified_changed_handler);
@@ -94,7 +96,7 @@ protected:
 		if(m_save_op == NULL)
 		{
 			GtkTextBuffer* buffer =
-				GTK_TEXT_BUFFER(m_document.get_text_buffer());
+				GTK_TEXT_BUFFER(m_view.get_text_buffer());
 
 			if(!gtk_text_buffer_get_modified(buffer))
 				m_timeout_handler.disconnect();
@@ -119,7 +121,7 @@ protected:
 		// uri yet where to save the document. However, we
 		// automatically retry when the document is assigned an URI,
 		// since the modification flag will change with this anyway.
-		const std::string& key = m_document.get_info_storage_key();
+		const std::string& key = m_view.get_info_storage_key();
 		const DocumentInfoStorage::Info* info =
 			m_commands.m_info_storage.get_info(key);
 		if(!info || info->uri.empty())
@@ -146,7 +148,7 @@ protected:
 	void on_save_operation_finished(bool success)
 	{
 		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(m_document.get_text_buffer());
+			GTK_TEXT_BUFFER(m_view.get_text_buffer());
 
 		if(success)
 			m_sync_time = m_save_op->get_start_time();
@@ -161,7 +163,7 @@ protected:
 
 	bool on_timeout()
 	{
-		const std::string& key = m_document.get_info_storage_key();
+		const std::string& key = m_view.get_info_storage_key();
 		const DocumentInfoStorage::Info* info =
 			m_commands.m_info_storage.get_info(key);
 
@@ -170,7 +172,7 @@ protected:
 		if(info != NULL)
 		{
 			m_commands.m_operations.save_document(
-				m_document, m_commands.m_folder,
+				m_view, m_commands.m_folder,
 				info->uri, info->encoding, info->eol_style);
 
 			g_assert(m_save_op != NULL);
@@ -194,7 +196,7 @@ private:
 	}
 
 	AutosaveCommands& m_commands;
-	DocWindow& m_document;
+	TextSessionView& m_view;
 
 	gulong m_modified_changed_handler;
 
@@ -244,36 +246,49 @@ Gobby::AutosaveCommands::~AutosaveCommands()
 	}
 }
 
-void Gobby::AutosaveCommands::on_document_added(DocWindow& document)
+void Gobby::AutosaveCommands::on_document_added(SessionView& view)
 {
 	if(m_preferences.editor.autosave_enabled)
 	{
-		g_assert(m_info_map.find(&document) == m_info_map.end());
-		m_info_map[&document] = new Info(*this, document);
+		// We can only save text views:
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(&view);
+		if(text_view)
+		{
+			g_assert(m_info_map.find(text_view) ==
+			         m_info_map.end());
+			m_info_map[text_view] = new Info(*this, *text_view);
+		}
 	}
 }
 
-void Gobby::AutosaveCommands::on_document_removed(DocWindow& document)
+void Gobby::AutosaveCommands::on_document_removed(SessionView& view)
 {
 	if(m_preferences.editor.autosave_enabled)
 	{
-		InfoMap::iterator iter = m_info_map.find(&document);
-		g_assert(iter != m_info_map.end());
-		delete iter->second;
-		m_info_map.erase(iter);
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(&view);
+
+		if(text_view)
+		{
+			InfoMap::iterator iter = m_info_map.find(text_view);
+			g_assert(iter != m_info_map.end());
+			delete iter->second;
+			m_info_map.erase(iter);
+		}
 	}
 }
 
 void Gobby::AutosaveCommands::on_begin_save_operation(
 	OperationSave* operation)
 {
-	DocWindow* document = operation->get_document();
+	TextSessionView* view = operation->get_view();
 	// Save operation just started, document must be present
-	g_assert(document != NULL);
+	g_assert(view != NULL);
 
 	if(m_preferences.editor.autosave_enabled)
 	{
-		InfoMap::iterator iter = m_info_map.find(document);
+		InfoMap::iterator iter = m_info_map.find(view);
 		g_assert(iter != m_info_map.end());
 
 		iter->second->begin_save_operation(operation);
@@ -288,9 +303,22 @@ void Gobby::AutosaveCommands::on_autosave_enabled_changed()
 		    i < static_cast<unsigned int>(m_folder.get_n_pages());
 		    ++i)
 		{
-			DocWindow* document = static_cast<DocWindow*>(
-				m_folder.get_nth_page(i));
-			m_info_map[document] = new Info(*this, *document);
+			// TODO: Add convenience API to folder, so that we
+			// don't need to know here that it actually contains
+			// SessionUserViews.
+			SessionUserView* userview =
+				static_cast<SessionUserView*>(
+					m_folder.get_nth_page(i));
+
+			SessionView& view = userview->get_session_view();
+			TextSessionView* text_view =
+				dynamic_cast<TextSessionView*>(&view);
+
+			if(text_view)
+			{
+				m_info_map[text_view] =
+					new Info(*this, *text_view);
+			}
 		}
 	}
 	else

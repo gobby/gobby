@@ -152,7 +152,7 @@ void Gobby::FileCommands::set_task(Task* task)
   task->run();
 }
 
-void Gobby::FileCommands::on_document_changed(DocWindow* document)
+void Gobby::FileCommands::on_document_changed(SessionView* view)
 {
 	update_sensitivity();
 }
@@ -189,18 +189,18 @@ void Gobby::FileCommands::on_open_location()
 
 void Gobby::FileCommands::on_save()
 {
-	// TODO: Encoding selection in file chooser
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
 
 	const DocumentInfoStorage::Info* info =
 		m_document_info_storage.get_info(
-			document->get_info_storage_key());
+			text_view->get_info_storage_key());
 
 	if(info != NULL && !info->uri.empty())
 	{
 		m_operations.save_document(
-			*document, m_folder, info->uri, info->encoding,
+			*text_view, m_folder, info->uri, info->encoding,
 			info->eol_style);
 	}
 	else
@@ -211,10 +211,11 @@ void Gobby::FileCommands::on_save()
 
 void Gobby::FileCommands::on_save_as()
 {
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
 
-	set_task(new TaskSave(*this, *document));
+	set_task(new TaskSave(*this, *text_view));
 }
 
 void Gobby::FileCommands::on_save_all()
@@ -222,19 +223,21 @@ void Gobby::FileCommands::on_save_all()
 	set_task(new TaskSaveAll(*this));
 }
 
-void Gobby::FileCommands::on_export_html() {
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+void Gobby::FileCommands::on_export_html()
+{
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
 
-	set_task(new TaskExportHtml(*this, *document));
+	set_task(new TaskExportHtml(*this, *text_view));
 }
 
 void Gobby::FileCommands::on_close()
 {
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+	SessionView* view = m_folder.get_current_document();
+	g_assert(view != NULL);
 
-	m_folder.remove_document(*document);
+	m_folder.remove_document(*view);
 }
 
 void Gobby::FileCommands::on_quit()
@@ -247,15 +250,21 @@ void Gobby::FileCommands::update_sensitivity()
 	GtkTreeIter dummy_iter;
 	bool create_sensitivity = gtk_tree_model_get_iter_first(
 		GTK_TREE_MODEL(m_browser.get_store()), &dummy_iter);
-	gboolean active_sensitivity = m_folder.get_current_document() != NULL;
+
+	SessionView* view = m_folder.get_current_document();
+	gboolean view_sensitivity = view != NULL;
+
+	// We can only save text documents currently
+	gboolean text_sensitivity =
+		dynamic_cast<TextSessionView*>(view) != NULL;
 
 	m_header.action_file_new->set_sensitive(create_sensitivity);
 	m_header.action_file_open->set_sensitive(create_sensitivity);
 	m_header.action_file_open_location->set_sensitive(create_sensitivity);
 
-	m_header.action_file_save->set_sensitive(active_sensitivity);
-	m_header.action_file_save_as->set_sensitive(active_sensitivity);
-	m_header.action_file_save_all->set_sensitive(active_sensitivity);
-	m_header.action_file_export_html->set_sensitive(active_sensitivity);
-	m_header.action_file_close->set_sensitive(active_sensitivity);
+	m_header.action_file_save->set_sensitive(text_sensitivity);
+	m_header.action_file_save_as->set_sensitive(text_sensitivity);
+	m_header.action_file_save_all->set_sensitive(text_sensitivity);
+	m_header.action_file_export_html->set_sensitive(text_sensitivity);
+	m_header.action_file_close->set_sensitive(view_sensitivity);
 }

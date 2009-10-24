@@ -16,25 +16,13 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "features.hpp"
-
-#include "core/docwindow.hpp"
-#include "core/preferences.hpp"
-#include "core/closableframe.hpp"
-#include "core/iconmanager.hpp"
-
+#include "core/textsessionview.hpp"
 #include "util/i18n.hpp"
 
 #include <gtkmm/scrolledwindow.h>
-#include <glibmm/pattern.h>
+#include <gtkmm/textiter.h>
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
-
-#include <gtksourceview/gtksourcebuffer.h>
-
-// TODO: Consider using a single user list for all DocWindows, reparenting
-// into the current DocWindow's frame. Keep dummy widgets in other docwindows,
-// so text does not resize.
 
 namespace
 {
@@ -96,17 +84,17 @@ namespace
 		return NULL;
 	}
 
-	bool tags_priority_idle_func(Gobby::DocWindow& window)
+	bool tags_priority_idle_func(Gobby::TextSessionView& view)
 	{
 		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 			inf_session_get_buffer(
-				INF_SESSION(window.get_session())));
+				INF_SESSION(view.get_session())));
 
 		inf_text_gtk_buffer_ensure_author_tags_priority(buffer);
 
 		// I don't know why it does not redraw automatically, perhaps
 		// this is a bug.
-		gtk_widget_queue_draw(GTK_WIDGET(window.get_text_view()));
+		gtk_widget_queue_draw(GTK_WIDGET(view.get_text_view()));
 		return false;
 	}
 
@@ -119,27 +107,23 @@ namespace
 		Glib::signal_idle().connect(
 			sigc::bind(
 				sigc::ptr_fun(tags_priority_idle_func),
-				sigc::ref(*static_cast<Gobby::DocWindow*>(
-					user_data))));
+				sigc::ref(
+					*static_cast<Gobby::TextSessionView*>(
+						user_data))));
 	}
 }
 
-Gobby::DocWindow::DocWindow(InfTextSession* session,
-                            const Glib::ustring& title,
-                            const Glib::ustring& path,
-                            const Glib::ustring& hostname,
-                            const std::string& info_storage_key,
-                            Preferences& preferences,
-			    GtkSourceLanguageManager* manager):
-	m_session(session), m_title(title), m_path(path),
-	m_hostname(hostname), m_info_storage_key(info_storage_key),
-	m_preferences(preferences),
-	m_view(GTK_SOURCE_VIEW(gtk_source_view_new())),
-	m_userlist(inf_session_get_user_table(INF_SESSION(session))),
-	m_info_box(false, 0), m_info_close_button_box(false, 6)
+Gobby::TextSessionView::TextSessionView(InfTextSession* session,
+                                        const Glib::ustring& title,
+                                        const Glib::ustring& path,
+                                        const Glib::ustring& hostname,
+                                        const std::string& info_storage_key,
+                                        Preferences& preferences,
+                                        GtkSourceLanguageManager* manager):
+	SessionView(INF_SESSION(session), title, path, hostname),
+	m_info_storage_key(info_storage_key), m_preferences(preferences),
+	m_view(GTK_SOURCE_VIEW(gtk_source_view_new()))
 {
-	g_object_ref(m_session);
-
 	InfBuffer* buffer = inf_session_get_buffer(INF_SESSION(session));
 	m_buffer = GTK_SOURCE_BUFFER(inf_text_gtk_buffer_get_text_buffer(
 		INF_TEXT_GTK_BUFFER(buffer)));
@@ -161,38 +145,50 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_view),
 	                         GTK_TEXT_BUFFER(m_buffer));
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
-	set_language(get_language_for_title(manager, m_title.c_str()));
+	set_language(get_language_for_title(manager, title.c_str()));
 
 	m_preferences.user.hue.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_user_color_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_user_color_changed));
 	m_preferences.editor.tab_width.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_tab_width_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_tab_width_changed));
 	m_preferences.editor.tab_spaces.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_tab_spaces_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_tab_spaces_changed));
 	m_preferences.editor.indentation_auto.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_auto_indent_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_auto_indent_changed));
 	m_preferences.editor.homeend_smart.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_homeend_smart_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_homeend_smart_changed));
 
 	m_preferences.view.wrap_mode.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_wrap_mode_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_wrap_mode_changed));
 	m_preferences.view.linenum_display.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_linenum_display_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_linenum_display_changed));
 	m_preferences.view.curline_highlight.signal_changed().connect(
-		sigc::mem_fun(*this,
-		              &DocWindow::on_curline_highlight_changed));
+		sigc::mem_fun(
+			*this,
+			&TextSessionView::on_curline_highlight_changed));
 	m_preferences.view.margin_display.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_margin_display_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_margin_display_changed));
 	m_preferences.view.margin_pos.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_margin_pos_changed));
+		sigc::mem_fun(
+			*this, &TextSessionView::on_margin_pos_changed));
 	m_preferences.view.bracket_highlight.signal_changed().connect(
-		sigc::mem_fun(*this,
-		              &DocWindow::on_bracket_highlight_changed));
+		sigc::mem_fun(
+			*this,
+			&TextSessionView::on_bracket_highlight_changed));
 	m_preferences.view.whitespace_display.signal_changed().connect(
-		sigc::mem_fun(*this,
-		              &DocWindow::on_whitespace_display_changed));
+		sigc::mem_fun(
+			*this,
+			&TextSessionView::on_whitespace_display_changed));
 	m_preferences.appearance.font.signal_changed().connect(
-		sigc::mem_fun(*this, &DocWindow::on_font_changed));
+		sigc::mem_fun(*this, &TextSessionView::on_font_changed));
 
 	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
 	gtk_source_view_set_insert_spaces_instead_of_tabs(
@@ -223,26 +219,6 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 		GTK_WIDGET(m_view),
 		const_cast<PangoFontDescription*>(desc.gobj()));
 
-	m_info_label.set_selectable(true);
-	m_info_label.set_line_wrap(true);
-	m_info_label.show();
-
-	m_info_close_button.signal_clicked().connect(
-		sigc::mem_fun(m_info_frame, &Gtk::Frame::hide));
-	m_info_close_button.show();
-
-	m_info_close_button_box.pack_end(m_info_close_button, Gtk::PACK_SHRINK);
-	// Don't show info close button box by default
-
-	m_info_box.pack_start(m_info_close_button_box, Gtk::PACK_SHRINK);
-	m_info_box.pack_start(m_info_label, Gtk::PACK_SHRINK);
-	m_info_box.set_border_width(6);
-	m_info_box.show();
-
-	m_info_frame.set_shadow_type(Gtk::SHADOW_IN);
-	m_info_frame.add(m_info_box);
-	// Don't show infoframe by default
-
 	gtk_widget_show(GTK_WIDGET(m_view));
 	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
 	scroll->set_shadow_type(Gtk::SHADOW_IN);
@@ -250,31 +226,11 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	gtk_container_add(GTK_CONTAINER(scroll->gobj()), GTK_WIDGET(m_view));
 	scroll->show();
 
-	Gtk::VBox* vbox = Gtk::manage(new Gtk::VBox);
-	vbox->pack_start(m_info_frame, Gtk::PACK_SHRINK);
-	vbox->pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
-	vbox->show();
-
-	m_userlist.show();
-	Gtk::Frame* frame = Gtk::manage(new ClosableFrame(
-		_("User List"), IconManager::STOCK_USERLIST,
-		m_preferences.appearance.show_userlist));
-	frame->set_shadow_type(Gtk::SHADOW_IN);
-	frame->add(m_userlist);
-	// frame manages visibility itself
-
-	pack1(*vbox, true, false);
-	pack2(*frame, false, false);
+	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
 }
 
-Gobby::DocWindow::~DocWindow()
-{
-	g_object_unref(m_session);
-	m_session = NULL;
-}
-
-void Gobby::DocWindow::get_cursor_position(unsigned int& row,
-                                           unsigned int& col) const
+void Gobby::TextSessionView::get_cursor_position(unsigned int& row,
+                                                 unsigned int& col) const
 {
 	GtkTextMark* insert_mark =
 		gtk_text_buffer_get_insert(GTK_TEXT_BUFFER(m_buffer));
@@ -307,8 +263,8 @@ void Gobby::DocWindow::get_cursor_position(unsigned int& row,
 	}
 }
 
-void Gobby::DocWindow::set_selection(const GtkTextIter* begin,
-                                     const GtkTextIter* end)
+void Gobby::TextSessionView::set_selection(const GtkTextIter* begin,
+                                           const GtkTextIter* end)
 {
 	gtk_text_buffer_select_range(
 		gtk_text_view_get_buffer(GTK_TEXT_VIEW(m_view)), begin, end);
@@ -316,7 +272,7 @@ void Gobby::DocWindow::set_selection(const GtkTextIter* begin,
 	scroll_to_cursor_position(0.1);
 }
 
-Glib::ustring Gobby::DocWindow::get_selected_text() const
+Glib::ustring Gobby::TextSessionView::get_selected_text() const
 {
 	GtkTextIter start, end;
 	gtk_text_buffer_get_selection_bounds(
@@ -327,7 +283,7 @@ Glib::ustring Gobby::DocWindow::get_selected_text() const
 	return start_cpp.get_slice(end_cpp);
 }
 
-void Gobby::DocWindow::scroll_to_cursor_position(double within_margin)
+void Gobby::TextSessionView::scroll_to_cursor_position(double within_margin)
 {
 	gtk_text_view_scroll_to_mark(
 		GTK_TEXT_VIEW(m_view),
@@ -336,29 +292,14 @@ void Gobby::DocWindow::scroll_to_cursor_position(double within_margin)
 		within_margin, FALSE, 0.0, 0.0);
 }
 
-void Gobby::DocWindow::set_info(const Glib::ustring& info, bool closable)
-{
-	m_info_label.set_text(info);
-
-	if(closable) m_info_close_button_box.show();
-	else m_info_close_button_box.hide();
-
-	m_info_frame.show();
-}
-
-void Gobby::DocWindow::unset_info()
-{
-	m_info_frame.hide();
-}
-
-InfTextUser* Gobby::DocWindow::get_active_user() const
+InfTextUser* Gobby::TextSessionView::get_active_user() const
 {
 	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 		inf_session_get_buffer(INF_SESSION(m_session)));
 	return inf_text_gtk_buffer_get_active_user(buffer);
 }
 
-void Gobby::DocWindow::set_active_user(InfTextUser* user)
+void Gobby::TextSessionView::set_active_user(InfTextUser* user)
 {
 	g_assert(
 		user == NULL ||
@@ -383,82 +324,46 @@ void Gobby::DocWindow::set_active_user(InfTextUser* user)
 	m_signal_active_user_changed.emit(user);
 }
 
-GtkSourceLanguage* Gobby::DocWindow::get_language() const
+GtkSourceLanguage* Gobby::TextSessionView::get_language() const
 {
 	return gtk_source_buffer_get_language(m_buffer);
 }
 
-void Gobby::DocWindow::set_language(GtkSourceLanguage* language)
+void Gobby::TextSessionView::set_language(GtkSourceLanguage* language)
 {
 	gtk_source_buffer_set_language(m_buffer, language);
 	m_signal_language_changed.emit(language);
 }
 
-void Gobby::DocWindow::on_size_allocate(Gtk::Allocation& allocation)
-{
-	Gtk::HPaned::on_size_allocate(allocation);
-
-	// Setup initial paned position. We can't do this simply every time
-	// on_size_allocate() is called since this would lead to an endless
-	// loop somehow when the userlist width is changed forcefully 
-	// (for example by a set_info() requiring much width).
-	if(!m_doc_userlist_width_changed_connection.connected())
-	{
-		Glib::SignalProxyProperty proxy =
-			property_position().signal_changed();
-
-		m_doc_userlist_width_changed_connection =
-			proxy.connect(sigc::mem_fun(
-				*this,
-				&DocWindow::on_doc_userlist_width_changed));
-
-		Preferences::Option<unsigned int>& option = 
-			m_preferences.appearance.userlist_width;
-
-		m_pref_userlist_width_changed_connection =
-			option.signal_changed().connect(sigc::mem_fun(
-				*this,
-				&DocWindow::on_pref_userlist_width_changed));
-
-		unsigned int desired_position =
-			get_width() - m_preferences.appearance.userlist_width;
-		desired_position = std::min<unsigned int>(
-			desired_position, property_max_position());
-
-		if(get_position() != desired_position)
-			set_position(desired_position);
-	}
-}
-
-void Gobby::DocWindow::on_user_color_changed()
+void Gobby::TextSessionView::on_user_color_changed()
 {
 	InfTextUser* user = get_active_user();
 
 	if(user)
 	{
-		inf_text_session_set_user_color(m_session, user,
+		inf_text_session_set_user_color(get_session(), user,
 		                                m_preferences.user.hue);
 	}
 }
 
-void Gobby::DocWindow::on_tab_width_changed()
+void Gobby::TextSessionView::on_tab_width_changed()
 {
 	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
 }
 
-void Gobby::DocWindow::on_tab_spaces_changed()
+void Gobby::TextSessionView::on_tab_spaces_changed()
 {
 	gtk_source_view_set_insert_spaces_instead_of_tabs(
 		m_view, m_preferences.editor.tab_spaces);
 }
 
-void Gobby::DocWindow::on_auto_indent_changed()
+void Gobby::TextSessionView::on_auto_indent_changed()
 {
 	gtk_source_view_set_auto_indent(
 		m_view, m_preferences.editor.indentation_auto);
 }
 
-void Gobby::DocWindow::on_homeend_smart_changed()
+void Gobby::TextSessionView::on_homeend_smart_changed()
 {
 	gtk_source_view_set_smart_home_end(
 		m_view, m_preferences.editor.homeend_smart ?
@@ -466,50 +371,50 @@ void Gobby::DocWindow::on_homeend_smart_changed()
 			GTK_SOURCE_SMART_HOME_END_DISABLED);
 }
 
-void Gobby::DocWindow::on_wrap_mode_changed()
+void Gobby::TextSessionView::on_wrap_mode_changed()
 {
 	gtk_text_view_set_wrap_mode(
 		GTK_TEXT_VIEW(m_view),
 		wrap_mode_from_preferences(m_preferences));
 }
 
-void Gobby::DocWindow::on_linenum_display_changed()
+void Gobby::TextSessionView::on_linenum_display_changed()
 {
 	gtk_source_view_set_show_line_numbers(
 		m_view, m_preferences.view.linenum_display);
 }
 
-void Gobby::DocWindow::on_curline_highlight_changed()
+void Gobby::TextSessionView::on_curline_highlight_changed()
 {
 	gtk_source_view_set_highlight_current_line(
 		m_view, m_preferences.view.curline_highlight);
 }
 
-void Gobby::DocWindow::on_margin_display_changed()
+void Gobby::TextSessionView::on_margin_display_changed()
 {
 	gtk_source_view_set_show_right_margin(
 		m_view, m_preferences.view.margin_display);
 }
 
-void Gobby::DocWindow::on_margin_pos_changed()
+void Gobby::TextSessionView::on_margin_pos_changed()
 {
 	gtk_source_view_set_right_margin_position(
 		m_view, m_preferences.view.margin_pos);
 }
 
-void Gobby::DocWindow::on_bracket_highlight_changed()
+void Gobby::TextSessionView::on_bracket_highlight_changed()
 {
 	gtk_source_buffer_set_highlight_matching_brackets(
 		m_buffer, m_preferences.view.bracket_highlight);
 }
 
-void Gobby::DocWindow::on_whitespace_display_changed()
+void Gobby::TextSessionView::on_whitespace_display_changed()
 {
 	gtk_source_view_set_draw_spaces(
 		m_view, m_preferences.view.whitespace_display);
 }
 
-void Gobby::DocWindow::on_font_changed()
+void Gobby::TextSessionView::on_font_changed()
 {
 	const Pango::FontDescription& desc = m_preferences.appearance.font;
 	gtk_widget_modify_font(
@@ -517,34 +422,9 @@ void Gobby::DocWindow::on_font_changed()
 		const_cast<PangoFontDescription*>(desc.gobj()));
 }
 
-void Gobby::DocWindow::on_doc_userlist_width_changed()
-{
-	unsigned int userlist_width = get_width() - get_position();
-
-	if(m_preferences.appearance.userlist_width != userlist_width)
-	{
-		m_pref_userlist_width_changed_connection.block();
-		m_preferences.appearance.userlist_width = userlist_width;
-		m_pref_userlist_width_changed_connection.unblock();
-	}
-}
-
-void Gobby::DocWindow::on_pref_userlist_width_changed()
-{
-	unsigned int position =
-		get_width() - m_preferences.appearance.userlist_width;
-
-	if(get_position() != position)
-	{
-		m_doc_userlist_width_changed_connection.block();
-		set_position(position);
-		m_doc_userlist_width_changed_connection.unblock();
-	}
-}
-
-bool
-Gobby::DocWindow::on_query_tooltip(int x, int y, bool keyboard_mode,
-                                   const Glib::RefPtr<Gtk::Tooltip>& tooltip)
+bool Gobby::TextSessionView::
+	on_query_tooltip(int x, int y, bool keyboard_mode,
+                         const Glib::RefPtr<Gtk::Tooltip>& tooltip)
 {
 	if(keyboard_mode) return false;
 

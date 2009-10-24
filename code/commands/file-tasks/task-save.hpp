@@ -28,15 +28,15 @@ class TaskSave: public FileCommands::Task
 {
 private:
 	FileChooser::Dialog m_file_dialog;
-	DocWindow* m_document;
+	TextSessionView* m_view;
 	bool m_running;
 
 public:
-	TaskSave(FileCommands& file_commands, DocWindow& document);
+	TaskSave(FileCommands& file_commands, TextSessionView& view);
 	virtual void run();
 
 	void on_response(int response_id);
-	void on_document_removed(DocWindow& document);
+	void on_document_removed(SessionView& view);
 };
 
 } // namespace Gobby

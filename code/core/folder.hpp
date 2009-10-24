@@ -19,7 +19,7 @@
 #ifndef _GOBBY_FOLDER_HPP_
 #define _GOBBY_FOLDER_HPP_
 
-#include "core/docwindow.hpp"
+#include "core/textsessionview.hpp"
 #include "core/preferences.hpp"
 #include "util/defaultaccumulator.hpp"
 
@@ -34,11 +34,11 @@ namespace Gobby
 class Folder : public Gtk::Notebook
 {
 public:
-	typedef sigc::signal<void, DocWindow&> SignalDocumentAdded;
-	typedef sigc::signal<void, DocWindow&> SignalDocumentRemoved;
-	typedef sigc::signal<void, DocWindow*> SignalDocumentChanged;
+	typedef sigc::signal<void, SessionView&> SignalDocumentAdded;
+	typedef sigc::signal<void, SessionView&> SignalDocumentRemoved;
+	typedef sigc::signal<void, SessionView*> SignalDocumentChanged;
 
-	typedef sigc::signal<bool, DocWindow&>::
+	typedef sigc::signal<bool, SessionView&>::
 		accumulated<default_accumulator<bool, true> >
 			SignalDocumentCloseRequest;
 
@@ -46,31 +46,35 @@ public:
 	       GtkSourceLanguageManager* lang_manager);
 	~Folder();
 
-	DocWindow& add_document(InfTextSession* session,
-	                        const Glib::ustring& title,
-	                        const Glib::ustring& path,
-	                        const Glib::ustring& hostname,
-	                        const std::string& info_storage_key);
-	void remove_document(DocWindow& document);
+	TextSessionView& add_document(InfTextSession* session,
+	                              const Glib::ustring& title,
+	                              const Glib::ustring& path,
+	                              const Glib::ustring& hostname,
+	                              const std::string& info_storage_key);
+	void remove_document(SessionView& view);
 
-	DocWindow* lookup_document(InfTextSession* session);
-	DocWindow* get_current_document();
-	const DocWindow* get_current_document() const;
-	void switch_to_document(DocWindow& document);
+	SessionView* lookup_document(InfSession* session);
+	SessionView* get_current_document();
+	const SessionView* get_current_document() const;
+	void switch_to_document(SessionView& document);
 
-	SignalDocumentAdded signal_document_added() const {
+	SignalDocumentAdded signal_document_added() const
+	{
 		return m_signal_document_added;
 	}
 
-	SignalDocumentRemoved signal_document_removed() const {
+	SignalDocumentRemoved signal_document_removed() const
+	{
 		return m_signal_document_removed;
 	}
 
-	SignalDocumentChanged signal_document_changed() const {
+	SignalDocumentChanged signal_document_changed() const
+	{
 		return m_signal_document_changed;
 	}
 
-	SignalDocumentCloseRequest signal_document_close_request() const {
+	SignalDocumentCloseRequest signal_document_close_request() const
+	{
 		return m_signal_document_close_request;
 	}
 
@@ -78,7 +82,7 @@ protected:
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
 	virtual bool on_key_press_event(GdkEventKey* event);
 
-	void on_tab_close_request(DocWindow& window);
+	void on_tab_close_request(SessionView& window);
 
 	Preferences& m_preferences;
 	GtkSourceLanguageManager* m_lang_manager;

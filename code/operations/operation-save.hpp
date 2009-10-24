@@ -33,22 +33,24 @@ namespace Gobby
 class OperationSave: public Operations::Operation, public sigc::trackable
 {
 public:
-	OperationSave(Operations& operations, DocWindow& document,
+	// TODO: This should maybe just take a text buffer to save, not a
+	// textsessionview.
+	OperationSave(Operations& operations, TextSessionView& view,
 	              Folder& folder, const std::string& uri,
 	              const std::string& encoding,
 	              DocumentInfoStorage::EolStyle eol_style);
 
 	virtual ~OperationSave();
 
-	// Note these can return NULL in case the document has been removed
+	// Note these can return NULL in case the view has been closed
 	// in the meanwhile.
-	DocWindow* get_document() { return m_document; }
-	const DocWindow* get_document() const { return m_document; }
+	TextSessionView* get_view() { return m_view; }
+	const TextSessionView* get_view() const { return m_view; }
 
 	std::time_t get_start_time() const { return m_start_time; }
 
 protected:
-	void on_document_removed(DocWindow& document);
+	void on_document_removed(SessionView& view);
 	void on_file_replace(const Glib::RefPtr<Gio::AsyncResult>& result);
 	void on_stream_write(const Glib::RefPtr<Gio::AsyncResult>& result);
 
@@ -56,7 +58,7 @@ protected:
 	void write_next();
 	void error(const Glib::ustring& message);
 protected:
-	DocWindow* m_document;
+	TextSessionView* m_view;
 	std::time_t m_start_time;
 
 	typedef std::pair<gchar*, std::size_t> Line;

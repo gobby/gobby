@@ -19,7 +19,7 @@
 #ifndef _GOBBY_TABLABEL_HPP_
 #define _GOBBY_TABLABEL_HPP_
 
-#include "core/docwindow.hpp"
+#include "core/textsessionview.hpp"
 #include "util/closebutton.hpp"
 
 #include <gtkmm/box.h>
@@ -38,7 +38,7 @@ class TabLabel: public Gtk::HBox
 public:
 	typedef Glib::SignalProxy0<void> SignalCloseRequest;
 
-	TabLabel(Folder& folder, DocWindow& document);
+	TabLabel(Folder& folder, TextSessionView& view);
 	~TabLabel();
 
 	SignalCloseRequest signal_close_request()
@@ -102,7 +102,7 @@ protected:
 	void on_modified_changed();
 	void on_changed(InfTextUser* author);
 
-	void on_folder_document_changed(DocWindow* document);
+	void on_folder_document_changed(SessionView* view);
 
 	void update_icon();
 	void update_color();
@@ -110,7 +110,7 @@ protected:
 	void update_dots();
 
 	Folder& m_folder;
-	DocWindow& m_document;
+	TextSessionView& m_view;
 
 	Gtk::Image m_icon;
 	Gtk::Label m_title;

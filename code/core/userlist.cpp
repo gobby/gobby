@@ -191,7 +191,7 @@ void Gobby::UserList::color_cell_data_func(Gtk::CellRenderer* renderer,
 	Glib::RefPtr<Gdk::Pixbuf> pixbuf = (*iter)[m_columns.color];
 	if(pixbuf)
 	{
-		pixbuf_renderer->property_pixbuf();
+		pixbuf_renderer->property_pixbuf() = pixbuf;
 		pixbuf_renderer->property_visible() = true;
 	}
 	else

@@ -21,7 +21,6 @@
 
 #include "commands/file-tasks/task-open.hpp"
 #include "commands/file-tasks/task-open-multiple.hpp"
-#include "core/docwindow.hpp"
 #include "core/iconmanager.hpp"
 #include "core/noteplugin.hpp"
 #include "core/closableframe.hpp"

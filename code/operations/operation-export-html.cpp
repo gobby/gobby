@@ -104,7 +104,7 @@ namespace
 	// <span/>s for line breaks and authorship of chunks of text, also
 	// save all users and tags encountered and the total number of
 	// lines dumped
-	void dump_buffer(Gobby::DocWindow& document,
+	void dump_buffer(Gobby::TextSessionView& view,
 		         xmlpp::Element* content,
 		         std::set<InfTextUser*>& users,
 		         priority_tag_set& tags,
@@ -120,11 +120,11 @@ namespace
 		line_no->set_attribute("id", "line_1");
 
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			document.get_text_buffer());
+			view.get_text_buffer());
 		InfTextGtkBuffer* inf_buffer
 			= INF_TEXT_GTK_BUFFER(
 				inf_session_get_buffer(
-					INF_SESSION(document.get_session())));
+					INF_SESSION(view.get_session())));
 
 		GtkTextIter begin;
 		gtk_text_buffer_get_start_iter(buffer, &begin);
@@ -222,7 +222,7 @@ namespace
 
 	// some random interesting information/advertisement to be put at
 	// the end of the html output
-	void dump_info(xmlpp::Element* node, Gobby::DocWindow& document)
+	void dump_info(xmlpp::Element* node, Gobby::TextSessionView& view)
 	{
 		using namespace Gobby;
 		// put current time
@@ -239,8 +239,8 @@ namespace
 				time_str = _("<unable to print date>");
 		}
 
-		char const* hostname = document.get_hostname().c_str();
-		char const* path     = document.get_path().c_str();
+		char const* hostname = view.get_hostname().c_str();
+		char const* path     = view.get_path().c_str();
 
 		// %1$s is session name/hostname
 		// %2$s is path within the session
@@ -348,7 +348,7 @@ namespace
 
 	// generate xhtml representation of the document and write it to the
 	// specified location in the filesystem
-	std::string export_html(Gobby::DocWindow& document)
+	std::string export_html(Gobby::TextSessionView& view)
 	{
 		using namespace Gobby;
 		xmlpp::Document output;
@@ -378,7 +378,7 @@ namespace
 		icon->set_attribute("alt",    "a gobby document:");
 		icon->set_attribute("class",  "icon");
 
-		const Glib::ustring& document_name = document.get_title();
+		const Glib::ustring& document_name = view.get_title();
 		title->add_child_text(document_name + " - infinote document");
 
 		h1->add_child_text(document_name);
@@ -388,12 +388,12 @@ namespace
 		std::set<InfTextUser*> users;
 		priority_tag_set tags;
 		unsigned int line_counter;
-		dump_buffer(document, content, users, tags, line_counter);
+		dump_buffer(view, content, users, tags, line_counter);
 
 		h2->add_child_text(_("Participants"));
 
 		info->set_attribute("class", "info");
-		dump_info(info, document);
+		dump_info(info, view);
 
 		style->set_attribute("type", "text/css");
 		dump_user_list(user_list, users);
@@ -440,10 +440,10 @@ namespace
 } // anonymous namespace
 
 Gobby::OperationExportHtml::OperationExportHtml(Operations& operations,
-                                                DocWindow& document,
+                                                TextSessionView& view,
                                                 const std::string& uri):
 	Operation(operations), m_index(0),
-	m_xml(export_html(document))
+	m_xml(export_html(view))
 {
 	m_file = Gio::File::create_for_uri(uri);
 	m_file->replace_async(
@@ -452,7 +452,7 @@ Gobby::OperationExportHtml::OperationExportHtml(Operations& operations,
 	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(
 			_("Exporting document %1 to %2 in HTML..."),
-			document.get_title(), uri));
+			view.get_title(), uri));
 }
 
 Gobby::OperationExportHtml::~OperationExportHtml()

@@ -39,7 +39,7 @@ namespace
 		USER_JOIN_ERROR
 	};
 
-	void set_error_text(Gobby::DocWindow& window,
+	void set_error_text(Gobby::SessionView& view,
 	                    const Glib::ustring& initial_text,
 	                    ErrorType type)
 	{
@@ -73,7 +73,7 @@ namespace
 			  "can fix the problem in a later version. "
 			  "Thank you.");
 
-		window.set_info(
+		view.set_info(
 			initial_text + "\n\n" + type_text + "\n\n" +
 			info_text, true);
 	}
@@ -217,21 +217,19 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 	if(proxy != NULL)
 	{
 		InfSession* session = infc_session_proxy_get_session(proxy);
-		InfTextSession* text_session = INF_TEXT_SESSION(session);
-		DocWindow* window = m_folder.lookup_document(text_session);
+		//InfTextSession* text_session = INF_TEXT_SESSION(session);
+		SessionView* view = m_folder.lookup_document(session);
+		//DocWindow* window = m_folder.lookup_document(text_session);
 
-		if(window != NULL)
+		if(view != NULL)
 		{
-			m_folder.switch_to_document(*window);
+			m_folder.switch_to_document(*view);
 		}
 		else
 		{
 			// This should not happen: We insert every document
 			// we subscribe to directly into the folder.
 			g_assert_not_reached();
-			/*folder.add_document(
-				text_session,
-				infc_browser_iter_get_name(browser, iter));*/
 		}
 	}
 	else
@@ -292,7 +290,7 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 	g_object_get(G_OBJECT(infc_browser_get_connection(browser)),
 	             "remote-hostname", &hostname, NULL);
 
-	DocWindow& window = m_folder.add_document(
+	TextSessionView& view = m_folder.add_document(
 		INF_TEXT_SESSION(session),
 		infc_browser_iter_get_name(browser, iter),
 		path, hostname,
@@ -305,8 +303,8 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 	// TODO: If the user issued other browserview events in the meanwhile,
 	// then don't select the item, and if the user did issue other folder
 	// events, then don't switch to the document in the folder.
-	m_folder.switch_to_document(window);
-	gtk_widget_grab_focus(GTK_WIDGET(window.get_text_view()));
+	m_folder.switch_to_document(view);
+	gtk_widget_grab_focus(GTK_WIDGET(view.get_text_view()));
 	m_browser.set_selected(browser, iter);
 
 	SessionNode& node = m_session_map[session];
@@ -351,7 +349,7 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 			                                         connection);
 		g_object_unref(connection);
 
-		window.set_info(
+		view.set_info(
 			Glib::ustring::compose(
 				_("Synchronization in progress... %1%%"),
 				static_cast<unsigned int>(percentage * 100)),
@@ -386,19 +384,18 @@ void Gobby::BrowserCommands::on_synchronization_failed(InfSession* session,
 
 	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
 	{
-		DocWindow* window = m_folder.lookup_document(
-			INF_TEXT_SESSION(session));
-		g_assert(window != NULL);
+		SessionView* view = m_folder.lookup_document(session);
+		g_assert(view != NULL);
 
 		set_error_text(
-			*window,
+			*view,
 			Glib::ustring::compose("Synchronization failed: %1",
 			                       error->message), SYNC_ERROR);
 
 		// The document will be of no use anyway, so consider it not
 		// being modified.
-		gtk_text_buffer_set_modified(
-			GTK_TEXT_BUFFER(window->get_text_buffer()), FALSE);
+		InfBuffer* buffer = inf_session_get_buffer(session);
+		inf_buffer_set_modified(buffer, FALSE);
 
 		// Don't wait until the session is closed because of this,
 		// since this would also cause a connection notify,
@@ -417,12 +414,11 @@ void Gobby::BrowserCommands::
 	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
 	{
 		// Unset modified flag after synchronization.
-		DocWindow* window = m_folder.lookup_document(
-			INF_TEXT_SESSION(session));
-		g_assert(window != NULL);
+		SessionView* view = m_folder.lookup_document(session);
+		g_assert(view != NULL);
 
-		gtk_text_buffer_set_modified(
-			GTK_TEXT_BUFFER(window->get_text_buffer()), FALSE);
+		InfBuffer* buffer = inf_session_get_buffer(session);
+		inf_buffer_set_modified(buffer, FALSE);
 
 		// TODO: Actually we should always set the modified flag,
 		// except the document is either empty, or known in the
@@ -457,11 +453,10 @@ void Gobby::BrowserCommands::on_synchronization_progress(InfSession* session,
 
 	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
 	{
-		DocWindow* window = m_folder.lookup_document(
-			INF_TEXT_SESSION(session));
+		SessionView* view = m_folder.lookup_document(session);
 
-		g_assert(window != NULL);
-		window->set_info(
+		g_assert(view != NULL);
+		view->set_info(
 			Glib::ustring::compose(
 				_("Synchronization in progress... %1%%"),
 				static_cast<unsigned int>(percentage * 100)),
@@ -484,11 +479,10 @@ void Gobby::BrowserCommands::on_notify_connection(InfcSessionProxy* proxy)
 
 	if(infc_session_proxy_get_connection(proxy) == NULL)
 	{
-		DocWindow* window = m_folder.lookup_document(
-			INF_TEXT_SESSION(session));
-		g_assert(window != NULL);
+		SessionView* view = m_folder.lookup_document(session);
+		g_assert(view != NULL);
 
-		window->set_info(_(
+		view->set_info(_(
 			"The connection to the publisher of this document "
 			"has been lost. Further changes to the document "
 			"could not be synchronized to others anymore, "
@@ -496,7 +490,11 @@ void Gobby::BrowserCommands::on_notify_connection(InfcSessionProxy* proxy)
 			"Please note also that it is possible that not all "
 			"of your latest changes have reached the "
 			"publisher before the connection was lost."), true);
-		window->set_active_user(NULL);
+
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(view);
+		if(text_view)
+			text_view->set_active_user(NULL);
 	}
 }
 
@@ -513,9 +511,12 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 
 	if(user == NULL)
 	{
-		DocWindow* window = m_folder.lookup_document(
-			INF_TEXT_SESSION(session));
-		g_assert(window != NULL);
+		// TODO: Make this work also for non-text views... should
+		// probably go into user-join-commands.cpp
+		SessionView* view = m_folder.lookup_document(session);
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(view);
+		g_assert(text_view != NULL);
 
 		// TODO: Automatically join with a different name if there is
 		// already a user with the preferred name?
@@ -544,14 +545,14 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 							session)))));
 
 		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(window->get_text_buffer());
+			GTK_TEXT_BUFFER(text_view->get_text_buffer());
 		GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
 		GtkTextIter caret_iter;
 		gtk_text_buffer_get_iter_at_mark(buffer, &caret_iter, mark);
 		g_value_set_uint(&params[3].value,
 		                 gtk_text_iter_get_offset(&caret_iter));
 
-		if(m_folder.get_current_document() == window)
+		if(m_folder.get_current_document() == view)
 			g_value_set_enum(&params[4].value, INF_USER_ACTIVE);
 		else
 			g_value_set_enum(&params[4].value, INF_USER_INACTIVE);
@@ -559,7 +560,7 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 		GError* error = NULL;
 		InfcUserRequest* request = infc_session_proxy_join_user(
 			proxy, params, 5, &error);
-	
+
 		g_value_unset(&params[0].value);
 		g_value_unset(&params[1].value);
 		g_value_unset(&params[2].value);
@@ -569,14 +570,14 @@ void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
 		if(request == NULL)
 		{
 			set_error_text(
-				*window,
+				*view,
 				Glib::ustring::compose("User Join failed: %1",
 				                       error->message),
 				USER_JOIN_ERROR);
 		}
 		else
 		{
-			window->set_info(
+			view->set_info(
 				_("User Join in progress..."), false);
 
 			g_signal_connect(
@@ -607,9 +608,9 @@ void Gobby::BrowserCommands::on_user_join_failed(InfcUserRequest* request,
 	                          GOBBY_BROWSER_COMMANDS_SESSION_PROXY);
 
 	InfcSessionProxy* proxy = static_cast<InfcSessionProxy*>(proxy_ptr);
-	DocWindow* window = m_folder.lookup_document(
-		INF_TEXT_SESSION(infc_session_proxy_get_session(proxy)));
-	g_assert(window != NULL);
+	SessionView* view = m_folder.lookup_document(
+		infc_session_proxy_get_session(proxy));
+	g_assert(view != NULL);
 
 	if(error->domain == inf_user_error_quark() &&
 	   error->code == INF_USER_ERROR_NAME_IN_USE)
@@ -642,7 +643,7 @@ void Gobby::BrowserCommands::on_user_join_failed(InfcUserRequest* request,
 			          NULL);
 
 		set_error_text(
-			*window,
+			*view,
 			Glib::ustring::compose("User Join failed: %1",
 				               error->message),
 			USER_JOIN_ERROR);
@@ -671,13 +672,15 @@ void Gobby::BrowserCommands::on_user_join_finished(InfcUserRequest* request,
 void Gobby::BrowserCommands::user_joined(InfcSessionProxy* proxy,
                                          InfUser* user)
 {
-	DocWindow* window = m_folder.lookup_document(
-		INF_TEXT_SESSION(infc_session_proxy_get_session(proxy)));
-	g_assert(window != NULL);
+	SessionView* view = m_folder.lookup_document(
+		infc_session_proxy_get_session(proxy));
+	g_assert(view != NULL);
 
 	// TODO: Notify the user that he is using an alternative name if
 	// inf_user_get_name(user) does not match m_preferences.user.name.
 
-	window->unset_info();	
-	window->set_active_user(INF_TEXT_USER(user));
+	view->unset_info();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	if(text_view)
+		text_view->set_active_user(INF_TEXT_USER(user));
 }

@@ -4,7 +4,6 @@ libgobby_core_a_SOURCES = \
 	browser.cpp \
 	closableframe.cpp \
 	documentinfostorage.cpp \
-	docwindow.cpp \
 	filechooser.cpp \
 	folder.cpp \
 	header.cpp \
@@ -17,6 +16,7 @@ libgobby_core_a_SOURCES = \
 	sessionview.cpp \
 	statusbar.cpp \
 	tablabel.cpp \
+	textsessionview.cpp \
 	titlebar.cpp \
 	userlist.cpp
 
@@ -24,7 +24,6 @@ noinst_HEADERS = \
         browser.hpp \
         closableframe.hpp \
         documentinfostorage.hpp \
-        docwindow.hpp \
         filechooser.hpp \
         folder.hpp \
         header.hpp \
@@ -37,6 +36,7 @@ noinst_HEADERS = \
 	sessionview.hpp \
         statusbar.hpp \
 	tablabel.hpp \
+        textsessionview.hpp \
 	titlebar.hpp \
         userlist.hpp
 

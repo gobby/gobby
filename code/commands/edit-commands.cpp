@@ -29,7 +29,7 @@ Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
                                   Preferences& preferences):
 	m_parent(parent), m_header(header), m_folder(folder),
 	m_preferences(preferences), m_status_bar(status_bar),
-	m_current_document(NULL)
+	m_current_view(NULL)
 {
 	m_header.action_edit_undo->signal_activate().connect(
 		sigc::mem_fun(*this, &EditCommands::on_undo));
@@ -68,22 +68,23 @@ Gobby::EditCommands::~EditCommands()
 	on_document_changed(NULL);
 }
 
-void Gobby::EditCommands::on_document_removed(DocWindow& document)
+void Gobby::EditCommands::on_document_removed(SessionView& view)
 {
-	if(&document == m_current_document)
+	// TODO: Isn't this emitted by Folder already?
+	if(&view == m_current_view)
 		on_document_changed(NULL);
 }
 
-void Gobby::EditCommands::on_document_changed(DocWindow* document)
+void Gobby::EditCommands::on_document_changed(SessionView* view)
 {
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 	{
-		InfTextSession* session = m_current_document->get_session();
+		InfTextSession* session = m_current_view->get_session();
 		InfAdoptedAlgorithm* algorithm =
 			inf_adopted_session_get_algorithm(
 				INF_ADOPTED_SESSION(session));
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 
 		if(m_synchronization_complete_handler != 0)
 		{
@@ -109,17 +110,17 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 		m_active_user_changed_connection.disconnect();
 	}
 
-	m_current_document = document;
+	m_current_view = dynamic_cast<TextSessionView*>(view);
 
-	if(document != NULL)
+	if(m_current_view != NULL)
 	{
-		InfTextSession* session = document->get_session();
-		InfTextUser* active_user = document->get_active_user();
+		InfTextSession* session = m_current_view->get_session();
+		InfTextUser* active_user = m_current_view->get_active_user();
 		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(document->get_text_buffer());
+			GTK_TEXT_BUFFER(m_current_view->get_text_buffer());
 
 		m_active_user_changed_connection =
-			document->signal_active_user_changed().connect(
+			m_current_view->signal_active_user_changed().connect(
 				sigc::mem_fun(
 					*this,
 					&EditCommands::
@@ -198,8 +199,8 @@ void Gobby::EditCommands::on_document_changed(DocWindow* document)
 
 void Gobby::EditCommands::on_sync_complete()
 {
-	g_assert(m_current_document != NULL);
-	InfTextSession* session = m_current_document->get_session();
+	g_assert(m_current_view != NULL);
+	InfTextSession* session = m_current_view->get_session();
 
 	InfAdoptedAlgorithm* algorithm = inf_adopted_session_get_algorithm(
 		INF_ADOPTED_SESSION(session));
@@ -223,16 +224,16 @@ void Gobby::EditCommands::on_sync_complete()
 
 void Gobby::EditCommands::on_active_user_changed(InfTextUser* active_user)
 {
-	g_assert(m_current_document != NULL);
+	g_assert(m_current_view != NULL);
 
 	if(active_user != NULL)
 	{
-		InfTextSession* session = m_current_document->get_session();
+		InfTextSession* session = m_current_view->get_session();
 		InfAdoptedAlgorithm* algorithm =
 			inf_adopted_session_get_algorithm(
 				INF_ADOPTED_SESSION(session));
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 
 		m_header.action_edit_undo->set_sensitive(
 			inf_adopted_algorithm_can_undo(
@@ -256,14 +257,14 @@ void Gobby::EditCommands::on_active_user_changed(InfTextUser* active_user)
 
 void Gobby::EditCommands::on_mark_set()
 {
-	g_assert(m_current_document != NULL);
+	g_assert(m_current_view != NULL);
 	GtkTextBuffer* buffer =
-		GTK_TEXT_BUFFER(m_current_document->get_text_buffer());
+		GTK_TEXT_BUFFER(m_current_view->get_text_buffer());
 
 	m_header.action_edit_copy->set_sensitive(
 		gtk_text_buffer_get_has_selection(buffer));
 
-	if(m_current_document->get_active_user() != NULL)
+	if(m_current_view->get_active_user() != NULL)
 	{
 		m_header.action_edit_cut->set_sensitive(
 			gtk_text_buffer_get_has_selection(buffer));
@@ -278,16 +279,16 @@ void Gobby::EditCommands::on_changed()
 void Gobby::EditCommands::on_can_undo_changed(InfAdoptedUser* user,
                                               bool can_undo)
 {
-	g_assert(m_current_document != NULL);
-	if(INF_ADOPTED_USER(m_current_document->get_active_user()) == user)
+	g_assert(m_current_view != NULL);
+	if(INF_ADOPTED_USER(m_current_view->get_active_user()) == user)
 		m_header.action_edit_undo->set_sensitive(can_undo);
 }
 
 void Gobby::EditCommands::on_can_redo_changed(InfAdoptedUser* user,
                                               bool can_redo)
 {
-	g_assert(m_current_document != NULL);
-	if(INF_ADOPTED_USER(m_current_document->get_active_user()) == user)
+	g_assert(m_current_view != NULL);
+	if(INF_ADOPTED_USER(m_current_view->get_active_user()) == user)
 		m_header.action_edit_redo->set_sensitive(can_redo);
 }
 
@@ -329,79 +330,79 @@ namespace {
 
 void Gobby::EditCommands::on_undo()
 {
-	g_assert(m_current_document != NULL);
+	g_assert(m_current_view != NULL);
 
-	gulong i_ = g_signal_connect_after(m_current_document->get_text_buffer(), "insert-text", G_CALLBACK(recaret_i), NULL);
-	gulong e_ = g_signal_connect_after(m_current_document->get_text_buffer(), "delete-range", G_CALLBACK(recaret_e), NULL);
+	gulong i_ = g_signal_connect_after(m_current_view->get_text_buffer(), "insert-text", G_CALLBACK(recaret_i), NULL);
+	gulong e_ = g_signal_connect_after(m_current_view->get_text_buffer(), "delete-range", G_CALLBACK(recaret_e), NULL);
 
 	inf_adopted_session_undo(
-		INF_ADOPTED_SESSION(m_current_document->get_session()),
-		INF_ADOPTED_USER(m_current_document->get_active_user())
+		INF_ADOPTED_SESSION(m_current_view->get_session()),
+		INF_ADOPTED_USER(m_current_view->get_active_user())
 	);
 
-	g_signal_handler_disconnect(m_current_document->get_text_buffer(), i_);
-	g_signal_handler_disconnect(m_current_document->get_text_buffer(), e_);
+	g_signal_handler_disconnect(m_current_view->get_text_buffer(), i_);
+	g_signal_handler_disconnect(m_current_view->get_text_buffer(), e_);
 
 	if(check_set)
-		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_document->get_text_buffer()), &check, &check);
+		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check, &check);
 	check_set = false;
-	m_current_document->scroll_to_cursor_position(0.0);
+	m_current_view->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_redo()
 {
-	g_assert(m_current_document != NULL);
+	g_assert(m_current_view != NULL);
 
-	gulong i_ = g_signal_connect_after(m_current_document->get_text_buffer(), "insert-text", G_CALLBACK(recaret_i), NULL);
-	gulong e_ = g_signal_connect_after(m_current_document->get_text_buffer(), "delete-range", G_CALLBACK(recaret_e), NULL);
+	gulong i_ = g_signal_connect_after(m_current_view->get_text_buffer(), "insert-text", G_CALLBACK(recaret_i), NULL);
+	gulong e_ = g_signal_connect_after(m_current_view->get_text_buffer(), "delete-range", G_CALLBACK(recaret_e), NULL);
 
 	inf_adopted_session_redo(
-		INF_ADOPTED_SESSION(m_current_document->get_session()),
-		INF_ADOPTED_USER(m_current_document->get_active_user())
+		INF_ADOPTED_SESSION(m_current_view->get_session()),
+		INF_ADOPTED_USER(m_current_view->get_active_user())
 	);
 
-	g_signal_handler_disconnect(m_current_document->get_text_buffer(), i_);
-	g_signal_handler_disconnect(m_current_document->get_text_buffer(), e_);
+	g_signal_handler_disconnect(m_current_view->get_text_buffer(), i_);
+	g_signal_handler_disconnect(m_current_view->get_text_buffer(), e_);
 
 	if(check_set)
-		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_document->get_text_buffer()), &check, &check);
+		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check, &check);
 	check_set = false;
-	m_current_document->scroll_to_cursor_position(0.0);
+	m_current_view->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_cut()
 {
-	g_assert(m_current_document != NULL);
-	g_assert(m_current_document->get_active_user() != NULL);
+	g_assert(m_current_view != NULL);
+	g_assert(m_current_view->get_active_user() != NULL);
 
 	gtk_text_buffer_cut_clipboard(
-		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
+		GTK_TEXT_BUFFER(m_current_view->get_text_buffer()),
 		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),
 		TRUE);
 
-	m_current_document->scroll_to_cursor_position(0.0);
+	m_current_view->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_copy()
 {
-	g_assert(m_current_document != NULL);
+	g_assert(m_current_view != NULL);
 
 	gtk_text_buffer_copy_clipboard(
-		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
+		GTK_TEXT_BUFFER(m_current_view->get_text_buffer()),
 		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD));
 }
 
 void Gobby::EditCommands::on_paste()
 {
-	g_assert(m_current_document != NULL);
-	g_assert(m_current_document->get_active_user() != NULL);
+	g_assert(m_current_view != NULL);
+	g_assert(m_current_view->get_active_user() != NULL);
 
 	gtk_text_buffer_paste_clipboard(
-		GTK_TEXT_BUFFER(m_current_document->get_text_buffer()),
+		GTK_TEXT_BUFFER(m_current_view->get_text_buffer()),
 		gtk_clipboard_get(GDK_SELECTION_CLIPBOARD),
 		NULL, TRUE);
 
-	m_current_document->scroll_to_cursor_position(0.0);
+	m_current_view->scroll_to_cursor_position(0.0);
 }
 
 void Gobby::EditCommands::on_find()

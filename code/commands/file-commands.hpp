@@ -92,7 +92,7 @@ protected:
 		static_cast<FileCommands*>(user_data)->on_row_deleted();
 	}
 
-	void on_document_changed(DocWindow* document);
+	void on_document_changed(SessionView* view);
 	void on_row_inserted();
 	void on_row_deleted();
 	void on_task_finished();

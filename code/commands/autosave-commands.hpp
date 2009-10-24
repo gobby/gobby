@@ -39,8 +39,8 @@ public:
 	~AutosaveCommands();
 
 protected:
-	void on_document_added(DocWindow& document);
-	void on_document_removed(DocWindow& document);
+	void on_document_added(SessionView& view);
+	void on_document_removed(SessionView& view);
 
 	void on_begin_save_operation(OperationSave* operation);
 	void on_autosave_enabled_changed();
@@ -52,7 +52,7 @@ protected:
 	const Preferences& m_preferences;
 
 	class Info;
-	typedef std::map<DocWindow*, Info*> InfoMap;
+	typedef std::map<TextSessionView*, Info*> InfoMap;
 	InfoMap m_info_map;
 };
 

@@ -35,7 +35,7 @@ public:
 	~ViewCommands();
 
 protected:
-	void on_document_changed(DocWindow* document);
+	void on_document_changed(SessionView* view);
 	
 	void on_menu_toolbar_toggled();
 	void on_menu_statusbar_toggled();
@@ -54,7 +54,7 @@ protected:
 	Folder& m_folder;
 	Preferences& m_preferences;
 
-	DocWindow* m_current_document;
+	TextSessionView* m_current_view;
 
 	sigc::connection m_menu_language_changed_connection;
 	sigc::connection m_document_language_changed_connection;

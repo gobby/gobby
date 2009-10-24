@@ -19,7 +19,7 @@
 #include "core/titlebar.hpp"
 
 Gobby::TitleBar::TitleBar(Gtk::Window& window, Folder& folder):
-	m_window(window), m_folder(folder), m_current_document(NULL)
+	m_window(window), m_folder(folder), m_current_view(NULL)
 {
 	folder.signal_document_removed().connect(
 		sigc::mem_fun(*this, &TitleBar::on_document_removed));
@@ -29,20 +29,19 @@ Gobby::TitleBar::TitleBar(Gtk::Window& window, Folder& folder):
 	on_document_changed(folder.get_current_document());
 }
 
-void Gobby::TitleBar::on_document_removed(DocWindow& document)
+void Gobby::TitleBar::on_document_removed(SessionView& view)
 {
-	if(m_current_document == &document)
+	// TODO: Isn't this called by Folder already?
+	if(m_current_view == &view)
 		on_document_changed(NULL);
 }
 
-void Gobby::TitleBar::on_document_changed(DocWindow* document)
+void Gobby::TitleBar::on_document_changed(SessionView* view)
 {
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 	{
-		InfSession* session = INF_SESSION(
-			m_current_document->get_session());
-		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+		InfSession* session = m_current_view->get_session();
+		InfBuffer* buffer = inf_session_get_buffer(session);
 
 		g_signal_handler_disconnect(G_OBJECT(session),
 		                            m_notify_status_handler);
@@ -50,20 +49,19 @@ void Gobby::TitleBar::on_document_changed(DocWindow* document)
 		                            m_modified_changed_handler);
 	}
 
-	m_current_document = document;
+	m_current_view = view;
 
-	if(document != NULL)
+	if(view != NULL)
 	{
-		InfSession* session = INF_SESSION(document->get_session());
-		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(document->get_text_buffer());
+		InfSession* session = view->get_session();
+		InfBuffer* buffer = inf_session_get_buffer(session);
 
 		m_notify_status_handler = g_signal_connect(
 			G_OBJECT(session), "notify::status",
 			G_CALLBACK(on_notify_status_static), this);
 		m_modified_changed_handler = g_signal_connect(
-			G_OBJECT(buffer), "modified-changed",
-			G_CALLBACK(on_modified_changed_static), this);
+			G_OBJECT(buffer), "notify::modified",
+			G_CALLBACK(on_notify_modified_static), this);
 	}
 
 	update_title();
@@ -74,7 +72,7 @@ void Gobby::TitleBar::on_notify_status()
 	update_title();
 }
 
-void Gobby::TitleBar::on_modified_changed()
+void Gobby::TitleBar::on_notify_modified()
 {
 	update_title();
 }
@@ -83,24 +81,22 @@ void Gobby::TitleBar::update_title()
 {
 	// TODO: Show path, as gedit does. This requires change notification
 	// for document info storage.
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 	{
-		InfSession* session = INF_SESSION(
-			m_current_document->get_session());
-		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+		InfSession* session = m_current_view->get_session();
+		InfBuffer* buffer = inf_session_get_buffer(session);
 
 		InfSessionStatus status = inf_session_get_status(session);
 		if(status == INF_SESSION_SYNCHRONIZING ||
-		   !gtk_text_buffer_get_modified(buffer))
+		   !inf_buffer_get_modified(buffer))
 		{
 			m_window.set_title(
-				m_current_document->get_title() + " - Gobby");
+				m_current_view->get_title() + " - Gobby");
 		}
 		else
 		{
 			m_window.set_title(
-				"*" + m_current_document->get_title() +
+				"*" + m_current_view->get_title() +
 				" - Gobby");
 		}
 	}

@@ -33,19 +33,26 @@ namespace Gobby
 class SessionView: public Gtk::VBox
 {
 public:
-	SessionView(InfSession* session, const Glib::ustring& title);
+	SessionView(InfSession* session, const Glib::ustring& title,
+	            const Glib::ustring& path, const Glib::ustring& hostname);
 	virtual ~SessionView();
 
 	const InfSession* get_session() const { return m_session; }
 	InfSession* get_session() { return m_session; }
+
 	const Glib::ustring& get_title() const { return m_title; }
+	const Glib::ustring& get_path() const { return m_path; }
+	const Glib::ustring& get_hostname() const { return m_hostname; }
 
 	void set_info(const Glib::ustring& info, bool closable);
 	void unset_info();
 
 protected:
 	InfSession* m_session;
-	Glib::ustring m_title;
+
+	const Glib::ustring m_title;
+	const Glib::ustring m_path;
+	const Glib::ustring m_hostname;
 
 	Gtk::Frame m_info_frame;
 	Gtk::VBox m_info_box;

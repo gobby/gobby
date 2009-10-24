@@ -23,20 +23,20 @@
 #include <cerrno>
 
 Gobby::OperationSave::OperationSave(Operations& operations,
-                                    DocWindow& document,
+                                    TextSessionView& view,
                                     Folder& folder,
 				    const std::string& uri,
 				    const std::string& encoding,
 				    DocumentInfoStorage::EolStyle eol_style):
-	Operation(operations), m_document(&document),
+	Operation(operations), m_view(&view),
 	m_start_time(std::time(NULL)), m_current_line_index(0),
 	m_iconv(encoding.c_str(), "UTF-8"), m_encoding(encoding),
 	m_eol_style(eol_style),
-	m_storage_key(document.get_info_storage_key()), m_buffer_size(0),
+	m_storage_key(view.get_info_storage_key()), m_buffer_size(0),
 	m_buffer_index(0)
 {
 	// Load content so that the session can go on while saving
-	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document.get_text_buffer());
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(view.get_text_buffer());
 	GtkTextIter prev;
 	GtkTextIter pos;
 	GtkTextIter old_pos;
@@ -71,7 +71,7 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 
 	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(_("Saving document %1 to %2..."),
-			document.get_title(), uri));
+			view.get_title(), uri));
 
 	folder.signal_document_removed().connect(
 		sigc::mem_fun(*this, &OperationSave::on_document_removed));
@@ -95,13 +95,13 @@ Gobby::OperationSave::~OperationSave()
 	m_file.reset();
 }
 
-void Gobby::OperationSave::on_document_removed(DocWindow& document)
+void Gobby::OperationSave::on_document_removed(SessionView& view)
 {
 	// We keep the document to unset the modified flag when the operation
 	// is complete, however, if the document is removed in the meanwhile,
 	// then we don't need to care anymore.
-	if(m_document == &document)
-		m_document = NULL;
+	if(m_view == &view)
+		m_view = NULL;
 }
 
 void Gobby::OperationSave::on_file_replace(
@@ -153,14 +153,13 @@ void Gobby::OperationSave::attempt_next()
 
 		m_stream->close();
 
-		if(m_document != NULL)
+		if(m_view != NULL)
 		{
 			// TODO: Don't unset modified flag if the document has
 			// changed in the meanwhile, but set
 			// buffer-modified-time in algorithm.
 			gtk_text_buffer_set_modified(
-				GTK_TEXT_BUFFER(
-					m_document->get_text_buffer()),
+				GTK_TEXT_BUFFER(m_view->get_text_buffer()),
 				FALSE);
 		}
 

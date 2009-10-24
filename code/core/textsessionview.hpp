@@ -16,22 +16,17 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_DOCWINDOW_HPP_
-#define _GOBBY_DOCWINDOW_HPP_
+#ifndef _GOBBY_TEXTSESSIONVIEW_HPP_
+#define _GOBBY_TEXTSESSIONVIEW_HPP_
 
-#include "core/userlist.hpp"
+#include "core/sessionview.hpp"
 #include "core/preferences.hpp"
-#include "util/closebutton.hpp"
-#include "features.hpp"
 
-#include <gtkmm/box.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/label.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/textiter.h>
+#include <gtkmm/tooltip.h>
 
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
+#include <gtksourceview/gtksourcelanguage.h>
 
 #include <libinftext/inf-text-session.h>
 #include <libinftext/inf-text-user.h>
@@ -39,24 +34,27 @@
 namespace Gobby
 {
 
-class DocWindow: public Gtk::HPaned
+class TextSessionView: public SessionView
 {
 public:
 	typedef sigc::signal<void, GtkSourceLanguage*> SignalLanguageChanged;
 	typedef sigc::signal<void, InfTextUser*> SignalActiveUserChanged;
 
-	DocWindow(InfTextSession* session, const Glib::ustring& title,
-	          const Glib::ustring& path, const Glib::ustring& hostname,
-	          const std::string& info_storage_key,
-	          Preferences& preferences,
-	          GtkSourceLanguageManager* manager);
-	virtual ~DocWindow();
+	TextSessionView(InfTextSession* session, const Glib::ustring& title,
+	                const Glib::ustring& path,
+	                const Glib::ustring& hostname,
+	                const std::string& info_storage_key,
+	                Preferences& preferences,
+	                GtkSourceLanguageManager* manager);
 
-	const InfTextSession* get_session() const { return m_session; }
-	InfTextSession* get_session() { return m_session; }
-	const Glib::ustring& get_title() const { return m_title; }
-	const Glib::ustring& get_path() const { return m_path; }
-	const Glib::ustring& get_hostname() const { return m_hostname; }
+/*	const InfTextSession* get_session() const
+	{
+		return INF_TEXT_SESSION(m_session);
+	}*/
+
+	// Override base class covariantly
+	InfTextSession* get_session() { return INF_TEXT_SESSION(m_session); }
+
 	const std::string& get_info_storage_key() const
 	{
 		return m_info_storage_key;
@@ -77,9 +75,6 @@ public:
 	GtkSourceView* get_text_view() { return m_view; }
 	GtkSourceBuffer* get_text_buffer() { return m_buffer; }
 
-	void set_info(const Glib::ustring& info, bool closable);
-	void unset_info();
-
 	SignalLanguageChanged signal_language_changed() const
 	{
 		return m_signal_language_changed;
@@ -91,8 +86,6 @@ public:
 	}
 
 protected:
-	virtual void on_size_allocate(Gtk::Allocation& allocation);
-
 	void on_user_color_changed();
 
 	void on_tab_width_changed();
@@ -110,9 +103,6 @@ protected:
 
 	void on_font_changed();
 
-	void on_doc_userlist_width_changed();
-	void on_pref_userlist_width_changed();
-
 	bool on_query_tooltip(int x, int y, bool keyboard_mode,
 	                      const Glib::RefPtr<Gtk::Tooltip>& tooltip);
 
@@ -121,34 +111,21 @@ protected:
 	                                        GtkTooltip* tooltip,
 	                                        gpointer user_data)
 	{
-		return static_cast<DocWindow*>(user_data)->on_query_tooltip(
-			x, y, keyboard_mode, Glib::wrap(tooltip, true));
+		return static_cast<TextSessionView*>(user_data)->
+			on_query_tooltip(x, y, keyboard_mode,
+			                 Glib::wrap(tooltip, true));
 	}
 
-	InfTextSession* m_session;
-	Glib::ustring m_title;
-	Glib::ustring m_path;
-	Glib::ustring m_hostname;
 	std::string m_info_storage_key;
 	Preferences& m_preferences;
 
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;
-	UserList m_userlist;
-
-	Gtk::Frame m_info_frame;
-	Gtk::VBox m_info_box;
-	Gtk::HBox m_info_close_button_box;
-	CloseButton m_info_close_button;
-	Gtk::Label m_info_label;
 
 	SignalLanguageChanged m_signal_language_changed;
 	SignalActiveUserChanged m_signal_active_user_changed;
-
-	sigc::connection m_doc_userlist_width_changed_connection;
-	sigc::connection m_pref_userlist_width_changed_connection;
 };
 
 }
 
-#endif // _GOBBY_DOCWINDOW_HPP_
+#endif // _GOBBY_TEXTSESSIONVIEW_HPP_

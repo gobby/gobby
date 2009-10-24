@@ -17,22 +17,28 @@
  */
 
 #include "commands/folder-commands.hpp"
+#include "core/sessionuserview.hpp"
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
+// TODO: Make this work with non-text documents also... maybe split &
+// share a base class... or better: Move active user stuff to SessionView
+// base. All SessionView's should be modifyable by the user, and if there are
+// document types gobby only supports in a read-only kind of way the active
+// user can just be NULL all the time.
 class Gobby::FolderCommands::DocInfo: public sigc::trackable
 {
 public:
 	static const unsigned int ACTIVATION_DELAY = 1000;
 
-	DocInfo(DocWindow& document):
-		m_document(document), m_active_user(NULL), m_active(false)
+	DocInfo(TextSessionView& view):
+		m_view(view), m_active_user(NULL), m_active(false)
 	{
-		m_document.signal_active_user_changed().connect(
+		m_view.signal_active_user_changed().connect(
 			sigc::mem_fun(
 				*this, &DocInfo::on_active_user_changed));
 
-		on_active_user_changed(document.get_active_user());
+		on_active_user_changed(view.get_active_user());
 	}
 
 	~DocInfo()
@@ -51,7 +57,7 @@ public:
 
 		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 			inf_session_get_buffer(
-				INF_SESSION(m_document.get_session())));
+				INF_SESSION(m_view.get_session())));
 
 		inf_text_gtk_buffer_set_wake_on_cursor_movement(
 			buffer, FALSE);
@@ -64,7 +70,7 @@ public:
 
 		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 			inf_session_get_buffer(
-				INF_SESSION(m_document.get_session())));
+				INF_SESSION(m_view.get_session())));
 
 		inf_text_gtk_buffer_set_wake_on_cursor_movement(
 			buffer, TRUE);
@@ -97,11 +103,11 @@ protected:
 			/* Flush pending requests, so user is not set active
 			 * again later. */
 			inf_text_session_flush_requests_for_user(
-				m_document.get_session(),
+				m_view.get_session(),
 				INF_TEXT_USER(m_active_user));
 
 			inf_session_set_user_status(
-				INF_SESSION(m_document.get_session()),
+				INF_SESSION(m_view.get_session()),
 				m_active_user, INF_USER_INACTIVE);
 			break;
 		case INF_USER_UNAVAILABLE:
@@ -190,13 +196,13 @@ protected:
 		         INF_USER_INACTIVE);
 
 		inf_session_set_user_status(
-			INF_SESSION(m_document.get_session()), m_active_user,
+			INF_SESSION(m_view.get_session()), m_active_user,
 			INF_USER_ACTIVE);
 
 		return false;
 	}
 
-	DocWindow& m_document;
+	TextSessionView& m_view;
 	InfUser* m_active_user;
 	bool m_active;
 
@@ -205,7 +211,7 @@ protected:
 };
 
 Gobby::FolderCommands::FolderCommands(Folder& folder):
-	m_folder(folder), m_current_document(NULL)
+	m_folder(folder), m_current_view(NULL)
 {
 	m_folder.signal_document_added().connect(
 		sigc::mem_fun(*this, &FolderCommands::on_document_added));
@@ -216,11 +222,16 @@ Gobby::FolderCommands::FolderCommands(Folder& folder):
 
 	for(unsigned int i = 0; i < m_folder.get_n_pages(); ++ i)
 	{
-		DocWindow* window = static_cast<DocWindow*>(
+		// TODO: Convenience API in Folder to retrieve SessionView,
+		// so that we don't need to know about SessionUserView here.
+		SessionUserView* user_view = static_cast<SessionUserView*>(
 			m_folder.get_nth_page(i));
-		g_assert(window != NULL);
+		SessionView& view = user_view->get_session_view();
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(&view);
 
-		on_document_added(*window);
+		if(text_view)
+			on_document_added(*text_view);
 	}
 
 	on_document_changed(m_folder.get_current_document());
@@ -235,42 +246,51 @@ Gobby::FolderCommands::~FolderCommands()
 	}
 }
 
-void Gobby::FolderCommands::on_document_added(DocWindow& document)
+void Gobby::FolderCommands::on_document_added(SessionView& view)
 {
-	DocInfo* info = new DocInfo(document);
-	m_doc_map[&document] = info;
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(&view);
+	if(text_view)
+	{
+		DocInfo* info = new DocInfo(*text_view);
+		m_doc_map[text_view] = info;
+	}
 }
 
-void Gobby::FolderCommands::on_document_removed(DocWindow& document)
+void Gobby::FolderCommands::on_document_removed(SessionView& view)
 {
-	DocumentMap::iterator iter = m_doc_map.find(&document);
-	g_assert(iter != m_doc_map.end());
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(&view);
+	if(text_view)
+	{
+		DocumentMap::iterator iter = m_doc_map.find(text_view);
+		g_assert(iter != m_doc_map.end());
 
-	delete iter->second;
-	m_doc_map.erase(iter);
+		delete iter->second;
+		m_doc_map.erase(iter);
 
-	// on_document_changed is called when another document has
-	// been selected
-	if(&document == m_current_document)
-		m_current_document = NULL;
+		// TODO: Isn't this called by Folder already? Would need to
+		// call changed first and then removed of course. We could
+		// then assert here.
+		if(text_view == m_current_view)
+			m_current_view = NULL;
+	}
 }
 
-void Gobby::FolderCommands::on_document_changed(DocWindow* document)
+void Gobby::FolderCommands::on_document_changed(SessionView* view)
 {
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 	{
 		DocumentMap::iterator iter =
-			m_doc_map.find(m_current_document);
+			m_doc_map.find(m_current_view);
 		g_assert(iter != m_doc_map.end());
 
 		iter->second->deactivate();
 	}
 
-	m_current_document = document;
+	m_current_view = dynamic_cast<TextSessionView*>(view);
 
-	if(document != NULL)
+	if(m_current_view != NULL)
 	{
-		DocumentMap::iterator iter = m_doc_map.find(document);
+		DocumentMap::iterator iter = m_doc_map.find(m_current_view);
 		g_assert(iter != m_doc_map.end());
 
 		iter->second->activate();

@@ -43,8 +43,8 @@ public:
 	~EditCommands();
 
 protected:
-	void on_document_removed(DocWindow& document);
-	void on_document_changed(DocWindow* document);
+	void on_document_removed(SessionView& view);
+	void on_document_changed(SessionView* view);
 
 	static void on_can_undo_changed_static(InfAdoptedAlgorithm* algorithm,
 	                                       InfAdoptedUser* user,
@@ -116,7 +116,7 @@ protected:
 	std::auto_ptr<GotoDialog> m_goto_dialog;
 	std::auto_ptr<PreferencesDialog> m_preferences_dialog;
 
-	DocWindow* m_current_document;
+	TextSessionView* m_current_view;
 	// Only valid when m_current_document is nonzero:
 	sigc::connection m_active_user_changed_connection;
 	gulong m_can_undo_changed_handler;

@@ -213,14 +213,15 @@ void Gobby::FindDialog::on_response(int id)
 	Gtk::Dialog::on_response(id);
 }
 
-void Gobby::FindDialog::on_document_changed(DocWindow* document)
+void Gobby::FindDialog::on_document_changed(SessionView* view)
 {
 	m_active_user_changed_connection.disconnect();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
 
-	if(document != NULL)
+	if(text_view != NULL)
 	{
 		m_active_user_changed_connection =
-			document->signal_active_user_changed().connect(
+			text_view->signal_active_user_changed().connect(
 				sigc::mem_fun(
 					*this,
 					&FindDialog::on_active_user_changed));
@@ -263,11 +264,12 @@ bool Gobby::FindDialog::find()
 
 bool Gobby::FindDialog::replace()
 {
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
 
 	// Get selected string
-	Glib::ustring sel_str = document->get_selected_text();
+	Glib::ustring sel_str = text_view->get_selected_text();
 	Glib::ustring find_str = get_find_text();
 
 	// Lowercase both if we are comparing insensitive
@@ -281,7 +283,7 @@ bool Gobby::FindDialog::replace()
 	if(sel_str == find_str)
 	{
 		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(document->get_text_buffer());
+			GTK_TEXT_BUFFER(text_view->get_text_buffer());
 
 		// Replace occurence
 		Glib::ustring replace_text = get_replace_text();
@@ -302,11 +304,14 @@ bool Gobby::FindDialog::replace()
 
 bool Gobby::FindDialog::replace_all()
 {
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+	// TODO: Add helper function to get textsessionview? Maybe even add
+	// to Folder?
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
 
 	GtkTextIter begin;
-	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document->get_text_buffer());
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(text_view->get_text_buffer());
 	gtk_text_buffer_get_start_iter(buffer, &begin);
 
 	unsigned int replace_count = 0;
@@ -348,8 +353,9 @@ bool Gobby::FindDialog::replace_all()
 bool Gobby::FindDialog::find_and_select(const GtkTextIter* from,
                                         SearchDirection direction)
 {
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
 
 	const GtkTextIter* real_begin = from;
 	GtkTextIter insert_iter;
@@ -358,7 +364,7 @@ bool Gobby::FindDialog::find_and_select(const GtkTextIter* from,
 	if(from == NULL)
 	{
 		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(document->get_text_buffer());
+			GTK_TEXT_BUFFER(text_view->get_text_buffer());
 		GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
 		gtk_text_buffer_get_iter_at_mark(buffer, &insert_iter, mark);
 		real_begin = &insert_iter;
@@ -368,9 +374,9 @@ bool Gobby::FindDialog::find_and_select(const GtkTextIter* from,
 	if(find_wrap(real_begin, direction, &match_start, &match_end))
 	{
 		if(direction == SEARCH_FORWARD)
-			document->set_selection(&match_end, &match_start);
+			text_view->set_selection(&match_end, &match_start);
 		else
-			document->set_selection(&match_start, &match_end);
+			text_view->set_selection(&match_start, &match_end);
 
 		return true;
 	}
@@ -383,8 +389,9 @@ bool Gobby::FindDialog::find_wrap(const GtkTextIter* from,
                                   GtkTextIter* match_start,
                                   GtkTextIter* match_end)
 {
-	DocWindow* document = m_folder.get_current_document();
-	g_assert(document != NULL);
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
 
 	GtkTextIter start_pos = *from;
 
@@ -396,7 +403,7 @@ bool Gobby::FindDialog::find_wrap(const GtkTextIter* from,
 
 	// Wrap around
 	GtkTextIter restart_pos;
-	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document->get_text_buffer());
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(text_view->get_text_buffer());
 
 	if(direction == SEARCH_FORWARD)
 		gtk_text_buffer_get_start_iter(buffer, &restart_pos);
@@ -478,12 +485,13 @@ bool Gobby::FindDialog::find_range_once(const GtkTextIter* from,
 
 void Gobby::FindDialog::update_sensitivity()
 {
-	DocWindow* document = m_folder.get_current_document();
+	SessionView* view = m_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
 
 	bool find_sensitivity =
-		(!m_entry_find.get_text().empty() && document != NULL);
+		(!m_entry_find.get_text().empty() && text_view != NULL);
 	bool replace_sensitivity =
-		(find_sensitivity && document->get_active_user() != NULL);
+		(find_sensitivity && text_view->get_active_user() != NULL);
 
 	set_response_sensitive(RESPONSE_FIND, find_sensitivity);
 	set_response_sensitive(RESPONSE_REPLACE, replace_sensitivity);

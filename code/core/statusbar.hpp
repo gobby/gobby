@@ -86,8 +86,8 @@ protected:
 	void on_message_clicked(GdkEventButton* button,
 	                        const MessageHandle& message);
 
-	void on_document_removed(DocWindow& document);
-	void on_document_changed(DocWindow* document);
+	void on_document_removed(SessionView& view);
+	void on_document_changed(SessionView* view);
 	void on_view_changed();
 	
 	void on_mark_set(GtkTextMark* mark);
@@ -100,7 +100,7 @@ protected:
 	MessageList m_list;
 
 	Gtk::Statusbar m_bar_position;
-	DocWindow* m_current_document;
+	TextSessionView* m_current_view;
 	gulong m_mark_set_handler;
 	gulong m_changed_handler;
 

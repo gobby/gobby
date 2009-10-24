@@ -21,7 +21,7 @@
 
 #include "core/folder.hpp"
 #include "core/statusbar.hpp"
-#include "core/docwindow.hpp"
+#include "core/sessionview.hpp"
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/box.h>
@@ -70,7 +70,7 @@ protected:
 	virtual void on_show();
 	virtual void on_response(int id);
 
-	void on_document_changed(DocWindow* document);
+	void on_document_changed(SessionView* view);
 	void on_active_user_changed(InfTextUser* user);
 	void on_find_text_changed();
 	void on_replace_text_changed();

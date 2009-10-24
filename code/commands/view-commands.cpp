@@ -22,7 +22,7 @@
 Gobby::ViewCommands::ViewCommands(Header& header, Folder& folder,
                                   Preferences& preferences):
 	m_header(header), m_folder(folder), m_preferences(preferences),
-	m_current_document(NULL)
+	m_current_view(NULL)
 {
 	m_menu_view_toolbar_connection = 
 		m_header.action_view_toolbar->signal_toggled().connect(
@@ -91,20 +91,20 @@ Gobby::ViewCommands::~ViewCommands()
 	on_document_changed(NULL);
 }
 
-void Gobby::ViewCommands::on_document_changed(DocWindow* document)
+void Gobby::ViewCommands::on_document_changed(SessionView* view)
 {
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 		m_document_language_changed_connection.disconnect();
 
-	m_current_document = document;
+	m_current_view = dynamic_cast<TextSessionView*>(view);
 
-	if(document != NULL)
+	if(m_current_view != NULL)
 	{
 		m_header.action_view_highlight_mode->set_sensitive(true);
 		m_header.action_view_userlist->set_sensitive(true);
 
 		m_document_language_changed_connection =
-			document->signal_language_changed().connect(
+			m_current_view->signal_language_changed().connect(
 				sigc::mem_fun(
 					*this,
 					&ViewCommands::
@@ -117,10 +117,12 @@ void Gobby::ViewCommands::on_document_changed(DocWindow* document)
 		m_header.action_view_highlight_none->set_active(true);
 		m_menu_language_changed_connection.unblock();
 
-		m_header.action_view_userlist->set_sensitive(false);
+		// Can toggle userlist also if it's not a textsession:
+		m_header.action_view_userlist->set_sensitive(view != NULL);
 	}
 
-	on_doc_language_changed(document ? document->get_language() : NULL);
+	on_doc_language_changed(
+		m_current_view ? m_current_view->get_language() : NULL);
 }
 
 void Gobby::ViewCommands::on_menu_toolbar_toggled()
@@ -193,10 +195,10 @@ void Gobby::ViewCommands::on_menu_language_changed(
 	Glib::RefPtr<Header::LanguageAction> language_action =
 		Glib::RefPtr<Header::LanguageAction>::cast_static(action);
 
-	g_assert(m_current_document != NULL);
+	g_assert(m_current_view != NULL);
 
 	m_document_language_changed_connection.block();
-	m_current_document->set_language(language_action->get_language());
+	m_current_view->set_language(language_action->get_language());
 	m_document_language_changed_connection.unblock();
 }
 
@@ -206,7 +208,7 @@ void Gobby::ViewCommands::on_doc_language_changed(GtkSourceLanguage* language)
 	const Glib::RefPtr<Header::LanguageAction> action =
 		(language != NULL) ?
 			m_header.lookup_language_action(
-				m_current_document->get_language()) :
+				m_current_view->get_language()) :
 			m_header.action_view_highlight_none;
 
 	m_menu_language_changed_connection.block();

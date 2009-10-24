@@ -21,6 +21,7 @@
 
 #include "core/documentinfostorage.hpp"
 #include "core/statusbar.hpp"
+#include "core/textsessionview.hpp"
 
 #include <libinfinity/client/infc-browser.h>
 
@@ -108,7 +109,7 @@ public:
 	                                        const Preferences& prefs,
 	                                        unsigned int num_uris);
 
-	OperationSave* save_document(DocWindow& document,
+	OperationSave* save_document(TextSessionView& view,
 	                             Folder& folder,
 	                             const std::string& uri,
 	                             const std::string& encoding,
@@ -117,10 +118,10 @@ public:
 	OperationDelete* delete_node(InfcBrowser* browser,
 	                             const InfcBrowserIter* iter);
 
-	OperationExportHtml* export_html(DocWindow& document,
+	OperationExportHtml* export_html(TextSessionView& view,
 	                                 const std::string& uri);
 
-	OperationSave* get_save_operation_for_document(DocWindow& window);
+	OperationSave* get_save_operation_for_document(TextSessionView& view);
 
 	SignalBeginSaveOperation signal_begin_save_operation() const
 	{

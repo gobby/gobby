@@ -34,36 +34,41 @@ void Gobby::TaskSaveAll::run() {
 	for(PageList::iterator iter = pages.begin();
 	    iter != pages.end(); ++ iter)
 	{
-		m_documents.push_back(
-			static_cast<DocWindow*>(iter->get_child()));
+		SessionView* view =
+			static_cast<SessionView*>(iter->get_child());
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(view);
+
+		if(text_view)
+			m_views.push_back(text_view);
 	}
 
 	get_folder().signal_document_removed().connect(
 		sigc::mem_fun(*this, &TaskSaveAll::on_document_removed));
 
-	m_current = m_documents.begin();
+	m_current = m_views.begin();
 	process_current();
 }
 
-void Gobby::TaskSaveAll::on_document_removed(DocWindow& document)
+void Gobby::TaskSaveAll::on_document_removed(SessionView& view)
 {
-	std::list<DocWindow*>::iterator iter = std::find(
-		m_documents.begin(), m_documents.end(), &document);
+	std::list<TextSessionView*>::iterator iter = std::find(
+		m_views.begin(), m_views.end(), &view);
 
 	if(iter == m_current)
 	{
-		m_current = m_documents.erase(m_current);
+		m_current = m_views.erase(m_current);
 		// Go on with next
 		process_current();
 	}
 
-	if(iter != m_documents.end())
-		m_documents.erase(iter);
+	if(iter != m_views.end())
+		m_views.erase(iter);
 }
 
 void Gobby::TaskSaveAll::on_finished()
 {
-	m_current = m_documents.erase(m_current);
+	m_current = m_views.erase(m_current);
 	process_current();
 }
 
@@ -71,30 +76,30 @@ void Gobby::TaskSaveAll::process_current()
 {
 	m_task.reset(NULL);
 
-	if(m_current == m_documents.end())
+	if(m_current == m_views.end())
 	{
 		finish();
 	}
 	else
 	{
-		DocWindow& doc = **m_current;
+		TextSessionView& view = **m_current;
 
 		const DocumentInfoStorage::Info* info =
 			get_document_info_storage().get_info(
-				doc.get_info_storage_key());
+				view.get_info_storage_key());
 
 		if(info != NULL && !info->uri.empty())
 		{
 			get_operations().save_document(
-				doc, get_folder(), info->uri,
+				view, get_folder(), info->uri,
 				info->encoding, info->eol_style);
 
-			m_current = m_documents.erase(m_current);
+			m_current = m_views.erase(m_current);
 			process_current();
 		}
 		else
 		{
-			m_task.reset(new TaskSave(m_file_commands, doc));
+			m_task.reset(new TaskSave(m_file_commands, view));
 
 			m_task->signal_finished().connect(sigc::mem_fun(
 				*this, &TaskSaveAll::on_finished));

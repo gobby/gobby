@@ -17,6 +17,7 @@
  */
 
 #include "core/folder.hpp"
+#include "core/sessionuserview.hpp"
 #include "core/tablabel.hpp"
 #include "util/closebutton.hpp"
 #include "util/file.hpp"
@@ -111,101 +112,125 @@ Gobby::Folder::~Folder()
 	// Remove all documents explicitely, so that all sessions are closed,
 	// and records finished.
 	while(get_n_pages())
-		remove_document(*static_cast<DocWindow*>(get_nth_page(0)));
+		remove_document(
+			static_cast<SessionUserView*>(
+				get_nth_page(0))->get_session_view());
 }
 
-Gobby::DocWindow&
+Gobby::TextSessionView&
 Gobby::Folder::add_document(InfTextSession* session,
                             const Glib::ustring& title,
                             const Glib::ustring& path,
                             const Glib::ustring& hostname,
                             const std::string& info_storage_key)
 {
-	Gobby::DocWindow* window = Gtk::manage(
-		new DocWindow(session, title, path, hostname,
-		              info_storage_key, m_preferences,
-		              m_lang_manager));
-	window->show();
-	m_signal_document_added.emit(*window);
+	TextSessionView* view = Gtk::manage(
+		new TextSessionView(session, title, path, hostname,
+		                    info_storage_key, m_preferences,
+		                    m_lang_manager));
+	view->show();
+	m_signal_document_added.emit(*view);
 
-	TabLabel* tablabel = Gtk::manage(new TabLabel(*this, *window));
+	SessionUserView* userview = Gtk::manage(
+		new SessionUserView(
+			*view,
+			m_preferences.appearance.show_userlist,
+			m_preferences.appearance.userlist_width));
+	userview->show();
+
+	TabLabel* tablabel = Gtk::manage(new TabLabel(*this, *view));
 	tablabel->signal_close_request().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_tab_close_request),
-			sigc::ref(*window)));
+			sigc::ref(*view)));
 	tablabel->show();
-	append_page(*window, *tablabel);
+	append_page(*userview, *tablabel);
 
-	set_tab_reorderable(*window, true);
+	set_tab_reorderable(*userview, true);
 
 	// Record the session, for debugging purposes:
 	record(session, title);
 
-	return *window;
+	return *view;
 }
 
-void Gobby::Folder::remove_document(DocWindow& window)
+void Gobby::Folder::remove_document(SessionView& view)
 {
-	m_signal_document_removed.emit(window);
+	m_signal_document_removed.emit(view);
 
 	// Finish the record
-	InfTextSession* session = window.get_session();
+	InfSession* session = view.get_session();
 	g_object_set_data(G_OBJECT(session), "GOBBY_SESSION_RECORD", NULL);
 
 	g_object_ref(session);
-	inf_session_close(INF_SESSION(session));
-	remove_page(window);
+	inf_session_close(session);
+	// This relies on the sessionuserview being the direct parent of
+	// view - maybe we should make a loop here instead which searches
+	// the folder in the widget hierarchy, to be more robust.
+	remove_page(*view.get_parent());
 	g_object_unref(session);
 
 	if(get_n_pages() == 0)
 		m_signal_document_changed.emit(NULL);
 }
 
-Gobby::DocWindow*
-Gobby::Folder::lookup_document(InfTextSession* session)
+Gobby::SessionView*
+Gobby::Folder::lookup_document(InfSession* session)
 {
 	const PageList& pagelist = pages();
 	for(PageList::iterator iter = pagelist.begin();
 	    iter != pagelist.end(); ++ iter)
 	{
-		DocWindow* window =
-			static_cast<DocWindow*>(iter->get_child());
+		SessionUserView* child =
+			static_cast<SessionUserView*>(iter->get_child());
 
-		if(window->get_session() == session)
-			return window;
+		if(child->get_session_view().get_session() == session)
+			return &child->get_session_view();
 	}
 
 	return NULL;
 }
 
-Gobby::DocWindow*
+Gobby::SessionView*
 Gobby::Folder::get_current_document()
 {
-	return static_cast<DocWindow*>(get_nth_page(get_current_page()));
+	SessionUserView* child = static_cast<SessionUserView*>(
+		get_nth_page(get_current_page()));
+	if(!child) return NULL;
+
+	return &child->get_session_view();
 }
 
-const Gobby::DocWindow*
+const Gobby::SessionView*
 Gobby::Folder::get_current_document() const
 {
-	return static_cast<const DocWindow*>(get_nth_page(get_current_page()));
+	const SessionUserView* child = static_cast<const SessionUserView*>(
+		get_nth_page(get_current_page()));
+	if(!child) return NULL;
+
+	return &child->get_session_view();
 }
 
-void Gobby::Folder::switch_to_document(DocWindow& document)
+void Gobby::Folder::switch_to_document(SessionView& document)
 {
-	set_current_page(page_num(document));
+	// Again, here we rely on document being the direct child of
+	// the SessionUserView...
+	set_current_page(page_num(*document.get_parent()));
 }
 
-void Gobby::Folder::on_tab_close_request(DocWindow& window)
+void Gobby::Folder::on_tab_close_request(SessionView& view)
 {
-	if(m_signal_document_close_request.emit(window))
-		remove_document(window);
+	if(m_signal_document_close_request.emit(view))
+		remove_document(view);
 }
 
 void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
 {
 	Gtk::Notebook::on_switch_page(page, page_num);
-	DocWindow& window = *static_cast<DocWindow*>(get_nth_page(page_num));
-	m_signal_document_changed.emit(&window);
+	SessionUserView& view =
+		*static_cast<SessionUserView*>(get_nth_page(page_num));
+
+	m_signal_document_changed.emit(&view.get_session_view());
 }
 
 bool Gobby::Folder::on_key_press_event(GdkEventKey* event)

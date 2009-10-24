@@ -20,7 +20,7 @@
 #define _GOBBY_TITLEBAR_HPP_
 
 #include "core/folder.hpp"
-#include "core/docwindow.hpp"
+#include "core/sessionview.hpp"
 
 #include <gtkmm/window.h>
 #include <sigc++/trackable.h>
@@ -41,23 +41,24 @@ private:
 		static_cast<TitleBar*>(user_data)->on_notify_status();
 	}
 
-	static void on_modified_changed_static(GtkTextBuffer* buffer,
-	                                       gpointer user_data)
+	static void on_notify_modified_static(InfBuffer* buffer,
+	                                      GParamSpec* pspec,
+	                                      gpointer user_data)
 	{
-		static_cast<TitleBar*>(user_data)->on_modified_changed();
+		static_cast<TitleBar*>(user_data)->on_notify_modified();
 	}
 
-	void on_document_removed(DocWindow& document);
-	void on_document_changed(DocWindow* document);
+	void on_document_removed(SessionView& view);
+	void on_document_changed(SessionView* view);
 
 	void on_notify_status();
-	void on_modified_changed();
+	void on_notify_modified();
 
 	void update_title();
 
 	Gtk::Window& m_window;
 	Folder& m_folder;
-	DocWindow* m_current_document;
+	SessionView* m_current_view;
 
 	gulong m_notify_status_handler;
 	gulong m_modified_changed_handler;

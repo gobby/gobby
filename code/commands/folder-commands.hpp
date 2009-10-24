@@ -34,16 +34,16 @@ public:
 
 protected:
 
-	void on_document_added(DocWindow& document);
-	void on_document_removed(DocWindow& document);
-	void on_document_changed(DocWindow* document);
+	void on_document_added(SessionView& view);
+	void on_document_removed(SessionView& view);
+	void on_document_changed(SessionView* view);
 
 	Folder& m_folder;
 
-	DocWindow* m_current_document;
+	TextSessionView* m_current_view;
 
 	class DocInfo;
-	typedef std::map<DocWindow*, DocInfo*> DocumentMap;
+	typedef std::map<SessionView*, DocInfo*> DocumentMap;
 	DocumentMap m_doc_map;
 };
 

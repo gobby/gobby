@@ -33,13 +33,13 @@ public:
 	virtual void run();
 
 private:
-	void on_document_removed(DocWindow& document);
+	void on_document_removed(SessionView& view);
 	void on_finished();
 
 	void process_current();
 
-	std::list<DocWindow*> m_documents;
-	std::list<DocWindow*>::iterator m_current;
+	std::list<TextSessionView*> m_views;
+	std::list<TextSessionView*>::iterator m_current;
 	std::auto_ptr<TaskSave> m_task;
 };
 

@@ -33,7 +33,7 @@ namespace Gobby
 class OperationExportHtml: public Operations::Operation, public sigc::trackable
 {
 public:
-	OperationExportHtml(Operations& operations, DocWindow& document,
+	OperationExportHtml(Operations& operations, TextSessionView& view,
 	                    const std::string& uri);
 
 	virtual ~OperationExportHtml();

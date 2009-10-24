@@ -21,9 +21,12 @@
 #include "core/sessionview.hpp"
 
 Gobby::SessionView::SessionView(InfSession* session,
-                                const Glib::ustring& title):
-	m_session(session), m_title(title),
-	m_info_box(false, 0), m_info_close_button_box(false, 6)
+                                const Glib::ustring& title,
+                                const Glib::ustring& path,
+                                const Glib::ustring& hostname):
+	m_session(session), m_title(title), m_path(path),
+	m_hostname(hostname), m_info_box(false, 0),
+	m_info_close_button_box(false, 6)
 {
 	g_object_ref(m_session);
 

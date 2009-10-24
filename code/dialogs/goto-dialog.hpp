@@ -20,7 +20,7 @@
 #define _GOBBY_GOTODIALOG_HPP_
 
 #include "core/folder.hpp"
-#include "core/docwindow.hpp"
+#include "core/sessionview.hpp"
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/table.h>
@@ -46,7 +46,7 @@ protected:
 	virtual void on_show();
 	virtual void on_response(int id);
 
-	void on_document_changed(DocWindow* document);
+	void on_document_changed(SessionView* view);
 	void on_changed();
 
 	Folder& m_folder;
@@ -56,7 +56,7 @@ protected:
 	Gtk::Label m_label_line;
 	Gtk::SpinButton m_entry_line;
 
-	DocWindow* m_current_document;
+	TextSessionView* m_current_view;
 	gulong m_changed_handler;
 };
 

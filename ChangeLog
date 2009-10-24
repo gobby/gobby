@@ -1,3 +1,60 @@
+2009-10-25  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/textsessionview.hpp:
+	* code/core/textsessionview.cpp: Added TextSessionView, a
+	SessionView-deriving class showing a InfTextSession.
+
+	* code/core/docwindow.hpp:
+	* code/core/docwindow.cpp: Removed.
+
+	* code/core/Makefile.am: Adapted the build.
+
+	* code/core/sessionview.hpp:
+	* code/core/sessionview.cpp: Added path & hostname to SessionView.
+
+	* code/core/folder.hpp:
+	* code/core/folder.cpp:
+	* code/core/statusbar.hpp:
+	* code/core/statusbar.cpp:
+	* code/core/tablabel.hpp:
+	* code/core/tablabel.cpp:
+	* code/core/titlebar.hpp:
+	* code/core/titlebar.cpp:
+	* code/core/userlist.cpp:
+
+	* code/dialogs/find-dialog.hpp:
+	* code/dialogs/find-dialog.cpp:
+	* code/dialogs/goto-dialog.hpp:
+	* code/dialogs/goto-dialog.cpp:
+
+	* code/operations/operation-export-html.hpp:
+	* code/operations/operation-export-html.cpp:
+	* code/operations/operation-save.hpp:
+	* code/operations/operation-save.cpp:
+	* code/operations/operations.hpp:
+	* code/operations/operations.cpp:
+
+	* code/commands/autosave-commands.hpp:
+	* code/commands/autosave-commands.cpp:
+	* code/commands/browser-commands.cpp:
+	* code/commands/edit-commands.hpp:
+	* code/commands/edit-commands.cpp:
+	* code/commands/file-commands.hpp:
+	* code/commands/file-commands.cpp:
+	* code/commands/folder-commands.hpp:
+	* code/commands/folder-commands.cpp:
+	* code/commands/view-commands.hpp:
+	* code/commands/view-commands.cpp:
+	* code/commands/file-tasks/task-export-html.hpp:
+	* code/commands/file-tasks/task-export-html.cpp:
+	* code/commands/file-tasks/task-save-all.hpp:
+	* code/commands/file-tasks/task-save-all.cpp:
+	* code/commands/file-tasks/task-save.hpp:
+	* code/commands/file-tasks/task-save.cpp:
+
+	* code/window.cpp: Adapt for the DocWindow->TextSessionView API
+	change.
+
 2009-10-18  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/sessionview.hpp:

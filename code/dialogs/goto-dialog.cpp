@@ -29,7 +29,7 @@ Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, Folder& folder):
 	m_table(1, 2),
 	m_label_line(_("Line _number:"), Gtk::ALIGN_LEFT,
 	             Gtk::ALIGN_CENTER, true),
-	m_current_document(NULL)
+	m_current_view(NULL)
 {
 	m_label_line.set_mnemonic_widget(m_entry_line);
 	m_label_line.show();
@@ -74,10 +74,10 @@ void Gobby::GotoDialog::on_show()
 	Gtk::Dialog::on_show();
 	m_entry_line.grab_focus();
 
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 	{
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 		GtkTextIter cursor;
 		gtk_text_buffer_get_iter_at_mark(
 			buffer, &cursor, gtk_text_buffer_get_insert(buffer));
@@ -92,14 +92,14 @@ void Gobby::GotoDialog::on_response(int id)
 {
 	if(id == Gtk::RESPONSE_ACCEPT)
 	{
-		g_assert(m_current_document != NULL);
+		g_assert(m_current_view != NULL);
 
 		int value = m_entry_line.get_value_as_int();
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 		GtkTextIter begin;
 		gtk_text_buffer_get_iter_at_line(buffer, &begin, value - 1);
-		m_current_document->set_selection(&begin, &begin);
+		m_current_view->set_selection(&begin, &begin);
 	}
 	else if(id == Gtk::RESPONSE_CLOSE)
 	{
@@ -109,23 +109,23 @@ void Gobby::GotoDialog::on_response(int id)
 	Gtk::Dialog::on_response(id);
 }
 
-void Gobby::GotoDialog::on_document_changed(DocWindow* document)
+void Gobby::GotoDialog::on_document_changed(SessionView* view)
 {
-	if(m_current_document != NULL)
+	if(m_current_view != NULL)
 	{
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			m_current_document->get_text_buffer());
+			m_current_view->get_text_buffer());
 		g_signal_handler_disconnect(buffer, m_changed_handler);
 	}
 
-	set_response_sensitive(Gtk::RESPONSE_ACCEPT, document != NULL);
-	m_entry_line.set_sensitive(document != NULL);
-	m_current_document = document;
+	m_current_view = dynamic_cast<TextSessionView*>(view);
+	set_response_sensitive(Gtk::RESPONSE_ACCEPT, m_current_view != NULL);
+	m_entry_line.set_sensitive(m_current_view != NULL);
 
-	if(document != NULL)
+	if(m_current_view != NULL)
 	{
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-			document->get_text_buffer());
+			m_current_view->get_text_buffer());
 
 		m_changed_handler = g_signal_connect_after(
 			G_OBJECT(buffer), "changed",
@@ -137,9 +137,9 @@ void Gobby::GotoDialog::on_document_changed(DocWindow* document)
 
 void Gobby::GotoDialog::on_changed()
 {
-	g_assert(m_current_document != NULL);
+	g_assert(m_current_view != NULL);
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
-		m_current_document->get_text_buffer());
+		m_current_view->get_text_buffer());
 
 	m_entry_line.set_range(1, gtk_text_buffer_get_line_count(buffer));
 }

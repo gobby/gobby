@@ -100,19 +100,19 @@ Gobby::Operations::create_documents(InfcBrowser* browser,
 }
 
 Gobby::OperationSave*
-Gobby::Operations::save_document(DocWindow& document,
+Gobby::Operations::save_document(TextSessionView& view,
                                  Folder& folder,
                                  const std::string& uri,
                                  const std::string& encoding,
                                  DocumentInfoStorage::EolStyle eol_style)
 {
-	OperationSave* prev_op = get_save_operation_for_document(document);
+	OperationSave* prev_op = get_save_operation_for_document(view);
 
 	// Cancel previous save operation:
 	if(prev_op != NULL)
 		fail_operation(prev_op);
 
-	OperationSave* op = new OperationSave(*this, document, folder, uri,
+	OperationSave* op = new OperationSave(*this, view, folder, uri,
 	                                      encoding, eol_style);
 
 	m_operations.insert(op);
@@ -130,17 +130,17 @@ Gobby::Operations::delete_node(InfcBrowser* browser,
 }
 
 Gobby::OperationExportHtml*
-Gobby::Operations::export_html(DocWindow& document,
+Gobby::Operations::export_html(TextSessionView& view,
                                const std::string& uri)
 {
 	OperationExportHtml* op =
-		new OperationExportHtml(*this, document, uri);
+		new OperationExportHtml(*this, view, uri);
 	m_operations.insert(op);
 	return op;
 }
 
 Gobby::OperationSave*
-Gobby::Operations::get_save_operation_for_document(DocWindow& document)
+Gobby::Operations::get_save_operation_for_document(TextSessionView& view)
 {
 	for(OperationSet::iterator iter = m_operations.begin();
 	    iter != m_operations.end(); ++ iter)
@@ -149,7 +149,7 @@ Gobby::Operations::get_save_operation_for_document(DocWindow& document)
 		OperationSave* save_op = dynamic_cast<OperationSave*>(op);
 		if(save_op != NULL)
 		{
-			if(save_op->get_document() == &document)
+			if(save_op->get_view() == &view)
 				return save_op;
 		}
 	}
