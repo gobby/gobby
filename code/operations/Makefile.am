@@ -3,6 +3,7 @@ noinst_LIBRARIES = libgobby-operations.a
 libgobby_operations_a_SOURCES = \
 	operations.cpp \
 	operation-delete.cpp \
+	operation-export-html.cpp \
 	operation-new.cpp \
 	operation-open.cpp \
 	operation-open-multiple.cpp \
@@ -11,6 +12,7 @@ libgobby_operations_a_SOURCES = \
 noinst_HEADERS = \
         operations.hpp \
         operation-delete.hpp \
+	operation-export-html.hpp \
         operation-new.hpp \
         operation-open.hpp \
 	operation-open-multiple.hpp \

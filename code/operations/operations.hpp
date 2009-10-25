@@ -37,6 +37,7 @@ class OperationOpen;
 class OperationOpenMultiple;
 class OperationSave;
 class OperationDelete;
+class OperationExportHtml;
 
 class Operations: public sigc::trackable
 {
@@ -115,6 +116,9 @@ public:
 
 	OperationDelete* delete_node(InfcBrowser* browser,
 	                             const InfcBrowserIter* iter);
+
+	OperationExportHtml* export_html(DocWindow& document,
+	                                 const std::string& uri);
 
 	OperationSave* get_save_operation_for_document(DocWindow& window);
 

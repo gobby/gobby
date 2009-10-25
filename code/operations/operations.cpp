@@ -21,6 +21,7 @@
 #include "operations/operation-open-multiple.hpp"
 #include "operations/operation-save.hpp"
 #include "operations/operation-delete.hpp"
+#include "operations/operation-export-html.hpp"
 
 #include "operations/operations.hpp"
 
@@ -124,6 +125,16 @@ Gobby::Operations::delete_node(InfcBrowser* browser,
                                const InfcBrowserIter* iter)
 {
 	OperationDelete* op = new OperationDelete(*this, browser, iter);
+	m_operations.insert(op);
+	return op;
+}
+
+Gobby::OperationExportHtml*
+Gobby::Operations::export_html(DocWindow& document,
+                               const std::string& uri)
+{
+	OperationExportHtml* op =
+		new OperationExportHtml(*this, document, uri);
 	m_operations.insert(op);
 	return op;
 }
