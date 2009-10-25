@@ -228,24 +228,22 @@ namespace
 				time_str = _("<unable to print date>");
 		}
 
-		// put document metadata, like path, hostname of infinoted
-		// TODO: figure out what interesting info
-		//       we can pull out of the session
-		char session_info[] =
-			"<placeholder for session info and path>";
+		char const* hostname = document.get_hostname().c_str();
+		char const* path     = document.get_path().c_str();
 
-		// %1$s is information about the document's location,
-		//         session name,
-		// %2$s is current date as formatted by %c,
-		// %3$s is a link to the gobby site
+		// %1$s is session name/hostname
+		// %2$s is path within the session
+		// %3$s is current date as formatted by %c,
+		// %4$s is a link to the gobby site, it must be present because
+		//   we need to handle that manually to insert a hyperlink
+		//   instead of just printf'ing it.
 		char const* translated =
-			_("Document generated from %1$s at %2$s by %3$s");
-		char const* p = std::strstr(translated, "%3$s");
+			_("Document generated from %1$s:%2$s at %3$s by %4$s");
+		char const* p = std::strstr(translated, "%4$s");
 		g_assert(p);
 		node->add_child_text(
 			uprintf(Glib::ustring(translated, p).c_str(),
-			        session_info,
-			        time_str));
+			        hostname, path, time_str));
 
 		xmlpp::Element* link = node->add_child("a");
 		link->set_attribute("href", "http://gobby.0x539.de/");
@@ -253,7 +251,7 @@ namespace
 
 		if(*p != '\0')
 			node->add_child_text(
-			  uprintf(p+4 , session_info, time_str));
+			  uprintf(p+4 , hostname, path, time_str));
 	}
 
 	// list each author before the actual text
