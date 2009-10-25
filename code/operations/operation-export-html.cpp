@@ -356,12 +356,12 @@ namespace
 			* body      = root->add_child("body"),
 			* title     = head->add_child("title"),
 			* style     = head->add_child("style"),
-			* icon      = body->add_child("img"),
 			* h1        = body->add_child("h1"),
 			* h2        = body->add_child("h2"),
 			* user_list = body->add_child("ul"),
 			* content   = body->add_child("pre"),
-			* info      = body->add_child("p");
+			* info      = body->add_child("p"),
+			* icon      = h1->add_child("img");
 
 		icon->set_attribute("src",    gobby_icon);
 		icon->set_attribute("width",  "48");
@@ -396,15 +396,6 @@ namespace
 		}
 
 		style->add_child_text(
-			".icon {\n"
-			"  float:                  left;\n"
-			"}\n"
-			"h1 {\n"
-			"  padding-top: 8px;\n"
-			"}\n"
-			"h2, .document {\n"
-			"  clear:                  both;\n"
-			"}\n"
 			".document {\n"
 			"  border-top:             1px solid gray;\n"
 			"  border-bottom:          1px solid black;\n"
