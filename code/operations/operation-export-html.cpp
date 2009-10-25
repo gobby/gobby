@@ -33,6 +33,8 @@
 
 namespace
 {
+	char const gobby_icon[] = "data:image/png;base64,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";
+
 	// Sort tags so that CSS declaration order corresponds to priority
 	struct TagComparator
 	{
@@ -354,11 +356,18 @@ namespace
 			* body      = root->add_child("body"),
 			* title     = head->add_child("title"),
 			* style     = head->add_child("style"),
+			* icon      = body->add_child("img"),
 			* h1        = body->add_child("h1"),
 			* h2        = body->add_child("h2"),
 			* user_list = body->add_child("ul"),
 			* content   = body->add_child("pre"),
 			* info      = body->add_child("p");
+
+		icon->set_attribute("src",    gobby_icon);
+		icon->set_attribute("width",  "48");
+		icon->set_attribute("height", "48");
+		icon->set_attribute("alt",    "a gobby document:");
+		icon->set_attribute("class",  "icon");
 
 		const Glib::ustring& document_name = document.get_title();
 		title->add_child_text(document_name + " - infinote document");
@@ -387,22 +396,28 @@ namespace
 		}
 
 		style->add_child_text(
-				"h1 {\n"
-				"  font-family:\n"
-				"}\n"
-				".document {\n"
-				"  border-top:             1px solid gray;\n"
-				"  border-bottom:          1px solid black;\n"
-				"  padding-bottom:         1.2em;\n"
-				"  counter-reset:          line;\n"
-				"}\n"
-				".line_no:before {\n"
-				"  content:                counter(line);\n"
-				"  counter-increment:      line;\n"
-				"}\n"
-				".info {\n"
-				"  font-size:              small;\n"
-				"}\n");
+			".icon {\n"
+			"  float:                  left;\n"
+			"}\n"
+			"h1 {\n"
+			"  padding-top: 8px;\n"
+			"}\n"
+			"h2, .document {\n"
+			"  clear:                  both;\n"
+			"}\n"
+			".document {\n"
+			"  border-top:             1px solid gray;\n"
+			"  border-bottom:          1px solid black;\n"
+			"  padding-bottom:         1.2em;\n"
+			"  counter-reset:          line;\n"
+			"}\n"
+			".line_no:before {\n"
+			"  content:                counter(line);\n"
+			"  counter-increment:      line;\n"
+			"}\n"
+			".info {\n"
+			"  font-size:              small;\n"
+			"}\n");
 
 		style->add_child_text(
 			uprintf(
