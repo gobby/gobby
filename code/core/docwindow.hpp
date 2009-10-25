@@ -46,6 +46,7 @@ public:
 	typedef sigc::signal<void, InfTextUser*> SignalActiveUserChanged;
 
 	DocWindow(InfTextSession* session, const Glib::ustring& title,
+	          const Glib::ustring& path, const Glib::ustring& hostname,
 	          const std::string& info_storage_key,
 	          Preferences& preferences,
 	          GtkSourceLanguageManager* manager);
@@ -54,6 +55,8 @@ public:
 	const InfTextSession* get_session() const { return m_session; }
 	InfTextSession* get_session() { return m_session; }
 	const Glib::ustring& get_title() const { return m_title; }
+	const Glib::ustring& get_path() const { return m_path; }
+	const Glib::ustring& get_hostname() const { return m_hostname; }
 	const std::string& get_info_storage_key() const
 	{
 		return m_info_storage_key;
@@ -123,6 +126,8 @@ protected:
 
 	InfTextSession* m_session;
 	Glib::ustring m_title;
+	Glib::ustring m_path;
+	Glib::ustring m_hostname;
 	std::string m_info_storage_key;
 	Preferences& m_preferences;
 

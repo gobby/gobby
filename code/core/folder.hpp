@@ -48,6 +48,8 @@ public:
 
 	DocWindow& add_document(InfTextSession* session,
 	                        const Glib::ustring& title,
+	                        const Glib::ustring& path,
+	                        const Glib::ustring& hostname,
 	                        const std::string& info_storage_key);
 	void remove_document(DocWindow& document);
 

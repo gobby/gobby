@@ -117,11 +117,14 @@ Gobby::Folder::~Folder()
 Gobby::DocWindow&
 Gobby::Folder::add_document(InfTextSession* session,
                             const Glib::ustring& title,
+                            const Glib::ustring& path,
+                            const Glib::ustring& hostname,
                             const std::string& info_storage_key)
 {
 	Gobby::DocWindow* window = Gtk::manage(
-		new DocWindow(session, title, info_storage_key,
-		              m_preferences, m_lang_manager));
+		new DocWindow(session, title, path, hostname,
+		              info_storage_key, m_preferences,
+		              m_lang_manager));
 	window->show();
 	m_signal_document_added.emit(*window);
 
