@@ -141,27 +141,32 @@ namespace
 		// set tags do not change, write each as a <span/>
 		while(!gtk_text_iter_is_end(&begin))
 		{
-			last_node = last_node->add_child("span");
-
 			// add current tags as classes for CSS formatting
 			// (both for author of text and syntax highlighting)
 			Glib::ustring classes = get_current_tags(tags, &begin);
 			if(!classes.empty())
+			{
+				last_node = last_node->add_child("span");
 				last_node->set_attribute("class", classes);
 
-			// add mouseover "written by" popup
-			InfTextUser* new_user
-				= inf_text_gtk_buffer_get_author(
-					inf_buffer,
-					&begin);
-			if(new_user)
-			{
-				last_node->set_attribute(
-					"title",
-					uprintf(_("written by: %s"),
+				// add mouseover "written by" popup
+				// this only needs to happen when there are tags,
+				// because the presence of an author implies a tag
+				InfTextUser* user
+					= inf_text_gtk_buffer_get_author(
+						inf_buffer,
+						&begin);
+				if(user)
+				{
+					char const* user_name =
 						inf_user_get_name(
-							INF_USER(new_user))));
-				users.insert(new_user);
+							INF_USER(user));
+					last_node->set_attribute(
+						"title",
+						uprintf(_("written by: %s"),
+							user_name));
+					users.insert(user);
+				}
 			}
 
 			GtkTextIter next = begin;
@@ -205,7 +210,11 @@ namespace
 				throw;
 			}
 			g_free(text);
-			last_node = last_node->get_parent();
+
+			// if we do not have any tags, we did not add classes
+			// and consequently did not go into a new span
+			if(!classes.empty())
+				last_node = last_node->get_parent();
 
 			begin = next;
 		}
