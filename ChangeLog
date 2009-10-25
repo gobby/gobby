@@ -1,3 +1,34 @@
+2009-10-25  Armin Burgmeier  <armin@arbur.net>, Benjamin Herr  <ben@0x539.de>
+
+	* code/operations/operation-export-html.hpp:
+	* code/operations/operation-export-html.cpp:
+	* code/operations/Makefile.am: Added an operation which exports a
+	document to a XHTML document.
+
+	* code/operations/operations.hpp:
+	* code/operations/operations.cpp: Added export_html() functio.
+
+	* code/core/header.hpp:
+	* code/core/header.cpp: Added a menu entry for exporting a document to
+	HTML.
+
+	* code/core/folder.hpp:
+	* code/core/folder.cpp:
+	* code/core/docwindow.hpp:
+	* code/core/docwindow.cpp:
+	* code/commands/browser-commands.cpp: Store path on remote host and
+	its hostname in the DocWindow.
+
+	* code/commands/file-tasks/task-export-html.hpp:
+	* code/commands/file-tasks/task-export-html.cpp:
+	* code/commands/file-tasks/Makefile.am: Added a task for HTML export
+	showing a file chooser dialog for the user to select a location to
+	export to.
+
+	* code/commands/file-commands.hpp:
+	* code/commands/file-commands.cpp: Start the task when the user
+	activates the corresponding action defined in Header.
+
 2009-10-24  Armin Burgmeier  <armin@arbur.net>
 
 	* icons/hicolor/scalable/status/user-color-indicator.svg: Removed
