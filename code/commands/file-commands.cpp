@@ -23,6 +23,7 @@
 #include "commands/file-tasks/task-open-location.hpp"
 #include "commands/file-tasks/task-save.hpp"
 #include "commands/file-tasks/task-save-all.hpp"
+#include "commands/file-tasks/task-export-html.hpp"
 
 Gobby::FileCommands::Task::Task(FileCommands& file_commands):
 	m_file_commands(file_commands)
@@ -225,12 +226,8 @@ void Gobby::FileCommands::on_export_html() {
 	DocWindow* document = m_folder.get_current_document();
 	g_assert(document != NULL);
 
-	// TODO: filechooser, possibly remember choice
-	// what is that whole operation/task thing?
-	Glib::ustring home = Glib::get_home_dir();
-	m_operations.export_html(*document, "file://" + home + "/output.xhtml");
+	set_task(new TaskExportHtml(*this, *document));
 }
-
 
 void Gobby::FileCommands::on_close()
 {

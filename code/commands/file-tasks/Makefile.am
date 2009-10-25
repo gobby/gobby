@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libgobby-file-tasks.a
 
 libgobby_file_tasks_a_SOURCES = \
+	task-export-html.cpp \
 	task-new.cpp \
 	task-open.cpp \
 	task-open-file.cpp \
@@ -10,6 +11,7 @@ libgobby_file_tasks_a_SOURCES = \
 	task-save-all.cpp
 
 noinst_HEADERS = \
+	task-export-html.hpp \
 	task-new.hpp \
 	task-open.hpp \
 	task-open-file.hpp \
