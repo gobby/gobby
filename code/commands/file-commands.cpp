@@ -233,16 +233,61 @@ void Gobby::FileCommands::on_save_all()
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 #include "util/i18n.hpp"
 
+struct TagComparator
+{
+  bool operator()(GtkTextTag* first, GtkTextTag* second) const
+  {
+    return gtk_text_tag_get_priority(first) <
+           gtk_text_tag_get_priority(second);
+  }
+};
+
+// Sort tags by priority, so that we declare them in order
+typedef std::set<GtkTextTag*, TagComparator> priority_tag_set;
+
+// We don't use Glib::ustring::compose for now because
+// it's formatting support does not compile properly under
+// Windows. See https://bugzilla.gnome.org/show_bug.cgi?id=599340
+Glib::ustring uprintf(gchar const* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	gchar* str = g_strdup_vprintf(fmt, args);
+	va_end(args);
+	Glib::ustring result;
+	try
+	{
+		result = str;
+	}
+	catch (...)
+	{
+		g_free(str);
+		throw;
+	}
+	g_free(str);
+	return result;
+}
+
+unsigned int color_to_rgb(GdkColor* color)
+{
+	return ((color->red   & 0xff00) << 8)
+	     |  (color->green & 0xff00)
+	     | ((color->blue  & 0xff00) >> 8);
+}
+
 // write the Gtk::TextBuffer from document into content, inserting <span/>s for
 // line breaks and authorship of chunks of text, also save all users
 // encountered and the total number of lines dumped
 void dump_buffer(Gobby::DocWindow& document,
                  xmlpp::Element* content,
                  std::set<InfTextUser*>& users,
-                 unsigned int& line_counter) {
-  using namespace Gobby;
-  users.clear();
-  line_counter = 1;
+                 priority_tag_set& tags,
+                 unsigned int& line_counter)
+{
+	using namespace Gobby;
+	users.clear();
+	tags.clear();
+	line_counter = 1;
 	xmlpp::Element* last_node = content;
 	xmlpp::Element* line_no = last_node->add_child("span");
 	line_no->set_attribute("class", "line_no");
@@ -251,40 +296,48 @@ void dump_buffer(Gobby::DocWindow& document,
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(document.get_text_buffer());
 	InfTextGtkBuffer* inf_buffer
 		= INF_TEXT_GTK_BUFFER(
-				inf_session_get_buffer(INF_SESSION(document.get_session())));
-
-	InfTextUser* user = 0;
+			inf_session_get_buffer(INF_SESSION(document.get_session())));
 
 	GtkTextIter begin;
 	gtk_text_buffer_get_start_iter(buffer, &begin);
+	{
+		GtkTextIter end;
+		gtk_text_buffer_get_end_iter(buffer, &end);
+		gtk_source_buffer_ensure_highlight(
+			GTK_SOURCE_BUFFER(buffer),
+			&begin,
+			&end);
+	}
 
-	while (!gtk_text_iter_is_end(&begin)) {
-		// check author, insert new <span/> if necessary
+	while(!gtk_text_iter_is_end(&begin))
+	{
+		GSList* current_tags = gtk_text_iter_get_tags(&begin);
+		Glib::SListHandle<Glib::RefPtr<Gtk::TextTag> > handle(
+			current_tags, Glib::OWNERSHIP_SHALLOW);
+		Glib::ustring classes;
+		for(GSList* tag = current_tags; tag != 0; tag = tag->next)
+		{
+			if(!classes.empty())
+				classes += ' ';
+			gchar* tag_name = g_strdup_printf(
+				"tag_%p", static_cast<void*>(tag->data));
+			classes += tag_name;
+			g_free(tag_name);
+			tags.insert(GTK_TEXT_TAG(tag->data));
+		}
+
+		last_node = last_node->add_child("span");
+		if (!classes.empty())
+			last_node->set_attribute("class", classes);
+
 		InfTextUser* new_user
 			= inf_text_gtk_buffer_get_author(inf_buffer, &begin);
-
 		if (new_user) {
-			guint new_id = inf_user_get_id(INF_USER(new_user));
-			if (!user || user != new_user) {
-				if (user)
-					last_node = last_node->get_parent();
-
-				last_node = last_node->add_child("span");
-				last_node->set_attribute(
-					"class",
-					Glib::ustring::compose("user_%1", new_id));
-				last_node->set_attribute(
-				  "title",
-				  Glib::ustring::compose(_("written by: %1"),
-				                         inf_user_get_name(INF_USER(new_user))));
-			}
-
-			user = new_user;
-			users.insert(user);
-		} else {
-			if (user)
-				last_node = last_node->get_parent();
-			user = 0;
+			last_node->set_attribute(
+				"title",
+				uprintf(_("written by: %s"),
+				        inf_user_get_name(INF_USER(new_user))));
+			users.insert(new_user);
 		}
 
 		GtkTextIter next = begin;
@@ -292,9 +345,10 @@ void dump_buffer(Gobby::DocWindow& document,
 
 		// split text by newlines so we can insert line number elements
 		gchar* text = gtk_text_iter_get_text(&begin, &next);
-		try {
+		try
+		{
 			gchar const* last_pos = text;
-			for (gchar const* i = text; *i; ++i) {
+			for (gchar const* i = last_pos; *i; ++i) {
 				if (*i != '\n')
 					continue;
 
@@ -306,31 +360,22 @@ void dump_buffer(Gobby::DocWindow& document,
 				last_pos = next_pos;
 
 				// drop author <span/> for a moment for the line number <span/>
-				if (user)
-					last_node = last_node->get_parent();
-			 	line_no = last_node->add_child("span");
-			 	line_no->set_attribute("class", "line_no");
-			 	line_no->set_attribute(
-			 	  "id",
-			 	  Glib::ustring::compose("line_%1", line_counter));
-				if (user) {
-					last_node = last_node->add_child("span");
-					last_node->set_attribute(
-						"class",
-						Glib::ustring::compose("user_%1",
-						                       inf_user_get_id(INF_USER(user))));
-					last_node->set_attribute(
-					  "title",
-					  Glib::ustring::compose(_("written by: %1"),
-					                         inf_user_get_name(INF_USER(user))));
-				}
+				line_no = last_node->add_child("span");
+				line_no->set_attribute("class", "line_no");
+				line_no->set_attribute(
+				  "id",
+				  uprintf("line_%d", line_counter));
 			}
+
 			last_node->add_child_text(Glib::ustring(last_pos));
-		} catch (...) {
+		}
+		catch(...)
+		{
 			g_free(text);
 			throw;
 		}
 		g_free(text);
+		last_node = last_node->get_parent();
 
 		begin = next;
 	}
@@ -358,54 +403,93 @@ void dump_info(xmlpp::Element* node, Gobby::DocWindow& document) {
 	// TODO: figure out what interesting info we can pull out of the session
 	char session_info[] = "<placeholder for session info and path>";
 
-	// %1 is information about the document's location, session name,
-	// %2 is current date as formatted by %c,
-	// %3 is a link to the gobby site
-	char const* translated = _("Document generated from %1 at %2 by %3");
-	char const* p = std::strstr(translated, "%3");
+	// %1$s is information about the document's location, session name,
+	// %2$s is current date as formatted by %c,
+	// %3$s is a link to the gobby site
+	char const* translated =
+		_("Document generated from %1$s at %2$s by %3$s");
+	char const* p = std::strstr(translated, "%3$s");
 	g_assert(p);
 	node->add_child_text(
-		Glib::ustring::compose(Glib::ustring(translated, p), session_info, time_str));
+		uprintf(Glib::ustring(translated, p).c_str(), session_info, time_str));
 
 	xmlpp::Element* link = node->add_child("a");
 	link->set_attribute("href", "http://gobby.0x539.de/");
 	link->add_child_text(PACKAGE_STRING);
 
-	if (*p != 0)
+	if (*p != '\0')
 		node->add_child_text(
-		  Glib::ustring::compose(p+2 , session_info, time_str));
+		  uprintf(p+4 , session_info, time_str));
 }
 
-// put author colours into the css, list each author before the actual text
-void add_user_colours(xmlpp::Element* css,
-                      xmlpp::Element* list,
-                      const std::set<InfTextUser*>& users) {
-	for (std::set<InfTextUser*>::const_iterator i = users.begin();
-	     i != users.end();
-			 ++i) {
-		guint id = inf_user_get_id(INF_USER(*i));
+// list each author before the actual text
+void dump_user_list(xmlpp::Element* list,
+                    const std::set<InfTextUser*>& users) {
+	for(std::set<InfTextUser*>::const_iterator i = users.begin();
+	    i != users.end();
+	    ++i)
+	{
 		gdouble hue = inf_text_user_get_hue(*i);
 		hue = std::fmod(hue, 1);
 
 		Gdk::Color c;
 		c.set_hsv(360.0 * hue, 0.35, 1.0);
 		gchar const* name = inf_user_get_name(INF_USER(*i));
-		unsigned int rgb =
-			  ((c.get_red()   & 0xff00) << 8)
-			|  (c.get_green() & 0xff00)
-			| ((c.get_blue()  & 0xff00) >> 8);
+		const unsigned int rgb = color_to_rgb(c.gobj());
 
-		css->add_child_text(Glib::ustring::compose(
-			".user_%1 {\n"
-			"  background-color:       #%2;\n"
-			"}\n",
-			id,
-			Glib::ustring::format(std::hex,
-			                      std::setw(6),
-			                      std::setfill(L'0'), rgb)));
 		xmlpp::Element* item = list->add_child("li");
-		item->set_attribute("class", Glib::ustring::compose("user_%1", id));
 		item->add_child_text(name);
+		item->set_attribute(
+			"style",
+			uprintf("background-color: #%06x;\n", rgb));
+	}
+}
+
+void dump_tags_style(xmlpp::Element* css,
+                     const priority_tag_set& tags)
+{
+	for(priority_tag_set::const_iterator i = tags.begin(); i != tags.end(); ++i)
+	{
+		GdkColor* fg, * bg;
+		gint weight;
+		gboolean underline;
+		PangoStyle style;
+		gboolean fg_set, bg_set, weight_set, underline_set, style_set;
+		g_object_get(G_OBJECT(*i),
+			"background-gdk", &bg,
+			"foreground-gdk", &fg,
+			"weight",         &weight,
+			"underline",      &underline,
+			"style",          &style,
+			"background-set", &bg_set,
+			"foreground-set", &fg_set,
+			"weight-set",     &weight_set,
+			"underline-set",  &underline_set,
+			"style-set",      &style_set,
+			NULL);
+		const unsigned int bg_rgb = color_to_rgb(bg);
+		const unsigned int fg_rgb = color_to_rgb(fg);
+		gdk_color_free(fg);
+		gdk_color_free(bg);
+		css->add_child_text(
+			uprintf(".tag_%p {\n", static_cast<void*>(*i)));
+		if(fg_set)
+			css->add_child_text(uprintf(
+				"  color:                  #%06x;\n",
+				fg_rgb));
+		if(bg_set)
+			css->add_child_text(uprintf(
+				"  background-color:       #%06x;\n",
+				bg_rgb));
+		if(weight_set)
+			css->add_child_text(uprintf(
+				"  font-weight:            %d;\n",
+				weight));
+		if(underline_set)
+			css->add_child_text(uprintf(
+				"  text-decoration:        %s;\n",
+				underline ? "underline" : "none"));
+		css->add_child_text("}\n");
 	}
 }
 
@@ -439,8 +523,9 @@ void export_html(Gobby::DocWindow& document, const Glib::ustring& output_path) {
 	content->set_attribute("class", "document");
 
 	std::set<InfTextUser*> users;
+	priority_tag_set tags;
 	unsigned int line_counter;
-	dump_buffer(document, content, users, line_counter);
+	dump_buffer(document, content, users, tags, line_counter);
 
 	h2->add_child_text(_("Participants"));
 
@@ -448,7 +533,8 @@ void export_html(Gobby::DocWindow& document, const Glib::ustring& output_path) {
   dump_info(info, document);
 
 	style->set_attribute("type", "text/css");
-	add_user_colours(style, user_list, users);
+	dump_user_list(user_list, users);
+	dump_tags_style(style, tags);
 	if (!user_list->cobj()->children) {
 		body->remove_child(h2);
 		body->remove_child(user_list);
@@ -473,16 +559,16 @@ void export_html(Gobby::DocWindow& document, const Glib::ustring& output_path) {
 			"}\n");
 
 	style->add_child_text(
-		Glib::ustring::compose(
+		uprintf(
 			".line_no {\n"
 			"  position:               absolute;\n"
 			"  float:                  left;\n"
 			"  clear:                  left;\n"
-			"  margin-left:            -%1em;\n"
+			"  margin-left:            -%1$uem;\n"
 			"  color:                  gray;\n"
 			"}\n"
 			".document {\n"
-			"  padding-left:            %1em\n"
+			"  padding-left:            %1$uem\n"
 			"}\n",
 	  static_cast<unsigned int>(std::log(line_counter)/std::log(10))+1));
 
