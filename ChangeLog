@@ -1,5 +1,13 @@
 2009-10-26  Armin Burgmeier  <armin@arbur.net>
 
+	* code/operations/operation-open.cpp (constructor): Also disable
+	GtkSourceView's Undo for sync'ed-in sessions. Otherwise the user was
+	able to press Ctrl+Z in a newly opened document to trigger
+	GtkSourceView (global) Undo when local group Undo is not available
+	(such as right after document creation).
+
+2009-10-26  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/browser-commands.cpp (on_subscribe_session): Use the
 	remote-hostname of the InfXmppConnection of the browser instead of the
 	root entry name of the browser model as hostname passed to the
