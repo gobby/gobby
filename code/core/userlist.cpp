@@ -239,8 +239,10 @@ int Gobby::UserList::sort_func(const Gtk::TreeIter& iter1,
 	}
 	else
 	{
-		return std::strcmp(inf_user_get_name(INF_USER(user1)),
-		                   inf_user_get_name(INF_USER(user2)));
+		// We might want to cache collate keys in the ListStore if
+		// this turns out to be a performance problem:
+		return g_utf8_collate(inf_user_get_name(INF_USER(user1)),
+		                      inf_user_get_name(INF_USER(user2)));
 	}
 }
 

@@ -1,5 +1,10 @@
 2009-10-26  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/userlist.cpp (sort_func): Sort the user list
+	case-insensitively.
+
+2009-10-26  Armin Burgmeier  <armin@arbur.net>
+
 	* code/operations/operation-open.cpp (constructor): Also disable
 	GtkSourceView's Undo for sync'ed-in sessions. Otherwise the user was
 	able to press Ctrl+Z in a newly opened document to trigger
