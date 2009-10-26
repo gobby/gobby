@@ -290,20 +290,9 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 {
 	InfSession* session = infc_session_proxy_get_session(proxy);
 	gchar* path = infc_browser_iter_get_path(browser, iter);
-
-	InfGtkBrowserStore* store = m_browser.get_store();
-	GtkTreeIter tree_iter;
-	InfcBrowserIter root_iter;
-
-	infc_browser_iter_get_root(browser, &root_iter);
-	inf_gtk_browser_model_browser_iter_to_tree_iter(
-		INF_GTK_BROWSER_MODEL(store), browser,
-		&root_iter, &tree_iter);
-
 	gchar* hostname;
-	gtk_tree_model_get(
-		GTK_TREE_MODEL(store), &tree_iter,
-		INF_GTK_BROWSER_MODEL_COL_NAME, &hostname, -1);
+	g_object_get(G_OBJECT(infc_browser_get_connection(browser)),
+	             "remote-hostname", &hostname, NULL);
 
 	DocWindow& window = m_folder.add_document(
 		INF_TEXT_SESSION(session),
