@@ -39,9 +39,11 @@ noinst_HEADERS = \
 appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby-0.5
 
-# ICONS_DIR is required by iconmanager.cpp to get access to the private icons
-# that are installed into prefix/share/gobby-0.5/icons instead of
-# prefix/share/icons.
+# PRIVATE_ICONS_DIR is required by iconmanager.cpp to get access to the
+# private icons that are installed into prefix/share/gobby-0.5/icons instead
+# of prefix/share/icons. We also set PUBLIC_ICONS_DIR explicitely so that
+# we find the application icon if it is installed in a non-standard prefix.
 AM_CPPFLAGS = $(gobby_CFLAGS) $(unique_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code \
-	      -DICONS_DIR=\""$(datadir)/gobby-0.5/icons"\"
+	      -DPRIVATE_ICONS_DIR=\""$(datadir)/gobby-0.5/icons"\" \
+	      -DPUBLIC_ICONS_DIR=\""$(datadir)/icons"\"

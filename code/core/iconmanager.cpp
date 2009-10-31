@@ -33,7 +33,8 @@ Gtk::StockID Gobby::IconManager::STOCK_USER_COLOR_INDICATOR(
 Gobby::IconManager::IconManager():
 	m_icon_factory(Gtk::IconFactory::create() )
 {
-	Gtk::IconTheme::get_default()->append_search_path(ICONS_DIR);
+	Gtk::IconTheme::get_default()->append_search_path(PUBLIC_ICONS_DIR);
+	Gtk::IconTheme::get_default()->append_search_path(PRIVATE_ICONS_DIR);
 
 	Gtk::IconSource userlist_source;
 	userlist_source.set_icon_name("user-list");

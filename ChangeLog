@@ -1,3 +1,12 @@
+2009-10-31  Armin Burgmeier  <armin@arbur.net>
+
+	* code/Makefile.am: Pass both public and private icon paths to the
+	code.
+
+	* code/core/iconmanager.cpp: Add both to the icon search path. This
+	fixes lookup of the application icon if gobby is installed in a
+	non-standard prefix.
+
 2009-10-26  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/userlist.cpp (sort_func): Sort the user list
