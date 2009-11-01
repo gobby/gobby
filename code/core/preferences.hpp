@@ -23,6 +23,8 @@
 
 #include "features.hpp"
 
+#include <gtksourceview/gtksourceview.h>
+
 #include <gtkmm/toolbar.h>
 
 #include <libinfinity/common/inf-xmpp-connection.h>
@@ -130,6 +132,7 @@ public:
 		Option<bool> margin_display;
 		Option<unsigned int> margin_pos;
 		Option<bool> bracket_highlight;
+		Option<GtkSourceDrawSpacesFlags> whitespace_display;
 	};
 
 	class Appearance

@@ -401,13 +401,15 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	m_group_curline(_("Current Line") ),
 	m_group_margin(_("Right Margin") ),
 	m_group_bracket(_("Bracket Matching") ),
+	m_group_spaces(_("Whitespace Display") ),
 	m_btn_wrap_text(_("Enable text wrapping") ),
 	m_btn_wrap_words(_("Do not split words over two lines") ),
 	m_btn_linenum_display(_("Display line numbers") ),
 	m_btn_curline_highlight(_("Highlight current line") ),
 	m_btn_margin_display(_("Display right margin") ),
 	m_lbl_margin_pos(_("Right margin at column:") ),
-	m_btn_bracket_highlight(_("Highlight matching bracket") )
+	m_btn_bracket_highlight(_("Highlight matching bracket") ),
+	m_cmb_spaces_display(preferences.view.whitespace_display)
 {
 	Gtk::WrapMode mode = preferences.view.wrap_mode;
 	bool linenum_display = preferences.view.linenum_display;
@@ -452,6 +454,26 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	connect_option(m_btn_bracket_highlight,
 	               preferences.view.bracket_highlight);
 
+	m_cmb_spaces_display.add(
+		_("Display no whitespace"),
+		static_cast<GtkSourceDrawSpacesFlags>(0));
+	m_cmb_spaces_display.add(
+		_("Display spaces"),
+		static_cast<GtkSourceDrawSpacesFlags>(
+			GTK_SOURCE_DRAW_SPACES_SPACE |
+			GTK_SOURCE_DRAW_SPACES_NBSP));
+	m_cmb_spaces_display.add(
+		_("Display tabs"),
+		static_cast<GtkSourceDrawSpacesFlags>(
+			GTK_SOURCE_DRAW_SPACES_TAB));
+	m_cmb_spaces_display.add(
+		_("Display tabs and spaces"),
+		static_cast<GtkSourceDrawSpacesFlags>(
+			GTK_SOURCE_DRAW_SPACES_SPACE |
+			GTK_SOURCE_DRAW_SPACES_NBSP |
+			GTK_SOURCE_DRAW_SPACES_TAB));
+	m_cmb_spaces_display.show();
+
 	m_box_margin_pos.set_spacing(6);
 	m_box_margin_pos.set_sensitive(margin_display);
 	m_box_margin_pos.pack_start(m_lbl_margin_pos, Gtk::PACK_SHRINK);
@@ -474,12 +496,16 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 
 	m_group_bracket.add(m_btn_bracket_highlight);
 	m_group_bracket.show();
-	
+
+	m_group_spaces.add(m_cmb_spaces_display);
+	m_group_spaces.show();
+
 	add(m_group_wrap);
 	add(m_group_linenum);
 	add(m_group_curline);
 	add(m_group_margin);
 	add(m_group_bracket);
+	add(m_group_spaces);
 }
 
 void Gobby::PreferencesDialog::View::on_wrap_text_toggled()

@@ -186,6 +186,7 @@ public:
 		Group m_group_curline;
 		Group m_group_margin;
 		Group m_group_bracket;
+		Group m_group_spaces;
 
 		Gtk::CheckButton m_btn_wrap_text;
 		Gtk::CheckButton m_btn_wrap_words;
@@ -200,6 +201,8 @@ public:
 		Gtk::SpinButton m_ent_margin_pos;
 
 		Gtk::CheckButton m_btn_bracket_highlight;
+		PreferencesComboBox<GtkSourceDrawSpacesFlags>
+			m_cmb_spaces_display;
 	};
 
 	class Appearance: public Page

@@ -19,6 +19,8 @@
 #include "features.hpp"
 #include "core/preferences.hpp"
 
+// TODO: Support direct enum config storage via context specialization for
+// enums.
 Gobby::Preferences::User::User(Config::ParentEntry& entry):
 	name(entry.get_value<Glib::ustring>("name", Glib::get_user_name())),
 	hue(entry.get_value<double>("hue", Glib::Rand().get_double())),
@@ -64,7 +66,9 @@ Gobby::Preferences::View::View(Config::ParentEntry& entry):
 	margin_display(entry.get_value<bool>("margin-display", true) ),
 	margin_pos(entry.get_value<unsigned int>("margin-position", 80) ),
 	bracket_highlight(entry.get_value<bool>(
-		"highlight-matching-brackets", true))
+		"highlight-matching-brackets", true)),
+	whitespace_display(static_cast<GtkSourceDrawSpacesFlags>(
+		entry.get_value<int>("display-whitespace", 0)))
 {
 }
 
@@ -76,6 +80,8 @@ void Gobby::Preferences::View::serialize(Config::ParentEntry& entry) const
 	entry.set_value("margin-display", margin_display);
 	entry.set_value("margin-position", margin_pos);
 	entry.set_value("highlight-matching-brackets", bracket_highlight);
+	entry.set_value("display-whitespace",
+	                static_cast<int>(whitespace_display));
 }
 
 Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):

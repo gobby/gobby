@@ -106,6 +106,7 @@ protected:
 	void on_margin_display_changed();
 	void on_margin_pos_changed();
 	void on_bracket_highlight_changed();
+	void on_whitespace_display_changed();
 
 	void on_font_changed();
 

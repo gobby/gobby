@@ -1,3 +1,19 @@
+2009-11-01  Benjamin Herr  <ben@0x539.de>
+
+	* code/core/preferences.hpp:
+	* code/core/preferences.cpp: Added view.whitespace_display option.
+
+	* code/dialogs/preferences-dialog.hpp:
+	* code/dialogs/preferences-dialog.cpp: Added a corresponding widget to
+	the View pane in the preferences dialog.
+
+	* code/core/docwindow.hpp:
+	* code/core/docwindow.cpp: Honor the setting.
+
+	* configure.ac: Require gtksourceview-2.0 >= 2.4 since
+	gtk_source_view_set_draw_spaces() is available only since this
+	version.
+
 2009-10-31  Armin Burgmeier  <armin@arbur.net>
 
 	* code/Makefile.am: Pass both public and private icon paths to the

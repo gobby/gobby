@@ -188,7 +188,9 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 	m_preferences.view.bracket_highlight.signal_changed().connect(
 		sigc::mem_fun(*this,
 		              &DocWindow::on_bracket_highlight_changed));
-
+	m_preferences.view.whitespace_display.signal_changed().connect(
+		sigc::mem_fun(*this,
+		              &DocWindow::on_whitespace_display_changed));
 	m_preferences.appearance.font.signal_changed().connect(
 		sigc::mem_fun(*this, &DocWindow::on_font_changed));
 
@@ -214,6 +216,8 @@ Gobby::DocWindow::DocWindow(InfTextSession* session,
 		m_view, m_preferences.view.margin_pos);
 	gtk_source_buffer_set_highlight_matching_brackets(
 		m_buffer, m_preferences.view.bracket_highlight);
+	gtk_source_view_set_draw_spaces(
+		m_view, m_preferences.view.whitespace_display);
 	const Pango::FontDescription& desc = m_preferences.appearance.font;
 	gtk_widget_modify_font(
 		GTK_WIDGET(m_view),
@@ -497,6 +501,12 @@ void Gobby::DocWindow::on_bracket_highlight_changed()
 {
 	gtk_source_buffer_set_highlight_matching_brackets(
 		m_buffer, m_preferences.view.bracket_highlight);
+}
+
+void Gobby::DocWindow::on_whitespace_display_changed()
+{
+	gtk_source_view_set_draw_spaces(
+		m_view, m_preferences.view.whitespace_display);
 }
 
 void Gobby::DocWindow::on_font_changed()
