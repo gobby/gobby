@@ -1,3 +1,8 @@
+2009-11-01  Armin Burgmeier  <armin@arbur.net>
+
+	* configure.ac: Require glibmm-2.4 >= 2.18.0 and giomm-2.4 >= 2.18.0
+	to make sure overwriting files works when saving. See also bug #471.
+
 2009-11-01  Benjamin Herr  <ben@0x539.de>
 
 	* code/core/preferences.hpp:
