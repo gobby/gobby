@@ -1,3 +1,9 @@
+2009-11-06  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/folder-commands.cpp: Avoid a crash if the connection
+	goes down before the activation timeout fired, i.e. right after
+	changing a tab.
+
 2009-11-01  Armin Burgmeier  <armin@arbur.net>
 
 	* configure.ac: Require glibmm-2.4 >= 2.18.0 and giomm-2.4 >= 2.18.0

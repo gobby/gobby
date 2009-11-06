@@ -109,12 +109,16 @@ protected:
 			// here, for example when we have lost the connection
 			// to the server, so this is not an error.
 
+			// If the user was active before we lost the
+			// connection then cancel the activation timeout
+			if(m_timeout_connection.connected())
+				m_timeout_connection.disconnect();
+
 			// TODO: Shouldn't local users stay available on
 			// connection loss? We probably need to fix this
 			// in infinote.
 			break;
 		}
-		
 	}
 
 	static void on_user_notify_status_static(InfUser* user,
