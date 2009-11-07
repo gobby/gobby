@@ -17,6 +17,7 @@
  */
 
 #include "commands/browser-context-commands.hpp"
+#include "operations/operation-open-multiple.hpp"
 #include "util/i18n.hpp"
 
 #include <gtkmm/icontheme.h>
@@ -268,17 +269,15 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 	{
 		Glib::SListHandle<Glib::ustring> uris = m_file_dialog->get_uris();
 
+		OperationOpenMultiple* operation =
+			m_operations.create_documents(browser, &iter, m_preferences, uris.size());
+
 		for(Glib::SListHandle<Glib::ustring>::iterator i = uris.begin(); i != uris.end(); ++i)
 		{
 			Glib::RefPtr<Gio::File> file =
 				Gio::File::create_for_uri(*i);
 
-			// TODO: Do this asynchronously:
-			Glib::RefPtr<Gio::FileInfo> info = file->query_info(
-				G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
-			m_operations.create_document(
-				browser, &iter, info->get_display_name(),
-				m_preferences, *i, NULL);
+			operation->add_uri(*i, NULL, NULL);
 		}
 	}
 
