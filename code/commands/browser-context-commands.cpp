@@ -214,6 +214,7 @@ void Gobby::BrowserContextCommands::on_open(InfcBrowser* browser,
 			&BrowserContextCommands::on_open_response),
 		browser, iter));
 
+	m_file_dialog->set_select_multiple(true);
 	m_file_dialog->present();
 }
 
@@ -265,15 +266,20 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
-		Glib::RefPtr<Gio::File> file =
-			Gio::File::create_for_uri(m_file_dialog->get_uri());
+		Glib::SListHandle<Glib::ustring> uris = m_file_dialog->get_uris();
 
-		// TODO: Do this asynchronously:
-		Glib::RefPtr<Gio::FileInfo> info = file->query_info(
-			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
-		m_operations.create_document(
-			browser, &iter, info->get_display_name(),
-			m_preferences, m_file_dialog->get_uri(), NULL);
+		for(Glib::SListHandle<Glib::ustring>::iterator i = uris.begin(); i != uris.end(); ++i)
+		{
+			Glib::RefPtr<Gio::File> file =
+				Gio::File::create_for_uri(*i);
+
+			// TODO: Do this asynchronously:
+			Glib::RefPtr<Gio::FileInfo> info = file->query_info(
+				G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
+			m_operations.create_document(
+				browser, &iter, info->get_display_name(),
+				m_preferences, *i, NULL);
+		}
 	}
 
 	m_watch.reset(NULL);

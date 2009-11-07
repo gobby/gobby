@@ -1,3 +1,10 @@
+2009-11-07  Gabríel A. Pétursson  <gabrielp@simnet.is>
+
+	* code/commands/browser-context-commands.cpp:
+	* code/commands/file-tasks/task-open-file.hpp:
+	* code/commands/file-tasks/task-open-file.cpp: Added the ability to
+	upload multiple files simultaneously.
+
 2009-11-07  Armin Burgmeier  <armin@arbur.net>
 
 	* AUTHORS: Updated.

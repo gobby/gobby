@@ -21,6 +21,7 @@
 
 #include "commands/file-commands.hpp"
 #include "commands/file-tasks/task-open.hpp"
+#include "commands/file-tasks/task-open-multiple.hpp"
 
 namespace Gobby
 {
@@ -37,6 +38,7 @@ private:
 
 	FileChooser::Dialog m_file_dialog;
 	std::auto_ptr<TaskOpen> m_open_task;
+	std::auto_ptr<TaskOpenMultiple> m_open_taskm;
 };
 
 } // namespace Gobby

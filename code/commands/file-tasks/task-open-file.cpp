@@ -24,6 +24,7 @@ Gobby::TaskOpenFile::TaskOpenFile(FileCommands& file_commands):
 		_("Choose a text file to open"),
 		Gtk::FILE_CHOOSER_ACTION_OPEN)
 {
+	m_file_dialog.set_select_multiple(true);
 }
 
 void Gobby::TaskOpenFile::run()
@@ -39,15 +40,30 @@ void Gobby::TaskOpenFile::on_file_response(int response_id)
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
 		m_file_dialog.hide();
-		// TODO: Handle multiple selection
-		Glib::ustring uri = m_file_dialog.get_uri();
-		Glib::RefPtr<Gio::File> file =
-			Gio::File::create_for_uri(uri);
-
-		m_open_task.reset(new TaskOpen(m_file_commands, file));
-		m_open_task->signal_finished().connect(
-			sigc::mem_fun(*this, &TaskOpenFile::finish));
-		m_open_task->run();
+		Glib::SListHandle<Glib::ustring> uris = m_file_dialog.get_uris();
+		
+		g_assert(uris.size() >= 1);
+		
+		if (uris.size() == 1)
+		{
+			Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(*uris.begin());
+			m_open_task.reset(new TaskOpen(m_file_commands, file));
+			m_open_task->signal_finished().connect(
+				sigc::mem_fun(*this, &TaskOpenFile::finish));
+			m_open_task->run();
+		}
+		else
+		{
+			TaskOpenMultiple *task = new TaskOpenMultiple(m_file_commands);
+			
+			for(Glib::SListHandle<Glib::ustring>::iterator i = uris.begin(); i != uris.end(); ++i)
+				task->add_file(*i);
+			
+			m_open_taskm.reset(task);
+			m_open_taskm->signal_finished().connect(
+				sigc::mem_fun(*this, &TaskOpenFile::finish));
+			m_open_taskm->run();
+		}
 	}
 	else
 	{
