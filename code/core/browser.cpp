@@ -30,6 +30,56 @@
 # include <net/if.h>
 #endif
 
+gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, gpointer user_data)
+{
+	gint result = 0;
+	InfcBrowser* br_one;
+	InfcBrowser* br_two;
+	InfcBrowserIter* bri_one;
+	InfcBrowserIter* bri_two;
+	GtkTreeIter parent;
+
+	/* Don't sort top level */
+	if(!gtk_tree_model_iter_parent(model, &parent, first))
+	{
+		g_assert(!gtk_tree_model_iter_parent(model, &parent, second));
+		return 0;
+	}
+
+	gtk_tree_model_get(model, first,  INF_GTK_BROWSER_MODEL_COL_BROWSER, &br_one, INF_GTK_BROWSER_MODEL_COL_NODE, &bri_one, -1);
+	gtk_tree_model_get(model, second, INF_GTK_BROWSER_MODEL_COL_BROWSER, &br_two, INF_GTK_BROWSER_MODEL_COL_NODE, &bri_two, -1);
+
+	if (infc_browser_iter_is_subdirectory(br_one, bri_one) && !infc_browser_iter_is_subdirectory(br_two, bri_two))
+		result = -1;
+	else if (!infc_browser_iter_is_subdirectory(br_one, bri_one) && infc_browser_iter_is_subdirectory(br_two, bri_two))
+		result = 1;
+	else
+	{
+		gchar* name_one;
+		gchar* name_two;
+		
+		gtk_tree_model_get(model, first,  INF_GTK_BROWSER_MODEL_COL_NAME, &name_one, -1);
+		gtk_tree_model_get(model, second, INF_GTK_BROWSER_MODEL_COL_NAME, &name_two, -1);
+		
+		gchar* one = g_utf8_casefold(name_one, -1);
+		gchar* two = g_utf8_casefold(name_two, -1);
+		
+		result = g_utf8_collate(one, two);
+		
+		g_free(name_one);
+		g_free(name_two);
+		g_free(one);
+		g_free(two);
+	}
+	
+	g_object_unref(br_one);
+	g_object_unref(br_two);
+	infc_browser_iter_free(bri_one);
+	infc_browser_iter_free(bri_two);
+	
+	return result;
+}
+
 Gobby::Browser::Browser(Gtk::Window& parent,
                         const InfcNotePlugin* text_plugin,
                         StatusBar& status_bar,
@@ -64,6 +114,9 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_browser_store = inf_gtk_browser_store_new(INF_IO(m_io),
 	                                            communication_manager);
 	g_object_unref(communication_manager);
+	
+	m_sort_model = inf_gtk_browser_model_sort_new(INF_GTK_BROWSER_MODEL(m_browser_store));
+	gtk_tree_sortable_set_default_sort_func(GTK_TREE_SORTABLE(m_sort_model), compare_func, NULL, NULL);
 
 	m_xmpp_manager = inf_xmpp_manager_new();
 #ifdef LIBINFINITY_HAVE_AVAHI
@@ -86,7 +139,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_browser_view =
 		INF_GTK_BROWSER_VIEW(
 			inf_gtk_browser_view_new_with_model(
-				INF_GTK_BROWSER_MODEL(m_browser_store)));
+				INF_GTK_BROWSER_MODEL(m_sort_model)));
 
 	gtk_widget_show(GTK_WIDGET(m_browser_view));
 	gtk_container_add(GTK_CONTAINER(m_scroll.gobj()),
@@ -131,6 +184,7 @@ Gobby::Browser::~Browser()
 	}
 
 	g_object_unref(m_browser_store);
+	g_object_unref(m_sort_model);
 	g_object_unref(m_cert_manager);
 	g_object_unref(m_xmpp_manager);
 #ifdef LIBINFINITY_HAVE_AVAHI
@@ -168,7 +222,7 @@ void Gobby::Browser::on_activate(GtkTreeIter* iter)
 	InfcBrowser* browser;
 	InfcBrowserIter* browser_iter;
 
-	gtk_tree_model_get(GTK_TREE_MODEL(m_browser_store), iter,
+	gtk_tree_model_get(GTK_TREE_MODEL(m_sort_model), iter,
 	                   INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
 	                   INF_GTK_BROWSER_MODEL_COL_NODE, &browser_iter,
 	                   -1);
@@ -280,7 +334,7 @@ bool Gobby::Browser::get_selected(InfcBrowser** browser,
 	InfcBrowserIter* tmp_iter;
 
 	gtk_tree_model_get(
-		GTK_TREE_MODEL(m_browser_store), &tree_iter,
+		GTK_TREE_MODEL(m_sort_model), &tree_iter,
 		INF_GTK_BROWSER_MODEL_COL_BROWSER, &tmp_browser,
 		-1);
 
@@ -288,7 +342,7 @@ bool Gobby::Browser::get_selected(InfcBrowser** browser,
 		return false;
 
 	gtk_tree_model_get(
-		GTK_TREE_MODEL(m_browser_store), &tree_iter,
+		GTK_TREE_MODEL(m_sort_model), &tree_iter,
 		INF_GTK_BROWSER_MODEL_COL_NODE, &tmp_iter,
 		-1);
 
@@ -306,7 +360,7 @@ void Gobby::Browser::set_selected(InfcBrowser* browser, InfcBrowserIter* iter)
 	GtkTreeIter tree_iter;
 
 	gboolean has_iter = inf_gtk_browser_model_browser_iter_to_tree_iter(
-		INF_GTK_BROWSER_MODEL(m_browser_store),
+		INF_GTK_BROWSER_MODEL(m_sort_model),
 		browser, iter, &tree_iter);
 	g_assert(has_iter == TRUE);
 

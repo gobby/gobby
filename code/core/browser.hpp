@@ -32,6 +32,8 @@
 #include <libinfinity/common/inf-discovery-avahi.h>
 #include <libinfinity/common/inf-xmpp-manager.h>
 #include <libinfinity/inf-config.h>
+#include <libinfgtk/inf-gtk-browser-model.h>
+#include <libinfgtk/inf-gtk-browser-model-sort.h>
 
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
@@ -64,9 +66,9 @@ public:
 	        Preferences& preferences);
 	~Browser();
 
-	InfGtkBrowserStore* get_store() { return m_browser_store; }
-	const InfGtkBrowserStore* get_store() const {
-		return m_browser_store;
+	InfGtkBrowserModelSort* get_store() { return m_sort_model; }
+	const InfGtkBrowserModelSort* get_store() const {
+		return m_sort_model;
 	}
 
 	InfGtkBrowserView* get_view() { return m_browser_view; }
@@ -136,6 +138,8 @@ protected:
 
 	ResolvMap m_resolv_map;
 	SignalActivate m_signal_activate;
+	
+	InfGtkBrowserModelSort* m_sort_model;
 };
 
 }

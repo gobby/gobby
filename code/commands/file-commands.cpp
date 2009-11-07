@@ -126,7 +126,7 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 	folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &FileCommands::on_document_changed));
 
-	InfGtkBrowserStore* store = browser.get_store();
+	InfGtkBrowserModelSort* store = browser.get_store();
 	m_row_inserted_handler =
 		g_signal_connect(G_OBJECT(store), "row-inserted",
 		                 G_CALLBACK(on_row_inserted_static), this);
@@ -139,7 +139,7 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 
 Gobby::FileCommands::~FileCommands()
 {
-	InfGtkBrowserStore* store = m_browser.get_store();
+	InfGtkBrowserModelSort* store = m_browser.get_store();
 	g_signal_handler_disconnect(G_OBJECT(store), m_row_inserted_handler);
 	g_signal_handler_disconnect(G_OBJECT(store), m_row_deleted_handler);
 }
