@@ -72,8 +72,8 @@ public:
 	       );
 	~Window();
 
-	const Folder& get_folder() const { return m_folder; }
-	Folder& get_folder() { return m_folder; }
+	const Folder& get_text_folder() const { return m_text_folder; }
+	Folder& get_text_folder() { return m_text_folder; }
 
 	void connect_to_host(const Glib::ustring& hostname)
 	{
@@ -132,10 +132,12 @@ protected:
 	// GUI
 	Gtk::VBox m_mainbox;
 	Gtk::HPaned m_paned;
+	Gtk::VPaned m_chat_paned;
 
 	Header m_header;
 	Browser m_browser;
-	Folder m_folder;
+	Folder m_text_folder;
+	Folder m_chat_folder;
 	StatusBar m_statusbar;
 
 	// Functionality

@@ -2,6 +2,7 @@ noinst_LIBRARIES = libgobby-core.a
 
 libgobby_core_a_SOURCES = \
 	browser.cpp \
+	chatsessionview.cpp \
 	closableframe.cpp \
 	documentinfostorage.cpp \
 	filechooser.cpp \
@@ -22,6 +23,7 @@ libgobby_core_a_SOURCES = \
 
 noinst_HEADERS = \
         browser.hpp \
+	chatsessionview.hpp \
         closableframe.hpp \
         documentinfostorage.hpp \
         filechooser.hpp \

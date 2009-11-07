@@ -118,11 +118,11 @@ Gobby::Folder::~Folder()
 }
 
 Gobby::TextSessionView&
-Gobby::Folder::add_document(InfTextSession* session,
-                            const Glib::ustring& title,
-                            const Glib::ustring& path,
-                            const Glib::ustring& hostname,
-                            const std::string& info_storage_key)
+Gobby::Folder::add_text_session(InfTextSession* session,
+                                const Glib::ustring& title,
+                                const Glib::ustring& path,
+                                const Glib::ustring& hostname,
+                                const std::string& info_storage_key)
 {
 	TextSessionView* view = Gtk::manage(
 		new TextSessionView(session, title, path, hostname,
@@ -151,6 +151,38 @@ Gobby::Folder::add_document(InfTextSession* session,
 	// Record the session, for debugging purposes:
 	record(session, title);
 
+	return *view;
+}
+
+Gobby::ChatSessionView&
+Gobby::Folder::add_chat_session(InfChatSession* session,
+                                const Glib::ustring& title,
+                                const Glib::ustring& path,
+                                const Glib::ustring& hostname)
+{
+	ChatSessionView* view = Gtk::manage(
+		new ChatSessionView(session, title, path, hostname,
+		                    m_preferences));
+	view->show();
+	m_signal_document_added.emit(*view);
+
+	SessionUserView* userview = Gtk::manage(
+		new SessionUserView(
+			*view,
+			m_preferences.appearance.show_userlist,
+			m_preferences.appearance.userlist_width));
+	userview->show();
+
+	// TODO chat: Use a ChatTabLabel
+	Gtk::Label* tablabel = Gtk::manage(new Gtk::Label(hostname));
+/*	tablabel->signal_close_request().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &Folder::on_tab_close_request),
+			sigc::ref(*view)));*/
+	tablabel->show();
+	append_page(*userview, *tablabel);
+
+	set_tab_reorderable(*userview, true);
 	return *view;
 }
 

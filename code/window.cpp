@@ -45,25 +45,27 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 #endif
 	m_header(m_preferences, m_lang_manager),
 	m_browser(*this, Plugins::TEXT, m_statusbar, m_preferences),
-	m_folder(m_preferences, m_lang_manager),
-	m_statusbar(m_folder, m_preferences),
+	m_text_folder(m_preferences, m_lang_manager),
+	m_chat_folder(m_preferences, m_lang_manager),
+	m_statusbar(m_text_folder, m_preferences),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
 	m_operations(m_info_storage, m_statusbar), 
-	m_commands_autosave(m_folder, m_operations, m_info_storage,
+	m_commands_autosave(m_text_folder, m_operations, m_info_storage,
 	                    m_preferences),
-	m_commands_browser(m_browser, m_folder, m_info_storage, m_statusbar,
-	                   m_preferences),
+	m_commands_browser(m_browser, m_text_folder, m_info_storage,
+	                   m_statusbar, m_preferences),
 	m_commands_browser_context(*this, m_browser, m_file_chooser,
 	                           m_operations, m_preferences),
-	m_commands_folder(m_folder),
-	m_commands_file(*this, m_header, m_browser, m_folder, m_statusbar,
-	                m_file_chooser, m_operations, m_info_storage,
+	m_commands_folder(m_text_folder),
+	// TODO: chat_folder commands
+	m_commands_file(*this, m_header, m_browser, m_text_folder,
+	                m_statusbar, m_file_chooser, m_operations,
+	                m_info_storage, m_preferences),
+	m_commands_edit(*this, m_header, m_text_folder, m_statusbar,
 	                m_preferences),
-	m_commands_edit(*this, m_header, m_folder, m_statusbar,
-	                m_preferences),
-	m_commands_view(m_header, m_folder, m_preferences),
+	m_commands_view(m_header, m_text_folder, m_preferences),
 	m_commands_help(*this, m_header, m_icon_mgr),
-	m_title_bar(*this, m_folder)
+	m_title_bar(*this, m_text_folder)
 {
 #ifdef WITH_UNIQUE
 	g_object_ref(app);
@@ -75,7 +77,8 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 
 	m_header.show();
 	m_browser.show();
-	m_folder.show();
+	m_text_folder.show();
+	m_chat_folder.show();
 
 	// Build UI
 	add_accel_group(m_header.get_accel_group() );
@@ -89,11 +92,21 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 
 	Gtk::Frame* frame_text = Gtk::manage(new Gtk::Frame);
 	frame_text->set_shadow_type(Gtk::SHADOW_IN);
-	frame_text->add(m_folder);
+	frame_text->add(m_text_folder);
 	frame_text->show();
 
+	// TODO: Use ClosableFrame here
+	Gtk::Frame* frame_chat = Gtk::manage(new Gtk::Frame);
+	frame_chat->set_shadow_type(Gtk::SHADOW_IN);
+	frame_chat->add(m_chat_folder);
+	frame_chat->show();
+
+	m_chat_paned.pack1(*frame_text, true, false);
+	m_chat_paned.pack2(*frame_chat, false, false);
+	m_chat_paned.show();
+
 	m_paned.pack1(*frame_browser, false, false);
-	m_paned.pack2(*frame_text, true, false);
+	m_paned.pack2(m_chat_paned, true, false);
 	m_paned.show();
 
 	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);
@@ -184,6 +197,7 @@ void Gobby::Window::on_realize()
 	Gtk::Window::on_realize();
 
 	m_paned.set_position(m_paned.get_width() * 2 / 5);
+	m_chat_paned.set_position(m_chat_paned.get_height() * 7 / 10);
 }
 
 void Gobby::Window::on_show()

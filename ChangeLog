@@ -1,3 +1,21 @@
+2009-11-08  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/chatsessionview.hpp:
+	* code/core/chatsessionview.cpp: Added a SessionView-deriving class to
+	show a chat session.
+
+	* code/core/Makefile.am: Added the new files to the build.
+
+	* code/core/folder.hpp:
+	* code/core/folder.cpp: Added add_chat_session, renamed add_document
+	to add_text_session.
+
+	* code/commands/browser-commands.cpp: Use add_text_session instead of
+	add_document.
+
+	* code/window.hpp:
+	* code/window.cpp: Added a bottom pane for the chat.
+
 2009-10-25  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/textsessionview.hpp:

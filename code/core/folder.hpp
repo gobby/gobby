@@ -20,6 +20,7 @@
 #define _GOBBY_FOLDER_HPP_
 
 #include "core/textsessionview.hpp"
+#include "core/chatsessionview.hpp"
 #include "core/preferences.hpp"
 #include "util/defaultaccumulator.hpp"
 
@@ -34,6 +35,7 @@ namespace Gobby
 class Folder : public Gtk::Notebook
 {
 public:
+	// TODO chat: This should be SignalSessionAdded/Removed/Changed
 	typedef sigc::signal<void, SessionView&> SignalDocumentAdded;
 	typedef sigc::signal<void, SessionView&> SignalDocumentRemoved;
 	typedef sigc::signal<void, SessionView*> SignalDocumentChanged;
@@ -42,15 +44,20 @@ public:
 		accumulated<default_accumulator<bool, true> >
 			SignalDocumentCloseRequest;
 
+	// TODO chat: Should not require langmgr
 	Folder(Preferences& preferences,
 	       GtkSourceLanguageManager* lang_manager);
 	~Folder();
 
-	TextSessionView& add_document(InfTextSession* session,
-	                              const Glib::ustring& title,
-	                              const Glib::ustring& path,
-	                              const Glib::ustring& hostname,
-	                              const std::string& info_storage_key);
+	TextSessionView& add_text_session(InfTextSession* session,
+	                                  const Glib::ustring& title,
+	                                  const Glib::ustring& path,
+	                                  const Glib::ustring& hostname,
+	                                  const std::string& info_storage_key);
+	ChatSessionView& add_chat_session(InfChatSession* session,
+	                                  const Glib::ustring& title,
+	                                  const Glib::ustring& path,
+	                                  const Glib::ustring& hostname);
 	void remove_document(SessionView& view);
 
 	SessionView* lookup_document(InfSession* session);

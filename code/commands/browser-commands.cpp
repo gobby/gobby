@@ -290,7 +290,7 @@ void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
 	g_object_get(G_OBJECT(infc_browser_get_connection(browser)),
 	             "remote-hostname", &hostname, NULL);
 
-	TextSessionView& view = m_folder.add_document(
+	TextSessionView& view = m_folder.add_text_session(
 		INF_TEXT_SESSION(session),
 		infc_browser_iter_get_name(browser, iter),
 		path, hostname,
