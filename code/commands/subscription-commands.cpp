@@ -48,8 +48,9 @@ private:
 class Gobby::SubscriptionCommands::SessionInfo
 {
 public:
-	SessionInfo(SubscriptionCommands& commands, InfcSessionProxy* proxy):
-		m_proxy(proxy)
+	SessionInfo(SubscriptionCommands& commands, Folder& folder,
+	            InfcSessionProxy* proxy):
+		m_folder(folder), m_proxy(proxy)
 	{
 		g_object_ref(proxy);
 
@@ -79,6 +80,7 @@ public:
 		g_object_unref(m_proxy);
 	}
 
+	Folder& get_folder() { return m_folder; }
 	InfcSessionProxy* get_proxy() { return m_proxy; }
 
 private:
@@ -96,6 +98,7 @@ private:
 			on_notify_connection(proxy);
 	}
 
+	Folder& m_folder;
 	InfcSessionProxy* m_proxy;
 
 	gulong m_notify_connection_handler;
@@ -103,9 +106,11 @@ private:
 };
 
 Gobby::SubscriptionCommands::SubscriptionCommands(Browser& browser,
-                                                  Folder& folder,
+                                                  Folder& text_folder,
+                                                  Folder& chat_folder,
                                                   DocumentInfoStorage& strg):
-	m_browser(browser), m_folder(folder), m_info_storage(strg)
+	m_browser(browser), m_text_folder(text_folder),
+	m_chat_folder(chat_folder), m_info_storage(strg)
 {
 	InfGtkBrowserModel* model =
 		INF_GTK_BROWSER_MODEL(browser.get_store());
@@ -163,33 +168,53 @@ void Gobby::SubscriptionCommands::on_subscribe_session(InfcBrowser* browser,
                                                        InfcBrowserIter* iter,
                                                        InfcSessionProxy* prxy)
 {
-	InfSession* session = infc_session_proxy_get_session(prxy);
-	gchar* path = infc_browser_iter_get_path(browser, iter);
 	gchar* hostname;
 	g_object_get(G_OBJECT(infc_browser_get_connection(browser)),
 	             "remote-hostname", &hostname, NULL);
+	InfSession* session = infc_session_proxy_get_session(prxy);
 
-	TextSessionView& view = m_folder.add_text_session(
-		INF_TEXT_SESSION(session),
-		infc_browser_iter_get_name(browser, iter),
-		path, hostname,
-		m_info_storage.get_key(browser, iter));
+	TextSessionView* text_view = NULL;;
+
+	Folder* folder;
+	SessionView* view;
+
+	if(iter != NULL)
+	{
+		gchar* path = infc_browser_iter_get_path(browser, iter);
+
+		text_view = &m_text_folder.add_text_session(
+			INF_TEXT_SESSION(session),
+			infc_browser_iter_get_name(browser, iter),
+			path, hostname,
+			m_info_storage.get_key(browser, iter));
+
+		folder = &m_text_folder;
+		view = text_view;
+
+		g_free(path);
+	}
+	else
+	{
+		view = &m_chat_folder.add_chat_session(
+			INF_CHAT_SESSION(session), hostname, "", hostname);
+		folder = &m_chat_folder;
+	}
 
 	g_free(hostname);
-	g_free(path);
 
-	m_signal_subscribe_session.emit(prxy, m_folder, view);
+	m_signal_subscribe_session.emit(prxy, *folder, *view);
 
 	// For now we always highlight the newly created session...
 	// TODO: If the user issued other browserview events in the meanwhile,
 	// then don't select the item, and if the user did issue other folder
 	// events, then don't switch to the document in the folder.
-	m_folder.switch_to_document(view);
-	gtk_widget_grab_focus(GTK_WIDGET(view.get_text_view()));
-	m_browser.set_selected(browser, iter);
+	folder->switch_to_document(*view);
+	if(text_view)
+		gtk_widget_grab_focus(GTK_WIDGET(text_view->get_text_view()));
+	if(iter) m_browser.set_selected(browser, iter);
 
 	g_assert(m_session_map.find(session) == m_session_map.end());
-	m_session_map[session] = new SessionInfo(*this, prxy);
+	m_session_map[session] = new SessionInfo(*this, *folder, prxy);
 }
 
 void Gobby::SubscriptionCommands::on_close(InfSession* session)
@@ -197,7 +222,8 @@ void Gobby::SubscriptionCommands::on_close(InfSession* session)
 	SessionMap::iterator iter = m_session_map.find(session);
 	g_assert(iter != m_session_map.end());
 
-	SessionView* view = m_folder.lookup_document(session);
+	Folder& folder = iter->second->get_folder();
+	SessionView* view = folder.lookup_document(session);
 	g_assert(view != NULL);
 
 	InfcSessionProxy* proxy = iter->second->get_proxy();
@@ -206,7 +232,7 @@ void Gobby::SubscriptionCommands::on_close(InfSession* session)
 	delete iter->second;
 	m_session_map.erase(iter);
 
-	m_signal_unsubscribe_session.emit(proxy, m_folder, *view);
+	m_signal_unsubscribe_session.emit(proxy, folder, *view);
 	g_object_unref(proxy);
 }
 
@@ -218,7 +244,8 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 
 	if(infc_session_proxy_get_connection(prxy) == NULL)
 	{
-		SessionView* view = m_folder.lookup_document(session);
+		Folder& folder = iter->second->get_folder();
+		SessionView* view = folder.lookup_document(session);
 		g_assert(view != NULL);
 
 		// TODO: Also reset active user for chat sessions
@@ -241,6 +268,6 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 			text_view->set_active_user(NULL);
 		}
 
-		m_signal_unsubscribe_session.emit(prxy, m_folder, *view);
+		m_signal_unsubscribe_session.emit(prxy, folder, *view);
 	}
 }

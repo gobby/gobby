@@ -35,6 +35,23 @@ public:
 	~BrowserCommands();
 
 protected:
+	static void
+	on_set_browser_static(InfGtkBrowserModel* model,
+	                      GtkTreePath* path,
+	                      GtkTreeIter* iter,
+	                      InfcBrowser* browser,
+	                      gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_set_browser(model, iter, browser);
+	}
+
+	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
+	                    InfcBrowser* browser);
+	void on_notify_status(InfXmlConnection* connection);
+
+	void subscribe_chat(InfcBrowser* browser);
+
 	void on_activate(InfcBrowser* browser, InfcBrowserIter* iter);
 	void on_finished(InfcNodeRequest* request);
 	void on_failed(InfcNodeRequest* request, const GError* error);
@@ -42,6 +59,12 @@ protected:
 	Browser& m_browser;
 	Folder& m_folder;
 	StatusBar& m_status_bar;
+
+	gulong m_set_browser_handler;
+
+	class ConnectionInfo;
+	typedef std::map<InfXmlConnection*, ConnectionInfo*> ConnectionMap;
+	ConnectionMap m_connection_map;
 
 	class RequestInfo;
 	typedef std::map<InfcNodeRequest*, RequestInfo*> RequestMap;

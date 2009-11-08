@@ -45,7 +45,8 @@ public:
 			SignalDocumentCloseRequest;
 
 	// TODO chat: Should not require langmgr
-	Folder(Preferences& preferences,
+	Folder(bool hide_single_tab,
+	       Preferences& preferences,
 	       GtkSourceLanguageManager* lang_manager);
 	~Folder();
 
@@ -91,6 +92,7 @@ protected:
 
 	void on_tab_close_request(SessionView& window);
 
+	const bool m_hide_single_tab;
 	Preferences& m_preferences;
 	GtkSourceLanguageManager* m_lang_manager;
 

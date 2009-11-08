@@ -1,5 +1,24 @@
 2009-11-08  Armin Burgmeier  <armin@arbur.net>
 
+	* code/commands/browser-commands.hpp:
+	* code/commands/browser-commands.cpp: Initiate a subscription to a
+	server's chat upon connection.
+
+	* code/commands/subscription-commands.hpp:
+	* code/commands/subscription-commands.cpp: Create a ChatSessionView in
+	the bottom pane in case of a chat subscription.
+
+	* code/commands/user-join-commands.cpp: Do a chat user join for chat
+	sessions.
+
+	* code/core/folder.hpp:
+	* code/core/folder.cpp: Added a hide_single_tab option.
+
+	* code/window.cpp: Adapt to changed folder and browser-commands
+	constructors.
+
+2009-11-08  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/subscription-commands.hpp:
 	* code/commands/subscription-commands.cpp: New class handling session
 	subscriptions.

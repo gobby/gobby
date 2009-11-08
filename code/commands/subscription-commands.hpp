@@ -38,8 +38,8 @@ public:
 	typedef sigc::signal<void, InfcSessionProxy*, Folder&, SessionView&>
 		SignalUnsubscribeSession;
 
-	SubscriptionCommands(Browser& browser, Folder& folder,
-	                     DocumentInfoStorage& strg);
+	SubscriptionCommands(Browser& browser, Folder& text_folder,
+	                     Folder& chat_folder, DocumentInfoStorage& strg);
 	~SubscriptionCommands();
 
 	// Emitted whenever a session is subscribed to, both for text and
@@ -105,7 +105,8 @@ protected:
 	void on_notify_connection(InfcSessionProxy* proxy);
 
 	Browser& m_browser;
-	Folder& m_folder;
+	Folder& m_text_folder;
+	Folder& m_chat_folder;
 	DocumentInfoStorage& m_info_storage;
 
 	gulong m_set_browser_handler;

@@ -103,6 +103,9 @@ private:
 	void user_join_complete(InfUser* user);
 	void finish();
 
+	void add_text_user_properties(std::vector<GParameter>& params,
+	                              TextSessionView& view);
+
 	UserJoinCommands& m_commands;
 
 	InfcSessionProxy* m_proxy;
@@ -228,24 +231,14 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 	}
 	else
 	{
-		// TODO: Make this work for chat sessions
-		TextSessionView* text_view =
-			dynamic_cast<TextSessionView*>(&m_view);
-		g_assert(text_view != NULL);
-
-		GParameter params[5] = {
-			{ "name", { 0 } },
-			{ "hue", { 0 } },
-			{ "vector", { 0 } },
-			{ "caret-position", { 0 } },
-			{ "status", { 0 } },
-		};
+		std::vector<GParameter> params;
+		const GParameter name_param = { "name", { 0 } };
+		params.push_back(name_param);
+		const GParameter status_param = { "status", { 0 } };
+		params.push_back(status_param);
 
 		g_value_init(&params[0].value, G_TYPE_STRING);
-		g_value_init(&params[1].value, G_TYPE_DOUBLE);
-		g_value_init(&params[2].value, INF_ADOPTED_TYPE_STATE_VECTOR);
-		g_value_init(&params[3].value, G_TYPE_UINT);
-		g_value_init(&params[4].value, INF_TYPE_USER_STATUS);
+		g_value_init(&params[1].value, INF_TYPE_USER_STATUS);
 
 		const Glib::ustring& pref_name = preferences.user.name;
 		if(m_retry_index > 1)
@@ -260,41 +253,27 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 				&params[0].value, pref_name.c_str());
 		}
 
-		g_value_set_double(&params[1].value, preferences.user.hue);
-		g_value_take_boxed(
-			&params[2].value, inf_adopted_state_vector_copy(
-				inf_adopted_algorithm_get_current(
-					inf_adopted_session_get_algorithm(
-						INF_ADOPTED_SESSION(
-							session)))));
-
-		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(text_view->get_text_buffer());
-		GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
-		GtkTextIter caret_iter;
-
-		gtk_text_buffer_get_iter_at_mark(buffer, &caret_iter, mark);
-		g_value_set_uint(&params[3].value,
-		                 gtk_text_iter_get_offset(&caret_iter));
-
 		if(m_folder.get_current_document() == &m_view)
-			g_value_set_enum(&params[4].value, INF_USER_ACTIVE);
+			g_value_set_enum(&params[1].value, INF_USER_ACTIVE);
 		else
-			g_value_set_enum(&params[4].value, INF_USER_INACTIVE);
+			g_value_set_enum(&params[1].value, INF_USER_INACTIVE);
+
+		// Extra properties for text session:
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(&m_view);
+		if(text_view) add_text_user_properties(params, *text_view);
 
 		GError* error = NULL;
 		m_request = infc_session_proxy_join_user(
-			m_proxy, params, 5, &error);
+			m_proxy, &params[0], params.size(), &error);
 
-		g_value_unset(&params[0].value);
-		g_value_unset(&params[1].value);
-		g_value_unset(&params[2].value);
-		g_value_unset(&params[3].value);
-		g_value_unset(&params[4].value);
+		for(unsigned int i = 0; i < params.size(); ++i)
+			g_value_unset(&params[i].value);
 
 		if(m_request == NULL)
 		{
 			set_error_text(m_view, error->message);
+			g_error_free(error);
 		}
 		else
 		{
@@ -319,9 +298,13 @@ void Gobby::UserJoinCommands::UserJoinInfo::user_join_complete(InfUser* user)
 	// TODO: Notify the user about alternative user name if s/he uses any
 	m_view.unset_info();
 
+	// TODO: set_active_user should maybe go to SessionView base:
 	TextSessionView* text_view = dynamic_cast<TextSessionView*>(&m_view);
 	if(text_view)
 		text_view->set_active_user(INF_TEXT_USER(user));
+	ChatSessionView* chat_view = dynamic_cast<ChatSessionView*>(&m_view);
+	if(chat_view)
+		chat_view->set_active_user(user);
 
 	finish();
 }
@@ -334,6 +317,41 @@ void Gobby::UserJoinCommands::UserJoinInfo::finish()
 
 	m_commands.m_user_join_map.erase(iter);
 	delete this;
+}
+
+void Gobby::UserJoinCommands::UserJoinInfo::
+	add_text_user_properties(std::vector<GParameter>& params,
+	                         TextSessionView& view)
+{
+	const Preferences& preferences = m_commands.m_preferences;
+	InfTextSession* session = view.get_session();
+
+	GParameter hue_param = { "hue", { 0 } };
+	g_value_init(&hue_param.value, G_TYPE_DOUBLE);
+	g_value_set_double(&hue_param.value,
+	                   m_commands.m_preferences.user.hue);
+	params.push_back(hue_param);
+
+	GParameter vector_param = { "vector", { 0 } };
+	g_value_init(&vector_param.value, INF_ADOPTED_TYPE_STATE_VECTOR);
+
+	g_value_take_boxed(&vector_param.value, inf_adopted_state_vector_copy(
+		inf_adopted_algorithm_get_current(
+			inf_adopted_session_get_algorithm(
+				INF_ADOPTED_SESSION(session)))));
+	params.push_back(vector_param);
+
+	GParameter caret_param = { "caret-position", { 0 } };
+	g_value_init(&caret_param.value, G_TYPE_UINT);
+
+	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(view.get_text_buffer());
+	GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
+	GtkTextIter caret_iter;
+
+	gtk_text_buffer_get_iter_at_mark(buffer, &caret_iter, mark);
+	g_value_set_uint(&caret_param.value,
+	                 gtk_text_iter_get_offset(&caret_iter));
+	params.push_back(caret_param);
 }
 
 Gobby::UserJoinCommands::

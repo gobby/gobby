@@ -100,11 +100,14 @@ namespace
 	}
 }
 
-Gobby::Folder::Folder(Preferences& preferences,
+Gobby::Folder::Folder(bool hide_single_tab,
+                      Preferences& preferences,
                       GtkSourceLanguageManager* lang_manager):
-	m_preferences(preferences), m_lang_manager(lang_manager)
+	m_hide_single_tab(hide_single_tab), m_preferences(preferences),
+	m_lang_manager(lang_manager)
 {
 	set_scrollable(true);
+	if(hide_single_tab) set_show_tabs(false);
 }
 
 Gobby::Folder::~Folder()
@@ -117,6 +120,7 @@ Gobby::Folder::~Folder()
 				get_nth_page(0))->get_session_view());
 }
 
+// TODO: Share common code of add_text_session and add_chat_session
 Gobby::TextSessionView&
 Gobby::Folder::add_text_session(InfTextSession* session,
                                 const Glib::ustring& title,
@@ -151,6 +155,8 @@ Gobby::Folder::add_text_session(InfTextSession* session,
 	// Record the session, for debugging purposes:
 	record(session, title);
 
+	if(m_hide_single_tab && get_n_pages() > 1)
+		set_show_tabs(true);
 	return *view;
 }
 
@@ -183,6 +189,8 @@ Gobby::Folder::add_chat_session(InfChatSession* session,
 	append_page(*userview, *tablabel);
 
 	set_tab_reorderable(*userview, true);
+	if(m_hide_single_tab && get_n_pages() > 1)
+		set_show_tabs(true);
 	return *view;
 }
 
@@ -204,6 +212,9 @@ void Gobby::Folder::remove_document(SessionView& view)
 
 	if(get_n_pages() == 0)
 		m_signal_document_changed.emit(NULL);
+
+	if(m_hide_single_tab && get_n_pages() <= 1)
+		set_show_tabs(false);
 }
 
 Gobby::SessionView*
