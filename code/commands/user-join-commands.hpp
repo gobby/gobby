@@ -16,38 +16,37 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef _GOBBY_BROWSER_COMMANDS_HPP_
-#define _GOBBY_BROWSER_COMMANDS_HPP_
+#ifndef _GOBBY_USER_JOIN_COMMANDS_HPP_
+#define _GOBBY_USER_JOIN_COMMANDS_HPP_
 
-#include "core/browser.hpp"
-#include "core/statusbar.hpp"
+#include "commands/subscription-commands.hpp"
+#include "core/preferences.hpp"
 
 #include <sigc++/trackable.h>
 
 namespace Gobby
 {
 
-class BrowserCommands: public sigc::trackable
+class UserJoinCommands: public sigc::trackable
 {
 public:
-	BrowserCommands(Browser& browser, Folder& folder,
-	                StatusBar& status_bar);
-	~BrowserCommands();
+	UserJoinCommands(SubscriptionCommands& subscription_commands,
+	                 const Preferences& preferences);
+	~UserJoinCommands();
 
 protected:
-	void on_activate(InfcBrowser* browser, InfcBrowserIter* iter);
-	void on_finished(InfcNodeRequest* request);
-	void on_failed(InfcNodeRequest* request, const GError* error);
+	void on_subscribe_session(InfcSessionProxy* proxy,
+	                          Folder& folder, SessionView& view);
+	void on_unsubscribe_session(InfcSessionProxy* proxy,
+	                            Folder& folder, SessionView& view);
 
-	Browser& m_browser;
-	Folder& m_folder;
-	StatusBar& m_status_bar;
+	const Preferences& m_preferences;
 
-	class RequestInfo;
-	typedef std::map<InfcNodeRequest*, RequestInfo*> RequestMap;
-	RequestMap m_request_map;
+	class UserJoinInfo;
+	typedef std::map<InfcSessionProxy*, UserJoinInfo*> UserJoinMap;
+	UserJoinMap m_user_join_map;
 };
 
 }
 
-#endif // _GOBBY_BROWSER_COMMANDS_HPP_
+#endif // _GOBBY_USER_JOIN_COMMANDS_HPP_

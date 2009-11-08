@@ -16,196 +16,90 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-// TODO: Split this file into multiple smaller files,
-// perhaps browser-commands.cpp (basically on_activate)
-// synchronization-commands.cpp (basically on_subscribe_session)
-// user-join-commands.cpp (basically join_user)
-
 #include "commands/browser-commands.hpp"
 #include "util/i18n.hpp"
 
-#include <libinftext/inf-text-user.h>
-#include <libinfinity/common/inf-error.h>
-
-namespace
+class Gobby::BrowserCommands::RequestInfo
 {
-	const char* GOBBY_BROWSER_COMMANDS_SESSION_PROXY =
-		"GOBBY_BROWSER_COMMANDS_SESSION_PROXY";
-	const char* GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY =
-		"GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY";
+public:
+	RequestInfo(BrowserCommands& commands, InfcBrowser* browser,
+	            InfcNodeRequest* request, StatusBar& status_bar);
+	~RequestInfo();
 
-	enum ErrorType {
-		SYNC_ERROR,
-		USER_JOIN_ERROR
-	};
-
-	void set_error_text(Gobby::SessionView& view,
-	                    const Glib::ustring& initial_text,
-	                    ErrorType type)
+private:
+	static void on_failed_static(InfcNodeRequest* request,
+	                             const GError* error, gpointer user_data)
 	{
-		using namespace Gobby;
-		Glib::ustring type_text;
-
-		switch(type)
-		{
-		case SYNC_ERROR:
-			// Document cannot be used if an error happened
-			// during synchronization.
-			type_text = _("This document cannot be used.");
-			break;
-		case USER_JOIN_ERROR:
-			type_text = _("You can still watch others editing "
-			              "the document, but you cannot edit "
-			              "it yourself.");
-			break;
-		}
-
-		const Glib::ustring info_text =
-			_("If you have an idea what could have caused the "
-			  "problem, then you may attempt to solve it and "
-			  "try again (after having closed this document). "
-			  "Otherwise it is most likely a bug in the "
-			  "software. In that case, please file a bug report "
-			  "at http://gobby.0x539.de/trac/newticket and "
-			  "provide as much information as you can, including "
-			  "what you did when the problem occurred and how to "
-			  "reproduce the problem (if possible) so that we "
-			  "can fix the problem in a later version. "
-			  "Thank you.");
-
-		view.set_info(
-			initial_text + "\n\n" + type_text + "\n\n" +
-			info_text, true);
+		static_cast<BrowserCommands*>(user_data)->
+			on_failed(request, error);
 	}
 
-	void retr_local_user_func(InfUser* user, gpointer user_data)
+	static void on_finished_static(InfcNodeRequest* request,
+	                               InfcBrowserIter* iter,
+	                               gpointer user_data)
 	{
-		(*static_cast<InfUser**>(user_data)) = user;
-	}
-}
-
-struct Gobby::BrowserCommands::BrowserNode
-{
-	BrowserNode(BrowserCommands& commands, InfcBrowser* browser):
-		m_browser(browser)
-	{
-		g_object_ref(m_browser);
-
-		m_subscribe_session_handler = g_signal_connect(
-			G_OBJECT(browser), "subscribe-session",
-			G_CALLBACK(&on_subscribe_session_static), &commands);
+		static_cast<BrowserCommands*>(user_data)->
+			on_finished(request);
 	}
 
-	~BrowserNode()
-	{
-		g_signal_handler_disconnect(G_OBJECT(m_browser),
-		                            m_subscribe_session_handler);
+	InfcNodeRequest* m_request;
 
-		g_object_unref(m_browser);
-	}
+	StatusBar& m_status_bar;
+	StatusBar::MessageHandle m_handle;
 
-	InfcBrowser* m_browser;
-	gulong m_subscribe_session_handler;
+	gulong m_failed_handler;
+	gulong m_finished_handler;
 };
 
-// These need default and copy constructors to satisfy the map properties.
-// However, we only do copy them as long as they are unset.
-Gobby::BrowserCommands::RequestNode::RequestNode():
-	commands(NULL) {}
-
-Gobby::BrowserCommands::RequestNode::RequestNode(const RequestNode& node):
-	commands(node.commands)
+Gobby::BrowserCommands::RequestInfo::RequestInfo(BrowserCommands& commands,
+                                                 InfcBrowser* browser,
+                                                 InfcNodeRequest* request,
+                                                 StatusBar& status_bar):
+	m_request(request), m_status_bar(status_bar)
 {
-	g_assert(commands == NULL);
+	g_object_ref(request);
+
+	InfcBrowserIter iter;
+	gboolean have_iter =
+		infc_browser_iter_from_node_request(browser, request, &iter);
+	g_assert(have_iter);
+
+	m_handle = m_status_bar.add_info_message(
+		Glib::ustring::compose(_("Subscribing to %1..."),
+			Glib::ustring(
+				infc_browser_iter_get_name(browser, &iter))));
+
+	m_failed_handler = g_signal_connect(request, "failed",
+	                 G_CALLBACK(on_failed_static), &commands);
+	m_finished_handler = g_signal_connect(request, "finished",
+	                 G_CALLBACK(on_finished_static), &commands);
 }
 
-Gobby::BrowserCommands::RequestNode::~RequestNode()
+Gobby::BrowserCommands::RequestInfo::~RequestInfo()
 {
-	if(commands != NULL)
-	{
-		commands->m_status_bar.remove_message(handle);
-	}
+	m_status_bar.remove_message(m_handle);
+
+	g_signal_handler_disconnect(m_request, m_failed_handler);
+	g_signal_handler_disconnect(m_request, m_finished_handler);
+
+	g_object_unref(m_request);
 }
 
-Gobby::BrowserCommands::SessionNode::SessionNode():
-	proxy(NULL) {}
-
-Gobby::BrowserCommands::SessionNode::SessionNode(const SessionNode& node):
-	proxy(node.proxy), status(node.status)
+Gobby::BrowserCommands::BrowserCommands(Browser& browser,
+                                        Folder& folder,
+                                        StatusBar& status_bar):
+	m_browser(browser), m_folder(folder), m_status_bar(status_bar)
 {
-	g_assert(proxy == NULL);
-}
-
-Gobby::BrowserCommands::SessionNode::~SessionNode()
-{
-	if(proxy != NULL)
-	{
-		InfSession* session = infc_session_proxy_get_session(proxy);
-		g_signal_handler_disconnect(proxy, notify_connection_id);
-		g_signal_handler_disconnect(session, failed_id);
-		g_signal_handler_disconnect(session, complete_before_id);
-		g_signal_handler_disconnect(session, complete_after_id);
-		g_signal_handler_disconnect(session, progress_id);
-		g_signal_handler_disconnect(session, close_id);
-
-		g_object_unref(proxy);
-	}
-}
-
-Gobby::BrowserCommands::BrowserCommands(Browser& browser, Folder& folder,
-                                        DocumentInfoStorage& info_storage,
-                                        StatusBar& status_bar,
-                                        const Preferences& preferences):
-	m_browser(browser), m_folder(folder), m_info_storage(info_storage),
-	m_status_bar(status_bar), m_preferences(preferences)
-{
-	InfGtkBrowserModel* model = INF_GTK_BROWSER_MODEL(browser.get_store());
-	m_set_browser_handler =
-		g_signal_connect(G_OBJECT(model), "set-browser",
-		                 G_CALLBACK(&on_set_browser_static), this);
-
 	m_browser.signal_activate().connect(
 		sigc::mem_fun(*this, &BrowserCommands::on_activate));
 }
 
 Gobby::BrowserCommands::~BrowserCommands()
 {
-	for(BrowserMap::iterator iter = m_browser_map.begin();
-	    iter != m_browser_map.end(); ++ iter)
+	for(RequestMap::iterator iter = m_request_map.begin();
+	    iter != m_request_map.end(); ++ iter)
 	{
 		delete iter->second;
-	}
-
-	g_signal_handler_disconnect(
-		INF_GTK_BROWSER_MODEL(m_browser.get_store()),
-		m_set_browser_handler);
-}
-
-void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
-                                            GtkTreeIter* iter,
-                                            InfcBrowser* browser)
-{
-	if(browser != NULL)
-	{
-		g_assert(m_browser_map.find(browser) == m_browser_map.end());
-		m_browser_map[browser ] = new BrowserNode(*this, browser);
-	}
-	else
-	{
-		InfcBrowser* old_browser;
-		gtk_tree_model_get(
-			GTK_TREE_MODEL(model), iter,
-			INF_GTK_BROWSER_MODEL_COL_BROWSER, &old_browser, -1);
-
-		if(old_browser != NULL)
-		{
-			BrowserMap::iterator iter =
-				m_browser_map.find(old_browser);
-			g_assert(iter != m_browser_map.end());
-			delete iter->second;
-			m_browser_map.erase(iter);
-			g_object_unref(old_browser);
-		}
 	}
 }
 
@@ -217,9 +111,7 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 	if(proxy != NULL)
 	{
 		InfSession* session = infc_session_proxy_get_session(proxy);
-		//InfTextSession* text_session = INF_TEXT_SESSION(session);
 		SessionView* view = m_folder.lookup_document(session);
-		//DocWindow* window = m_folder.lookup_document(text_session);
 
 		if(view != NULL)
 		{
@@ -244,28 +136,11 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 			request = infc_browser_iter_subscribe_session(browser,
 			                                              iter);
 
-			RequestNode& node = m_request_map[request];
-			node.commands = this;
-			node.browser = browser;
-			node.handle = m_status_bar.add_info_message(
-				Glib::ustring::compose(
-					_("Subscribing to %1..."),
-					Glib::ustring(
-						infc_browser_iter_get_name(
-							browser, iter))));
-
-			g_signal_connect(
-				request, "finished",
-				G_CALLBACK(&on_finished_static), this);
-
-			g_signal_connect(
-				request, "failed",
-				G_CALLBACK(&on_failed_static), this);
-		}
-		else
-		{
-			m_status_bar.add_info_message(
-				_("Subscription already in progress"));
+			g_assert(m_request_map.find(request) ==
+			         m_request_map.end());
+			m_request_map[request] =
+				new RequestInfo(*this, browser, request,
+				                m_status_bar);
 		}
 	}
 }
@@ -274,92 +149,8 @@ void Gobby::BrowserCommands::on_finished(InfcNodeRequest* request)
 {
 	RequestMap::iterator iter = m_request_map.find(request);
 	g_assert(iter != m_request_map.end());
-
-	// The synchronization is watched in on_subscribe_session which is
-	// emitted along with this signal.
+	delete iter->second;
 	m_request_map.erase(iter);
-}
-
-void Gobby::BrowserCommands::on_subscribe_session(InfcBrowser* browser,
-                                                  InfcBrowserIter* iter,
-                                                  InfcSessionProxy* proxy)
-{
-	InfSession* session = infc_session_proxy_get_session(proxy);
-	gchar* path = infc_browser_iter_get_path(browser, iter);
-	gchar* hostname;
-	g_object_get(G_OBJECT(infc_browser_get_connection(browser)),
-	             "remote-hostname", &hostname, NULL);
-
-	TextSessionView& view = m_folder.add_text_session(
-		INF_TEXT_SESSION(session),
-		infc_browser_iter_get_name(browser, iter),
-		path, hostname,
-		m_info_storage.get_key(browser, iter));
-
-	g_free(hostname);
-	g_free(path);
-
-	// For now we always highlight the newly created session...
-	// TODO: If the user issued other browserview events in the meanwhile,
-	// then don't select the item, and if the user did issue other folder
-	// events, then don't switch to the document in the folder.
-	m_folder.switch_to_document(view);
-	gtk_widget_grab_focus(GTK_WIDGET(view.get_text_view()));
-	m_browser.set_selected(browser, iter);
-
-	SessionNode& node = m_session_map[session];
-	node.proxy = proxy;
-
-	/* We cache this for the synchronization-complete signal handler,
-	 * since the session already changed to RUNNING before the signal
-	 * handler is run: */
-	node.status = inf_session_get_status(session);
-	g_object_ref(proxy);
-
-	node.notify_connection_id = g_signal_connect(
-		proxy, "notify::connection",
-		G_CALLBACK(on_notify_connection_static), this);
-	node.failed_id = g_signal_connect(
-		session, "synchronization-failed",
-		G_CALLBACK(on_synchronization_failed_static), this);
-
-	// Connect _after here so that we can access the 
-	// AdoptedAlgorithm the default handler created to perform
-	// the user join.
-	node.complete_before_id = g_signal_connect(
-		session, "synchronization-complete",
-		G_CALLBACK(on_synchronization_complete_before_static), this);
-	node.complete_after_id = g_signal_connect_after(
-		session, "synchronization-complete",
-		G_CALLBACK(on_synchronization_complete_after_static), this);
-	node.progress_id = g_signal_connect(
-		session, "synchronization-progress",
-		G_CALLBACK(on_synchronization_progress_static), this);
-	node.close_id = g_signal_connect(
-		session, "close", G_CALLBACK(on_close_static), this);
-
-	if(inf_session_get_status(session) == INF_SESSION_SYNCHRONIZING)
-	{
-		InfXmlConnection* connection;
-		g_object_get(G_OBJECT(session),
-		             "sync-connection", &connection, NULL);
-
-		gdouble percentage =
-			inf_session_get_synchronization_progress(session,
-			                                         connection);
-		g_object_unref(connection);
-
-		view.set_info(
-			Glib::ustring::compose(
-				_("Synchronization in progress... %1%%"),
-				static_cast<unsigned int>(percentage * 100)),
-			false);
-	}
-	else
-	{
-		// Already in running state, do user join
-		join_user(proxy, m_preferences.user.name);
-	}
 }
 
 void Gobby::BrowserCommands::on_failed(InfcNodeRequest* request,
@@ -367,320 +158,10 @@ void Gobby::BrowserCommands::on_failed(InfcNodeRequest* request,
 {
 	RequestMap::iterator iter = m_request_map.find(request);
 	g_assert(iter != m_request_map.end());
-
+	delete iter->second;
 	m_request_map.erase(iter);
 
 	m_status_bar.add_error_message(
 		_("Subscription failed"),
 		error->message);
-}
-
-void Gobby::BrowserCommands::on_synchronization_failed(InfSession* session,
-                                                       InfXmlConnection* conn,
-                                                       const GError* error)
-{
-	SessionMap::iterator iter = m_session_map.find(session);
-	g_assert(iter != m_session_map.end());
-
-	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
-	{
-		SessionView* view = m_folder.lookup_document(session);
-		g_assert(view != NULL);
-
-		set_error_text(
-			*view,
-			Glib::ustring::compose("Synchronization failed: %1",
-			                       error->message), SYNC_ERROR);
-
-		// The document will be of no use anyway, so consider it not
-		// being modified.
-		InfBuffer* buffer = inf_session_get_buffer(session);
-		inf_buffer_set_modified(buffer, FALSE);
-
-		// Don't wait until the session is closed because of this,
-		// since this would also cause a connection notify,
-		// overwriting the error message with a useless one.
-		m_session_map.erase(iter);
-	}
-}
-
-void Gobby::BrowserCommands::
-	on_synchronization_complete_before(InfSession* session,
-                                           InfXmlConnection* connection)
-{
-	SessionMap::iterator iter = m_session_map.find(session);
-	g_assert(iter != m_session_map.end());
-
-	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
-	{
-		// Unset modified flag after synchronization.
-		SessionView* view = m_folder.lookup_document(session);
-		g_assert(view != NULL);
-
-		InfBuffer* buffer = inf_session_get_buffer(session);
-		inf_buffer_set_modified(buffer, FALSE);
-
-		// TODO: Actually we should always set the modified flag,
-		// except the document is either empty, or known in the
-		// document info storage and the version on disk is the same
-		// as the one we got synchronized. We could store a hash and
-		// modification time in the documentinfo storage for this.
-		// We should do this is another source file, such as
-		// synchronization-commands.cpp.
-	}
-}
-
-void Gobby::BrowserCommands::
-	on_synchronization_complete_after(InfSession* session,
-                                          InfXmlConnection* connection)
-{
-	SessionMap::iterator iter = m_session_map.find(session);
-	g_assert(iter != m_session_map.end());
-
-	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
-	{
-		iter->second.status = INF_SESSION_RUNNING;
-		join_user(iter->second.proxy, m_preferences.user.name);
-	}
-}
-
-void Gobby::BrowserCommands::on_synchronization_progress(InfSession* session,
-                                                         InfXmlConnection* c,
-                                                         gdouble percentage)
-{
-	SessionMap::iterator iter = m_session_map.find(session);
-	g_assert(iter != m_session_map.end());
-
-	if(iter->second.status == INF_SESSION_SYNCHRONIZING)
-	{
-		SessionView* view = m_folder.lookup_document(session);
-
-		g_assert(view != NULL);
-		view->set_info(
-			Glib::ustring::compose(
-				_("Synchronization in progress... %1%%"),
-				static_cast<unsigned int>(percentage * 100)),
-			false);
-	}
-}
-
-void Gobby::BrowserCommands::on_close(InfSession* session)
-{
-	SessionMap::iterator iter = m_session_map.find(session);
-	g_assert(iter != m_session_map.end());
-	m_session_map.erase(iter);
-}
-
-void Gobby::BrowserCommands::on_notify_connection(InfcSessionProxy* proxy)
-{
-	InfSession* session = infc_session_proxy_get_session(proxy);
-	SessionMap::iterator iter = m_session_map.find(session);
-	g_assert(iter != m_session_map.end());
-
-	if(infc_session_proxy_get_connection(proxy) == NULL)
-	{
-		SessionView* view = m_folder.lookup_document(session);
-		g_assert(view != NULL);
-
-		view->set_info(_(
-			"The connection to the publisher of this document "
-			"has been lost. Further changes to the document "
-			"could not be synchronized to others anymore, "
-			"therefore the document cannot be edited anymore.\n\n"
-			"Please note also that it is possible that not all "
-			"of your latest changes have reached the "
-			"publisher before the connection was lost."), true);
-
-		TextSessionView* text_view =
-			dynamic_cast<TextSessionView*>(view);
-		if(text_view)
-			text_view->set_active_user(NULL);
-	}
-}
-
-void Gobby::BrowserCommands::join_user(InfcSessionProxy* proxy,
-                                       const Glib::ustring& name)
-{
-	// Check if there is already a local user
-	InfSession* session = infc_session_proxy_get_session(proxy);
-	InfUserTable* user_table = inf_session_get_user_table(session);
-
-	InfUser* user = NULL;
-	inf_user_table_foreach_local_user(user_table, &retr_local_user_func,
-	                                  &user);
-
-	if(user == NULL)
-	{
-		// TODO: Make this work also for non-text views... should
-		// probably go into user-join-commands.cpp
-		SessionView* view = m_folder.lookup_document(session);
-		TextSessionView* text_view =
-			dynamic_cast<TextSessionView*>(view);
-		g_assert(text_view != NULL);
-
-		// TODO: Automatically join with a different name if there is
-		// already a user with the preferred name?
-		GParameter params[5] = {
-			{ "name", { 0 } },
-			{ "hue", { 0 } },
-			{ "vector", { 0 } },
-			{ "caret-position", { 0 } },
-			{ "status", { 0 } }
-		};
-
-		g_value_init(&params[0].value, G_TYPE_STRING);
-		g_value_init(&params[1].value, G_TYPE_DOUBLE);
-		g_value_init(&params[2].value, INF_ADOPTED_TYPE_STATE_VECTOR);
-		g_value_init(&params[3].value, G_TYPE_UINT);
-		g_value_init(&params[4].value, INF_TYPE_USER_STATUS);
-
-		g_value_set_static_string(&params[0].value, name.c_str());
-		g_value_set_double(
-			&params[1].value, m_preferences.user.hue);
-		g_value_take_boxed(
-			&params[2].value,inf_adopted_state_vector_copy(
-				inf_adopted_algorithm_get_current(
-					inf_adopted_session_get_algorithm(
-						INF_ADOPTED_SESSION(
-							session)))));
-
-		GtkTextBuffer* buffer =
-			GTK_TEXT_BUFFER(text_view->get_text_buffer());
-		GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
-		GtkTextIter caret_iter;
-		gtk_text_buffer_get_iter_at_mark(buffer, &caret_iter, mark);
-		g_value_set_uint(&params[3].value,
-		                 gtk_text_iter_get_offset(&caret_iter));
-
-		if(m_folder.get_current_document() == view)
-			g_value_set_enum(&params[4].value, INF_USER_ACTIVE);
-		else
-			g_value_set_enum(&params[4].value, INF_USER_INACTIVE);
-
-		GError* error = NULL;
-		InfcUserRequest* request = infc_session_proxy_join_user(
-			proxy, params, 5, &error);
-
-		g_value_unset(&params[0].value);
-		g_value_unset(&params[1].value);
-		g_value_unset(&params[2].value);
-		g_value_unset(&params[3].value);
-		g_value_unset(&params[4].value);
-
-		if(request == NULL)
-		{
-			set_error_text(
-				*view,
-				Glib::ustring::compose("User Join failed: %1",
-				                       error->message),
-				USER_JOIN_ERROR);
-		}
-		else
-		{
-			view->set_info(
-				_("User Join in progress..."), false);
-
-			g_signal_connect(
-				request, "failed",
-				G_CALLBACK(on_user_join_failed_static), this);
-			g_signal_connect(
-				request, "finished",
-				G_CALLBACK(on_user_join_finished_static),
-				this);
-
-			g_object_set_data(
-				G_OBJECT(request),
-				GOBBY_BROWSER_COMMANDS_SESSION_PROXY,
-				proxy);
-		}
-	}
-	else
-	{
-		user_joined(proxy, user);
-	}
-}
-
-void Gobby::BrowserCommands::on_user_join_failed(InfcUserRequest* request,
-                                                 const GError* error)
-{
-	gpointer proxy_ptr =
-		g_object_get_data(G_OBJECT(request),
-	                          GOBBY_BROWSER_COMMANDS_SESSION_PROXY);
-
-	InfcSessionProxy* proxy = static_cast<InfcSessionProxy*>(proxy_ptr);
-	SessionView* view = m_folder.lookup_document(
-		infc_session_proxy_get_session(proxy));
-	g_assert(view != NULL);
-
-	if(error->domain == inf_user_error_quark() &&
-	   error->code == INF_USER_ERROR_NAME_IN_USE)
-	{
-		gpointer retry_ptr = g_object_get_data(
-			G_OBJECT(proxy),
-			GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY);
-
-		guint retry;
-		if(retry_ptr)
-			retry = GPOINTER_TO_UINT(retry_ptr);
-		else
-			retry = 2;
-
-		// TODO: Introduce an "alternative name" preference
-		join_user(proxy, Glib::ustring::compose(
-			"%1 %2", m_preferences.user.name, retry));
-
-		g_object_set_data(
-			G_OBJECT(proxy),
-			GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY,
-			GUINT_TO_POINTER(retry + 1));
-	}
-	else
-	{
-		// Remove the user join retry counter as we don't need it
-		// anymore if the user join failed anyway
-		g_object_set_data(G_OBJECT(proxy),
-			          GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY,
-			          NULL);
-
-		set_error_text(
-			*view,
-			Glib::ustring::compose("User Join failed: %1",
-				               error->message),
-			USER_JOIN_ERROR);
-	}
-}
-
-void Gobby::BrowserCommands::on_user_join_finished(InfcUserRequest* request,
-                                                   InfUser* user)
-{
-	g_assert(INF_TEXT_IS_USER(user));
-
-	gpointer proxy_ptr =
-		g_object_get_data(G_OBJECT(request),
-	                          GOBBY_BROWSER_COMMANDS_SESSION_PROXY);
-
-	InfcSessionProxy* proxy = static_cast<InfcSessionProxy*>(proxy_ptr);
-	
-	// Clear user join retry counter from proxy now that
-	// the user join finished.
-	g_object_set_data(G_OBJECT(proxy),
-	                  GOBBY_BROWSER_COMMANDS_USER_JOIN_RETRY, NULL);
-
-	user_joined(proxy, user);
-}
-
-void Gobby::BrowserCommands::user_joined(InfcSessionProxy* proxy,
-                                         InfUser* user)
-{
-	SessionView* view = m_folder.lookup_document(
-		infc_session_proxy_get_session(proxy));
-	g_assert(view != NULL);
-
-	// TODO: Notify the user that he is using an alternative name if
-	// inf_user_get_name(user) does not match m_preferences.user.name.
-
-	view->unset_info();
-	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
-	if(text_view)
-		text_view->set_active_user(INF_TEXT_USER(user));
 }

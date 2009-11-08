@@ -10,6 +10,9 @@ libgobby_commands_a_SOURCES = \
 	file-commands.cpp \
 	folder-commands.cpp \
 	help-commands.cpp \
+	subscription-commands.cpp \
+	synchronization-commands.cpp \
+	user-join-commands.cpp \
 	view-commands.cpp
 
 noinst_HEADERS = \
@@ -20,6 +23,9 @@ noinst_HEADERS = \
         file-commands.hpp \
         folder-commands.hpp \
         help-commands.hpp \
+	subscription-commands.hpp \
+	synchronization-commands.hpp \
+	user-join-commands.hpp \
         view-commands.hpp
 
 appicondir = $(datadir)/pixmaps

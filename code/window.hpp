@@ -23,6 +23,9 @@
 
 #include "commands/autosave-commands.hpp"
 #include "commands/browser-commands.hpp"
+#include "commands/subscription-commands.hpp"
+#include "commands/synchronization-commands.hpp"
+#include "commands/user-join-commands.hpp"
 #include "commands/browser-context-commands.hpp"
 #include "commands/folder-commands.hpp"
 #include "commands/file-commands.hpp"
@@ -147,6 +150,10 @@ protected:
 
 	AutosaveCommands m_commands_autosave;
 	BrowserCommands m_commands_browser;
+	SubscriptionCommands m_commands_subscription;
+	SynchronizationCommands m_commands_synchronization;
+	UserJoinCommands m_commands_user_join;
+
 	BrowserContextCommands m_commands_browser_context;
 	FolderCommands m_commands_folder;
 	FileCommands m_commands_file;

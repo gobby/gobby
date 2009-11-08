@@ -1,5 +1,27 @@
 2009-11-08  Armin Burgmeier  <armin@arbur.net>
 
+	* code/commands/subscription-commands.hpp:
+	* code/commands/subscription-commands.cpp: New class handling session
+	subscriptions.
+
+	* code/commands/synchronization-commands.hpp:
+	* code/commands/synchronization-commands.cpp: New class handling
+	session synchronization.
+
+	* code/commands/user-join-commands.hpp:
+	* code/commands/user-join-commands.cpp: New class handling user join.
+
+	* code/commands/browser-commands.hpp:
+	* code/commands/browser-commands.cpp: Removed the functionality that
+	has been moved to the classes mentioned above.
+
+	* code/commands/Makfile.am: Add the new files to the build.
+
+	* code/window.hpp:
+	* code/window.cpp: Instantiante the new classes.
+
+2009-11-08  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/chatsessionview.hpp:
 	* code/core/chatsessionview.cpp: Added a SessionView-deriving class to
 	show a chat session.
