@@ -143,6 +143,7 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_session_document_open;
 	const Glib::RefPtr<Gtk::Action> action_session_document_save;
 	const Glib::RefPtr<Gtk::Action> action_session_document_save_as;
+	const Glib::RefPtr<Gtk::Action> action_session_document_save_all;
 	const Glib::RefPtr<Gtk::Action> action_session_document_close;
 
 	const Glib::RefPtr<Gtk::Action> action_edit;

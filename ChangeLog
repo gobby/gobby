@@ -1,5 +1,12 @@
 2009-11-09  Philipp Kern  <phil@0x539.de>
 
+	* inc/header.hpp:
+	* inc/window.hpp:
+	* src/header.cpp:
+	* src/window.cpp: implement "Save all documents" (Debian bug #459613)
+
+2009-11-09  Philipp Kern  <phil@0x539.de>
+
 	* inc/joinprogressdialog.cpp:
 	* src/joinprogressdialog.cpp: set "Session password required" in the
 	  title instead of "Wrong session password" on first try (Debian bug

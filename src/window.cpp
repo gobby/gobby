@@ -100,6 +100,8 @@ Gobby::Window::Window(const IconManager& icon_mgr, Config& config):
 		sigc::mem_fun(*this, &Window::on_document_save) );
 	m_header.action_session_document_save_as->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_document_save_as) );
+	m_header.action_session_document_save_all->signal_activate().connect(
+		sigc::mem_fun(*this, &Window::on_document_save_all) );
 	m_header.action_session_document_close->signal_activate().connect(
 		sigc::mem_fun(*this, &Window::on_document_close) );
 
@@ -737,18 +739,8 @@ void Gobby::Window::on_document_save()
 	handle_document_save();
 }
 
-bool Gobby::Window::handle_document_save()
+bool Gobby::Window::handle_document_save_impl(DocWindow* doc)
 {
-	// Get page
-	DocWindow* doc = get_current_document();
-	if(doc == NULL)
-	{
-		throw std::logic_error(
-			"Gobby::Window::on_document_save:\n"
-			"No document opened"
-		);
-	}
-
 	// Is there already a path for this document?
 	std::string path = m_document_settings.get_path(doc->get_info() );
 	if(!path.empty() )
@@ -766,8 +758,24 @@ bool Gobby::Window::handle_document_save()
 	else
 	{
 		// Open save as dialog otherwise
-		return handle_document_save_as();
+		return handle_document_save_as_impl(doc);
 	}
+}
+
+bool Gobby::Window::handle_document_save()
+{
+	// Get page
+	DocWindow* doc = get_current_document();
+
+	if(doc == NULL)
+	{
+		throw std::logic_error(
+			"Gobby::Window::on_document_save:\n"
+			"No document opened"
+		);
+	}
+
+	return handle_document_save_impl(doc);
 }
 
 void Gobby::Window::on_document_save_as()
@@ -787,10 +795,19 @@ bool Gobby::Window::handle_document_save_as()
 		);
 	}
 
+	return handle_document_save_as_impl(doc);
+}
+
+bool Gobby::Window::handle_document_save_as_impl(DocWindow* doc)
+{
+	// Window title
+	obby::format_string str(_("Save document \"%0%\"") );
+	str << doc->get_info().get_title();
+
 	// Setup dialog
 	EncodingFileChooserDialog dlg(
 		*this,
-		_("Save current document"),
+		str.str(),
 		Gtk::FILE_CHOOSER_ACTION_SAVE
 	);
 
@@ -839,6 +856,15 @@ bool Gobby::Window::handle_document_save_as()
 		return true;
 	}
 	return false;
+}
+
+void Gobby::Window::on_document_save_all()
+{
+	for(int i = 0; i < m_folder.get_n_pages(); ++i)
+	{
+		Widget* page = m_folder.get_nth_page(i);
+		handle_document_save_impl(static_cast<DocWindow*>(page) );
+	}
 }
 
 void Gobby::Window::on_document_close()

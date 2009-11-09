@@ -126,8 +126,11 @@ protected:
 	void on_document_open();
 	void on_document_save();
 	bool handle_document_save();
+	bool handle_document_save_impl(DocWindow* doc);
 	void on_document_save_as();
 	bool handle_document_save_as();
+	bool handle_document_save_as_impl(DocWindow* doc);
+	void on_document_save_all();
 	void on_document_close();
 
 	void on_edit_search();

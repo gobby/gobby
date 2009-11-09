@@ -48,6 +48,7 @@ namespace {
 		"      <menuitem action=\"SessionDocumentOpen\" />"
 		"      <menuitem action=\"SessionDocumentSave\" />"
 		"      <menuitem action=\"SessionDocumentSaveAs\" />"
+		"      <menuitem action=\"SessionDocumentSaveAll\" />"
 		"      <menuitem action=\"SessionDocumentClose\" />"
 		"    </menu>"
 		"    <menu action=\"MenuEdit\">"
@@ -320,6 +321,14 @@ Gobby::Header::Header(const ApplicationState& state,
 		)
 	),
 
+	action_session_document_save_all(
+		Gtk::Action::create(
+			"SessionDocumentSaveAll",
+			_("Save all documents"),
+			_("Saves all documents")
+		)
+	),
+
 	action_session_document_close(
 		Gtk::Action::create(
 			"SessionDocumentClose",
@@ -505,6 +514,11 @@ Gobby::Header::Header(const ApplicationState& state,
 	);
 
 	set_action_auto(
+		action_session_document_save_all, state,
+		APPLICATION_DOCUMENT, APPLICATION_NONE
+	);
+
+	set_action_auto(
 		action_session_document_close, state,
 		APPLICATION_DOCUMENT, APPLICATION_NONE
 	);
@@ -606,6 +620,7 @@ Gobby::Header::Header(const ApplicationState& state,
 	group_session->add(action_session_document_open);
 	group_session->add(action_session_document_save);
 	group_session->add(action_session_document_save_as);
+	group_session->add(action_session_document_save_all);
 	group_session->add(action_session_document_close);
 
 	group_edit->add(action_edit);
