@@ -52,6 +52,9 @@ public:
 	}
 
 	Gtk::Widget* widget() const { return m_widget; }
+	
+	Glib::ustring m_simple_desc;
+	Glib::ustring m_detail_desc;
 protected:
 	Gtk::Widget* m_widget;
 	sigc::connection m_conn;
@@ -86,8 +89,11 @@ Gobby::StatusBar::~StatusBar()
 Gobby::StatusBar::MessageHandle
 Gobby::StatusBar::add_message(MessageType type,
                               const Glib::ustring& message,
-                              unsigned int timeout)
+                              const Glib::ustring& dialog_message)
 {
+	if (m_list.size() >= 12)
+		Gobby::StatusBar::remove_message(m_list.begin());
+
 	Gtk::HBox* bar = Gtk::manage(new Gtk::HBox);
 
 	Gtk::Image* image = Gtk::manage(new Gtk::Image(
@@ -105,35 +111,47 @@ Gobby::StatusBar::add_message(MessageType type,
 	gtk_widget_style_get(GTK_WIDGET(m_bar_position.gobj()),
 	                     "shadow-type", &shadow_type, NULL);
 	Gtk::Frame* frame = Gtk::manage(new Gtk::Frame);
+	Gtk::EventBox *eventbox = Gtk::manage(new Gtk::EventBox);
+
 	frame->set_shadow_type(static_cast<Gtk::ShadowType>(shadow_type));
-	frame->add(*bar);
+	frame->add(*eventbox);
+	eventbox->add(*bar);
 	bar->show();
 
 	pack_start(*frame, Gtk::PACK_EXPAND_WIDGET);
 	reorder_child(*frame, 0);
-	frame->show();
 
 	m_list.push_back(new Message(frame));
-	MessageHandle iter(m_list.end());
-	--iter;
+	Gobby::StatusBar::MessageHandle iter(--m_list.end());
+	(*iter)->m_simple_desc = message;
+	(*iter)->m_detail_desc = dialog_message;
 
-	if(timeout)
-	{
-		sigc::slot<bool> slot(sigc::bind_return(
+	eventbox->signal_button_press_event().connect(
+		sigc::bind_return(
 			sigc::bind(
 				sigc::mem_fun(
 					*this,
-					&StatusBar::remove_message),
+					&StatusBar::on_message_clicked),
 				iter),
 			false));
-		
-		sigc::connection timeout_conn =
-			Glib::signal_timeout().connect_seconds(slot, timeout);
 
-		(*iter)->set_timeout_connection(timeout_conn);
-	}
+	eventbox->show();
+	frame->show();
 
 	return iter;
+}
+
+Gobby::StatusBar::MessageHandle
+Gobby::StatusBar::add_info_message(const Glib::ustring& message)
+{
+	return Gobby::StatusBar::add_message(INFO, message, "");
+}
+
+Gobby::StatusBar::MessageHandle
+Gobby::StatusBar::add_error_message(const Glib::ustring& brief_desc,
+                                    const Glib::ustring& detailed_desc)
+{
+	return Gobby::StatusBar::add_message(ERROR, brief_desc, detailed_desc);
 }
 
 void Gobby::StatusBar::remove_message(const MessageHandle& handle)
@@ -146,6 +164,34 @@ void Gobby::StatusBar::remove_message(const MessageHandle& handle)
 Gobby::StatusBar::MessageHandle Gobby::StatusBar::invalid_handle()
 {
 	return m_list.end();
+}
+
+void Gobby::StatusBar::on_message_clicked(GdkEventButton* button,
+                                          const MessageHandle& handler)
+{
+	const Glib::ustring& simple = (*handler)->m_simple_desc;
+	const Glib::ustring& detail = (*handler)->m_detail_desc;
+
+	if(!detail.empty())
+	{
+		if (button->button == 1)
+		{
+			Gtk::MessageDialog *dialog = new Gtk::MessageDialog(
+				simple,
+				false,
+				Gtk::MESSAGE_ERROR,
+				Gtk::BUTTONS_CLOSE,
+				false
+			);
+
+			dialog->set_secondary_text(detail, false);
+			dialog->run();
+
+			delete dialog;
+		}
+
+		remove_message(handler);
+	}
 }
 
 void Gobby::StatusBar::on_document_removed(DocWindow& document)

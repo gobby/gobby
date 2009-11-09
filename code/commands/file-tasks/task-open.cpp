@@ -43,10 +43,10 @@ void Gobby::TaskOpen::run()
 			sigc::mem_fun(*this, &TaskOpen::on_query_info),
 			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 
-		m_handle = get_status_bar().add_message(
-			StatusBar::INFO, Glib::ustring::compose(
+		m_handle = get_status_bar().add_info_message(
+			Glib::ustring::compose(
 				_("Querying \"%1\"..."),
-				m_file->get_uri()), 0);
+				m_file->get_uri()));
 	}
 	catch(const Gio::Error& ex)
 	{
@@ -100,10 +100,11 @@ void Gobby::TaskOpen::on_location_response(int response_id)
 
 void Gobby::TaskOpen::error(const Glib::ustring& message)
 {
-	get_status_bar().add_message(StatusBar::ERROR,
+	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			_("Failed to open document \"%1\": %2"),
-			m_file->get_uri(), message), 5);
+			_("Failed to open document \"%1\""),
+			m_file->get_uri()),
+		message);
 
 	finish();
 }

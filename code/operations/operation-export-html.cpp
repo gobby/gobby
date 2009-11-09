@@ -449,11 +449,10 @@ Gobby::OperationExportHtml::OperationExportHtml(Operations& operations,
 	m_file->replace_async(
 		sigc::mem_fun(*this, &OperationExportHtml::on_file_replace));
 
-	m_message_handle = get_status_bar().add_message(
-		StatusBar::INFO,
+	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(
 			_("Exporting document %1 to %2 in HTML..."),
-			document.get_title(), uri), 0);
+			document.get_title(), uri));
 }
 
 Gobby::OperationExportHtml::~OperationExportHtml()
@@ -522,11 +521,10 @@ void Gobby::OperationExportHtml::on_stream_write(
 
 void Gobby::OperationExportHtml::error(const Glib::ustring& message)
 {
-	get_status_bar().add_message(
-		StatusBar::ERROR,
+	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			_("Failed to export document %1 to HTML: %2"),
-			m_file->get_uri(), message), 5);
+			_("Failed to export document %1 to HTML"), m_file->get_uri()),
+		message);
 
 	fail();
 }

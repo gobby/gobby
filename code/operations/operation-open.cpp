@@ -84,10 +84,9 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 		m_file->read_async(sigc::mem_fun(
 			*this, &OperationOpen::on_file_read));
 
-		m_message_handle = get_status_bar().add_message(
-			StatusBar::INFO,
+		m_message_handle = get_status_bar().add_info_message(
 			Glib::ustring::compose(
-				_("Opening document %1..."), uri), 0);
+				_("Opening document %1..."), uri));
 
 		m_parent.signal_node_removed().connect(
 			sigc::mem_fun(
@@ -433,11 +432,11 @@ void Gobby::OperationOpen::on_request_finished(InfcBrowserIter* iter)
 
 void Gobby::OperationOpen::error(const Glib::ustring& message)
 {
-	get_status_bar().add_message(
-		StatusBar::ERROR,
+	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			_("Failed to open document \"%1\": %2"),
-			m_file->get_uri(), message), 5);
+			_("Failed to open document \"%1\""),
+			m_file->get_uri()),
+		message);
 
 	fail();
 }

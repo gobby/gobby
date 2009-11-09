@@ -38,9 +38,8 @@ Gobby::OperationDelete::OperationDelete(Operations& operations,
 		G_OBJECT(m_request), "finished",
 		G_CALLBACK(on_request_finished_static), this);
 
-	m_message_handle = get_status_bar().add_message(
-		StatusBar::INFO,
-		Glib::ustring::compose(_("Removing node %1..."), m_name), 0);
+	m_message_handle = get_status_bar().add_info_message(
+		Glib::ustring::compose(_("Removing node %1..."), m_name));
 }
 
 Gobby::OperationDelete::~OperationDelete()
@@ -54,10 +53,9 @@ Gobby::OperationDelete::~OperationDelete()
 
 void Gobby::OperationDelete::on_request_failed(const GError* error)
 {
-	get_status_bar().add_message(
-		StatusBar::ERROR,
-		Glib::ustring::compose(_("Failed to delete node %1: %2"),
-			m_name, error->message), 5);
+	get_status_bar().add_error_message(
+		Glib::ustring::compose(_("Failed to delete node %1"), m_name),
+		error->message);
 
 	fail();
 }

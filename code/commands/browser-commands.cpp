@@ -249,13 +249,12 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 			RequestNode& node = m_request_map[request];
 			node.commands = this;
 			node.browser = browser;
-			node.handle = m_status_bar.add_message(
-				StatusBar::INFO,
+			node.handle = m_status_bar.add_info_message(
 				Glib::ustring::compose(
 					_("Subscribing to %1..."),
 					Glib::ustring(
 						infc_browser_iter_get_name(
-							browser, iter))), 0);
+							browser, iter))));
 
 			g_signal_connect(
 				request, "finished",
@@ -267,9 +266,8 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 		}
 		else
 		{
-			m_status_bar.add_message(
-				StatusBar::INFO,
-				_("Subscription already in progress"), 2);
+			m_status_bar.add_info_message(
+				_("Subscription already in progress"));
 		}
 	}
 }
@@ -374,10 +372,9 @@ void Gobby::BrowserCommands::on_failed(InfcNodeRequest* request,
 
 	m_request_map.erase(iter);
 
-	m_status_bar.add_message(
-		StatusBar::ERROR,
-		Glib::ustring::compose(_("Subscription failed: %1"),
-			error->message), 5);
+	m_status_bar.add_error_message(
+		_("Subscription failed"),
+		error->message);
 }
 
 void Gobby::BrowserCommands::on_synchronization_failed(InfSession* session,

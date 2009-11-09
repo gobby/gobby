@@ -22,6 +22,8 @@
 #include "folder.hpp"
 
 #include <gtkmm/box.h>
+#include <gtkmm/eventbox.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/statusbar.h>
 
 #include <glibmm/ustring.h>
@@ -53,15 +55,20 @@ public:
 	StatusBar(Folder& folder, const Preferences& preferences);
 	~StatusBar();
 
-	MessageHandle add_message(MessageType type,
-	                          const Glib::ustring& message,
-	                          unsigned int timeout); // timeout in seconds
+	MessageHandle add_info_message(const Glib::ustring& message);
+
+	MessageHandle add_error_message(const Glib::ustring& brief_desc,
+	                                const Glib::ustring& detailed_desc);
 
 	void remove_message(const MessageHandle& handle);
 
 	MessageHandle invalid_handle();
 
 protected:
+	MessageHandle add_message(MessageType type,
+	                          const Glib::ustring& message,
+	                          const Glib::ustring& dialog_message);
+
 	static void on_mark_set_static(GtkTextBuffer* buffer,
 	                               GtkTextIter* location,
 	                               GtkTextMark* mark,
@@ -75,6 +82,9 @@ protected:
 	{
 		static_cast<StatusBar*>(user_data)->on_changed();
 	}
+
+	void on_message_clicked(GdkEventButton* button,
+	                        const MessageHandle& message);
 
 	void on_document_removed(DocWindow& document);
 	void on_document_changed(DocWindow* document);

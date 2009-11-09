@@ -111,7 +111,8 @@ protected:
 	                    guint port, const Glib::ustring& hostname,
 	                    unsigned int device_index);
 	void on_resolv_error(ResolvHandle* handle,
-	                     const std::runtime_error& error);
+	                     const std::runtime_error& error,
+	                     const Glib::ustring& hostname);
 
 	void on_security_policy_changed();
 	void on_trust_file_changed();

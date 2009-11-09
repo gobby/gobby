@@ -1,3 +1,19 @@
+2009-11-09  Gabríel A. Pétursson  <gabrielp@simnet.is>
+
+	* code/commands/browser-commands.cpp:
+	* code/commands/file-tasks/task-open.cpp:
+	* code/core/browser.cpp:
+	* code/core/statusbar.cpp:
+	* code/core/statusbar.hpp:
+	* code/dialogs/find-dialog.cpp:
+	* code/operations/operation-delete.cpp:
+	* code/operations/operation-export-html.cpp:
+	* code/operations/operation-new.cpp:
+	* code/operations/operation-open-multiple.cpp:
+	* code/operations/operation-open.cpp:
+	* code/operations/operation-save.cpp: Minor refactoring. Added detailed
+	status bar error messages.
+
 2009-11-07  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/browser-context-commands.cpp (on_open_response): Use

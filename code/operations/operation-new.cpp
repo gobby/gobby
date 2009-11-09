@@ -51,11 +51,10 @@ Gobby::OperationNew::OperationNew(Operations& operations,
 		G_OBJECT(m_request), "finished",
 		G_CALLBACK(on_request_finished_static), this);
 
-	m_message_handle = get_status_bar().add_message(
-		StatusBar::INFO,
+	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(
 			directory ? _("Creating directory %1...")
-			          : _("Creating document %1..."), name), 0);
+			          : _("Creating document %1..."), name));
 }
 
 Gobby::OperationNew::~OperationNew()
@@ -69,12 +68,12 @@ Gobby::OperationNew::~OperationNew()
 
 void Gobby::OperationNew::on_request_failed(const GError* error)
 {
-	get_status_bar().add_message(
-		StatusBar::ERROR,
+	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			m_directory ? _("Failed to create directory %1: %2")
-			            : _("Failed to create document %1: %2"),
-			m_name, error->message), 5);
+			m_directory ? _("Failed to create directory %1")
+			            : _("Failed to create document %1"),
+			m_name),
+		error->message);
 
 	fail();
 }

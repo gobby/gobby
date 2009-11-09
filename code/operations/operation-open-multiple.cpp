@@ -154,10 +154,10 @@ void Gobby::OperationOpenMultiple::single_error(
 		const info_list::iterator& iter,
 		const Glib::ustring& message)
 {
-	get_status_bar().add_message(StatusBar::ERROR,
+	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			_("Failed to open document \"%1\": %2"),
-			iter->uri, message), 5);
+			_("Failed to open document \"%1\""), iter->uri),
+		message);
 
 	m_infos.erase(iter);
 
@@ -168,10 +168,9 @@ void Gobby::OperationOpenMultiple::single_error(
 
 void Gobby::OperationOpenMultiple::fatal_error(const Glib::ustring& message)
 {
-	get_status_bar().add_message(StatusBar::ERROR,
-		Glib::ustring::compose(
-			_("Failed to open multiple documents: %1"),
-			message), 5);
+	get_status_bar().add_error_message(
+		_("Failed to open multiple documents"),
+		message);
 
 	fail();
 }

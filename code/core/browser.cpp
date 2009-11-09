@@ -273,8 +273,10 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 		GError* error = NULL;
 		if(!inf_tcp_connection_open(connection, &error))
 		{
-			m_status_bar.add_message(StatusBar::ERROR,
-			                         error->message, 5);
+			m_status_bar.add_error_message(
+				Glib::ustring::compose(
+					_("Connection to \"%1\" failed"),
+					hostname), error->message);
 			g_error_free(error);
 		}
 		else
@@ -312,7 +314,8 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 }
 
 void Gobby::Browser::on_resolv_error(ResolvHandle* handle,
-                                     const std::runtime_error& error)
+                                     const std::runtime_error& error,
+                                     const Glib::ustring& hostname)
 {
 	ResolvMap::iterator iter = m_resolv_map.find(handle);
 	g_assert(iter != m_resolv_map.end());
@@ -320,7 +323,10 @@ void Gobby::Browser::on_resolv_error(ResolvHandle* handle,
 	m_status_bar.remove_message(iter->second.message_handle);
 	m_resolv_map.erase(iter);
 
-	m_status_bar.add_message(StatusBar::ERROR, error.what(), 5);
+	m_status_bar.add_error_message(
+		Glib::ustring::compose(_("Could not resolve \"%1\""),
+		                       hostname),
+		error.what());
 }
 
 bool Gobby::Browser::get_selected(InfcBrowser** browser,
@@ -387,11 +393,13 @@ void Gobby::Browser::connect_to_host(Glib::ustring str)
 		device_index = if_nametoindex(device_name.c_str());
 		if(device_index == 0)
 		{
-			m_status_bar.add_message(
-				StatusBar::ERROR,
+			m_status_bar.add_error_message(
+				Glib::ustring::compose(
+					_("Connection to \"%1\" failed"),
+					host),
 				Glib::ustring::compose(
 					_("Device \"%1\" does not exist"),
-					device_name), 5);
+					device_name));
 		}
 #endif
 	}
@@ -420,12 +428,14 @@ void Gobby::Browser::connect_to_host(Glib::ustring str)
 	        sigc::bind(
 			sigc::mem_fun(*this, &Browser::on_resolv_done),
 			host, device_index),
-	        sigc::mem_fun(*this, &Browser::on_resolv_error));
+	        sigc::bind(
+			sigc::mem_fun(*this, &Browser::on_resolv_error),
+			host));
 
 	StatusBar::MessageHandle message_handle =
-		m_status_bar.add_message(
-			StatusBar::INFO, Glib::ustring::compose(
-				_("Resolving %1..."), host), 0);
+		m_status_bar.add_info_message(
+			Glib::ustring::compose(_("Resolving \"%1\"..."),
+			                       host));
 
 	m_resolv_map[resolv_handle].message_handle = message_handle;
 }
