@@ -84,12 +84,12 @@ protected:
 	}
 
 	void on_message_clicked(GdkEventButton* button,
-	                        const MessageHandle& message);
+	                        const MessageHandle& handle);
 
 	void on_document_removed(SessionView& view);
 	void on_document_changed(SessionView* view);
 	void on_view_changed();
-	
+
 	void on_mark_set(GtkTextMark* mark);
 	void on_changed();
 

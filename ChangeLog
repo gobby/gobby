@@ -1,3 +1,9 @@
+2009-11-09  Benjamin Herr  <ben@0x539.de>
+
+	* code/core/statusbar.cpp:
+	* code/core/statusbar.hpp: Minor refactoring to the status bar message
+	change. Also made more stuff a detail of StatusBar::Message.
+
 2009-11-08  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/browser-commands.hpp:
