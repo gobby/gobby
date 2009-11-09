@@ -1,6 +1,14 @@
 2009-11-09  Benjamin Herr  <ben@0x539.de>
 
 	* code/core/statusbar.cpp:
+	* code/core/statusbar.hpp: Add hide_message that only removes a
+	message widget without removing the (then-null) pointer from the
+	m_list. hide_message can be called multiple times, thus avoiding the
+	crash when an info message was removed twice.
+
+2009-11-09  Benjamin Herr  <ben@0x539.de>
+
+	* code/core/statusbar.cpp:
 	* code/core/statusbar.hpp: Minor refactoring to the status bar message
 	change. Also made more stuff a detail of StatusBar::Message.
 

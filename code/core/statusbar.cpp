@@ -62,6 +62,8 @@ public:
 		dialog.run();
 	}
 
+	bool is_error() { return !m_detail_desc.empty(); }
+
 	Gtk::Widget* widget() const { return m_widget; }
 
 protected:
@@ -73,7 +75,7 @@ protected:
 Gobby::StatusBar::StatusBar(Folder& folder,
                             const Preferences& preferences):
 	Gtk::HBox(false, 2), m_folder(folder), m_preferences(preferences),
-	m_current_view(NULL), m_position_context_id(0)
+	m_current_view(NULL), m_position_context_id(0), m_visible_messages(0)
 {
 	pack_end(m_bar_position, Gtk::PACK_SHRINK);
 	m_bar_position.set_size_request(200, -1);
@@ -101,8 +103,28 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
                               const Glib::ustring& message,
                               const Glib::ustring& dialog_message)
 {
-	if(m_list.size() >= 12)
-		Gobby::StatusBar::remove_message(m_list.begin());
+	if(m_visible_messages >= 12)
+	{
+		for(MessageHandle iter = m_list.begin();
+		    iter != m_list.end();
+		    ++iter)
+		{
+			if ((*iter)->is_error())
+			{
+				remove_message(iter);
+				break;
+			}
+			else
+			{
+				// only hide message because whoever installed
+				// it is expecting to be able to call
+				// remove_message on it
+				hide_message(iter);
+				if (m_visible_messages < 12)
+					break;
+			}
+		}
+	}
 
 	Gtk::HBox* bar = Gtk::manage(new Gtk::HBox);
 
@@ -123,6 +145,7 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 	Gtk::Frame* frame = Gtk::manage(new Gtk::Frame);
 
 	m_list.push_back(new Message(frame, message, dialog_message));
+	++m_visible_messages;
 	Gobby::StatusBar::MessageHandle iter(--m_list.end());
 
 	if(dialog_message.empty())
@@ -170,9 +193,20 @@ Gobby::StatusBar::add_error_message(const Glib::ustring& brief_desc,
 
 void Gobby::StatusBar::remove_message(const MessageHandle& handle)
 {
-	remove(*(*handle)->widget());
-	delete *handle;
+	hide_message(handle);
 	m_list.erase(handle);
+}
+
+void Gobby::StatusBar::hide_message(const MessageHandle& handle)
+{
+	if(*handle != 0)
+	{
+		g_assert(m_visible_messages > 0);
+		--m_visible_messages;
+		remove(*(*handle)->widget());
+		delete *handle;
+		*handle = 0;
+	}
 }
 
 Gobby::StatusBar::MessageHandle Gobby::StatusBar::invalid_handle()

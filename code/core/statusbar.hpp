@@ -61,6 +61,7 @@ public:
 	                                const Glib::ustring& detailed_desc);
 
 	void remove_message(const MessageHandle& handle);
+	void hide_message(const MessageHandle& handle);
 
 	MessageHandle invalid_handle();
 
@@ -98,6 +99,7 @@ protected:
 	Folder& m_folder;
 	const Preferences& m_preferences;
 	MessageList m_list;
+	unsigned int m_visible_messages;
 
 	Gtk::Statusbar m_bar_position;
 	TextSessionView* m_current_view;
