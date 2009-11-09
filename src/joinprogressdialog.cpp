@@ -173,7 +173,7 @@ Gdk::Color Gobby::JoinProgressDialog::ColorPrompt::get_color() const
 }
 
 Gobby::JoinProgressDialog::SessionPasswordPrompt::
-	SessionPasswordPrompt(Gtk::Window& parent):
+	SessionPasswordPrompt(Gtk::Window& parent, bool password_tried):
 	Prompt(
 		parent,
 		obby::login::errstring(
@@ -185,6 +185,13 @@ Gobby::JoinProgressDialog::SessionPasswordPrompt::
 	),
 	m_label(_("Session password:"), Gtk::ALIGN_RIGHT)
 {
+	// It's actually the first password try, so change the title to not
+	// imply that the password is wrong.
+	if(!password_tried)
+	{
+		set_title(_("Session password required") );
+	}
+
 	m_entry.signal_changed().connect(
 		sigc::mem_fun(*this, &SessionPasswordPrompt::on_change)
 	);
@@ -308,7 +315,8 @@ Gobby::JoinProgressDialog::JoinProgressDialog(Gtk::Window& parent,
 	ProgressDialog(_("Joining obby session..."), parent),
 	m_config_entry(config_entry), m_hostname(hostname), m_port(port),
 	m_address(addr ? addr->clone() : NULL), m_username(username),
-	m_color(color), m_got_welcome(false), m_got_done(false)
+	m_color(color), m_got_welcome(false), m_got_done(false),
+	m_password_tried(false)
 {
 	obby::format_string str("Connecting to %0%...");
 	str << hostname;
@@ -514,10 +522,11 @@ bool Gobby::JoinProgressDialog::on_prompt_colour(connection_settings& settings)
 bool Gobby::JoinProgressDialog::
 	on_prompt_global_password(connection_settings& settings)
 {
-	SessionPasswordPrompt prompt(*this);
+	SessionPasswordPrompt prompt(*this, m_password_tried);
 	if(prompt.run() == Gtk::RESPONSE_OK)
 	{
 		settings.global_password = prompt.get_password();
+		m_password_tried = true;
 		return true;
 	}
 	else

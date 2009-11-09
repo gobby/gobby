@@ -96,7 +96,8 @@ private:
 	class SessionPasswordPrompt: public Prompt
 	{
 	public:
-		SessionPasswordPrompt(Gtk::Window& parent);
+		SessionPasswordPrompt(Gtk::Window& parent,
+		                      bool password_tried);
 
 		Glib::ustring get_password() const;
 	protected:
@@ -162,6 +163,8 @@ private:
 	bool m_got_done;
 	// Got welcome packet
 	bool m_got_welcome;
+	// First time password question
+	bool m_password_tried;
 };
 
 } // namespace Gobby

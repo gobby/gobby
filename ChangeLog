@@ -1,3 +1,10 @@
+2009-11-09  Philipp Kern  <phil@0x539.de>
+
+	* inc/joinprogressdialog.cpp:
+	* src/joinprogressdialog.cpp: set "Session password required" in the
+	  title instead of "Wrong session password" on first try (Debian bug
+	  #544728)
+
 2009-10-10  Armin Burgmeier  <armin@arbur.net>
 
 	* po/uk.po: Added Ukrainian translation by Yuri Chornoivan. Bug #478.
