@@ -1,3 +1,17 @@
+2009-11-09  Gabríel A. Pétursson  <gabrielp@simnet.is>, Armin Burgmeier <armin@arbur.net>
+
+	* code/core/preferences.hpp:
+	* code/core/preferences.cpp: Added scheme_id preference option to
+	appearance.
+
+	* code/core/textsessionview.hpp:
+	* code/core/textsessionview.cpp: Set GtkSourceView style scheme
+	according to selected scheme ID.
+
+	* code/dialogs/preferences-dialog.hpp:
+	* code/dialogs/preferences-dialog.cpp: Add a list to choose one's
+	favoured style scheme to the appearance tab.
+
 2009-11-09  Benjamin Herr  <ben@0x539.de>
 
 	* code/core/statusbar.cpp:

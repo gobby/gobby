@@ -189,7 +189,8 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 			&TextSessionView::on_whitespace_display_changed));
 	m_preferences.appearance.font.signal_changed().connect(
 		sigc::mem_fun(*this, &TextSessionView::on_font_changed));
-
+	m_preferences.appearance.scheme_id.signal_changed().connect(
+		sigc::mem_fun(*this, &TextSessionView::on_scheme_changed));
 	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
 	gtk_source_view_set_insert_spaces_instead_of_tabs(
 		m_view, m_preferences.editor.tab_spaces);
@@ -227,6 +228,8 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	scroll->show();
 
 	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
+	
+	gtk_source_buffer_set_style_scheme(m_buffer, gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(), static_cast<Glib::ustring>(preferences.appearance.scheme_id).c_str()));
 }
 
 void Gobby::TextSessionView::get_cursor_position(unsigned int& row,
@@ -420,6 +423,11 @@ void Gobby::TextSessionView::on_font_changed()
 	gtk_widget_modify_font(
 		GTK_WIDGET(m_view),
 		const_cast<PangoFontDescription*>(desc.gobj()));
+}
+
+void Gobby::TextSessionView::on_scheme_changed()
+{
+	gtk_source_buffer_set_style_scheme(m_buffer, gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(), static_cast<Glib::ustring>(m_preferences.appearance.scheme_id).c_str()));
 }
 
 bool Gobby::TextSessionView::

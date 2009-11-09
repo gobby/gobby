@@ -21,8 +21,11 @@
 #include "util/i18n.hpp"
 
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/stock.h>
 #include <stdexcept>
+
+#include <gtksourceview/gtksourcestyleschememanager.h>
 
 namespace
 {
@@ -205,7 +208,7 @@ Gobby::PreferencesDialog::Group::Group(const Glib::ustring& title):
 
 void Gobby::PreferencesDialog::Group::add(Gtk::Widget& widget)
 {
-	m_box.pack_start(widget, Gtk::PACK_SHRINK);
+	m_box.pack_start(widget, Gtk::PACK_EXPAND_WIDGET);
 }
 
 Gobby::PreferencesDialog::Page::Page():
@@ -219,9 +222,9 @@ Gobby::PreferencesDialog::Page::Page():
 	set_border_width(12);
 }
 
-void Gobby::PreferencesDialog::Page::add(Gtk::Widget& widget)
+void Gobby::PreferencesDialog::Page::add(Gtk::Widget& widget, bool expand)
 {
-	m_box.pack_start(widget, Gtk::PACK_SHRINK);
+	m_box.pack_start(widget, expand ? Gtk::PACK_EXPAND_WIDGET : Gtk::PACK_SHRINK);
 }
 
 Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
@@ -289,8 +292,8 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	// Disable until we support self-hosting:
 	// m_group_paths.show();
 
-	add(m_group_settings);
-	add(m_group_paths);
+	add(m_group_settings, false);
+	add(m_group_paths, false);
 }
 
 Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
@@ -383,10 +386,10 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_saving.add(m_box_autosave_interval);
 	m_group_saving.show();
 
-	add(m_group_tab);
-	add(m_group_indentation);
-	add(m_group_homeend);
-	add(m_group_saving);
+	add(m_group_tab, false);
+	add(m_group_indentation, false);
+	add(m_group_homeend, false);
+	add(m_group_saving, false);
 }
 
 void Gobby::PreferencesDialog::Editor::on_autosave_enabled_toggled()
@@ -500,12 +503,12 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	m_group_spaces.add(m_cmb_spaces_display);
 	m_group_spaces.show();
 
-	add(m_group_wrap);
-	add(m_group_linenum);
-	add(m_group_curline);
-	add(m_group_margin);
-	add(m_group_bracket);
-	add(m_group_spaces);
+	add(m_group_wrap, false);
+	add(m_group_linenum, false);
+	add(m_group_curline, false);
+	add(m_group_margin, false);
+	add(m_group_bracket, false);
+	add(m_group_spaces, false);
 }
 
 void Gobby::PreferencesDialog::View::on_wrap_text_toggled()
@@ -521,7 +524,10 @@ void Gobby::PreferencesDialog::View::on_margin_display_toggled()
 Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
 	m_group_toolbar(_("Toolbar") ),
 	m_group_font(_("Font") ),
-	m_cmb_toolbar_style(preferences.appearance.toolbar_style)
+	m_group_scheme(_("Color Scheme")),
+	m_cmb_toolbar_style(preferences.appearance.toolbar_style),
+	m_list(Gtk::ListStore::create(m_columns)),
+	m_tree(m_list)
 {
 	const Pango::FontDescription& font = preferences.appearance.font;
 
@@ -545,8 +551,68 @@ Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
 	m_group_font.add(m_btn_font);
 	m_group_font.show();
 
-	add(m_group_toolbar);
-	add(m_group_font);
+	Gtk::TreeViewColumn column_name;
+	Gtk::CellRendererText renderer_name;
+	column_name.pack_start(renderer_name, false);
+	column_name.add_attribute(renderer_name.property_text(), m_columns.name);
+
+	m_tree.append_column(column_name);//"Scheme Name", m_columns.name);
+	m_tree.append_column("Scheme description", m_columns.description);
+
+	Pango::AttrList list;
+	Pango::Attribute attr(Pango::Attribute::create_attr_weight(Pango::WEIGHT_BOLD));
+	list.insert(attr);
+	renderer_name.property_attributes() = list;
+
+	m_tree.set_headers_visible(false);
+	m_tree.show();
+
+	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
+	scroll->set_shadow_type(Gtk::SHADOW_IN);
+	scroll->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	scroll->add(m_tree);
+	scroll->show();
+
+	m_group_scheme.add(*scroll);
+	m_group_scheme.show();
+
+	GtkSourceStyleSchemeManager* manager = gtk_source_style_scheme_manager_get_default();
+	const gchar* const* ids = gtk_source_style_scheme_manager_get_scheme_ids(manager);
+
+	Glib::ustring current_scheme = preferences.appearance.scheme_id;
+
+	for (const gchar* const* id = ids; *id != NULL; ++id)
+	{
+		GtkSourceStyleScheme* scheme = gtk_source_style_scheme_manager_get_scheme(manager, *id);
+		const gchar* name = gtk_source_style_scheme_get_name(scheme);
+		const gchar* desc = gtk_source_style_scheme_get_description(scheme);
+
+		Gtk::TreeIter iter = m_list->append();
+		(*iter)[m_columns.name] = name;
+		(*iter)[m_columns.description] = desc;
+		(*iter)[m_columns.scheme] = scheme;
+
+		if (current_scheme == gtk_source_style_scheme_get_id(scheme))
+			m_tree.get_selection()->select(iter);
+	}
+
+	m_tree.get_selection()->signal_changed().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &Appearance::on_scheme_changed),
+			sigc::ref(preferences)));
+
+	m_list->set_sort_column_id(m_columns.name, Gtk::SORT_ASCENDING); // This should do it
+
+	add(m_group_toolbar, false);
+	add(m_group_font, false);
+	add(m_group_scheme, true);
+}
+
+void Gobby::PreferencesDialog::Appearance::on_scheme_changed(Preferences& preferences)
+{
+	Gtk::TreeIter iter = m_tree.get_selection()->get_selected();
+	GtkSourceStyleScheme* scheme = (*iter)[m_columns.scheme];
+	preferences.appearance.scheme_id = gtk_source_style_scheme_get_id(scheme);
 }
 
 Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
@@ -578,8 +644,8 @@ Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
 	m_group_connection_policy.add(m_cmb_connection_policy);
 	m_group_connection_policy.show();
 
-	add(m_group_trust_file);
-	add(m_group_connection_policy);
+	add(m_group_trust_file, false);
+	add(m_group_connection_policy, false);
 }
 
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,

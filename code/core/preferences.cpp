@@ -93,7 +93,8 @@ Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
 	show_toolbar(entry.get_value<bool>("show-toolbar", true)),
 	show_statusbar(entry.get_value<bool>("show-statusbar", true)),
 	show_browser(entry.get_value<bool>("show-browser", true)),
-	show_userlist(entry.get_value<bool>("show-userlist", true))
+	show_userlist(entry.get_value<bool>("show-userlist", true)),
+	scheme_id(entry.get_value<Glib::ustring>("scheme-id", "classic"))
 {
 }
 
@@ -112,6 +113,7 @@ void Gobby::Preferences::Appearance::
 	entry.set_value("show-statusbar", show_statusbar);
 	entry.set_value("show-browser", show_browser);
 	entry.set_value("show-userlist", show_userlist);
+	entry.set_value("scheme-id", scheme_id);
 }
 
 Gobby::Preferences::Security::Security(Config::ParentEntry& entry):

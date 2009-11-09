@@ -112,7 +112,7 @@ public:
 	{
 	public:
 		Page();
-		void add(Gtk::Widget& widget);
+		void add(Gtk::Widget& widget, bool expand);
 
 	protected:
 		Gtk::VBox m_box;
@@ -211,11 +211,32 @@ public:
 		Appearance(Preferences& preferences);
 
 	protected:
+		class Columns: public Gtk::TreeModelColumnRecord
+		{
+		public:
+			Gtk::TreeModelColumn<GtkSourceStyleScheme*> scheme;
+			Gtk::TreeModelColumn<Glib::ustring> name;
+			Gtk::TreeModelColumn<Glib::ustring> description;
+			Columns()
+			{
+				add(scheme);
+				add(name);
+				add(description);
+			}
+		};
+
+		void on_scheme_changed(Preferences& preferences);
+
 		Group m_group_toolbar;
 		Group m_group_font;
+		Group m_group_scheme;
 
 		PreferencesComboBox<Gtk::ToolbarStyle> m_cmb_toolbar_style;
 		Gtk::FontButton m_btn_font;
+
+		Columns m_columns;
+		Glib::RefPtr<Gtk::ListStore> m_list;
+		Gtk::TreeView m_tree;
 	};
 
 	class Security: public Page

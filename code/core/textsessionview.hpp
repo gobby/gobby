@@ -102,6 +102,7 @@ protected:
 	void on_whitespace_display_changed();
 
 	void on_font_changed();
+	void on_scheme_changed();
 
 	bool on_query_tooltip(int x, int y, bool keyboard_mode,
 	                      const Glib::RefPtr<Gtk::Tooltip>& tooltip);

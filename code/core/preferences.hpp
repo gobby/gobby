@@ -24,6 +24,7 @@
 #include "features.hpp"
 
 #include <gtksourceview/gtksourceview.h>
+#include <gtksourceview/gtksourcestyleschememanager.h>
 
 #include <gtkmm/toolbar.h>
 
@@ -152,6 +153,8 @@ public:
 		Option<bool> show_statusbar;
 		Option<bool> show_browser;
 		Option<bool> show_userlist;
+		
+		Option<Glib::ustring> scheme_id;
 	};
 
 	class Security
