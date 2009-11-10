@@ -163,7 +163,7 @@ bool Gobby::FindDialog::find_next()
 			_("Phrase \"%1\" has not been found"),
 			get_find_text());
 
-		m_status_bar.add_info_message(str);
+		m_status_bar.add_info_message(str, 5);
 		return false;
 	}
 
@@ -179,7 +179,7 @@ bool Gobby::FindDialog::find_previous()
 			_("Phrase \"%1\" has not been found"),
 			get_find_text());
 
-		m_status_bar.add_info_message(str);
+		m_status_bar.add_info_message(str, 5);
 		return false;
 	}
 
@@ -346,7 +346,7 @@ bool Gobby::FindDialog::replace_all()
 		result = true;
 	}
 
-	m_status_bar.add_info_message(message);
+	m_status_bar.add_info_message(message, 5);
 	return result;
 }
 

@@ -55,10 +55,14 @@ public:
 	StatusBar(Folder& folder, const Preferences& preferences);
 	~StatusBar();
 
-	MessageHandle add_info_message(const Glib::ustring& message);
+	MessageHandle add_info_message(const Glib::ustring& message,
+	                               unsigned int timeout = 0);
 
-	MessageHandle add_error_message(const Glib::ustring& brief_desc,
-	                                const Glib::ustring& detailed_desc);
+	// This does not return a message handle because users dispose of
+	// messages by clicking on them.
+	void add_error_message(const Glib::ustring& brief_desc,
+	                       const Glib::ustring& detailed_desc,
+	                       unsigned int timeout = 0);
 
 	void remove_message(const MessageHandle& handle);
 	void hide_message(const MessageHandle& handle);
@@ -68,7 +72,8 @@ public:
 protected:
 	MessageHandle add_message(MessageType type,
 	                          const Glib::ustring& message,
-	                          const Glib::ustring& dialog_message);
+	                          const Glib::ustring& dialog_message,
+	                          unsigned int timeout = 0);
 
 	static void on_mark_set_static(GtkTextBuffer* buffer,
 	                               GtkTextIter* location,

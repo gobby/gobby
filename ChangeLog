@@ -1,5 +1,14 @@
 2009-11-09  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/statusbar.hpp:
+	* code/core/statusbar.cpp: Readded timeout mechanism into status bar
+	message functions.
+
+	* code/dialogs/find-dialog.cpp: Readded timeout for status bar
+	messages so that they would actually disappear at some point.
+
+2009-11-09  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/statusbar.cpp: Changed "OK" back to "Close" in status bar
 	error message popup dialog.
 

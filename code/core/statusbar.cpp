@@ -49,9 +49,16 @@ class Gobby::StatusBar::Message
 public:
 	Message(Gtk::Widget* widget,
 	        const Glib::ustring& simple,
-	        const Glib::ustring& detail):
-		m_widget(widget), m_simple_desc(simple), m_detail_desc(detail)
+	        const Glib::ustring& detail,
+		sigc::connection timeout_conn = sigc::connection()):
+		m_widget(widget), m_timeout_conn(timeout_conn),
+		m_simple_desc(simple), m_detail_desc(detail)
 	{
+	}
+
+	~Message()
+	{
+		m_timeout_conn.disconnect();
 	}
 
 	void show_dialog() const
@@ -78,6 +85,7 @@ public:
 
 protected:
 	Gtk::Widget* m_widget;
+	sigc::connection m_timeout_conn;
 	Glib::ustring m_simple_desc;
 	Glib::ustring m_detail_desc;
 };
@@ -85,7 +93,7 @@ protected:
 Gobby::StatusBar::StatusBar(Folder& folder,
                             const Preferences& preferences):
 	Gtk::HBox(false, 2), m_folder(folder), m_preferences(preferences),
-	m_current_view(NULL), m_position_context_id(0), m_visible_messages(0)
+	m_visible_messages(0), m_current_view(NULL), m_position_context_id(0)
 {
 	pack_end(m_bar_position, Gtk::PACK_SHRINK);
 	m_bar_position.set_size_request(200, -1);
@@ -111,7 +119,8 @@ Gobby::StatusBar::~StatusBar()
 Gobby::StatusBar::MessageHandle
 Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
                               const Glib::ustring& message,
-                              const Glib::ustring& dialog_message)
+                              const Glib::ustring& dialog_message,
+			      unsigned int timeout)
 {
 	if(m_visible_messages >= 12)
 	{
@@ -119,19 +128,16 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 		    iter != m_list.end();
 		    ++iter)
 		{
-			if ((*iter)->is_error())
+			if(*iter)
 			{
-				remove_message(iter);
+				if((*iter)->is_error())
+					remove_message(iter);
+				else
+					// only hide message because whoever
+					// installed it is expecting to be
+					// able to call remove_message on it
+					hide_message(iter);
 				break;
-			}
-			else
-			{
-				// only hide message because whoever installed
-				// it is expecting to be able to call
-				// remove_message on it
-				hide_message(iter);
-				if (m_visible_messages < 12)
-					break;
 			}
 		}
 	}
@@ -154,9 +160,23 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 	                     "shadow-type", &shadow_type, NULL);
 	Gtk::Frame* frame = Gtk::manage(new Gtk::Frame);
 
-	m_list.push_back(new Message(frame, message, dialog_message));
-	++m_visible_messages;
+	m_list.push_back(0);
 	Gobby::StatusBar::MessageHandle iter(--m_list.end());
+	sigc::connection timeout_conn;
+	if(timeout)
+	{
+		timeout_conn = Glib::signal_timeout().connect_seconds(
+			sigc::bind(
+				sigc::bind_return(
+					sigc::mem_fun(
+						*this,
+						&StatusBar::remove_message),
+					false),
+				iter),
+			timeout);
+	}
+	*iter = new Message(frame, message, dialog_message, timeout_conn);
+	++m_visible_messages;
 
 	if(dialog_message.empty())
 	{
@@ -189,16 +209,28 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 }
 
 Gobby::StatusBar::MessageHandle
-Gobby::StatusBar::add_info_message(const Glib::ustring& message)
+Gobby::StatusBar::add_info_message(const Glib::ustring& message,
+                                   unsigned int timeout)
 {
-	return Gobby::StatusBar::add_message(INFO, message, "");
+	MessageHandle handle =
+		Gobby::StatusBar::add_message(INFO, message, "", timeout);
+	// Caller is not allowed to hold on to handles to messages that we are
+	// going to delete anyway.
+	if(timeout)
+		return invalid_handle();
+	else
+		return handle;
 }
 
-Gobby::StatusBar::MessageHandle
+void
 Gobby::StatusBar::add_error_message(const Glib::ustring& brief_desc,
-                                    const Glib::ustring& detailed_desc)
+                                    const Glib::ustring& detailed_desc,
+                                    unsigned int timeout)
 {
-	return Gobby::StatusBar::add_message(ERROR, brief_desc, detailed_desc);
+	Gobby::StatusBar::add_message(ERROR,
+	                              brief_desc,
+	                              detailed_desc,
+	                              timeout);
 }
 
 void Gobby::StatusBar::remove_message(const MessageHandle& handle)
