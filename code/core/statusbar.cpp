@@ -37,6 +37,11 @@ namespace
 			g_assert_not_reached();
 		}
 	}
+
+	void dispose_dialog(Gtk::MessageDialog* dialog)
+	{
+		delete dialog;
+	}
 }
 
 class Gobby::StatusBar::Message
@@ -51,15 +56,20 @@ public:
 
 	void show_dialog() const
 	{
-		Gtk::MessageDialog dialog(
+		Gtk::MessageDialog* dialog = new Gtk::MessageDialog(
 			m_simple_desc,
 			false,
 			Gtk::MESSAGE_ERROR,
 			Gtk::BUTTONS_OK,
 			false);
 
-		dialog.set_secondary_text(m_detail_desc, true);
-		dialog.run();
+		dialog->set_secondary_text(m_detail_desc, true);
+		dialog->signal_response().connect(
+			sigc::hide(
+				sigc::bind(
+					sigc::ptr_fun(dispose_dialog),
+					dialog)));
+		dialog->show();
 	}
 
 	bool is_error() { return !m_detail_desc.empty(); }

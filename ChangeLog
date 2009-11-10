@@ -1,3 +1,8 @@
+2009-11-09  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/statusbar.cpp: Made status bar error message popup dialog
+	non-modal.
+
 2009-11-09  Gabríel A. Pétursson  <gabrielp@simnet.is>, Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/preferences.hpp:
