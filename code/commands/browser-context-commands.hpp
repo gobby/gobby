@@ -54,6 +54,7 @@ protected:
 	void on_menu_deactivate();
 
 	void on_populate_popup(Gtk::Menu* menu);
+	void on_popdown();
 
 	// Context commands
 	void on_new(InfcBrowser* browser, InfcBrowserIter iter,

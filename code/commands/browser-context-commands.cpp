@@ -167,7 +167,19 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		delete_item->set_sensitive(!is_toplevel);
 		delete_item->show();
 		menu->append(*delete_item);
+		
+		m_popup_menu = menu;
+		menu->signal_selection_done().connect(
+			sigc::mem_fun(
+				*this,
+				&BrowserContextCommands::on_popdown));
 	}
+}
+
+void Gobby::BrowserContextCommands::on_popdown()
+{
+	m_popup_menu = NULL;
+	m_watch.reset(NULL);
 }
 
 void Gobby::BrowserContextCommands::on_new(InfcBrowser* browser,

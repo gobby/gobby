@@ -1,3 +1,8 @@
+2009-11-10  Gabríel A. Pétursson  <gabrielp@simnet.is>
+
+	* code/commands/browser-context-commands.hpp:
+	* code/commands/browser-context-commands.cpp: Fixed an assertion error.
+
 2009-11-09  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/statusbar.hpp:
