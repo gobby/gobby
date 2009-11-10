@@ -60,7 +60,7 @@ public:
 			m_simple_desc,
 			false,
 			Gtk::MESSAGE_ERROR,
-			Gtk::BUTTONS_OK,
+			Gtk::BUTTONS_CLOSE,
 			false);
 
 		dialog->set_secondary_text(m_detail_desc, true);

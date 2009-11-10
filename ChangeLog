@@ -1,5 +1,10 @@
 2009-11-09  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/statusbar.cpp: Changed "OK" back to "Close" in status bar
+	error message popup dialog.
+
+2009-11-09  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/statusbar.cpp: Made status bar error message popup dialog
 	non-modal.
 
