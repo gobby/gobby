@@ -67,8 +67,10 @@ public:
 			m_simple_desc,
 			false,
 			Gtk::MESSAGE_ERROR,
-			Gtk::BUTTONS_CLOSE,
+			Gtk::BUTTONS_NONE,
 			false);
+
+		dialog->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 
 		dialog->set_secondary_text(m_detail_desc, true);
 		dialog->signal_response().connect(
