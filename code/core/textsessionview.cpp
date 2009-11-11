@@ -18,6 +18,7 @@
 
 #include "core/textsessionview.hpp"
 #include "util/i18n.hpp"
+#include "util/color.hpp"
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textiter.h>
@@ -127,6 +128,12 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	InfBuffer* buffer = inf_session_get_buffer(INF_SESSION(session));
 	m_buffer = GTK_SOURCE_BUFFER(inf_text_gtk_buffer_get_text_buffer(
 		INF_TEXT_GTK_BUFFER(buffer)));
+
+	g_signal_connect_after(
+		G_OBJECT(m_view),
+		"style-set",
+		G_CALLBACK(on_style_set_static),
+		this);
 
 	// This is a hack to make sure that the author tags in the textview
 	// have lowest priority of all tags, especially lower than
@@ -484,4 +491,25 @@ bool Gobby::TextSessionView::
 	}
 
 	return true;
+}
+
+void Gobby::TextSessionView::on_style_set()
+{
+	GtkStyle* style = gtk_widget_get_style(GTK_WIDGET(m_view));
+	g_assert(style != NULL);
+
+	const GdkColor& color = style->base[GTK_STATE_NORMAL];
+	double rh = color.red / 65535.0;
+	double gs = color.green / 65535.0;
+	double bv = color.blue / 65535.0;
+
+	Gobby::rgb_to_hsv(rh, gs, bv);
+
+	double my_sat = gs * 0.5 + 0.3;
+	double my_val = (std::pow(bv + 1, 3) - 1) / 7 * 0.6 + 0.4;
+
+	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+		inf_session_get_buffer(INF_SESSION(m_session)));
+
+	inf_text_gtk_buffer_set_saturation_value(buffer, my_sat, my_val);
 }
