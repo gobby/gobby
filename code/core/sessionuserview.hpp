@@ -32,7 +32,7 @@ namespace Gobby
 class SessionUserView: public Gtk::HPaned
 {
 public:
-	SessionUserView(SessionView& view,
+	SessionUserView(SessionView& view, bool show_disconnected,
 	                Preferences::Option<bool>& userlist_view,
 	                Preferences::Option<unsigned int>& userlist_width);
 

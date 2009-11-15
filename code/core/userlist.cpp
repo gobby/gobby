@@ -136,6 +136,8 @@ Gobby::UserList::~UserList()
 {
 	g_signal_handler_disconnect(G_OBJECT(m_table), m_add_user_handle);
 
+	m_filter_model.reset();
+
 	const Gtk::TreeModel::Children& children = m_store->children();
 	for(Gtk::TreeIter iter = children.begin();
 	    iter != children.end(); ++ iter)
@@ -152,6 +154,33 @@ Gobby::UserList::~UserList()
 		g_signal_handler_disconnect(G_OBJECT(user),
 		                            notify_status_handle);
 	}
+}
+
+void Gobby::UserList::set_show_disconnected(bool show_disconnected)
+{
+	if(show_disconnected)
+	{
+		m_filter_model.reset();
+		m_view.set_model(m_store);
+	}
+	else
+	{
+		m_filter_model = Gtk::TreeModelFilter::create(m_store);
+		m_view.set_model(m_filter_model);
+
+		m_filter_model->set_visible_func(
+			sigc::mem_fun(*this, &UserList::visible_func));
+	}
+}
+
+bool Gobby::UserList::visible_func(const Gtk::TreeIter& iter)
+{
+	InfUser* user = (*iter)[m_columns.user];
+
+	// Can happen after creation of the node when the user object has
+	// not yet been set
+	if(user == NULL) return false;
+	return inf_user_get_status(user) != INF_USER_UNAVAILABLE;
 }
 
 void Gobby::UserList::icon_cell_data_func(Gtk::CellRenderer* renderer,

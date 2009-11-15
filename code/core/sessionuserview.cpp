@@ -29,12 +29,14 @@
 // but keep the notebook tabs on top of the userlist.
 
 Gobby::SessionUserView::SessionUserView(SessionView& view,
+                                        bool show_disconnected,
                                         Preferences::Option<bool>& opt_view,
                                         Preferences::Option<unsigned int>& w):
 	m_view(view), m_userlist_width(w),
 	m_userlist(inf_session_get_user_table(view.get_session()))
 {
 	m_userlist.show();
+	m_userlist.set_show_disconnected(show_disconnected);
 	Gtk::Frame* frame = Gtk::manage(new ClosableFrame(
 		_("User List"), IconManager::STOCK_USERLIST, opt_view));
 	frame->set_shadow_type(Gtk::SHADOW_IN);

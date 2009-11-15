@@ -20,6 +20,7 @@
 #define _GOBBY_USERLIST_HPP_
 
 #include <gtkmm/treeview.h>
+#include <gtkmm/treemodelfilter.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/box.h>
 
@@ -33,6 +34,8 @@ namespace Gobby
 	public:
 		UserList(InfUserTable* table);
 		~UserList();
+
+		void set_show_disconnected(bool show_disconnected);
 
 	protected:
 		InfUserTable* m_table;
@@ -78,6 +81,7 @@ namespace Gobby
 				on_notify_hue(INF_TEXT_USER(user));
 		}
 
+		bool visible_func(const Gtk::TreeIter& iter);
 		void icon_cell_data_func(Gtk::CellRenderer* renderer,
 		                         const Gtk::TreeIter& iter);
 		void color_cell_data_func(Gtk::CellRenderer* renderer,
@@ -95,6 +99,7 @@ namespace Gobby
 
 		Columns m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_store;
+		Glib::RefPtr<Gtk::TreeModelFilter> m_filter_model;
 		Gtk::TreeView m_view;
 
 		gulong m_add_user_handle;

@@ -1,3 +1,15 @@
+2009-11-15  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/userlist.hpp:
+	* code/core/userlist.cpp: Added set_show_disconnected().
+
+	* code/core/sessionuserview.hpp:
+	* code/core/sessionuserview.cpp: Added a show_disconnected parameter
+	in the constructor.
+
+	* code/core/folder.cpp: Don't show disconnected users for chat
+	sessions.
+
 2009-11-15  Gabríel A. Pétursson  <gabrielp@simnet.is>
 
 	* code/commands/help-commands.cpp: Updated the about dialog.

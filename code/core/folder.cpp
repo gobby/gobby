@@ -137,7 +137,7 @@ Gobby::Folder::add_text_session(InfTextSession* session,
 
 	SessionUserView* userview = Gtk::manage(
 		new SessionUserView(
-			*view,
+			*view, true,
 			m_preferences.appearance.show_userlist,
 			m_preferences.appearance.userlist_width));
 	userview->show();
@@ -174,7 +174,7 @@ Gobby::Folder::add_chat_session(InfChatSession* session,
 
 	SessionUserView* userview = Gtk::manage(
 		new SessionUserView(
-			*view,
+			*view, false,
 			m_preferences.appearance.show_userlist,
 			m_preferences.appearance.userlist_width));
 	userview->show();
