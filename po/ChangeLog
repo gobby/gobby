@@ -1,3 +1,12 @@
+2009-11-15  Armin Burgmeier  <armin@arbur.net>
+
+	* POTFILES.in: Updated.
+
+	* LINGUAS: Removed all languages.
+	* *.po: Removed as these were just remains from Gobby 0.4.x which
+	contained only very few strings that are still valid, and a lot of
+	invalid fuzzy matches.
+
 2009-08-29  Armin Burgmeier  <armin@arbur.net>
 
 	* POTFILES.in: Updated.
