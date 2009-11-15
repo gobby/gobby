@@ -1,3 +1,7 @@
+2009-11-15  Gabríel A. Pétursson  <gabrielp@simnet.is>
+
+	* code/commands/help-commands.cpp: Updated the about dialog.
+
 2009-11-11  Benjamin Herr  <ben@0x539.de>
 
 	* code/core/textsessionview.hpp:

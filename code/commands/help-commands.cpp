@@ -87,9 +87,27 @@ void Gobby::HelpCommands::on_about()
 
 		std::vector<Glib::ustring> authors;
 		authors.push_back("Armin Burgmeier <armin@arbur.net>");
+		authors.push_back("Philipp Kern <phil@0x539.de>");
+		authors.push_back("");
+		authors.push_back(_("Contributors:"));
+		authors.push_back("\tBenjamin Herr <ben@0x539.de>");
+		authors.push_back("\tBen Levitt <benjie@gmail.com>");
+		authors.push_back("\tGabríel A. Pétursson <gabrielp@simnet.is>");
+
+		std::vector<Glib::ustring> translators;
+		// TODO: Add translator credits as soon as we have translations
+
+		Glib::ustring transl = "";
+		for(std::vector<Glib::ustring>::iterator i = translators.begin();
+		    i != translators.end(); ++i)
+		{
+			if(i != translators.begin()) transl += "\n";
+			transl += *i;
+		}
 
 		m_about_dialog->set_artists(artists);
 		m_about_dialog->set_authors(authors);
+		//m_about_dialog->set_translator_credits(transl); // TODO: Enable when we have translations
 		m_about_dialog->set_copyright(
 			"Copyright © 2008, 2009 Armin Burgmeier");
 		m_about_dialog->set_license(_(
@@ -110,10 +128,9 @@ void Gobby::HelpCommands::on_about()
 			"write to the Free Software Foundation, Inc., 675 "
 			"Mass Ave, Cambridge, MA 02139, USA."));
 		m_about_dialog->set_logo_icon_name("gobby-0.5");
-		m_about_dialog->set_name("Gobby");
 		m_about_dialog->set_program_name("Gobby");
 		m_about_dialog->set_version(PACKAGE_VERSION);
-		m_about_dialog->set_website("http://gobby.0x539.de");
+		m_about_dialog->set_website("http://gobby.0x539.de/");
 		m_about_dialog->set_wrap_license(true);
 
 		m_about_dialog->signal_response().connect(
