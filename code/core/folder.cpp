@@ -138,8 +138,8 @@ Gobby::Folder::add_text_session(InfTextSession* session,
 	SessionUserView* userview = Gtk::manage(
 		new SessionUserView(
 			*view, true,
-			m_preferences.appearance.show_userlist,
-			m_preferences.appearance.userlist_width));
+			m_preferences.appearance.show_document_userlist,
+			m_preferences.appearance.document_userlist_width));
 	userview->show();
 
 	TabLabel* tablabel = Gtk::manage(new TabLabel(*this, *view));
@@ -175,8 +175,8 @@ Gobby::Folder::add_chat_session(InfChatSession* session,
 	SessionUserView* userview = Gtk::manage(
 		new SessionUserView(
 			*view, false,
-			m_preferences.appearance.show_userlist,
-			m_preferences.appearance.userlist_width));
+			m_preferences.appearance.show_chat_userlist,
+			m_preferences.appearance.chat_userlist_width));
 	userview->show();
 
 	// TODO chat: Use a ChatTabLabel

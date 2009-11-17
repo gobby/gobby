@@ -34,6 +34,8 @@ public:
 	              const Gtk::StockID& stock_id,
 	              Preferences::Option<bool>& option);
 
+	void set_allow_visible(bool allow_visible);
+
 protected:
 	virtual void on_add(Gtk::Widget* widget);
 
@@ -42,6 +44,7 @@ protected:
 
 	Preferences::Option<bool>& m_option;
 	Gtk::VBox m_box;
+	bool m_allow_visible;
 };
 
 }

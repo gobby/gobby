@@ -89,12 +89,20 @@ Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
 		"toolbar-style", static_cast<int>(Gtk::TOOLBAR_BOTH)))),
 	font(Pango::FontDescription(entry.get_value<Glib::ustring>(
 		"font", "Monospace 10"))),
-	userlist_width(entry.get_value<unsigned int>("userlist-width", 150)),
+	document_userlist_width(entry.get_value<unsigned int>(
+		"document-userlist-width", 150)),
+	chat_userlist_width(entry.get_value<unsigned int>(
+		"chat-userlist-width", 150)),
+	scheme_id(entry.get_value<Glib::ustring>("scheme-id", "classic")),
+
 	show_toolbar(entry.get_value<bool>("show-toolbar", true)),
 	show_statusbar(entry.get_value<bool>("show-statusbar", true)),
 	show_browser(entry.get_value<bool>("show-browser", true)),
-	show_userlist(entry.get_value<bool>("show-userlist", true)),
-	scheme_id(entry.get_value<Glib::ustring>("scheme-id", "classic"))
+	show_chat(entry.get_value<bool>("show-chat", true)),
+	show_document_userlist(entry.get_value<bool>(
+		"show-document-userlist", true)),
+	show_chat_userlist(entry.get_value<bool>(
+		"show-chat-userlist", true))
 {
 }
 
@@ -107,13 +115,17 @@ void Gobby::Preferences::Appearance::
 		"font",
 		static_cast<const Pango::FontDescription&>(font).to_string());
 
-	entry.set_value("userlist-width", userlist_width);
+	entry.set_value("scheme-id", scheme_id);
+
+	entry.set_value("document-userlist-width", document_userlist_width);
+	entry.set_value("chat-userlist-width", chat_userlist_width);
 
 	entry.set_value("show-toolbar", show_toolbar);
 	entry.set_value("show-statusbar", show_statusbar);
 	entry.set_value("show-browser", show_browser);
-	entry.set_value("show-userlist", show_userlist);
-	entry.set_value("scheme-id", scheme_id);
+	entry.set_value("show-chat", show_chat);
+	entry.set_value("show-document-userlist", show_document_userlist);
+	entry.set_value("show-chat-userlist", show_chat_userlist);
 }
 
 Gobby::Preferences::Security::Security(Config::ParentEntry& entry):

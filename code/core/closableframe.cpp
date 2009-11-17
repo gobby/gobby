@@ -25,7 +25,7 @@
 Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
                                     const Gtk::StockID& stock_id,
                                     Preferences::Option<bool>& option):
-	m_option(option), m_box(false, 6)
+	m_option(option), m_box(false, 6), m_allow_visible(true)
 {
 	CloseButton* button = Gtk::manage(new CloseButton);
 
@@ -59,6 +59,14 @@ Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
 	on_option();
 }
 
+void Gobby::ClosableFrame::set_allow_visible(bool allow_visible)
+{
+	m_allow_visible = allow_visible;
+
+	if(m_option && m_allow_visible) show();
+	else hide();
+}
+
 void Gobby::ClosableFrame::on_add(Gtk::Widget* widget)
 {
 	if(widget == &m_box)
@@ -74,6 +82,6 @@ void Gobby::ClosableFrame::on_clicked()
 
 void Gobby::ClosableFrame::on_option()
 {
-	if(m_option) show();
+	if(m_option && m_allow_visible) show();
 	else hide();
 }

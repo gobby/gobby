@@ -23,7 +23,6 @@
 #include "commands/file-tasks/task-open-multiple.hpp"
 #include "core/iconmanager.hpp"
 #include "core/noteplugin.hpp"
-#include "core/closableframe.hpp"
 
 #include "util/i18n.hpp"
 
@@ -47,6 +46,8 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_browser(*this, Plugins::TEXT, m_statusbar, m_preferences),
 	m_text_folder(false, m_preferences, m_lang_manager),
 	m_chat_folder(true, m_preferences, m_lang_manager),
+	m_chat_frame(_("Chat"), IconManager::STOCK_CHAT,
+	             m_preferences.appearance.show_chat),
 	m_statusbar(m_text_folder, m_preferences),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
 	m_operations(m_info_storage, m_statusbar),
@@ -66,7 +67,8 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	                m_info_storage, m_preferences),
 	m_commands_edit(*this, m_header, m_text_folder, m_statusbar,
 	                m_preferences),
-	m_commands_view(m_header, m_text_folder, m_preferences),
+	m_commands_view(m_header, m_text_folder, m_chat_frame, m_chat_folder,
+	                m_preferences),
 	m_commands_help(*this, m_header, m_icon_mgr),
 	m_title_bar(*this, m_text_folder)
 {
@@ -98,14 +100,12 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	frame_text->add(m_text_folder);
 	frame_text->show();
 
-	// TODO: Use ClosableFrame here
-	Gtk::Frame* frame_chat = Gtk::manage(new Gtk::Frame);
-	frame_chat->set_shadow_type(Gtk::SHADOW_IN);
-	frame_chat->add(m_chat_folder);
-	frame_chat->show();
+	m_chat_frame.set_shadow_type(Gtk::SHADOW_IN);
+	m_chat_frame.add(m_chat_folder);
+	// frame_chat manages visibility itself
 
 	m_chat_paned.pack1(*frame_text, true, false);
-	m_chat_paned.pack2(*frame_chat, false, false);
+	m_chat_paned.pack2(m_chat_frame, false, false);
 	m_chat_paned.show();
 
 	m_paned.pack1(*frame_browser, false, false);

@@ -66,7 +66,9 @@ namespace {
 		"      <menuitem action=\"ViewStatusbar\" />"
 		"      <separator />"
 		"      <menuitem action=\"ViewBrowser\" />"
-		"      <menuitem action=\"ViewUserlist\" />"
+		"      <menuitem action=\"ViewChat\" />"
+		"      <menuitem action=\"ViewDocumentUserList\" />"
+		"      <menuitem action=\"ViewChatUserList\" />"
 		"      <separator />"
 		"      <menu action=\"ViewHighlightMode\">"
 		"        <menuitem"
@@ -279,11 +281,21 @@ Gobby::Header::Header(Preferences& preferences,
 			"ViewBrowser", _("View Document Browser"),
 			_("Whether to show the document browser"),
 			preferences.appearance.show_browser)),
-	action_view_userlist(
+	action_view_chat(
 		Gtk::ToggleAction::create(
-			"ViewUserlist", _("View User List"),
-			_("Whether to show the user list"),
-			preferences.appearance.show_userlist)),
+			"ViewChat", _("View Chat"),
+			_("Whether to show the chat pane"),
+			preferences.appearance.show_chat)),
+	action_view_document_userlist(
+		Gtk::ToggleAction::create(
+			"ViewDocumentUserList", _("View Document User List"),
+			_("Whether to show the user list for documents"),
+			preferences.appearance.show_document_userlist)),
+	action_view_chat_userlist(
+		Gtk::ToggleAction::create(
+			"ViewChatUserList", _("View Chat User List"),
+			_("Whether to show the user list for the chat"),
+			preferences.appearance.show_chat_userlist)),
 	action_view_highlight_mode(
 		Gtk::Action::create("ViewHighlightMode",
 		                    _("_Highlight Mode"))),
@@ -354,12 +366,14 @@ Gobby::Header::Header(Preferences& preferences,
 	group_view->add(action_view);
 	group_view->add(action_view_toolbar);
 	group_view->add(action_view_statusbar);
-	group_view->add(action_view_browser,
-	                Gtk::AccelKey("F9",
-			              "<Actions>/MenuView/ViewBrowser"));
-	group_view->add(action_view_userlist,
-	                Gtk::AccelKey("<control>F9",
-			              "<Actions>/MenuView/ViewUserList"));
+	group_view->add(action_view_browser, Gtk::AccelKey(
+		"F9", "<Actions>/MenuView/ViewBrowser"));
+	group_view->add(action_view_chat, Gtk::AccelKey(
+		"<shift>F9", "<Actions>/MenuView/ViewChat"));
+	group_view->add(action_view_document_userlist, Gtk::AccelKey(
+		"<control>F9", "<Actions>/MenuView/ViewDocumentUserList"));
+	group_view->add(action_view_chat_userlist, Gtk::AccelKey(
+		"<control><shift>F9", "<Actions>/MenuView/ViewChatUserList"));
 	group_view->add(action_view_highlight_mode);
 	group_view->add(action_view_highlight_none);
 	

@@ -43,6 +43,7 @@
 #include "core/statusbar.hpp"
 #include "core/preferences.hpp"
 #include "core/filechooser.hpp"
+#include "core/closableframe.hpp"
 #include "core/titlebar.hpp"
 
 #include "util/config.hpp"
@@ -141,6 +142,7 @@ protected:
 	Browser m_browser;
 	Folder m_text_folder;
 	Folder m_chat_folder;
+	ClosableFrame m_chat_frame;
 	StatusBar m_statusbar;
 
 	// Functionality

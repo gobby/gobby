@@ -29,17 +29,19 @@ namespace Gobby
 	class IconManager
 	{
 	public:
+		static Gtk::StockID STOCK_SAVE_ALL;
 		static Gtk::StockID STOCK_USERLIST;
 		static Gtk::StockID STOCK_DOCLIST;
-		static Gtk::StockID STOCK_SAVE_ALL;
+		static Gtk::StockID STOCK_CHAT;
 		static Gtk::StockID STOCK_USER_COLOR_INDICATOR;
 
 		IconManager();
 
 	protected:
+		Gtk::IconSet m_is_save_all;
 		Gtk::IconSet m_is_userlist;
 		Gtk::IconSet m_is_doclist;
-		Gtk::IconSet m_is_save_all;
+		Gtk::IconSet m_is_chat;
 		Gtk::IconSet m_is_user_color_indicator;
 
 		Glib::RefPtr<Gtk::IconFactory> m_icon_factory;

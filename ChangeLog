@@ -1,5 +1,31 @@
 2009-11-17  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/closableframe.hpp:
+	* code/core/closableframe.cpp: Add set_allow_visible().
+
+	* code/core/preferences.hpp:
+	* code/core/preferences.cpp: Added settings for chat visibility and
+	chat userlist visibility and width.
+
+	* code/core/folder.cpp: Use different preference settings for document
+	userlist visibility and chat userlist visibility.
+
+	* code/core/iconmanager.hpp:
+	* code/core/iconmanager.cpp: Added stock chat icon.
+
+	* code/core/header.hpp:
+	* code/core/header.cpp: Added "View Chat" and "View Chat User List"
+	menu items and actions.
+
+	* code/commands/view-commands.hpp:
+	* code/commands/view-commands.cpp: Implemented functionality for the
+	new actions.
+
+	* code/window.hpp:
+	* code/window.cpp: Pass chat frame and folder to view-commands.
+
+2009-11-17  Armin Burgmeier  <armin@arbur.net>
+
 	* code/util/color.hpp:
 	* code/util/color.cpp: Fixed return type of rgb_to_hsv() and
 	hsv_to_rgb().

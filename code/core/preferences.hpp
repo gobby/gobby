@@ -147,14 +147,17 @@ public:
 		Option<Gtk::ToolbarStyle> toolbar_style;
 		Option<Pango::FontDescription> font;
 
-		Option<unsigned int> userlist_width;
+		Option<Glib::ustring> scheme_id;
+
+		Option<unsigned int> document_userlist_width;
+		Option<unsigned int> chat_userlist_width;
 
 		Option<bool> show_toolbar;
 		Option<bool> show_statusbar;
 		Option<bool> show_browser;
-		Option<bool> show_userlist;
-		
-		Option<Glib::ustring> scheme_id;
+		Option<bool> show_chat;
+		Option<bool> show_document_userlist;
+		Option<bool> show_chat_userlist;
 	};
 
 	class Security
