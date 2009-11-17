@@ -128,6 +128,9 @@ protected:
 	bool on_switch_to_chat();
 	bool on_switch_to_text();
 
+	void on_chat_hide();
+	void on_chat_show();
+
 #ifdef WITH_UNIQUE
 	UniqueResponse on_message_received(UniqueCommand command,
 	                                   UniqueMessageData* message,

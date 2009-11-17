@@ -80,6 +80,11 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	                 G_CALLBACK(on_message_received_static), this);
 #endif // WITH_UNIQUE
 
+	m_chat_frame.signal_show().connect(
+		sigc::mem_fun(*this, &Window::on_chat_show), true);
+	m_chat_frame.signal_hide().connect(
+		sigc::mem_fun(*this, &Window::on_chat_hide), false);
+
 	m_header.show();
 	m_browser.show();
 	m_text_folder.show();
@@ -292,6 +297,25 @@ bool Gobby::Window::on_switch_to_text()
 	// TODO: Turn chat back off if previously activated
 	// via on_switch_to_chat()?
 	return true;
+}
+
+void Gobby::Window::on_chat_hide()
+{
+	Gtk::Widget* focus = get_focus();
+	// Actually this always returns NULL if m_chat_frame has focus,
+	// because the focus is removed again. I think it's good enough
+	// though.
+	if(focus == NULL || focus == &m_chat_frame ||
+	   focus->is_ancestor(m_chat_frame))
+	{
+		on_switch_to_text();
+	}
+}
+
+void Gobby::Window::on_chat_show()
+{
+	Gtk::Widget* focus = get_focus();
+	if(!focus) on_switch_to_chat();
 }
 
 #ifdef WITH_UNIQUE

@@ -1,5 +1,12 @@
 2009-11-17  Armin Burgmeier  <armin@arbur.net>
 
+	* code/window.hpp:
+	* code/window.cpp: Switch to text when chat pane is hidden while it
+	had focus, and give it focus if it is shown and nothing else has focus
+	already.
+
+2009-11-17  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/chatsessionview.hpp: Added get_chat().
 
 	* code/window.hpp:
