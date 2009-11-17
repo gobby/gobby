@@ -103,7 +103,7 @@
           <guisubmenu>Internet</guisubmenu>
           <guimenuitem>Gobby Collaborative Editor (0.5)</guimenuitem>
         </menuchoice> to start the application.</para>
-      <para>You may also start <application>Gobby</application> from
+      <para>You may also start <application>&appname;</application> from
         the command line:</para>
 <programlisting>
 gobby-0.5
@@ -205,6 +205,10 @@ gobby-0.5
        <listitem><para><literal>obby-users</literal>: Discussions about Gobby's usage and installation problems. The announcements are also posted there.</para></listitem>
       </itemizedlist>
       <para>More information about how to subscribe can be found on <ulink url="http://gobby.0x539.de/trac/wiki/MailingLists"><literal>http://gobby.0x539.de/trac/wiki/MailingLists</literal></ulink>.</para>
+    </sect2>
+    <sect2 id="irc">
+      <title>IRC channel</title>
+      <para>Questions can also be taken to the IRC channel <literal><ulink url="irc://irc.freenode.net/infinote">#infinote</ulink></literal> on Freenode (<literal>irc.freenode.net</literal>).  However, you might need to be patient due to you and the developers living in different time zones.</para>
     </sect2>
   </sect1>
 </article>
