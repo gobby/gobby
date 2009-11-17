@@ -161,12 +161,12 @@ namespace
 
 namespace Gobby
 {
-	double hsv_to_rgb(double& rh, double &gs, double &gv)
+	void hsv_to_rgb(double& rh, double &gs, double &gv)
 	{
 		::hsv_to_rgb(&rh, &gs, &gv);
 	}
 
-	double rgb_to_hsv(double &rh, double &gs, double &gv)
+	void rgb_to_hsv(double &rh, double &gs, double &gv)
 	{
 		::rgb_to_hsv(&rh, &gs, &gv);
 	}

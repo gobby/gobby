@@ -1,3 +1,9 @@
+2009-11-17  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/color.hpp:
+	* code/util/color.cpp: Fixed return type of rgb_to_hsv() and
+	hsv_to_rgb().
+
 2009-11-15  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/userlist.hpp:
