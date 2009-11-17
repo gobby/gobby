@@ -86,7 +86,21 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_chat_folder.show();
 
 	// Build UI
-	add_accel_group(m_header.get_accel_group() );
+	Glib::RefPtr<Gtk::AccelGroup> group = m_header.get_accel_group();
+	// Add focus shortcuts; unfortunately gtkmm does not wrap that API
+	GClosure* closure = g_cclosure_new(
+		G_CALLBACK(on_switch_to_chat_static), this, NULL);
+	gtk_accel_group_connect(group->gobj(), GDK_m, GDK_CONTROL_MASK,
+	                        static_cast<GtkAccelFlags>(0), closure);
+	//g_closure_unref(closure);
+	GClosure* closure2 = g_cclosure_new(
+		G_CALLBACK(on_switch_to_text_static), this, NULL);
+	gtk_accel_group_connect(group->gobj(), GDK_m,
+	                        static_cast<GdkModifierType>(
+					GDK_CONTROL_MASK | GDK_SHIFT_MASK),
+	                        static_cast<GtkAccelFlags>(0), closure2);
+	//g_closure_unref(closure2);
+	add_accel_group(group);
 
 	Gtk::Frame* frame_browser = Gtk::manage(new ClosableFrame(
 		_("Document Browser"), IconManager::STOCK_DOCLIST,
@@ -248,6 +262,36 @@ void Gobby::Window::on_initial_dialog_hide()
 	m_initial_dlg.reset(NULL);
 	// Don't show again
 	m_config.get_root()["initial"].set_value("run", true);
+}
+
+bool Gobby::Window::on_switch_to_chat()
+{
+	SessionView* view = m_chat_folder.get_current_document();
+	if(!view) return false;
+
+	ChatSessionView* chat_view = dynamic_cast<ChatSessionView*>(view);
+	if(!chat_view) return false;
+
+	m_preferences.appearance.show_chat = true;
+	InfGtkChat* chat = chat_view->get_chat();
+	GtkWidget* entry = inf_gtk_chat_get_entry(chat);
+	gtk_widget_grab_focus(GTK_WIDGET(entry));
+	return true;
+}
+
+bool Gobby::Window::on_switch_to_text()
+{
+	SessionView* view = m_text_folder.get_current_document();
+	if(!view) return false;
+
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	if(!text_view) return false;
+
+	GtkSourceView* gtk_view = text_view->get_text_view();
+	gtk_widget_grab_focus(GTK_WIDGET(gtk_view));
+	// TODO: Turn chat back off if previously activated
+	// via on_switch_to_chat()?
+	return true;
 }
 
 #ifdef WITH_UNIQUE

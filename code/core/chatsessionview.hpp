@@ -40,6 +40,7 @@ public:
 
 	// Override base class covariantly
 	InfChatSession* get_session() { return INF_CHAT_SESSION(m_session); }
+	InfGtkChat* get_chat() { return m_chat; }
 
 	InfUser* get_active_user() const;
 	void set_active_user(InfUser* user);

@@ -107,6 +107,27 @@ protected:
 
 	void on_initial_dialog_hide();
 
+	static gboolean on_switch_to_chat_static(GtkAccelGroup* group,
+	                                         GObject* acceleratable,
+	                                         guint keyval,
+	                                         GdkModifierType modifier,
+	                                         gpointer user_data)
+	{
+		return static_cast<Window*>(user_data)->on_switch_to_chat();
+	}
+
+	static gboolean on_switch_to_text_static(GtkAccelGroup* group,
+	                                         GObject* acceleratable,
+	                                         guint keyval,
+	                                         GdkModifierType modifier,
+	                                         gpointer user_data)
+	{
+		return static_cast<Window*>(user_data)->on_switch_to_text();
+	}
+
+	bool on_switch_to_chat();
+	bool on_switch_to_text();
+
 #ifdef WITH_UNIQUE
 	UniqueResponse on_message_received(UniqueCommand command,
 	                                   UniqueMessageData* message,

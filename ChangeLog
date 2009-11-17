@@ -1,5 +1,13 @@
 2009-11-17  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/chatsessionview.hpp: Added get_chat().
+
+	* code/window.hpp:
+	* code/window.cpp: Added Ctrl+M and Ctrl+Shift+M shortcuts to easily
+	jump between chat and document.
+
+2009-11-17  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/closableframe.hpp:
 	* code/core/closableframe.cpp: Add set_allow_visible().
 
