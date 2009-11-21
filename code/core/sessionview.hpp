@@ -33,6 +33,8 @@ namespace Gobby
 class SessionView: public Gtk::VBox
 {
 public:
+	typedef sigc::signal<void, InfUser*> SignalActiveUserChanged;
+
 	SessionView(InfSession* session, const Glib::ustring& title,
 	            const Glib::ustring& path, const Glib::ustring& hostname);
 	virtual ~SessionView();
@@ -47,7 +49,16 @@ public:
 	void set_info(const Glib::ustring& info, bool closable);
 	void unset_info();
 
+	virtual InfUser* get_active_user() const;
+
+	SignalActiveUserChanged signal_active_user_changed() const
+	{
+		return m_signal_active_user_changed;
+	}
+
 protected:
+	void active_user_changed(InfUser* new_user);
+
 	InfSession* m_session;
 
 	const Glib::ustring m_title;
@@ -59,6 +70,9 @@ protected:
 	Gtk::HBox m_info_close_button_box;
 	CloseButton m_info_close_button;
 	Gtk::Label m_info_label;
+
+private:
+	SignalActiveUserChanged m_signal_active_user_changed;
 };
 
 }

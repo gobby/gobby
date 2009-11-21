@@ -73,3 +73,13 @@ void Gobby::SessionView::unset_info()
 {
 	m_info_frame.hide();
 }
+
+InfUser* Gobby::SessionView::get_active_user() const
+{
+	return NULL;
+}
+
+void Gobby::SessionView::active_user_changed(InfUser* new_user)
+{
+	m_signal_active_user_changed.emit(new_user);
+}

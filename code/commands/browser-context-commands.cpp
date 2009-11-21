@@ -78,7 +78,7 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 			infc_browser_iter_is_subdirectory(browser, &iter);
 		bool is_toplevel =
 			!infc_browser_iter_get_parent(browser, &dummy_iter);
-			
+
 		// Watch the node, and close the popup menu when the node
 		// it refers to is removed.
 		m_watch.reset(new NodeWatch(browser, &iter));

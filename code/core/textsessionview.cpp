@@ -302,11 +302,11 @@ void Gobby::TextSessionView::scroll_to_cursor_position(double within_margin)
 		within_margin, FALSE, 0.0, 0.0);
 }
 
-InfTextUser* Gobby::TextSessionView::get_active_user() const
+InfUser* Gobby::TextSessionView::get_active_user() const
 {
 	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 		inf_session_get_buffer(INF_SESSION(m_session)));
-	return inf_text_gtk_buffer_get_active_user(buffer);
+	return INF_USER(inf_text_gtk_buffer_get_active_user(buffer));
 }
 
 void Gobby::TextSessionView::set_active_user(InfTextUser* user)
@@ -331,7 +331,7 @@ void Gobby::TextSessionView::set_active_user(InfTextUser* user)
 	else
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
 
-	m_signal_active_user_changed.emit(user);
+	active_user_changed(INF_USER(user));
 }
 
 GtkSourceLanguage* Gobby::TextSessionView::get_language() const
@@ -347,7 +347,7 @@ void Gobby::TextSessionView::set_language(GtkSourceLanguage* language)
 
 void Gobby::TextSessionView::on_user_color_changed()
 {
-	InfTextUser* user = get_active_user();
+	InfTextUser* user = INF_TEXT_USER(get_active_user());
 
 	if(user)
 	{

@@ -71,7 +71,7 @@ protected:
 	virtual void on_response(int id);
 
 	void on_document_changed(SessionView* view);
-	void on_active_user_changed(InfTextUser* user);
+	void on_active_user_changed(InfUser* user);
 	void on_find_text_changed();
 	void on_replace_text_changed();
 

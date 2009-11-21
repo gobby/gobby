@@ -174,18 +174,20 @@ protected:
 	FileChooser m_file_chooser;
 	Operations m_operations;
 
-	AutosaveCommands m_commands_autosave;
-	BrowserCommands m_commands_browser;
-	SubscriptionCommands m_commands_subscription;
-	SynchronizationCommands m_commands_synchronization;
-	UserJoinCommands m_commands_user_join;
+	BrowserCommands m_browser_commands;
+	BrowserContextCommands m_browser_context_commands;
 
-	BrowserContextCommands m_commands_browser_context;
-	FolderCommands m_commands_folder;
-	FileCommands m_commands_file;
-	EditCommands m_commands_edit;
-	ViewCommands m_commands_view;
-	HelpCommands m_commands_help;
+	AutosaveCommands m_autosave_commands;
+	SubscriptionCommands m_subscription_commands;
+	SynchronizationCommands m_synchronization_commands;
+	UserJoinCommands m_user_join_commands;
+
+	FolderCommands m_text_folder_commands;
+	FolderCommands m_chat_folder_commands;
+	FileCommands m_file_commands;
+	EditCommands m_edit_commands;
+	ViewCommands m_view_commands;
+	HelpCommands m_help_commands;
 
 	TitleBar m_title_bar;
 

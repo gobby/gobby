@@ -230,7 +230,7 @@ void Gobby::FindDialog::on_document_changed(SessionView* view)
 	update_sensitivity();
 }
 
-void Gobby::FindDialog::on_active_user_changed(InfTextUser* user)
+void Gobby::FindDialog::on_active_user_changed(InfUser* user)
 {
 	update_sensitivity();
 }

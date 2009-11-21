@@ -40,13 +40,15 @@ protected:
 
 	Folder& m_folder;
 
-	TextSessionView* m_current_view;
+	SessionView* m_current_view;
 
 	class DocInfo;
 	typedef std::map<SessionView*, DocInfo*> DocumentMap;
 	DocumentMap m_doc_map;
+
+	class TextDocInfo;
 };
 
 }
-	
+
 #endif // _GOBBY_FOLDER_COMMANDS_HPP_

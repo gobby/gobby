@@ -86,7 +86,7 @@ protected:
 	}
 
 	void on_sync_complete();
-	void on_active_user_changed(InfTextUser* active_user);
+	void on_active_user_changed(InfUser* active_user);
 	void on_mark_set();
 	void on_changed();
 

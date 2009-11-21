@@ -48,5 +48,5 @@ void Gobby::ChatSessionView::set_active_user(InfUser* user)
 		== INF_USER(user));
 
 	inf_gtk_chat_set_active_user(m_chat, user);
-	m_signal_active_user_changed.emit(user);
+	active_user_changed(user);
 }

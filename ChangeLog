@@ -1,3 +1,28 @@
+2009-11-21  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/sessionview.hpp:
+	* code/core/sessionview.cpp:
+	* code/core/chatsessionview.hpp:
+	* code/core/chatsessionview.cpp:
+	* code/core/textsessionview.hpp:
+	* code/core/textsessionview.cpp: Moved get_active_user and the
+	active-user-changed signal to the base class.
+
+	* code/commands/folder-commands.hpp:
+	* code/commands/folder-commands.cpp: Make this work with chat
+	sessions.
+
+	* code/dialogs/find-dialog.hpp:
+	* code/dialogs/find-dialog.cpp:
+	* code/commands/edit-commands.hpp:
+	* code/commands/edit-commands.cpp: Adapt for changed
+	active-user-changed signal signature.
+
+	* code/window.hpp:
+	* code/window.cpp: Renamed commands member variables to have _commands
+	as suffix, not as prefix, and added a folder commands for the chat
+	folder.
+
 2009-11-21  Philipp Kern  <phil@0x539.de>
 
 	* help/C/gobby.xml: document Editor settings a bit more

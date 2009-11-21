@@ -31,7 +31,7 @@ class Gobby::FolderCommands::DocInfo: public sigc::trackable
 public:
 	static const unsigned int ACTIVATION_DELAY = 1000;
 
-	DocInfo(TextSessionView& view):
+	DocInfo(SessionView& view):
 		m_view(view), m_active_user(NULL), m_active(false)
 	{
 		m_view.signal_active_user_changed().connect(
@@ -41,7 +41,7 @@ public:
 		on_active_user_changed(view.get_active_user());
 	}
 
-	~DocInfo()
+	virtual ~DocInfo()
 	{
 		if(m_active_user != NULL)
 		{
@@ -50,31 +50,19 @@ public:
 		}
 	}
 
-	void deactivate()
+	virtual void deactivate()
 	{
 		m_active = false;
 		if(m_active_user) deactivate_user();
-
-		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
-			inf_session_get_buffer(
-				INF_SESSION(m_view.get_session())));
-
-		inf_text_gtk_buffer_set_wake_on_cursor_movement(
-			buffer, FALSE);
 	}
 
-	void activate()
+	virtual void activate()
 	{
 		m_active = true;
 		if(m_active_user) activate_user();
-
-		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
-			inf_session_get_buffer(
-				INF_SESSION(m_view.get_session())));
-
-		inf_text_gtk_buffer_set_wake_on_cursor_movement(
-			buffer, TRUE);
 	}
+
+	virtual void flush() {}
 
 protected:
 	void activate_user()
@@ -101,10 +89,9 @@ protected:
 			break;
 		case INF_USER_ACTIVE:
 			/* Flush pending requests, so user is not set active
-			 * again later. */
-			inf_text_session_flush_requests_for_user(
-				m_view.get_session(),
-				INF_TEXT_USER(m_active_user));
+			 * again later. TODO: Maybe this should become a
+			 * virtual function in InfSession actually. */
+			flush();
 
 			inf_session_set_user_status(
 				INF_SESSION(m_view.get_session()),
@@ -134,7 +121,7 @@ protected:
 		static_cast<DocInfo*>(user_data)->on_user_notify_status(user);
 	}
 
-	void on_active_user_changed(InfTextUser* user)
+	void on_active_user_changed(InfUser* user)
 	{
 		if(m_active_user != NULL)
 		{
@@ -145,7 +132,7 @@ protected:
 			                            m_notify_status_handle);
 		}
 
-		m_active_user = INF_USER(user);
+		m_active_user = user;
 
 		if(user != NULL)
 		{
@@ -202,12 +189,52 @@ protected:
 		return false;
 	}
 
-	TextSessionView& m_view;
+	SessionView& m_view;
 	InfUser* m_active_user;
 	bool m_active;
 
 	sigc::connection m_timeout_connection;
 	gulong m_notify_status_handle;
+};
+
+class Gobby::FolderCommands::TextDocInfo:
+	public Gobby::FolderCommands::DocInfo
+{
+public:
+	TextDocInfo(TextSessionView& view): DocInfo(view) {}
+
+	virtual void activate()
+	{
+		DocInfo::activate();
+
+		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+			inf_session_get_buffer(m_view.get_session()));
+
+		inf_text_gtk_buffer_set_wake_on_cursor_movement(
+			buffer, TRUE);
+	}
+
+	virtual void deactivate()
+	{
+		DocInfo::deactivate();
+
+		InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+			inf_session_get_buffer(m_view.get_session()));
+
+		inf_text_gtk_buffer_set_wake_on_cursor_movement(
+			buffer, FALSE);
+	}
+
+	virtual void flush()
+	{
+		DocInfo::flush();
+
+		g_assert(m_active_user != NULL);
+
+		inf_text_session_flush_requests_for_user(
+			INF_TEXT_SESSION(m_view.get_session()),
+			INF_TEXT_USER(m_active_user));
+	}
 };
 
 Gobby::FolderCommands::FolderCommands(Folder& folder):
@@ -227,11 +254,8 @@ Gobby::FolderCommands::FolderCommands(Folder& folder):
 		SessionUserView* user_view = static_cast<SessionUserView*>(
 			m_folder.get_nth_page(i));
 		SessionView& view = user_view->get_session_view();
-		TextSessionView* text_view =
-			dynamic_cast<TextSessionView*>(&view);
 
-		if(text_view)
-			on_document_added(*text_view);
+		on_document_added(view);
 	}
 
 	on_document_changed(m_folder.get_current_document());
@@ -248,31 +272,34 @@ Gobby::FolderCommands::~FolderCommands()
 
 void Gobby::FolderCommands::on_document_added(SessionView& view)
 {
-	TextSessionView* text_view = dynamic_cast<TextSessionView*>(&view);
-	if(text_view)
+	DocInfo* info;
+
 	{
-		DocInfo* info = new DocInfo(*text_view);
-		m_doc_map[text_view] = info;
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(&view);
+
+		if(text_view)
+			info = new TextDocInfo(*text_view);
+		else
+			info = new DocInfo(view);
 	}
+
+	m_doc_map[&view] = info;
 }
 
 void Gobby::FolderCommands::on_document_removed(SessionView& view)
 {
-	TextSessionView* text_view = dynamic_cast<TextSessionView*>(&view);
-	if(text_view)
-	{
-		DocumentMap::iterator iter = m_doc_map.find(text_view);
-		g_assert(iter != m_doc_map.end());
+	DocumentMap::iterator iter = m_doc_map.find(&view);
+	g_assert(iter != m_doc_map.end());
 
-		delete iter->second;
-		m_doc_map.erase(iter);
+	delete iter->second;
+	m_doc_map.erase(iter);
 
-		// TODO: Isn't this called by Folder already? Would need to
-		// call changed first and then removed of course. We could
-		// then assert here.
-		if(text_view == m_current_view)
-			m_current_view = NULL;
-	}
+	// TODO: Isn't this called by Folder already? Would need to
+	// call changed first and then removed of course. We could
+	// then assert here.
+	if(&view == m_current_view)
+		m_current_view = NULL;
 }
 
 void Gobby::FolderCommands::on_document_changed(SessionView* view)
@@ -286,7 +313,7 @@ void Gobby::FolderCommands::on_document_changed(SessionView* view)
 		iter->second->deactivate();
 	}
 
-	m_current_view = dynamic_cast<TextSessionView*>(view);
+	m_current_view = view;
 
 	if(m_current_view != NULL)
 	{

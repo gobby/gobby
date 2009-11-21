@@ -31,8 +31,6 @@ namespace Gobby
 class ChatSessionView: public SessionView
 {
 public:
-	typedef sigc::signal<void, InfUser*> SignalActiveUserChanged;
-
 	ChatSessionView(InfChatSession* session, const Glib::ustring& title,
 	                const Glib::ustring& path,
 	                const Glib::ustring& hostname,
@@ -42,20 +40,13 @@ public:
 	InfChatSession* get_session() { return INF_CHAT_SESSION(m_session); }
 	InfGtkChat* get_chat() { return m_chat; }
 
-	InfUser* get_active_user() const;
+	virtual InfUser* get_active_user() const;
 	void set_active_user(InfUser* user);
-
-	SignalActiveUserChanged signal_active_user_changed() const
-	{
-		return m_signal_active_user_changed;
-	}
 
 protected:
 	Preferences& m_preferences;
 
 	InfGtkChat* m_chat;
-
-	SignalActiveUserChanged m_signal_active_user_changed;
 };
 
 }

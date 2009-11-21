@@ -38,7 +38,6 @@ class TextSessionView: public SessionView
 {
 public:
 	typedef sigc::signal<void, GtkSourceLanguage*> SignalLanguageChanged;
-	typedef sigc::signal<void, InfTextUser*> SignalActiveUserChanged;
 
 	TextSessionView(InfTextSession* session, const Glib::ustring& title,
 	                const Glib::ustring& path,
@@ -47,12 +46,6 @@ public:
 	                Preferences& preferences,
 	                GtkSourceLanguageManager* manager);
 
-/*	const InfTextSession* get_session() const
-	{
-		return INF_TEXT_SESSION(m_session);
-	}*/
-
-	// Override base class covariantly
 	InfTextSession* get_session() { return INF_TEXT_SESSION(m_session); }
 
 	const std::string& get_info_storage_key() const
@@ -69,7 +62,9 @@ public:
 	GtkSourceLanguage* get_language() const;
 	void set_language(GtkSourceLanguage* language);
 
-	InfTextUser* get_active_user() const;
+	// cannot overwrite with covariant return type InfTextUser because
+	// C++ does not know GObject inheritance:
+	virtual InfUser* get_active_user() const;
 	void set_active_user(InfTextUser* user);
 
 	GtkSourceView* get_text_view() { return m_view; }
@@ -78,11 +73,6 @@ public:
 	SignalLanguageChanged signal_language_changed() const
 	{
 		return m_signal_language_changed;
-	}
-
-	SignalActiveUserChanged signal_active_user_changed() const
-	{
-		return m_signal_active_user_changed;
 	}
 
 protected:
@@ -133,7 +123,6 @@ protected:
 	GtkSourceBuffer* m_buffer;
 
 	SignalLanguageChanged m_signal_language_changed;
-	SignalActiveUserChanged m_signal_active_user_changed;
 };
 
 }

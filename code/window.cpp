@@ -51,25 +51,25 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_statusbar(m_text_folder, m_preferences),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
 	m_operations(m_info_storage, m_statusbar),
-	m_commands_autosave(m_text_folder, m_operations, m_info_storage,
-	                    m_preferences),
-	m_commands_browser(m_browser, m_text_folder, m_statusbar),
-	m_commands_subscription(m_browser, m_text_folder,
-	                        m_chat_folder, m_info_storage),
-	m_commands_synchronization(m_commands_subscription),
-	m_commands_user_join(m_commands_subscription, m_preferences),
-	m_commands_browser_context(*this, m_browser, m_file_chooser,
+	m_browser_commands(m_browser, m_text_folder, m_statusbar),
+	m_browser_context_commands(*this, m_browser, m_file_chooser,
 	                           m_operations, m_preferences),
-	m_commands_folder(m_text_folder),
-	// TODO: chat_folder commands
-	m_commands_file(*this, m_header, m_browser, m_text_folder,
+	m_autosave_commands(m_text_folder, m_operations, m_info_storage,
+	                    m_preferences),
+	m_subscription_commands(m_browser, m_text_folder,
+	                        m_chat_folder, m_info_storage),
+	m_synchronization_commands(m_subscription_commands),
+	m_user_join_commands(m_subscription_commands, m_preferences),
+	m_text_folder_commands(m_text_folder),
+	m_chat_folder_commands(m_chat_folder),
+	m_file_commands(*this, m_header, m_browser, m_text_folder,
 	                m_statusbar, m_file_chooser, m_operations,
 	                m_info_storage, m_preferences),
-	m_commands_edit(*this, m_header, m_text_folder, m_statusbar,
+	m_edit_commands(*this, m_header, m_text_folder, m_statusbar,
 	                m_preferences),
-	m_commands_view(m_header, m_text_folder, m_chat_frame, m_chat_folder,
+	m_view_commands(m_header, m_text_folder, m_chat_frame, m_chat_folder,
 	                m_preferences),
-	m_commands_help(*this, m_header, m_icon_mgr),
+	m_help_commands(*this, m_header, m_icon_mgr),
 	m_title_bar(*this, m_text_folder)
 {
 #ifdef WITH_UNIQUE
@@ -242,12 +242,12 @@ void Gobby::Window::on_show()
 	{
 		Glib::RefPtr<Gio::File> file(
 			Gio::File::create_for_commandline_arg(m_argv[0]));
-		m_commands_file.set_task(new TaskOpen(m_commands_file, file));
+		m_file_commands.set_task(new TaskOpen(m_file_commands, file));
 	}
 	else if(m_argc > 1)
 	{
 		TaskOpenMultiple* task =
-			new TaskOpenMultiple(m_commands_file);
+			new TaskOpenMultiple(m_file_commands);
 
 		const char* const* arg = m_argv;
 		do
@@ -257,7 +257,7 @@ void Gobby::Window::on_show()
 			task->add_file(file->get_uri());
 		} while(*++arg);
 
-		m_commands_file.set_task(task);
+		m_file_commands.set_task(task);
 	}
 
 }
@@ -353,17 +353,17 @@ try
 			if(uris[1]) // multiple files?
 			{
 				TaskOpenMultiple* task =
-					new TaskOpenMultiple(m_commands_file);
+					new TaskOpenMultiple(m_file_commands);
 				for(const gchar* const* p = uris; *p; ++p)
 					task->add_file(*p);
-				m_commands_file.set_task(task);
+				m_file_commands.set_task(task);
 			}
 			else
 			{
 				TaskOpen* task = new TaskOpen(
-					m_commands_file,
+					m_file_commands,
 					Gio::File::create_for_uri(*uris));
-				m_commands_file.set_task(task);
+				m_file_commands.set_task(task);
 			}
 			return UNIQUE_RESPONSE_OK;
 		}

@@ -115,7 +115,7 @@ void Gobby::EditCommands::on_document_changed(SessionView* view)
 	if(m_current_view != NULL)
 	{
 		InfTextSession* session = m_current_view->get_session();
-		InfTextUser* active_user = m_current_view->get_active_user();
+		InfUser* active_user = m_current_view->get_active_user();
 		GtkTextBuffer* buffer =
 			GTK_TEXT_BUFFER(m_current_view->get_text_buffer());
 
@@ -222,7 +222,7 @@ void Gobby::EditCommands::on_sync_complete()
 	}
 }
 
-void Gobby::EditCommands::on_active_user_changed(InfTextUser* active_user)
+void Gobby::EditCommands::on_active_user_changed(InfUser* active_user)
 {
 	g_assert(m_current_view != NULL);
 
