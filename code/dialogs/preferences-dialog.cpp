@@ -299,7 +299,7 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_tab(_("Tab Stops")),
 	m_group_indentation(_("Indentation")),
-	m_group_homeend(_("Home/End Behaviour")),
+	m_group_homeend(_("Home/End Behavior")),
 	m_group_saving(_("File Saving")),
 	m_lbl_tab_width(_("_Tab width:"), Gtk::ALIGN_RIGHT,
 	                Gtk::ALIGN_CENTER, true),
