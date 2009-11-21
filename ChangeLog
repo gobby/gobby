@@ -1,3 +1,11 @@
+2009-11-21  Philipp Kern  <phil@0x539.de>
+
+	* help/C/gobby.xml: add shortcuts
+
+2009-11-17  Philipp Kern  <phil@0x539.de>
+
+	* help/C/gobby.xml: point to the new IRC channel on Freenode
+
 2009-11-17  Armin Burgmeier  <armin@arbur.net>
 
 	* code/window.hpp:
