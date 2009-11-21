@@ -1,5 +1,9 @@
 2009-11-21  Philipp Kern  <phil@0x539.de>
 
+	* help/C/gobby.xml: document Editor settings a bit more
+
+2009-11-21  Philipp Kern  <phil@0x539.de>
+
 	* code/dialogs/preferences-dialog.cpp: fix en_UK-ism
 
 2009-11-21  Philipp Kern  <phil@0x539.de>

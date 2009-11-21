@@ -178,6 +178,20 @@ gobby-0.5
           </caption>
         </mediaobject>
       </screenshot>
+      <itemizedlist>
+        <listitem>
+          <para><emphasis role="italic">Tab Stops</emphasis> - The <emphasis role="italic">Tab width </emphasis> setting controls the display of tab characters.  In conjunction with <emphasis role="italic">Insert spaces instead of tabs</emphasis> it also determins the amount of white space characters inserted into the text when the tab key is pressed.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis role="italic">Indentation</emphasis> -</para>
+        </listitem>
+        <listitem>
+          <para><emphasis role="italic">Home/End Behavior</emphasis> - <emphasis role="italic">Smart home/end</emphasis> controls if the Home and End keys should move to the first/last non-space character before moving to the beginning/end of the line.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis role="italic">File Saving</emphasis> -</para>
+        </listitem>
+      </itemizedlist>
     </sect2>
   </sect1>
   <sect1 id="shortcuts">
@@ -371,7 +385,7 @@ gobby-0.5
   </sect1>
   <sect1 id="about">
     <title>About Gobby</title>
-    <para><application>Gobby</application> was written by Armin Burgmeier.</para>
+    <para><application>Gobby</application> was written by Armin Burgmeier and others.</para>
     <para>To report a bug or make a suggestion regarding this application or this
       manual, please file a ticket on
       <ulink url="http://gobby.0x539.de/">http://gobby.0x539.de</ulink>.
