@@ -285,7 +285,7 @@ bool Gobby::Window::on_delete_event(GdkEventAny* event)
 	);
 
 	dlg.set_secondary_text(
-		_("Do you want to close Gobby nevertheless?")
+		_("Do you want to close Gobby anyway?")
 	);
 
 	Gtk::Image* img = Gtk::manage(new Gtk::Image(Gtk::Stock::CANCEL,

@@ -1,3 +1,8 @@
+2009-11-23  Armin Burgmeier  <armin@arbur.net>
+
+	* src/window.cpp: Changed "Do you want to close Gobby nevertheless?"
+	to "Do you want to close Gobby anyway?". Bug #505.
+
 2009-11-09  Philipp Kern  <phil@0x539.de>
 
 	* inc/header.hpp:
