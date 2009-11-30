@@ -31,6 +31,7 @@ namespace
 {
 	InfSession*
 	session_new(InfIo* io, InfCommunicationManager* manager,
+	            InfSessionStatus status,
 	            InfCommunicationJoinedGroup* sync_group,
 	            InfXmlConnection* sync_connection, gpointer user_data)
 	{
@@ -48,6 +49,7 @@ namespace
 			inf_text_session_new_with_user_table(
 				manager, INF_TEXT_BUFFER(buffer), io,
 				user_table,
+				status,
 				INF_COMMUNICATION_GROUP(sync_group),
 				sync_connection);
 		return INF_SESSION(session);

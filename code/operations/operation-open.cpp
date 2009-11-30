@@ -385,7 +385,7 @@ void Gobby::OperationOpen::read_finish()
 
 	InfTextSession* session = inf_text_session_new_with_user_table(
 		communication_manager, INF_TEXT_BUFFER(text_gtk_buffer), io,
-		user_table, NULL, NULL);
+		user_table, INF_SESSION_RUNNING, NULL, NULL);
 
 	g_object_unref(io);
 	g_object_unref(text_gtk_buffer);

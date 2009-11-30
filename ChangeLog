@@ -1,5 +1,12 @@
 2009-11-30  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/noteplugin.cpp:
+	* code/operations/operation-open.cpp: Adapt to recent API change in
+	libinfinity: inf_text_session_new() and InfcNotePlugin's session_new()
+	now take a InfSessionStatus parameter.
+
+2009-11-30  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/folder-commands.cpp (constructor): Fixed a comparison
 	of signed vs. unsigned compiler warning.
 
