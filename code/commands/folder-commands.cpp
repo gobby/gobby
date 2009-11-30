@@ -247,7 +247,9 @@ Gobby::FolderCommands::FolderCommands(Folder& folder):
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &FolderCommands::on_document_changed));
 
-	for(unsigned int i = 0; i < m_folder.get_n_pages(); ++ i)
+	const unsigned int n_pages =
+		static_cast<unsigned int>(m_folder.get_n_pages());
+	for(unsigned int i = 0; i < n_pages; ++i)
 	{
 		// TODO: Convenience API in Folder to retrieve SessionView,
 		// so that we don't need to know about SessionUserView here.
