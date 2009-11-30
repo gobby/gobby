@@ -248,9 +248,10 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 		SessionView* view = folder.lookup_document(session);
 		g_assert(view != NULL);
 
-		// TODO: Also reset active user for chat sessions
 		TextSessionView* text_view =
 			dynamic_cast<TextSessionView*>(view);
+		ChatSessionView* chat_view =
+			dynamic_cast<ChatSessionView*>(view);
 
 		if(text_view)
 		{
@@ -266,6 +267,10 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 				"lost."), true);
 
 			text_view->set_active_user(NULL);
+		}
+		else if(chat_view)
+		{
+			chat_view->set_active_user(NULL);
 		}
 
 		m_signal_unsubscribe_session.emit(prxy, folder, *view);

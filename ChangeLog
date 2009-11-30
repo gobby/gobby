@@ -1,3 +1,9 @@
+2009-11-30  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/subscription-commands.cpp (on_notify_connection): Also
+	reset the active user for chat sessions. This prevents a crash when
+	changing to a chat session tab which belongs to a closed chat session.
+
 2009-11-21  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/sessionview.hpp:
