@@ -1,3 +1,16 @@
+2009-12-01  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/tablabel.hpp:
+	* code/core/tablabel.cpp: Removed all text-specific functionality from
+	TabLabel.
+
+	* code/core/texttablabel.hpp:
+	* code/core/texttablabel.cpp:
+	* code/core/Makefile.am: Readded it to TextTagTabel which derives from
+	TabLabel.
+
+	* code/core/folder.cpp: Create a TextTabLabel for text documents.
+
 2009-12-01  Gabríel A. Pétursson  <gabrielp@simnet.is>
 
 	* code/core/statusbar.cpp: Do not display documents' status on the

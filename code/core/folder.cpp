@@ -18,7 +18,7 @@
 
 #include "core/folder.hpp"
 #include "core/sessionuserview.hpp"
-#include "core/tablabel.hpp"
+#include "core/texttablabel.hpp"
 #include "util/closebutton.hpp"
 #include "util/file.hpp"
 
@@ -142,7 +142,7 @@ Gobby::Folder::add_text_session(InfTextSession* session,
 			m_preferences.appearance.document_userlist_width));
 	userview->show();
 
-	TabLabel* tablabel = Gtk::manage(new TabLabel(*this, *view));
+	TabLabel* tablabel = Gtk::manage(new TextTabLabel(*this, *view));
 	tablabel->signal_close_request().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_tab_close_request),

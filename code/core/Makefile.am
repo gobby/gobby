@@ -18,6 +18,7 @@ libgobby_core_a_SOURCES = \
 	statusbar.cpp \
 	tablabel.cpp \
 	textsessionview.cpp \
+	texttablabel.cpp \
 	titlebar.cpp \
 	userlist.cpp
 
@@ -39,6 +40,7 @@ noinst_HEADERS = \
         statusbar.hpp \
 	tablabel.hpp \
         textsessionview.hpp \
+	texttablabel.hpp \
 	titlebar.hpp \
         userlist.hpp
 

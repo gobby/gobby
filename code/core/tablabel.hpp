@@ -19,14 +19,10 @@
 #ifndef _GOBBY_TABLABEL_HPP_
 #define _GOBBY_TABLABEL_HPP_
 
-#include "core/textsessionview.hpp"
-#include "util/closebutton.hpp"
+#include "core/sessionview.hpp"
 
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
-#include <gtkmm/label.h>
-
-#include <list>
 
 namespace Gobby
 {
@@ -38,8 +34,8 @@ class TabLabel: public Gtk::HBox
 public:
 	typedef Glib::SignalProxy0<void> SignalCloseRequest;
 
-	TabLabel(Folder& folder, TextSessionView& view);
-	~TabLabel();
+	TabLabel(Folder& folder, SessionView& view, Gtk::StockID active_icon);
+	virtual ~TabLabel();
 
 	SignalCloseRequest signal_close_request()
 	{
@@ -47,13 +43,6 @@ public:
 	}
 
 protected:
-	static void on_notify_editable_static(GObject* object,
-	                                      GParamSpec* pspec,
-	                                      gpointer user_data)
-	{
-		static_cast<TabLabel*>(user_data)->on_notify_editable();
-	}
-
 	static void on_notify_status_static(GObject* object,
 	                                    GParamSpec* pspec,
 	                                    gpointer user_data)
@@ -69,96 +58,36 @@ protected:
 			on_notify_subscription_group();
 	}
 
-	static void on_modified_changed_static(GtkTextBuffer* buffer,
-	                                       gpointer user_data)
-	{
-		static_cast<TabLabel*>(user_data)->on_modified_changed();
-	}
-
-	static void on_erase_text_static(InfTextBuffer* buffer,
-	                                 guint position,
-	                                 guint length,
-	                                 InfTextUser* author,
-	                                 gpointer user_data)
-	{
-		static_cast<TabLabel*>(user_data)->on_changed(author);
-	}
-
-	static void on_insert_text_static(InfTextBuffer* buffer,
-	                                  guint position,
-	                                  InfTextChunk* text,
-	                                  InfTextUser* author,
-	                                  gpointer user_data)
-	{
-		static_cast<TabLabel*>(user_data)->on_changed(author);
-	}
-
-	virtual void on_style_changed(const Glib::RefPtr<Gtk::Style>& prev);
-
-	void on_notify_editable();
-	void on_notify_status();
-	void on_notify_subscription_group();
-
-	void on_modified_changed();
-	void on_changed(InfTextUser* author);
-
 	void on_folder_document_changed(SessionView* view);
 
-	void update_icon();
-	void update_color();
-	void update_modified();
-	void update_dots();
+	// Can be overriden by derived classes:
+	virtual void on_active_user_changed(InfUser* user);
+	virtual void on_notify_status();
+	virtual void on_notify_subscription_group();
+	virtual void on_activate();
+
+	// To be called by derived classes:
+	void set_changed();
 
 	Folder& m_folder;
-	TextSessionView& m_view;
+	SessionView& m_view;
 
 	Gtk::Image m_icon;
 	Gtk::Label m_title;
-	Gtk::Label m_dots;
+	Gtk::HBox m_extra;
 	CloseButton m_button;
 
-	gunichar m_dot_char;
-
-	// Whether the document was changed since it has been active.
 	bool m_changed;
 
-	gulong m_notify_editable_handle;
+private:
+	void update_icon();
+	void update_color();
+
+	Gtk::StockID m_active_icon;
+
+	// Whether the document was changed since it has been active.
 	gulong m_notify_status_handle;
 	gulong m_notify_subscription_group_handle;
-	gulong m_modified_changed_handle;
-	gulong m_erase_text_handle;
-	gulong m_insert_text_handle;
-
-	class UserWatcher
-	{
-	public:
-		UserWatcher(TabLabel* l, InfTextUser* u);
-
-		UserWatcher(const UserWatcher& other);
-
-		~UserWatcher();
-
-		InfTextUser* get_user() const;
-
-		bool operator==(InfTextUser* other_user) const;
-
-		// UserWatcher& operator=(const UserWatcher& other);
-
-	private:
-		void connect();
-
-		void disconnect();
-
-		static void on_notify_hue(GObject* user_object,
-		                          GParamSpec* spec,
-		                          gpointer user_data);
-
-		TabLabel* label;
-		InfTextUser* user;
-		gulong handle;
-	};
-
-	std::list<UserWatcher> m_changed_by;
 };
 
 }

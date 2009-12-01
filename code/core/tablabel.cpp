@@ -21,66 +21,25 @@
 
 #include <gtkmm/stock.h>
 
-Gobby::TabLabel::UserWatcher::UserWatcher(TabLabel* l, InfTextUser* u):
-	label(l), user(u)
-{
-	connect();
-}
-
-Gobby::TabLabel::UserWatcher::UserWatcher(const UserWatcher& other):
-	label(other.label), user(other.user)
-{
-	connect();
-}
-
-Gobby::TabLabel::UserWatcher::~UserWatcher()
-{
-	g_signal_handler_disconnect(user, handle);
-}
-
-InfTextUser* Gobby::TabLabel::UserWatcher::get_user() const
-{
-	return user;
-}
-
-bool Gobby::TabLabel::UserWatcher::operator==(InfTextUser* other_user) const
-{
-	return user == other_user;
-}
-
-void Gobby::TabLabel::UserWatcher::connect()
-{
-	handle = g_signal_connect(
-		G_OBJECT(user), "notify::hue",
-		G_CALLBACK(&UserWatcher::on_notify_hue), label);
-}
-
-void Gobby::TabLabel::UserWatcher::on_notify_hue(GObject* user_object,
-                                                 GParamSpec* spec,
-                                                 gpointer user_data)
-{
-	static_cast<TabLabel*>(user_data)->update_dots();
-}
-
-
-Gobby::TabLabel::TabLabel(Folder& folder, TextSessionView& view):
-	Gtk::HBox(false, 6),
-	m_folder(folder), m_view(view),
-	m_dot_char(0), m_changed(false)
+Gobby::TabLabel::TabLabel(Folder& folder, SessionView& view,
+                          Gtk::StockID active_icon):
+	Gtk::HBox(false, 6), m_folder(folder), m_view(view),
+	m_title(view.get_title()), m_changed(false),
+	m_active_icon(active_icon)
 {
 	m_title.set_alignment(Gtk::ALIGN_LEFT);
 
 	update_icon();
 	update_color();
-	update_modified();
 
 	m_icon.show();
 	m_title.show();
+	m_extra.show();
 	m_button.show();
 
-	m_notify_editable_handle = g_signal_connect(
-		G_OBJECT(view.get_text_view()), "notify::editable",
-		G_CALLBACK(on_notify_editable_static), this);
+	view.signal_active_user_changed().connect(
+		sigc::mem_fun(*this, &TabLabel::on_active_user_changed));
+
 	m_notify_status_handle = g_signal_connect(
 		G_OBJECT(view.get_session()), "notify::status",
 		G_CALLBACK(on_notify_status_static), this);
@@ -88,76 +47,31 @@ Gobby::TabLabel::TabLabel(Folder& folder, TextSessionView& view):
 		G_OBJECT(view.get_session()),
 		"notify::subscription-group",
 		G_CALLBACK(on_notify_subscription_group_static), this);
-	m_modified_changed_handle = g_signal_connect_after(
-		G_OBJECT(view.get_text_buffer()), "modified-changed",
-		G_CALLBACK(on_modified_changed_static), this);
-
-	InfTextBuffer* buffer = 
-		INF_TEXT_BUFFER(
-			inf_session_get_buffer(
-				INF_SESSION(view.get_session())));
-	m_insert_text_handle = g_signal_connect_after(
-		G_OBJECT(buffer), "insert-text",
-		G_CALLBACK(on_insert_text_static), this);
-	m_erase_text_handle = g_signal_connect_after(
-		G_OBJECT(buffer), "erase-text",
-		G_CALLBACK(on_erase_text_static), this);
 
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &TabLabel::on_folder_document_changed));
 
 	pack_start(m_icon, Gtk::PACK_SHRINK);
 	pack_start(m_title, Gtk::PACK_SHRINK);
-	pack_start(m_dots, Gtk::PACK_SHRINK);
+	pack_start(m_extra, Gtk::PACK_EXPAND_WIDGET);
 	pack_end(m_button, Gtk::PACK_SHRINK);
 }
 
 Gobby::TabLabel::~TabLabel()
 {
-	g_signal_handler_disconnect(m_view.get_text_view(),
-	                            m_notify_editable_handle);
 	g_signal_handler_disconnect(m_view.get_session(),
 	                            m_notify_status_handle);
 	g_signal_handler_disconnect(m_view.get_session(),
 	                            m_notify_subscription_group_handle);
-	g_signal_handler_disconnect(m_view.get_text_buffer(),
-	                            m_modified_changed_handle);
-	InfTextBuffer* buffer = 
-		INF_TEXT_BUFFER(
-			inf_session_get_buffer(
-				INF_SESSION(m_view.get_session())));
-	g_signal_handler_disconnect(buffer, m_erase_text_handle);
-	g_signal_handler_disconnect(buffer, m_insert_text_handle);
 }
 
-void Gobby::TabLabel::on_style_changed(const Glib::RefPtr<Gtk::Style>& prev)
+void Gobby::TabLabel::on_folder_document_changed(SessionView* view)
 {
-	Gtk::HBox::on_style_changed(prev);
-
-	static const gunichar dot_chars[] = {
-		0x270E, /* pencil */
-		0x26AB, /* medium black circle */
-		0x25CF, /* black circle */
-		0x002A, /* asterisk */
-		0x0000
-	};
-
-	// Find a glyph for the user dots
-	const gunichar* c;
-	for(c = dot_chars; *c; ++c)
-	{
-		m_dots.set_text(Glib::ustring(1, *c));
-		if(m_dots.get_layout()->get_unknown_glyphs_count() == 0)
-			break;
-	}
-
-	m_dot_char = *c;
-
-	// Update dots using this char
-	update_dots();
+	if(view == &m_view)
+		on_activate();
 }
 
-void Gobby::TabLabel::on_notify_editable()
+void Gobby::TabLabel::on_active_user_changed(InfUser* user)
 {
 	update_icon();
 }
@@ -166,7 +80,6 @@ void Gobby::TabLabel::on_notify_status()
 {
 	update_icon();
 	update_color();
-	update_modified();
 }
 
 void Gobby::TabLabel::on_notify_subscription_group()
@@ -175,45 +88,17 @@ void Gobby::TabLabel::on_notify_subscription_group()
 	update_color();
 }
 
-void Gobby::TabLabel::on_modified_changed()
+void Gobby::TabLabel::on_activate()
 {
-	update_modified();
+	m_changed = false;
+	update_color();
 }
 
-void Gobby::TabLabel::on_changed(InfTextUser* author)
+void Gobby::TabLabel::set_changed()
 {
 	if(m_folder.get_current_document() != &m_view)
 	{
-		// TODO: remove dot if all the user's
-		// new contributions where undone
-		if(std::find(m_changed_by.begin(), m_changed_by.end(), author)
-		   == m_changed_by.end())
-		{
-			m_changed_by.push_back(UserWatcher(this, author));
-			update_dots();
-		}
-
-		if(!m_changed)
-		{
-			InfSession* session =
-				INF_SESSION(m_view.get_session());
-			if(inf_session_get_status(session) ==
-			   INF_SESSION_RUNNING)
-			{
-				m_changed = true;
-				update_color();
-			}
-		}
-	}
-}
-
-void Gobby::TabLabel::on_folder_document_changed(SessionView* view)
-{
-	if(view == &m_view)
-	{
-		m_changed_by.clear();
-		update_dots();
-		m_changed = false;
+		m_changed = true;
 		update_color();
 	}
 }
@@ -221,7 +106,6 @@ void Gobby::TabLabel::on_folder_document_changed(SessionView* view)
 void Gobby::TabLabel::update_icon()
 {
 	InfSession* session = INF_SESSION(m_view.get_session());
-	GtkTextView* view = GTK_TEXT_VIEW(m_view.get_text_view());
 
 	if(inf_session_get_subscription_group(session) == NULL)
 	{
@@ -231,13 +115,14 @@ void Gobby::TabLabel::update_icon()
 	{
 		switch(inf_session_get_status(session))
 		{
+		case INF_SESSION_PRESYNC:
 		case INF_SESSION_SYNCHRONIZING:
 			m_icon.set(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_MENU);
 			break;
 		case INF_SESSION_RUNNING:
-			if(gtk_text_view_get_editable(view))
+			if(m_view.get_active_user() != NULL)
 			{
-				m_icon.set(Gtk::Stock::EDIT,
+				m_icon.set(m_active_icon,
 				           Gtk::ICON_SIZE_MENU);
 			}
 			else
@@ -284,52 +169,5 @@ void Gobby::TabLabel::update_color()
 		m_title.modify_fg(
 			Gtk::STATE_NORMAL,
 			default_style->get_fg(Gtk::STATE_NORMAL));
-	}
-}
-
-void Gobby::TabLabel::update_modified()
-{
-	InfSession* session = INF_SESSION(m_view.get_session());
-	bool modified = gtk_text_buffer_get_modified(
-		GTK_TEXT_BUFFER(m_view.get_text_buffer()));
-
-	if(inf_session_get_status(session) == INF_SESSION_SYNCHRONIZING)
-		modified = false;
-
-	if(modified)
-		m_title.set_text("*" + m_view.get_title());
-	else
-		m_title.set_text(m_view.get_title());
-}
-
-void Gobby::TabLabel::update_dots()
-{
-	if (m_changed_by.empty())
-	{
-		m_dots.hide();
-	}
-	else
-	{
-		Glib::ustring markup;
-		for (std::list<UserWatcher>::const_iterator i = m_changed_by.begin();
-		     i != m_changed_by.end();
-		     ++i)
-		{
-			Gdk::Color c;
-			c.set_hsv(360.0 * inf_text_user_get_hue(i->get_user()), 0.6, 0.6);
-
-			// We are using the C API here since
-			// gdk_color_to_string is available since GTK 2.12,
-			// but Gdk::Color::to_string only since gtkmm 2.14,
-			// and we want to require nothing more recent than
-			// 2.12 for now. See also bug #447.
-			gchar* color_str = gdk_color_to_string(c.gobj());
-			Glib::ustring cpp_color_str(color_str);
-			g_free(color_str);
-
-			markup += "<span color=\"" + cpp_color_str + "\">" + m_dot_char + "</span>";
-		}
-		m_dots.set_markup(markup);
-		m_dots.show();
 	}
 }
