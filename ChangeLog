@@ -1,5 +1,13 @@
 2009-12-01  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/chattablabel.hpp:
+	* code/core/chattablabel.cpp:
+	* code/core/Makefile.am: Added a tab label for the chat tabs.
+
+	* code/core/folder.cpp: Make use of it for new chat sessions.
+
+2009-12-01  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/tablabel.hpp:
 	* code/core/tablabel.cpp: Removed all text-specific functionality from
 	TabLabel.

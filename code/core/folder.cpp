@@ -18,8 +18,8 @@
 
 #include "core/folder.hpp"
 #include "core/sessionuserview.hpp"
+#include "core/chattablabel.hpp"
 #include "core/texttablabel.hpp"
-#include "util/closebutton.hpp"
 #include "util/file.hpp"
 
 #include <gdk/gdkkeysyms.h>
@@ -179,12 +179,11 @@ Gobby::Folder::add_chat_session(InfChatSession* session,
 			m_preferences.appearance.chat_userlist_width));
 	userview->show();
 
-	// TODO chat: Use a ChatTabLabel
-	Gtk::Label* tablabel = Gtk::manage(new Gtk::Label(hostname));
-/*	tablabel->signal_close_request().connect(
+	TabLabel* tablabel = Gtk::manage(new ChatTabLabel(*this, *view));
+	tablabel->signal_close_request().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_tab_close_request),
-			sigc::ref(*view)));*/
+			sigc::ref(*view)));
 	tablabel->show();
 	append_page(*userview, *tablabel);
 
