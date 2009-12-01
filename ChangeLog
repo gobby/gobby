@@ -1,5 +1,10 @@
 2009-12-01  Gabríel A. Pétursson  <gabrielp@simnet.is>
 
+	* code/core/statusbar.cpp: Do not display documents' status on the
+	status bar when there are no documents open.
+
+2009-12-01  Gabríel A. Pétursson  <gabrielp@simnet.is>
+
 	* code/core/statusbar.hpp:
 	* code/core/statusbar.cpp: Display the overwrite status on the status
 	bar.
