@@ -89,6 +89,13 @@ protected:
 		static_cast<StatusBar*>(user_data)->on_changed();
 	}
 
+	static void on_toggled_overwrite_static(GtkTextView* buffer,
+	                                        GParamSpec* pspec,
+	                                        gpointer user_data)
+	{
+		static_cast<StatusBar*>(user_data)->on_toggled_overwrite();
+	}
+
 	void on_message_clicked(GdkEventButton* button,
 	                        const MessageHandle& handle);
 
@@ -97,6 +104,7 @@ protected:
 	void on_view_changed();
 
 	void on_mark_set(GtkTextMark* mark);
+	void on_toggled_overwrite();
 	void on_changed();
 
 	void update_pos_display();
@@ -110,6 +118,7 @@ protected:
 	TextSessionView* m_current_view;
 	gulong m_mark_set_handler;
 	gulong m_changed_handler;
+	gulong m_toverwrite_handler;
 
 	guint m_position_context_id;
 };

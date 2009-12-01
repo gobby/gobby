@@ -122,7 +122,7 @@ Gobby::StatusBar::MessageHandle
 Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
                               const Glib::ustring& message,
                               const Glib::ustring& dialog_message,
-			      unsigned int timeout)
+                              unsigned int timeout)
 {
 	if(m_visible_messages >= 12)
 	{
@@ -276,6 +276,8 @@ void Gobby::StatusBar::on_document_removed(SessionView& view)
 
 		g_signal_handler_disconnect(buffer, m_mark_set_handler);
 		g_signal_handler_disconnect(buffer, m_changed_handler);
+		g_signal_handler_disconnect(m_current_view->get_text_view(),
+		                            m_toverwrite_handler);
 
 		m_current_view = NULL;
 	}
@@ -290,6 +292,8 @@ void Gobby::StatusBar::on_document_changed(SessionView* view)
 
 		g_signal_handler_disconnect(buffer, m_mark_set_handler);
 		g_signal_handler_disconnect(buffer, m_changed_handler);
+		g_signal_handler_disconnect(m_current_view->get_text_view(),
+		                            m_toverwrite_handler);
 	}
 
 	m_current_view = dynamic_cast<TextSessionView*>(view);
@@ -306,6 +310,10 @@ void Gobby::StatusBar::on_document_changed(SessionView* view)
 		m_changed_handler = g_signal_connect_after(
 			G_OBJECT(buffer), "changed",
 			G_CALLBACK(on_changed_static), this);
+
+		m_toverwrite_handler = g_signal_connect_after(
+			G_OBJECT(GTK_TEXT_VIEW(m_current_view->get_text_view())), "notify::overwrite",
+			G_CALLBACK(on_toggled_overwrite_static), this);
 
 		// Initial update
 		update_pos_display();
@@ -325,6 +333,11 @@ void Gobby::StatusBar::on_mark_set(GtkTextMark* mark)
 
 	if(mark == gtk_text_buffer_get_insert(buffer))
 		update_pos_display();
+}
+
+void Gobby::StatusBar::on_toggled_overwrite()
+{
+	update_pos_display();
 }
 
 void Gobby::StatusBar::on_changed()
@@ -361,10 +374,15 @@ void Gobby::StatusBar::update_pos_display()
 				++ column;
 		}
 
+		// TODO: We might want to have a separate widget for the
+		// OVR/INS display.
 		m_position_context_id = m_bar_position.push(
 			Glib::ustring::compose(
-				_("Ln %1, Col %2"),
+				_("Ln %1, Col %2\t%3"),
 				gtk_text_iter_get_line(&iter) + 1,
-				column + 1));
+				column + 1,
+				gtk_text_view_get_overwrite(GTK_TEXT_VIEW(m_current_view->get_text_view())) ? _("OVR") : _("INS")
+			)
+		);
 	}
 }
