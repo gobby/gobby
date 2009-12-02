@@ -337,7 +337,8 @@ void Gobby::EditCommands::on_undo()
 
 	inf_adopted_session_undo(
 		INF_ADOPTED_SESSION(m_current_view->get_session()),
-		INF_ADOPTED_USER(m_current_view->get_active_user())
+		INF_ADOPTED_USER(m_current_view->get_active_user()),
+		1
 	);
 
 	g_signal_handler_disconnect(m_current_view->get_text_buffer(), i_);
@@ -358,7 +359,8 @@ void Gobby::EditCommands::on_redo()
 
 	inf_adopted_session_redo(
 		INF_ADOPTED_SESSION(m_current_view->get_session()),
-		INF_ADOPTED_USER(m_current_view->get_active_user())
+		INF_ADOPTED_USER(m_current_view->get_active_user()),
+		1
 	);
 
 	g_signal_handler_disconnect(m_current_view->get_text_buffer(), i_);

@@ -1,3 +1,9 @@
+2009-12-02  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/edit-commands.cpp: Adapt to another libinfinity API
+	change: inf_adopted_session_undo() and inf_adopted_session_redo() have
+	a new guint parameter.
+
 2009-12-01  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/chattablabel.hpp:
