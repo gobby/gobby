@@ -285,7 +285,7 @@ bool Gobby::FindDialog::replace()
 		GtkTextBuffer* buffer =
 			GTK_TEXT_BUFFER(text_view->get_text_buffer());
 
-		// Replace occurence
+		// Replace occurrence
 		Glib::ustring replace_text = get_replace_text();
 		gtk_text_buffer_delete_selection(buffer, TRUE, TRUE);
 		gtk_text_buffer_insert_at_cursor(buffer, replace_text.c_str(),
@@ -297,7 +297,7 @@ bool Gobby::FindDialog::replace()
 	}
 	else
 	{
-		// Search the first occurence
+		// Search the first occurrence
 		return find();
 	}
 }
@@ -334,14 +334,14 @@ bool Gobby::FindDialog::replace_all()
 
 	if(replace_count == 0)
 	{
-		message = _("No occurence has been replaced");
+		message = _("No occurrence has been replaced");
 		result = false;
 	}
 	else
 	{
 		message = Glib::ustring::compose(
-			ngettext("%1 occurence has been replaced",
-			         "%1 occurences have been replaced",
+			ngettext("%1 occurrence has been replaced",
+			         "%1 occurrences have been replaced",
 			         replace_count), replace_count);
 		result = true;
 	}
