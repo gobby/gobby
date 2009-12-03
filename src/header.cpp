@@ -372,7 +372,7 @@ Gobby::Header::Header(const ApplicationState& state,
 			"EditPreferences",
 			Gtk::Stock::PREFERENCES,
 			_("Preferences..."),
-			_("Displays a dialog to customise Gobby for your needs")
+			_("Displays a dialog to customize Gobby for your needs")
 		)
 	),
 
@@ -403,8 +403,8 @@ Gobby::Header::Header(const ApplicationState& state,
 		Gtk::Action::create(
 			"UserSetColour",
 			Gtk::Stock::SELECT_COLOR,
-			_("Set colour..."),
-			_("Sets a new colour for this user")
+			_("Set color..."),
+			_("Sets a new color for this user")
 		)
 	),
 

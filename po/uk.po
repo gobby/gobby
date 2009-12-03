@@ -6,15 +6,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-23 17:37+0200\n"
+"POT-Creation-Date: 2009-12-03 22:30+0100\n"
 "PO-Revision-Date: 2009-10-06 20:44+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
-"=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 0.3\n"
 
 #: ../src/chat.cpp:73
@@ -43,9 +43,13 @@ msgstr "Використання: /remove <документ>"
 msgid "Subscribe"
 msgstr "Підписатися"
 
-#: ../src/documentlist.cpp:107 ../src/header.cpp:417 ../src/icon.cpp:27
+#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
 msgid "Document list"
 msgstr "Список документів"
+
+#: ../src/docwindow.cpp:159
+msgid "GtkSpell error: %0%"
+msgstr ""
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
@@ -149,217 +153,227 @@ msgstr "Пере_йти до рядка"
 msgid "Go to line"
 msgstr "Перейти до рядка"
 
-#: ../src/header.cpp:235
+#: ../src/header.cpp:236
 msgid "Create session..."
 msgstr "Створити сеанс..."
 
-#: ../src/header.cpp:236
+#: ../src/header.cpp:237
 msgid "Opens a new obby session"
 msgstr "Відкриває новий сеанс obby"
 
-#: ../src/header.cpp:244
+#: ../src/header.cpp:245
 msgid "Join session..."
 msgstr "Приєднатися до сеансу..."
 
-#: ../src/header.cpp:245
+#: ../src/header.cpp:246
 msgid "Joins an existing obby session"
 msgstr "Приєднатися до вже створеного сеансу obby"
 
-#: ../src/header.cpp:253
-#| msgid "Save session..."
+#: ../src/header.cpp:254
 msgid "Save session"
 msgstr "Зберегти сеанс"
 
-#: ../src/header.cpp:254
+#: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "Зберегти сеанс для наступного відновлення"
 
-#: ../src/header.cpp:262
-#| msgid "Save session..."
+#: ../src/header.cpp:263
 msgid "Save session as..."
 msgstr "Зберегти сеанс як..."
 
-#: ../src/header.cpp:263
-#| msgid "Saves the complete session for a later restore"
+#: ../src/header.cpp:264
 msgid "\"Saves as...\" the complete session for a later restore"
 msgstr "Зберегти сеанс з новою назвою для наступного відновлення"
 
-#: ../src/header.cpp:271
+#: ../src/header.cpp:272
 msgid "Quit session"
 msgstr "Вийти з сеансу"
 
-#: ../src/header.cpp:272
+#: ../src/header.cpp:273
 msgid "Leaves the currently running obby session"
 msgstr "Полишити поточний сеанс obby"
 
-#: ../src/header.cpp:280
+#: ../src/header.cpp:281
 msgid "Quit"
 msgstr "Вийти"
 
-#: ../src/header.cpp:281
+#: ../src/header.cpp:282
 msgid "Quits the application"
 msgstr "Закриває вікно програми"
 
-#: ../src/header.cpp:285
+#: ../src/header.cpp:286
 msgid "_Session"
 msgstr "С_еанс"
 
-#: ../src/header.cpp:291
+#: ../src/header.cpp:292
 msgid "Create document..."
 msgstr "Створити документ..."
 
-#: ../src/header.cpp:292
+#: ../src/header.cpp:293
 msgid "Creates a new document"
 msgstr "Створити документ"
 
-#: ../src/header.cpp:300
+#: ../src/header.cpp:301
 msgid "Open document..."
 msgstr "Відкрити документ..."
 
-#: ../src/header.cpp:301
+#: ../src/header.cpp:302
 msgid "Loads a file into a new document"
 msgstr "Завантажити файл до нового документа"
 
-#: ../src/header.cpp:309
+#: ../src/header.cpp:310
 msgid "Save document"
 msgstr "Зберегти документ"
 
-#: ../src/header.cpp:310
+#: ../src/header.cpp:311
 msgid "Saves a document into a file"
 msgstr "Зберегти документ до файла"
 
-#: ../src/header.cpp:318
+#: ../src/header.cpp:319
 msgid "Save document as..."
 msgstr "Зберегти документ як..."
 
-#: ../src/header.cpp:319
+#: ../src/header.cpp:320
 msgid "Saves a document to another location"
 msgstr "Зберегти документ за іншою адресою"
 
 #: ../src/header.cpp:327
+#, fuzzy
+msgid "Save all documents"
+msgstr "Зберегти документ"
+
+#: ../src/header.cpp:328
+#, fuzzy
+msgid "Saves all documents"
+msgstr "Зберегти документ"
+
+#: ../src/header.cpp:336
 msgid "Close document"
 msgstr "Закрити документ"
 
-#: ../src/header.cpp:328
+#: ../src/header.cpp:337
 msgid "Closes an opened document"
 msgstr "Закрити відкритий документ"
 
-#: ../src/header.cpp:332
+#: ../src/header.cpp:341
 msgid "_Edit"
 msgstr "_Правка"
 
-#: ../src/header.cpp:338
+#: ../src/header.cpp:347
 msgid "Find..."
 msgstr "Знайти..."
 
-#: ../src/header.cpp:339
+#: ../src/header.cpp:348
 msgid "Search for a text in the current document"
 msgstr "Шукати фрагмент тексту у створеному документі"
 
-#: ../src/header.cpp:347
+#: ../src/header.cpp:356
 msgid "Find and replace..."
 msgstr "Знайти і замінити..."
 
-#: ../src/header.cpp:348
+#: ../src/header.cpp:357
 msgid "Search for a text and replace it with another one"
 msgstr "Знайти фрагмент тексту і замінити його іншим фрагментом"
 
-#: ../src/header.cpp:356
+#: ../src/header.cpp:365
 msgid "Go to line..."
 msgstr "Перейти до рядка..."
 
-#: ../src/header.cpp:357
+#: ../src/header.cpp:366
 msgid "Move cursor to a specified line"
 msgstr "Пересунути курсор до вказаного рядка"
 
-#: ../src/header.cpp:365
+#: ../src/header.cpp:374
 msgid "Preferences..."
 msgstr "Налаштування..."
 
-#: ../src/header.cpp:366
-msgid "Displays a dialog to customise Gobby for your needs"
+#: ../src/header.cpp:375
+#, fuzzy
+msgid "Displays a dialog to customize Gobby for your needs"
 msgstr ""
 "Показати діалогове вікно для налаштування Gobby згідно до ваших уподобань"
 
-#: ../src/header.cpp:374
+#: ../src/header.cpp:383
 msgid "Document preferences..."
 msgstr "Параметри документа..."
 
-#: ../src/header.cpp:375
+#: ../src/header.cpp:384
 msgid "Shows a preferences dialog that is just applied to this document"
 msgstr ""
 "Відкрити діалогове вікно параметрів, які стосуються лише поточного документа"
 
-#: ../src/header.cpp:380
+#: ../src/header.cpp:389
 msgid "Syntax"
 msgstr "Синтаксис"
 
-#: ../src/header.cpp:382
+#: ../src/header.cpp:391
 msgid "_User"
 msgstr "_Користувач"
 
-#: ../src/header.cpp:388
+#: ../src/header.cpp:397
 msgid "Set password..."
 msgstr "Встановити пароль…"
 
-#: ../src/header.cpp:389
+#: ../src/header.cpp:398
 msgid "Sets a password for this user"
 msgstr "Встановити пароль для цього користувача"
 
-#: ../src/header.cpp:397
-msgid "Set colour..."
+#: ../src/header.cpp:406
+#, fuzzy
+msgid "Set color..."
 msgstr "Встановити колір..."
 
-#: ../src/header.cpp:398
-msgid "Sets a new colour for this user"
+#: ../src/header.cpp:407
+#, fuzzy
+msgid "Sets a new color for this user"
 msgstr "Встановити новий колір для цього користувача"
 
-#: ../src/header.cpp:402
+#: ../src/header.cpp:411
 msgid "_Window"
 msgstr "_Вікно"
 
-#: ../src/header.cpp:408 ../src/icon.cpp:21 ../src/userlist.cpp:122
+#: ../src/header.cpp:417 ../src/icon.cpp:21 ../src/userlist.cpp:122
 msgid "User list"
 msgstr "Список користувачів"
 
-#: ../src/header.cpp:409
+#: ../src/header.cpp:418
 msgid "Displays a list of users that are currently joined"
 msgstr "Відкриває вікно списку користувачів, що приєдналися до редагування"
 
-#: ../src/header.cpp:418
+#: ../src/header.cpp:427
 msgid "Displays a list of documents within the current session"
 msgstr "Показати список документів у поточному сеансі"
 
-#: ../src/header.cpp:427 ../src/icon.cpp:33
+#: ../src/header.cpp:436 ../src/icon.cpp:33
 msgid "Chat"
 msgstr "Балачка"
 
-#: ../src/header.cpp:428
+#: ../src/header.cpp:437
 msgid "Displays a chat to talk to other people in the session"
 msgstr "Відкриває вікно балачки для обговорення з іншими користувачами сеансу"
 
-#: ../src/header.cpp:433
+#: ../src/header.cpp:442
 msgid "_Help"
 msgstr "_Довідка"
 
-#: ../src/header.cpp:439
+#: ../src/header.cpp:448
 msgid "About"
 msgstr "Про програму"
 
-#: ../src/header.cpp:440
+#: ../src/header.cpp:449
 msgid "Shows Gobby's copyright and credits"
 msgstr "Відкрити вікно з відомостями щодо авторських прав і авторів Gobby"
 
-#: ../src/header.cpp:662
+#: ../src/header.cpp:677
 msgid "None"
 msgstr "Нічого"
 
-#: ../src/header.cpp:663
+#: ../src/header.cpp:678
 msgid "Unselects the current language"
 msgstr "Скасувати вибір поточної мови"
 
 #. Build description string
-#: ../src/header.cpp:679
+#: ../src/header.cpp:694
 msgid "Selects %0% as language"
 msgstr "Обрати мову %0%"
 
@@ -376,7 +390,8 @@ msgid "Name:"
 msgstr "Ім’я:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-msgid "Colour:"
+#, fuzzy
+msgid "Color:"
 msgstr "Колір:"
 
 #: ../src/hostdialog.cpp:39
@@ -452,13 +467,14 @@ msgstr ""
 "Це ім’я вже використовується. Ви можете обрати інше ім’я або скасувати "
 "спробу з’єднання."
 
-#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:227
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:234
 msgid "New name:"
 msgstr "Нова назва:"
 
 #: ../src/joinprogressdialog.cpp:157
+#, fuzzy
 msgid ""
-"Colour is already in use. You may choose another colour or cancel the "
+"Color is already in use. You may choose another color or cancel the "
 "connection."
 msgstr ""
 "Цей колір вже використано. Ви можете обрати інший колір або скасувати спробу "
@@ -476,11 +492,16 @@ msgstr ""
 msgid "Session password:"
 msgstr "Пароль сеансу:"
 
-#: ../src/joinprogressdialog.cpp:228
+#: ../src/joinprogressdialog.cpp:192
+#, fuzzy
+msgid "Session password required"
+msgstr "Пароль сеансу:"
+
+#: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
 msgstr "Пароль користувача:"
 
-#: ../src/joinprogressdialog.cpp:308
+#: ../src/joinprogressdialog.cpp:315
 msgid "Joining obby session..."
 msgstr "Приєднання до сеансу obby..."
 
@@ -488,21 +509,21 @@ msgstr "Приєднання до сеансу obby..."
 #. The welcome event will be emitted as soon as the connection
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
-#: ../src/joinprogressdialog.cpp:410
+#: ../src/joinprogressdialog.cpp:418
 msgid "Setting up connection encryption (TLS)..."
 msgstr "Встановлення шифрування з’єднання (TLS)..."
 
 #. Update status message
-#: ../src/joinprogressdialog.cpp:470
+#: ../src/joinprogressdialog.cpp:478
 msgid "Login packet sent, waiting for response..."
 msgstr "Надіслано пакунок реєстрації, очікування на відповідь..."
 
-#: ../src/joinprogressdialog.cpp:552
+#: ../src/joinprogressdialog.cpp:561
 msgid "Logged in successfully, synchronising session..."
 msgstr "Успішна реєстрація, синхронізація сеансу..."
 
 #. Connection closed by remote site
-#: ../src/joinprogressdialog.cpp:565 ../src/window.cpp:1063
+#: ../src/joinprogressdialog.cpp:574 ../src/window.cpp:1089
 msgid "Connection lost"
 msgstr "З’єднання втрачено"
 
@@ -708,7 +729,7 @@ msgstr "В мережі"
 msgid "Offline"
 msgstr "Поза мережею"
 
-#: ../src/window.cpp:196
+#: ../src/window.cpp:198
 msgid ""
 "Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
@@ -719,33 +740,34 @@ msgstr ""
 "від імені користувача root до запуску Gobby. Протягом поточного сеансу "
 "підтримку Zeroconf буде вимкнено."
 
-#: ../src/window.cpp:278
+#: ../src/window.cpp:280
 msgid "You are still connected to a session"
 msgstr "Вашу програму все ще з’єднано з сеансом"
 
-#: ../src/window.cpp:286
-msgid "Do you want to close Gobby nevertheless?"
+#: ../src/window.cpp:288
+#, fuzzy
+msgid "Do you want to close Gobby anyway?"
 msgstr "Все одно бажаєте завершити роботу Gobby?"
 
-#: ../src/window.cpp:292
+#: ../src/window.cpp:294
 msgid "C_ancel"
 msgstr "_Скасувати"
 
-#: ../src/window.cpp:469
+#: ../src/window.cpp:471
 msgid "Use default .obby extension if none is given"
 msgstr "Використовувати типовий суфікс .obby, якщо суфікса не вказано"
 
-#: ../src/window.cpp:474
+#: ../src/window.cpp:476
 msgid "Save obby session"
 msgstr "Зберегти сеанс obby"
 
-#: ../src/window.cpp:537
+#: ../src/window.cpp:539
 msgid "A collaborative text editor"
 msgstr "Текстовий редактор для спільного редагування"
 
 #. Please note in the translation that only the English version is
 #. legally binding.
-#: ../src/window.cpp:567
+#: ../src/window.cpp:569
 msgid ""
 "This program is free software; you can redistribute it\n"
 "and/or modify it under the terms of the GNU General Public\n"
@@ -770,23 +792,25 @@ msgstr ""
 "ПРИДАТНОСТІ ДО ПЕВНОЇ МЕТИ. Докладніше про це можна дізнатися з\n"
 "GNU General Public License."
 
-#: ../src/window.cpp:679
+#: ../src/window.cpp:681
 msgid "Create document"
 msgstr "Створити документ"
 
-#: ../src/window.cpp:679
+#: ../src/window.cpp:681
 msgid "Enter document name"
 msgstr "Введіть назву документа"
 
-#: ../src/window.cpp:701
+#: ../src/window.cpp:703
 msgid "Open new document"
 msgstr "Відкрити новий документ"
 
-#: ../src/window.cpp:793
-msgid "Save current document"
-msgstr "Зберегти поточний документ"
+#. Window title
+#: ../src/window.cpp:804
+#, fuzzy
+msgid "Save document \"%0%\""
+msgstr "Зберегти документ"
 
-#: ../src/window.cpp:884
+#: ../src/window.cpp:910
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
@@ -797,11 +821,11 @@ msgstr ""
 "наступного використання у нових документах."
 
 #. Build password dialog with info
-#: ../src/window.cpp:928
+#: ../src/window.cpp:954
 msgid "Set user password"
 msgstr "Встановити пароль користувача"
 
-#: ../src/window.cpp:930
+#: ../src/window.cpp:956
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
@@ -810,7 +834,7 @@ msgstr ""
 "наступної спроби зареєструватися з цим іменем користувача система попросить "
 "вас ввести цей пароль."
 
-#: ../src/window.cpp:991
+#: ../src/window.cpp:1017
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
@@ -820,23 +844,24 @@ msgstr ""
 "бажаєте змінити параметри на загальному рівні, скористайтеся пунктом "
 "параметрів у меню «Правка»."
 
-#: ../src/window.cpp:1101
-msgid "Colour change failed: Colour already in use"
+#: ../src/window.cpp:1127
+#, fuzzy
+msgid "Color change failed: Color already in use"
 msgstr "Спроба зміни кольору була невдалою: цей колір вже використано"
 
-#: ../src/window.cpp:1353
+#: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
 msgstr "З’єднано з %0%:%1%"
 
-#: ../src/window.cpp:1397
+#: ../src/window.cpp:1423
 msgid "Serving on port %0%"
 msgstr "Обслуговування на порті %0%"
 
-#: ../src/window.cpp:1527
+#: ../src/window.cpp:1553
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "Зберегти зміни у документі «%0%» перед завершенням роботи?"
 
-#: ../src/window.cpp:1537
+#: ../src/window.cpp:1563
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
@@ -845,12 +870,12 @@ msgstr ""
 "буде відновити, якщо ви повторно приєднаєтеся до редагування документа "
 "протягом роботи у поточному сеансі."
 
-#: ../src/window.cpp:1546
+#: ../src/window.cpp:1572
 msgid "If you don't save, changes will be discarded."
 msgstr "Якщо документ не буде збережено, всі зміни буде втрачено."
 
 #. Add button to allow the user to save the dialog
-#: ../src/window.cpp:1561
+#: ../src/window.cpp:1587
 msgid "Close without saving"
 msgstr "Закрити без збереження"
 
@@ -859,7 +884,8 @@ msgid "Edit text files collaboratively"
 msgstr "Редагуйте текстові файли разом з іншими користувачами"
 
 #: ../contrib/gobby.desktop.in.h:2
-#| msgid "A collaborative text editor"
 msgid "Gobby Collaborative Editor"
 msgstr "Редактор для спільного редагування Gobby"
 
+#~ msgid "Save current document"
+#~ msgstr "Зберегти поточний документ"

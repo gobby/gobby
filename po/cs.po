@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-01 17:22+0100\n"
+"POT-Creation-Date: 2009-12-03 22:30+0100\n"
 "PO-Revision-Date: 2009-04-11 17:35+0100\n"
 "Last-Translator: Petr Pulc <petrpulc@gmail.com>\n"
 "Language-Team: Czech\n"
@@ -24,7 +24,8 @@ msgstr "Odeslat"
 
 #: ../src/chat.cpp:231
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
-msgstr "Příkaz '%0%' nebyl nalezen. Pro seznam existujících příkazů zadejte /help."
+msgstr ""
+"Příkaz '%0%' nebyl nalezen. Pro seznam existujících příkazů zadejte /help."
 
 #: ../src/chat.cpp:242
 msgid "%0%: %1%"
@@ -42,11 +43,13 @@ msgstr "Použití: /remove <dokument>"
 msgid "Subscribe"
 msgstr "Připojit"
 
-#: ../src/documentlist.cpp:107
-#: ../src/header.cpp:407
-#: ../src/icon.cpp:69
+#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
 msgid "Document list"
 msgstr "Seznam dokumentů"
+
+#: ../src/docwindow.cpp:159
+msgid "GtkSpell error: %0%"
+msgstr ""
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
@@ -56,14 +59,18 @@ msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
 msgstr "UTF-8|ISO-8859-2|WINDOWS-1250|ISO-8859-1|UTF-7|UTF-16|UCS-2|UCS-4"
 
 #: ../src/encoding.cpp:113
-msgid "Failed to convert input into UTF-8: Either the encoding is unknown or it is binary input."
-msgstr "Nepodařilo se převést vstup do UTF-8: Buď je v neznámém kódování, nebo se jedná o binární data."
+msgid ""
+"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
+"binary input."
+msgstr ""
+"Nepodařilo se převést vstup do UTF-8: Buď je v neznámém kódování, nebo se "
+"jedná o binární data."
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
 msgstr "Automaticky detekované"
 
-#: ../src/encoding_selector.cpp:153
+#: ../src/encoding_selector.cpp:158
 msgid "Character Encoding:"
 msgstr "Kódování znaků:"
 
@@ -146,208 +153,228 @@ msgstr "Přejít n_a řádek"
 msgid "Go to line"
 msgstr "Přejít na řádek"
 
-#: ../src/header.cpp:234
+#: ../src/header.cpp:236
 msgid "Create session..."
 msgstr "Vytvořit sezení..."
 
-#: ../src/header.cpp:235
+#: ../src/header.cpp:237
 msgid "Opens a new obby session"
 msgstr "Vytvořit nové obby sezení"
 
-#: ../src/header.cpp:243
+#: ../src/header.cpp:245
 msgid "Join session..."
 msgstr "Připojit se..."
 
-#: ../src/header.cpp:244
+#: ../src/header.cpp:246
 msgid "Joins an existing obby session"
 msgstr "Připojit se k existujícímu obby sezení"
 
-#: ../src/header.cpp:252
-msgid "Save session..."
+#: ../src/header.cpp:254
+#, fuzzy
+msgid "Save session"
 msgstr "Uložit sezení..."
 
-#: ../src/header.cpp:253
+#: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "Uložit sezení pro pozdější obnovu"
 
-#: ../src/header.cpp:261
+#: ../src/header.cpp:263
+#, fuzzy
+msgid "Save session as..."
+msgstr "Uložit sezení..."
+
+#: ../src/header.cpp:264
+#, fuzzy
+msgid "\"Saves as...\" the complete session for a later restore"
+msgstr "Uložit sezení pro pozdější obnovu"
+
+#: ../src/header.cpp:272
 msgid "Quit session"
 msgstr "Ukončit sezení"
 
-#: ../src/header.cpp:262
+#: ../src/header.cpp:273
 msgid "Leaves the currently running obby session"
 msgstr "Opustit momentálně běžící obby sezení"
 
-#: ../src/header.cpp:270
+#: ../src/header.cpp:281
 msgid "Quit"
 msgstr "Ukončit"
 
-#: ../src/header.cpp:271
+#: ../src/header.cpp:282
 msgid "Quits the application"
 msgstr "Ukončit aplikaci"
 
-#: ../src/header.cpp:275
+#: ../src/header.cpp:286
 msgid "_Session"
 msgstr "_Sezení"
 
-#: ../src/header.cpp:281
+#: ../src/header.cpp:292
 msgid "Create document..."
 msgstr "Vytvořit dokument..."
 
-#: ../src/header.cpp:282
+#: ../src/header.cpp:293
 msgid "Creates a new document"
 msgstr "Vytvořit nový dokument"
 
-#: ../src/header.cpp:290
+#: ../src/header.cpp:301
 msgid "Open document..."
 msgstr "Otevřít dokument..."
 
-#: ../src/header.cpp:291
+#: ../src/header.cpp:302
 msgid "Loads a file into a new document"
 msgstr "Načíst soubor do nového dokumentu"
 
-#: ../src/header.cpp:299
+#: ../src/header.cpp:310
 msgid "Save document"
 msgstr "Uložit dokument"
 
-#: ../src/header.cpp:300
+#: ../src/header.cpp:311
 msgid "Saves a document into a file"
 msgstr "Uložit dokument do souboru"
 
-#: ../src/header.cpp:308
+#: ../src/header.cpp:319
 msgid "Save document as..."
 msgstr "Uložit dokument jako..."
 
-#: ../src/header.cpp:309
+#: ../src/header.cpp:320
 msgid "Saves a document to another location"
 msgstr "Uložit dokument do jiného umístění"
 
-#: ../src/header.cpp:317
+#: ../src/header.cpp:327
+#, fuzzy
+msgid "Save all documents"
+msgstr "Uložit dokument"
+
+#: ../src/header.cpp:328
+#, fuzzy
+msgid "Saves all documents"
+msgstr "Uložit dokument"
+
+#: ../src/header.cpp:336
 msgid "Close document"
 msgstr "Zavřít dokument"
 
-#: ../src/header.cpp:318
+#: ../src/header.cpp:337
 msgid "Closes an opened document"
 msgstr "Zavřít otevřený dokument"
 
-#: ../src/header.cpp:322
+#: ../src/header.cpp:341
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/header.cpp:328
+#: ../src/header.cpp:347
 msgid "Find..."
 msgstr "Hledat..."
 
-#: ../src/header.cpp:329
+#: ../src/header.cpp:348
 msgid "Search for a text in the current document"
 msgstr "Hledat text v současném dokumentu"
 
-#: ../src/header.cpp:337
+#: ../src/header.cpp:356
 msgid "Find and replace..."
 msgstr "Hledat a nahradit..."
 
-#: ../src/header.cpp:338
+#: ../src/header.cpp:357
 msgid "Search for a text and replace it with another one"
 msgstr "Hledat text a nahradit jej jiným"
 
-#: ../src/header.cpp:346
+#: ../src/header.cpp:365
 msgid "Go to line..."
 msgstr "Přejít na řádek..."
 
-#: ../src/header.cpp:347
+#: ../src/header.cpp:366
 msgid "Move cursor to a specified line"
 msgstr "Přesunout kurzor na daný řádek"
 
-#: ../src/header.cpp:355
+#: ../src/header.cpp:374
 msgid "Preferences..."
 msgstr "Nastavení..."
 
-#: ../src/header.cpp:356
+#: ../src/header.cpp:375
 #, fuzzy
-msgid "Displays a dialog to customise Gobby for your needs"
+msgid "Displays a dialog to customize Gobby for your needs"
 msgstr "Zobrazit dialog pro přizpůsobení Gobby vašim představám"
 
-#: ../src/header.cpp:364
+#: ../src/header.cpp:383
 msgid "Document preferences..."
 msgstr "Nastavení dokumentu..."
 
-#: ../src/header.cpp:365
+#: ../src/header.cpp:384
 msgid "Shows a preferences dialog that is just applied to this document"
 msgstr "Zobrazit dialog s nastaveními pouze pro tento dokument"
 
-#: ../src/header.cpp:370
+#: ../src/header.cpp:389
 msgid "Syntax"
 msgstr "Syntaxe"
 
-#: ../src/header.cpp:372
+#: ../src/header.cpp:391
 msgid "_User"
 msgstr "Už_ivatel"
 
-#: ../src/header.cpp:378
+#: ../src/header.cpp:397
 msgid "Set password..."
 msgstr "Nastavit heslo..."
 
-#: ../src/header.cpp:379
+#: ../src/header.cpp:398
 msgid "Sets a password for this user"
 msgstr "Nastavit heslo pro aktuálního uživatele"
 
-#: ../src/header.cpp:387
-msgid "Set colour..."
+#: ../src/header.cpp:406
+#, fuzzy
+msgid "Set color..."
 msgstr "Nastavit barvu..."
 
-#: ../src/header.cpp:388
-msgid "Sets a new colour for this user"
+#: ../src/header.cpp:407
+#, fuzzy
+msgid "Sets a new color for this user"
 msgstr "Nastavit novou barvu pro aktuálního uživatele"
 
-#: ../src/header.cpp:392
+#: ../src/header.cpp:411
 msgid "_Window"
 msgstr "_Okna"
 
-#: ../src/header.cpp:398
-#: ../src/icon.cpp:66
-#: ../src/userlist.cpp:122
+#: ../src/header.cpp:417 ../src/icon.cpp:21 ../src/userlist.cpp:122
 msgid "User list"
 msgstr "Seznam uživatelů"
 
-#: ../src/header.cpp:399
+#: ../src/header.cpp:418
 msgid "Displays a list of users that are currently joined"
 msgstr "Zobrazit seznam momentálně připojených uživatelů"
 
-#: ../src/header.cpp:408
+#: ../src/header.cpp:427
 msgid "Displays a list of documents within the current session"
 msgstr "Zobrazit seznam dokumentů v tomto sezení"
 
-#: ../src/header.cpp:417
-#: ../src/icon.cpp:72
+#: ../src/header.cpp:436 ../src/icon.cpp:33
 msgid "Chat"
 msgstr "Diskuze"
 
-#: ../src/header.cpp:418
+#: ../src/header.cpp:437
 msgid "Displays a chat to talk to other people in the session"
 msgstr "Zobrazit diskuzi pro komunikaci s ostatními lidmi v sezení"
 
-#: ../src/header.cpp:423
+#: ../src/header.cpp:442
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../src/header.cpp:429
+#: ../src/header.cpp:448
 msgid "About"
 msgstr "O aplikaci"
 
-#: ../src/header.cpp:430
+#: ../src/header.cpp:449
 msgid "Shows Gobby's copyright and credits"
 msgstr "Zobrazit autorská práva a zásluhy v Gobby"
 
-#: ../src/header.cpp:645
+#: ../src/header.cpp:677
 msgid "None"
 msgstr "Žádný"
 
-#: ../src/header.cpp:646
+#: ../src/header.cpp:678
 msgid "Unselects the current language"
 msgstr "Zrušit výběr současného jazyka"
 
 #. Build description string
-#: ../src/header.cpp:662
+#: ../src/header.cpp:694
 msgid "Selects %0% as language"
 msgstr "Vybrat %0% jako jazyk"
 
@@ -355,19 +382,17 @@ msgstr "Vybrat %0% jako jazyk"
 msgid "Create obby session"
 msgstr "Vytvořit obby sezení"
 
-#: ../src/hostdialog.cpp:36
-#: ../src/joindialog.cpp:56
+#: ../src/hostdialog.cpp:36 ../src/joindialog.cpp:56
 msgid "Port:"
 msgstr "Port:"
 
-#: ../src/hostdialog.cpp:37
-#: ../src/joindialog.cpp:57
+#: ../src/hostdialog.cpp:37 ../src/joindialog.cpp:57
 msgid "Name:"
 msgstr "Jméno:"
 
-#: ../src/hostdialog.cpp:38
-#: ../src/joindialog.cpp:58
-msgid "Colour:"
+#: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
+#, fuzzy
+msgid "Color:"
 msgstr "Barva:"
 
 #: ../src/hostdialog.cpp:39
@@ -394,8 +419,7 @@ msgstr "Všechny soubory"
 msgid "_Host"
 msgstr "_Vytvořit"
 
-#: ../src/hostprogressdialog.cpp:29
-#: ../src/hostprogressdialog.cpp:33
+#: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
 msgid "Opening obby session..."
 msgstr "Otevírám obby sezení..."
 
@@ -429,35 +453,51 @@ msgid "Failure"
 msgstr "Selhání"
 
 #: ../src/joinprogressdialog.cpp:34
-msgid "User password for user '%0%' required. You may either choose another user name, type in your user password or cancel the connection."
-msgstr "Přístup pro uživatele '%0%' je zaheslován. Zvolte si jiné jméno, vyplňte heslo, nebo zrušte spojení."
+msgid ""
+"User password for user '%0%' required. You may either choose another user "
+"name, type in your user password or cancel the connection."
+msgstr ""
+"Přístup pro uživatele '%0%' je zaheslován. Zvolte si jiné jméno, vyplňte "
+"heslo, nebo zrušte spojení."
 
 #: ../src/joinprogressdialog.cpp:111
-msgid "Name is already in use. You may choose another name or cancel the connection."
+msgid ""
+"Name is already in use. You may choose another name or cancel the connection."
 msgstr "Toto jméno se již používá. Zvolte si jiné jméno, nebo zrušte spojení."
 
-#: ../src/joinprogressdialog.cpp:116
-#: ../src/joinprogressdialog.cpp:227
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:234
 msgid "New name:"
 msgstr "Nové jméno:"
 
 #: ../src/joinprogressdialog.cpp:157
-msgid "Colour is already in use. You may choose another colour or cancel the connection."
+#, fuzzy
+msgid ""
+"Color is already in use. You may choose another color or cancel the "
+"connection."
 msgstr "Tato barva se již používá. Zvolte si jinou barvu, nebo zrušte spojení."
 
 #: ../src/joinprogressdialog.cpp:182
-msgid "Session password required. You have to type in the password to be able to join the obby session."
-msgstr "Přístup k tomuto sezení je zaheslován. Musíte vyplnit heslo, abyste se mohli připojit k tomuto obby sezení."
+msgid ""
+"Session password required. You have to type in the password to be able to "
+"join the obby session."
+msgstr ""
+"Přístup k tomuto sezení je zaheslován. Musíte vyplnit heslo, abyste se mohli "
+"připojit k tomuto obby sezení."
 
 #: ../src/joinprogressdialog.cpp:186
 msgid "Session password:"
 msgstr "Heslo sezení:"
 
-#: ../src/joinprogressdialog.cpp:228
+#: ../src/joinprogressdialog.cpp:192
+#, fuzzy
+msgid "Session password required"
+msgstr "Heslo sezení:"
+
+#: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
 msgstr "Heslo uživatele:"
 
-#: ../src/joinprogressdialog.cpp:308
+#: ../src/joinprogressdialog.cpp:315
 msgid "Joining obby session..."
 msgstr "Připojování k obby sezení..."
 
@@ -465,22 +505,21 @@ msgstr "Připojování k obby sezení..."
 #. The welcome event will be emitted as soon as the connection
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
-#: ../src/joinprogressdialog.cpp:410
+#: ../src/joinprogressdialog.cpp:418
 msgid "Setting up connection encryption (TLS)..."
 msgstr "Nastavuje se šifrované spojení (TLS)..."
 
 #. Update status message
-#: ../src/joinprogressdialog.cpp:470
+#: ../src/joinprogressdialog.cpp:478
 msgid "Login packet sent, waiting for response..."
 msgstr "Přihlašovací paket odeslán, čeká se na odpověď..."
 
-#: ../src/joinprogressdialog.cpp:552
+#: ../src/joinprogressdialog.cpp:561
 msgid "Logged in successfully, synchronising session..."
 msgstr "Úspěšně přihlášeno, synchronizuje se sezení..."
 
 #. Connection closed by remote site
-#: ../src/joinprogressdialog.cpp:565
-#: ../src/window.cpp:1043
+#: ../src/joinprogressdialog.cpp:574 ../src/window.cpp:1089
 msgid "Connection lost"
 msgstr "Spojení ztraceno"
 
@@ -513,8 +552,12 @@ msgid "Smart home/end"
 msgstr "Chytrá klávesa Home/End"
 
 #: ../src/preferencesdialog.cpp:85
-msgid "With this option enabled, Home/End keys move to first/last character before going to the start/end of the line."
-msgstr "Povolíte-li tuto možnost, stiskem klávesy Home/End se kurzor přesune na první/poslední znak a až poté na začátek/konec řádku."
+msgid ""
+"With this option enabled, Home/End keys move to first/last character before "
+"going to the start/end of the line."
+msgstr ""
+"Povolíte-li tuto možnost, stiskem klávesy Home/End se kurzor přesune na "
+"první/poslední znak a až poté na začátek/konec řádku."
 
 #: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
@@ -657,8 +700,7 @@ msgstr "Chování"
 msgid "Files"
 msgstr "Soubory"
 
-#: ../src/statusbar.cpp:38
-#: ../src/statusbar.cpp:100
+#: ../src/statusbar.cpp:38 ../src/statusbar.cpp:100
 msgid "Not connected"
 msgstr "Odpojen"
 
@@ -682,37 +724,44 @@ msgstr "Připojeni"
 msgid "Offline"
 msgstr "Odpojeni"
 
-#: ../src/window.cpp:194
-msgid "Zeroconf initialisation failed. Probably you need to run avahi-daemon or mDNSResponder, depending on the library you use, as root prior to Gobby. Zeroconf support is deactivated for this session."
-msgstr "Inicializace Zeroconf selhala. Pravděpodobně potřebujete v závislosti na používané knihovně spustit avahi-daemon nebo mDNSResponder jako uživatel root před spuštěním Gobby. Podpora Zeroconf bude pro toto sezení vypnuta."
+#: ../src/window.cpp:198
+msgid ""
+"Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
+"mDNSResponder, depending on the library you use, as root prior to Gobby. "
+"Zeroconf support is deactivated for this session."
+msgstr ""
+"Inicializace Zeroconf selhala. Pravděpodobně potřebujete v závislosti na "
+"používané knihovně spustit avahi-daemon nebo mDNSResponder jako uživatel "
+"root před spuštěním Gobby. Podpora Zeroconf bude pro toto sezení vypnuta."
 
-#: ../src/window.cpp:276
+#: ../src/window.cpp:280
 msgid "You are still connected to a session"
 msgstr "Jste stále připojeni k sezení"
 
-#: ../src/window.cpp:284
-msgid "Do you want to close Gobby nevertheless?"
+#: ../src/window.cpp:288
+#, fuzzy
+msgid "Do you want to close Gobby anyway?"
 msgstr "Chcete přesto ukončit Gobby?"
 
-#: ../src/window.cpp:290
+#: ../src/window.cpp:294
 msgid "C_ancel"
 msgstr "_Zrušit"
 
-#: ../src/window.cpp:449
+#: ../src/window.cpp:471
 msgid "Use default .obby extension if none is given"
 msgstr "Použít výchozí příponu .obby, pokud není použita jiná"
 
-#: ../src/window.cpp:454
+#: ../src/window.cpp:476
 msgid "Save obby session"
 msgstr "Uložit obby sezení"
 
-#: ../src/window.cpp:517
+#: ../src/window.cpp:539
 msgid "A collaborative text editor"
 msgstr "Textový editor pro spolupráci"
 
 #. Please note in the translation that only the English version is
 #. legally binding.
-#: ../src/window.cpp:547
+#: ../src/window.cpp:569
 msgid ""
 "This program is free software; you can redistribute it\n"
 "and/or modify it under the terms of the GNU General Public\n"
@@ -736,65 +785,88 @@ msgstr ""
 "záruky PRODEJNOSTI anebo VHODNOSTI PRO URČITÝ ÚČEL.\n"
 "Další podrobnosti hledejte v GNU General Public License."
 
-#: ../src/window.cpp:659
+#: ../src/window.cpp:681
 msgid "Create document"
 msgstr "Vytvořit dokument"
 
-#: ../src/window.cpp:659
+#: ../src/window.cpp:681
 msgid "Enter document name"
 msgstr "Zadejte název dokumentu"
 
-#: ../src/window.cpp:681
+#: ../src/window.cpp:703
 msgid "Open new document"
 msgstr "Otevřít dokument"
 
-#: ../src/window.cpp:773
-msgid "Save current document"
-msgstr "Uložit aktuální dokument"
+#. Window title
+#: ../src/window.cpp:804
+#, fuzzy
+msgid "Save document \"%0%\""
+msgstr "Uložit dokument"
 
-#: ../src/window.cpp:864
-msgid "Click on \"Apply\" to apply the new settings to documents that are currently open. \"OK\" will just store the values to use them with newly created documents."
-msgstr "Klikněte na \"Použít\" pro užití nových nastavení i na právě otevřené dokumenty. S \"OK\" se nové hodnoty pouze uloží a použijí se při vytváření nových dokumentů."
+#: ../src/window.cpp:910
+msgid ""
+"Click on \"Apply\" to apply the new settings to documents that are currently "
+"open. \"OK\" will just store the values to use them with newly created "
+"documents."
+msgstr ""
+"Klikněte na \"Použít\" pro užití nových nastavení i na právě otevřené "
+"dokumenty. S \"OK\" se nové hodnoty pouze uloží a použijí se při vytváření "
+"nových dokumentů."
 
 #. Build password dialog with info
-#: ../src/window.cpp:908
+#: ../src/window.cpp:954
 msgid "Set user password"
 msgstr "Nastavit heslo uživatele"
 
-#: ../src/window.cpp:910
-msgid "Set a user password for your user account. When you try to login next time with this user, you will be prompted for your password."
-msgstr "Nastavte si heslo pro svůj uživatelský účet. Až se pokusíte přihlásit příště, budete vyzván k zadání tohoto hesla."
+#: ../src/window.cpp:956
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+"Nastavte si heslo pro svůj uživatelský účet. Až se pokusíte přihlásit "
+"příště, budete vyzván k zadání tohoto hesla."
 
-#: ../src/window.cpp:971
-msgid "These preferences affect only the currently active document \"%0%\". If you want to change global preferences, use the preferences menu item in the \"Edit\" menu."
-msgstr "Tato nastavení ovlivní pouze momentálně otevřený dokument \"%0%\". Chcete-li změnit globální nastavení, použijte dialog \"Nastavení\" z nabídky \"Upravit\"."
+#: ../src/window.cpp:1017
+msgid ""
+"These preferences affect only the currently active document \"%0%\". If you "
+"want to change global preferences, use the preferences menu item in the "
+"\"Edit\" menu."
+msgstr ""
+"Tato nastavení ovlivní pouze momentálně otevřený dokument \"%0%\". Chcete-li "
+"změnit globální nastavení, použijte dialog \"Nastavení\" z nabídky \"Upravit"
+"\"."
 
-#: ../src/window.cpp:1081
-msgid "Colour change failed: Colour already in use"
+#: ../src/window.cpp:1127
+#, fuzzy
+msgid "Color change failed: Color already in use"
 msgstr "Změna barev selhala: Tato barva se již používá"
 
-#: ../src/window.cpp:1333
+#: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
 msgstr "Připojeno k %0%:%1%"
 
-#: ../src/window.cpp:1377
+#: ../src/window.cpp:1423
 msgid "Serving on port %0%"
 msgstr "Sdílení na portu %0%"
 
-#: ../src/window.cpp:1507
+#: ../src/window.cpp:1553
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr "Uložit před zavřením změny v dokumentu \"%0%\"?"
 
-#: ../src/window.cpp:1517
-msgid "If you don't save, changes will be discarded, but may still be retrieved if you re-subscribe to the document as long as the session remains open."
-msgstr "Pokud je neuložíte, budou změny ztraceny. Mohou být obnoveny pouze dokud sezení zůstane otevřené a vy se znovu přihlásíte k odběru tohoto dokumentu."
+#: ../src/window.cpp:1563
+msgid ""
+"If you don't save, changes will be discarded, but may still be retrieved if "
+"you re-subscribe to the document as long as the session remains open."
+msgstr ""
+"Pokud je neuložíte, budou změny ztraceny. Mohou být obnoveny pouze dokud "
+"sezení zůstane otevřené a vy se znovu přihlásíte k odběru tohoto dokumentu."
 
-#: ../src/window.cpp:1526
+#: ../src/window.cpp:1572
 msgid "If you don't save, changes will be discarded."
 msgstr "Pokud je neuložíte, budou změny ztraceny."
 
 #. Add button to allow the user to save the dialog
-#: ../src/window.cpp:1541
+#: ../src/window.cpp:1587
 msgid "Close without saving"
 msgstr "Zavřít bez uložení"
 
@@ -806,3 +878,5 @@ msgstr "Upravujte textové soubory společně"
 msgid "Gobby Collaborative Editor"
 msgstr "Editor pro spolupráci Gobby"
 
+#~ msgid "Save current document"
+#~ msgstr "Uložit aktuální dokument"

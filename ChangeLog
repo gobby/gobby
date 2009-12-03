@@ -1,3 +1,17 @@
+2009-02-03  Armin Burgmeier  <armin@arbur.net>
+
+	* src/header.cpp:
+	* src/hostdialog.cpp:
+	* src/joindialog.cpp:
+	* src/joinprogressdialog.cpp:
+	* src/window.cpp: Changed strings from British to American English.
+	Based on a patch by Mackenzie Morgan at Launchpad bug #485408. Bug
+	#513.
+
+	* configure.ac: Added en_GB as a translation.
+
+	* po/en_GB.po: Added en_GB translation.
+
 2009-11-23  Armin Burgmeier  <armin@arbur.net>
 
 	* src/window.cpp: Changed "Do you want to close Gobby nevertheless?"

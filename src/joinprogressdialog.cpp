@@ -154,7 +154,7 @@ Gobby::JoinProgressDialog::ColorPrompt::
 	Prompt(
 		parent,
 		obby::login::errstring(obby::login::ERROR_COLOUR_IN_USE),
-		_("Colour is already in use. You may choose another colour or "
+		_("Color is already in use. You may choose another color or "
 		  "cancel the connection."),
 		Gtk::Stock::DIALOG_QUESTION
 	),

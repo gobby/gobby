@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-23 17:37+0200\n"
+"POT-Creation-Date: 2009-12-03 22:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,8 +41,12 @@ msgstr ""
 msgid "Subscribe"
 msgstr ""
 
-#: ../src/documentlist.cpp:107 ../src/header.cpp:417 ../src/icon.cpp:27
+#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
 msgid "Document list"
+msgstr ""
+
+#: ../src/docwindow.cpp:159
+msgid "GtkSpell error: %0%"
 msgstr ""
 
 #. Translators: the msgid should not be localized.
@@ -144,212 +148,220 @@ msgstr ""
 msgid "Go to line"
 msgstr ""
 
-#: ../src/header.cpp:235
+#: ../src/header.cpp:236
 msgid "Create session..."
 msgstr ""
 
-#: ../src/header.cpp:236
+#: ../src/header.cpp:237
 msgid "Opens a new obby session"
 msgstr ""
 
-#: ../src/header.cpp:244
+#: ../src/header.cpp:245
 msgid "Join session..."
 msgstr ""
 
-#: ../src/header.cpp:245
+#: ../src/header.cpp:246
 msgid "Joins an existing obby session"
 msgstr ""
 
-#: ../src/header.cpp:253
+#: ../src/header.cpp:254
 msgid "Save session"
 msgstr ""
 
-#: ../src/header.cpp:254
+#: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr ""
 
-#: ../src/header.cpp:262
+#: ../src/header.cpp:263
 msgid "Save session as..."
 msgstr ""
 
-#: ../src/header.cpp:263
+#: ../src/header.cpp:264
 msgid "\"Saves as...\" the complete session for a later restore"
 msgstr ""
 
-#: ../src/header.cpp:271
+#: ../src/header.cpp:272
 msgid "Quit session"
 msgstr ""
 
-#: ../src/header.cpp:272
+#: ../src/header.cpp:273
 msgid "Leaves the currently running obby session"
 msgstr ""
 
-#: ../src/header.cpp:280
+#: ../src/header.cpp:281
 msgid "Quit"
 msgstr ""
 
-#: ../src/header.cpp:281
+#: ../src/header.cpp:282
 msgid "Quits the application"
 msgstr ""
 
-#: ../src/header.cpp:285
+#: ../src/header.cpp:286
 msgid "_Session"
 msgstr ""
 
-#: ../src/header.cpp:291
+#: ../src/header.cpp:292
 msgid "Create document..."
 msgstr ""
 
-#: ../src/header.cpp:292
+#: ../src/header.cpp:293
 msgid "Creates a new document"
 msgstr ""
 
-#: ../src/header.cpp:300
+#: ../src/header.cpp:301
 msgid "Open document..."
 msgstr ""
 
-#: ../src/header.cpp:301
+#: ../src/header.cpp:302
 msgid "Loads a file into a new document"
 msgstr ""
 
-#: ../src/header.cpp:309
+#: ../src/header.cpp:310
 msgid "Save document"
 msgstr ""
 
-#: ../src/header.cpp:310
+#: ../src/header.cpp:311
 msgid "Saves a document into a file"
 msgstr ""
 
-#: ../src/header.cpp:318
+#: ../src/header.cpp:319
 msgid "Save document as..."
 msgstr ""
 
-#: ../src/header.cpp:319
+#: ../src/header.cpp:320
 msgid "Saves a document to another location"
 msgstr ""
 
 #: ../src/header.cpp:327
-msgid "Close document"
+msgid "Save all documents"
 msgstr ""
 
 #: ../src/header.cpp:328
+msgid "Saves all documents"
+msgstr ""
+
+#: ../src/header.cpp:336
+msgid "Close document"
+msgstr ""
+
+#: ../src/header.cpp:337
 msgid "Closes an opened document"
 msgstr ""
 
-#: ../src/header.cpp:332
+#: ../src/header.cpp:341
 msgid "_Edit"
 msgstr ""
 
-#: ../src/header.cpp:338
+#: ../src/header.cpp:347
 msgid "Find..."
 msgstr ""
 
-#: ../src/header.cpp:339
+#: ../src/header.cpp:348
 msgid "Search for a text in the current document"
 msgstr ""
 
-#: ../src/header.cpp:347
+#: ../src/header.cpp:356
 msgid "Find and replace..."
 msgstr ""
 
-#: ../src/header.cpp:348
+#: ../src/header.cpp:357
 msgid "Search for a text and replace it with another one"
 msgstr ""
 
-#: ../src/header.cpp:356
+#: ../src/header.cpp:365
 msgid "Go to line..."
 msgstr ""
 
-#: ../src/header.cpp:357
+#: ../src/header.cpp:366
 msgid "Move cursor to a specified line"
 msgstr ""
 
-#: ../src/header.cpp:365
+#: ../src/header.cpp:374
 msgid "Preferences..."
 msgstr ""
 
-#: ../src/header.cpp:366
-msgid "Displays a dialog to customise Gobby for your needs"
+#: ../src/header.cpp:375
+msgid "Displays a dialog to customize Gobby for your needs"
 msgstr ""
 
-#: ../src/header.cpp:374
+#: ../src/header.cpp:383
 msgid "Document preferences..."
 msgstr ""
 
-#: ../src/header.cpp:375
+#: ../src/header.cpp:384
 msgid "Shows a preferences dialog that is just applied to this document"
 msgstr ""
 
-#: ../src/header.cpp:380
+#: ../src/header.cpp:389
 msgid "Syntax"
 msgstr ""
 
-#: ../src/header.cpp:382
+#: ../src/header.cpp:391
 msgid "_User"
 msgstr ""
 
-#: ../src/header.cpp:388
+#: ../src/header.cpp:397
 msgid "Set password..."
 msgstr ""
 
-#: ../src/header.cpp:389
+#: ../src/header.cpp:398
 msgid "Sets a password for this user"
 msgstr ""
 
-#: ../src/header.cpp:397
-msgid "Set colour..."
+#: ../src/header.cpp:406
+msgid "Set color..."
 msgstr ""
 
-#: ../src/header.cpp:398
-msgid "Sets a new colour for this user"
+#: ../src/header.cpp:407
+msgid "Sets a new color for this user"
 msgstr ""
 
-#: ../src/header.cpp:402
+#: ../src/header.cpp:411
 msgid "_Window"
 msgstr ""
 
-#: ../src/header.cpp:408 ../src/icon.cpp:21 ../src/userlist.cpp:122
+#: ../src/header.cpp:417 ../src/icon.cpp:21 ../src/userlist.cpp:122
 msgid "User list"
 msgstr ""
 
-#: ../src/header.cpp:409
+#: ../src/header.cpp:418
 msgid "Displays a list of users that are currently joined"
 msgstr ""
 
-#: ../src/header.cpp:418
+#: ../src/header.cpp:427
 msgid "Displays a list of documents within the current session"
 msgstr ""
 
-#: ../src/header.cpp:427 ../src/icon.cpp:33
+#: ../src/header.cpp:436 ../src/icon.cpp:33
 msgid "Chat"
 msgstr ""
 
-#: ../src/header.cpp:428
+#: ../src/header.cpp:437
 msgid "Displays a chat to talk to other people in the session"
 msgstr ""
 
-#: ../src/header.cpp:433
+#: ../src/header.cpp:442
 msgid "_Help"
 msgstr ""
 
-#: ../src/header.cpp:439
+#: ../src/header.cpp:448
 msgid "About"
 msgstr ""
 
-#: ../src/header.cpp:440
+#: ../src/header.cpp:449
 msgid "Shows Gobby's copyright and credits"
 msgstr ""
 
-#: ../src/header.cpp:662
+#: ../src/header.cpp:677
 msgid "None"
 msgstr ""
 
-#: ../src/header.cpp:663
+#: ../src/header.cpp:678
 msgid "Unselects the current language"
 msgstr ""
 
 #. Build description string
-#: ../src/header.cpp:679
+#: ../src/header.cpp:694
 msgid "Selects %0% as language"
 msgstr ""
 
@@ -366,7 +378,7 @@ msgid "Name:"
 msgstr ""
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-msgid "Colour:"
+msgid "Color:"
 msgstr ""
 
 #: ../src/hostdialog.cpp:39
@@ -437,13 +449,13 @@ msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
 msgstr ""
 
-#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:227
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:234
 msgid "New name:"
 msgstr ""
 
 #: ../src/joinprogressdialog.cpp:157
 msgid ""
-"Colour is already in use. You may choose another colour or cancel the "
+"Color is already in use. You may choose another color or cancel the "
 "connection."
 msgstr ""
 
@@ -457,11 +469,15 @@ msgstr ""
 msgid "Session password:"
 msgstr ""
 
-#: ../src/joinprogressdialog.cpp:228
+#: ../src/joinprogressdialog.cpp:192
+msgid "Session password required"
+msgstr ""
+
+#: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
 msgstr ""
 
-#: ../src/joinprogressdialog.cpp:308
+#: ../src/joinprogressdialog.cpp:315
 msgid "Joining obby session..."
 msgstr ""
 
@@ -469,21 +485,21 @@ msgstr ""
 #. The welcome event will be emitted as soon as the connection
 #. has been encrypted. Maybe we should have another step before
 #. this that really waits for the welcome packet.
-#: ../src/joinprogressdialog.cpp:410
+#: ../src/joinprogressdialog.cpp:418
 msgid "Setting up connection encryption (TLS)..."
 msgstr ""
 
 #. Update status message
-#: ../src/joinprogressdialog.cpp:470
+#: ../src/joinprogressdialog.cpp:478
 msgid "Login packet sent, waiting for response..."
 msgstr ""
 
-#: ../src/joinprogressdialog.cpp:552
+#: ../src/joinprogressdialog.cpp:561
 msgid "Logged in successfully, synchronising session..."
 msgstr ""
 
 #. Connection closed by remote site
-#: ../src/joinprogressdialog.cpp:565 ../src/window.cpp:1063
+#: ../src/joinprogressdialog.cpp:574 ../src/window.cpp:1089
 msgid "Connection lost"
 msgstr ""
 
@@ -686,40 +702,40 @@ msgstr ""
 msgid "Offline"
 msgstr ""
 
-#: ../src/window.cpp:196
+#: ../src/window.cpp:198
 msgid ""
 "Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
 
-#: ../src/window.cpp:278
+#: ../src/window.cpp:280
 msgid "You are still connected to a session"
 msgstr ""
 
-#: ../src/window.cpp:286
-msgid "Do you want to close Gobby nevertheless?"
+#: ../src/window.cpp:288
+msgid "Do you want to close Gobby anyway?"
 msgstr ""
 
-#: ../src/window.cpp:292
+#: ../src/window.cpp:294
 msgid "C_ancel"
 msgstr ""
 
-#: ../src/window.cpp:469
+#: ../src/window.cpp:471
 msgid "Use default .obby extension if none is given"
 msgstr ""
 
-#: ../src/window.cpp:474
+#: ../src/window.cpp:476
 msgid "Save obby session"
 msgstr ""
 
-#: ../src/window.cpp:537
+#: ../src/window.cpp:539
 msgid "A collaborative text editor"
 msgstr ""
 
 #. Please note in the translation that only the English version is
 #. legally binding.
-#: ../src/window.cpp:567
+#: ../src/window.cpp:569
 msgid ""
 "This program is free software; you can redistribute it\n"
 "and/or modify it under the terms of the GNU General Public\n"
@@ -733,23 +749,24 @@ msgid ""
 "PURPOSE.  See the GNU General Public License for more details."
 msgstr ""
 
-#: ../src/window.cpp:679
+#: ../src/window.cpp:681
 msgid "Create document"
 msgstr ""
 
-#: ../src/window.cpp:679
+#: ../src/window.cpp:681
 msgid "Enter document name"
 msgstr ""
 
-#: ../src/window.cpp:701
+#: ../src/window.cpp:703
 msgid "Open new document"
 msgstr ""
 
-#: ../src/window.cpp:793
-msgid "Save current document"
+#. Window title
+#: ../src/window.cpp:804
+msgid "Save document \"%0%\""
 msgstr ""
 
-#: ../src/window.cpp:884
+#: ../src/window.cpp:910
 msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
@@ -757,51 +774,51 @@ msgid ""
 msgstr ""
 
 #. Build password dialog with info
-#: ../src/window.cpp:928
+#: ../src/window.cpp:954
 msgid "Set user password"
 msgstr ""
 
-#: ../src/window.cpp:930
+#: ../src/window.cpp:956
 msgid ""
 "Set a user password for your user account. When you try to login next time "
 "with this user, you will be prompted for your password."
 msgstr ""
 
-#: ../src/window.cpp:991
+#: ../src/window.cpp:1017
 msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
 
-#: ../src/window.cpp:1101
-msgid "Colour change failed: Colour already in use"
+#: ../src/window.cpp:1127
+msgid "Color change failed: Color already in use"
 msgstr ""
 
-#: ../src/window.cpp:1353
+#: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
 msgstr ""
 
-#: ../src/window.cpp:1397
+#: ../src/window.cpp:1423
 msgid "Serving on port %0%"
 msgstr ""
 
-#: ../src/window.cpp:1527
+#: ../src/window.cpp:1553
 msgid "Save changes to document \"%0%\" before closing?"
 msgstr ""
 
-#: ../src/window.cpp:1537
+#: ../src/window.cpp:1563
 msgid ""
 "If you don't save, changes will be discarded, but may still be retrieved if "
 "you re-subscribe to the document as long as the session remains open."
 msgstr ""
 
-#: ../src/window.cpp:1546
+#: ../src/window.cpp:1572
 msgid "If you don't save, changes will be discarded."
 msgstr ""
 
 #. Add button to allow the user to save the dialog
-#: ../src/window.cpp:1561
+#: ../src/window.cpp:1587
 msgid "Close without saving"
 msgstr ""
 

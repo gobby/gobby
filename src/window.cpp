@@ -1124,7 +1124,7 @@ void Gobby::Window::on_obby_user_colour(const obby::user& user)
 
 void Gobby::Window::on_obby_user_colour_failed()
 {
-	display_error(_("Colour change failed: Colour already in use") );
+	display_error(_("Color change failed: Color already in use") );
 }
 
 void Gobby::Window::on_obby_document_insert(DocumentInfo& document)
