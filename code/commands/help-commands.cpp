@@ -95,7 +95,8 @@ void Gobby::HelpCommands::on_about()
 		authors.push_back("\tGabríel A. Pétursson <gabrielp@simnet.is>");
 
 		std::vector<Glib::ustring> translators;
-		// TODO: Add translator credits as soon as we have translations
+		translators.push_back(_("British English:"));
+		translators.push_back("\tGabríel A. Pétursson <gabrielp@simnet.is>");
 
 		Glib::ustring transl = "";
 		for(std::vector<Glib::ustring>::iterator i = translators.begin();
@@ -107,7 +108,7 @@ void Gobby::HelpCommands::on_about()
 
 		m_about_dialog->set_artists(artists);
 		m_about_dialog->set_authors(authors);
-		//m_about_dialog->set_translator_credits(transl); // TODO: Enable when we have translations
+		m_about_dialog->set_translator_credits(transl);
 		m_about_dialog->set_copyright(
 			"Copyright © 2008, 2009 Armin Burgmeier");
 		m_about_dialog->set_license(_(

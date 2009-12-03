@@ -6,7 +6,6 @@ code/commands/file-tasks/task-open.cpp
 code/commands/file-tasks/task-open-file.cpp
 code/commands/file-tasks/task-save.cpp
 code/commands/help-commands.cpp
-code/commands/help-commands.cpp.orig
 code/commands/subscription-commands.cpp
 code/commands/synchronization-commands.cpp
 code/commands/user-join-commands.cpp
