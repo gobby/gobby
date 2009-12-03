@@ -52,7 +52,9 @@ public:
 
 	typedef MessageList::iterator MessageHandle;
 
-	StatusBar(Folder& folder, const Preferences& preferences);
+	StatusBar(Gtk::Window& window,
+	          Folder& folder,
+	          const Preferences& preferences);
 	~StatusBar();
 
 	MessageHandle add_info_message(const Glib::ustring& message,
@@ -106,6 +108,7 @@ protected:
 	void on_mark_set(GtkTextMark* mark);
 	void on_toggled_overwrite();
 	void on_changed();
+	bool on_window_state_event(GdkEventWindowState* event);
 
 	void update_pos_display();
 

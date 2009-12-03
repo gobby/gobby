@@ -1,3 +1,10 @@
+2009-12-02  Gabríel A. Pétursson  <gabrielp@simnet.is>
+
+	* code/window.cpp:
+	* code/core/statusbar.hpp:
+	* code/core/statusbar.cpp: Do not show the statusbar's grip handle
+	while the window is maximized.
+
 2009-12-02  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/edit-commands.cpp: Adapt to another libinfinity API

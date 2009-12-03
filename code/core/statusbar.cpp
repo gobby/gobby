@@ -92,7 +92,8 @@ protected:
 	Glib::ustring m_detail_desc;
 };
 
-Gobby::StatusBar::StatusBar(Folder& folder,
+Gobby::StatusBar::StatusBar(Gtk::Window& window,
+                            Folder& folder,
                             const Preferences& preferences):
 	Gtk::HBox(false, 2), m_folder(folder), m_preferences(preferences),
 	m_visible_messages(0), m_current_view(NULL), m_position_context_id(0)
@@ -100,6 +101,9 @@ Gobby::StatusBar::StatusBar(Folder& folder,
 	pack_end(m_bar_position, Gtk::PACK_SHRINK);
 	m_bar_position.set_size_request(200, -1);
 	m_bar_position.show();
+
+	window.signal_window_state_event().connect(
+		sigc::mem_fun(*this, &StatusBar::on_window_state_event));
 
 	m_folder.signal_document_removed().connect(
 		sigc::mem_fun(*this, &StatusBar::on_document_removed));
@@ -343,6 +347,16 @@ void Gobby::StatusBar::on_toggled_overwrite()
 void Gobby::StatusBar::on_changed()
 {
 	update_pos_display();
+}
+
+bool Gobby::StatusBar::on_window_state_event(GdkEventWindowState* event)
+{
+	if (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
+		m_bar_position.set_has_resize_grip(false);
+	else
+		m_bar_position.set_has_resize_grip(true);
+
+	return true;
 }
 
 void Gobby::StatusBar::update_pos_display()
