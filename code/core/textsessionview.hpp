@@ -19,6 +19,7 @@
 #ifndef _GOBBY_TEXTSESSIONVIEW_HPP_
 #define _GOBBY_TEXTSESSIONVIEW_HPP_
 
+#include "core/textundogrouping.hpp"
 #include "core/sessionview.hpp"
 #include "core/preferences.hpp"
 
@@ -66,6 +67,9 @@ public:
 	// C++ does not know GObject inheritance:
 	virtual InfUser* get_active_user() const;
 	void set_active_user(InfTextUser* user);
+
+	// requires active user to be set:
+	TextUndoGrouping& get_undo_grouping() { return *m_undo_grouping; }
 
 	GtkSourceView* get_text_view() { return m_view; }
 	GtkSourceBuffer* get_text_buffer() { return m_buffer; }
@@ -121,6 +125,7 @@ protected:
 
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;
+	std::auto_ptr<TextUndoGrouping> m_undo_grouping;
 
 	SignalLanguageChanged m_signal_language_changed;
 };

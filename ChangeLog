@@ -1,3 +1,18 @@
+2009-12-05  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/textundogrouping.hpp:
+	* code/core/textundogrouping.cpp:
+	* code/core/Makefile.am: Added a thin wrapper around
+	InfTextUndoGrouping which also encloses GtkTextBuffer's user actions
+	into an undo group.
+
+	* code/core/textsessionview.hpp:
+	* code/core/textsessionview.cpp: Instantiate an undo group when an
+	active user is set.
+
+	* code/commands/edit-commands.cpp: Undo multiple requests according
+	to the document's undo grouping.
+
 2009-12-03  Gabríel A. Pétursson  <gabrielp@simnet.is>
 
 	* code/commands/help-commands.cpp: Added translator credits.

@@ -332,6 +332,19 @@ void Gobby::TextSessionView::set_active_user(InfTextUser* user)
 		gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
 
 	active_user_changed(INF_USER(user));
+
+	if(user != NULL)
+	{
+		m_undo_grouping.reset(
+			new TextUndoGrouping(
+				inf_adopted_session_get_algorithm(
+					INF_ADOPTED_SESSION(m_session)),
+				user, GTK_TEXT_BUFFER(m_buffer)));
+	}
+	else
+	{
+		m_undo_grouping.reset(NULL);
+	}
 }
 
 GtkSourceLanguage* Gobby::TextSessionView::get_language() const

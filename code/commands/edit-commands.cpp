@@ -305,8 +305,7 @@ void Gobby::EditCommands::on_find_text_changed()
 // libinfinity supports caret-aware requests, by generating undo-caret and
 // redo-caret requests.
 namespace {
-	bool check_set = false;
-	GtkTextIter check;
+	GtkTextMark* check = NULL;
 
 	void recaret_i(GtkTextBuffer* buffer,
 	               GtkTextIter* location,
@@ -314,8 +313,17 @@ namespace {
 	               gint len,
 	               gpointer user_data)
 	{
-		check = *location;
-		check_set = true;
+		if(!check)
+		{
+			check = gtk_text_buffer_create_mark(buffer, NULL, location, FALSE);
+		}
+		else
+		{
+			GtkTextIter iter;
+			gtk_text_buffer_get_iter_at_mark(buffer, &iter, check);
+			if(gtk_text_iter_get_offset(&iter) < gtk_text_iter_get_offset(location))
+				gtk_text_buffer_move_mark(buffer, check, location);
+		}
 	}
 
 	void recaret_e(GtkTextBuffer* buffer,
@@ -323,8 +331,17 @@ namespace {
 	               GtkTextIter* end,
 	               gpointer user_data)
 	{
-		check = *start;
-		check_set = true;
+		if(!check)
+		{
+			check = gtk_text_buffer_create_mark(buffer, NULL, start, FALSE);
+		}
+		else
+		{
+			GtkTextIter iter;
+			gtk_text_buffer_get_iter_at_mark(buffer, &iter, check);
+			if(gtk_text_iter_get_offset(&iter) < gtk_text_iter_get_offset(start))
+				gtk_text_buffer_move_mark(buffer, check, start);
+		}
 	}
 }
 
@@ -338,15 +355,21 @@ void Gobby::EditCommands::on_undo()
 	inf_adopted_session_undo(
 		INF_ADOPTED_SESSION(m_current_view->get_session()),
 		INF_ADOPTED_USER(m_current_view->get_active_user()),
-		1
+		m_current_view->get_undo_grouping().get_undo_size()
 	);
 
 	g_signal_handler_disconnect(m_current_view->get_text_buffer(), i_);
 	g_signal_handler_disconnect(m_current_view->get_text_buffer(), e_);
 
-	if(check_set)
-		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check, &check);
-	check_set = false;
+	if(check)
+	{
+		GtkTextIter check_iter;
+		gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check_iter, check);
+		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check_iter, &check_iter);
+		gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), check);
+		check = NULL;
+	}
+
 	m_current_view->scroll_to_cursor_position(0.0);
 }
 
@@ -360,15 +383,21 @@ void Gobby::EditCommands::on_redo()
 	inf_adopted_session_redo(
 		INF_ADOPTED_SESSION(m_current_view->get_session()),
 		INF_ADOPTED_USER(m_current_view->get_active_user()),
-		1
+		m_current_view->get_undo_grouping().get_redo_size()
 	);
 
 	g_signal_handler_disconnect(m_current_view->get_text_buffer(), i_);
 	g_signal_handler_disconnect(m_current_view->get_text_buffer(), e_);
 
-	if(check_set)
-		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check, &check);
-	check_set = false;
+	if(check)
+	{
+		GtkTextIter check_iter;
+		gtk_text_buffer_get_iter_at_mark(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check_iter, check);
+		gtk_text_buffer_select_range(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), &check_iter, &check_iter);
+		gtk_text_buffer_delete_mark(GTK_TEXT_BUFFER(m_current_view->get_text_buffer()), check);
+		check = NULL;
+	}
+
 	m_current_view->scroll_to_cursor_position(0.0);
 }
 
