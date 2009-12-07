@@ -158,6 +158,7 @@ Gobby::DocWindow::DocWindow(LocalDocumentInfo& info,
 	{
 		obby::format_string str(_("GtkSpell error: %0%") );
 		str << error->message;
+		g_error_free(error);
 
 		// Initialization failed, show error message.
 		Gtk::MessageDialog dlg(

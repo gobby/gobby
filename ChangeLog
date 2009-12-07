@@ -1,4 +1,9 @@
-2009-02-03  Armin Burgmeier  <armin@arbur.net>
+2009-12-07  Armin Burgmeier  <armin@arbur.net>
+
+	* src/docwindow.cpp: Don't leak the GError in case
+	gtkspell_new_attach() fails.
+
+2009-12-03  Armin Burgmeier  <armin@arbur.net>
 
 	* src/header.cpp:
 	* src/hostdialog.cpp:
