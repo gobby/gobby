@@ -1,3 +1,9 @@
+2009-12-07  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/browser-commands.hpp:
+	* code/commands/browser-commands.cpp: Simplified the code a bit using
+	the new InfcBrowser "status" property.
+
 2009-12-05  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/textundogrouping.hpp:

@@ -19,26 +19,24 @@
 #include "commands/browser-commands.hpp"
 #include "util/i18n.hpp"
 
-class Gobby::BrowserCommands::ConnectionInfo
+class Gobby::BrowserCommands::BrowserInfo
 {
 public:
-	ConnectionInfo(BrowserCommands& commands,
-	               InfXmlConnection* connection,
-	               InfcBrowser* browser);
+	BrowserInfo(BrowserCommands& commands,
+	            InfcBrowser* browser);
 
-	~ConnectionInfo();
+	~BrowserInfo();
 
 	InfcBrowser* get_browser() { return m_browser; }
 private:
-	static void on_notify_status_static(InfXmlConnection* connection,
+	static void on_notify_status_static(GObject* object,
 	                                    GParamSpec* pspec,
 	                                    gpointer user_data)
 	{
 		static_cast<BrowserCommands*>(user_data)->on_notify_status(
-			connection);
+			INFC_BROWSER(object));
 	}
 
-	InfXmlConnection* m_connection;
 	InfcBrowser* m_browser;
 
 	gulong m_notify_status_handler;
@@ -77,24 +75,21 @@ private:
 	gulong m_finished_handler;
 };
 
-Gobby::BrowserCommands::ConnectionInfo::ConnectionInfo(BrowserCommands& cmds,
-                                                       InfXmlConnection* cn,
-                                                       InfcBrowser* browser):
-	m_connection(cn), m_browser(browser)
+Gobby::BrowserCommands::BrowserInfo::BrowserInfo(BrowserCommands& cmds,
+                                                 InfcBrowser* browser):
+	m_browser(browser)
 {
 	m_notify_status_handler = g_signal_connect(
-		m_connection, "notify::status",
+		m_browser, "notify::status",
 		G_CALLBACK(on_notify_status_static), &cmds);
 
 	g_object_ref(browser);
-	g_object_ref(cn);
 }
 
-Gobby::BrowserCommands::ConnectionInfo::~ConnectionInfo()
+Gobby::BrowserCommands::BrowserInfo::~BrowserInfo()
 {
-	g_signal_handler_disconnect(m_connection, m_notify_status_handler);
+	g_signal_handler_disconnect(m_browser, m_notify_status_handler);
 
-	g_object_unref(m_connection);
 	g_object_unref(m_browser);
 }
 
@@ -166,8 +161,8 @@ Gobby::BrowserCommands::~BrowserCommands()
 		delete iter->second;
 	}
 
-	for(ConnectionMap::iterator iter = m_connection_map.begin();
-	    iter != m_connection_map.end(); ++iter)
+	for(BrowserMap::iterator iter = m_browser_map.begin();
+	    iter != m_browser_map.end(); ++iter)
 	{
 		delete iter->second;
 	}
@@ -189,62 +184,32 @@ void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
 	{
 		// Find by browser in case old_browser has it's connection
 		// reset.
-		ConnectionMap::iterator iter;
-		for(iter = m_connection_map.begin();
-		    iter != m_connection_map.end(); ++iter)
-		{
-			if(iter->second->get_browser() == old_browser)
-				break;
-		}
+		BrowserMap::iterator iter = m_browser_map.find(old_browser);
 
-		if(iter != m_connection_map.end())
-		{
-			delete iter->second;
-			m_connection_map.erase(iter);
-		}
+		g_assert(iter != m_browser_map.end());
+
+		delete iter->second;
+		m_browser_map.erase(iter);
 
 		g_object_unref(old_browser);
 	}
 
 	if(browser != NULL)
 	{
-		InfXmlConnection* connection =
-			infc_browser_get_connection(browser);
-		g_assert(connection);
-		g_assert(m_connection_map.find(connection) ==
-		         m_connection_map.end());
+		g_assert(m_browser_map.find(browser) == m_browser_map.end());
 
-		InfXmlConnectionStatus status;
-		g_object_get(G_OBJECT(connection), "status", &status, NULL);
-
-		if(status != INF_XML_CONNECTION_OPEN)
-		{
-			m_connection_map[connection] = new ConnectionInfo(
-				*this, connection, browser);
-		}
-		else if(!infc_browser_get_chat_session(browser))
-		{
-			subscribe_chat(browser);
-		}
+		m_browser_map[browser] = new BrowserInfo(*this, browser);
+		if(infc_browser_get_status(browser) == INFC_BROWSER_CONNECTED)
+			if(!infc_browser_get_chat_session(browser))
+				subscribe_chat(browser);
 	}
 }
 
-void Gobby::BrowserCommands::on_notify_status(InfXmlConnection* connection)
+void Gobby::BrowserCommands::on_notify_status(InfcBrowser* browser)
 {
-	InfXmlConnectionStatus status;
-	g_object_get(G_OBJECT(connection), "status", &status, NULL);
-
-	ConnectionMap::iterator iter = m_connection_map.find(connection);
-	g_assert(iter != m_connection_map.end());
-	InfcBrowser* browser = iter->second->get_browser();
-
-	if(status == INF_XML_CONNECTION_OPEN &&
-	   !infc_browser_get_chat_session(browser))
-	{
-		subscribe_chat(browser);
-	}
-
-	// Keep the connection info in case of a reconnect
+	if(infc_browser_get_status(browser) == INFC_BROWSER_CONNECTED)
+		if(!infc_browser_get_chat_session(browser))
+			subscribe_chat(browser);
 }
 
 void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)

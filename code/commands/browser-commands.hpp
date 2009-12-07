@@ -48,7 +48,7 @@ protected:
 
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
 	                    InfcBrowser* browser);
-	void on_notify_status(InfXmlConnection* connection);
+	void on_notify_status(InfcBrowser* browser);
 
 	void subscribe_chat(InfcBrowser* browser);
 
@@ -62,9 +62,9 @@ protected:
 
 	gulong m_set_browser_handler;
 
-	class ConnectionInfo;
-	typedef std::map<InfXmlConnection*, ConnectionInfo*> ConnectionMap;
-	ConnectionMap m_connection_map;
+	class BrowserInfo;
+	typedef std::map<InfcBrowser*, BrowserInfo*> BrowserMap;
+	BrowserMap m_browser_map;
 
 	class RequestInfo;
 	typedef std::map<InfcNodeRequest*, RequestInfo*> RequestMap;
