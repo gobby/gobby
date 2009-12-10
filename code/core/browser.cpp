@@ -262,13 +262,14 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 
 	if(!xmpp)
 	{
-		InfTcpConnection* connection = INF_TCP_CONNECTION(
-			g_object_new(INF_TYPE_TCP_CONNECTION,
-			             "io", m_io,
-			             "remote-address", address,
-			             "remote-port", port,
-			             "device-index", device_index,
-			             NULL));
+		InfTcpConnection* connection = inf_tcp_connection_new(
+			INF_IO(m_io),
+			address,
+			port);
+
+		g_object_set(G_OBJECT(connection),
+			"device-index", device_index,
+			NULL);
 
 		GError* error = NULL;
 		if(!inf_tcp_connection_open(connection, &error))

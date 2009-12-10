@@ -1,3 +1,8 @@
+2009-12-10  Benjamin Herr  <ben@0x539.de>
+
+	* code/core/browser.cpp: Use new inf_tcp_connection_new() function
+	instead of manually creating a GObject.
+
 2009-12-07  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/browser-commands.hpp:
