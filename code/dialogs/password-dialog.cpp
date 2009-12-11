@@ -25,12 +25,12 @@ Gobby::PasswordDialog::PasswordDialog(Gtk::Window& parent,
                                 const Glib::ustring& remote_id):
 	Gtk::Dialog(_("Password required"), parent), m_box(false, 6),
 	m_rightbox(false, 16),
-	m_promptbox(false, 8),
+	m_promptbox(false, 12),
 	m_image(Gtk::Stock::DIALOG_AUTHENTICATION, Gtk::ICON_SIZE_DIALOG),
 	m_intro_label(Glib::ustring::compose(
-		_("Connection to host %1 requires a password."), remote_id)),
-	m_prompt_label(_("_Password:"),
-		Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER, true)
+		_("Connection to host \"%1\" requires a password."),
+		remote_id)),
+	m_prompt_label(_("Server _Password:"), true)
 {
 	m_prompt_label.set_mnemonic_widget(m_entry);
 	m_promptbox.pack_start(m_prompt_label, Gtk::PACK_SHRINK);
