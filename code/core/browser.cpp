@@ -16,6 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include "dialogs/password-dialog.hpp"
 #include "core/browser.hpp"
 #include "util/file.hpp"
 #include "util/i18n.hpp"
@@ -26,9 +27,29 @@
 #include <gtkmm/image.h>
 
 #ifndef G_OS_WIN32
-# include <sys/socket.h> 
+# include <sys/socket.h>
 # include <net/if.h>
 #endif
+
+namespace
+{
+	Glib::ustring prompt_password(Gtk::Window& parent,
+	                              Gsasl_session* session)
+	{
+		InfXmppConnection* xmpp =
+			INF_XMPP_CONNECTION(gsasl_session_hook_get(session));
+		gchar* remote_id;
+		g_object_get(G_OBJECT(xmpp), "remote-id", &remote_id, NULL);
+		Glib::ustring remote_id_(remote_id);
+		g_free(remote_id);
+		Gobby::PasswordDialog dialog(parent, remote_id_);
+		dialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_ACCEPT);
+		dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+		if(dialog.run() != Gtk::RESPONSE_ACCEPT)
+			return "";
+		return dialog.get_password();
+	}
+}
 
 gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, gpointer user_data)
 {
@@ -88,6 +109,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_text_plugin(text_plugin),
 	m_status_bar(status_bar),
 	m_preferences(preferences),
+	m_gsasl(NULL),
 	m_expander(_("_Direct Connection"), true),
 	m_hbox(false, 6),
 	m_label_hostname(_("Host Name:")),
@@ -182,6 +204,8 @@ Gobby::Browser::~Browser()
 	{
 		cancel(iter->first);
 	}
+
+	gsasl_done(m_gsasl);
 
 	g_object_unref(m_browser_store);
 	g_object_unref(m_sort_model);
@@ -286,7 +310,11 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 				connection, INF_XMPP_CONNECTION_CLIENT,
 				NULL, hostname.c_str(),
 				m_preferences.security.policy,
-				NULL, NULL, NULL);
+				NULL,
+				m_gsasl,
+				m_gsasl_mechanisms.empty()
+					? ""
+					: m_gsasl_mechanisms.c_str());
 
 			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
 			g_object_unref(xmpp);
@@ -439,6 +467,18 @@ void Gobby::Browser::connect_to_host(Glib::ustring str)
 			                       host));
 
 	m_resolv_map[resolv_handle].message_handle = message_handle;
+}
+
+void Gobby::Browser::set_gsasl_context(Gsasl* gsasl, const char* mechanisms)
+{
+	m_gsasl = gsasl;
+	m_gsasl_mechanisms = mechanisms ? mechanisms : "";
+#ifdef LIBINFINITY_HAVE_AVAHI
+	g_object_set(G_OBJECT(m_discovery),
+		"sasl-context", m_gsasl,
+		"sasl-mechanisms", mechanisms,
+		NULL);
+#endif
 }
 
 void Gobby::Browser::on_security_policy_changed()

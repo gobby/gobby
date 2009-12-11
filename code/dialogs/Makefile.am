@@ -7,6 +7,7 @@ libgobby_dialogs_a_SOURCES = \
 	goto-dialog.cpp \
 	initial-dialog.cpp \
 	open-location-dialog.cpp \
+	password-dialog.cpp \
 	preferences-dialog.cpp
 
 noinst_HEADERS = \
@@ -16,6 +17,7 @@ noinst_HEADERS = \
         goto-dialog.hpp \
         initial-dialog.hpp \
 	open-location-dialog.hpp \
+	password-dialog.hpp \
         preferences-dialog.hpp
 
 appicondir = $(datadir)/pixmaps

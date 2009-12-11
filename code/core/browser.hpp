@@ -35,6 +35,8 @@
 #include <libinfgtk/inf-gtk-browser-model.h>
 #include <libinfgtk/inf-gtk-browser-model-sort.h>
 
+#include <gsasl.h>
+
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
@@ -77,6 +79,8 @@ public:
 	void set_selected(InfcBrowser* browser, InfcBrowserIter* iter);
 
 	void connect_to_host(Glib::ustring str);
+
+	void set_gsasl_context(Gsasl* gsasl, const char* mechanisms);
 
 	SignalActivate signal_activate() const { return m_signal_activate; }
 
@@ -122,6 +126,8 @@ protected:
 	StatusBar& m_status_bar;
 	Preferences& m_preferences;
 
+	Gsasl* m_gsasl;
+	std::string m_gsasl_mechanisms;
 	InfXmppManager* m_xmpp_manager;
 #ifdef LIBINFINITY_HAVE_AVAHI
 	InfDiscoveryAvahi* m_discovery;
