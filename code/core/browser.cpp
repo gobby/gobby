@@ -31,26 +31,6 @@
 # include <net/if.h>
 #endif
 
-namespace
-{
-	Glib::ustring prompt_password(Gtk::Window& parent,
-	                              Gsasl_session* session)
-	{
-		InfXmppConnection* xmpp =
-			INF_XMPP_CONNECTION(gsasl_session_hook_get(session));
-		gchar* remote_id;
-		g_object_get(G_OBJECT(xmpp), "remote-id", &remote_id, NULL);
-		Glib::ustring remote_id_(remote_id);
-		g_free(remote_id);
-		Gobby::PasswordDialog dialog(parent, remote_id_);
-		dialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_ACCEPT);
-		dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-		if(dialog.run() != Gtk::RESPONSE_ACCEPT)
-			return "";
-		return dialog.get_password();
-	}
-}
-
 gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, gpointer user_data)
 {
 	gint result = 0;
