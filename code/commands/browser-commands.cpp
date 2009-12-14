@@ -207,9 +207,34 @@ void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
 
 void Gobby::BrowserCommands::on_notify_status(InfcBrowser* browser)
 {
-	if(infc_browser_get_status(browser) == INFC_BROWSER_CONNECTED)
+	InfXmlConnection* connection;
+	InfXmlConnectionStatus status;
+
+	switch(infc_browser_get_status(browser))
+	{
+	case INFC_BROWSER_DISCONNECTED:
+		// Close connection if browser got disconnected. This for
+		// example happens when the server does not send an initial
+		// welcome message.
+		connection = infc_browser_get_connection(browser);
+		g_object_get(G_OBJECT(connection), "status", &status, NULL);
+		if(status != INF_XML_CONNECTION_CLOSED &&
+		   status != INF_XML_CONNECTION_CLOSING)
+		{
+			inf_xml_connection_close(connection);
+		}
+
+		break;
+	case INFC_BROWSER_CONNECTING:
+		break;
+	case INFC_BROWSER_CONNECTED:
 		if(!infc_browser_get_chat_session(browser))
 			subscribe_chat(browser);
+		break;
+	default:
+		g_assert_not_reached();
+		break;
+	}
 }
 
 void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)
