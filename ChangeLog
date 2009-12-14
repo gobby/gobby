@@ -1,5 +1,11 @@
 2009-12-14  Armin Burgmeier  <armin@arbur.net>
 
+	* code/commands/browser-context-commands.cpp (on_populate_popup):
+	Don't crash when right-clicking on a browser item whose connection is
+	currently being established.
+
+2009-12-14  Armin Burgmeier  <armin@arbur.net>
+
 	* code/commands/browser-commands.cpp (on_notify_status): Close
 	network connection when server does not send initial welcome message.
 

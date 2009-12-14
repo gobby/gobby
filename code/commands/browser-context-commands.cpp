@@ -71,15 +71,9 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	InfcBrowser* browser;
 	InfcBrowserIter iter;
 
-	if(m_browser.get_selected(&browser, &iter))
+	if(m_browser.get_selected(&browser, &iter) &&
+	   infc_browser_get_status(browser) == INFC_BROWSER_CONNECTED)
 	{
-		InfXmlConnection* connection =
-			infc_browser_get_connection(browser);
-		InfXmlConnectionStatus status;
-		g_object_get(G_OBJECT(connection), "status", &status, NULL);
-		if(status != INF_XML_CONNECTION_OPEN)
-			return;
-
 		InfcBrowserIter dummy_iter = iter;
 		bool is_subdirectory =
 			infc_browser_iter_is_subdirectory(browser, &iter);
