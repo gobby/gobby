@@ -20,6 +20,7 @@
 #define _GOBBY_AUTH_COMMANDS_HPP_
 
 #include "core/browser.hpp"
+#include "core/statusbar.hpp"
 #include "core/preferences.hpp"
 
 #include <gsasl.h>
@@ -33,7 +34,9 @@ namespace Gobby
 class AuthCommands: public sigc::trackable
 {
 public:
-	AuthCommands(Gtk::Window& parent, Browser& browser,
+	AuthCommands(Gtk::Window& parent,
+	             Browser& browser,
+	             StatusBar& statusbar,
 	             const Preferences& preferences);
 
 	~AuthCommands();
@@ -48,11 +51,36 @@ protected:
 		return auth->gsasl_callback(session, prop);
 	}
 
+	static void set_browser_callback_static(InfGtkBrowserModel*,
+	                                       GtkTreePath*,
+	                                       GtkTreeIter*,
+	                                       InfcBrowser* browser,
+	                                       gpointer user_data)
+	{
+		AuthCommands* auth = static_cast<AuthCommands*>(user_data);
+		auth->set_browser_callback(browser);
+	}
+
+	static void browser_error_callback_static(InfcBrowser* browser,
+	                                          gpointer error_ptr,
+	                                          gpointer user_data)
+	{
+		AuthCommands* auth = static_cast<AuthCommands*>(user_data);
+		GError* error = static_cast<GError*>(error_ptr);
+
+		auth->browser_error_callback(browser, error);
+	}
+
 	int gsasl_callback(Gsasl_session* session,
 	                   Gsasl_property prop);
 
+	void set_browser_callback(InfcBrowser* browser);
+
+	void browser_error_callback(InfcBrowser* browser, GError* error);
+
 	Gtk::Window& m_parent;
 	Browser& m_browser;
+	StatusBar& m_statusbar;
 	const Preferences& m_preferences;
 	Gsasl* m_gsasl;
 };

@@ -21,6 +21,7 @@
 #include "util/i18n.hpp"
 
 #include <libinfinity/common/inf-xmpp-connection.h>
+#include <libinfinity/common/inf-error.h>
 
 #include <gtkmm/stock.h>
 
@@ -47,9 +48,14 @@ namespace
 	}
 }
 
-Gobby::AuthCommands::AuthCommands(Gtk::Window& parent, Browser& browser,
+Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
+                                  Browser& browser,
+                                  StatusBar& statusbar,
                                   const Preferences& preferences):
-	m_parent(parent), m_browser(browser), m_preferences(preferences)
+	m_parent(parent),
+	m_browser(browser),
+	m_statusbar(statusbar),
+	m_preferences(preferences)
 {
 	int gsasl_status = gsasl_init(&m_gsasl);
 	if(gsasl_status != GSASL_OK)
@@ -63,6 +69,11 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent, Browser& browser,
 	                       m_gsasl,
 	                       reinterpret_cast<GDestroyNotify>(gsasl_done));
 	m_browser.set_gsasl_context(m_gsasl, "ANONYMOUS PLAIN");
+	g_signal_connect(
+		G_OBJECT(m_browser.get_store()),
+		"set-browser",
+		G_CALLBACK(&AuthCommands::set_browser_callback_static),
+		this);
 }
 
 Gobby::AuthCommands::~AuthCommands()
@@ -98,4 +109,29 @@ int Gobby::AuthCommands::gsasl_callback(Gsasl_session* session,
 	default:
 		return GSASL_NO_CALLBACK;
 	}
+}
+
+void Gobby::AuthCommands::set_browser_callback(InfcBrowser* browser)
+{
+	g_signal_connect(
+		G_OBJECT(browser),
+		"error",
+		G_CALLBACK(browser_error_callback_static),
+		this);
+}
+
+void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,
+                                                 GError* error)
+{
+	if(error->domain != inf_gsasl_error_quark())
+		return;
+
+	gchar* remote;
+	g_object_get(infc_browser_get_connection(browser),
+		"remote-hostname", &remote,
+		NULL);
+	Glib::ustring short_message(Glib::ustring::compose(
+		"Authentication failed for \"%1\"", remote));
+	g_free(remote);
+	m_statusbar.add_error_message(short_message, error->message);
 }
