@@ -185,8 +185,6 @@ Gobby::Browser::~Browser()
 		cancel(iter->first);
 	}
 
-	gsasl_done(m_gsasl);
-
 	g_object_unref(m_browser_store);
 	g_object_unref(m_sort_model);
 	g_object_unref(m_cert_manager);

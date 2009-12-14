@@ -58,13 +58,16 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent, Browser& browser,
 			gsasl_strerror(gsasl_status));
 	gsasl_callback_set(m_gsasl, &AuthCommands::gsasl_callback_static);
 	gsasl_callback_hook_set(m_gsasl, this);
+	g_object_set_data_full(G_OBJECT(m_browser.get_store()),
+	                       "Gobby::AuthCommands::m_gsasl",
+	                       m_gsasl,
+	                       reinterpret_cast<GDestroyNotify>(gsasl_done));
 	m_browser.set_gsasl_context(m_gsasl, "ANONYMOUS PLAIN");
 }
 
 Gobby::AuthCommands::~AuthCommands()
 {
 	m_browser.set_gsasl_context(NULL, NULL);
-	gsasl_done(m_gsasl);
 }
 
 int Gobby::AuthCommands::gsasl_callback(Gsasl_session* session,
