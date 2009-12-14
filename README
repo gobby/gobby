@@ -59,7 +59,7 @@ Gobby: First Contact
      * Gtk+ (>= 2.12.0)
      * Glib (>= 2.18.0)
      * GtkSourceView (>= 2.0)
-     * Glibmm (>= 2.16.4)
+     * Glibmm (>= 2.18.0)
      * libxml++ (>= 2.6.0)
      * Gtkmm (>= 2.12.0)
      _________________________________________________________
@@ -128,7 +128,7 @@ Gobby: First Contact
 6. Development
 
    To get in contact with the developers, either use the obby-users mailing
-   list mentioned above or drop by in our IRC channel #0x539 on
-   irc.blitzed.org. To get the up-to-date Gobby code to hack on, use
+   list mentioned above or drop by in our IRC channel #infinote on
+   irc.freenode.org. To get the up-to-date Gobby code to hack on, use
    `git clone git://git.0x539.de/git/gobby.git'. Patches should be filed
    in our bug tracker on http://gobby.0x539.de/trac/newticket.
