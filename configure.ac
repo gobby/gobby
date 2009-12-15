@@ -4,6 +4,7 @@
 AC_PREREQ(2.59)
 AC_INIT([gobby], [0.4.93], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9 check-news)
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
 AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([code/window.hpp])
 AC_CONFIG_HEADER([code/features.hpp])
