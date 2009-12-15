@@ -27,6 +27,7 @@
 #include "commands/synchronization-commands.hpp"
 #include "commands/user-join-commands.hpp"
 #include "commands/browser-context-commands.hpp"
+#include "commands/auth-commands.hpp"
 #include "commands/folder-commands.hpp"
 #include "commands/file-commands.hpp"
 #include "commands/edit-commands.hpp"
@@ -176,6 +177,8 @@ protected:
 
 	BrowserCommands m_browser_commands;
 	BrowserContextCommands m_browser_context_commands;
+
+	AuthCommands m_auth_commands;
 
 	AutosaveCommands m_autosave_commands;
 	SubscriptionCommands m_subscription_commands;

@@ -1,5 +1,19 @@
 2009-12-15  Benjamin Herr  <ben@0x539.de>
 
+	* code/commands/Makefile.am:
+	* code/commands/auth-commands.hpp:
+	* code/commands/auth-commands.cpp:
+	* code/core/browser.hpp:
+	* code/core/browser.cpp:
+	* code/dialogs/Makefile.am:
+	* code/dialogs/password-dialog.hpp:
+	* code/dialogs/password-dialog.cpp:
+	* code/window.hpp:
+	* code/window.cpp: Added support for SASL PLAIN authentication,
+	prompting the user for a password upon connection.
+
+2009-12-15  Benjamin Herr  <ben@0x539.de>
+
 	* configure.ac: Enable optional AM_SILENT_RULES.
 
 2009-12-14  Armin Burgmeier  <armin@arbur.net>

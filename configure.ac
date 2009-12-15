@@ -37,7 +37,7 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-required_libs="libxml++-2.6 glibmm-2.4 >= 2.18.0 giomm-2.4 >= 2.18.0 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0 >= 2.4"
+required_libs="libxml++-2.6 glibmm-2.4 >= 2.18.0 giomm-2.4 >= 2.18.0 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0 >= 2.4 libgsasl >= 0.2.21"
 
 # Check if we are running on OS X, for special link handling.
 if test "x$build_vendor" = "xapple" ; then
