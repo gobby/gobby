@@ -65,7 +65,7 @@ public:
 		GtkSourceLanguage* m_language;
 	};
 
-        typedef std::list<Glib::RefPtr<LanguageAction> > LanguageList;
+	typedef std::list<Glib::RefPtr<LanguageAction> > LanguageList;
 	typedef std::map<Glib::ustring, const LanguageList> LanguageMap;
 
 	Header(Preferences& preferences,
@@ -103,21 +103,22 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_file_save_as;
 	const Glib::RefPtr<Gtk::Action> action_file_save_all;
 	const Glib::RefPtr<Gtk::Action> action_file_export_html;
+	const Glib::RefPtr<Gtk::Action> action_file_connect;
 	const Glib::RefPtr<Gtk::Action> action_file_close;
 	const Glib::RefPtr<Gtk::Action> action_file_quit;
 
-        const Glib::RefPtr<Gtk::Action> action_edit;
-        const Glib::RefPtr<Gtk::Action> action_edit_undo;
-        const Glib::RefPtr<Gtk::Action> action_edit_redo;
-        const Glib::RefPtr<Gtk::Action> action_edit_cut;
-        const Glib::RefPtr<Gtk::Action> action_edit_copy;
-        const Glib::RefPtr<Gtk::Action> action_edit_paste;
-        const Glib::RefPtr<Gtk::Action> action_edit_find;
-        const Glib::RefPtr<Gtk::Action> action_edit_find_next;
-        const Glib::RefPtr<Gtk::Action> action_edit_find_prev;
-        const Glib::RefPtr<Gtk::Action> action_edit_find_replace;
-        const Glib::RefPtr<Gtk::Action> action_edit_goto_line;
-        const Glib::RefPtr<Gtk::Action> action_edit_preferences;
+	const Glib::RefPtr<Gtk::Action> action_edit;
+	const Glib::RefPtr<Gtk::Action> action_edit_undo;
+	const Glib::RefPtr<Gtk::Action> action_edit_redo;
+	const Glib::RefPtr<Gtk::Action> action_edit_cut;
+	const Glib::RefPtr<Gtk::Action> action_edit_copy;
+	const Glib::RefPtr<Gtk::Action> action_edit_paste;
+	const Glib::RefPtr<Gtk::Action> action_edit_find;
+	const Glib::RefPtr<Gtk::Action> action_edit_find_next;
+	const Glib::RefPtr<Gtk::Action> action_edit_find_prev;
+	const Glib::RefPtr<Gtk::Action> action_edit_find_replace;
+	const Glib::RefPtr<Gtk::Action> action_edit_goto_line;
+	const Glib::RefPtr<Gtk::Action> action_edit_preferences;
 
 	const Glib::RefPtr<Gtk::Action> action_view;
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_toolbar;
@@ -128,7 +129,7 @@ public:
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_chat_userlist;
 	const Glib::RefPtr<Gtk::Action> action_view_highlight_mode;
 	const Glib::RefPtr<LanguageAction> action_view_highlight_none;
-        const LanguageMap action_view_highlight_languages;
+	const LanguageMap action_view_highlight_languages;
 
 	const Glib::RefPtr<Gtk::Action> action_help;
 	const Glib::RefPtr<Gtk::Action> action_help_contents;

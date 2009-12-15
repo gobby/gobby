@@ -41,6 +41,7 @@ namespace {
 		"      <menuitem action=\"FileSaveAll\" />"
 		"      <separator />"
 		"      <menuitem action=\"FileExportHtml\" />"
+		"      <menuitem action=\"FileConnect\" />"
 		"      <separator />"
 		"      <menuitem action=\"FileClose\" />"
 		"      <menuitem action=\"FileQuit\" />"
@@ -209,6 +210,8 @@ Gobby::Header::Header(Preferences& preferences,
                       GtkSourceLanguageManager* lang_mgr):
 	m_preferences(preferences),
 
+	m_ui_manager(Gtk::UIManager::create()),
+
 	group_file(Gtk::ActionGroup::create("MenuFile") ),
 	group_edit(Gtk::ActionGroup::create("MenuEdit") ),
 	group_view(Gtk::ActionGroup::create("MenuView") ),
@@ -231,6 +234,9 @@ Gobby::Header::Header(Preferences& preferences,
 			_("Save All"), _("Save all open files locally"))),
 	action_file_export_html(
 		Gtk::Action::create("FileExportHtml", _("Export As _HTML..."))),
+	action_file_connect(
+		Gtk::Action::create("FileConnect", Gtk::Stock::CONNECT,
+		                    _("Connect _to Server..."))),
 	action_file_close(
 		Gtk::Action::create("FileClose", Gtk::Stock::CLOSE)),
 	action_file_quit(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)),
@@ -312,9 +318,7 @@ Gobby::Header::Header(Preferences& preferences,
 	action_help_about(
 		Gtk::Action::create(
 			"HelpAbout", Gtk::Stock::ABOUT, _("_About..."),
-			_("Shows Gobby's copyright and credits"))),
-
-	m_ui_manager(Gtk::UIManager::create())
+			_("Shows Gobby's copyright and credits")))
 {
 	// Add basic menu
 	m_ui_manager->add_ui_from_string(ui_desc);
@@ -335,6 +339,9 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file_export_html,
 	                Gtk::AccelKey("<control><shift>H",
 			              "<Actions>/MenuFile/FileExportHtml"));
+	group_file->add(action_file_connect,
+	                Gtk::AccelKey("<control>T",
+	                              "<Actions>/MenuFile/FileConnect"));
 	group_file->add(action_file_close);
 	group_file->add(action_file_quit);
 

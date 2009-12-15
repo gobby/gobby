@@ -23,6 +23,7 @@
 
 #include "operations/operations.hpp"
 #include "dialogs/document-location-dialog.hpp"
+#include "dialogs/connection-dialog.hpp"
 #include "core/header.hpp"
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
@@ -103,10 +104,14 @@ protected:
 	void on_save();
 	void on_save_as();
 	void on_save_all();
+
 	void on_export_html();
+	void on_connect();
 
 	void on_close();
 	void on_quit();
+
+	void on_connect_response(int response_id);
 
 	void update_sensitivity();
 
@@ -125,6 +130,8 @@ protected:
 	// is freed before the location dialog.
 	std::auto_ptr<DocumentLocationDialog> m_location_dialog;
 	std::auto_ptr<Task> m_task;
+
+	std::auto_ptr<ConnectionDialog> m_connection_dialog;
 
 	gulong m_row_inserted_handler;
 	gulong m_row_deleted_handler;

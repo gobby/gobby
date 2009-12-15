@@ -25,6 +25,8 @@
 #include "commands/file-tasks/task-save-all.hpp"
 #include "commands/file-tasks/task-export-html.hpp"
 
+#include <gtkmm/stock.h>
+
 Gobby::FileCommands::Task::Task(FileCommands& file_commands):
 	m_file_commands(file_commands)
 {
@@ -118,6 +120,8 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 		sigc::mem_fun(*this, &FileCommands::on_save_all));
 	header.action_file_export_html->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_export_html));
+	header.action_file_connect->signal_activate().connect(
+		sigc::mem_fun(*this, &FileCommands::on_connect));
 	header.action_file_close->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_close));
 	header.action_file_quit->signal_activate().connect(
@@ -149,7 +153,7 @@ void Gobby::FileCommands::set_task(Task* task)
 	task->signal_finished().connect(sigc::mem_fun(
 		*this, &FileCommands::on_task_finished));
 	m_task.reset(task);
-  task->run();
+	task->run();
 }
 
 void Gobby::FileCommands::on_document_changed(SessionView* view)
@@ -232,6 +236,25 @@ void Gobby::FileCommands::on_export_html()
 	set_task(new TaskExportHtml(*this, *text_view));
 }
 
+void Gobby::FileCommands::on_connect()
+{
+	if(m_connection_dialog.get() == NULL)
+	{
+		m_connection_dialog.reset(new ConnectionDialog(m_parent));
+
+		m_connection_dialog->signal_response().connect(
+			sigc::mem_fun(*this,
+				&FileCommands::on_connect_response));
+
+		m_connection_dialog->add_button(Gtk::Stock::CANCEL,
+		                                Gtk::RESPONSE_CANCEL);
+		m_connection_dialog->add_button(Gtk::Stock::CONNECT,
+		                                Gtk::RESPONSE_ACCEPT);
+	}
+
+	m_connection_dialog->present();
+}
+
 void Gobby::FileCommands::on_close()
 {
 	SessionView* view = m_folder.get_current_document();
@@ -243,6 +266,18 @@ void Gobby::FileCommands::on_close()
 void Gobby::FileCommands::on_quit()
 {
 	m_parent.hide();
+}
+
+void Gobby::FileCommands::on_connect_response(int response_id)
+{
+	if(response_id == Gtk::RESPONSE_ACCEPT)
+	{
+		const Glib::ustring& host = m_connection_dialog->get_host_name();
+		if(!host.empty())
+			m_browser.connect_to_host(host);
+	}
+
+	m_connection_dialog->hide();
 }
 
 void Gobby::FileCommands::update_sensitivity()
