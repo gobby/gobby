@@ -24,8 +24,8 @@
 Gobby::PasswordDialog::PasswordDialog(Gtk::Window& parent,
                                 const Glib::ustring& remote_id,
                                 unsigned int retry_counter):
-	Gtk::Dialog(_("Password required"), parent), m_box(false, 6),
-	m_rightbox(false, 16),
+	Gtk::Dialog(_("Password required"), parent), m_box(false, 12),
+	m_rightbox(false, 6),
 	m_promptbox(false, 12),
 	m_image(Gtk::Stock::DIALOG_AUTHENTICATION, Gtk::ICON_SIZE_DIALOG),
 	m_intro_label(Glib::ustring::compose(
