@@ -30,7 +30,9 @@ namespace Gobby
 class PasswordDialog: public Gtk::Dialog
 {
 public:
-	PasswordDialog(Gtk::Window& parent, const Glib::ustring& remote_id);
+	PasswordDialog(Gtk::Window& parent,
+	               const Glib::ustring& remote_id,
+	               unsigned int retry_counter);
 
 	Glib::ustring get_password() const;
 

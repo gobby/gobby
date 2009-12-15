@@ -28,19 +28,20 @@
 namespace
 {
 	Glib::ustring prompt_password(Gtk::Window& parent,
-	                              Gsasl_session* session)
+	                              InfXmppConnection* xmpp,
+	                              unsigned int retry_counter)
 	{
-		InfXmppConnection* xmpp =
-			INF_XMPP_CONNECTION(gsasl_session_hook_get(session));
 		gchar* remote_id;
 		g_object_get(G_OBJECT(xmpp),
 			"remote-hostname", &remote_id,
 			NULL);
 		Glib::ustring remote_id_(remote_id);
 		g_free(remote_id);
-		Gobby::PasswordDialog dialog(parent, remote_id_);
+		Gobby::PasswordDialog dialog(parent,
+		                             remote_id_,
+		                             retry_counter);
 		dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-		/* TODO: Armin does not like the OK button */
+
 		dialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_ACCEPT);
 		if(dialog.run() != Gtk::RESPONSE_ACCEPT)
 			return "";
@@ -79,13 +80,18 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
 Gobby::AuthCommands::~AuthCommands()
 {
 	m_browser.set_gsasl_context(NULL, NULL);
+
+	for(RetryMap::iterator iter = m_retries.begin();
+	    iter != m_retries.end(); ++iter)
+	{
+		g_signal_handler_disconnect(iter->first, iter->second.handle);
+	}
 }
 
 int Gobby::AuthCommands::gsasl_callback(Gsasl_session* session,
                                         Gsasl_property prop)
 {
 	Glib::ustring username = m_preferences.user.name;
-	Glib::ustring password;
 	switch(prop)
 	{
 	case GSASL_ANONYMOUS_TOKEN:
@@ -99,13 +105,36 @@ int Gobby::AuthCommands::gsasl_callback(Gsasl_session* session,
 		                   username.c_str());
 		return GSASL_OK;
 	case GSASL_PASSWORD:
-		password = prompt_password(m_parent, session);
-		if(password.empty())
-			return GSASL_NO_PASSWORD;
-		gsasl_property_set(session,
-		                   GSASL_PASSWORD,
-		                   password.c_str());
-		return GSASL_OK;
+		{
+			InfXmppConnection* xmpp =
+				INF_XMPP_CONNECTION(
+					gsasl_session_hook_get(session));
+			RetryMap::iterator i = m_retries.find(xmpp);
+			if(i == m_retries.end())
+			{
+				i = m_retries.insert(
+					std::make_pair(xmpp,
+					               RetryInfo())).first;
+				i->second.retries = 0;
+				i->second.handle = g_signal_connect(
+					G_OBJECT(xmpp),
+					"notify::status",
+					G_CALLBACK(on_notify_status_static),
+					this);
+			}
+			RetryInfo& info(i->second);
+
+			Glib::ustring password =
+				prompt_password(m_parent, xmpp, info.retries);
+			++info.retries;
+
+			if(password.empty())
+				return GSASL_NO_PASSWORD;
+			gsasl_property_set(session,
+			                   GSASL_PASSWORD,
+			                   password.c_str());
+			return GSASL_OK;
+		}
 	default:
 		return GSASL_NO_CALLBACK;
 	}
@@ -127,11 +156,25 @@ void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,
 		return;
 
 	gchar* remote;
-	g_object_get(infc_browser_get_connection(browser),
+	InfXmlConnection* connection = infc_browser_get_connection(browser);
+	g_assert(INF_IS_XMPP_CONNECTION(connection));
+	g_object_get(connection,
 		"remote-hostname", &remote,
 		NULL);
 	Glib::ustring short_message(Glib::ustring::compose(
 		"Authentication failed for \"%1\"", remote));
 	g_free(remote);
 	m_statusbar.add_error_message(short_message, error->message);
+}
+
+void Gobby::AuthCommands::on_notify_status(InfXmppConnection* connection)
+{
+	InfXmlConnectionStatus status;
+	g_object_get(G_OBJECT(connection), "status", &status, NULL);
+	if(status != INF_XML_CONNECTION_OPENING)
+	{
+		RetryMap::iterator iter = m_retries.find(connection);
+		g_signal_handler_disconnect(connection, iter->second.handle);
+		m_retries.erase(iter);
+	}
 }

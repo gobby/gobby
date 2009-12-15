@@ -61,6 +61,14 @@ protected:
 		auth->set_browser_callback(browser);
 	}
 
+	static void on_notify_status_static(GObject* connection_obj,
+	                                    GParamSpec*,
+	                                    gpointer user_data)
+	{
+		AuthCommands* auth = static_cast<AuthCommands*>(user_data);
+		auth->on_notify_status(INF_XMPP_CONNECTION(connection_obj));
+	}
+
 	static void browser_error_callback_static(InfcBrowser* browser,
 	                                          gpointer error_ptr,
 	                                          gpointer user_data)
@@ -78,11 +86,21 @@ protected:
 
 	void browser_error_callback(InfcBrowser* browser, GError* error);
 
+	void on_notify_status(InfXmppConnection* connection);
+
 	Gtk::Window& m_parent;
 	Browser& m_browser;
 	StatusBar& m_statusbar;
 	const Preferences& m_preferences;
 	Gsasl* m_gsasl;
+
+	struct RetryInfo {
+		unsigned int retries;
+		gulong handle;
+	};
+
+	typedef std::map<InfXmppConnection*, RetryInfo> RetryMap;
+	RetryMap m_retries;
 };
 
 }

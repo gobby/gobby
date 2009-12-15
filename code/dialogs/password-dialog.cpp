@@ -22,13 +22,17 @@
 #include <gtkmm/stock.h>
 
 Gobby::PasswordDialog::PasswordDialog(Gtk::Window& parent,
-                                const Glib::ustring& remote_id):
+                                const Glib::ustring& remote_id,
+                                unsigned int retry_counter):
 	Gtk::Dialog(_("Password required"), parent), m_box(false, 6),
 	m_rightbox(false, 16),
 	m_promptbox(false, 12),
 	m_image(Gtk::Stock::DIALOG_AUTHENTICATION, Gtk::ICON_SIZE_DIALOG),
 	m_intro_label(Glib::ustring::compose(
-		_("Connection to host \"%1\" requires a password."),
+		(retry_counter == 0)
+			? _("Connection to host \"%1\" requires a password.")
+			: _("Invalid password for host \"%1\". "
+			    "Please try again."),
 		remote_id)),
 	m_prompt_label(_("Server _Password:"), true)
 {
