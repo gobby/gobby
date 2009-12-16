@@ -1,3 +1,7 @@
+2009-12-16  Armin Burgmeier  <armin@arbur.net>
+
+	* Makefile.am: Don't install the .desktop file on Windows.
+
 2009-12-15  Armin Burgmeier  <armin@arbur.net>
 
 	* code/dialogs/password-dialog.cpp: Fix spacings.

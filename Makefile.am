@@ -31,9 +31,11 @@ endif
 gobby_0_5_SOURCES = 
 
 # .desktop file
+if !WIN32
 desktopdir = $(datadir)/applications
 desktop_in_files = gobby-0.5.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+endif
 
 clean-local:
 	-rm -rf gobby-0.5.desktop
