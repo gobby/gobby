@@ -1,3 +1,4 @@
+code/commands/auth-commands.cpp
 code/commands/browser-commands.cpp
 code/commands/browser-context-commands.cpp
 code/commands/file-tasks/task-export-html.cpp
@@ -16,11 +17,13 @@ code/core/sessionuserview.cpp
 code/core/statusbar.cpp
 code/core/textsessionview.cpp
 code/core/userlist.cpp
+code/dialogs/connection-dialog.cpp
 code/dialogs/document-location-dialog.cpp
 code/dialogs/find-dialog.cpp
 code/dialogs/goto-dialog.cpp
 code/dialogs/initial-dialog.cpp
 code/dialogs/open-location-dialog.cpp
+code/dialogs/password-dialog.cpp
 code/dialogs/preferences-dialog.cpp
 code/main.cpp
 code/operations/operation-delete.cpp

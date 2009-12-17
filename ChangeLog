@@ -1,5 +1,12 @@
 2009-12-16  Armin Burgmeier  <armin@arbur.net>
 
+	* Makefile.am: Added gobby-0.5.desktop.in to EXTRA_DIST.
+
+	* help/C/gobby.xml: Added dummy items for referenced sections, so that
+	the XML validates. This fixes make distcheck.
+
+2009-12-16  Armin Burgmeier  <armin@arbur.net>
+
 	* Makefile.am: Don't install the .desktop file on Windows.
 
 2009-12-15  Armin Burgmeier  <armin@arbur.net>

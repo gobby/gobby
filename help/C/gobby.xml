@@ -193,6 +193,18 @@ gobby-0.5
         </listitem>
       </itemizedlist>
     </sect2>
+    <sect2 id="view-settings">
+      <title>Text View Preferences</title>
+      <para>TODO</para>
+    </sect2>
+    <sect2 id="appearance-settings">
+      <title>General Appearance</title>
+      <para>TODO</para>
+    </sect2>
+    <sect2 id="security-settings">
+      <title>Security Settings</title>
+      <para>TODO</para>
+    </sect2>
   </sect1>
   <sect1 id="shortcuts">
     <title>Shortcuts</title>
@@ -232,6 +244,10 @@ gobby-0.5
           <row>
             <entry>Ctrl-Shift-H</entry>
             <entry>Export as HTML <emphasis role="italic">(since 0.4.93)</emphasis></entry>
+          </row>
+          <row>
+            <entry>Ctrl-T</entry>
+            <entry>Connect to Server <emphasis role="italic">(since 0.4.93)</emphasis></entry>
           </row>
           <row>
             <entry>Ctrl-W</entry>
