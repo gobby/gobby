@@ -1,6 +1,16 @@
 Gobby
 =====
 
+Verison 0.4.12:
+ * "Save all documents" has been introduced.
+ * Fix up the title of the first session password dialog.
+ * Add experimental spell checking support based on gtkspell, which needs to be
+   explicitly enabled by passing --with-gtkspell to configure.
+ * Translation roundup:
+   - Updated Gobby to use en_US internally
+   - Added Ukrainian translation (thanks to Yuri Chornoivan)
+   - Various translation updates from Launchpad
+
 Version 0.4.11:
  * Gobby now adheres to the XDG specification for its configuration file.
  * Remove spurious underscores on "replace" buttons.

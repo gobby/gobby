@@ -1,5 +1,10 @@
 2009-12-18  Philipp Kern  <phil@0x539.de>
 
+	* configure.ac:
+	* NEWS: bump version to 0.4.12, document the changes
+
+2009-12-18  Philipp Kern  <phil@0x539.de>
+
 	* po/*.po: fix up the fuzzyness of some strings
 
 2009-12-07  Armin Burgmeier  <armin@arbur.net>
