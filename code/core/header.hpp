@@ -121,6 +121,7 @@ public:
 	const Glib::RefPtr<Gtk::Action> action_edit_preferences;
 
 	const Glib::RefPtr<Gtk::Action> action_view;
+	const Glib::RefPtr<Gtk::Action> action_view_hide_user_colors;
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_toolbar;
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_statusbar;
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_browser;

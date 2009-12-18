@@ -1,3 +1,13 @@
+2009-12-18  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/header.hpp:
+	* code/core/header.cpp: Added a reset user color item to the view
+	menu.
+
+	* code/commands/view-commands.hpp:
+	* code/commands/view-commands.cpp: Added corresponding functionality,
+	using inf_text_gtk_buffer_show_user_colors(). Bug #211.
+
 2009-12-16  Armin Burgmeier  <armin@arbur.net>
 
 	* Makefile.am: Added gobby-0.5.desktop.in to EXTRA_DIST.

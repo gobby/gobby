@@ -19,6 +19,8 @@
 #include "commands/view-commands.hpp"
 #include "util/i18n.hpp"
 
+#include <libinftextgtk/inf-text-gtk-buffer.h>
+
 Gobby::ViewCommands::ViewCommands(Header& header, Folder& text_folder,
                                   ClosableFrame& chat_frame,
 	                          Folder& chat_folder,
@@ -27,7 +29,10 @@ Gobby::ViewCommands::ViewCommands(Header& header, Folder& text_folder,
 	m_chat_frame(chat_frame), m_chat_folder(chat_folder),
 	m_preferences(preferences), m_current_view(NULL)
 {
-	m_menu_view_toolbar_connection = 
+	m_header.action_view_hide_user_colors->signal_activate().connect(
+		sigc::mem_fun(*this, &ViewCommands::on_hide_user_colors));
+
+	m_menu_view_toolbar_connection =
 		m_header.action_view_toolbar->signal_toggled().connect(
 			sigc::mem_fun(
 				*this,
@@ -159,6 +164,7 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 
 	if(m_current_view != NULL)
 	{
+		m_header.action_view_hide_user_colors->set_sensitive(true);
 		m_header.action_view_highlight_mode->set_sensitive(true);
 		m_header.action_view_document_userlist->set_sensitive(true);
 
@@ -171,6 +177,8 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 	}
 	else
 	{
+		m_header.action_view_hide_user_colors->set_sensitive(false);
+
 		m_menu_language_changed_connection.block();
 		m_header.action_view_highlight_mode->set_sensitive(false);
 		m_header.action_view_highlight_none->set_active(true);
@@ -228,6 +236,25 @@ void Gobby::ViewCommands::on_chat_show()
 void Gobby::ViewCommands::on_chat_hide()
 {
 	m_header.action_view_chat_userlist->set_sensitive(false);
+}
+
+void Gobby::ViewCommands::on_hide_user_colors()
+{
+	SessionView* view = m_text_folder.get_current_document();
+	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
+	g_assert(text_view != NULL);
+
+	InfSession* session = INF_SESSION(text_view->get_session());
+	GtkTextBuffer* textbuffer =
+		GTK_TEXT_BUFFER(text_view->get_text_buffer());
+	InfBuffer* buffer = inf_session_get_buffer(session);
+	InfTextGtkBuffer* infbuffer = INF_TEXT_GTK_BUFFER(buffer);
+
+	GtkTextIter start, end;
+	gtk_text_buffer_get_start_iter(textbuffer, &start);
+	gtk_text_buffer_get_end_iter(textbuffer, &end);
+
+	inf_text_gtk_buffer_show_user_colors(infbuffer, FALSE, &start, &end);
 }
 
 void Gobby::ViewCommands::on_menu_toolbar_toggled()

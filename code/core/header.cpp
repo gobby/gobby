@@ -63,6 +63,8 @@ namespace {
 		"      <menuitem action=\"EditPreferences\" />"
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
+		"      <menuitem action=\"ViewHideUserColors\" />"
+		"      <separator />"
 		"      <menuitem action=\"ViewToolbar\" />"
 		"      <menuitem action=\"ViewStatusbar\" />"
 		"      <separator />"
@@ -272,10 +274,14 @@ Gobby::Header::Header(Preferences& preferences,
 		                    _("Pr_eferences..."))),
 
 	action_view(Gtk::Action::create("MenuView", _("_View"))),
+	action_view_hide_user_colors(
+		Gtk::Action::create(
+			"ViewHideUserColors", _("Reset User Colors"),
+			_("Hide user colors in current document"))),
 	action_view_toolbar(
 		Gtk::ToggleAction::create(
 			"ViewToolbar", _("View Toolbar"),
-		        _("Whether to show the toolbar"), 
+		        _("Whether to show the toolbar"),
 			preferences.appearance.show_toolbar)),
 	action_view_statusbar(
 		Gtk::ToggleAction::create(
@@ -371,6 +377,10 @@ Gobby::Header::Header(Preferences& preferences,
 	group_edit->add(action_edit_preferences);
 
 	group_view->add(action_view);
+	group_view->add(
+		action_view_hide_user_colors,
+		Gtk::AccelKey("<shift><control>C",
+		              "<Actions>/MenuView/ViewHideUserColors"));
 	group_view->add(action_view_toolbar);
 	group_view->add(action_view_statusbar);
 	group_view->add(action_view_browser, Gtk::AccelKey(
@@ -383,7 +393,7 @@ Gobby::Header::Header(Preferences& preferences,
 		"<control><shift>F9", "<Actions>/MenuView/ViewChatUserList"));
 	group_view->add(action_view_highlight_mode);
 	group_view->add(action_view_highlight_none);
-	
+
 	unsigned int language_menu_counter = 0;
 	for(LanguageMap::const_iterator iter =
 		action_view_highlight_languages.begin();
@@ -414,7 +424,7 @@ Gobby::Header::Header(Preferences& preferences,
 			Glib::ustring language_action_xml =
 				Glib::Markup::escape_text(
 					(*iter2)->get_name());
-			
+
 			Glib::ustring xml_desc =
 				"<ui>"
 				"  <menubar name=\"MenuMainBar\">"
@@ -470,11 +480,11 @@ Gobby::Header::Header(Preferences& preferences,
 
 #ifdef PLATFORM_OSX_NATIVE
 	ige_mac_menu_set_menu_bar(GTK_MENU_SHELL(m_menubar->gobj()));
-	
+
 	ige_mac_menu_set_quit_menu_item(GTK_MENU_ITEM(
 		m_ui_manager->get_widget(
 			"/MenuMainBar/MenuFile/FileQuit")->gobj()));
-	
+
 	ige_mac_menu_add_app_menu_item(
 		ige_mac_menu_add_app_menu_group(), GTK_MENU_ITEM(
 			m_ui_manager->get_widget(
