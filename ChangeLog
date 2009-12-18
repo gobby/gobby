@@ -1,5 +1,9 @@
 2009-12-18  Armin Burgmeier  <armin@arbur.net>
 
+	* help/C/gobby.xml: Mention Shift+Ctrl+C shortcut for color reset.
+
+2009-12-18  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/header.hpp:
 	* code/core/header.cpp: Added a reset user color item to the view
 	menu.

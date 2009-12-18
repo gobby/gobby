@@ -266,6 +266,10 @@ gobby-0.5
             <entry>Switch to text document <emphasis role="italic">(since 0.4.93)</emphasis></entry>
           </row>
           <row>
+            <entry>Ctrl-Shift-C</entry>
+            <entry>Reset user colors in the current document <emphasis role="italic">(since 0.4.93)</emphasis></entry>
+          </row>
+          <row>
             <entry>F9</entry>
             <entry>Toggle document browser visibility</entry>
           </row>
