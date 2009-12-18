@@ -292,7 +292,6 @@ msgid "Preferences..."
 msgstr "Параметры..."
 
 #: ../src/header.cpp:375
-#, fuzzy
 msgid "Displays a dialog to customize Gobby for your needs"
 msgstr "Показывает диалог  настройки Gobby"
 
@@ -322,12 +321,10 @@ msgid "Sets a password for this user"
 msgstr "Установить пароль для этого пользователя"
 
 #: ../src/header.cpp:406
-#, fuzzy
 msgid "Set color..."
 msgstr "Установить цвет..."
 
 #: ../src/header.cpp:407
-#, fuzzy
 msgid "Sets a new color for this user"
 msgstr "Установить новый цвет для этого пользователя"
 
@@ -473,7 +470,6 @@ msgid "New name:"
 msgstr "Новое имя:"
 
 #: ../src/joinprogressdialog.cpp:157
-#, fuzzy
 msgid ""
 "Color is already in use. You may choose another color or cancel the "
 "connection."
@@ -744,7 +740,6 @@ msgid "You are still connected to a session"
 msgstr "Вы подключены к сеансу"
 
 #: ../src/window.cpp:288
-#, fuzzy
 msgid "Do you want to close Gobby anyway?"
 msgstr "Вы всё равно хотите закрыть Gobby?"
 

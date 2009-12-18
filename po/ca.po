@@ -170,7 +170,6 @@ msgid "Joins an existing obby session"
 msgstr "Uneix a una sessió d'obby ja existent"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
 msgstr "Desa la sessió..."
 
@@ -179,14 +178,12 @@ msgid "Saves the complete session for a later restore"
 msgstr "Desa la sessió completa per a restaurar-la més endavant"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "Desa la sessió..."
+msgstr ""
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "Desa la sessió completa per a restaurar-la més endavant"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -241,14 +238,12 @@ msgid "Saves a document to another location"
 msgstr "Desa el document en una altra ubicació"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Desa el document"
+msgstr ""
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Desa el document"
+msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -291,7 +286,6 @@ msgid "Preferences..."
 msgstr "Preferències"
 
 #: ../src/header.cpp:375
-#, fuzzy
 msgid "Displays a dialog to customize Gobby for your needs"
 msgstr ""
 "Mostra un diàleg per a personalitzar el Gobby a les vostres necessitats"
@@ -321,12 +315,10 @@ msgid "Sets a password for this user"
 msgstr "Estableix una contrasenya per a aquest usuari"
 
 #: ../src/header.cpp:406
-#, fuzzy
 msgid "Set color..."
 msgstr "Estableix el color..."
 
 #: ../src/header.cpp:407
-#, fuzzy
 msgid "Sets a new color for this user"
 msgstr "Estableix el color per a aquest usuari"
 
@@ -392,7 +384,6 @@ msgid "Name:"
 msgstr "Nom:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
 msgstr "Color:"
 
@@ -472,7 +463,6 @@ msgid "New name:"
 msgstr "Nou nom:"
 
 #: ../src/joinprogressdialog.cpp:157
-#, fuzzy
 msgid ""
 "Color is already in use. You may choose another color or cancel the "
 "connection."
@@ -492,9 +482,8 @@ msgid "Session password:"
 msgstr "Contrasenya de la sessió:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Contrasenya de la sessió:"
+msgstr ""
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -743,7 +732,6 @@ msgid "You are still connected to a session"
 msgstr "Encara esteu connectats a una sessió"
 
 #: ../src/window.cpp:288
-#, fuzzy
 msgid "Do you want to close Gobby anyway?"
 msgstr "Voleu tancar el Gobby igualment?"
 
@@ -793,9 +781,8 @@ msgstr "Obre un document nou"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Desa el document"
+msgstr ""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -832,7 +819,6 @@ msgstr ""
 "menú «Edita»."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
 msgstr "Ha fallat el canvi de color: el color ja està en ús"
 

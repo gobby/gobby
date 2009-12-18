@@ -1,3 +1,7 @@
+2009-12-18  Philipp Kern  <phil@0x539.de>
+
+	* po/*.po: fix up the fuzzyness of some strings
+
 2009-12-07  Armin Burgmeier  <armin@arbur.net>
 
 	* src/docwindow.cpp: Don't leak the GError in case

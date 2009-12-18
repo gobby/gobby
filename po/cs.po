@@ -170,18 +170,16 @@ msgid "Joins an existing obby session"
 msgstr "Připojit se k existujícímu obby sezení"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "Uložit sezení..."
+msgstr "Uložit sezení"
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "Uložit sezení pro pozdější obnovu"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "Uložit sezení..."
+msgstr ""
 
 #: ../src/header.cpp:264
 #, fuzzy
@@ -291,7 +289,6 @@ msgid "Preferences..."
 msgstr "Nastavení..."
 
 #: ../src/header.cpp:375
-#, fuzzy
 msgid "Displays a dialog to customize Gobby for your needs"
 msgstr "Zobrazit dialog pro přizpůsobení Gobby vašim představám"
 
@@ -320,12 +317,10 @@ msgid "Sets a password for this user"
 msgstr "Nastavit heslo pro aktuálního uživatele"
 
 #: ../src/header.cpp:406
-#, fuzzy
 msgid "Set color..."
 msgstr "Nastavit barvu..."
 
 #: ../src/header.cpp:407
-#, fuzzy
 msgid "Sets a new color for this user"
 msgstr "Nastavit novou barvu pro aktuálního uživatele"
 
@@ -470,7 +465,6 @@ msgid "New name:"
 msgstr "Nové jméno:"
 
 #: ../src/joinprogressdialog.cpp:157
-#, fuzzy
 msgid ""
 "Color is already in use. You may choose another color or cancel the "
 "connection."
@@ -739,7 +733,6 @@ msgid "You are still connected to a session"
 msgstr "Jste stále připojeni k sezení"
 
 #: ../src/window.cpp:288
-#, fuzzy
 msgid "Do you want to close Gobby anyway?"
 msgstr "Chcete přesto ukončit Gobby?"
 

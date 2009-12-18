@@ -320,12 +320,10 @@ msgid "Sets a password for this user"
 msgstr "Define uma palavra-passe para este utilizador"
 
 #: ../src/header.cpp:406
-#, fuzzy
 msgid "Set color..."
 msgstr "Definir cor..."
 
 #: ../src/header.cpp:407
-#, fuzzy
 msgid "Sets a new color for this user"
 msgstr "Define a cor do utilizador"
 
@@ -472,7 +470,6 @@ msgid "New name:"
 msgstr "Novo nome:"
 
 #: ../src/joinprogressdialog.cpp:157
-#, fuzzy
 msgid ""
 "Color is already in use. You may choose another color or cancel the "
 "connection."
@@ -740,7 +737,6 @@ msgid "You are still connected to a session"
 msgstr "Continua ligado a uma sessão"
 
 #: ../src/window.cpp:288
-#, fuzzy
 msgid "Do you want to close Gobby anyway?"
 msgstr "Mesmo assim deseja fechar o Gobby?"
 

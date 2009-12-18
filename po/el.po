@@ -291,7 +291,6 @@ msgid "Preferences..."
 msgstr "Προτιμήσεις..."
 
 #: ../src/header.cpp:375
-#, fuzzy
 msgid "Displays a dialog to customize Gobby for your needs"
 msgstr "Παρουσιάζει έναν διάλογο για να ρυθμίσετε το Gobby στις ανάγκες σας"
 
@@ -321,12 +320,10 @@ msgid "Sets a password for this user"
 msgstr "Ορίζει ένα κωδικό πρόσβασης για τον χρήστη"
 
 #: ../src/header.cpp:406
-#, fuzzy
 msgid "Set color..."
 msgstr "Ορισμός χρώματος..."
 
 #: ../src/header.cpp:407
-#, fuzzy
 msgid "Sets a new color for this user"
 msgstr "Ορίζει ένα νέο χρώμα για τον χρήστη"
 
@@ -476,7 +473,6 @@ msgid "New name:"
 msgstr "Νέο όνομα:"
 
 #: ../src/joinprogressdialog.cpp:157
-#, fuzzy
 msgid ""
 "Color is already in use. You may choose another color or cancel the "
 "connection."
@@ -748,7 +744,6 @@ msgid "You are still connected to a session"
 msgstr "Είστε ακόμα συνδεδεμένοι στην συνεδρία"
 
 #: ../src/window.cpp:288
-#, fuzzy
 msgid "Do you want to close Gobby anyway?"
 msgstr "Θέλετε να κλείσετε το Gobby παρ' όλα αυτά;"
 

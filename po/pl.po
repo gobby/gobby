@@ -293,7 +293,6 @@ msgid "Preferences..."
 msgstr "Preferencje..."
 
 #: ../src/header.cpp:375
-#, fuzzy
 msgid "Displays a dialog to customize Gobby for your needs"
 msgstr ""
 "Wyświetla okno dialogowe umożliwiające dostosowanie programu Gobby do "
@@ -324,12 +323,10 @@ msgid "Sets a password for this user"
 msgstr "Ustawia hasło dla tego użytkownika"
 
 #: ../src/header.cpp:406
-#, fuzzy
 msgid "Set color..."
 msgstr "Ustaw kolor. . ."
 
 #: ../src/header.cpp:407
-#, fuzzy
 msgid "Sets a new color for this user"
 msgstr "Ustawia nowy kolor dla tego użytkownika"
 
@@ -473,7 +470,6 @@ msgid "New name:"
 msgstr "Nowa nazwa:"
 
 #: ../src/joinprogressdialog.cpp:157
-#, fuzzy
 msgid ""
 "Color is already in use. You may choose another color or cancel the "
 "connection."
