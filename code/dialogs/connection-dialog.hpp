@@ -23,6 +23,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/box.h>
+#include <gtkmm/image.h>
 
 namespace Gobby
 {
