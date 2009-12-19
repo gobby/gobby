@@ -1,4 +1,8 @@
-SUBDIRS = m4 win32 code . icons po help
+SUBDIRS = m4 win32 code . icons po
+
+if HAVE_GNOME_DOC_UTILS
+SUBDIRS += help
+endif
 
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4

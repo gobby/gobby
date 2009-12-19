@@ -84,7 +84,9 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 
 # Help file building
-GNOME_DOC_INIT
+GNOME_DOC_INIT([0.9.0],,
+  [AC_MSG_WARN([[gnome-doc-utils not found: documentation will not be built.]])])
+
 
 # AC_DEFINE(GOBBY_CONFIGDIR, [".gobby-0.5"],
 #           [where to store Gobby's config files,
