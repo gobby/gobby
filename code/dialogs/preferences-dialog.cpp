@@ -457,14 +457,17 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	connect_option(m_btn_bracket_highlight,
 	               preferences.view.bracket_highlight);
 
+	// TODO: When we require a higher version of GtkSourceView, then
+	// we should add GTK_SOURCE_DRAW_SPACES_NBSP here.
+	const int SOURCE_DRAW_SPACES = GTK_SOURCE_DRAW_SPACES_SPACE;
+
 	m_cmb_spaces_display.add(
 		_("Display no whitespace"),
 		static_cast<GtkSourceDrawSpacesFlags>(0));
 	m_cmb_spaces_display.add(
 		_("Display spaces"),
 		static_cast<GtkSourceDrawSpacesFlags>(
-			GTK_SOURCE_DRAW_SPACES_SPACE |
-			GTK_SOURCE_DRAW_SPACES_NBSP));
+			SOURCE_DRAW_SPACES));
 	m_cmb_spaces_display.add(
 		_("Display tabs"),
 		static_cast<GtkSourceDrawSpacesFlags>(
@@ -472,9 +475,7 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	m_cmb_spaces_display.add(
 		_("Display tabs and spaces"),
 		static_cast<GtkSourceDrawSpacesFlags>(
-			GTK_SOURCE_DRAW_SPACES_SPACE |
-			GTK_SOURCE_DRAW_SPACES_NBSP |
-			GTK_SOURCE_DRAW_SPACES_TAB));
+			SOURCE_DRAW_SPACES | GTK_SOURCE_DRAW_SPACES_TAB));
 	m_cmb_spaces_display.show();
 
 	m_box_margin_pos.set_spacing(6);
