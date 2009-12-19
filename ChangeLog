@@ -1,3 +1,7 @@
+2009-12-19  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/browser.cpp: Sort top-level items by name.
+
 2009-12-18  Armin Burgmeier  <armin@arbur.net>
 
 	* help/C/gobby.xml: Mention Shift+Ctrl+C shortcut for color reset.

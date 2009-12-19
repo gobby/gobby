@@ -33,51 +33,74 @@
 
 gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, gpointer user_data)
 {
-	gint result = 0;
+	gint result;
 	InfcBrowser* br_one;
 	InfcBrowser* br_two;
 	InfcBrowserIter* bri_one;
 	InfcBrowserIter* bri_two;
 	GtkTreeIter parent;
 
-	/* Don't sort top level */
-	if(!gtk_tree_model_iter_parent(model, &parent, first))
+	if(gtk_tree_model_iter_parent(model, &parent, first))
 	{
-		g_assert(!gtk_tree_model_iter_parent(model, &parent, second));
-		return 0;
+		g_assert(gtk_tree_model_iter_parent(model, &parent, second));
+
+		gtk_tree_model_get(
+			model, first,
+			INF_GTK_BROWSER_MODEL_COL_BROWSER, &br_one,
+			INF_GTK_BROWSER_MODEL_COL_NODE, &bri_one,
+			-1);
+		gtk_tree_model_get(
+			model, second,
+			INF_GTK_BROWSER_MODEL_COL_BROWSER, &br_two,
+			INF_GTK_BROWSER_MODEL_COL_NODE, &bri_two,
+			-1);
+
+		if(infc_browser_iter_is_subdirectory(br_one, bri_one) &&
+		   !infc_browser_iter_is_subdirectory(br_two, bri_two))
+		{
+			result = -1;
+		}
+		else if(!infc_browser_iter_is_subdirectory(br_one, bri_one) &&
+		        infc_browser_iter_is_subdirectory(br_two, bri_two))
+		{
+			result = 1;
+		}
+		else
+		{
+			result = 0;
+		}
+
+		g_object_unref(br_one);
+		g_object_unref(br_two);
+		infc_browser_iter_free(bri_one);
+		infc_browser_iter_free(bri_two);
 	}
 
-	gtk_tree_model_get(model, first,  INF_GTK_BROWSER_MODEL_COL_BROWSER, &br_one, INF_GTK_BROWSER_MODEL_COL_NODE, &bri_one, -1);
-	gtk_tree_model_get(model, second, INF_GTK_BROWSER_MODEL_COL_BROWSER, &br_two, INF_GTK_BROWSER_MODEL_COL_NODE, &bri_two, -1);
-
-	if (infc_browser_iter_is_subdirectory(br_one, bri_one) && !infc_browser_iter_is_subdirectory(br_two, bri_two))
-		result = -1;
-	else if (!infc_browser_iter_is_subdirectory(br_one, bri_one) && infc_browser_iter_is_subdirectory(br_two, bri_two))
-		result = 1;
-	else
+	if(!result)
 	{
 		gchar* name_one;
 		gchar* name_two;
-		
-		gtk_tree_model_get(model, first,  INF_GTK_BROWSER_MODEL_COL_NAME, &name_one, -1);
-		gtk_tree_model_get(model, second, INF_GTK_BROWSER_MODEL_COL_NAME, &name_two, -1);
-		
+
+		gtk_tree_model_get(
+			model, first,
+			INF_GTK_BROWSER_MODEL_COL_NAME, &name_one,
+			-1);
+		gtk_tree_model_get(
+			model, second,
+			INF_GTK_BROWSER_MODEL_COL_NAME, &name_two,
+			-1);
+
 		gchar* one = g_utf8_casefold(name_one, -1);
 		gchar* two = g_utf8_casefold(name_two, -1);
-		
+
 		result = g_utf8_collate(one, two);
-		
+
 		g_free(name_one);
 		g_free(name_two);
 		g_free(one);
 		g_free(two);
 	}
-	
-	g_object_unref(br_one);
-	g_object_unref(br_two);
-	infc_browser_iter_free(bri_one);
-	infc_browser_iter_free(bri_two);
-	
+
 	return result;
 }
 
