@@ -32,6 +32,7 @@ Gobby: First Contact
      * Realtime collaboration through encrypted connections
      * Each user has its own colour to be identified by others
      * Local group Undo
+     * IRC-like chat
      * Sidebar with all the others having joined the session
      * Syntax highlighting, auto indentation, configurable tab
        width

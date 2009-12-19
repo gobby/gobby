@@ -1,6 +1,18 @@
 Gobby
 =====
 
+Version 0.4.93:
+  * Added IRC-like chat
+  * Added functionality to export a document to HTML (#245)
+  * Sort browser entries
+  * Allow selecting multiple files when opening files
+  * Allow resetting user colors in a document (Bug #211)
+  * Added a Connect to Server option to the File menu
+  * Undo words instead of individual characters
+  * When starting Gobby twice then send commands to an existing Gobby (if any)
+    unless the -n command line option is given.
+  * Added an option to highlight spaces and tabs
+
 Version 0.4.92:
   * Support running Gobby on Windows 2000.
   * Added Icons for HCLP and HCLPI icon themes (Bug #413, Patrick Wade).
