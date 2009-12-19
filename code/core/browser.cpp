@@ -40,6 +40,7 @@ gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, 
 	InfcBrowserIter* bri_two;
 	GtkTreeIter parent;
 
+	result = 0;
 	if(gtk_tree_model_iter_parent(model, &parent, first))
 	{
 		g_assert(gtk_tree_model_iter_parent(model, &parent, second));
@@ -64,10 +65,6 @@ gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, 
 		        infc_browser_iter_is_subdirectory(br_two, bri_two))
 		{
 			result = 1;
-		}
-		else
-		{
-			result = 0;
 		}
 
 		g_object_unref(br_one);
