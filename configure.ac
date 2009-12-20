@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([gobby], [0.4.93], [crew@0x539.de])
+AC_INIT([gobby], [0.4.94], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9 check-news)
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
 AM_MAINTAINER_MODE
@@ -53,7 +53,7 @@ AC_CACHE_SAVE
 
 # Checks for libraries.
 PKG_CHECK_MODULES([gobby], [$required_libs])
-PKG_CHECK_MODULES([infinote], [libinfinity-0.4 libinftext-0.4 libinfgtk-0.4 libinftextgtk-0.4])
+PKG_CHECK_MODULES([infinote], [libinfinity-0.5 libinftext-0.5 libinfgtk-0.5 libinftextgtk-0.5])
 AC_CACHE_SAVE
 
 # Check for unique (optional)
