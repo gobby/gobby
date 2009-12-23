@@ -27,17 +27,14 @@ Gobby::TaskSaveAll::TaskSaveAll(FileCommands& file_commands):
 {
 }
 
-void Gobby::TaskSaveAll::run() {
-	typedef Gtk::Notebook_Helpers::PageList PageList;
-	PageList& pages = get_folder().pages();
-
-	for(PageList::iterator iter = pages.begin();
-	    iter != pages.end(); ++ iter)
+void Gobby::TaskSaveAll::run()
+{
+	const unsigned int n_pages = get_folder().get_n_pages();
+	for(unsigned int i = 0; i < n_pages; ++i)
 	{
-		SessionView* view =
-			static_cast<SessionView*>(iter->get_child());
+		SessionView& view = get_folder().get_document(i);
 		TextSessionView* text_view =
-			dynamic_cast<TextSessionView*>(view);
+			dynamic_cast<TextSessionView*>(&view);
 
 		if(text_view)
 			m_views.push_back(text_view);

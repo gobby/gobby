@@ -1,3 +1,12 @@
+2009-12-23  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/folder.hpp:
+	* code/core/folder.cpp: Added get_document().
+
+	* code/commands/file-tasks/task-save-all.cpp (run): Use it, instead
+	of (wrongly) iterating the folder's documents by itself, fixing "Save
+	All". Bug #519.
+
 2009-12-19  Armin Burgmeier  <armin@arbur.net>
 
 	* configure.ac: Post-release bump to 0.4.94, require libinfinity-0.5.

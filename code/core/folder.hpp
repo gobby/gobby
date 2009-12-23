@@ -61,6 +61,8 @@ public:
 	                                  const Glib::ustring& hostname);
 	void remove_document(SessionView& view);
 
+	SessionView& get_document(unsigned int n);
+
 	SessionView* lookup_document(InfSession* session);
 	SessionView* get_current_document();
 	const SessionView* get_current_document() const;

@@ -115,9 +115,7 @@ Gobby::Folder::~Folder()
 	// Remove all documents explicitely, so that all sessions are closed,
 	// and records finished.
 	while(get_n_pages())
-		remove_document(
-			static_cast<SessionUserView*>(
-				get_nth_page(0))->get_session_view());
+		remove_document(get_document(0));
 }
 
 // TODO: Share common code of add_text_session and add_chat_session
@@ -216,20 +214,22 @@ void Gobby::Folder::remove_document(SessionView& view)
 		set_show_tabs(false);
 }
 
+Gobby::SessionView& Gobby::Folder::get_document(unsigned int n)
+{
+	SessionUserView* child =
+		static_cast<SessionUserView*>(get_nth_page(n));
+	if(!child)
+		throw std::logic_error("Gobby::Folder::get_document: out of bounds");
+	return child->get_session_view();
+}
+
 Gobby::SessionView*
 Gobby::Folder::lookup_document(InfSession* session)
 {
-	const PageList& pagelist = pages();
-	for(PageList::iterator iter = pagelist.begin();
-	    iter != pagelist.end(); ++ iter)
-	{
-		SessionUserView* child =
-			static_cast<SessionUserView*>(iter->get_child());
-
-		if(child->get_session_view().get_session() == session)
-			return &child->get_session_view();
-	}
-
+	const unsigned int n_pages = get_n_pages();
+	for(unsigned int i = 0; i < n_pages; ++i)
+		if(get_document(i).get_session() == session)
+			return &get_document(i);
 	return NULL;
 }
 
