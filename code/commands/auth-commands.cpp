@@ -152,7 +152,8 @@ void Gobby::AuthCommands::set_browser_callback(InfcBrowser* browser)
 void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,
                                                  GError* error)
 {
-	if(error->domain != inf_gsasl_error_quark())
+	if(error->domain != inf_gsasl_error_quark() &&
+	   error->domain != inf_postauthentication_error_quark())
 		return;
 
 	gchar* remote;
@@ -164,7 +165,21 @@ void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,
 	Glib::ustring short_message(Glib::ustring::compose(
 		"Authentication failed for \"%1\"", remote));
 	g_free(remote);
-	m_statusbar.add_error_message(short_message, error->message);
+
+	if(error->domain == inf_gsasl_error_quark())
+	{
+		m_statusbar.add_error_message(
+			short_message,
+			error->message);
+	}
+	else if(error->domain == inf_postauthentication_error_quark())
+	{
+		m_statusbar.add_error_message(
+			short_message,
+			inf_postauthentication_strerror(
+				static_cast<InfPostAuthenticationError>(
+					error->code)));
+	}
 }
 
 void Gobby::AuthCommands::on_notify_status(InfXmppConnection* connection)
