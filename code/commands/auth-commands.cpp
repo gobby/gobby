@@ -47,6 +47,35 @@ namespace
 			return "";
 		return dialog.get_password();
 	}
+
+	void show_error(const GError* error,
+	                Gobby::StatusBar& statusbar,
+	                InfXmlConnection* connection)
+	{
+		gchar* remote;
+		g_object_get(connection,
+			"remote-hostname", &remote,
+			NULL);
+		Glib::ustring short_message(Glib::ustring::compose(
+			"Authentication failed for \"%1\"", remote));
+		g_free(remote);
+
+		if(error->domain ==
+		   inf_authentication_detail_error_quark())
+		{
+			statusbar.add_error_message(
+				short_message,
+				inf_authentication_detail_strerror(
+					InfAuthenticationDetailError(
+						error->code)));
+		}
+		else
+		{
+			statusbar.add_error_message(
+				short_message,
+				error->message);
+		}
+	}
 }
 
 Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
@@ -152,33 +181,46 @@ void Gobby::AuthCommands::set_browser_callback(InfcBrowser* browser)
 void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,
                                                  GError* error)
 {
-	if(error->domain != inf_gsasl_error_quark() &&
-	   error->domain != inf_postauthentication_error_quark())
-		return;
+	// The Browser already displays errors inline, but we want
+	// auth-related error messages to show up in the status bar.
 
-	gchar* remote;
 	InfXmlConnection* connection = infc_browser_get_connection(browser);
 	g_assert(INF_IS_XMPP_CONNECTION(connection));
-	g_object_get(connection,
-		"remote-hostname", &remote,
-		NULL);
-	Glib::ustring short_message(Glib::ustring::compose(
-		"Authentication failed for \"%1\"", remote));
-	g_free(remote);
 
-	if(error->domain == inf_gsasl_error_quark())
+	if(error->domain ==
+	     g_quark_from_static_string("INF_XMPP_CONNECTION_AUTH_ERROR"))
 	{
-		m_statusbar.add_error_message(
-			short_message,
-			error->message);
+		InfXmppConnection* xmpp = INF_XMPP_CONNECTION(connection);
+		const GError* sasl_error =
+			inf_xmpp_connection_get_sasl_error(xmpp);
+		if(sasl_error != NULL &&
+		   sasl_error->domain ==
+		     inf_authentication_detail_error_quark() &&
+		   sasl_error->code ==
+		     INF_AUTHENTICATION_DETAIL_ERROR_AUTHENTICATION_FAILED)
+		{
+			GError* my_error = NULL;
+			inf_xmpp_connection_retry_sasl_authentication(
+				INF_XMPP_CONNECTION(connection), &my_error);
+			if(my_error)
+			{
+				show_error(my_error, m_statusbar, connection);
+				g_error_free(my_error);
+			}
+		}
+		else if(sasl_error != NULL)
+		{
+			show_error(sasl_error, m_statusbar, connection);
+		}
+		else
+		{
+			show_error(error, m_statusbar, connection);
+		}
 	}
-	else if(error->domain == inf_postauthentication_error_quark())
+	else if(error->domain == inf_gsasl_error_quark() ||
+	        error->domain == inf_authentication_detail_error_quark())
 	{
-		m_statusbar.add_error_message(
-			short_message,
-			inf_postauthentication_strerror(
-				static_cast<InfPostAuthenticationError>(
-					error->code)));
+		show_error(error, m_statusbar, connection);
 	}
 }
 

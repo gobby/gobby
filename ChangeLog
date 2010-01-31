@@ -1,3 +1,9 @@
+2010-01-31  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/auth-commands.cpp: Adapt to the removal of the
+	user-authenticated signal, instead query detailed SASL error using
+	inf_xmpp_connection_get_sasl_error().
+
 2009-01-27  Benjamin Herr  <ben@0x539.de>
 
 	* code/commands/auth-commands.cpp: Display errors from the
