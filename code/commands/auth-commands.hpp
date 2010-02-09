@@ -86,6 +86,21 @@ protected:
 
 	void browser_error_callback(InfcBrowser* browser, GError* error);
 
+	void handle_error_detail(InfXmppConnection* xmpp,
+	                         const GError* detail_error,
+	                         Glib::ustring& old_password,
+	                         Glib::ustring& last_password);
+
+	struct RetryInfo {
+		unsigned int retries;
+		Glib::ustring last_password;
+		gulong handle;
+	};
+
+	typedef std::map<InfXmppConnection*, RetryInfo> RetryMap;
+
+	RetryMap::iterator insert_retry_info(InfXmppConnection* xmpp);
+
 	void on_notify_status(InfXmppConnection* connection);
 
 	Gtk::Window& m_parent;
@@ -94,12 +109,6 @@ protected:
 	const Preferences& m_preferences;
 	Gsasl* m_gsasl;
 
-	struct RetryInfo {
-		unsigned int retries;
-		gulong handle;
-	};
-
-	typedef std::map<InfXmppConnection*, RetryInfo> RetryMap;
 	RetryMap m_retries;
 };
 

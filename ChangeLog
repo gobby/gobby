@@ -1,3 +1,9 @@
+2010-02-09  Benjamin Herr  <ben@0x539.de>
+
+	* code/commands/auth-commands.hpp:
+	* code/commands/auth-commands.cpp: Handle _TRY_AGAIN errors, do
+	the whole retrying thing properly.
+
 2010-01-31  Benjamin Herr  <ben@0x539.de>, Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/auth-commands.cpp: Adapt to the removal of the

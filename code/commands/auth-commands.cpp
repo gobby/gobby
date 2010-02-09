@@ -140,28 +140,23 @@ int Gobby::AuthCommands::gsasl_callback(Gsasl_session* session,
 					gsasl_session_hook_get(session));
 			RetryMap::iterator i = m_retries.find(xmpp);
 			if(i == m_retries.end())
-			{
-				i = m_retries.insert(
-					std::make_pair(xmpp,
-					               RetryInfo())).first;
-				i->second.retries = 0;
-				i->second.handle = g_signal_connect(
-					G_OBJECT(xmpp),
-					"notify::status",
-					G_CALLBACK(on_notify_status_static),
-					this);
-			}
+				i = insert_retry_info(xmpp);
 			RetryInfo& info(i->second);
 
-			Glib::ustring password =
-				prompt_password(m_parent, xmpp, info.retries);
-			++info.retries;
+			if(info.last_password.empty())
+			{
+				info.last_password =
+					prompt_password(m_parent, xmpp,
+					                info.retries);
+				++info.retries;
 
-			if(password.empty())
-				return GSASL_NO_PASSWORD;
+				if(info.last_password.empty())
+					return GSASL_NO_PASSWORD;
+			}
+
 			gsasl_property_set(session,
 			                   GSASL_PASSWORD,
-			                   password.c_str());
+			                   info.last_password.c_str());
 			return GSASL_OK;
 		}
 	default:
@@ -187,26 +182,27 @@ void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,
 	InfXmlConnection* connection = infc_browser_get_connection(browser);
 	g_assert(INF_IS_XMPP_CONNECTION(connection));
 
+	InfXmppConnection* xmpp = INF_XMPP_CONNECTION(connection);
+	RetryMap::iterator iter = m_retries.find(xmpp);
+	if(iter == m_retries.end())
+		iter = insert_retry_info(xmpp);
+	Glib::ustring& last_password(iter->second.last_password);
+	Glib::ustring old_password;
+
+	old_password.swap(last_password);
+
 	if(error->domain ==
 	     g_quark_from_static_string("INF_XMPP_CONNECTION_AUTH_ERROR"))
 	{
-		InfXmppConnection* xmpp = INF_XMPP_CONNECTION(connection);
 		const GError* sasl_error =
 			inf_xmpp_connection_get_sasl_error(xmpp);
 		if(sasl_error != NULL &&
 		   sasl_error->domain ==
-		     inf_authentication_detail_error_quark() &&
-		   sasl_error->code ==
-		     INF_AUTHENTICATION_DETAIL_ERROR_AUTHENTICATION_FAILED)
+		     inf_authentication_detail_error_quark())
 		{
-			GError* my_error = NULL;
-			inf_xmpp_connection_retry_sasl_authentication(
-				INF_XMPP_CONNECTION(connection), &my_error);
-			if(my_error)
-			{
-				show_error(my_error, m_statusbar, connection);
-				g_error_free(my_error);
-			}
+			handle_error_detail(xmpp, sasl_error,
+			                    old_password,
+			                    last_password);
 		}
 		else if(sasl_error != NULL)
 		{
@@ -217,11 +213,56 @@ void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,
 			show_error(error, m_statusbar, connection);
 		}
 	}
-	else if(error->domain == inf_gsasl_error_quark() ||
-	        error->domain == inf_authentication_detail_error_quark())
+	else if(error->domain == inf_gsasl_error_quark())
 	{
 		show_error(error, m_statusbar, connection);
 	}
+}
+
+void Gobby::AuthCommands::handle_error_detail(InfXmppConnection* xmpp,
+                                              const GError* detail_error,
+                                              Glib::ustring& old_password,
+                                              Glib::ustring& last_password)
+{
+	GError* error = NULL;
+	switch(detail_error->code)
+	{
+	case INF_AUTHENTICATION_DETAIL_ERROR_AUTHENTICATION_FAILED:
+		inf_xmpp_connection_retry_sasl_authentication(xmpp, &error);
+		break;
+	case INF_AUTHENTICATION_DETAIL_ERROR_TRY_AGAIN:
+		old_password.swap(last_password);
+		inf_xmpp_connection_retry_sasl_authentication(xmpp, &error);
+
+		break;
+	default:
+		show_error(detail_error, m_statusbar,
+		           INF_XML_CONNECTION(xmpp));
+		break;
+	}
+
+	if(error)
+	{
+		show_error(error, m_statusbar,
+		           INF_XML_CONNECTION(xmpp));
+		g_error_free(error);
+	}
+}
+
+Gobby::AuthCommands::RetryMap::iterator
+Gobby::AuthCommands::insert_retry_info(InfXmppConnection* xmpp)
+{
+	RetryMap::iterator iter = m_retries.insert(
+		std::make_pair(xmpp,
+		               RetryInfo())).first;
+	iter->second.retries = 0;
+	iter->second.handle = g_signal_connect(
+		G_OBJECT(xmpp),
+		"notify::status",
+		G_CALLBACK(on_notify_status_static),
+		this);
+
+	return iter;
 }
 
 void Gobby::AuthCommands::on_notify_status(InfXmppConnection* connection)
