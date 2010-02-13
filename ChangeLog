@@ -1,3 +1,9 @@
+2010-02-13  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/textsessionview.hpp:
+	* code/core/textsessionview.cpp: Add a InfTextGtkView, to show remote
+	cursors.
+
 2010-02-12  Armin Burgmeier  <armin@arbur.net>
 
 	* all source files: Added 2010 to copyright years.

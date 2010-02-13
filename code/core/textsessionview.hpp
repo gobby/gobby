@@ -29,6 +29,7 @@
 #include <gtksourceview/gtksourcelanguagemanager.h>
 #include <gtksourceview/gtksourcelanguage.h>
 
+#include <libinftextgtk/inf-text-gtk-view.h>
 #include <libinftext/inf-text-session.h>
 #include <libinftext/inf-text-user.h>
 
@@ -46,6 +47,7 @@ public:
 	                const std::string& info_storage_key,
 	                Preferences& preferences,
 	                GtkSourceLanguageManager* manager);
+	~TextSessionView();
 
 	InfTextSession* get_session() { return INF_TEXT_SESSION(m_session); }
 
@@ -126,6 +128,7 @@ protected:
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;
 	std::auto_ptr<TextUndoGrouping> m_undo_grouping;
+	InfTextGtkView* m_infview;
 
 	SignalLanguageChanged m_signal_language_changed;
 };

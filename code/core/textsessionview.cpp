@@ -126,8 +126,15 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	m_view(GTK_SOURCE_VIEW(gtk_source_view_new()))
 {
 	InfBuffer* buffer = inf_session_get_buffer(INF_SESSION(session));
+	InfUserTable* user_table =
+		inf_session_get_user_table(INF_SESSION(session));
 	m_buffer = GTK_SOURCE_BUFFER(inf_text_gtk_buffer_get_text_buffer(
 		INF_TEXT_GTK_BUFFER(buffer)));
+
+	m_infview = inf_text_gtk_view_new(
+		inf_adopted_session_get_io(INF_ADOPTED_SESSION(session)),
+		GTK_TEXT_VIEW(m_view),
+		user_table);
 
 	g_signal_connect_after(
 		G_OBJECT(m_view),
@@ -235,8 +242,18 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	scroll->show();
 
 	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
-	
-	gtk_source_buffer_set_style_scheme(m_buffer, gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(), static_cast<Glib::ustring>(preferences.appearance.scheme_id).c_str()));
+
+	gtk_source_buffer_set_style_scheme(
+		m_buffer,
+		gtk_source_style_scheme_manager_get_scheme(
+			gtk_source_style_scheme_manager_get_default(),
+			static_cast<Glib::ustring>(
+				preferences.appearance.scheme_id).c_str()));
+}
+
+Gobby::TextSessionView::~TextSessionView()
+{
+	g_object_unref(m_infview);
 }
 
 void Gobby::TextSessionView::get_cursor_position(unsigned int& row,
@@ -322,6 +339,7 @@ void Gobby::TextSessionView::set_active_user(InfTextUser* user)
 		INF_TEXT_GTK_BUFFER(
 			inf_session_get_buffer(INF_SESSION(m_session))),
 		user);
+	inf_text_gtk_view_set_active_user(m_infview, user);
 
 	// TODO: Make sure the active user has the color specified in the
 	// preferences, and set color if not.
