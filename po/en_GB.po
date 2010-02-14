@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby-0.4.93~dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-19 20:29+0100\n"
+"POT-Creation-Date: 2010-02-14 22:31+0100\n"
 "PO-Revision-Date: 2009-12-03 19:26-0000\n"
 "Last-Translator: Gabríel A. Pétursson <gabrielp@simnet.is>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,7 +110,11 @@ msgstr "Contributors:"
 msgid "British English:"
 msgstr "British English:"
 
-#: ../code/commands/help-commands.cpp:115
+#: ../code/commands/help-commands.cpp:100
+msgid "German:"
+msgstr "German:"
+
+#: ../code/commands/help-commands.cpp:117
 msgid ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -123,8 +127,8 @@ msgid ""
 "more details.\n"
 "\n"
 "You should have received a copy of the GNU General Public License along with "
-"this program; if not, write to the Free Software Foundation, Inc., 675 Mass "
-"Ave, Cambridge, MA 02139, USA."
+"this program; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA"
 msgstr ""
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -137,8 +141,8 @@ msgstr ""
 "more details.\n"
 "\n"
 "You should have received a copy of the GNU General Public License along with "
-"this program; if not, write to the Free Software Foundation, Inc., 675 Mass "
-"Ave, Cambridge, MA 02139, USA."
+"this program; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA"
 
 #: ../code/commands/subscription-commands.cpp:259
 msgid ""
@@ -206,27 +210,27 @@ msgstr "User Join failed: %1"
 msgid "User Join in progress..."
 msgstr "User Join in progress..."
 
-#: ../code/core/browser.cpp:116
+#: ../code/core/browser.cpp:113
 msgid "_Direct Connection"
 msgstr "_Direct Connection"
 
-#: ../code/core/browser.cpp:118
+#: ../code/core/browser.cpp:115
 msgid "Host Name:"
 msgstr "Host Name:"
 
-#: ../code/core/browser.cpp:304 ../code/core/browser.cpp:428
+#: ../code/core/browser.cpp:301 ../code/core/browser.cpp:425
 msgid "Connection to \"%1\" failed"
 msgstr "Connection to \"%1\" failed"
 
-#: ../code/core/browser.cpp:357
+#: ../code/core/browser.cpp:354
 msgid "Could not resolve \"%1\""
 msgstr "Could not resolve \"%1\""
 
-#: ../code/core/browser.cpp:431
+#: ../code/core/browser.cpp:428
 msgid "Device \"%1\" does not exist"
 msgstr "Device \"%1\" does not exist"
 
-#: ../code/core/browser.cpp:467
+#: ../code/core/browser.cpp:464
 msgid "Resolving \"%1\"..."
 msgstr "Resolving \"%1\"..."
 
@@ -395,7 +399,6 @@ msgid "Document list"
 msgstr "Document list"
 
 #: ../code/core/iconmanager.cpp:58 ../code/window.cpp:49
-#: ../code/window.cpp.orig:49
 msgid "Chat"
 msgstr "Chat"
 
@@ -407,23 +410,23 @@ msgstr "User Colour Indicator"
 msgid "User List"
 msgstr "User List"
 
-#: ../code/core/statusbar.cpp:395 ../code/core/statusbar.cpp.orig:401
+#: ../code/core/statusbar.cpp:395
 msgid "Ln %1, Col %2\t%3"
 msgstr "Ln %1, Col %2\t%3"
 
-#: ../code/core/statusbar.cpp:398 ../code/core/statusbar.cpp.orig:404
+#: ../code/core/statusbar.cpp:398
 msgid "OVR"
 msgstr "OVR"
 
-#: ../code/core/statusbar.cpp:398 ../code/core/statusbar.cpp.orig:404
+#: ../code/core/statusbar.cpp:398
 msgid "INS"
 msgstr "INS"
 
-#: ../code/core/textsessionview.cpp:497
+#: ../code/core/textsessionview.cpp:515
 msgid "Text written by <b>%1</b>"
 msgstr "Text written by <b>%1</b>"
 
-#: ../code/core/textsessionview.cpp:503
+#: ../code/core/textsessionview.cpp:521
 msgid "Unowned text"
 msgstr "Ownerless text"
 
@@ -570,8 +573,8 @@ msgid "Enter the _location (URI) of the file you would like to open:"
 msgstr "Enter the _location (URI) of the file you would like to open:"
 
 #: ../code/dialogs/password-dialog.cpp:27
-msgid "Password required"
-msgstr "Password required"
+msgid "Password Required"
+msgstr "Password Required"
 
 #: ../code/dialogs/password-dialog.cpp:33
 msgid "Connection to host \"%1\" requires a password."
@@ -624,7 +627,7 @@ msgstr "Indentation"
 
 #: ../code/dialogs/preferences-dialog.cpp:302
 msgid "Home/End Behavior"
-msgstr "Home/End Behavior"
+msgstr "Home/End Behaviour"
 
 #: ../code/dialogs/preferences-dialog.cpp:303
 msgid "File Saving"
@@ -714,91 +717,91 @@ msgstr "Right margin at column:"
 msgid "Highlight matching bracket"
 msgstr "Highlight matching bracket"
 
-#: ../code/dialogs/preferences-dialog.cpp:461
+#: ../code/dialogs/preferences-dialog.cpp:465
 msgid "Display no whitespace"
 msgstr "Display no whitespace"
 
-#: ../code/dialogs/preferences-dialog.cpp:464
+#: ../code/dialogs/preferences-dialog.cpp:468
 msgid "Display spaces"
 msgstr "Display spaces"
 
-#: ../code/dialogs/preferences-dialog.cpp:469
+#: ../code/dialogs/preferences-dialog.cpp:472
 msgid "Display tabs"
 msgstr "Display tabs"
 
-#: ../code/dialogs/preferences-dialog.cpp:473
+#: ../code/dialogs/preferences-dialog.cpp:476
 msgid "Display tabs and spaces"
 msgstr "Display tabs and spaces"
 
-#: ../code/dialogs/preferences-dialog.cpp:525
+#: ../code/dialogs/preferences-dialog.cpp:526
 msgid "Toolbar"
 msgstr "Toolbar"
 
-#: ../code/dialogs/preferences-dialog.cpp:526
+#: ../code/dialogs/preferences-dialog.cpp:527
 msgid "Font"
 msgstr "Font"
 
-#: ../code/dialogs/preferences-dialog.cpp:527
+#: ../code/dialogs/preferences-dialog.cpp:528
 msgid "Color Scheme"
 msgstr "Colour Scheme"
 
-#: ../code/dialogs/preferences-dialog.cpp:534
+#: ../code/dialogs/preferences-dialog.cpp:535
 msgid "Show text only"
 msgstr "Show text only"
 
-#: ../code/dialogs/preferences-dialog.cpp:536
+#: ../code/dialogs/preferences-dialog.cpp:537
 msgid "Show icons only"
 msgstr "Show icons only"
 
-#: ../code/dialogs/preferences-dialog.cpp:538
+#: ../code/dialogs/preferences-dialog.cpp:539
 msgid "Show both icons and text"
 msgstr "Show both icons and text"
 
-#: ../code/dialogs/preferences-dialog.cpp:540
+#: ../code/dialogs/preferences-dialog.cpp:541
 msgid "Show text besides icons"
 msgstr "Show text besides icons"
 
-#: ../code/dialogs/preferences-dialog.cpp:619
+#: ../code/dialogs/preferences-dialog.cpp:620
 msgid "Trusted CAs"
 msgstr "Trusted CAs"
 
-#: ../code/dialogs/preferences-dialog.cpp:620
+#: ../code/dialogs/preferences-dialog.cpp:621
 msgid "Secure Connection"
 msgstr "Secure Connection"
 
-#: ../code/dialogs/preferences-dialog.cpp:621
+#: ../code/dialogs/preferences-dialog.cpp:622
 msgid "Select a file containing trusted CAs"
 msgstr "Select a file containing trusted CAs"
 
-#: ../code/dialogs/preferences-dialog.cpp:638
+#: ../code/dialogs/preferences-dialog.cpp:639
 msgid "Use TLS if possible"
 msgstr "Use TLS where possible"
 
-#: ../code/dialogs/preferences-dialog.cpp:641
+#: ../code/dialogs/preferences-dialog.cpp:642
 msgid "Always use TLS"
 msgstr "Always use TLS"
 
-#: ../code/dialogs/preferences-dialog.cpp:653
+#: ../code/dialogs/preferences-dialog.cpp:654
 msgid "Preferences"
 msgstr "Preferences"
 
-#: ../code/dialogs/preferences-dialog.cpp:658
+#: ../code/dialogs/preferences-dialog.cpp:659
 msgid "User"
 msgstr "User"
 
-#: ../code/dialogs/preferences-dialog.cpp:659
+#: ../code/dialogs/preferences-dialog.cpp:660
 msgid "Editor"
 msgstr "Editor"
 
-#: ../code/dialogs/preferences-dialog.cpp:660
+#: ../code/dialogs/preferences-dialog.cpp:661
 msgid "View"
 msgstr "View"
 
-#: ../code/dialogs/preferences-dialog.cpp:661
+#: ../code/dialogs/preferences-dialog.cpp:662
 msgid "Appearance"
 msgstr "Appearance"
 
-#: ../code/dialogs/preferences-dialog.cpp:662
+#: ../code/dialogs/preferences-dialog.cpp:663
 msgid "Security"
 msgstr "Security"
 
@@ -827,12 +830,12 @@ msgid "HOSTNAME"
 msgstr "HOSTNAME"
 
 #: ../code/operations/operation-delete.cpp:42
-msgid "Removing node %1..."
-msgstr "Removing node %1..."
+msgid "Removing node \"%1\"..."
+msgstr "Removing node \"%1\"..."
 
 #: ../code/operations/operation-delete.cpp:57
-msgid "Failed to delete node %1"
-msgstr "Failed to delete node %1"
+msgid "Failed to delete node \"%1\""
+msgstr "Failed to delete node \"%1\""
 
 #: ../code/operations/operation-export-html.cpp:166
 #, c-format
@@ -843,6 +846,12 @@ msgstr "written by: %s"
 msgid "<unable to print date>"
 msgstr "<unable to print date>"
 
+#. %1$s is session name/hostname
+#. %2$s is path within the session
+#. %3$s is current date as formatted by %c,
+#. %4$s is a link to the gobby site, it must be present because
+#. we need to handle that manually to insert a hyperlink
+#. instead of just printf'ing it.
 #: ../code/operations/operation-export-html.cpp:252
 #, c-format
 msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
@@ -853,28 +862,28 @@ msgid "Participants"
 msgstr "Participants"
 
 #: ../code/operations/operation-export-html.cpp:454
-msgid "Exporting document %1 to %2 in HTML..."
-msgstr "Exporting document %1 to %2 in HTML..."
+msgid "Exporting document \"%1\" to \"%2\" in HTML..."
+msgstr "Exporting document \"%1\" to \"%2\" in HTML..."
 
 #: ../code/operations/operation-export-html.cpp:526
-msgid "Failed to export document %1 to HTML"
-msgstr "Failed to export document %1 to HTML"
+msgid "Failed to export document \"%1\" to HTML"
+msgstr "Failed to export document \"%1\" to HTML"
 
 #: ../code/operations/operation-new.cpp:56
-msgid "Creating directory %1..."
-msgstr "Creating directory %1..."
+msgid "Creating directory \"%1\"..."
+msgstr "Creating directory \"%1\"..."
 
 #: ../code/operations/operation-new.cpp:57
-msgid "Creating document %1..."
-msgstr "Creating document %1..."
+msgid "Creating document \"%1\"..."
+msgstr "Creating document \"%1\"..."
 
 #: ../code/operations/operation-new.cpp:73
-msgid "Failed to create directory %1"
-msgstr "Failed to create directory %1"
+msgid "Failed to create directory \"%1\""
+msgstr "Failed to create directory \"%1\""
 
 #: ../code/operations/operation-new.cpp:74
-msgid "Failed to create document %1"
-msgstr "Failed to create document %1"
+msgid "Failed to create document \"%1\""
+msgstr "Failed to create document \"%1\""
 
 #. Translators: This is the 8 bit encoding that is tried when
 #. autodetecting a file's encoding.
@@ -883,8 +892,8 @@ msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
 #: ../code/operations/operation-open.cpp:89
-msgid "Opening document %1..."
-msgstr "Opening document %1..."
+msgid "Opening document \"%1\"..."
+msgstr "Opening document \"%1\"..."
 
 #: ../code/operations/operation-open.cpp:124
 msgid ""
@@ -914,11 +923,11 @@ msgstr "Parent folder was removed"
 msgid "Failed to open multiple documents"
 msgstr "Failed to open multiple documents"
 
-#: ../code/operations/operation-save.cpp:73
-msgid "Saving document %1 to %2..."
-msgstr "Saving document %1 to %2..."
+#: ../code/operations/operation-save.cpp:74
+msgid "Saving document \"%1\" to \"%2\"..."
+msgstr "Saving document \"%1\" to \"%2\"..."
 
-#: ../code/operations/operation-save.cpp:226
+#: ../code/operations/operation-save.cpp:227
 msgid ""
 "The document contains one or more characters that cannot be encoded in the "
 "specified character coding."
@@ -926,27 +935,27 @@ msgstr ""
 "The document contains one or more characters that cannot be encoded in the "
 "specified character coding."
 
-#: ../code/operations/operation-save.cpp:287
-msgid "Failed to save document %1"
-msgstr "Failed to save document %1"
+#: ../code/operations/operation-save.cpp:288
+msgid "Failed to save document \"%1\""
+msgstr "Failed to save document \"%1\""
 
 #: ../code/util/file.cpp:67 ../code/util/file.cpp:76
 msgid "Could not create directory \"%1\": %2"
 msgstr "Could not create directory \"%1\": %2"
 
-#: ../code/window.cpp:112 ../code/window.cpp.orig:111
+#: ../code/window.cpp:112
 msgid "Document Browser"
 msgstr "Document Browser"
 
-#: ../code/window.cpp:168 ../code/window.cpp.orig:167
+#: ../code/window.cpp:168
 msgid "You are still connected to a session"
 msgstr "You are still connected to a session"
 
-#: ../code/window.cpp:176 ../code/window.cpp.orig:175
+#: ../code/window.cpp:176
 msgid "Do you want to close Gobby nevertheless?"
 msgstr "Do you want to close Gobby nevertheless?"
 
-#: ../code/window.cpp:182 ../code/window.cpp.orig:181
+#: ../code/window.cpp:182
 msgid "C_ancel"
 msgstr "C_ancel"
 
@@ -957,3 +966,11 @@ msgstr "Edit text files collaboratively"
 #: ../gobby-0.5.desktop.in.h:2
 msgid "Gobby Collaborative Editor (0.5)"
 msgstr "Gobby Collaborative Editor (0.5)"
+
+#, fuzzy
+#~ msgid "Subscription already in progress"
+#~ msgstr "Subscription failed"
+
+#, fuzzy
+#~ msgid "Whether to show the user list"
+#~ msgstr "Whether to show the user list for the chat"

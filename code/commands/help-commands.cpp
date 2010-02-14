@@ -97,6 +97,8 @@ void Gobby::HelpCommands::on_about()
 		std::vector<Glib::ustring> translators;
 		translators.push_back(_("British English:"));
 		translators.push_back("\tGabríel A. Pétursson <gabrielp@simnet.is>");
+		translators.push_back(_("German:"));
+		translators.push_back("\tMichael Frey <michael.frey@gmx.ch>");
 
 		Glib::ustring transl = "";
 		for(std::vector<Glib::ustring>::iterator i = translators.begin();
@@ -126,8 +128,9 @@ void Gobby::HelpCommands::on_about()
 
 			"You should have received a copy of the GNU General "
 			"Public License along with this program; if not, "
-			"write to the Free Software Foundation, Inc., 675 "
-			"Mass Ave, Cambridge, MA 02139, USA."));
+			"write to the Free Software Foundation, Inc., 51 "
+			"Franklin Street, Fifth Floor, Boston, MA  "
+                        "02110-1301, USA"));
 		m_about_dialog->set_logo_icon_name("gobby-0.5");
 		m_about_dialog->set_program_name("Gobby");
 		m_about_dialog->set_version(PACKAGE_VERSION);

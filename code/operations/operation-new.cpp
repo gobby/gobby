@@ -53,8 +53,8 @@ Gobby::OperationNew::OperationNew(Operations& operations,
 
 	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(
-			directory ? _("Creating directory %1...")
-			          : _("Creating document %1..."), name));
+			directory ? _("Creating directory \"%1\"...")
+			          : _("Creating document \"%1\"..."), name));
 }
 
 Gobby::OperationNew::~OperationNew()
@@ -70,8 +70,8 @@ void Gobby::OperationNew::on_request_failed(const GError* error)
 {
 	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			m_directory ? _("Failed to create directory %1")
-			            : _("Failed to create document %1"),
+			m_directory ? _("Failed to create directory \"%1\"")
+			            : _("Failed to create document \"%1\""),
 			m_name),
 		error->message);
 

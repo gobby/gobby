@@ -86,7 +86,7 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 
 		m_message_handle = get_status_bar().add_info_message(
 			Glib::ustring::compose(
-				_("Opening document %1..."), uri));
+				_("Opening document \"%1\"..."), uri));
 
 		m_parent.signal_node_removed().connect(
 			sigc::mem_fun(

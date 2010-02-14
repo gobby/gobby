@@ -1,3 +1,19 @@
+2010-02-14  Benjamin Herr  <ben@0x539.de>
+
+	* code/dialogs/password-dialog.cpp:
+	* code/operations/operation-delete.cpp:
+	* code/operations/operation-new.cpp:
+	* code/operations/operation-open.cpp:
+	* code/operations/operation-save.cpp: Added quotation marks in
+	messages including file paths or document names.
+
+	* code/operations/operation-export-html.cpp: Quotations marks as
+	above, also moved a comment so it shows up in .po files.
+
+	* code/commands/help-commands.cpp: Updated FSF address in GPL, added
+	Michael Frey to translation credits.
+
+
 2010-02-13  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/textsessionview.hpp:

@@ -242,13 +242,13 @@ namespace
 		char const* hostname = view.get_hostname().c_str();
 		char const* path     = view.get_path().c_str();
 
+		char const* translated =
 		// %1$s is session name/hostname
 		// %2$s is path within the session
 		// %3$s is current date as formatted by %c,
 		// %4$s is a link to the gobby site, it must be present because
 		//   we need to handle that manually to insert a hyperlink
 		//   instead of just printf'ing it.
-		char const* translated =
 			_("Document generated from %1$s:%2$s at %3$s by %4$s");
 		char const* p = std::strstr(translated, "%4$s");
 		g_assert(p);
@@ -451,7 +451,7 @@ Gobby::OperationExportHtml::OperationExportHtml(Operations& operations,
 
 	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(
-			_("Exporting document %1 to %2 in HTML..."),
+			_("Exporting document \"%1\" to \"%2\" in HTML..."),
 			view.get_title(), uri));
 }
 
@@ -523,7 +523,7 @@ void Gobby::OperationExportHtml::error(const Glib::ustring& message)
 {
 	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			_("Failed to export document %1 to HTML"), m_file->get_uri()),
+			_("Failed to export document \"%1\" to HTML"), m_file->get_uri()),
 		message);
 
 	fail();

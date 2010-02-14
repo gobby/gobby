@@ -70,7 +70,8 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 	                                   &OperationSave::on_file_replace));
 
 	m_message_handle = get_status_bar().add_info_message(
-		Glib::ustring::compose(_("Saving document %1 to %2..."),
+		Glib::ustring::compose(
+			_("Saving document \"%1\" to \"%2\"..."),
 			view.get_title(), uri));
 
 	folder.signal_document_removed().connect(
@@ -284,7 +285,7 @@ void Gobby::OperationSave::on_stream_write(
 void Gobby::OperationSave::error(const Glib::ustring& message)
 {
 	get_status_bar().add_error_message(
-		Glib::ustring::compose(_("Failed to save document %1"),
+		Glib::ustring::compose(_("Failed to save document \"%1\""),
 		                         m_file->get_uri()),
 		message);
 
