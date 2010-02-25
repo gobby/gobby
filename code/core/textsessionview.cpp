@@ -241,6 +241,8 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	gtk_container_add(GTK_CONTAINER(scroll->gobj()), GTK_WIDGET(m_view));
 	scroll->show();
 
+	m_infviewport = inf_text_gtk_viewport_new(scroll->gobj(), user_table);
+
 	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
 
 	gtk_source_buffer_set_style_scheme(
@@ -254,6 +256,7 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 Gobby::TextSessionView::~TextSessionView()
 {
 	g_object_unref(m_infview);
+	g_object_unref(m_infviewport);
 }
 
 void Gobby::TextSessionView::get_cursor_position(unsigned int& row,
@@ -340,6 +343,7 @@ void Gobby::TextSessionView::set_active_user(InfTextUser* user)
 			inf_session_get_buffer(INF_SESSION(m_session))),
 		user);
 	inf_text_gtk_view_set_active_user(m_infview, user);
+	inf_text_gtk_viewport_set_active_user(m_infviewport, user);
 
 	// TODO: Make sure the active user has the color specified in the
 	// preferences, and set color if not.

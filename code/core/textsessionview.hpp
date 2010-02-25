@@ -30,6 +30,7 @@
 #include <gtksourceview/gtksourcelanguage.h>
 
 #include <libinftextgtk/inf-text-gtk-view.h>
+#include <libinftextgtk/inf-text-gtk-viewport.h>
 #include <libinftext/inf-text-session.h>
 #include <libinftext/inf-text-user.h>
 
@@ -129,6 +130,7 @@ protected:
 	GtkSourceBuffer* m_buffer;
 	std::auto_ptr<TextUndoGrouping> m_undo_grouping;
 	InfTextGtkView* m_infview;
+	InfTextGtkViewport* m_infviewport;
 
 	SignalLanguageChanged m_signal_language_changed;
 };
