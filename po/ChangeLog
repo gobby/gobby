@@ -1,3 +1,8 @@
+2010-02-26  Armin Burgmeier  <armin@arbur.net>
+
+	* de.po: Choose v as mnemonic for "Direktverbindung" as d is already
+	in use by "_Datei" in the menu bar.
+
 2010-02-14  Benjamin Herr  <ben@0x539.de>
 
 	* en_GB.po:

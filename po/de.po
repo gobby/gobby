@@ -211,7 +211,7 @@ msgstr "Benutzerbeitritt wird bearbeitet…"
 
 #: ../code/core/browser.cpp:113
 msgid "_Direct Connection"
-msgstr "_Direktverbindung"
+msgstr "Direkt_verbindung"
 
 #: ../code/core/browser.cpp:115
 msgid "Host Name:"
