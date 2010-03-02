@@ -1,3 +1,8 @@
+2010-03-02  Armin Burgmeier  <armin@arbur.net>
+
+	* gobby-0.5.desktop.in: Added GenericName and X-GNOME-FullName fields,
+	changed Name to be just Gobby. Bug #528.
+
 2010-02-25  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/textsessionview.hpp:

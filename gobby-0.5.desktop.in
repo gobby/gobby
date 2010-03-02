@@ -1,5 +1,7 @@
 [Desktop Entry]
-_Name=Gobby Collaborative Editor (0.5)
+_Name=Gobby
+_GenericName=Collaborative Editor
+_X-GNOME-FullName=Gobby Collaborative Editor (0.5)
 _Comment=Edit text files collaboratively
 Exec=gobby-0.5
 Terminal=false
