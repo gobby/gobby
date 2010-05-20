@@ -1,0 +1,871 @@
+# Basque translation for gobby
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the gobby package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gobby\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2010-05-18 13:43+0000\n"
+"Last-Translator: Oier Mees <Unknown>\n"
+"Language-Team: Basque <eu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2010-05-18 13:44+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: ../src/chat.cpp:73
+msgid "Send"
+msgstr "Bidali"
+
+#: ../src/chat.cpp:231
+msgid "Command '%0%' not found. Type /help for a list of existing commands."
+msgstr ""
+"'%0%' agindua ez da aurkitu. Idatzi /help baliozko aginduen zerrenda "
+"ikusteko."
+
+#: ../src/chat.cpp:242
+msgid "%0%: %1%"
+msgstr "Copy text   \t %0%: %1%"
+
+#: ../src/chat.cpp:256
+msgid "Document %0% does not exist"
+msgstr "%0% dokumentua ez da existitzen"
+
+#: ../src/chat.cpp:262
+msgid "Usage: /remove <document>"
+msgstr "Erabilera: /remove <dokumentua>"
+
+#: ../src/documentlist.cpp:51
+msgid "Subscribe"
+msgstr "Harpidetu"
+
+#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
+msgid "Document list"
+msgstr "Dokumentuen zerrenda"
+
+#: ../src/docwindow.cpp:159
+msgid "GtkSpell error: %0%"
+msgstr "GtkSpell errorea: %0%"
+
+#. Translators: the msgid should not be localized.
+#. * The msgstr is the list of encodings separated by bar. e.g.
+#. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
+#: ../src/encoding.cpp:53
+msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
+msgstr "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
+
+#: ../src/encoding.cpp:113
+msgid ""
+"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
+"binary input."
+msgstr ""
+"Errorea sarrera UTF-8-ra bihurtzean: Kodeketa ezezaguna da edo sarrera "
+"binarioa da."
+
+#: ../src/encoding_selector.cpp:26
+msgid "Auto Detect"
+msgstr "Auto Atzeman"
+
+#: ../src/encoding_selector.cpp:158
+msgid "Character Encoding:"
+msgstr "Karaketere Kodeketa:"
+
+#: ../src/finddialog.cpp:43
+msgid "Find what:"
+msgstr "Bilatu:"
+
+#: ../src/finddialog.cpp:44
+msgid "Replace with:"
+msgstr "Ordeztu honekin:"
+
+#: ../src/finddialog.cpp:45
+msgid "Match whole word only"
+msgstr "Hitz osoa soilik"
+
+#: ../src/finddialog.cpp:46
+msgid "Match case"
+msgstr "Maiuskula/minuskula"
+
+#: ../src/finddialog.cpp:47
+msgid "Match as regular expression"
+msgstr "Bilatu adierazpen erregularra"
+
+#: ../src/finddialog.cpp:48
+msgid "Direction"
+msgstr "Norantza"
+
+#: ../src/finddialog.cpp:49
+msgid "_Up"
+msgstr "_Gora"
+
+#: ../src/finddialog.cpp:50
+msgid "_Down"
+msgstr "_Behera"
+
+#: ../src/finddialog.cpp:52
+msgid "_Replace"
+msgstr "_Ordezkatu"
+
+#: ../src/finddialog.cpp:53
+msgid "Replace _all"
+msgstr "Ordeztu _guztiak"
+
+#: ../src/finddialog.cpp:158
+msgid "Search"
+msgstr "Bilatu"
+
+#: ../src/finddialog.cpp:158
+msgid "Search and replace"
+msgstr "Bilatu eta ordeztu"
+
+#: ../src/finddialog.cpp:182
+msgid "\"%0%\" has not been found in the document."
+msgstr "Ez da \"%0%\" aurkitu dokumentuan."
+
+#: ../src/finddialog.cpp:265
+msgid "No occurence has been replaced"
+msgstr "Ez da agerraldirik ordeztu"
+
+#: ../src/finddialog.cpp:271
+msgid "%0% occurence has been replaced"
+msgid_plural "%0% occurences have been replaced"
+msgstr[0] "%0% agerraldia ordeztu da"
+msgstr[1] "%0% agerraldi ordeztu dira"
+
+#: ../src/finddialog.cpp:301
+msgid "No document currently opened"
+msgstr "Ez dago dokumenturik irekita"
+
+#: ../src/gotodialog.cpp:30
+msgid "Line number:"
+msgstr "Lerro zenbakia:"
+
+#: ../src/gotodialog.cpp:32
+msgid "_Go to line"
+msgstr "_Lerrora joan"
+
+#: ../src/gotodialog.cpp:77
+msgid "Go to line"
+msgstr "Joan lerrora"
+
+#: ../src/header.cpp:236
+msgid "Create session..."
+msgstr "Saioa sortu..."
+
+#: ../src/header.cpp:237
+msgid "Opens a new obby session"
+msgstr "Obby saio berri bat ireki"
+
+#: ../src/header.cpp:245
+msgid "Join session..."
+msgstr "Saiora elkartu..."
+
+#: ../src/header.cpp:246
+msgid "Joins an existing obby session"
+msgstr "Obby saio batera elkartu"
+
+#: ../src/header.cpp:254
+msgid "Save session"
+msgstr "Saioa gorde"
+
+#: ../src/header.cpp:255
+msgid "Saves the complete session for a later restore"
+msgstr "Saioa osoa gorde beranduago berreskuratzeko"
+
+#: ../src/header.cpp:263
+msgid "Save session as..."
+msgstr "Gorde saioa honela..."
+
+#: ../src/header.cpp:264
+msgid "\"Saves as...\" the complete session for a later restore"
+msgstr "\"Gorde honela...\" saio osoa beranduago berreskuratzeko"
+
+#: ../src/header.cpp:272
+msgid "Quit session"
+msgstr "Saiotik irten"
+
+#: ../src/header.cpp:273
+msgid "Leaves the currently running obby session"
+msgstr "Uneko obby saiotik irten"
+
+#: ../src/header.cpp:281
+msgid "Quit"
+msgstr "Irten"
+
+#: ../src/header.cpp:282
+msgid "Quits the application"
+msgstr "Aplikazioa ixten du"
+
+#: ../src/header.cpp:286
+msgid "_Session"
+msgstr "_Saioa"
+
+#: ../src/header.cpp:292
+msgid "Create document..."
+msgstr "Dokumentua sortu"
+
+#: ../src/header.cpp:293
+msgid "Creates a new document"
+msgstr "Dokumentu berri bat sortzen du"
+
+#: ../src/header.cpp:301
+msgid "Open document..."
+msgstr "Dokumentua ireki..."
+
+#: ../src/header.cpp:302
+msgid "Loads a file into a new document"
+msgstr "Fitxategi bat dokumentu berri batean kargatu"
+
+#: ../src/header.cpp:310
+msgid "Save document"
+msgstr "Dokumentua gorde"
+
+#: ../src/header.cpp:311
+msgid "Saves a document into a file"
+msgstr "Dokumentu bat fitxategi batera gorde"
+
+#: ../src/header.cpp:319
+msgid "Save document as..."
+msgstr "Gorde dokumentua honela..."
+
+#: ../src/header.cpp:320
+msgid "Saves a document to another location"
+msgstr "Beste leku batean gorde dokumentua"
+
+#: ../src/header.cpp:327
+msgid "Save all documents"
+msgstr "Gorde dokumentu guztiak"
+
+#: ../src/header.cpp:328
+msgid "Saves all documents"
+msgstr "Gorde dokumentu guztiak"
+
+#: ../src/header.cpp:336
+msgid "Close document"
+msgstr "Itxi dokumentua"
+
+#: ../src/header.cpp:337
+msgid "Closes an opened document"
+msgstr "Irekitako dokumentu bat itxitzen du"
+
+#: ../src/header.cpp:341
+msgid "_Edit"
+msgstr "_Editatu"
+
+#: ../src/header.cpp:347
+msgid "Find..."
+msgstr "Bilatu..."
+
+#: ../src/header.cpp:348
+msgid "Search for a text in the current document"
+msgstr "Testua bilatu uneko dokumentuan"
+
+#: ../src/header.cpp:356
+msgid "Find and replace..."
+msgstr "Bilatu eta ordezkatu..."
+
+#: ../src/header.cpp:357
+msgid "Search for a text and replace it with another one"
+msgstr "Testua bilatu eta ordeztu"
+
+#: ../src/header.cpp:365
+msgid "Go to line..."
+msgstr "Joan lerrora..."
+
+#: ../src/header.cpp:366
+msgid "Move cursor to a specified line"
+msgstr "Kurtsorea lerro jakin batera mugitu"
+
+#: ../src/header.cpp:374
+msgid "Preferences..."
+msgstr "Hobespenak..."
+
+#: ../src/header.cpp:375
+msgid "Displays a dialog to customize Gobby for your needs"
+msgstr "Elkarrizketa koadro bat erakusten du Gobby zure beharretara moldatzeko"
+
+#: ../src/header.cpp:383
+msgid "Document preferences..."
+msgstr "Dokumentuen hobespenak..."
+
+#: ../src/header.cpp:384
+msgid "Shows a preferences dialog that is just applied to this document"
+msgstr ""
+"Hobespen koadro bat erakusten du uneko dokumentuari bakarrik aplikatuko "
+"zaiona"
+
+#: ../src/header.cpp:389
+msgid "Syntax"
+msgstr "Sintaxia"
+
+#: ../src/header.cpp:391
+msgid "_User"
+msgstr "_Erabiltzailea"
+
+#: ../src/header.cpp:397
+msgid "Set password..."
+msgstr "Ezarri pasahitza..."
+
+#: ../src/header.cpp:398
+msgid "Sets a password for this user"
+msgstr "Erabiltzaile honentzat pasahitz bat ezartzen du"
+
+#: ../src/header.cpp:406
+msgid "Set color..."
+msgstr "Ezarri kolorea..."
+
+#: ../src/header.cpp:407
+msgid "Sets a new color for this user"
+msgstr "Erabiltzaile honentzat kolore berri bat ezartzen du"
+
+#: ../src/header.cpp:411
+msgid "_Window"
+msgstr "_Leihoa"
+
+#: ../src/header.cpp:417 ../src/icon.cpp:21 ../src/userlist.cpp:122
+msgid "User list"
+msgstr "Erabiltzaile zerrenda"
+
+#: ../src/header.cpp:418
+msgid "Displays a list of users that are currently joined"
+msgstr "Uneko konektaturiko erabiltzaileen zerrenda erakusten du"
+
+#: ../src/header.cpp:427
+msgid "Displays a list of documents within the current session"
+msgstr "Uneko saioko dokumentuen zerrenda erakusten du"
+
+#: ../src/header.cpp:436 ../src/icon.cpp:33
+msgid "Chat"
+msgstr "Txata"
+
+#: ../src/header.cpp:437
+msgid "Displays a chat to talk to other people in the session"
+msgstr "Saioko beste pertsonekin hitz egiteko txata erakusten du"
+
+#: ../src/header.cpp:442
+msgid "_Help"
+msgstr "_Laguntza"
+
+#: ../src/header.cpp:448
+msgid "About"
+msgstr "Honi buruz"
+
+#: ../src/header.cpp:449
+msgid "Shows Gobby's copyright and credits"
+msgstr "Gobby-ren copyright eta kredituak erakusten ditu"
+
+#: ../src/header.cpp:677
+msgid "None"
+msgstr "Bat ere ez"
+
+#: ../src/header.cpp:678
+msgid "Unselects the current language"
+msgstr "Uneko hizkuntza deshautatzen du"
+
+#. Build description string
+#: ../src/header.cpp:694
+msgid "Selects %0% as language"
+msgstr "%0% hizkuntza hautatzen du"
+
+#: ../src/hostdialog.cpp:33
+msgid "Create obby session"
+msgstr "Obby saioa sortu"
+
+#: ../src/hostdialog.cpp:36 ../src/joindialog.cpp:56
+msgid "Port:"
+msgstr "Ataka:"
+
+#: ../src/hostdialog.cpp:37 ../src/joindialog.cpp:57
+msgid "Name:"
+msgstr "Izena:"
+
+#: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
+msgid "Color:"
+msgstr "Kolorea:"
+
+#: ../src/hostdialog.cpp:39
+msgid "Password:"
+msgstr "Pasahitza:"
+
+#: ../src/hostdialog.cpp:40
+msgid "Restore session:"
+msgstr "Saioa berrezarri:"
+
+#: ../src/hostdialog.cpp:42
+msgid "Restore session"
+msgstr "Saioa berrezarri"
+
+#: ../src/hostdialog.cpp:106
+msgid ".obby files"
+msgstr ".obby fitxategiak"
+
+#: ../src/hostdialog.cpp:108
+msgid "All files"
+msgstr "Fitxategi guztiak"
+
+#: ../src/hostdialog.cpp:120
+msgid "_Host"
+msgstr "_Ostalaria"
+
+#: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
+msgid "Opening obby session..."
+msgstr "Obby saioa irekitzen..."
+
+#: ../src/joindialog.cpp:52
+msgid "Join obby session"
+msgstr "Obby saio batera elkartu"
+
+#: ../src/joindialog.cpp:55
+msgid "Host:"
+msgstr "Ostalaria:"
+
+#: ../src/joindialog.cpp:60
+msgid "Local network"
+msgstr "Sare lokala"
+
+#. resetup columns
+#: ../src/joindialog.cpp:365
+msgid "User"
+msgstr "Erabiltzailea"
+
+#: ../src/joindialog.cpp:366
+msgid "Host"
+msgstr "Ostalaria"
+
+#: ../src/joindialog.cpp:367
+msgid "Port"
+msgstr "Ataka"
+
+#: ../src/joindialog.cpp:386
+msgid "Failure"
+msgstr "Hutsegitea"
+
+#: ../src/joinprogressdialog.cpp:34
+msgid ""
+"User password for user '%0%' required. You may either choose another user "
+"name, type in your user password or cancel the connection."
+msgstr ""
+"'%0%' erabiltzailearentzat pasahitza behar da. Beste erabiltzaile izena "
+"aukeratu, zure erabiltzaile pasahitza sartu edo konexioa bertan behera utzi "
+"dezakezu."
+
+#: ../src/joinprogressdialog.cpp:111
+msgid ""
+"Name is already in use. You may choose another name or cancel the connection."
+msgstr "Izena iada hartuta dago. Beste izen bat aukeratu edo konexioa utzi."
+
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:234
+msgid "New name:"
+msgstr "Izen berria:"
+
+#: ../src/joinprogressdialog.cpp:157
+msgid ""
+"Color is already in use. You may choose another color or cancel the "
+"connection."
+msgstr ""
+"Kolorea iada hautatuta dago. Beste kolore bat hautatu edo konexioa utzi."
+
+#: ../src/joinprogressdialog.cpp:182
+msgid ""
+"Session password required. You have to type in the password to be able to "
+"join the obby session."
+msgstr ""
+"Saio honentzat pasahitza behar da. Pasahitza sartu behar duzu saio honetan "
+"parte hartzeko."
+
+#: ../src/joinprogressdialog.cpp:186
+msgid "Session password:"
+msgstr "Saioko pasahitza:"
+
+#: ../src/joinprogressdialog.cpp:192
+msgid "Session password required"
+msgstr "Saioko pasahitza behar da"
+
+#: ../src/joinprogressdialog.cpp:235
+msgid "User password:"
+msgstr "Erabiltzaile pasahitza:"
+
+#: ../src/joinprogressdialog.cpp:315
+msgid "Joining obby session..."
+msgstr "Obby saiora elkartzen..."
+
+#. Thread has established connection, wait for welcome packet
+#. The welcome event will be emitted as soon as the connection
+#. has been encrypted. Maybe we should have another step before
+#. this that really waits for the welcome packet.
+#: ../src/joinprogressdialog.cpp:418
+msgid "Setting up connection encryption (TLS)..."
+msgstr "Konexio enkriptatua (TLS) ezartzen..."
+
+#. Update status message
+#: ../src/joinprogressdialog.cpp:478
+msgid "Login packet sent, waiting for response..."
+msgstr "Saioa hasteko paketea bidali da, erantzunaren zain..."
+
+#: ../src/joinprogressdialog.cpp:561
+msgid "Logged in successfully, synchronising session..."
+msgstr "Arrakastarekin hasi da saioa, saioa sinkronizatzen..."
+
+#. Connection closed by remote site
+#: ../src/joinprogressdialog.cpp:574 ../src/window.cpp:1089
+msgid "Connection lost"
+msgstr "Konexioa galdu da"
+
+#: ../src/preferencesdialog.cpp:65
+msgid "Tab Stops"
+msgstr "Tabulazioak"
+
+#: ../src/preferencesdialog.cpp:66
+msgid "Indentation"
+msgstr "Koska"
+
+#: ../src/preferencesdialog.cpp:67
+msgid "Home/End behaviour"
+msgstr "Hasi/Bukatu portaera"
+
+#: ../src/preferencesdialog.cpp:68
+msgid "Tab width:"
+msgstr "Tabuladorearen zabalera:"
+
+#: ../src/preferencesdialog.cpp:69
+msgid "Insert spaces instead of tabs"
+msgstr "Txertatu zuriuneak tabuladorearen ordez"
+
+#: ../src/preferencesdialog.cpp:70
+msgid "Enable automatic indentation"
+msgstr "Koskatze automatikoa gaitu"
+
+#: ../src/preferencesdialog.cpp:71
+msgid "Smart home/end"
+msgstr "Hasi/Bukatu inteligentea"
+
+#: ../src/preferencesdialog.cpp:85
+msgid ""
+"With this option enabled, Home/End keys move to first/last character before "
+"going to the start/end of the line."
+msgstr ""
+"Aukera hau gaituta, Hasi/Bukatu teklak lehena/azkena karaktereetara mugituko "
+"dira lerroaren hasiera/bukaera-ra joan aurretik."
+
+#: ../src/preferencesdialog.cpp:131
+msgid "Text wrapping"
+msgstr "Testu-itzulbiratzea"
+
+#: ../src/preferencesdialog.cpp:132
+msgid "Line numbers"
+msgstr "Lerro zenbakiak"
+
+#: ../src/preferencesdialog.cpp:133
+msgid "Current line"
+msgstr "Uneko lerroa"
+
+#: ../src/preferencesdialog.cpp:134
+msgid "Right margin"
+msgstr "Eskuin marjina"
+
+#: ../src/preferencesdialog.cpp:135
+msgid "Bracket matching"
+msgstr "Parentesien bat-etortzea"
+
+#: ../src/preferencesdialog.cpp:136
+msgid "Enable text wrapping"
+msgstr "Testu-itzulbiratzea gaitu"
+
+#: ../src/preferencesdialog.cpp:137
+msgid "Do not split words over two lines"
+msgstr "Ez zatitu hitza bi lerroetan"
+
+#: ../src/preferencesdialog.cpp:138
+msgid "Display line numbers"
+msgstr "Lerro zenbakiak erakusti"
+
+#: ../src/preferencesdialog.cpp:139
+msgid "Highlight current line"
+msgstr "Nabarmendu uneko lerroa"
+
+#: ../src/preferencesdialog.cpp:140
+msgid "Display right margin"
+msgstr "Eskuin marjina erakutsi"
+
+#: ../src/preferencesdialog.cpp:141
+msgid "Right margin at column:"
+msgstr "Eskuin marjina hurrengo zutabean:"
+
+#: ../src/preferencesdialog.cpp:142
+msgid "Highlight matching bracket"
+msgstr "Nabarmendu parentesi bat-etortzea"
+
+#: ../src/preferencesdialog.cpp:225
+msgid "Toolbar"
+msgstr "Tresna-barra"
+
+#: ../src/preferencesdialog.cpp:226
+msgid "Windows"
+msgstr "Leihoak"
+
+#: ../src/preferencesdialog.cpp:227
+msgid "Remember the positions and states"
+msgstr "Posizio eta egoerak gogoratu"
+
+#: ../src/preferencesdialog.cpp:229
+msgid "Highlight the window on incoming chat messages"
+msgstr "Leihoa nabarmendu txateko mezu berrietan"
+
+#: ../src/preferencesdialog.cpp:235
+msgid "Show text only"
+msgstr "Testua bakarrik erakutsi"
+
+#: ../src/preferencesdialog.cpp:236
+msgid "Show icons only"
+msgstr "Ikonoak bakarrik erakusti"
+
+#: ../src/preferencesdialog.cpp:237
+msgid "Show both icons and text"
+msgstr "Biak erakutsi ikonoak eta testua"
+
+#: ../src/preferencesdialog.cpp:238
+msgid "Show text besides icons"
+msgstr "Ikonoen ondoan testua erakutsi"
+
+#: ../src/preferencesdialog.cpp:309
+msgid "Document management"
+msgstr "Dokumentuen kudeaketa"
+
+#: ../src/preferencesdialog.cpp:310
+msgid "Open new remotely-created documents automatically"
+msgstr "Urrunetik sortutako dokumentu berria automatikoki ireki"
+
+#: ../src/preferencesdialog.cpp:348
+msgid "Pattern"
+msgstr "Eredua"
+
+#: ../src/preferencesdialog.cpp:349
+msgid "Language"
+msgstr "Hizkuntza"
+
+#: ../src/preferencesdialog.cpp:350
+msgid "Mime type"
+msgstr "Mime mota"
+
+#: ../src/preferencesdialog.cpp:352
+msgid "This is a list of all recognized file types"
+msgstr "Onartzen diren fitxategi moten zerrenda da hau"
+
+#: ../src/preferencesdialog.cpp:513
+msgid "Pattern must not be empty."
+msgstr "Patroiak ezin du hutsa izan."
+
+#: ../src/preferencesdialog.cpp:576
+msgid "There is no language with the mime type '%0%'."
+msgstr "Ez dago '%0%' mime mota duen hizkuntzarik"
+
+#: ../src/preferencesdialog.cpp:713
+msgid "Preferences"
+msgstr "Hobespenak"
+
+#: ../src/preferencesdialog.cpp:725
+msgid "Editor"
+msgstr "Editorea"
+
+#: ../src/preferencesdialog.cpp:726
+msgid "View"
+msgstr "Ikusi"
+
+#. Appearance only affects the global Gobby window
+#: ../src/preferencesdialog.cpp:729
+msgid "Appearance"
+msgstr "Itxura"
+
+#: ../src/preferencesdialog.cpp:730
+msgid "Font"
+msgstr "Letra-tipoa"
+
+#: ../src/preferencesdialog.cpp:731
+msgid "Behaviour"
+msgstr "Portaera"
+
+#: ../src/preferencesdialog.cpp:732
+msgid "Files"
+msgstr "Fitxategiak"
+
+#: ../src/statusbar.cpp:38 ../src/statusbar.cpp:100
+msgid "Not connected"
+msgstr "Konektatu gabe"
+
+#: ../src/statusbar.cpp:56
+msgid "Selected language: %0%"
+msgstr "Hautatuako hizkuntza: %0%"
+
+#: ../src/statusbar.cpp:62
+msgid "No language selected"
+msgstr "Ez da hizkuntzarik hautatu"
+
+#: ../src/statusbar.cpp:72
+msgid "Line: %0%, Column: %1%"
+msgstr "Lerroa: %0%, Zutabea: %1%"
+
+#: ../src/userlist.cpp:94
+msgid "Online"
+msgstr "Konektatuta"
+
+#: ../src/userlist.cpp:95
+msgid "Offline"
+msgstr "Deskonektatuta"
+
+#: ../src/window.cpp:198
+msgid ""
+"Zeroconf initialisation failed. Probably you need to run avahi-daemon or "
+"mDNSResponder, depending on the library you use, as root prior to Gobby. "
+"Zeroconf support is deactivated for this session."
+msgstr ""
+"Zeroconf-en hasieraketak huts egin du. Erabiltzen duzun liburutegiaren "
+"arabera, Gobby-ren aurretik root gisa egikaritu beharko dituzu ziurrenik "
+"avahi-daemon edo mDNSResponder."
+
+#: ../src/window.cpp:280
+msgid "You are still connected to a session"
+msgstr "Oraindik saiora konektaturik zaude"
+
+#: ../src/window.cpp:288
+msgid "Do you want to close Gobby anyway?"
+msgstr "Gobby itxi nahi duzu hala ere?"
+
+#: ../src/window.cpp:294
+msgid "C_ancel"
+msgstr "_Utzi"
+
+#: ../src/window.cpp:471
+msgid "Use default .obby extension if none is given"
+msgstr "Lehenetsitako .obby luzapena erabili besterik ezean"
+
+#: ../src/window.cpp:476
+msgid "Save obby session"
+msgstr "Obby saioa gorde"
+
+#: ../src/window.cpp:539
+msgid "A collaborative text editor"
+msgstr "Elkarlanean aritzeko testu editore bat"
+
+#. Please note in the translation that only the English version is
+#. legally binding.
+#: ../src/window.cpp:569
+msgid ""
+"This program is free software; you can redistribute it\n"
+"and/or modify it under the terms of the GNU General Public\n"
+"License as published by the Free Software Foundation; either\n"
+"version 2 of the License, or (at your option) any later\n"
+"version.\n"
+"\n"
+"This program is distributed in the hope that it will be\n"
+"useful, but WITHOUT ANY WARRANTY; without even the implied\n"
+"warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
+"PURPOSE.  See the GNU General Public License for more details."
+msgstr ""
+"Programa hau software librea da: birbanatzea\n"
+"edo/eta aldatzea daukazu Free Software Foundation-ek\n"
+"argitaratutako GNU General Public License-ren 2\n"
+"bertsioaren, edo (zure aukeran)\n"
+"bertsio berriago baten, baldintzenpean.\n"
+"\n"
+"Programa hau erabilgarri izango delakoan banatzen dugu,\n"
+"baina INONGO BERMERIK GABE; ezta ere hurrengo berme\n"
+"implizitukin MERKATURATZETASUNA, KALITATE EGOKIA,\n"
+"edo INTENTZIO JAKIN BATERAKO EGOKITASUNA. Ikusi \n"
+"GNU General Public License xehetasun gehiagorentzat.\n"
+"Oharra: Ingelesezko bertsioak dauka bakarrik lotura juridikoa."
+
+#: ../src/window.cpp:681
+msgid "Create document"
+msgstr "Dokumentua sortu"
+
+#: ../src/window.cpp:681
+msgid "Enter document name"
+msgstr "Dokumentuaren izena sartu"
+
+#: ../src/window.cpp:703
+msgid "Open new document"
+msgstr "Ireki dokumentu berria"
+
+#. Window title
+#: ../src/window.cpp:804
+msgid "Save document \"%0%\""
+msgstr "Gorde \"%0%\" dokumentua"
+
+#: ../src/window.cpp:910
+msgid ""
+"Click on \"Apply\" to apply the new settings to documents that are currently "
+"open. \"OK\" will just store the values to use them with newly created "
+"documents."
+msgstr ""
+"Klikatu \"Aplikatu\" ezarpen berriak irakita dauden dokumentu guztieri "
+"aplikatzeko. \"Ados\"-ek balioak gordeko ditu sortzen diren dokumentu "
+"berrietan erabiltzeko."
+
+#. Build password dialog with info
+#: ../src/window.cpp:954
+msgid "Set user password"
+msgstr "Ezarri erabiltzaile pasahitza"
+
+#: ../src/window.cpp:956
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+"Zure erabiltzaile kontuari pasahitza ezarri. Erabiltzaile honekin saioa "
+"hasten duzun hurrengoan, pasahitza sartzeko eskatuko zaizu."
+
+#: ../src/window.cpp:1017
+msgid ""
+"These preferences affect only the currently active document \"%0%\". If you "
+"want to change global preferences, use the preferences menu item in the "
+"\"Edit\" menu."
+msgstr ""
+"Hobespen hauek uneko \"%0%\" dokumentu aktiboari bakarrik eragiten diote. "
+"Hobespen globalak aldatu nahi badituzu, erabili \"Editatu\" menuko hobespen "
+"elementua."
+
+#: ../src/window.cpp:1127
+msgid "Color change failed: Color already in use"
+msgstr "Kolore aldaketak huts egin du: Kolorea iada hautatuta dago"
+
+#: ../src/window.cpp:1379
+msgid "Connected to %0%:%1%"
+msgstr "%0%-ra konektaturik:%1%"
+
+#: ../src/window.cpp:1423
+msgid "Serving on port %0%"
+msgstr "%0% portuan zerbitzua ematen"
+
+#: ../src/window.cpp:1553
+msgid "Save changes to document \"%0%\" before closing?"
+msgstr "Itxi aurretik \"%0%\" dokumentura gorde aldaketak?"
+
+#: ../src/window.cpp:1563
+msgid ""
+"If you don't save, changes will be discarded, but may still be retrieved if "
+"you re-subscribe to the document as long as the session remains open."
+msgstr ""
+"Ez baduzu gordetzen, aldaketak baztertuko dira, baina hauek berreskuratu "
+"ditzakezu dokumentura berharpidetzen bazera saioa irekita dagoen bitartean."
+
+#: ../src/window.cpp:1572
+msgid "If you don't save, changes will be discarded."
+msgstr "Ez baduzu gordetzen, aldaketak baztertu egingo dira."
+
+#. Add button to allow the user to save the dialog
+#: ../src/window.cpp:1587
+msgid "Close without saving"
+msgstr "Gorde gabe itxi"
+
+#: ../contrib/gobby.desktop.in.h:1
+msgid "Edit text files collaboratively"
+msgstr "Testu fitxategiak elkarlanean editatu"
+
+#: ../contrib/gobby.desktop.in.h:2
+msgid "Gobby Collaborative Editor"
+msgstr "Gobby Elkarlanerako Editorea"

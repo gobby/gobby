@@ -1,3 +1,8 @@
+2010-05-20  Armin Burgmeier  <armin@0x539.de>
+
+	* configure.ac:
+	* po/eu.po: Added basque translation (thanks to Oier Mees).
+
 2009-12-18  Philipp Kern  <phil@0x539.de>
 
 	* configure.ac:
