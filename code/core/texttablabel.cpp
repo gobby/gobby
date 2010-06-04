@@ -80,11 +80,11 @@ Gobby::TextTabLabel::TextTabLabel(Folder& folder, TextSessionView& view):
 			inf_session_get_buffer(
 				INF_SESSION(view.get_session())));
 	m_insert_text_handle = g_signal_connect_after(
-		G_OBJECT(buffer), "insert-text",
-		G_CALLBACK(on_insert_text_static), this);
+		G_OBJECT(buffer), "text-inserted",
+		G_CALLBACK(on_text_inserted_static), this);
 	m_erase_text_handle = g_signal_connect_after(
-		G_OBJECT(buffer), "erase-text",
-		G_CALLBACK(on_erase_text_static), this);
+		G_OBJECT(buffer), "text-erased",
+		G_CALLBACK(on_text_erased_static), this);
 
 	m_extra.pack_start(m_dots, Gtk::PACK_SHRINK);
 }

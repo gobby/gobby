@@ -38,20 +38,20 @@ protected:
 		static_cast<TextTabLabel*>(user_data)->on_modified_changed();
 	}
 
-	static void on_erase_text_static(InfTextBuffer* buffer,
-	                                 guint position,
-	                                 guint length,
-	                                 InfTextUser* author,
-	                                 gpointer user_data)
+	static void on_text_erased_static(InfTextBuffer* buffer,
+	                                  guint position,
+	                                  InfTextChunk* chunk,
+	                                  InfTextUser* author,
+	                                  gpointer user_data)
 	{
 		static_cast<TextTabLabel*>(user_data)->on_changed(author);
 	}
 
-	static void on_insert_text_static(InfTextBuffer* buffer,
-	                                  guint position,
-	                                  InfTextChunk* text,
-	                                  InfTextUser* author,
-	                                  gpointer user_data)
+	static void on_text_inserted_static(InfTextBuffer* buffer,
+	                                    guint position,
+	                                    InfTextChunk* text,
+	                                    InfTextUser* author,
+	                                    gpointer user_data)
 	{
 		static_cast<TextTabLabel*>(user_data)->on_changed(author);
 	}
