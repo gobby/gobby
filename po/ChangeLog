@@ -1,3 +1,8 @@
+2010-06-20  Γιάννης Κασκαμανίδης  <kiolalis@gmail.com>
+
+	* LINGUAS: Added el_GR.
+	* el_GR.po: Added greek translation.
+
 2010-02-26  Armin Burgmeier  <armin@arbur.net>
 
 	* de.po: Choose v as mnemonic for "Direktverbindung" as d is already
