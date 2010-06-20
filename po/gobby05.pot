@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-14 22:31+0100\n"
+"POT-Creation-Date: 2010-06-20 14:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -394,11 +395,11 @@ msgstr ""
 msgid "INS"
 msgstr ""
 
-#: ../code/core/textsessionview.cpp:515
+#: ../code/core/textsessionview.cpp:519
 msgid "Text written by <b>%1</b>"
 msgstr ""
 
-#: ../code/core/textsessionview.cpp:521
+#: ../code/core/textsessionview.cpp:525
 msgid "Unowned text"
 msgstr ""
 
@@ -921,9 +922,17 @@ msgid "C_ancel"
 msgstr ""
 
 #: ../gobby-0.5.desktop.in.h:1
-msgid "Edit text files collaboratively"
+msgid "Collaborative Editor"
 msgstr ""
 
 #: ../gobby-0.5.desktop.in.h:2
+msgid "Edit text files collaboratively"
+msgstr ""
+
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby"
+msgstr ""
+
+#: ../gobby-0.5.desktop.in.h:4
 msgid "Gobby Collaborative Editor (0.5)"
 msgstr ""

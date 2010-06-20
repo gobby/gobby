@@ -6,10 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.4.93\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-14 22:31+0100\n"
+"POT-Creation-Date: 2010-06-20 14:26+0200\n"
 "PO-Revision-Date: 2010-02-07 09:40+0100\n"
 "Last-Translator: Michael Frey <michael.frey@gmx.ch>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -421,11 +422,11 @@ msgstr "ÜBS"
 msgid "INS"
 msgstr "EIN"
 
-#: ../code/core/textsessionview.cpp:515
+#: ../code/core/textsessionview.cpp:519
 msgid "Text written by <b>%1</b>"
 msgstr "Text geschrieben von <b>%1</b>"
 
-#: ../code/core/textsessionview.cpp:521
+#: ../code/core/textsessionview.cpp:525
 msgid "Unowned text"
 msgstr "Kein Verfasser"
 
@@ -965,10 +966,18 @@ msgid "C_ancel"
 msgstr "_Abbrechen"
 
 #: ../gobby-0.5.desktop.in.h:1
+msgid "Collaborative Editor"
+msgstr "Gemeinschaftlicher Editor"
+
+#: ../gobby-0.5.desktop.in.h:2
 msgid "Edit text files collaboratively"
 msgstr "Textdateien gemeinsam bearbeiten"
 
-#: ../gobby-0.5.desktop.in.h:2
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby"
+msgstr "Gobby"
+
+#: ../gobby-0.5.desktop.in.h:4
 msgid "Gobby Collaborative Editor (0.5)"
 msgstr "Gobby Gemeinschaftlicher Editor (0.5)"
 

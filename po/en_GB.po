@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby-0.4.93~dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-14 22:31+0100\n"
+"POT-Creation-Date: 2010-06-20 14:26+0200\n"
 "PO-Revision-Date: 2009-12-03 19:26-0000\n"
 "Last-Translator: Gabríel A. Pétursson <gabrielp@simnet.is>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -422,11 +423,11 @@ msgstr "OVR"
 msgid "INS"
 msgstr "INS"
 
-#: ../code/core/textsessionview.cpp:515
+#: ../code/core/textsessionview.cpp:519
 msgid "Text written by <b>%1</b>"
 msgstr "Text written by <b>%1</b>"
 
-#: ../code/core/textsessionview.cpp:521
+#: ../code/core/textsessionview.cpp:525
 msgid "Unowned text"
 msgstr "Ownerless text"
 
@@ -960,10 +961,18 @@ msgid "C_ancel"
 msgstr "C_ancel"
 
 #: ../gobby-0.5.desktop.in.h:1
+msgid "Collaborative Editor"
+msgstr "Collaborative Editor"
+
+#: ../gobby-0.5.desktop.in.h:2
 msgid "Edit text files collaboratively"
 msgstr "Edit text files collaboratively"
 
-#: ../gobby-0.5.desktop.in.h:2
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby"
+msgstr "Gobby"
+
+#: ../gobby-0.5.desktop.in.h:4
 msgid "Gobby Collaborative Editor (0.5)"
 msgstr "Gobby Collaborative Editor (0.5)"
 
