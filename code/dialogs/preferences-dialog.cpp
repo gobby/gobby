@@ -231,6 +231,7 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
                                      Preferences& preferences):
 	m_group_settings(_("Settings")),
 	m_group_paths(_("Paths")),
+	m_group_remote(_("Remote Users")),
 	m_box_user_name(false, 6),
 	m_lbl_user_name(_("User name:"), Gtk::ALIGN_LEFT),
 	m_box_user_color(false, 6),
@@ -239,6 +240,12 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_box_path_host_directory(false, 6),
 	m_btn_path_host_directory(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
 	m_lbl_path_host_directory(_("Host directory:")),
+	m_btn_remote_show_cursors(_("Show cursors of remote users")),
+	m_btn_remote_show_selections(_("Show selections of remote users")),
+	m_btn_remote_show_current_lines(
+		_("Highlight current line of remote users")),
+	m_btn_remote_show_cursor_positions(
+		_("Indicate remote users' cursor position in the scrollbar")),
 	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
 {
 	m_lbl_user_name.show();
@@ -292,8 +299,39 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	// Disable until we support self-hosting:
 	// m_group_paths.show();
 
+	m_btn_remote_show_cursors.set_active(
+		preferences.user.show_remote_cursors);
+	m_btn_remote_show_cursors.show();
+	connect_option(m_btn_remote_show_cursors,
+	               preferences.user.show_remote_cursors);
+
+	m_btn_remote_show_selections.set_active(
+		preferences.user.show_remote_selections);
+	m_btn_remote_show_selections.show();
+	connect_option(m_btn_remote_show_selections,
+	               preferences.user.show_remote_selections);
+
+	m_btn_remote_show_current_lines.set_active(
+		preferences.user.show_remote_current_lines);
+	m_btn_remote_show_current_lines.show();
+	connect_option(m_btn_remote_show_current_lines,
+	               preferences.user.show_remote_current_lines);
+
+	m_btn_remote_show_cursor_positions.set_active(
+		preferences.user.show_remote_cursor_positions);
+	m_btn_remote_show_cursor_positions.show();
+	connect_option(m_btn_remote_show_cursor_positions,
+	               preferences.user.show_remote_cursor_positions);
+
+	m_group_remote.add(m_btn_remote_show_cursors);
+	m_group_remote.add(m_btn_remote_show_selections);
+	m_group_remote.add(m_btn_remote_show_current_lines);
+	m_group_remote.add(m_btn_remote_show_cursor_positions);
+	m_group_remote.show();
+
 	add(m_group_settings, false);
 	add(m_group_paths, false);
+	add(m_group_remote, false);
 }
 
 Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):

@@ -105,6 +105,11 @@ public:
 		Option<Glib::ustring> name;
 		Option<double> hue;
 		Option<std::string> host_directory;
+
+		Option<bool> show_remote_cursors;
+		Option<bool> show_remote_selections;
+		Option<bool> show_remote_current_lines;
+		Option<bool> show_remote_cursor_positions;
 	};
 
 	class Editor

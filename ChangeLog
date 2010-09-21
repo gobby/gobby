@@ -1,3 +1,18 @@
+2010-09-21  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/preferences.hpp:
+	* code/core/preferences.cpp: Add preferences options for showing
+	remote cursors, selections, current lines and cursor positions in the
+	scrollbar.
+
+	* code/core/textsessionview.hpp:
+	* code/core/textsessionview.cpp: Apply the new settings on the
+	underlying objects.
+
+	* code/dialogs/preferences-dialog.hpp:
+	* code/dialogs/preferences-dialog.cpp: Add the new options to the
+	preferences dialog.
+
 2010-06-04  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/texttablabel.hpp:

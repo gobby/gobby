@@ -126,6 +126,7 @@ public:
 	protected:
 		Group m_group_settings;
 		Group m_group_paths;
+		Group m_group_remote;
 
 		Gtk::HBox m_box_user_name;
 		Gtk::Label m_lbl_user_name;
@@ -138,6 +139,11 @@ public:
 		Gtk::HBox m_box_path_host_directory;
 		Gtk::Label m_lbl_path_host_directory;
 		Gtk::FileChooserButton m_btn_path_host_directory;
+
+		Gtk::CheckButton m_btn_remote_show_cursors;
+		Gtk::CheckButton m_btn_remote_show_selections;
+		Gtk::CheckButton m_btn_remote_show_current_lines;
+		Gtk::CheckButton m_btn_remote_show_cursor_positions;
 
 		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
 	};

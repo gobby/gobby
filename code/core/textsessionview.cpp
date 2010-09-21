@@ -164,6 +164,18 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	m_preferences.user.hue.signal_changed().connect(
 		sigc::mem_fun(
 			*this, &TextSessionView::on_user_color_changed));
+	m_preferences.user.show_remote_cursors.signal_changed().connect(
+		sigc::mem_fun(
+			*this, &TextSessionView::on_show_remote_cursors_changed));
+	m_preferences.user.show_remote_selections.signal_changed().connect(
+		sigc::mem_fun(
+			*this, &TextSessionView::on_show_remote_selections_changed));
+	m_preferences.user.show_remote_current_lines.signal_changed().connect(
+		sigc::mem_fun(
+			*this, &TextSessionView::on_show_remote_current_lines_changed));
+	m_preferences.user.show_remote_cursor_positions.signal_changed().connect(
+		sigc::mem_fun(
+			*this, &TextSessionView::on_show_remote_cursor_positions_changed));
 	m_preferences.editor.tab_width.signal_changed().connect(
 		sigc::mem_fun(
 			*this, &TextSessionView::on_tab_width_changed));
@@ -205,6 +217,20 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 		sigc::mem_fun(*this, &TextSessionView::on_font_changed));
 	m_preferences.appearance.scheme_id.signal_changed().connect(
 		sigc::mem_fun(*this, &TextSessionView::on_scheme_changed));
+
+	inf_text_gtk_view_set_show_remote_cursors(
+		m_infview,
+		m_preferences.user.show_remote_cursors
+	);
+	inf_text_gtk_view_set_show_remote_selections(
+		m_infview,
+		m_preferences.user.show_remote_selections
+	);
+	inf_text_gtk_view_set_show_remote_current_lines(
+		m_infview,
+		m_preferences.user.show_remote_current_lines
+	);
+
 	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
 	gtk_source_view_set_insert_spaces_instead_of_tabs(
 		m_view, m_preferences.editor.tab_spaces);
@@ -242,6 +268,10 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	scroll->show();
 
 	m_infviewport = inf_text_gtk_viewport_new(scroll->gobj(), user_table);
+	inf_text_gtk_viewport_set_show_user_markers(
+		m_infviewport,
+		m_preferences.user.show_remote_cursor_positions
+	);
 
 	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
 
@@ -389,6 +419,39 @@ void Gobby::TextSessionView::on_user_color_changed()
 		inf_text_session_set_user_color(get_session(), user,
 		                                m_preferences.user.hue);
 	}
+}
+
+
+void Gobby::TextSessionView::on_show_remote_cursors_changed()
+{
+	inf_text_gtk_view_set_show_remote_cursors(
+		m_infview,
+		m_preferences.user.show_remote_cursors
+	);
+}
+
+void Gobby::TextSessionView::on_show_remote_selections_changed()
+{
+	inf_text_gtk_view_set_show_remote_selections(
+		m_infview,
+		m_preferences.user.show_remote_selections
+	);
+}
+
+void Gobby::TextSessionView::on_show_remote_current_lines_changed()
+{
+	inf_text_gtk_view_set_show_remote_current_lines(
+		m_infview,
+		m_preferences.user.show_remote_current_lines
+	);
+}
+
+void Gobby::TextSessionView::on_show_remote_cursor_positions_changed()
+{
+	inf_text_gtk_viewport_set_show_user_markers(
+		m_infviewport,
+		m_preferences.user.show_remote_cursor_positions
+	);
 }
 
 void Gobby::TextSessionView::on_tab_width_changed()

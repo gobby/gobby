@@ -85,6 +85,11 @@ public:
 protected:
 	void on_user_color_changed();
 
+	void on_show_remote_cursors_changed();
+	void on_show_remote_selections_changed();
+	void on_show_remote_current_lines_changed();
+	void on_show_remote_cursor_positions_changed();
+
 	void on_tab_width_changed();
 	void on_tab_spaces_changed();
 	void on_auto_indent_changed();
