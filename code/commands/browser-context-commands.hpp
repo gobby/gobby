@@ -57,6 +57,8 @@ protected:
 	void on_popdown();
 
 	// Context commands
+	void on_disconnect(InfcBrowser* browser);
+
 	void on_new(InfcBrowser* browser, InfcBrowserIter iter,
 	            bool directory);
 	void on_open(InfcBrowser* browser, InfcBrowserIter iter);

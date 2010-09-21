@@ -89,6 +89,28 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		menu->signal_deactivate().connect(sigc::mem_fun(
 			*this, &BrowserContextCommands::on_menu_deactivate));
 
+		// Add "Disconnect" menu option if the connection
+		// item has been clicked at
+		if(is_toplevel)
+		{
+			Gtk::ImageMenuItem* disconnect_item = Gtk::manage(
+				new Gtk::ImageMenuItem(_("_Disconnect from Server"), true));
+			disconnect_item->set_image(*Gtk::manage(new Gtk::Image(
+				Gtk::Stock::DISCONNECT, Gtk::ICON_SIZE_MENU)));
+			disconnect_item->signal_activate().connect(sigc::bind(
+				sigc::mem_fun(*this,
+					&BrowserContextCommands::on_disconnect),
+				browser));
+			disconnect_item->show();
+			menu->append(*disconnect_item);
+
+			// Separator
+			Gtk::SeparatorMenuItem* sep_item =
+				Gtk::manage(new Gtk::SeparatorMenuItem);
+			sep_item->show();
+			menu->append(*sep_item);
+		}
+
 		// Create Document
 		Gtk::ImageMenuItem* new_document_item = Gtk::manage(
 			new Gtk::ImageMenuItem(_("Create Do_cument..."),
@@ -126,7 +148,7 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		}
 
 		Gtk::ImageMenuItem* new_directory_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("Create Directory..."),
+			new Gtk::ImageMenuItem(_("Create Di_rectory..."),
 			                       true));
 		new_directory_item->set_image(*new_directory_image);
 		new_directory_item->signal_activate().connect(sigc::bind(
@@ -181,6 +203,19 @@ void Gobby::BrowserContextCommands::on_popdown()
 {
 	m_popup_menu = NULL;
 	m_watch.reset(NULL);
+}
+
+void Gobby::BrowserContextCommands::on_disconnect(InfcBrowser* browser)
+{
+	InfXmlConnection* connection = infc_browser_get_connection(browser);
+	InfXmlConnectionStatus status;
+	g_object_get(G_OBJECT(connection), "status", &status, NULL);
+
+	if(status != INF_XML_CONNECTION_CLOSED &&
+	   status != INF_XML_CONNECTION_CLOSING)
+	{
+		inf_xml_connection_close(connection);
+	}
 }
 
 void Gobby::BrowserContextCommands::on_new(InfcBrowser* browser,

@@ -1,5 +1,11 @@
 2010-09-21  Armin Burgmeier  <armin@arbur.net>
 
+	* code/commands/browser-context-commands.hpp:
+	* code/commands/browser-context-commands.cpp: Add a "Disconnect from
+	Server" option to the context menu (#542).
+
+2010-09-21  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/preferences.hpp:
 	* code/core/preferences.cpp: Add preferences options for showing
 	remote cursors, selections, current lines and cursor positions in the
