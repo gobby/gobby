@@ -1,0 +1,1010 @@
+# French translation of Gobby.
+# Copyright (C) 2010, Listed translators
+# This file is distributed under the same license as the Gobby package.
+# Claude Paroz <claude@2xlibre.net>, 2010
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Gobby 0.5 fr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-11-16 23:39+0100\n"
+"PO-Revision-Date: 2010-11-16 23:04+0100\n"
+"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
+"Language-Team: French <traduc@traduc.org>\n"
+"Language: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../code/commands/browser-commands.cpp:109
+msgid "Subscribing to %1..."
+msgstr "Inscription à %1..."
+
+#: ../code/commands/browser-commands.cpp:122
+msgid "Subscribing to chat on %1..."
+msgstr "Inscription à la discussion sur %1..."
+
+#: ../code/commands/browser-commands.cpp:307
+msgid "Subscription failed"
+msgstr "Échec de l'inscription"
+
+#: ../code/commands/browser-context-commands.cpp:97
+#, fuzzy
+msgid "_Disconnect from Server"
+msgstr "Connexion à un serveur"
+
+#: ../code/commands/browser-context-commands.cpp:116
+msgid "Create Do_cument..."
+msgstr "Créer un do_cument..."
+
+#: ../code/commands/browser-context-commands.cpp:151
+#, fuzzy
+msgid "Create Di_rectory..."
+msgstr "Créer un dossier..."
+
+#: ../code/commands/browser-context-commands.cpp:164
+msgid "_Open Document..."
+msgstr "_Ouvrir un document..."
+
+#: ../code/commands/browser-context-commands.cpp:183
+msgid "D_elete"
+msgstr "_Supprimer"
+
+#: ../code/commands/browser-context-commands.cpp:232
+msgid "Choose a name for the directory"
+msgstr "Choisissez un nom pour le dossier"
+
+#: ../code/commands/browser-context-commands.cpp:233
+msgid "Choose a name for the document"
+msgstr "Choisissez un nom pour le document"
+
+#: ../code/commands/browser-context-commands.cpp:234
+msgid "_Directory Name:"
+msgstr "Nom du _dossier :"
+
+#: ../code/commands/browser-context-commands.cpp:235
+msgid "_Document Name:"
+msgstr "Nom du _document :"
+
+#: ../code/commands/browser-context-commands.cpp:238
+msgid "C_reate"
+msgstr "C_réer"
+
+#: ../code/commands/browser-context-commands.cpp:242
+msgid "New Directory"
+msgstr "Nouveau dossier"
+
+#: ../code/commands/browser-context-commands.cpp:243
+#: ../code/commands/file-tasks/task-new.cpp:38
+msgid "New Document"
+msgstr "Nouveau document"
+
+#: ../code/commands/browser-context-commands.cpp:259
+#: ../code/commands/file-tasks/task-open-file.cpp:24
+msgid "Choose a text file to open"
+msgstr "Choisissez un fichier texte à ouvrir"
+
+#: ../code/commands/file-tasks/task-export-html.cpp:29
+msgid "Choose a location to export document \"%1\" to"
+msgstr "Choisissez un emplacement pour y exporter le document « %1 »"
+
+#: ../code/commands/file-tasks/task-open.cpp:48
+msgid "Querying \"%1\"..."
+msgstr "Requête vers « %1 »..."
+
+#: ../code/commands/file-tasks/task-open.cpp:105
+#: ../code/operations/operation-open.cpp:437
+#: ../code/operations/operation-open-multiple.cpp:159
+msgid "Failed to open document \"%1\""
+msgstr "Le document « %1 » n'a pas pu être ouvert"
+
+#: ../code/commands/file-tasks/task-save.cpp:26
+msgid "Choose a location to save document \"%1\" to"
+msgstr "Choisissez un emplacement pour y enregistrer le document « %1 »"
+
+#. Help browser could not be invoked, show an error message to the user.
+#: ../code/commands/help-commands.cpp:69
+msgid "There was an error displaying help."
+msgstr "Une erreur est survenue durant l'affichage de l'aide"
+
+#: ../code/commands/help-commands.cpp:92
+msgid "Contributors:"
+msgstr "Contributeurs :"
+
+#: ../code/commands/help-commands.cpp:98
+msgid "British English:"
+msgstr "Anglais britannique :"
+
+#: ../code/commands/help-commands.cpp:100
+msgid "German:"
+msgstr "Allemand :"
+
+#: ../code/commands/help-commands.cpp:117
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,  but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA"
+msgstr ""
+"Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le "
+"modifier au titre des clauses de la Licence Publique Générale GNU, telle que "
+"publiée par la Free Software Foundation ; soit la version 2 de la Licence, "
+"ou (à votre discrétion) une version ultérieure quelconque.\n"
+"Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE "
+"GARANTIE ; sans même une garantie implicite de COMMERCIABILITÉ ou DE "
+"CONFORMITÉ À UNE UTILISATION PARTICULIÈRE. Voir la Licence Publique Générale "
+"GNU pour plus de détails.\n"
+"Vous devriez avoir reçu un exemplaire de la Licence Publique Générale GNU "
+"avec ce programme ; si ce n'est pas le cas, écrivez à la Free Software "
+"Foundation Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+
+#: ../code/commands/subscription-commands.cpp:259
+msgid ""
+"The connection to the publisher of this document has been lost. Further "
+"changes to the document could not be synchronized to others anymore, "
+"therefore the document cannot be edited anymore.\n"
+"\n"
+"Please note also that it is possible that not all of your latest changes "
+"have reached the publisher before the connection was lost."
+msgstr ""
+"La connexion à l'éditeur de ce document a été interrompue. De nouvelles "
+"modifications au document ne pourraient plus être partagées avec les autres, "
+"c'est pourquoi le document ne peut plus être modifié.\n"
+"\n"
+"Sachez également qu'il n'est pas certain que vos dernières modifications "
+"aient pu être transmises à l'éditeur avant la perte de la connexion."
+
+#: ../code/commands/synchronization-commands.cpp:32
+msgid "Synchronization in progress... %1%%"
+msgstr "Synchronisation en cours... %1 %%"
+
+#. Document cannot be used if an error happened
+#. during synchronization.
+#: ../code/commands/synchronization-commands.cpp:44
+msgid "This document cannot be used."
+msgstr "Ce document est inutilisable."
+
+#: ../code/commands/synchronization-commands.cpp:47
+#: ../code/commands/user-join-commands.cpp:40
+msgid ""
+"If you have an idea what could have caused the problem, then you may attempt "
+"to solve it and try again (after having closed this document). Otherwise it "
+"is most likely a bug in the software. In that case, please file a bug report "
+"at http://gobby.0x539.de/trac/newticket and provide as much information as "
+"you can, including what you did when the problem occurred and how to "
+"reproduce the problem (if possible) so that we can fix the problem in a "
+"later version. Thank you."
+msgstr ""
+"Si vous avez une idée sur la cause de ce problème, vous pouvez tenter de le "
+"résoudre puis essayer à nouveau (après avoir fermé ce document). Sinon, "
+"c'est probablement une anomalie du logiciel. Dans ce cas, veuillez signaler "
+"cette erreur dans un rapport sur http://gobby.0x539.de/trac/newticket et "
+"indiquer le maximum d'informations, y compris ce que vous faisiez lorsque le "
+"problème est survenu et comment il est possible de le reproduire (le cas "
+"échéant), afin que nous puissions corriger cette erreur dans une prochaine "
+"version. Merci."
+
+#: ../code/commands/synchronization-commands.cpp:61
+msgid "Synchronization failed: %1"
+msgstr "Échec de synchronisation : %1"
+
+#. TODO: Adjust this for chat sessions
+#: ../code/commands/user-join-commands.cpp:35
+msgid ""
+"You can still watch others editing the document, but you cannot edit it "
+"yourself."
+msgstr ""
+"Vous pouvez encore voir les modifications des autres personnes, mais vous ne "
+"pouvez plus modifier ce document vous-même."
+
+#: ../code/commands/user-join-commands.cpp:54
+msgid "User Join failed: %1"
+msgstr "Échec de l'adhésion d'un utilisateur : %1"
+
+#: ../code/commands/user-join-commands.cpp:283
+msgid "User Join in progress..."
+msgstr "Adhésion d'utilisateur en cours..."
+
+#: ../code/core/browser.cpp:113
+msgid "_Direct Connection"
+msgstr "Connexion _directe"
+
+#: ../code/core/browser.cpp:115
+msgid "Host Name:"
+msgstr "Nom d'hôte :"
+
+#: ../code/core/browser.cpp:301 ../code/core/browser.cpp:425
+msgid "Connection to \"%1\" failed"
+msgstr "La connexion à « %1 » a échoué"
+
+#: ../code/core/browser.cpp:354
+msgid "Could not resolve \"%1\""
+msgstr "Impossible de résoudre « %1 »"
+
+#: ../code/core/browser.cpp:428
+msgid "Device \"%1\" does not exist"
+msgstr "Le périphérique « %1 » n'existe pas"
+
+#: ../code/core/browser.cpp:464
+msgid "Resolving \"%1\"..."
+msgstr "Résolution de « %1 »..."
+
+#: ../code/core/header.cpp:198
+msgid "_None"
+msgstr "_Aucun"
+
+#: ../code/core/header.cpp:222
+msgid "_File"
+msgstr "_Fichier"
+
+#: ../code/core/header.cpp:225
+msgid "_Open..."
+msgstr "_Ouvrir..."
+
+#: ../code/core/header.cpp:228
+msgid "Open _Location..."
+msgstr "Ouvrir un _emplacement..."
+
+#: ../code/core/header.cpp:232
+msgid "Save _As..."
+msgstr "Enregistrer _sous..."
+
+#: ../code/core/header.cpp:236 ../code/core/iconmanager.cpp:40
+msgid "Save All"
+msgstr "Tout enregistrer"
+
+#: ../code/core/header.cpp:236
+msgid "Save all open files locally"
+msgstr "Enregistrer localement tous les fichiers ouverts"
+
+#: ../code/core/header.cpp:238
+msgid "Export As _HTML..."
+msgstr "Exporter en _HTML..."
+
+#: ../code/core/header.cpp:241
+msgid "Connect _to Server..."
+msgstr "Se _connecter à un serveur..."
+
+#: ../code/core/header.cpp:246
+msgid "_Edit"
+msgstr "É_dition"
+
+#: ../code/core/header.cpp:254
+msgid "_Find..."
+msgstr "_Rechercher..."
+
+#: ../code/core/header.cpp:256
+msgid "Find Ne_xt"
+msgstr "Rechercher le _suivant"
+
+#: ../code/core/header.cpp:257
+msgid "Find next match of phrase searched for"
+msgstr "Rechercher la prochaine occurrence du texte recherché"
+
+#: ../code/core/header.cpp:260
+msgid "Find Pre_vious"
+msgstr "Rechercher le _précédent"
+
+#: ../code/core/header.cpp:261
+msgid "Find previous match of phrase searched for"
+msgstr "Rechercher la précédente occurrence du texte recherché"
+
+#: ../code/core/header.cpp:266
+msgid "Find and Rep_lace..."
+msgstr "Rechercher et re_mplacer..."
+
+#: ../code/core/header.cpp:270
+msgid "Go to _Line..."
+msgstr "Aller à la _ligne..."
+
+#: ../code/core/header.cpp:274
+msgid "Pr_eferences..."
+msgstr "_Préférences..."
+
+#: ../code/core/header.cpp:276
+msgid "_View"
+msgstr "_Affichage"
+
+#: ../code/core/header.cpp:279
+msgid "Reset User Colors"
+msgstr "Réinitialiser les couleurs des utilisateurs"
+
+#: ../code/core/header.cpp:280
+msgid "Hide user colors in current document"
+msgstr "Masquer les couleurs des utilisateurs dans le document actuel"
+
+#: ../code/core/header.cpp:283
+msgid "View Toolbar"
+msgstr "Afficher la barre d'outils"
+
+#: ../code/core/header.cpp:284
+msgid "Whether to show the toolbar"
+msgstr "Indique s'il faut afficher la barre d'outils"
+
+#: ../code/core/header.cpp:288
+msgid "View Statusbar"
+msgstr "Afficher la barre d'état"
+
+#: ../code/core/header.cpp:289
+msgid "Whether to show the statusbar"
+msgstr "Indique s'il faut afficher la barre d'état"
+
+#: ../code/core/header.cpp:293
+msgid "View Document Browser"
+msgstr "Afficher le navigateur de document"
+
+#: ../code/core/header.cpp:294
+msgid "Whether to show the document browser"
+msgstr "Indique s'il faut afficher le navigateur de document"
+
+#: ../code/core/header.cpp:298
+msgid "View Chat"
+msgstr "Afficher la discussion"
+
+#: ../code/core/header.cpp:299
+msgid "Whether to show the chat pane"
+msgstr "Indique s'il faut afficher le volet de discussion"
+
+#: ../code/core/header.cpp:303
+msgid "View Document User List"
+msgstr "Afficher la liste des utilisateurs du document"
+
+#: ../code/core/header.cpp:304
+msgid "Whether to show the user list for documents"
+msgstr "Indique s'il faut afficher la liste des utilisateurs du document"
+
+#: ../code/core/header.cpp:308
+msgid "View Chat User List"
+msgstr "Afficher la liste des utilisateurs de la discussion"
+
+#: ../code/core/header.cpp:309
+msgid "Whether to show the user list for the chat"
+msgstr "Indique s'il faut afficher la liste des utilisateurs de la discussion"
+
+#: ../code/core/header.cpp:313
+msgid "_Highlight Mode"
+msgstr "_Mode de coloration"
+
+#: ../code/core/header.cpp:319
+msgid "_Help"
+msgstr "Aid_e"
+
+#: ../code/core/header.cpp:322
+msgid "_Contents"
+msgstr "_Sommaire"
+
+#: ../code/core/header.cpp:323
+msgid "Opens the Gobby manual"
+msgstr "Ouvre le manuel de Gobby"
+
+#: ../code/core/header.cpp:326
+msgid "_About..."
+msgstr "À _propos..."
+
+#: ../code/core/header.cpp:327
+msgid "Shows Gobby's copyright and credits"
+msgstr "Affiche le copyright et les remerciements de Gobby"
+
+#: ../code/core/iconmanager.cpp:46
+msgid "User list"
+msgstr "Liste des utilisateurs"
+
+#: ../code/core/iconmanager.cpp:52
+msgid "Document list"
+msgstr "Liste des documents"
+
+#: ../code/core/iconmanager.cpp:58 ../code/window.cpp:49
+msgid "Chat"
+msgstr "Discussion"
+
+#: ../code/core/iconmanager.cpp:65
+msgid "User Color Indicator"
+msgstr "Indicateur des couleurs des utilisateurs"
+
+#: ../code/core/sessionuserview.cpp:41
+msgid "User List"
+msgstr "Liste des utilisateurs"
+
+#: ../code/core/statusbar.cpp:395
+msgid "Ln %1, Col %2\t%3"
+msgstr "Lig %1, col %2\t%3"
+
+#: ../code/core/statusbar.cpp:398
+msgid "OVR"
+msgstr "ÉCR"
+
+#: ../code/core/statusbar.cpp:398
+msgid "INS"
+msgstr "INS"
+
+#: ../code/core/textsessionview.cpp:582
+msgid "Text written by <b>%1</b>"
+msgstr "Texte écrit par <b>%1</b>"
+
+#: ../code/core/textsessionview.cpp:588
+msgid "Unowned text"
+msgstr "Texte anonyme"
+
+#: ../code/core/userlist.cpp:105
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: ../code/dialogs/connection-dialog.cpp:28
+msgid "Connect to Server"
+msgstr "Connexion à un serveur"
+
+#: ../code/dialogs/connection-dialog.cpp:32
+msgid "Please enter a host name with which to establish a connection."
+msgstr "Veuillez indiquer un nom d'hôte pour établir la connexion."
+
+#: ../code/dialogs/connection-dialog.cpp:34
+msgid "_Remote Endpoint:"
+msgstr "Point d'_accès distant :"
+
+#: ../code/dialogs/document-location-dialog.cpp:29
+msgid "Document Name:"
+msgstr "Nom du document :"
+
+#: ../code/dialogs/document-location-dialog.cpp:156
+msgid "Select document's target location"
+msgstr "Sélectionnez l'emplacement cible du document"
+
+#: ../code/dialogs/document-location-dialog.cpp:158
+msgid "Choose a directory to create the document into:"
+msgstr "Choisissez un dossier dans lequel créer le document :"
+
+#: ../code/dialogs/document-location-dialog.cpp:164
+msgid "Select documents' target location"
+msgstr "Sélectionnez l'emplacement cible du document"
+
+#: ../code/dialogs/document-location-dialog.cpp:166
+msgid "Choose a directory to create the documents into:"
+msgstr "Choisissez un dossier dans lequel créer les documents :"
+
+#: ../code/dialogs/find-dialog.cpp:46 ../code/dialogs/find-dialog.cpp:144
+msgid "Find"
+msgstr "Rechercher"
+
+#: ../code/dialogs/find-dialog.cpp:49
+msgid "_Search for:"
+msgstr "_Rechercher :"
+
+#: ../code/dialogs/find-dialog.cpp:51
+msgid "Replace _with:"
+msgstr "Rem_placer par :"
+
+#: ../code/dialogs/find-dialog.cpp:53
+msgid "_Match case"
+msgstr "Re_specter la casse"
+
+#: ../code/dialogs/find-dialog.cpp:54
+msgid "Match _entire word only"
+msgstr "_Mots entiers seulement"
+
+#: ../code/dialogs/find-dialog.cpp:55
+msgid "Search _backwards"
+msgstr "Rechercher en _arrière"
+
+#: ../code/dialogs/find-dialog.cpp:56
+msgid "Wra_p around"
+msgstr "Recherche _circulaire"
+
+#: ../code/dialogs/find-dialog.cpp:102
+msgid "Replace _All"
+msgstr "_Tout remplacer"
+
+#: ../code/dialogs/find-dialog.cpp:104
+msgid "_Replace"
+msgstr "R_emplacer"
+
+#: ../code/dialogs/find-dialog.cpp:144
+msgid "Replace"
+msgstr "Remplacer"
+
+#: ../code/dialogs/find-dialog.cpp:163 ../code/dialogs/find-dialog.cpp:179
+msgid "Phrase \"%1\" has not been found"
+msgstr "Le texte « %1 » n'a pas été trouvé"
+
+#: ../code/dialogs/find-dialog.cpp:337
+msgid "No occurrence has been replaced"
+msgstr "Aucune occurrence n'a été remplacée"
+
+#: ../code/dialogs/find-dialog.cpp:343
+msgid "%1 occurrence has been replaced"
+msgid_plural "%1 occurrences have been replaced"
+msgstr[0] "%1 occurrence a été remplacée"
+msgstr[1] "%1 occurrences ont été remplacées"
+
+#: ../code/dialogs/goto-dialog.cpp:27
+msgid "Go to line"
+msgstr "Aller à la ligne"
+
+#: ../code/dialogs/goto-dialog.cpp:30
+msgid "Line _number:"
+msgstr "_Numéro de ligne :"
+
+#: ../code/dialogs/goto-dialog.cpp:51
+msgid "Go To _Line"
+msgstr "Aller à la _ligne"
+
+#: ../code/dialogs/initial-dialog.cpp:49
+msgid "Choose a user color"
+msgstr "Choisissez une couleur d'utilisateur"
+
+#: ../code/dialogs/initial-dialog.cpp:53
+msgid "Welcome to Gobby"
+msgstr "Bienvenue dans Gobby"
+
+#: ../code/dialogs/initial-dialog.cpp:62
+msgid ""
+"Before we start, a few options need to be configured. You can later change "
+"them by choosing Edit ▸ Preferences from the menu."
+msgstr ""
+"Avant de commencer, quelques options doivent être configurées. Il est "
+"possible de les modifier ultérieurement en choisissant Édition ▸ Préférences "
+"dans le menu."
+
+#: ../code/dialogs/initial-dialog.cpp:69
+msgid "User Name"
+msgstr "Nom d'utilisateur"
+
+#: ../code/dialogs/initial-dialog.cpp:71
+msgid "Your name as shown to other users."
+msgstr "Votre nom tel qu'il apparaîtra pour les autres personnes."
+
+#: ../code/dialogs/initial-dialog.cpp:80
+msgid "User Color"
+msgstr "Couleur d'utilisateur"
+
+#: ../code/dialogs/initial-dialog.cpp:82
+msgid "The color with which text you have written is branded."
+msgstr "La couleur qui marquera le texte que vous écrivez."
+
+#: ../code/dialogs/open-location-dialog.cpp:27
+msgid "Open Location"
+msgstr "Ouvrir un emplacement"
+
+#: ../code/dialogs/open-location-dialog.cpp:28
+msgid "Enter the _location (URI) of the file you would like to open:"
+msgstr "Saisissez l'_emplacement (URI) du fichier que vous souhaitez ouvrir :"
+
+#: ../code/dialogs/password-dialog.cpp:27
+msgid "Password Required"
+msgstr "Mot de passe nécessaire"
+
+#: ../code/dialogs/password-dialog.cpp:33
+msgid "Connection to host \"%1\" requires a password."
+msgstr "La connexion au serveur « %1 » exige un mot de passe."
+
+#: ../code/dialogs/password-dialog.cpp:34
+msgid "Invalid password for host \"%1\". Please try again."
+msgstr ""
+"Le mot de passe pour le serveur « %1 » n'est pas valable. Essayez encore une "
+"fois."
+
+#: ../code/dialogs/password-dialog.cpp:37
+msgid "Server _Password:"
+msgstr "_Mot de passe du serveur :"
+
+#: ../code/dialogs/preferences-dialog.cpp:232
+msgid "Settings"
+msgstr "Paramètres"
+
+#: ../code/dialogs/preferences-dialog.cpp:233
+msgid "Paths"
+msgstr "Chemins"
+
+#: ../code/dialogs/preferences-dialog.cpp:234
+#, fuzzy
+msgid "Remote Users"
+msgstr "Réinitialiser les couleurs des utilisateurs"
+
+#: ../code/dialogs/preferences-dialog.cpp:236
+msgid "User name:"
+msgstr "Nom d'utilisateur :"
+
+#: ../code/dialogs/preferences-dialog.cpp:238
+msgid "User color:"
+msgstr "Couleur d'utilisateur :"
+
+#: ../code/dialogs/preferences-dialog.cpp:239
+msgid "Choose a new user color"
+msgstr "Choisissez une nouvelle couleur d'utilisateur"
+
+#: ../code/dialogs/preferences-dialog.cpp:242
+msgid "Host directory:"
+msgstr "Dossier de l'hôte :"
+
+#: ../code/dialogs/preferences-dialog.cpp:243
+msgid "Show cursors of remote users"
+msgstr ""
+
+#: ../code/dialogs/preferences-dialog.cpp:244
+msgid "Show selections of remote users"
+msgstr ""
+
+#: ../code/dialogs/preferences-dialog.cpp:246
+#, fuzzy
+msgid "Highlight current line of remote users"
+msgstr "Surligner la ligne actuelle"
+
+#: ../code/dialogs/preferences-dialog.cpp:248
+msgid "Indicate remote users' cursor position in the scrollbar"
+msgstr ""
+
+#: ../code/dialogs/preferences-dialog.cpp:290
+msgid "The directory into which locally hosted sessions are permanently stored"
+msgstr ""
+"Le dossier dans lequel les sessions hébergées localement sont enregistrées "
+"de façon permanente"
+
+#: ../code/dialogs/preferences-dialog.cpp:338
+msgid "Tab Stops"
+msgstr "Tabulations"
+
+#: ../code/dialogs/preferences-dialog.cpp:339
+msgid "Indentation"
+msgstr "Indentation"
+
+#: ../code/dialogs/preferences-dialog.cpp:340
+msgid "Home/End Behavior"
+msgstr "Comportement de Origine/Fin"
+
+#: ../code/dialogs/preferences-dialog.cpp:341
+msgid "File Saving"
+msgstr "Enregistrement de fichiers"
+
+#: ../code/dialogs/preferences-dialog.cpp:342
+msgid "_Tab width:"
+msgstr "_Largeur des tabulations :"
+
+#: ../code/dialogs/preferences-dialog.cpp:344
+msgid "Insert _spaces instead of tabs"
+msgstr "Insérer des _espaces au lieu de tabulations"
+
+#: ../code/dialogs/preferences-dialog.cpp:345
+msgid "Enable automatic _indentation"
+msgstr "Activer l'_indentation automatique"
+
+#: ../code/dialogs/preferences-dialog.cpp:346
+msgid "Smart _home/end"
+msgstr "_Origine/fin intelligents"
+
+#: ../code/dialogs/preferences-dialog.cpp:347
+msgid "Enable _automatic saving of documents"
+msgstr "_Activer l'enregistrement automatique des documents"
+
+#: ../code/dialogs/preferences-dialog.cpp:349
+msgid "Autosave interval in _minutes:"
+msgstr "Intervalle d'enregistrement en _minutes :"
+
+#: ../code/dialogs/preferences-dialog.cpp:370
+msgid ""
+"With this option enabled, Home/End keys move to first/last character before "
+"going to the start/end of the line."
+msgstr ""
+"Quand cette option est activée, les touches Origine/Fin se placent au "
+"premier/dernier caractère avant d'aller au début/à la fin de la ligne."
+
+#: ../code/dialogs/preferences-dialog.cpp:440
+msgid "Text Wrapping"
+msgstr "Longues lignes"
+
+#: ../code/dialogs/preferences-dialog.cpp:441
+msgid "Line Numbers"
+msgstr "Numéros de ligne"
+
+#: ../code/dialogs/preferences-dialog.cpp:442
+msgid "Current Line"
+msgstr "Ligne actuelle"
+
+#: ../code/dialogs/preferences-dialog.cpp:443
+msgid "Right Margin"
+msgstr "Marge de droite"
+
+#: ../code/dialogs/preferences-dialog.cpp:444
+msgid "Bracket Matching"
+msgstr "Correspondance des parenthèses"
+
+#: ../code/dialogs/preferences-dialog.cpp:445
+msgid "Whitespace Display"
+msgstr "Affichage des blancs"
+
+#: ../code/dialogs/preferences-dialog.cpp:446
+msgid "Enable text wrapping"
+msgstr "Activer le retour à la ligne"
+
+#: ../code/dialogs/preferences-dialog.cpp:447
+msgid "Do not split words over two lines"
+msgstr "Ne pas couper les mots sur deux lignes"
+
+#: ../code/dialogs/preferences-dialog.cpp:448
+msgid "Display line numbers"
+msgstr "Afficher les numéros de ligne"
+
+#: ../code/dialogs/preferences-dialog.cpp:449
+msgid "Highlight current line"
+msgstr "Surligner la ligne actuelle"
+
+#: ../code/dialogs/preferences-dialog.cpp:450
+msgid "Display right margin"
+msgstr "Afficher la marge de droite"
+
+#: ../code/dialogs/preferences-dialog.cpp:451
+msgid "Right margin at column:"
+msgstr "Marge de droite à la colonne :"
+
+#: ../code/dialogs/preferences-dialog.cpp:452
+msgid "Highlight matching bracket"
+msgstr "Surligner les parenthèses correspondantes"
+
+#: ../code/dialogs/preferences-dialog.cpp:503
+msgid "Display no whitespace"
+msgstr "N'afficher aucun type d'espace"
+
+#: ../code/dialogs/preferences-dialog.cpp:506
+msgid "Display spaces"
+msgstr "Afficher les espaces"
+
+#: ../code/dialogs/preferences-dialog.cpp:510
+msgid "Display tabs"
+msgstr "Afficher les tabulations"
+
+#: ../code/dialogs/preferences-dialog.cpp:514
+msgid "Display tabs and spaces"
+msgstr "Afficher les tabulations et les espaces"
+
+#: ../code/dialogs/preferences-dialog.cpp:564
+msgid "Toolbar"
+msgstr "Barre d'outils"
+
+#: ../code/dialogs/preferences-dialog.cpp:565
+msgid "Font"
+msgstr "Police"
+
+#: ../code/dialogs/preferences-dialog.cpp:566
+msgid "Color Scheme"
+msgstr "Jeu de couleurs"
+
+#: ../code/dialogs/preferences-dialog.cpp:573
+msgid "Show text only"
+msgstr "Afficher uniquement le texte"
+
+#: ../code/dialogs/preferences-dialog.cpp:575
+msgid "Show icons only"
+msgstr "Afficher unqiuement les icônes"
+
+#: ../code/dialogs/preferences-dialog.cpp:577
+msgid "Show both icons and text"
+msgstr "Afficher les icônes et le texte"
+
+#: ../code/dialogs/preferences-dialog.cpp:579
+msgid "Show text besides icons"
+msgstr "Afficher le texte à côté des icônes"
+
+#: ../code/dialogs/preferences-dialog.cpp:658
+msgid "Trusted CAs"
+msgstr "Autorités de confiance"
+
+#: ../code/dialogs/preferences-dialog.cpp:659
+msgid "Secure Connection"
+msgstr "Connexion sécurisée"
+
+#: ../code/dialogs/preferences-dialog.cpp:660
+msgid "Select a file containing trusted CAs"
+msgstr ""
+"Choisissez un fichier contenant les autorités de certification de confiance"
+
+#: ../code/dialogs/preferences-dialog.cpp:677
+msgid "Use TLS if possible"
+msgstr "Utiliser TSL si possible"
+
+#: ../code/dialogs/preferences-dialog.cpp:680
+msgid "Always use TLS"
+msgstr "Toujours utiliser TLS"
+
+#: ../code/dialogs/preferences-dialog.cpp:692
+msgid "Preferences"
+msgstr "Préférences"
+
+#: ../code/dialogs/preferences-dialog.cpp:697
+msgid "User"
+msgstr "Utilisateur"
+
+#: ../code/dialogs/preferences-dialog.cpp:698
+msgid "Editor"
+msgstr "Éditeur"
+
+#: ../code/dialogs/preferences-dialog.cpp:699
+msgid "View"
+msgstr "Affichage"
+
+#: ../code/dialogs/preferences-dialog.cpp:700
+msgid "Appearance"
+msgstr "Apparence"
+
+#: ../code/dialogs/preferences-dialog.cpp:701
+msgid "Security"
+msgstr "Sécurité"
+
+#: ../code/main.cpp:196
+msgid "Gobby options"
+msgstr "Options de Gobby"
+
+#: ../code/main.cpp:196
+msgid "Options related to Gobby"
+msgstr "Options liées à Gobby"
+
+#: ../code/main.cpp:201
+msgid "Display version information and exit"
+msgstr "Affiche l'information de version et quitte"
+
+#: ../code/main.cpp:208
+msgid "Also start a new Gobby instance when there is one running already"
+msgstr "Démarre une nouvelle instance Gobby même s'il y en a déjà une"
+
+#: ../code/main.cpp:216
+msgid "Connect to given host on startup, can be given multiple times"
+msgstr ""
+"Se connecte à l'hôte indiqué au démarrage, peut apparaître plusieurs fois"
+
+#: ../code/main.cpp:217
+msgid "HOSTNAME"
+msgstr "NOM_HÒTE"
+
+#: ../code/operations/operation-delete.cpp:42
+msgid "Removing node \"%1\"..."
+msgstr "Suppression du nœud « %1 »..."
+
+#: ../code/operations/operation-delete.cpp:57
+msgid "Failed to delete node \"%1\""
+msgstr "Échec de suppression du nœud « %1 »"
+
+#: ../code/operations/operation-export-html.cpp:166
+#, c-format
+msgid "written by: %s"
+msgstr "écrit par : %s"
+
+#: ../code/operations/operation-export-html.cpp:239
+msgid "<unable to print date>"
+msgstr "<impossible d'afficher la date>"
+
+#. %1$s is session name/hostname
+#. %2$s is path within the session
+#. %3$s is current date as formatted by %c,
+#. %4$s is a link to the gobby site, it must be present because
+#. we need to handle that manually to insert a hyperlink
+#. instead of just printf'ing it.
+#: ../code/operations/operation-export-html.cpp:252
+#, c-format
+msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
+msgstr "Document généré à partir de %1$s:%2$s le %3$s par %4$s"
+
+#: ../code/operations/operation-export-html.cpp:393
+msgid "Participants"
+msgstr "Participants"
+
+#: ../code/operations/operation-export-html.cpp:454
+msgid "Exporting document \"%1\" to \"%2\" in HTML..."
+msgstr "Exportation HTML du document « %1 » vers « %2 »..."
+
+#: ../code/operations/operation-export-html.cpp:526
+msgid "Failed to export document \"%1\" to HTML"
+msgstr "Impossible d'exporter le document « %1 » en HTML"
+
+#: ../code/operations/operation-new.cpp:56
+msgid "Creating directory \"%1\"..."
+msgstr "Création du dossier « %1 »..."
+
+#: ../code/operations/operation-new.cpp:57
+msgid "Creating document \"%1\"..."
+msgstr "Création du document « %1 »..."
+
+#: ../code/operations/operation-new.cpp:73
+msgid "Failed to create directory \"%1\""
+msgstr "Impossible de créer le dossier « %1 »"
+
+#: ../code/operations/operation-new.cpp:74
+msgid "Failed to create document \"%1\""
+msgstr "Impossible de créer le document « %1 »"
+
+#. Translators: This is the 8 bit encoding that is tried when
+#. autodetecting a file's encoding.
+#: ../code/operations/operation-open.cpp:38
+msgid "ISO-8859-1"
+msgstr "ISO-8859-1"
+
+#: ../code/operations/operation-open.cpp:89
+msgid "Opening document \"%1\"..."
+msgstr "Ouverture du document « %1 »..."
+
+#: ../code/operations/operation-open.cpp:124
+msgid ""
+"The directory into which the new document was supposed to be inserted has "
+"been removed"
+msgstr ""
+"Le dossier dans lequel le document aurait dû être inséré a été supprimé"
+
+#: ../code/operations/operation-open.cpp:313
+msgid "The file contains data not in the specified encoding"
+msgstr ""
+"Le fichier contient des données incompatibles avec le jeu de caractères "
+"indiqué"
+
+#: ../code/operations/operation-open.cpp:324
+msgid ""
+"The file either contains data in an unknown encoding, or it contains binary "
+"data."
+msgstr ""
+"Soit le fichier contient des données dans un codage inconnu, soit il "
+"contient des données binaires."
+
+#: ../code/operations/operation-open-multiple.cpp:84
+msgid "Parent folder was removed"
+msgstr "Le dossier parent a été supprimé"
+
+#: ../code/operations/operation-open-multiple.cpp:172
+msgid "Failed to open multiple documents"
+msgstr "Impossible d'ouvrir plusieurs documents"
+
+#: ../code/operations/operation-save.cpp:74
+msgid "Saving document \"%1\" to \"%2\"..."
+msgstr "Enregistrement du document « %1 » vers « %2 »..."
+
+#: ../code/operations/operation-save.cpp:227
+msgid ""
+"The document contains one or more characters that cannot be encoded in the "
+"specified character coding."
+msgstr ""
+"Le document contient un ou plusieurs caractères qui ne peuvent pas être "
+"codés dans le jeu de caractères indiqué."
+
+#: ../code/operations/operation-save.cpp:288
+msgid "Failed to save document \"%1\""
+msgstr "L'enregistrement du document « %1 » a échoué"
+
+#: ../code/util/file.cpp:67 ../code/util/file.cpp:76
+msgid "Could not create directory \"%1\": %2"
+msgstr "Impossible de créer le "
+
+#: ../code/window.cpp:112
+msgid "Document Browser"
+msgstr "Navigateur de documents"
+
+#: ../code/window.cpp:168
+msgid "You are still connected to a session"
+msgstr "Vous êtes toujours connecté à une session"
+
+#: ../code/window.cpp:176
+msgid "Do you want to close Gobby nevertheless?"
+msgstr "Souhaitez-vous tout de même fermer Gobby ?"
+
+#: ../code/window.cpp:182
+msgid "C_ancel"
+msgstr "_Annuler"
+
+#: ../gobby-0.5.desktop.in.h:1
+msgid "Collaborative Editor"
+msgstr "Éditeur collaboratif"
+
+#: ../gobby-0.5.desktop.in.h:2
+msgid "Edit text files collaboratively"
+msgstr "Éditer des fichiers texte de manière collaborative"
+
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby"
+msgstr "Gobby"
+
+#: ../gobby-0.5.desktop.in.h:4
+msgid "Gobby Collaborative Editor (0.5)"
+msgstr "Éditeur collaboratif Gobby (0.5)"

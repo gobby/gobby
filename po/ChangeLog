@@ -1,3 +1,8 @@
+2010-11-16  Claude Paroz  <claude@2xlibre.net>
+
+	* fr.po: Add French translation.
+	* LINGUAS: Add fr.
+
 2010-06-20  Armin Burgmeier  <armin@arbur.net>
 
 	* en_GB.po:
