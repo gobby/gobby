@@ -1,3 +1,8 @@
+2010-11-18  Takahiro Sunaga  <sunagae@sunagae.net>
+
+	* ja.po: Add Japanese translation.
+	* LINGUAS: Add ja.
+
 2010-11-16  Claude Paroz  <claude@2xlibre.net>
 
 	* fr.po: Add French translation.

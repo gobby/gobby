@@ -1,0 +1,968 @@
+# Japanese translations for gobby package.
+# Copyright (C) 2010 THE gobby'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gobby package.
+#  <sunagae@sunagae.net>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gobby 0.4.94\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-06-20 14:26+0200\n"
+"PO-Revision-Date: 2010-11-19 01:09+0900\n"
+"Last-Translator: Takahiro Sunaga <sunagae@sunagae.net>\n"
+"Language-Team: Japanese\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../code/commands/browser-commands.cpp:109
+msgid "Subscribing to %1..."
+msgstr "%1へ加入..."
+
+#: ../code/commands/browser-commands.cpp:122
+msgid "Subscribing to chat on %1..."
+msgstr "チャット%1へ加入..."
+
+#: ../code/commands/browser-commands.cpp:307
+msgid "Subscription failed"
+msgstr "加入に失敗"
+
+#: ../code/commands/browser-context-commands.cpp:94
+msgid "Create Do_cument..."
+msgstr "ドキュメントの作成(_C)"
+
+#: ../code/commands/browser-context-commands.cpp:129
+msgid "Create Directory..."
+msgstr "ディレクトリの作成"
+
+#: ../code/commands/browser-context-commands.cpp:142
+msgid "_Open Document..."
+msgstr "ドキュメントを開く(_O)"
+
+#: ../code/commands/browser-context-commands.cpp:161
+msgid "D_elete"
+msgstr "削除(_D)"
+
+#: ../code/commands/browser-context-commands.cpp:197
+msgid "Choose a name for the directory"
+msgstr "ディレクトリ名の選択"
+
+#: ../code/commands/browser-context-commands.cpp:198
+msgid "Choose a name for the document"
+msgstr "ドキュメント名の選択"
+
+#: ../code/commands/browser-context-commands.cpp:199
+msgid "_Directory Name:"
+msgstr "ディレクトリ名(_D)"
+
+#: ../code/commands/browser-context-commands.cpp:200
+msgid "_Document Name:"
+msgstr "ドキュメント名(_D)"
+
+#: ../code/commands/browser-context-commands.cpp:203
+msgid "C_reate"
+msgstr "作成(_C)"
+
+#: ../code/commands/browser-context-commands.cpp:207
+msgid "New Directory"
+msgstr "新規ディレクトリ"
+
+#: ../code/commands/browser-context-commands.cpp:208
+#: ../code/commands/file-tasks/task-new.cpp:38
+msgid "New Document"
+msgstr "新規ドキュメント"
+
+#: ../code/commands/browser-context-commands.cpp:224
+#: ../code/commands/file-tasks/task-open-file.cpp:24
+msgid "Choose a text file to open"
+msgstr "開くテキストファイルの選択"
+
+#: ../code/commands/file-tasks/task-export-html.cpp:29
+msgid "Choose a location to export document \"%1\" to"
+msgstr "\"%1\"をエクスポートする先の選択"
+
+#: ../code/commands/file-tasks/task-open.cpp:48
+msgid "Querying \"%1\"..."
+msgstr "\"%1\"の問い合わせ..."
+
+#: ../code/commands/file-tasks/task-open.cpp:105
+#: ../code/operations/operation-open.cpp:437
+#: ../code/operations/operation-open-multiple.cpp:159
+msgid "Failed to open document \"%1\""
+msgstr "\"%1\"を開くのに失敗しました"
+
+#: ../code/commands/file-tasks/task-save.cpp:26
+msgid "Choose a location to save document \"%1\" to"
+msgstr "\"%1\"を保存する先の選択"
+
+#. Help browser could not be invoked, show an error message to the user.
+#: ../code/commands/help-commands.cpp:69
+msgid "There was an error displaying help."
+msgstr "ヘルプ表示時にエラーが発生しました。"
+
+#: ../code/commands/help-commands.cpp:92
+msgid "Contributors:"
+msgstr "貢献者:"
+
+#: ../code/commands/help-commands.cpp:98
+msgid "British English:"
+msgstr "British English:"
+
+#: ../code/commands/help-commands.cpp:100
+msgid "German:"
+msgstr "German:"
+
+#: ../code/commands/help-commands.cpp:117
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,  but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA"
+msgstr ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,  but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for "
+"more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License along with "
+"this program; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA"
+
+#: ../code/commands/subscription-commands.cpp:259
+msgid ""
+"The connection to the publisher of this document has been lost. Further "
+"changes to the document could not be synchronized to others anymore, "
+"therefore the document cannot be edited anymore.\n"
+"\n"
+"Please note also that it is possible that not all of your latest changes "
+"have reached the publisher before the connection was lost."
+msgstr ""
+"このドキュメントの発行者への接続が失われました。ドキュメントへの変更の同期が"
+"これ以上できないため、このドキュメントはこれ以上編集できません。\n"
+"\n"
+"発行者への接続が失われる前に伝達された変更でも適用されていない可能性がありま"
+"す。"
+
+#: ../code/commands/synchronization-commands.cpp:32
+msgid "Synchronization in progress... %1%%"
+msgstr "同期中です... %1%%"
+
+#. Document cannot be used if an error happened
+#. during synchronization.
+#: ../code/commands/synchronization-commands.cpp:44
+msgid "This document cannot be used."
+msgstr "このドキュメントは使用できません。"
+
+#: ../code/commands/synchronization-commands.cpp:47
+#: ../code/commands/user-join-commands.cpp:40
+msgid ""
+"If you have an idea what could have caused the problem, then you may attempt "
+"to solve it and try again (after having closed this document). Otherwise it "
+"is most likely a bug in the software. In that case, please file a bug report "
+"at http://gobby.0x539.de/trac/newticket and provide as much information as "
+"you can, including what you did when the problem occurred and how to "
+"reproduce the problem (if possible) so that we can fix the problem in a "
+"later version. Thank you."
+msgstr ""
+"もしなにがこの問題を引き起こしているか分かる場合、それを解決してもう一度試し"
+"てください(このドキュメントを閉じた後)。そうでなければこのソフトウェアのバグ"
+"の可能性があります。この場合は私たちは今後のバージョンで問題を修復できるよう"
+"に、http://gobby.0x539.de/trac/newticket(英語)にバグレポートを記録し、この問"
+"題が起きたときどんな操作をしていたか、または問題の再現の方法(可能ならば)を含"
+"むできるだけたくさんの情報を提供してください。よろしくお願いします。"
+
+#: ../code/commands/synchronization-commands.cpp:61
+msgid "Synchronization failed: %1"
+msgstr "同期に失敗しました: %1"
+
+#. TODO: Adjust this for chat sessions
+#: ../code/commands/user-join-commands.cpp:35
+msgid ""
+"You can still watch others editing the document, but you cannot edit it "
+"yourself."
+msgstr ""
+"このドキュメントが他人によって編集されるのを見ることができますが、編集はでき"
+"ません。"
+
+#: ../code/commands/user-join-commands.cpp:54
+msgid "User Join failed: %1"
+msgstr "ユーザーの参加に失敗: %1"
+
+#: ../code/commands/user-join-commands.cpp:283
+msgid "User Join in progress..."
+msgstr "ユーザーの参加処理を行っています..."
+
+#: ../code/core/browser.cpp:113
+msgid "_Direct Connection"
+msgstr "直接接続(_D)"
+
+#: ../code/core/browser.cpp:115
+msgid "Host Name:"
+msgstr "ホスト名:"
+
+#: ../code/core/browser.cpp:301 ../code/core/browser.cpp:425
+msgid "Connection to \"%1\" failed"
+msgstr "\"%1\"への接続が失敗しました"
+
+#: ../code/core/browser.cpp:354
+msgid "Could not resolve \"%1\""
+msgstr "\"%1\"の解決に失敗しました"
+
+#: ../code/core/browser.cpp:428
+msgid "Device \"%1\" does not exist"
+msgstr "デバイス\"%1\"は存在しません"
+
+#: ../code/core/browser.cpp:464
+msgid "Resolving \"%1\"..."
+msgstr "\"%1\"を解決しています..."
+
+#: ../code/core/header.cpp:198
+msgid "_None"
+msgstr "_None"
+
+#: ../code/core/header.cpp:222
+msgid "_File"
+msgstr "ファイル(_F)"
+
+#: ../code/core/header.cpp:225
+msgid "_Open..."
+msgstr "開く(_O)"
+
+#: ../code/core/header.cpp:228
+msgid "Open _Location..."
+msgstr "場所を開く(_L)"
+
+#: ../code/core/header.cpp:232
+msgid "Save _As..."
+msgstr "名前をつけて保存(_A)"
+
+#: ../code/core/header.cpp:236 ../code/core/iconmanager.cpp:40
+msgid "Save All"
+msgstr "すべて保存"
+
+#: ../code/core/header.cpp:236
+msgid "Save all open files locally"
+msgstr "開かれているすべてのファイルをローカルへ保存"
+
+#: ../code/core/header.cpp:238
+msgid "Export As _HTML..."
+msgstr "HTMLとしてエクスポート(_H)"
+
+#: ../code/core/header.cpp:241
+msgid "Connect _to Server..."
+msgstr "サーバーへ接続(_T)"
+
+#: ../code/core/header.cpp:246
+msgid "_Edit"
+msgstr "編集(_E)"
+
+#: ../code/core/header.cpp:254
+msgid "_Find..."
+msgstr "検索(_F)"
+
+#: ../code/core/header.cpp:256
+msgid "Find Ne_xt"
+msgstr "次を検索(_X)"
+
+#: ../code/core/header.cpp:257
+msgid "Find next match of phrase searched for"
+msgstr "フレーズ検索の次を検索"
+
+#: ../code/core/header.cpp:260
+msgid "Find Pre_vious"
+msgstr "前を検索(_V)"
+
+#: ../code/core/header.cpp:261
+msgid "Find previous match of phrase searched for"
+msgstr "フレーズ検索の前を検索"
+
+#: ../code/core/header.cpp:266
+msgid "Find and Rep_lace..."
+msgstr "置換(_L)"
+
+#: ../code/core/header.cpp:270
+msgid "Go to _Line..."
+msgstr "指定行へ移動(_L)"
+
+#: ../code/core/header.cpp:274
+msgid "Pr_eferences..."
+msgstr "設定(_E)"
+
+#: ../code/core/header.cpp:276
+msgid "_View"
+msgstr "表示(_V)"
+
+#: ../code/core/header.cpp:279
+msgid "Reset User Colors"
+msgstr "ユーザーカラーをリセット"
+
+#: ../code/core/header.cpp:280
+msgid "Hide user colors in current document"
+msgstr "このドキュメントユーザーカラーを非表示"
+
+#: ../code/core/header.cpp:283
+msgid "View Toolbar"
+msgstr "ツールバー"
+
+#: ../code/core/header.cpp:284
+msgid "Whether to show the toolbar"
+msgstr "ツールバーを表示するかどうか"
+
+#: ../code/core/header.cpp:288
+msgid "View Statusbar"
+msgstr "ステータスバー"
+
+#: ../code/core/header.cpp:289
+msgid "Whether to show the statusbar"
+msgstr "ステータスバーを表示するかどうか"
+
+#: ../code/core/header.cpp:293
+msgid "View Document Browser"
+msgstr "ドキュメントブラウザ"
+
+#: ../code/core/header.cpp:294
+msgid "Whether to show the document browser"
+msgstr "ドキュメントブラウザを表示するかどうか"
+
+#: ../code/core/header.cpp:298
+msgid "View Chat"
+msgstr "チャット"
+
+#: ../code/core/header.cpp:299
+msgid "Whether to show the chat pane"
+msgstr "チャットを表示するかどうか"
+
+#: ../code/core/header.cpp:303
+msgid "View Document User List"
+msgstr "ドキュメントユーザーリスト"
+
+#: ../code/core/header.cpp:304
+msgid "Whether to show the user list for documents"
+msgstr "このドキュメントのユーザーリストを表示するかどうか"
+
+#: ../code/core/header.cpp:308
+msgid "View Chat User List"
+msgstr "チャットユーザーリスト"
+
+#: ../code/core/header.cpp:309
+msgid "Whether to show the user list for the chat"
+msgstr "チャットユーザーリストを表示するかどうか"
+
+#: ../code/core/header.cpp:313
+msgid "_Highlight Mode"
+msgstr "強調表示モード(_H)"
+
+#: ../code/core/header.cpp:319
+msgid "_Help"
+msgstr "ヘルプ(_H)"
+
+#: ../code/core/header.cpp:322
+msgid "_Contents"
+msgstr "目次(_C)"
+
+#: ../code/core/header.cpp:323
+msgid "Opens the Gobby manual"
+msgstr "Gobbyのマニュアルを開く"
+
+#: ../code/core/header.cpp:326
+msgid "_About..."
+msgstr "Gobbyについて(_A)"
+
+#: ../code/core/header.cpp:327
+msgid "Shows Gobby's copyright and credits"
+msgstr "Gobbyの著作権やクレジットの表示"
+
+#: ../code/core/iconmanager.cpp:46
+msgid "User list"
+msgstr "ユーザーリスト"
+
+#: ../code/core/iconmanager.cpp:52
+msgid "Document list"
+msgstr "ドキュメントリスト"
+
+#: ../code/core/iconmanager.cpp:58 ../code/window.cpp:49
+msgid "Chat"
+msgstr "チャット"
+
+#: ../code/core/iconmanager.cpp:65
+msgid "User Color Indicator"
+msgstr "ユーザーカラー表示"
+
+#: ../code/core/sessionuserview.cpp:41
+msgid "User List"
+msgstr "ユーザーリスト"
+
+#: ../code/core/statusbar.cpp:395
+msgid "Ln %1, Col %2\t%3"
+msgstr "%1行, %2列\t%3"
+
+#: ../code/core/statusbar.cpp:398
+msgid "OVR"
+msgstr "上書"
+
+#: ../code/core/statusbar.cpp:398
+msgid "INS"
+msgstr "挿入"
+
+#: ../code/core/textsessionview.cpp:519
+msgid "Text written by <b>%1</b>"
+msgstr "<b>%1</b>によって書かれたテキスト"
+
+#: ../code/core/textsessionview.cpp:525
+msgid "Unowned text"
+msgstr "所有していないテキスト"
+
+#: ../code/core/userlist.cpp:105
+msgid "Users"
+msgstr "ユーザー"
+
+#: ../code/dialogs/connection-dialog.cpp:28
+msgid "Connect to Server"
+msgstr "サーバーへ接続"
+
+#: ../code/dialogs/connection-dialog.cpp:32
+msgid "Please enter a host name with which to establish a connection."
+msgstr "接続先のホスト名を入力してください"
+
+#: ../code/dialogs/connection-dialog.cpp:34
+msgid "_Remote Endpoint:"
+msgstr "接続先(_R)"
+
+#: ../code/dialogs/document-location-dialog.cpp:29
+msgid "Document Name:"
+msgstr "ドキュメント名:"
+
+#: ../code/dialogs/document-location-dialog.cpp:156
+msgid "Select document's target location"
+msgstr "ドキュメントの対象場所を選択"
+
+#: ../code/dialogs/document-location-dialog.cpp:158
+msgid "Choose a directory to create the document into:"
+msgstr "ドキュメントをいれるディレクトリ名:"
+
+#: ../code/dialogs/document-location-dialog.cpp:164
+msgid "Select documents' target location"
+msgstr "ドキュメントの対象場所を選択"
+
+#: ../code/dialogs/document-location-dialog.cpp:166
+msgid "Choose a directory to create the documents into:"
+msgstr "ドキュメントをいれるディレクトリ名:"
+
+#: ../code/dialogs/find-dialog.cpp:46 ../code/dialogs/find-dialog.cpp:144
+msgid "Find"
+msgstr "検索"
+
+#: ../code/dialogs/find-dialog.cpp:49
+msgid "_Search for:"
+msgstr "検索文字列(_S):"
+
+#: ../code/dialogs/find-dialog.cpp:51
+msgid "Replace _with:"
+msgstr "置換先(_W)"
+
+#: ../code/dialogs/find-dialog.cpp:53
+msgid "_Match case"
+msgstr "大文字小文字の区別(_M)"
+
+#: ../code/dialogs/find-dialog.cpp:54
+msgid "Match _entire word only"
+msgstr "完全単語一致(_E)"
+
+#: ../code/dialogs/find-dialog.cpp:55
+msgid "Search _backwards"
+msgstr "前へ検索(_B)"
+
+#: ../code/dialogs/find-dialog.cpp:56
+msgid "Wra_p around"
+msgstr "行をはさむ(_P)"
+
+#: ../code/dialogs/find-dialog.cpp:102
+msgid "Replace _All"
+msgstr "すべて置換(_A)"
+
+#: ../code/dialogs/find-dialog.cpp:104
+msgid "_Replace"
+msgstr "置換(_R)"
+
+#: ../code/dialogs/find-dialog.cpp:144
+msgid "Replace"
+msgstr "置換"
+
+#: ../code/dialogs/find-dialog.cpp:163 ../code/dialogs/find-dialog.cpp:179
+msgid "Phrase \"%1\" has not been found"
+msgstr "フレーズ\"%1\"は発見されません"
+
+#: ../code/dialogs/find-dialog.cpp:337
+msgid "No occurrence has been replaced"
+msgstr "置換されませんでした"
+
+#: ../code/dialogs/find-dialog.cpp:343
+msgid "%1 occurrence has been replaced"
+msgid_plural "%1 occurrences have been replaced"
+msgstr[0] "%1件置換されました"
+
+#: ../code/dialogs/goto-dialog.cpp:27
+msgid "Go to line"
+msgstr "指定行へ移動"
+
+#: ../code/dialogs/goto-dialog.cpp:30
+msgid "Line _number:"
+msgstr "行番号(_N):"
+
+#: ../code/dialogs/goto-dialog.cpp:51
+msgid "Go To _Line"
+msgstr "指定行へ移動(_L)"
+
+#: ../code/dialogs/initial-dialog.cpp:49
+msgid "Choose a user color"
+msgstr "ユーザーカラーの選択"
+
+#: ../code/dialogs/initial-dialog.cpp:53
+msgid "Welcome to Gobby"
+msgstr "Gobbyへようそこ"
+
+#: ../code/dialogs/initial-dialog.cpp:62
+msgid ""
+"Before we start, a few options need to be configured. You can later change "
+"them by choosing Edit ▸ Preferences from the menu."
+msgstr ""
+"開始する前に、いくつかのオプションを設定する必要があります。これらは後から"
+"「設定」メニューで変更できます。"
+
+#: ../code/dialogs/initial-dialog.cpp:69
+msgid "User Name"
+msgstr "ユーザー名"
+
+#: ../code/dialogs/initial-dialog.cpp:71
+msgid "Your name as shown to other users."
+msgstr "他のユーザーへ表示されるあなたの名前"
+
+#: ../code/dialogs/initial-dialog.cpp:80
+msgid "User Color"
+msgstr "ユーザーカラー"
+
+#: ../code/dialogs/initial-dialog.cpp:82
+msgid "The color with which text you have written is branded."
+msgstr "あなたが書いた文章につけられる色"
+
+#: ../code/dialogs/open-location-dialog.cpp:27
+msgid "Open Location"
+msgstr "場所を開く"
+
+#: ../code/dialogs/open-location-dialog.cpp:28
+msgid "Enter the _location (URI) of the file you would like to open:"
+msgstr "開きたいファイルがある場所(URI)(_L):"
+
+#: ../code/dialogs/password-dialog.cpp:27
+msgid "Password Required"
+msgstr "パスワードが必要です"
+
+#: ../code/dialogs/password-dialog.cpp:33
+msgid "Connection to host \"%1\" requires a password."
+msgstr "ホスト\"%1\"への接続にはパスワードが必要です。"
+
+#: ../code/dialogs/password-dialog.cpp:34
+msgid "Invalid password for host \"%1\". Please try again."
+msgstr "ホスト\"%1\"のパスワードが違います。再試行してください。"
+
+#: ../code/dialogs/password-dialog.cpp:37
+msgid "Server _Password:"
+msgstr "サーバーパスワード(_P):"
+
+#: ../code/dialogs/preferences-dialog.cpp:232
+msgid "Settings"
+msgstr "設定"
+
+#: ../code/dialogs/preferences-dialog.cpp:233
+msgid "Paths"
+msgstr "パス"
+
+#: ../code/dialogs/preferences-dialog.cpp:235
+msgid "User name:"
+msgstr "ユーザー名:"
+
+#: ../code/dialogs/preferences-dialog.cpp:237
+msgid "User color:"
+msgstr "ユーザーカラー:"
+
+#: ../code/dialogs/preferences-dialog.cpp:238
+msgid "Choose a new user color"
+msgstr "新しいユーザーカラーを選択してください"
+
+#: ../code/dialogs/preferences-dialog.cpp:241
+msgid "Host directory:"
+msgstr "ホストディレクトリ:"
+
+#: ../code/dialogs/preferences-dialog.cpp:283
+msgid "The directory into which locally hosted sessions are permanently stored"
+msgstr "ローカルでホストされたセッションが恒久的に記憶されるディレクトリ"
+
+#: ../code/dialogs/preferences-dialog.cpp:300
+msgid "Tab Stops"
+msgstr "タブストップ"
+
+#: ../code/dialogs/preferences-dialog.cpp:301
+msgid "Indentation"
+msgstr "インデント"
+
+#: ../code/dialogs/preferences-dialog.cpp:302
+msgid "Home/End Behavior"
+msgstr "Home/Endキーの挙動"
+
+#: ../code/dialogs/preferences-dialog.cpp:303
+msgid "File Saving"
+msgstr "ファイルの保存"
+
+#: ../code/dialogs/preferences-dialog.cpp:304
+msgid "_Tab width:"
+msgstr "タブ幅(_T):"
+
+#: ../code/dialogs/preferences-dialog.cpp:306
+msgid "Insert _spaces instead of tabs"
+msgstr "タブ文字の代わりにスペースを挿入する(_I)"
+
+#: ../code/dialogs/preferences-dialog.cpp:307
+msgid "Enable automatic _indentation"
+msgstr "オートインデントを有効にする(_I)"
+
+#: ../code/dialogs/preferences-dialog.cpp:308
+msgid "Smart _home/end"
+msgstr "スマートhome/end(_H)"
+
+#: ../code/dialogs/preferences-dialog.cpp:309
+msgid "Enable _automatic saving of documents"
+msgstr "ドキュメントの自動保存を有効にする(_A)"
+
+#: ../code/dialogs/preferences-dialog.cpp:311
+msgid "Autosave interval in _minutes:"
+msgstr "自動保存間隔(分)(_M):"
+
+#: ../code/dialogs/preferences-dialog.cpp:332
+msgid ""
+"With this option enabled, Home/End keys move to first/last character before "
+"going to the start/end of the line."
+msgstr ""
+"このオプションによって、Home/Endキーは行頭/行末にいく前に最初/最後の文字へ移"
+"動するようになります。"
+
+#: ../code/dialogs/preferences-dialog.cpp:402
+msgid "Text Wrapping"
+msgstr "ワードラップ"
+
+#: ../code/dialogs/preferences-dialog.cpp:403
+msgid "Line Numbers"
+msgstr "行番号"
+
+#: ../code/dialogs/preferences-dialog.cpp:404
+msgid "Current Line"
+msgstr "現在行"
+
+#: ../code/dialogs/preferences-dialog.cpp:405
+msgid "Right Margin"
+msgstr "右マージン"
+
+#: ../code/dialogs/preferences-dialog.cpp:406
+msgid "Bracket Matching"
+msgstr "対応する括弧の表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:407
+msgid "Whitespace Display"
+msgstr "空白文字の表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:408
+msgid "Enable text wrapping"
+msgstr "ワードラップを有効にする"
+
+#: ../code/dialogs/preferences-dialog.cpp:409
+msgid "Do not split words over two lines"
+msgstr "一単語を二行に分割しない"
+
+#: ../code/dialogs/preferences-dialog.cpp:410
+msgid "Display line numbers"
+msgstr "行番号を表示する"
+
+#: ../code/dialogs/preferences-dialog.cpp:411
+msgid "Highlight current line"
+msgstr "現在の行をハイライトする"
+
+#: ../code/dialogs/preferences-dialog.cpp:412
+msgid "Display right margin"
+msgstr "右マージンの表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:413
+msgid "Right margin at column:"
+msgstr "右マージンの列数:"
+
+#: ../code/dialogs/preferences-dialog.cpp:414
+msgid "Highlight matching bracket"
+msgstr "対応する括弧のハイライト"
+
+#: ../code/dialogs/preferences-dialog.cpp:465
+msgid "Display no whitespace"
+msgstr "空白文字を表示しない"
+
+#: ../code/dialogs/preferences-dialog.cpp:468
+msgid "Display spaces"
+msgstr "スペースの表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:472
+msgid "Display tabs"
+msgstr "タブ文字の表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:476
+msgid "Display tabs and spaces"
+msgstr "タブ文字とスペースの表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:526
+msgid "Toolbar"
+msgstr "ツールバー"
+
+#: ../code/dialogs/preferences-dialog.cpp:527
+msgid "Font"
+msgstr "フォント"
+
+#: ../code/dialogs/preferences-dialog.cpp:528
+msgid "Color Scheme"
+msgstr "カラースキーム"
+
+#: ../code/dialogs/preferences-dialog.cpp:535
+msgid "Show text only"
+msgstr "テキストのみ表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:537
+msgid "Show icons only"
+msgstr "アイコンのみ表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:539
+msgid "Show both icons and text"
+msgstr "アイコンとテキストの表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:541
+msgid "Show text besides icons"
+msgstr "アイコンの隣にテキストを表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:620
+msgid "Trusted CAs"
+msgstr "信頼したCA"
+
+#: ../code/dialogs/preferences-dialog.cpp:621
+msgid "Secure Connection"
+msgstr "保護された接続"
+
+#: ../code/dialogs/preferences-dialog.cpp:622
+msgid "Select a file containing trusted CAs"
+msgstr "信頼されたCAを含むファイルの選択"
+
+#: ../code/dialogs/preferences-dialog.cpp:639
+msgid "Use TLS if possible"
+msgstr "可能であればTLSを使用する"
+
+#: ../code/dialogs/preferences-dialog.cpp:642
+msgid "Always use TLS"
+msgstr "常にTLSを使用する"
+
+#: ../code/dialogs/preferences-dialog.cpp:654
+msgid "Preferences"
+msgstr "設定"
+
+#: ../code/dialogs/preferences-dialog.cpp:659
+msgid "User"
+msgstr "ユーザー"
+
+#: ../code/dialogs/preferences-dialog.cpp:660
+msgid "Editor"
+msgstr "エディタ"
+
+#: ../code/dialogs/preferences-dialog.cpp:661
+msgid "View"
+msgstr "表示"
+
+#: ../code/dialogs/preferences-dialog.cpp:662
+msgid "Appearance"
+msgstr "外観"
+
+#: ../code/dialogs/preferences-dialog.cpp:663
+msgid "Security"
+msgstr "セキュリティ"
+
+#: ../code/main.cpp:196
+msgid "Gobby options"
+msgstr "Gobbyオプション"
+
+#: ../code/main.cpp:196
+msgid "Options related to Gobby"
+msgstr "Gobbyに関連したオプション"
+
+#: ../code/main.cpp:201
+msgid "Display version information and exit"
+msgstr "バージョン情報を表示して終了"
+
+#: ../code/main.cpp:208
+msgid "Also start a new Gobby instance when there is one running already"
+msgstr "Gobbyが既にひとつ起動していても新しいインスタンスを起動する"
+
+#: ../code/main.cpp:216
+msgid "Connect to given host on startup, can be given multiple times"
+msgstr "起動時に与えられたホストへ接続します。複数回指定できます。"
+
+#: ../code/main.cpp:217
+msgid "HOSTNAME"
+msgstr "HOSTNAME"
+
+#: ../code/operations/operation-delete.cpp:42
+msgid "Removing node \"%1\"..."
+msgstr "ノード\"%1\"を削除..."
+
+#: ../code/operations/operation-delete.cpp:57
+msgid "Failed to delete node \"%1\""
+msgstr "ノード\"%1\"の削除に失敗"
+
+#: ../code/operations/operation-export-html.cpp:166
+#, c-format
+msgid "written by: %s"
+msgstr "%sによって書かれた"
+
+#: ../code/operations/operation-export-html.cpp:239
+msgid "<unable to print date>"
+msgstr "<日付を表示できません>"
+
+#. %1$s is session name/hostname
+#. %2$s is path within the session
+#. %3$s is current date as formatted by %c,
+#. %4$s is a link to the gobby site, it must be present because
+#. we need to handle that manually to insert a hyperlink
+#. instead of just printf'ing it.
+#: ../code/operations/operation-export-html.cpp:252
+#, c-format
+msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
+msgstr "ドキュメントは%3$sの%1$s:%2$sから%4$sによって生成された"
+
+#: ../code/operations/operation-export-html.cpp:393
+msgid "Participants"
+msgstr "参加者"
+
+#: ../code/operations/operation-export-html.cpp:454
+msgid "Exporting document \"%1\" to \"%2\" in HTML..."
+msgstr "\"%1\"を\"%2\"へHTMLでエクスポート..."
+
+#: ../code/operations/operation-export-html.cpp:526
+msgid "Failed to export document \"%1\" to HTML"
+msgstr "\"%1\"のHTMLでのエクスポートに失敗しました"
+
+#: ../code/operations/operation-new.cpp:56
+msgid "Creating directory \"%1\"..."
+msgstr "ディレクトリ\"%1\"の作成..."
+
+#: ../code/operations/operation-new.cpp:57
+msgid "Creating document \"%1\"..."
+msgstr "ドキュメント\"%1\"の作成"
+
+#: ../code/operations/operation-new.cpp:73
+msgid "Failed to create directory \"%1\""
+msgstr "ディレクトリ\"%1\"の作成に失敗しました"
+
+#: ../code/operations/operation-new.cpp:74
+msgid "Failed to create document \"%1\""
+msgstr "ドキュメント\"%1\"の作成に失敗しました"
+
+#. Translators: This is the 8 bit encoding that is tried when
+#. autodetecting a file's encoding.
+#: ../code/operations/operation-open.cpp:38
+msgid "ISO-8859-1"
+msgstr "ISO-8859-1"
+
+#: ../code/operations/operation-open.cpp:89
+msgid "Opening document \"%1\"..."
+msgstr "ドキュメント\"%1\"を開く..."
+
+#: ../code/operations/operation-open.cpp:124
+msgid ""
+"The directory into which the new document was supposed to be inserted has "
+"been removed"
+msgstr "新しいドキュメントを挿入しようとしたディレクトリは削除されています"
+
+#: ../code/operations/operation-open.cpp:313
+msgid "The file contains data not in the specified encoding"
+msgstr "入力されたエンコーディングでないデータがファイルに含まれています"
+
+#: ../code/operations/operation-open.cpp:324
+msgid ""
+"The file either contains data in an unknown encoding, or it contains binary "
+"data."
+msgstr "未知のエンコーディングか、バイナリデータがファイルに含まれています"
+
+#: ../code/operations/operation-open-multiple.cpp:84
+msgid "Parent folder was removed"
+msgstr "親フォルダは削除されました"
+
+#: ../code/operations/operation-open-multiple.cpp:172
+msgid "Failed to open multiple documents"
+msgstr "複数のファイルを開くのに失敗"
+
+#: ../code/operations/operation-save.cpp:74
+msgid "Saving document \"%1\" to \"%2\"..."
+msgstr "\"%1\"を\"%2\"へ保存..."
+
+#: ../code/operations/operation-save.cpp:227
+msgid ""
+"The document contains one or more characters that cannot be encoded in the "
+"specified character coding."
+msgstr ""
+"指定された文字エンコーディングでエンコードできない文字がドキュメントに含まれ"
+"ています"
+
+#: ../code/operations/operation-save.cpp:288
+msgid "Failed to save document \"%1\""
+msgstr "ドキュメント\"%1\"の保存に失敗しました"
+
+#: ../code/util/file.cpp:67 ../code/util/file.cpp:76
+msgid "Could not create directory \"%1\": %2"
+msgstr "ディレクトリ\"%1\"を作成できませんでした: %2"
+
+#: ../code/window.cpp:112
+msgid "Document Browser"
+msgstr "ドキュメントブラウザ"
+
+#: ../code/window.cpp:168
+msgid "You are still connected to a session"
+msgstr "まだセッションに接続されています"
+
+#: ../code/window.cpp:176
+msgid "Do you want to close Gobby nevertheless?"
+msgstr "それでもGobbyを閉じてもいいですか？"
+
+#: ../code/window.cpp:182
+msgid "C_ancel"
+msgstr "キャンセル(_C)"
+
+#: ../gobby-0.5.desktop.in.h:1
+msgid "Collaborative Editor"
+msgstr "共同作業テキストエディタ"
+
+#: ../gobby-0.5.desktop.in.h:2
+msgid "Edit text files collaboratively"
+msgstr "テキストを共同作業で編集する"
+
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby"
+msgstr "Gobby"
+
+#: ../gobby-0.5.desktop.in.h:4
+msgid "Gobby Collaborative Editor (0.5)"
+msgstr "Gobby Collaborative Editor (0.5)"
