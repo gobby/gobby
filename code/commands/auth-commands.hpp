@@ -19,11 +19,11 @@
 #ifndef _GOBBY_AUTH_COMMANDS_HPP_
 #define _GOBBY_AUTH_COMMANDS_HPP_
 
+#include "dialogs/password-dialog.hpp"
+
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
 #include "core/preferences.hpp"
-
-#include <gsasl.h>
 
 #include <gtkmm/window.h>
 #include <sigc++/trackable.h>
@@ -42,13 +42,15 @@ public:
 	~AuthCommands();
 
 protected:
-	static int gsasl_callback_static(Gsasl* ctx,
-	                                 Gsasl_session* session,
-	                                 Gsasl_property prop)
+	static void sasl_callback_static(InfSaslContextSession* session,
+	                                 Gsasl_property prop,
+					 gpointer session_data,
+					 gpointer user_data)
 	{
-		AuthCommands* auth = static_cast<AuthCommands*>(
-			gsasl_callback_hook_get(ctx));
-		return auth->gsasl_callback(session, prop);
+		AuthCommands* auth = static_cast<AuthCommands*>(user_data);
+
+		auth->sasl_callback(
+			session, INF_XMPP_CONNECTION(session_data), prop);
 	}
 
 	static void set_browser_callback_static(InfGtkBrowserModel*,
@@ -79,7 +81,8 @@ protected:
 		auth->browser_error_callback(browser, error);
 	}
 
-	int gsasl_callback(Gsasl_session* session,
+	void sasl_callback(InfSaslContextSession* session,
+	                   InfXmppConnection* xmpp,
 	                   Gsasl_property prop);
 
 	void set_browser_callback(InfcBrowser* browser);
@@ -95,6 +98,7 @@ protected:
 		unsigned int retries;
 		Glib::ustring last_password;
 		gulong handle;
+		PasswordDialog* password_dialog;
 	};
 
 	typedef std::map<InfXmppConnection*, RetryInfo> RetryMap;
@@ -102,12 +106,14 @@ protected:
 	RetryMap::iterator insert_retry_info(InfXmppConnection* xmpp);
 
 	void on_notify_status(InfXmppConnection* connection);
+	void on_response(int response_id, InfSaslContextSession* session,
+	                 InfXmppConnection* xmpp);
 
 	Gtk::Window& m_parent;
 	Browser& m_browser;
 	StatusBar& m_statusbar;
 	const Preferences& m_preferences;
-	Gsasl* m_gsasl;
+	InfSaslContext* m_sasl_context;
 
 	RetryMap m_retries;
 };

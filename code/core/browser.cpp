@@ -109,7 +109,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_text_plugin(text_plugin),
 	m_status_bar(status_bar),
 	m_preferences(preferences),
-	m_gsasl(NULL),
+	m_sasl_context(NULL),
 	m_expander(_("_Direct Connection"), true),
 	m_hbox(false, 6),
 	m_label_hostname(_("Host Name:")),
@@ -204,6 +204,9 @@ Gobby::Browser::~Browser()
 	{
 		cancel(iter->first);
 	}
+
+	if(m_sasl_context)
+		inf_sasl_context_unref(m_sasl_context);
 
 	g_object_unref(m_browser_store);
 	g_object_unref(m_sort_model);
@@ -309,10 +312,10 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 				NULL, hostname.c_str(),
 				m_preferences.security.policy,
 				NULL,
-				m_gsasl,
-				m_gsasl_mechanisms.empty()
+				m_sasl_context,
+				m_sasl_mechanisms.empty()
 					? ""
-					: m_gsasl_mechanisms.c_str());
+					: m_sasl_mechanisms.c_str());
 
 			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
 			g_object_unref(xmpp);
@@ -467,13 +470,17 @@ void Gobby::Browser::connect_to_host(Glib::ustring str)
 	m_resolv_map[resolv_handle].message_handle = message_handle;
 }
 
-void Gobby::Browser::set_gsasl_context(Gsasl* gsasl, const char* mechanisms)
+void Gobby::Browser::set_sasl_context(InfSaslContext* sasl_context,
+                                      const char* mechanisms)
 {
-	m_gsasl = gsasl;
-	m_gsasl_mechanisms = mechanisms ? mechanisms : "";
+	if(m_sasl_context) inf_sasl_context_unref(m_sasl_context);
+	m_sasl_context = sasl_context;
+	if(m_sasl_context) inf_sasl_context_ref(m_sasl_context);
+	m_sasl_mechanisms = mechanisms ? mechanisms : "";
+
 #ifdef LIBINFINITY_HAVE_AVAHI
 	g_object_set(G_OBJECT(m_discovery),
-		"sasl-context", m_gsasl,
+		"sasl-context", m_sasl_context,
 		"sasl-mechanisms", mechanisms,
 		NULL);
 #endif

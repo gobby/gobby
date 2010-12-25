@@ -1,3 +1,11 @@
+2010-12-25  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/browser.hpp:
+	* code/core/browser.cpp:
+	* code/commands/auth-commands.hpp:
+	* code/commands/auth-commands.cpp: Adapt to latest API changes in
+	libinfinity, show password dialog asynchronously.
+
 2010-09-21  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/browser-context-commands.hpp:
