@@ -19,6 +19,7 @@
 #include "dialogs/preferences-dialog.hpp"
 #include "util/color.hpp"
 #include "util/i18n.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
@@ -233,13 +234,13 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_group_paths(_("Paths")),
 	m_group_remote(_("Remote Users")),
 	m_box_user_name(false, 6),
-	m_lbl_user_name(_("User name:"), Gtk::ALIGN_LEFT),
+	m_lbl_user_name(_("User name:"), GtkCompat::ALIGN_LEFT),
 	m_box_user_color(false, 6),
-	m_lbl_user_color(_("User color:"), Gtk::ALIGN_LEFT),
+	m_lbl_user_color(_("User color:"), GtkCompat::ALIGN_LEFT),
 	m_btn_user_color(_("Choose a new user color"), parent),
 	m_box_path_host_directory(false, 6),
-	m_btn_path_host_directory(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
 	m_lbl_path_host_directory(_("Host directory:")),
+	m_btn_path_host_directory(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
 	m_btn_remote_show_cursors(_("Show cursors of remote users")),
 	m_btn_remote_show_selections(_("Show selections of remote users")),
 	m_btn_remote_show_current_lines(
@@ -339,7 +340,7 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_indentation(_("Indentation")),
 	m_group_homeend(_("Home/End Behavior")),
 	m_group_saving(_("File Saving")),
-	m_lbl_tab_width(_("_Tab width:"), Gtk::ALIGN_RIGHT,
+	m_lbl_tab_width(_("_Tab width:"), GtkCompat::ALIGN_RIGHT,
 	                Gtk::ALIGN_CENTER, true),
 	m_btn_tab_spaces(_("Insert _spaces instead of tabs"), true),
 	m_btn_indentation_auto(_("Enable automatic _indentation"), true),
@@ -640,7 +641,11 @@ Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
 			sigc::mem_fun(*this, &Appearance::on_scheme_changed),
 			sigc::ref(preferences)));
 
-	m_list->set_sort_column_id(m_columns.name, Gtk::SORT_ASCENDING); // This should do it
+#ifdef USE_GTKMM3
+	m_list->set_sort_column(m_columns.name, Gtk::SORT_ASCENDING);
+#else
+	m_list->set_sort_column_id(m_columns.name, Gtk::SORT_ASCENDING);
+#endif
 
 	add(m_group_toolbar, false);
 	add(m_group_font, false);

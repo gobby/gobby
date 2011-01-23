@@ -18,6 +18,7 @@
 
 #include "dialogs/document-location-dialog.hpp"
 #include "util/i18n.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <gtkmm/stock.h>
 
@@ -26,8 +27,8 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 	Gtk::Dialog("", parent),
 	m_box(false, 6),
 	m_name_box(false, 6),
-	m_name_label(_("Document Name:"), Gtk::ALIGN_RIGHT),
-	m_location_label("", Gtk::ALIGN_LEFT),
+	m_name_label(_("Document Name:"), GtkCompat::ALIGN_RIGHT),
+	m_location_label("", GtkCompat::ALIGN_LEFT),
 	m_filter_model(inf_gtk_browser_model_filter_new(m)),
 	m_view(INF_GTK_BROWSER_VIEW(inf_gtk_browser_view_new_with_model(
 		INF_GTK_BROWSER_MODEL(m_filter_model))))
@@ -171,7 +172,7 @@ void Gobby::DocumentLocationDialog::on_show()
 {
 	Gtk::Dialog::on_show();
 
-	if (m_name_box.is_visible())
+	if (GtkCompat::is_visible(m_name_box))
 	{
 		m_name_entry.select_region(0, m_name_entry.get_text_length());
 		m_name_entry.grab_focus();

@@ -37,16 +37,16 @@ namespace
 
 		KeyMap()
 		{
-			m_keyvals[GDK_0] = 9;
-			m_keyvals[GDK_1] = 0;
-			m_keyvals[GDK_2] = 1;
-			m_keyvals[GDK_3] = 2;
-			m_keyvals[GDK_4] = 3;
-			m_keyvals[GDK_5] = 4;
-			m_keyvals[GDK_6] = 5;
-			m_keyvals[GDK_7] = 6;
-			m_keyvals[GDK_8] = 7;
-			m_keyvals[GDK_9] = 8;
+			m_keyvals[GDK_KEY_0] = 9;
+			m_keyvals[GDK_KEY_1] = 0;
+			m_keyvals[GDK_KEY_2] = 1;
+			m_keyvals[GDK_KEY_3] = 2;
+			m_keyvals[GDK_KEY_4] = 3;
+			m_keyvals[GDK_KEY_5] = 4;
+			m_keyvals[GDK_KEY_6] = 5;
+			m_keyvals[GDK_KEY_7] = 6;
+			m_keyvals[GDK_KEY_8] = 7;
+			m_keyvals[GDK_KEY_9] = 8;
 		}
 
 		unsigned int lookup(guint key) const
@@ -266,11 +266,12 @@ void Gobby::Folder::on_tab_close_request(SessionView& view)
 		remove_document(view);
 }
 
-void Gobby::Folder::on_switch_page(GtkNotebookPage* page, guint page_num)
+void Gobby::Folder::on_switch_page(Gtk::Widget* page, guint page_num)
 {
-	Gtk::Notebook::on_switch_page(page, page_num);
-	SessionUserView& view =
-		*static_cast<SessionUserView*>(get_nth_page(page_num));
+	Notebook::on_switch_page(page, page_num);
+//	SessionUserView& view =
+//		*static_cast<SessionUserView*>(get_nth_page(page_num));
+	SessionUserView& view = *static_cast<SessionUserView*>(page);
 
 	m_signal_document_changed.emit(&view.get_session_view());
 }
@@ -293,8 +294,8 @@ bool Gobby::Folder::on_key_press_event(GdkEventKey* event)
 	    (GDK_CONTROL_MASK | GDK_MOD1_MASK))
 	{
 		int offset = 0;
-		if(event->keyval == GDK_Page_Up) offset = -1;
-		if(event->keyval == GDK_Page_Down) offset = 1;
+		if(event->keyval == GDK_KEY_Page_Up) offset = -1;
+		if(event->keyval == GDK_KEY_Page_Down) offset = 1;
 
 		if(offset != 0)
 		{

@@ -104,10 +104,18 @@ Gobby::TextTabLabel::~TextTabLabel()
 	g_signal_handler_disconnect(buffer, m_insert_text_handle);
 }
 
+#ifdef USE_GTKMM3
+void Gobby::TextTabLabel::on_style_updated()
+#else
 void
 Gobby::TextTabLabel::on_style_changed(const Glib::RefPtr<Gtk::Style>& prev)
+#endif
 {
+#ifdef USE_GTKMM3
+	TabLabel::on_style_updated();
+#else
 	TabLabel::on_style_changed(prev);
+#endif
 
 	static const gunichar dot_chars[] = {
 		0x270E, /* pencil */

@@ -442,8 +442,7 @@ namespace
 Gobby::OperationExportHtml::OperationExportHtml(Operations& operations,
                                                 TextSessionView& view,
                                                 const std::string& uri):
-	Operation(operations), m_index(0),
-	m_xml(export_html(view))
+	Operation(operations), m_xml(export_html(view)), m_index(0)
 {
 	m_file = Gio::File::create_for_uri(uri);
 	m_file->replace_async(

@@ -86,7 +86,7 @@ namespace
 	                            const std::vector<Glib::ustring>& uris)
 	{
 		std::vector<const gchar*> uri_cstrs(uris.size() + 1);
-		for(int i = 0; i < uris.size(); ++i)
+		for(unsigned int i = 0; i < uris.size(); ++i)
 			uri_cstrs[i] = uris[i].c_str();
 
 		UniqueMessageData* message = unique_message_data_new();
@@ -147,7 +147,7 @@ namespace
 		const std::vector<Glib::ustring>& hostnames)
 	{
 		std::vector<Glib::ustring> uris(hostnames);
-		for(int i = 0; i < uris.size(); ++i)
+		for(unsigned int i = 0; i < uris.size(); ++i)
 		{
 			uris[i].insert(0, "infinote://");
 		}

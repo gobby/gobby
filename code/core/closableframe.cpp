@@ -18,6 +18,7 @@
 
 #include "core/closableframe.hpp"
 #include "util/closebutton.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <gtkmm/image.h>
 #include <gtkmm/label.h>
@@ -41,7 +42,7 @@ Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
 	image->show();
 
 	Gtk::Label* label_title = Gtk::manage(
-		new Gtk::Label(title, Gtk::ALIGN_LEFT));
+		new Gtk::Label(title, GtkCompat::ALIGN_LEFT));
 	label_title->show();
 
 	Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox(false, 6));

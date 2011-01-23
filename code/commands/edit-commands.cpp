@@ -28,7 +28,7 @@ Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
                                   Folder& folder, StatusBar& status_bar,
                                   Preferences& preferences):
 	m_parent(parent), m_header(header), m_folder(folder),
-	m_preferences(preferences), m_status_bar(status_bar),
+	m_status_bar(status_bar), m_preferences(preferences),
 	m_current_view(NULL)
 {
 	m_header.action_edit_undo->signal_activate().connect(

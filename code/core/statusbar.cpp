@@ -17,6 +17,7 @@
  */
 
 #include "core/statusbar.hpp"
+#include "util/gtk-compat.hpp"
 #include "util/i18n.hpp"
 
 #include <gtkmm/frame.h>
@@ -155,8 +156,8 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 	bar->pack_start(*image, Gtk::PACK_SHRINK);
 	image->show();
 
-	Gtk::Label* label = Gtk::manage(new Gtk::Label(message,
-	                                               Gtk::ALIGN_LEFT));
+	Gtk::Label* label = Gtk::manage(
+		new Gtk::Label(message, GtkCompat::ALIGN_LEFT));
 	label->set_ellipsize(Pango::ELLIPSIZE_END);
 	bar->pack_start(*label, Gtk::PACK_EXPAND_WIDGET);
 	label->show();
@@ -351,10 +352,14 @@ void Gobby::StatusBar::on_changed()
 
 bool Gobby::StatusBar::on_window_state_event(GdkEventWindowState* event)
 {
+	// In GTK+ 3 the resize grip is handled by the Window,
+	// not the status bar
+#ifndef USE_GTKMM3
 	if (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
 		m_bar_position.set_has_resize_grip(false);
 	else
 		m_bar_position.set_has_resize_grip(true);
+#endif
 
 	return true;
 }
@@ -374,7 +379,7 @@ void Gobby::StatusBar::update_pos_display()
 		gtk_text_buffer_get_iter_at_mark(
 			buffer, &iter, gtk_text_buffer_get_insert(buffer));
 
-		guint offset = gtk_text_iter_get_line_offset(&iter);
+		gint offset = gtk_text_iter_get_line_offset(&iter);
 
 		unsigned int column = 0;
 		const unsigned int tab_width = m_preferences.editor.tab_width;

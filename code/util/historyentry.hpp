@@ -20,9 +20,10 @@
 #define _GOBBY_HISTORYENTRY_HPP_
 
 #include <gtkmm/entry.h>
-#include <gtkmm/comboboxentry.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
+
+#include "util/gtk-compat.hpp"
 
 #include <memory>
 
@@ -79,7 +80,7 @@ protected:
   History m_history;
 };
 
-class HistoryComboBoxEntry: public Gtk::ComboBoxEntry
+class HistoryComboBoxEntry: public GtkCompat::ComboBoxEntry
 {
 public:
   HistoryComboBoxEntry(const std::string& history_file, unsigned int length);

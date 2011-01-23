@@ -20,6 +20,7 @@
 
 #include "util/color.hpp"
 #include "util/i18n.hpp"
+#include "util/gtk-compat.hpp"
 #include "features.hpp"
 
 #include <gtkmm/stock.h>
@@ -30,7 +31,8 @@ namespace
 	Gtk::Widget* align_top(Gtk::Widget& widget)
 	{
 		Gtk::Alignment* alignment =
-			new Gtk::Alignment(Gtk::ALIGN_CENTER, Gtk::ALIGN_TOP,
+			new Gtk::Alignment(Gtk::ALIGN_CENTER,
+			                   Gobby::GtkCompat::ALIGN_TOP,
 			                   1.0, 0.0);
 		alignment->add(widget);
 		alignment->show();
@@ -43,9 +45,9 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
                                     const IconManager& icon_manager):
 	Gtk::Dialog("Gobby", parent),
 	m_preferences(preferences),
-	m_table(2, 2),
-	m_vbox(false, 12),
 	m_hbox(false, 12),
+	m_vbox(false, 12),
+	m_table(2, 2),
 	m_color_button(_("Choose a user color"), *this)
 {
 	m_title.set_markup(
@@ -55,7 +57,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_title.show();
 
 	m_image.set_from_icon_name("gobby-0.5", Gtk::ICON_SIZE_DIALOG);
-	m_image.set_alignment(Gtk::ALIGN_CENTER, Gtk::ALIGN_TOP);
+	m_image.set_alignment(Gtk::ALIGN_CENTER, GtkCompat::ALIGN_TOP);
 	m_image.show();
 
 	m_intro.set_text(
@@ -71,7 +73,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		Glib::Markup::escape_text(_("Your name as shown to "
 		                            "other users.")) +
 		"</small>");
-	m_name_label.set_alignment(Gtk::ALIGN_LEFT);
+	m_name_label.set_alignment(GtkCompat::ALIGN_LEFT);
 	m_name_label.set_line_wrap(true);
 	m_name_label.set_width_chars(20);
 	m_name_label.show();
@@ -82,7 +84,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		Glib::Markup::escape_text(_("The color with which text you "
 		                            "have written is branded.")) +
 		"</small>");
-	m_color_label.set_alignment(Gtk::ALIGN_LEFT);
+	m_color_label.set_alignment(GtkCompat::ALIGN_LEFT);
 	m_color_label.set_line_wrap(true);
 	m_color_label.set_width_chars(20);
 	m_color_label.show();

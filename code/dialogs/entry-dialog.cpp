@@ -17,12 +17,14 @@
  */
 
 #include "dialogs/entry-dialog.hpp"
+#include "util/gtk-compat.hpp"
 
 Gobby::EntryDialog::EntryDialog(Gtk::Window& parent,
                                 const Glib::ustring& title,
                                 const Glib::ustring& intro_text):
 	Gtk::Dialog(title, parent), m_box(false, 6),
-	m_intro_label(intro_text, Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER, true)
+	m_intro_label(intro_text,
+	              GtkCompat::ALIGN_RIGHT, Gtk::ALIGN_CENTER, true)
 {
 	m_intro_label.set_mnemonic_widget(m_entry);
 	m_box.pack_start(m_intro_label, Gtk::PACK_EXPAND_WIDGET);

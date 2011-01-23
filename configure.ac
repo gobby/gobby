@@ -23,6 +23,10 @@ AC_PROG_RANLIB
 AM_PROG_CC_C_O
 AC_CACHE_SAVE
 
+###################################
+# Check for Win32
+###################################
+
 AC_MSG_CHECKING([whether to enable WIN32 specific flags])
 case "$host_os" in
 *mingw*)
@@ -37,12 +41,41 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-required_libs="libxml++-2.6 glibmm-2.4 >= 2.18.0 giomm-2.4 >= 2.18.0 gtkmm-2.4 >= 2.12.0 gthread-2.0 gtksourceview-2.0 >= 2.4 libgsasl >= 0.2.21"
+###################################
+# Check for GTK+ 3
+###################################
+
+AC_ARG_WITH([gtk3], AS_HELP_STRING([--with-gtk3],
+            [Builds gobby against GTK+ 3 instead of GTK+ 2[[default=no]]]),
+	    [with_gtk3=$withval], [with_gtk3=no])
+
+if test "x$with_gtk3" = "xyes"; then
+	# TODO: Increase to 2.99.2 once it's out
+	gtk_requirement="gtkmm-3.0 >= 2.99.1 gtksourceview-3.0 >= 2.91.0"
+	gtk_version=3
+else
+	gtk_requirement="gtkmm-2.4 >= 2.12.0 gtksourceview-2.0 >= 2.4"
+	gtk_version=2
+fi
+
+required_libs="libxml++-2.6 glibmm-2.4 >= 2.18.0 giomm-2.4 >= 2.18.0 gthread-2.0 libgsasl >= 0.2.21 $gtk_requirement"
+
+###################################
+# Check for Mac OS X
+###################################
 
 # Check if we are running on OS X, for special link handling.
 if test "x$build_vendor" = "xapple" ; then
   AC_DEFINE([PLATFORM_OSX], 1, [Define whether we are running on Mac OS X.])
-  target=`pkg-config --variable=target gtk+-2.0`
+
+  # Check whether we are running the native quartz backend
+  if test "$gtk_version" == "2"; then
+    target=`pkg-config --variable=target gtk+-2.0`
+  else
+    target=`pkg-config --variable=targets gtk+-3.0`
+  fi
+
+  # If so use ige-mac-integration
   if test "$target" = "quartz" ; then
     AC_DEFINE([PLATFORM_OSX_NATIVE], 1, [Define whether we are running on
                                          Mac OS X with the quartz GDK target])
@@ -51,29 +84,53 @@ if test "x$build_vendor" = "xapple" ; then
 fi
 AC_CACHE_SAVE
 
-# Checks for libraries.
+###################################
+# Check for libraries.
+###################################
+
 PKG_CHECK_MODULES([gobby], [$required_libs])
 PKG_CHECK_MODULES([infinote], [libinfinity-0.5 libinftext-0.5 libinfgtk-0.5 libinftextgtk-0.5])
 AC_CACHE_SAVE
 
+###################################
+# Check libinfinity GTK+ version
+###################################
+
+inf_gtk_version=`pkg-config --variable=gtk_version libinfgtk-0.5`
+if test "$inf_gtk_version" != "$gtk_version"; then
+	AC_MSG_ERROR([Gobby is being built with GTK+ $gtk_version but libinfinity was built against GTK+ $inf_gtk_version])
+fi
+
+###################################
 # Check for unique (optional)
+###################################
+
 AC_ARG_WITH([unique], AS_HELP_STRING([--with-unique],
             [Enables support for single-instance [[default=auto]]]),
             [use_unique=$withval], [use_unique=auto])
-if test "x$use_unique" = "xauto"; then
-  PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2], [use_unique=yes], [use_unique=no])
-elif test "x$use_unique" = "xyes"; then
-  PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2])
-fi
 
-if test "x$use_unique" = "xyes"; then
-  AC_DEFINE([WITH_UNIQUE], 1, [Whether support for unique is enabled])
+# Ignore this setting if not using unique,
+# we might later use GtkApplication instead
+if test "$with_gtk3" != "yes"; then
+  if test "x$use_unique" = "xauto"; then
+    PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2], [use_unique=yes], [use_unique=no])
+  elif test "x$use_unique" = "xyes"; then
+    PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2])
+  fi
+
+  if test "x$use_unique" = "xyes"; then
+    AC_DEFINE([WITH_UNIQUE], 1, [Whether support for unique is enabled])
+  fi
+else
+  use_unique="no"
 fi
 
 AM_CONDITIONAL([WITH_UNIQUE], test "x$use_unique" = "xyes")
 AC_CACHE_SAVE
 
+###################################
 # Glib i18n/gettext support.
+###################################
 ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
 AM_GLIB_DEFINE_LOCALEDIR(GOBBY_LOCALEDIR)
@@ -83,14 +140,19 @@ GETTEXT_PACKAGE=gobby05
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 
+###################################
 # Help file building
+###################################
 GNOME_DOC_INIT([0.9.0],,
   [AC_MSG_WARN([[gnome-doc-utils not found: documentation will not be built.]])])
-
 
 # AC_DEFINE(GOBBY_CONFIGDIR, [".gobby-0.5"],
 #           [where to store Gobby's config files,
 #            relative to the user's home directory])
+
+###################################
+# Output
+###################################
 
 AC_OUTPUT([
   Makefile

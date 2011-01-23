@@ -323,7 +323,6 @@ void Gobby::UserJoinCommands::UserJoinInfo::
 	add_text_user_properties(std::vector<GParameter>& params,
 	                         TextSessionView& view)
 {
-	const Preferences& preferences = m_commands.m_preferences;
 	InfTextSession* session = view.get_session();
 
 	GParameter hue_param = { "hue", { 0 } };

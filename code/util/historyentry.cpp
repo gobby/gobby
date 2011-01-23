@@ -314,7 +314,7 @@ bool Gobby::HistoryEntry::on_key_press_event(GdkEventKey* event)
 {
 	Glib::ustring entry;
 
-	if(event->keyval == GDK_Up)
+	if(event->keyval == GDK_KEY_Up)
 	{
 		if(m_history.up(get_text(), entry))
 			set_text(entry);
@@ -322,7 +322,7 @@ bool Gobby::HistoryEntry::on_key_press_event(GdkEventKey* event)
 		return true;
 	}
 
-	if(event->keyval == GDK_Down)
+	if(event->keyval == GDK_KEY_Down)
 	{
 		if(m_history.down(get_text(), entry))
 			set_text(entry);
@@ -369,7 +369,7 @@ bool Gobby::HistoryComboBoxEntry::on_entry_key_press_event(GdkEventKey* event)
 {
 	Glib::ustring entry;
 
-	if(event->keyval == GDK_Up)
+	if(event->keyval == GDK_KEY_Up)
 	{
 		if(m_history.up(get_entry()->get_text(), entry))
 			get_entry()->set_text(entry);
@@ -377,7 +377,7 @@ bool Gobby::HistoryComboBoxEntry::on_entry_key_press_event(GdkEventKey* event)
 		return true;
 	}
 
-	if(event->keyval == GDK_Down)
+	if(event->keyval == GDK_KEY_Down)
 	{
 		if(m_history.down(get_entry()->get_text(), entry))
 			get_entry()->set_text(entry);

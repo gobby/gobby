@@ -19,18 +19,18 @@
 #include "dialogs/find-dialog.hpp"
 #include "core/folder.hpp"
 #include "util/i18n.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/textbuffer.h>
 #include <gtkmm/stock.h>
-#include <gtksourceview/gtksourceiter.h>
 
 namespace
 {
-	typedef gboolean (*GtkSourceIterSearchFunc)(
+	typedef gboolean (*TextSearchFunc)(
 		const GtkTextIter*,
 		const gchar*,
-		GtkSourceSearchFlags,
+		Gobby::GtkCompat::TextSearchFlags,
 		GtkTextIter*,
 		GtkTextIter*,
 		const GtkTextIter*
@@ -46,9 +46,9 @@ Gobby::FindDialog::FindDialog(Gtk::Window& parent, Folder& folder,
 	Gtk::Dialog(_("Find"), parent),
 	m_folder(folder), m_status_bar(status_bar),
 	m_table_entries(2, 2),
-	m_label_find(_("_Search for:"), Gtk::ALIGN_LEFT,
+	m_label_find(_("_Search for:"), GtkCompat::ALIGN_LEFT,
 	             Gtk::ALIGN_CENTER, true),
-	m_label_replace(_("Replace _with:"), Gtk::ALIGN_LEFT,
+	m_label_replace(_("Replace _with:"), GtkCompat::ALIGN_LEFT,
 	                Gtk::ALIGN_CENTER, true),
 	m_check_case(_("_Match case"), true),
 	m_check_whole_word(_("Match _entire word only"), true),
@@ -121,7 +121,7 @@ Gobby::FindDialog::~FindDialog()
 
 bool Gobby::FindDialog::get_search_only() const
 {
-	return m_label_replace.is_visible();
+	return GtkCompat::is_visible(m_label_replace);
 }
 
 void Gobby::FindDialog::set_search_only(bool search_only)
@@ -257,9 +257,9 @@ Gobby::FindDialog::SearchDirection Gobby::FindDialog::get_direction() const
 bool Gobby::FindDialog::find()
 {
 	if(get_direction() == SEARCH_FORWARD)
-		find_next();
+		return find_next();
 	else
-		find_previous();
+		return find_previous();
 }
 
 bool Gobby::FindDialog::replace()
@@ -461,14 +461,13 @@ bool Gobby::FindDialog::find_range_once(const GtkTextIter* from,
                                         GtkTextIter* match_start,
                                         GtkTextIter* match_end)
 {
-	GtkSourceSearchFlags flags = GtkSourceSearchFlags(0);
+	GtkCompat::TextSearchFlags flags = GtkCompat::TextSearchFlags(0);
 	if(!m_check_case.get_active() )
-		flags = GTK_SOURCE_SEARCH_CASE_INSENSITIVE;
+		flags = GtkCompat::TEXT_SEARCH_CASE_INSENSITIVE;
 
-	GtkSourceIterSearchFunc search_func = (direction == SEARCH_FORWARD ?
-		gtk_source_iter_forward_search :
-		gtk_source_iter_backward_search);
-
+	TextSearchFunc search_func = (direction == SEARCH_FORWARD ?
+		GtkCompat::text_iter_forward_search :
+		GtkCompat::text_iter_backward_search);
 	Glib::ustring find_str = m_entry_find.get_text();
 
 	gboolean result = search_func(

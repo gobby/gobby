@@ -21,6 +21,7 @@
 
 #include "core/textsessionview.hpp"
 #include "core/tablabel.hpp"
+#include "util/gtk-compat.hpp"
 
 namespace Gobby
 {
@@ -56,7 +57,11 @@ protected:
 		static_cast<TextTabLabel*>(user_data)->on_changed(author);
 	}
 
+#ifdef USE_GTKMM3
+	virtual void on_style_updated();
+#else
 	virtual void on_style_changed(const Glib::RefPtr<Gtk::Style>& prev);
+#endif
 
 	virtual void on_notify_status(); // override
 	virtual void on_activate();

@@ -21,6 +21,8 @@
 #include "util/i18n.hpp"
 
 #include <gtkmm/icontheme.h>
+#include <gtkmm/imagemenuitem.h>
+#include <gtkmm/separatormenuitem.h>
 #include <gtkmm/stock.h>
 #include <giomm/file.h>
 

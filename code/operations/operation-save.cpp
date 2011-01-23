@@ -30,10 +30,10 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 				    DocumentInfoStorage::EolStyle eol_style):
 	Operation(operations), m_view(&view),
 	m_start_time(std::time(NULL)), m_current_line_index(0),
-	m_iconv(encoding.c_str(), "UTF-8"), m_encoding(encoding),
-	m_eol_style(eol_style),
-	m_storage_key(view.get_info_storage_key()), m_buffer_size(0),
-	m_buffer_index(0)
+	m_encoding(encoding), m_eol_style(eol_style),
+	m_storage_key(view.get_info_storage_key()),
+	m_iconv(encoding.c_str(), "UTF-8"),
+	m_buffer_size(0), m_buffer_index(0)
 {
 	// Load content so that the session can go on while saving
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(view.get_text_buffer());

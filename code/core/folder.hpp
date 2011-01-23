@@ -23,6 +23,7 @@
 #include "core/chatsessionview.hpp"
 #include "core/preferences.hpp"
 #include "util/defaultaccumulator.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <gtkmm/notebook.h>
 #include <sigc++/signal.h>
@@ -32,7 +33,7 @@
 namespace Gobby
 {
 
-class Folder : public Gtk::Notebook
+class Folder : public GtkCompat::Notebook
 {
 public:
 	// TODO chat: This should be SignalSessionAdded/Removed/Changed
@@ -89,7 +90,7 @@ public:
 	}
 
 protected:
-	virtual void on_switch_page(GtkNotebookPage* page, guint page_num);
+	virtual void on_switch_page(Gtk::Widget* page, guint page_num);
 	virtual bool on_key_press_event(GdkEventKey* event);
 
 	void on_tab_close_request(SessionView& window);

@@ -18,6 +18,7 @@
 
 #include "commands/view-commands.hpp"
 #include "util/i18n.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
@@ -214,7 +215,7 @@ void Gobby::ViewCommands::on_chat_document_changed(SessionView* view)
 {
 	if(view != NULL)
 	{
-		if(m_chat_frame.is_visible())
+		if(GtkCompat::is_visible(m_chat_frame))
 		{
 			m_header.action_view_chat_userlist->set_sensitive(
 				true);

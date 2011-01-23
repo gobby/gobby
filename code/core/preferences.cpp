@@ -103,11 +103,11 @@ Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
 		"toolbar-style", static_cast<int>(Gtk::TOOLBAR_BOTH)))),
 	font(Pango::FontDescription(entry.get_value<Glib::ustring>(
 		"font", "Monospace 10"))),
+	scheme_id(entry.get_value<Glib::ustring>("scheme-id", "classic")),
 	document_userlist_width(entry.get_value<unsigned int>(
 		"document-userlist-width", 150)),
 	chat_userlist_width(entry.get_value<unsigned int>(
 		"chat-userlist-width", 150)),
-	scheme_id(entry.get_value<Glib::ustring>("scheme-id", "classic")),
 
 	show_toolbar(entry.get_value<bool>("show-toolbar", true)),
 	show_statusbar(entry.get_value<bool>("show-statusbar", true)),

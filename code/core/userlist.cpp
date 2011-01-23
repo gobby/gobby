@@ -21,6 +21,7 @@
 
 #include "util/i18n.hpp"
 #include "util/color.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/stock.h>
@@ -39,16 +40,20 @@ namespace
 	Glib::RefPtr<Gdk::Pixbuf> generate_user_color_pixbuf(Gtk::Widget& w,
 	                                                     gdouble hue)
 	{
-		Glib::RefPtr<Gdk::Pixbuf> pixbuf = w.render_icon(
-			Gobby::IconManager::STOCK_USER_COLOR_INDICATOR,
-			Gtk::ICON_SIZE_MENU);
+		Gtk::StockID id =
+			Gobby::IconManager::STOCK_USER_COLOR_INDICATOR;
+
+		Glib::RefPtr<Gdk::Pixbuf> pixbuf =
+			Gobby::GtkCompat::render_icon(
+				w, id,
+				Gtk::ICON_SIZE_MENU);
 
 		// pixbuf is shared, though we want to mess with it here
 		pixbuf = pixbuf->copy();
 
-		for(unsigned int y = 0; y < pixbuf->get_height(); ++y)
+		for(int y = 0; y < pixbuf->get_height(); ++y)
 		{
-			for(unsigned int x = 0; x < pixbuf->get_width(); ++x)
+			for(int x = 0; x < pixbuf->get_width(); ++x)
 			{
 				guint8* pixels = pixbuf->get_pixels();
 				guint8* pixel =

@@ -1,3 +1,41 @@
+2011-01-23  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/gtk-compat.hpp:
+	* code/util/historyentry.hpp:
+	* code/util/historyentry.cpp:
+	* code/util/Makefile.am:
+	* code/core/browser.cpp:
+	* code/core/closableframe.cpp:
+	* code/core/folder.hpp:
+	* code/core/folder.cpp:
+	* code/core/preferences.cpp:
+	* code/core/sessionuserview.cpp:
+	* code/core/statusbar.cpp:
+	* code/core/tablabel.cpp:
+	* code/core/texttablabel.hpp:
+	* code/core/texttablabel.cpp:
+	* code/core/userlist.cpp:
+	* code/dialogs/document-location-dialog.cpp:
+	* code/dialogs/entry-dialog.cpp:
+	* code/dialogs/find-dialog.cpp:
+	* code/dialogs/goto-dialog.cpp:
+	* code/dialogs/initial-dialog.cpp:
+	* code/dialogs/open-location-dialog.cpp:
+	* code/dialogs/preferences-dialog.cpp:
+	* code/operations/operation-export-html.cpp:
+	* code/operations/operation-save.cpp:
+	* code/commands/browser-context-commands.cpp:
+	* code/commands/edit-commands.cpp:
+	* code/commands/help-commands.cpp:
+	* code/commands/user-join-commands.cpp:
+	* code/commands/view-commands.cpp:
+	* code/window.cpp:
+	* code/main.cpp:
+	* configure.ac: Add a --with-gtk3 switch to Gobby and adapt the code
+	so that it compiles with gtkmm-3. If GTK 3 is enabled then the
+	--with-unique switch is ignored. Eventually we need to port that code
+	to GtkApplication.
+
 2010-12-25  Armin Burgmeier  <armin@arbur.net>
 
 	* code/core/browser.hpp:

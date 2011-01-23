@@ -16,6 +16,7 @@ noinst_HEADERS = \
         config.hpp \
         defaultaccumulator.hpp \
         file.hpp \
+	gtk-compat.hpp \
 	historyentry.hpp \
         i18n.hpp \
         resolv.hpp \

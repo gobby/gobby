@@ -75,7 +75,7 @@ void Gobby::SessionUserView::on_size_allocate(Gtk::Allocation& allocation)
 				&SessionUserView::
 					on_pref_userlist_width_changed));
 
-		unsigned int desired_position =
+		int desired_position =
 			get_width() - m_userlist_width;
 		desired_position = std::min<unsigned int>(
 			desired_position, property_max_position());
@@ -99,7 +99,7 @@ void Gobby::SessionUserView::on_doc_userlist_width_changed()
 
 void Gobby::SessionUserView::on_pref_userlist_width_changed()
 {
-	unsigned int position = get_width() - m_userlist_width;
+	int position = get_width() - m_userlist_width;
 
 	if(get_position() != position)
 	{

@@ -25,6 +25,7 @@
 #include "core/noteplugin.hpp"
 
 #include "util/i18n.hpp"
+#include "util/gtk-compat.hpp"
 
 #include <gtkmm/frame.h>
 
@@ -96,12 +97,12 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	// Add focus shortcuts; unfortunately gtkmm does not wrap that API
 	GClosure* closure = g_cclosure_new(
 		G_CALLBACK(on_switch_to_chat_static), this, NULL);
-	gtk_accel_group_connect(group->gobj(), GDK_m, GDK_CONTROL_MASK,
+	gtk_accel_group_connect(group->gobj(), GDK_KEY_m, GDK_CONTROL_MASK,
 	                        static_cast<GtkAccelFlags>(0), closure);
 	//g_closure_unref(closure);
 	GClosure* closure2 = g_cclosure_new(
 		G_CALLBACK(on_switch_to_text_static), this, NULL);
-	gtk_accel_group_connect(group->gobj(), GDK_m,
+	gtk_accel_group_connect(group->gobj(), GDK_KEY_m,
 	                        static_cast<GdkModifierType>(
 					GDK_CONTROL_MASK | GDK_SHIFT_MASK),
 	                        static_cast<GtkAccelFlags>(0), closure2);
@@ -203,7 +204,11 @@ bool Gobby::Window::on_key_press_event(GdkEventKey* event)
 	// perhaps be to subclass GtkSourceView, and either
 	// unregister/reregister the keybinding there, or making sure the
 	// key-press-event default handler returns false.
-	if(event->keyval == GDK_z || event->keyval == GDK_Z)
+	// TODO: An even properer solution is to use the new GtkSourceView3
+	// feature which allows to plug a different undo manager to the
+	// SourceView. This would also make the Undo/Redo context menu items
+	// work.
+	if(event->keyval == GDK_KEY_z || event->keyval == GDK_KEY_Z)
 		return Gtk::Window::on_key_press_event(event);
 
 	bool handled = gtk_window_propagate_key_event(gobj(), event);
@@ -338,7 +343,9 @@ try
 		uris_holder& operator=(const uris_holder&);
 	};
 
-	switch (command)
+	// Cast to int to suppress a warning about UNIQUE_GOBBY_CONNECT not
+	// being a member of the UniqueCommand enum.
+	switch (static_cast<signed int>(command))
 	{
 	case UNIQUE_ACTIVATE:
 		gtk_window_set_screen(gobj(),
