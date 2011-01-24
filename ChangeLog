@@ -1,3 +1,8 @@
+2011-01-24  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/gtk-compat.cpp: Fix a crash when connecting to a server
+	with GTK+ 2.
+
 2011-01-23  Armin Burgmeier  <armin@arbur.net>
 
 	* code/util/gtk-compat.hpp:

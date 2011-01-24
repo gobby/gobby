@@ -106,6 +106,7 @@ class Notebook: public Gtk::Notebook
 protected:
 	virtual void on_switch_page(GtkNotebookPage* page, guint page_num)
 	{
+		Gtk::Notebook::on_switch_page(page, page_num);
 		on_switch_page(get_nth_page(page_num), page_num);
 	}
 
