@@ -19,8 +19,8 @@
 #ifndef _GOBBY_TEXTSESSIONVIEW_HPP_
 #define _GOBBY_TEXTSESSIONVIEW_HPP_
 
-#include "core/textundogrouping.hpp"
 #include "core/sessionview.hpp"
+#include "core/textundogrouping.hpp"
 #include "core/preferences.hpp"
 
 #include <gtkmm/tooltip.h>

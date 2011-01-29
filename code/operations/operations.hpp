@@ -19,8 +19,8 @@
 #ifndef _GOBBY_OPERATIONS_OPERATIONS_HPP_
 #define _GOBBY_OPERATIONS_OPERATIONS_HPP_
 
-#include "core/documentinfostorage.hpp"
 #include "core/statusbar.hpp"
+#include "core/documentinfostorage.hpp"
 #include "core/textsessionview.hpp"
 
 #include <libinfinity/client/infc-browser.h>

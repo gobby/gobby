@@ -1,3 +1,18 @@
+2011-01-29  Armin Burgmeier  <armin@arbur.net>
+
+	* code/util/gtk-compat.hpp: Add a wrapper for Gtk::IconSet which is
+	now used by a RefPtr in gtkmm 3.
+
+	* code/core/iconmanager.hpp:
+	* code/core/iconmanager.cpp: Adapt for that.
+
+	* code/core/textsessionview.hpp:
+	* code/operations/operations.hpp:
+	* code/operations/operation-export-html.cpp: Rearrange some include
+	directives to avoid including gtkmm headers after Xlib headers, which
+	causes trouble because of common Xlib #defines such as None, Window or
+	Status.
+
 2011-01-24  Armin Burgmeier  <armin@arbur.net>
 
 	* code/util/gtk-compat.cpp: Fix a crash when connecting to a server

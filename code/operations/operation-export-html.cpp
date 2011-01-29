@@ -16,12 +16,15 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// Include this first because some of the other headers include X11.h which,
+// among others, #defines "None".
+#include <libxml++/libxml++.h>
+
 #include "operations/operation-export-html.hpp"
 
 #include "util/i18n.hpp"
 
 #include <gtkmm/textbuffer.h>
-#include <libxml++/libxml++.h>
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 

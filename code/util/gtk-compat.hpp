@@ -169,6 +169,19 @@ inline gboolean text_iter_backward_search(const GtkTextIter* iter,
 #endif
 }
 
+#ifdef USE_GTKMM3
+typedef Glib::RefPtr<Gtk::IconSet> IconSet;
+inline IconSet create_icon_set() { return Gtk::IconSet::create(); }
+#else
+class IconSet: public Gtk::IconSet
+{
+public:
+	IconSet* operator->() { return this; }
+	const IconSet* operator->() const { return this; }
+};
+inline IconSet create_icon_set() { return IconSet(); }
+#endif
+
 } // namespace GtkCompat
 
 } // namespace Gobby
