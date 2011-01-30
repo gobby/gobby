@@ -1,5 +1,9 @@
 2011-01-29  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/sessionuserview.hpp: Fix the include guard.
+
+2011-01-29  Armin Burgmeier  <armin@arbur.net>
+
 	* code/util/gtk-compat.hpp: Add a wrapper for Gtk::IconSet which is
 	now used by a RefPtr in gtkmm 3.
 

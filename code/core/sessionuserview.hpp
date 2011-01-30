@@ -17,7 +17,7 @@
  */
 
 #ifndef _GOBBY_SESSIONUSERVIEW_HPP_
-#define _GOBBY_SESSIENUSERVIEW_HPP_
+#define _GOBBY_SESSIONUSERVIEW_HPP_
 
 #include "core/sessionview.hpp"
 #include "core/preferences.hpp"
