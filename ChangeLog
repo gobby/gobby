@@ -1,3 +1,9 @@
+2011-01-30  Armin Burgmeier  <armin@arbur.net>
+
+	* code/core/folder.cpp (remove_document): Don't call
+	inf_session_close() if the session is already closed. This can happen
+	if the session synchronization fails.
+
 2011-01-29  Armin Burgmeier  <armin@arbur.net>
 
 	* all source files: Add 2011 to copyright years.
