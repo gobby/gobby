@@ -1,5 +1,12 @@
 2011-01-30  Armin Burgmeier  <armin@arbur.net>
 
+	* code/commands/subscription-commands.cpp (on_notify_connection):
+	Don't show the info text if session's state is not RUNNING. In that
+	case the connection was unset in SYNCHRONIZING state in which case
+	synchronization-commands will set a more specific error message.
+
+2011-01-30  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/folder.cpp (remove_document): Don't call
 	inf_session_close() if the session is already closed. This can happen
 	if the session synchronization fails.

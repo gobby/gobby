@@ -244,6 +244,8 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 
 	if(infc_session_proxy_get_connection(prxy) == NULL)
 	{
+		InfSession* session = infc_session_proxy_get_session(prxy);
+
 		Folder& folder = iter->second->get_folder();
 		SessionView* view = folder.lookup_document(session);
 		g_assert(view != NULL);
@@ -255,16 +257,26 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 
 		if(text_view)
 		{
-			view->set_info(_(
-				"The connection to the publisher of this "
-				"document has been lost. Further changes to "
-				"the document could not be synchronized to "
-				"others anymore, therefore the document "
-				"cannot be edited anymore.\n\n"
-				"Please note also that it is possible that "
-				"not all of your latest changes have reached "
-				"the publisher before the connection was "
-				"lost."), true);
+			/* If the session is in SYNCHRONIZING state then the
+			 * session is closed due to a synchronization error.
+			 * In that case synchronization-command.cpp will set
+			 * a more meaningful error message. */
+			if(inf_session_get_status(session) ==
+			   INF_SESSION_RUNNING)
+			{
+				view->set_info(_(
+					"The connection to the publisher of "
+					"this document has been lost. "
+					"Further changes to the document "
+					"could not be synchronized to others "
+					"anymore, therefore the document "
+					"cannot be edited anymore.\n\n"
+					"Please note also that it is "
+					"possible that not all of your "
+					"latest changes have reached the "
+					"publisher before the connection was "
+					"lost."), true);
+			}
 
 			text_view->set_active_user(NULL);
 		}
