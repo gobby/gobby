@@ -1,5 +1,10 @@
 2011-01-29  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/textsessionview.cpp (get_cursor_position):
+	Fix a compiler warning.
+
+2011-01-29  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/textsessionuserview.hpp:
 	* code/core/textsessionuserview.cpp:
 	* code/core/Makefile.am: Add the InfTextSessionUserView class which

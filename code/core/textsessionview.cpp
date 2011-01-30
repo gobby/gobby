@@ -25,6 +25,8 @@
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
+// TODO: Put all the preferences handling into an extra class
+
 namespace
 {
 	GtkWrapMode wrap_mode_from_preferences(const Gobby::Preferences& pref)
@@ -302,7 +304,7 @@ void Gobby::TextSessionView::get_cursor_position(unsigned int& row,
 	row = gtk_text_iter_get_line(&iter);
 	col = 0;
 
-	unsigned int chars = gtk_text_iter_get_line_offset(&iter);
+	int chars = gtk_text_iter_get_line_offset(&iter);
 	unsigned int tabs = m_preferences.editor.tab_width;
 
 	// Tab characters expand to more than one column
@@ -532,7 +534,12 @@ void Gobby::TextSessionView::on_font_changed()
 
 void Gobby::TextSessionView::on_scheme_changed()
 {
-	gtk_source_buffer_set_style_scheme(m_buffer, gtk_source_style_scheme_manager_get_scheme(gtk_source_style_scheme_manager_get_default(), static_cast<Glib::ustring>(m_preferences.appearance.scheme_id).c_str()));
+	gtk_source_buffer_set_style_scheme(
+		m_buffer,
+		gtk_source_style_scheme_manager_get_scheme(
+			gtk_source_style_scheme_manager_get_default(),
+			static_cast<Glib::ustring>(
+				m_preferences.appearance.scheme_id).c_str()));
 }
 
 bool Gobby::TextSessionView::
