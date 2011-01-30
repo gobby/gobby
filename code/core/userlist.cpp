@@ -122,6 +122,9 @@ Gobby::UserList::UserList(InfUserTable* table):
 		*name_renderer,
 		sigc::mem_fun(*this, &UserList::name_cell_data_func));
 
+	m_view.signal_row_activated().connect(
+		sigc::mem_fun(*this, &UserList::on_row_activated));
+
 	column->set_spacing(6);
 	m_view.append_column(*column);
 	m_view.get_selection()->set_mode(Gtk::SELECTION_NONE);
@@ -330,6 +333,22 @@ void Gobby::UserList::on_notify_status(InfUser* user)
 
 	// But this does:
 	(*iter)[m_columns.user] = user;
+}
+
+void Gobby::UserList::on_row_activated(const Gtk::TreePath& path,
+                                       Gtk::TreeViewColumn* column)
+{
+	Gtk::TreePath parent_path;
+	if(m_filter_model)
+		parent_path = m_filter_model->convert_path_to_child_path(path);
+	else
+		parent_path = path;
+
+	const Gtk::TreeIter& iter = m_store->get_iter(path);
+	InfUser* user = (*iter)[m_columns.user];
+
+	if(inf_user_get_status(user) != INF_USER_UNAVAILABLE)
+		m_signal_user_activated.emit(user);
 }
 
 Gtk::TreeIter Gobby::UserList::find_user_iter(InfUser* user)

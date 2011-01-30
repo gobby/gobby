@@ -1,5 +1,19 @@
 2011-01-29  Armin Burgmeier  <armin@arbur.net>
 
+	* code/core/textsessionuserview.hpp:
+	* code/core/textsessionuserview.cpp:
+	* code/core/Makefile.am: Add the InfTextSessionUserView class which
+	handles scrolling to a remote user's cursor when double-clicking it in
+	the user list.
+
+	* code/core/userlist.hpp:
+	* code/core/userlist.cpp: Add the user_activated signal.
+
+	* code/core/folder.cpp: Create a TextSessionUserView for text
+	sessions.
+
+2011-01-29  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/sessionuserview.hpp: Fix the include guard.
 
 2011-01-29  Armin Burgmeier  <armin@arbur.net>

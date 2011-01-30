@@ -32,11 +32,18 @@ namespace Gobby
 	class UserList: public Gtk::VBox
 	{
 	public:
+		typedef sigc::signal<void, InfUser*> SignalUserActivated;
+
 		UserList(InfUserTable* table);
 		~UserList();
 
 		void set_show_disconnected(bool show_disconnected);
 
+		SignalUserActivated signal_user_activated() const
+		{
+			return m_signal_user_activated;
+		}
+		
 	protected:
 		InfUserTable* m_table;
 
@@ -95,6 +102,10 @@ namespace Gobby
 		void on_notify_status(InfUser* user);
 		void on_notify_hue(InfTextUser* user);
 
+		//void on_select_func(const Gtk::TreeIter& iter);
+		void on_row_activated(const Gtk::TreePath& path,
+		                      Gtk::TreeViewColumn* column);
+
 		Gtk::TreeIter find_user_iter(InfUser* user);
 
 		Columns m_columns;
@@ -103,6 +114,8 @@ namespace Gobby
 		Gtk::TreeView m_view;
 
 		gulong m_add_user_handle;
+
+		SignalUserActivated m_signal_user_activated;
 	};
 }
 

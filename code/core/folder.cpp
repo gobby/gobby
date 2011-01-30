@@ -17,6 +17,7 @@
  */
 
 #include "core/folder.hpp"
+#include "core/textsessionuserview.hpp"
 #include "core/sessionuserview.hpp"
 #include "core/chattablabel.hpp"
 #include "core/texttablabel.hpp"
@@ -133,8 +134,8 @@ Gobby::Folder::add_text_session(InfTextSession* session,
 	view->show();
 	m_signal_document_added.emit(*view);
 
-	SessionUserView* userview = Gtk::manage(
-		new SessionUserView(
+	TextSessionUserView* userview = Gtk::manage(
+		new TextSessionUserView(
 			*view, true,
 			m_preferences.appearance.show_document_userlist,
 			m_preferences.appearance.document_userlist_width));
