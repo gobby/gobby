@@ -1,5 +1,9 @@
 2011-01-29  Armin Burgmeier  <armin@arbur.net>
 
+	* all source files: Add 2011 to copyright years.
+
+2011-01-29  Armin Burgmeier  <armin@arbur.net>
+
 	* code/core/textsessionview.cpp (get_cursor_position):
 	Fix a compiler warning.
 
