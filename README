@@ -57,7 +57,7 @@ Gobby: First Contact
 
      * libsigc++ (>= 2.0.2)
      * GNUTLS (>= 1.7.2)
-     * libinfinity (0.5.x)
+     * libinfinity (0.6.x)
      * Gtk+ (>= 2.12.0)
      * Glib (>= 2.18.0)
      * GtkSourceView (>= 2.0)

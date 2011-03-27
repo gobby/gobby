@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([gobby], [0.4.94], [crew@0x539.de])
+AC_INIT([gobby], [0.4.95], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9 check-news)
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
 AM_MAINTAINER_MODE
@@ -89,14 +89,14 @@ AC_CACHE_SAVE
 ###################################
 
 PKG_CHECK_MODULES([gobby], [$required_libs])
-PKG_CHECK_MODULES([infinote], [libinfinity-0.5 libinftext-0.5 libinfgtk-0.5 libinftextgtk-0.5])
+PKG_CHECK_MODULES([infinote], [libinfinity-0.6 libinftext-0.6 libinfgtk-0.6 libinftextgtk-0.6])
 AC_CACHE_SAVE
 
 ###################################
 # Check libinfinity GTK+ version
 ###################################
 
-inf_gtk_version=`pkg-config --variable=gtk_version libinfgtk-0.5`
+inf_gtk_version=`pkg-config --variable=gtk_version libinfgtk-0.6`
 if test "$inf_gtk_version" != "$gtk_version"; then
 	AC_MSG_ERROR([Gobby is being built with GTK+ $gtk_version but libinfinity was built against GTK+ $inf_gtk_version])
 fi
