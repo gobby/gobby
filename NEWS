@@ -1,6 +1,15 @@
 Gobby
 =====
 
+Version 0.4.94:
+  * Show cursors and selections of remote users in the own viewport and
+    scrollbar
+  * Add a "Disconnect from Server" option to the context menu
+  * When double-clicking a user in the user list jump to its current cursor
+    position
+  * Allow gobby to be built against GTK+ 3
+  * Fixed a bug which prevented "Save All" from working
+
 Version 0.4.93:
   * Added IRC-like chat
   * Added functionality to export a document to HTML (#245)

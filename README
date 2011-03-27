@@ -33,6 +33,7 @@ Gobby: First Contact
      * Each user has its own colour to be identified by others
      * Local group Undo
      * IRC-like chat
+     * Shows cursors and selections of remote users
      * Sidebar with all the others having joined the session
      * Syntax highlighting, auto indentation, configurable tab
        width

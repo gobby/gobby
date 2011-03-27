@@ -1,4 +1,11 @@
-2011-02-27  Armin Burgmeier  <armin@arbur.net>
+2011-03-27  Armin Burgmeier  <armin@arbur.net>
+
+	* === Released 0.4.94 ===
+
+	* README:
+	* NEWS: Update for release.
+
+2011-03-27  Armin Burgmeier  <armin@arbur.net>
 
 	* configure.ac: Use unique-3.0 when compiling against GTK+ 3.0.
 
