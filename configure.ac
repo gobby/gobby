@@ -109,20 +109,20 @@ AC_ARG_WITH([unique], AS_HELP_STRING([--with-unique],
             [Enables support for single-instance [[default=auto]]]),
             [use_unique=$withval], [use_unique=auto])
 
-# Ignore this setting if not using unique,
-# we might later use GtkApplication instead
 if test "$with_gtk3" != "yes"; then
-  if test "x$use_unique" = "xauto"; then
-    PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2], [use_unique=yes], [use_unique=no])
-  elif test "x$use_unique" = "xyes"; then
-    PKG_CHECK_MODULES([unique], [unique-1.0 >= 1.1.2])
-  fi
-
-  if test "x$use_unique" = "xyes"; then
-    AC_DEFINE([WITH_UNIQUE], 1, [Whether support for unique is enabled])
-  fi
+  unique_req="unique-1.0 >= 1.1.2"
 else
-  use_unique="no"
+  unique_req="unique-3.0"
+fi
+
+if test "x$use_unique" = "xauto"; then
+  PKG_CHECK_MODULES([unique], [$unique_req], [use_unique=yes], [use_unique=no])
+elif test "x$use_unique" = "xyes"; then
+  PKG_CHECK_MODULES([unique], [$unique_req])
+fi
+
+if test "x$use_unique" = "xyes"; then
+  AC_DEFINE([WITH_UNIQUE], 1, [Whether support for unique is enabled])
 fi
 
 AM_CONDITIONAL([WITH_UNIQUE], test "x$use_unique" = "xyes")

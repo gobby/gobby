@@ -1,3 +1,7 @@
+2011-02-27  Armin Burgmeier  <armin@arbur.net>
+
+	* configure.ac: Use unique-3.0 when compiling against GTK+ 3.0.
+
 2011-01-30  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/subscription-commands.cpp (on_notify_connection):
