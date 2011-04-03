@@ -1,3 +1,8 @@
+2011-04-03  Philipp Kern  <phil@0x539.de>
+
+	* *.cpp, *.hpp: adjusted the address of the Free Software Foundation
+	to match the current one
+
 2011-03-27  Armin Burgmeier  <armin@arbur.net>
 
 	* configure.ac: Post-release bump to 0.4.95, require libinfinity-0.6.
