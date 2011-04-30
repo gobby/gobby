@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2009-09-11 23:41+0000\n"
-"Last-Translator: Tiago Silva <Unknown>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2009-12-19 22:28+0000\n"
+"Last-Translator: Philipp Kern <phil+launchpad@philkern.de>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -69,7 +70,7 @@ msgstr ""
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
-msgstr ""
+msgstr "Detectar Automaticamente"
 
 #: ../src/encoding_selector.cpp:158
 msgid "Character Encoding:"
@@ -170,23 +171,20 @@ msgid "Joins an existing obby session"
 msgstr "Entrar numa sessão obby já existente"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "Guardar sessão..."
+msgstr ""
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "Guardar a sessão para utilizar mais tarde"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "Guardar sessão..."
+msgstr ""
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "Guardar a sessão para utilizar mais tarde"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -241,14 +239,12 @@ msgid "Saves a document to another location"
 msgstr "Guarda o documento noutro local"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Gravar documento"
+msgstr ""
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Gravar documento"
+msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -389,9 +385,8 @@ msgid "Name:"
 msgstr "Nome:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
-msgstr "Cor:"
+msgstr ""
 
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
@@ -490,9 +485,8 @@ msgid "Session password:"
 msgstr "Palavra-chave da sessão:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Palavra-chave da sessão:"
+msgstr ""
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -786,9 +780,8 @@ msgstr "Abrir um novo documento"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Gravar documento"
+msgstr ""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -824,9 +817,8 @@ msgstr ""
 "menu \"Editar\"."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "Impossivel mudar de cor: A cor escolhida está em uso"
+msgstr ""
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -863,5 +855,33 @@ msgstr ""
 msgid "Gobby Collaborative Editor"
 msgstr ""
 
+#~ msgid "Save session..."
+#~ msgstr "Guardar sessão..."
+
+#~ msgid "Set colour..."
+#~ msgstr "Definir cor..."
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr ""
+#~ "A cor que escolheu está a ser utilizada. Deve escolher outra ou cancelar "
+#~ "a ligação."
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Mesmo assim deseja fechar o Gobby?"
+
 #~ msgid "Save current document"
 #~ msgstr "Guardar o documento actual"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "Impossivel mudar de cor: A cor escolhida está em uso"
+
+#~ msgid "Colour:"
+#~ msgstr "Cor:"
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Define uma cor para este utilizador"
+
+#~ msgid "_View"
+#~ msgstr "Ver"

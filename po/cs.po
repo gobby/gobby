@@ -7,16 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2009-04-11 17:35+0100\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2009-12-19 22:27+0000\n"
 "Last-Translator: Petr Pulc <petrpulc@gmail.com>\n"
 "Language-Team: Czech\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Poedit-Language: Czech\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 "X-Poedit-Country: CZECH REPUBLIC\n"
+"X-Poedit-Language: Czech\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -182,9 +185,8 @@ msgid "Save session as..."
 msgstr ""
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "Uložit sezení pro pozdější obnovu"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -239,14 +241,12 @@ msgid "Saves a document to another location"
 msgstr "Uložit dokument do jiného umístění"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Uložit dokument"
+msgstr ""
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Uložit dokument"
+msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -386,9 +386,8 @@ msgid "Name:"
 msgstr "Jméno:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
-msgstr "Barva:"
+msgstr ""
 
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
@@ -483,9 +482,8 @@ msgid "Session password:"
 msgstr "Heslo sezení:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Heslo sezení:"
+msgstr ""
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -792,9 +790,8 @@ msgstr "Otevřít dokument"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Uložit dokument"
+msgstr ""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -830,9 +827,8 @@ msgstr ""
 "\"."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "Změna barev selhala: Tato barva se již používá"
+msgstr ""
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -871,5 +867,29 @@ msgstr "Upravujte textové soubory společně"
 msgid "Gobby Collaborative Editor"
 msgstr "Editor pro spolupráci Gobby"
 
+#~ msgid "Save session..."
+#~ msgstr "Uložit sezení..."
+
+#~ msgid "Set colour..."
+#~ msgstr "Nastavit barvu..."
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Nastavit novou barvu pro aktuálního uživatele"
+
+#~ msgid "Colour:"
+#~ msgstr "Barva:"
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr ""
+#~ "Tato barva se již používá. Zvolte si jinou barvu, nebo zrušte spojení."
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Chcete přesto ukončit Gobby?"
+
 #~ msgid "Save current document"
 #~ msgstr "Uložit aktuální dokument"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "Změna barev selhala: Tato barva se již používá"

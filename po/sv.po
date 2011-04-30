@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2007-09-01 23:52+0000\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2009-12-19 22:28+0000\n"
 "Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -170,23 +171,20 @@ msgid "Joins an existing obby session"
 msgstr "Ansluter till en existerande obby-session"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "Spara session..."
+msgstr ""
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "Sparar den kompletta sessionen för att kunna återställa den senare"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "Spara session..."
+msgstr ""
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "Sparar den kompletta sessionen för att kunna återställa den senare"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -241,14 +239,12 @@ msgid "Saves a document to another location"
 msgstr "Sparar dokument till annan plats"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Spara dokument"
+msgstr ""
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Spara dokument"
+msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -389,9 +385,8 @@ msgid "Name:"
 msgstr "Namn:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
-msgstr "Färg:"
+msgstr ""
 
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
@@ -490,9 +485,8 @@ msgid "Session password:"
 msgstr "Sessionslösenord:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Sessionslösenord:"
+msgstr ""
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -789,9 +783,8 @@ msgstr "Öppna nytt dokument"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Spara dokument"
+msgstr ""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -827,9 +820,8 @@ msgstr ""
 "globala inställningar."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "Färgändring misslyckades: Färgen används redan"
+msgstr ""
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -868,5 +860,79 @@ msgstr ""
 msgid "Gobby Collaborative Editor"
 msgstr ""
 
+#~ msgid "Set colour..."
+#~ msgstr "Välj färg..."
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Väljer en ny färg för denna användare"
+
+#~ msgid "Colour:"
+#~ msgstr "Färg:"
+
 #~ msgid "Save current document"
 #~ msgstr "Spara aktuellt dokument"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "Färgändring misslyckades: Färgen används redan"
+
+#~ msgid "Save session..."
+#~ msgstr "Spara session..."
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr ""
+#~ "Färgen används redan. Du kan välja en annan färg eller koppla ner "
+#~ "anslutningen."
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Vill du stänga Gobby ändå?"
+
+#~ msgid "Displays a dialog to customise Gobby for your needs"
+#~ msgstr "Öppnar en dialogruta för att anpassa Gobby efter dina behov"
+
+#~ msgid "_View"
+#~ msgstr "_Visa"
+
+#~ msgid "%0% has joined"
+#~ msgstr "%0% har anslutit"
+
+#~ msgid "%0% has left"
+#~ msgstr "%0% har lämn<t"
+
+#~ msgid "Gobby"
+#~ msgstr "Gobby"
+
+#~ msgid "Colour"
+#~ msgstr "Färg"
+
+#~ msgid "Name"
+#~ msgstr "Namn"
+
+#~ msgid "Subscribed"
+#~ msgstr "Prenumererar"
+
+#~ msgid ""
+#~ "You are not subscribed to the document \"%0%\".\n"
+#~ "\n"
+#~ "To view changes that others make or to edit the document yourself, you "
+#~ "have to subscribe to this document. Use the following button to perform "
+#~ "this.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Du prenumererar inte på dokumentet \"%0%\".\n"
+#~ "\n"
+#~ "För att se ändringar andra gör eller för att ändra dokumentet själv måste "
+#~ "du prenumerera på det här dokumentet. Använd följande knapp för att göra "
+#~ "detta.\n"
+#~ "\n"
+
+#~ msgid "Enter user password"
+#~ msgstr "Ange användarlösenord"
+
+#~ msgid ""
+#~ "The document \"%0%\" has been changed since it was saved to disk. Are you "
+#~ "sure that you want to close it?"
+#~ msgstr ""
+#~ "Dokumentet \"%0%\" har ändrats sedan det sparades till disk. Är du säker "
+#~ "på att du vill stänga det?"

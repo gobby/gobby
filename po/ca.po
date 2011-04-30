@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2009-06-08 21:28+0000\n"
-"Last-Translator: David Planella <Unknown>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2009-12-19 22:27+0000\n"
+"Last-Translator: Philipp Kern <phil+launchpad@philkern.de>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -791,8 +792,8 @@ msgid ""
 "documents."
 msgstr ""
 "Feu clic en «Aplica» per a aplicar els nous paràmetres als documents que "
-"estan oberts. «D'acord» només emmagatzemarà els valors per a usar-los amb els "
-"documents de nova creació."
+"estan oberts. «D'acord» només emmagatzemarà els valors per a usar-los amb "
+"els documents de nova creació."
 
 #. Build password dialog with info
 #: ../src/window.cpp:954
@@ -814,9 +815,9 @@ msgid ""
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
-"Aquestes preferències només afecten al document actiu «%0%». Si voleu canviar "
-"les preferències globals, utilitzeu l'element del menú de preferències al "
-"menú «Edita»."
+"Aquestes preferències només afecten al document actiu «%0%». Si voleu "
+"canviar les preferències globals, utilitzeu l'element del menú de "
+"preferències al menú «Edita»."
 
 #: ../src/window.cpp:1127
 msgid "Color change failed: Color already in use"
@@ -859,5 +860,60 @@ msgstr ""
 msgid "Gobby Collaborative Editor"
 msgstr ""
 
+#~ msgid "Set colour..."
+#~ msgstr "Estableix el color..."
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Estableix el color per a aquest usuari"
+
+#~ msgid "Colour:"
+#~ msgstr "Color:"
+
 #~ msgid "Save current document"
 #~ msgstr "Desa el document actual"
+
+#~ msgid "Displays a dialog to customise Gobby for your needs"
+#~ msgstr ""
+#~ "Mostra un diàleg per a personalitzar el Gobby a les vostres necessitats"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "Ha fallat el canvi de color: el color ja està en ús"
+
+#~ msgid "Save session..."
+#~ msgstr "Desa la sessió..."
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr ""
+#~ "El color ja està en ús. Podeu triar un altre color o cancel·lar la "
+#~ "connexió."
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Voleu tancar el Gobby igualment?"
+
+#~ msgid "%0% has joined"
+#~ msgstr "%0% s'ha unit"
+
+#~ msgid "%0% has left"
+#~ msgstr "%0% ha sortit"
+
+#~ msgid "Gobby"
+#~ msgstr "Gobby"
+
+#~ msgid "Colour"
+#~ msgstr "Color"
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#~ msgid "Subscribed"
+#~ msgstr "Subscrit"
+
+#~ msgid "%0% pending change"
+#~ msgid_plural "%0% pending changes"
+#~ msgstr[0] "%0% canvi pendent"
+#~ msgstr[1] "%0% canvis pendents"
+
+#~ msgid "Revision: %0%"
+#~ msgstr "Revisió: %0%"

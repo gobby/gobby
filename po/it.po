@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: obby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2009-07-14 13:57+0000\n"
-"Last-Translator: Milo Casagrande <milo@casagrande.name>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2010-02-01 17:06+0000\n"
+"Last-Translator: Paolo Sammicheli <paolo@sammicheli.net>\n"
 "Language-Team: Italian <it@li.org>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -49,7 +50,7 @@ msgstr "Elenco documenti"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
-msgstr ""
+msgstr "Errore GtkSpell: %0%"
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
@@ -124,7 +125,7 @@ msgstr "Cerca e sostituisci"
 
 #: ../src/finddialog.cpp:182
 msgid "\"%0%\" has not been found in the document."
-msgstr "«%0%« non è stato trovato nel documento."
+msgstr "«%0%» non è stato trovato nel documento."
 
 #: ../src/finddialog.cpp:265
 msgid "No occurence has been replaced"
@@ -169,23 +170,20 @@ msgid "Joins an existing obby session"
 msgstr "Entra in una sessione esistente"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "Salva sessione..."
+msgstr "Salva la sessione"
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "Salva la sessione completa per un ripristino futuro"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "Salva sessione..."
+msgstr "Salva la sessione come..."
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "Salva la sessione completa per un ripristino futuro"
+msgstr "«Salva come...» la sessione completa per un successivo ripristino"
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -240,14 +238,12 @@ msgid "Saves a document to another location"
 msgstr "Salva un documento in un'altra posizione"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Salva documento"
+msgstr "Salva tutti i documenti"
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Salva documento"
+msgstr "Salva tutti i documenti"
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -387,7 +383,6 @@ msgid "Name:"
 msgstr "Nome :"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
 msgstr "Colore:"
 
@@ -484,9 +479,8 @@ msgid "Session password:"
 msgstr "Password di sessione:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Password di sessione:"
+msgstr "Password di sessione richiesta"
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -725,9 +719,10 @@ msgid ""
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
-"Inizializzazione di Zeroconf fallita. Probabilmente è necessario eseguire "
-"avahi-daemon o mDNSResponder, in base alla libreria usata, come root prima "
-"di Gobby. Il supporto a Zeroconf è disabilitato per questa sessione."
+"Inizializzazione di Zeroconf non riuscita. Probabilmente è necessario "
+"eseguire avahi-daemon o mDNSResponder, in base alla libreria usata, come "
+"root prima di Gobby. Il supporto a Zeroconf è disabilitato per questa "
+"sessione."
 
 #: ../src/window.cpp:280
 msgid "You are still connected to a session"
@@ -768,6 +763,20 @@ msgid ""
 "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
 "PURPOSE.  See the GNU General Public License for more details."
 msgstr ""
+"Questo programma è Software Libero: sei libero di ridistribuirlo\n"
+"con o senza modifiche sotto gli stessi termini della GNU General Public\n"
+"License come pubblicato dalla Free Software Foundation nella \n"
+"versione 2 e successive.\n"
+"\n"
+"Questo programma è distribuito nella speranza che vi sia utile,\n"
+"ma SENZA ALCUNA GARANZIA; incluso senza la garanzia implicita\n"
+"di COMMERCIABILITÀ o di ADEGUATEZZA AD UN PARTICOLARE\n"
+"SCOPO. Per ulteriori dettagli consultate la versione completa della\n"
+"GNU General Public License.\n"
+"\n"
+"Nota: solo la versione originale in Inglese ha gli effetti di legge. "
+"Riferirsi \n"
+"solo alla versione Inglese per qualsiasi aspetto legale."
 
 #: ../src/window.cpp:681
 msgid "Create document"
@@ -783,9 +792,8 @@ msgstr "Apri nuovo documento"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Salva documento"
+msgstr "Salva il documento «%0%»"
 
 #: ../src/window.cpp:910
 msgid ""
@@ -820,9 +828,8 @@ msgstr ""
 "«Modifica»."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "Cambiamento colore fallito: colore già in uso"
+msgstr "Cambio colore non riuscito: colore già in uso"
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -861,5 +868,32 @@ msgstr "Modifica file di testo in modo collaborativo"
 msgid "Gobby Collaborative Editor"
 msgstr "Gobby - Editor collaborativo"
 
+#~ msgid "Save session..."
+#~ msgstr "Salva sessione..."
+
+#~ msgid "Displays a dialog to customise Gobby for your needs"
+#~ msgstr ""
+#~ "Visualizza un dialogo per personalizzare Gobby alle proprie esigenze"
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Imposta un nuovo colore per questo utente"
+
+#~ msgid "Set colour..."
+#~ msgstr "Imposta colore..."
+
+#~ msgid "Colour:"
+#~ msgstr "Colore:"
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr "Colore già in uso. Sceglierne un altro o annullare la connessione."
+
 #~ msgid "Save current document"
 #~ msgstr "Salva documento corrente"
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Chiudere Gobby in ogni caso?"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "Cambiamento colore fallito: colore già in uso"

@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-20 18:07+0200\n"
-"PO-Revision-Date: 2010-05-18 13:43+0000\n"
+"PO-Revision-Date: 2010-05-24 17:18+0000\n"
 "Last-Translator: Oier Mees <Unknown>\n"
 "Language-Team: Basque <eu@li.org>\n"
+"Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-05-18 13:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -30,7 +31,7 @@ msgstr ""
 
 #: ../src/chat.cpp:242
 msgid "%0%: %1%"
-msgstr "Copy text   \t %0%: %1%"
+msgstr "%0%: %1%"
 
 #: ../src/chat.cpp:256
 msgid "Document %0% does not exist"

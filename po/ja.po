@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2009-03-12 07:37+0000\n"
-"Last-Translator: Mitsuya Shibata <mty.shibata@gmail.com>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2010-04-09 01:45+0000\n"
+"Last-Translator: Fumihito YOSHIDA <hito@kugutsu.org>\n"
 "Language-Team: Chikahiro Masami <cmasa.z321@gmail.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -169,23 +170,20 @@ msgid "Joins an existing obby session"
 msgstr "存在するobbyセッションに参加"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "セッションを保存..."
+msgstr ""
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "後で復元するためにセッションを完全に保存する"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "セッションを保存..."
+msgstr ""
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "後で復元するためにセッションを完全に保存する"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -240,14 +238,12 @@ msgid "Saves a document to another location"
 msgstr "文書を別な場所に保存"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "文書の保存"
+msgstr ""
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "文書の保存"
+msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -387,9 +383,8 @@ msgid "Name:"
 msgstr "名前:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
-msgstr "色:"
+msgstr ""
 
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
@@ -425,7 +420,7 @@ msgstr "obbyセッションに参加"
 
 #: ../src/joindialog.cpp:55
 msgid "Host:"
-msgstr "ホスト:"
+msgstr "ホスト："
 
 #: ../src/joindialog.cpp:60
 msgid "Local network"
@@ -434,7 +429,7 @@ msgstr "ローカル・ネットワーク"
 #. resetup columns
 #: ../src/joindialog.cpp:365
 msgid "User"
-msgstr "利用者"
+msgstr "ユーザー"
 
 #: ../src/joindialog.cpp:366
 msgid "Host"
@@ -487,13 +482,12 @@ msgid "Session password:"
 msgstr "セッション・パスワード:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "セッション・パスワード:"
+msgstr ""
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
-msgstr "利用者パスワード:"
+msgstr "ユーザーのパスワード:"
 
 #: ../src/joinprogressdialog.cpp:315
 msgid "Joining obby session..."
@@ -786,9 +780,8 @@ msgstr "新しい文書を開く"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "文書の保存"
+msgstr ""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -822,9 +815,8 @@ msgstr ""
 "い場合は、「編集」メニューの設定メニューを使ってください。"
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "色の変更に失敗しました: その色はすでに使われています"
+msgstr ""
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -863,5 +855,33 @@ msgstr "共同でテキストファイルを編集する"
 msgid "Gobby Collaborative Editor"
 msgstr "Gobby コラボレーティブ・エディタ"
 
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr ""
+#~ "その色はすでに使われています。別の色を選ぶか、接続をキャンセルしてくださ"
+#~ "い。"
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "それでもGobbyを終了しますか？"
+
 #~ msgid "Save current document"
 #~ msgstr "現在の文書を保存"
+
+#~ msgid "Save session..."
+#~ msgstr "セッションを保存..."
+
+#~ msgid "Set colour..."
+#~ msgstr "色を設定..."
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "この利用者の新しい色を設定"
+
+#~ msgid "Colour:"
+#~ msgstr "色:"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "色の変更に失敗しました: その色はすでに使われています"
+
+#~ msgid "Displays a dialog to customise Gobby for your needs"
+#~ msgstr "ダイアログを表示して、Gobbyをカスタマイズする"

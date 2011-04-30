@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2008-07-04 10:14+0000\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2009-12-19 22:27+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2008-08-27 14:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -166,23 +167,20 @@ msgid "Joins an existing obby session"
 msgstr "מצטרף למפגש obby קיים"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "שמור מפגש..."
+msgstr ""
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "שומר את המפגש כולו לשיחזור מאוחר יותר"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "שמור מפגש..."
+msgstr ""
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "שומר את המפגש כולו לשיחזור מאוחר יותר"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -237,14 +235,12 @@ msgid "Saves a document to another location"
 msgstr "שומר מסמך למיקום שונה"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "שמור מסמך"
+msgstr ""
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "שמור מסמך"
+msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -384,9 +380,8 @@ msgid "Name:"
 msgstr "שם:‏"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
-msgstr "צבע:"
+msgstr ""
 
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
@@ -481,9 +476,8 @@ msgid "Session password:"
 msgstr "סיסמת המפגש:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "סיסמת המפגש:"
+msgstr ""
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -780,9 +774,8 @@ msgstr "פתח מסמך חדש"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "שמור מסמך"
+msgstr ""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -816,9 +809,8 @@ msgstr ""
 "הכלליות, השתמש בפריט העדפות מהתפריט \"עריכה\"."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "שינוי הצבע נכשל: הצבע כבר בשימוש"
+msgstr ""
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -854,9 +846,34 @@ msgid "Edit text files collaboratively"
 msgstr ""
 
 #: ../contrib/gobby.desktop.in.h:2
-#, fuzzy
 msgid "Gobby Collaborative Editor"
-msgstr "עורך טקסט שיתופי"
+msgstr ""
+
+#~ msgid "Save session..."
+#~ msgstr "שמור מפגש..."
+
+#~ msgid "Displays a dialog to customise Gobby for your needs"
+#~ msgstr "מציג חלון להתאמת Gobby לצרכיך"
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "הגדר צבע חדש למשתמש זה"
+
+#~ msgid "Set colour..."
+#~ msgstr "הגדר צבע..."
+
+#~ msgid "Colour:"
+#~ msgstr "צבע:"
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr "הצבע כבר בשימוש. תוכל לבחור בצבע אחר או לבטל את החיבור."
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "האם ברצונך לסגור את Gobby למרות זאת?"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "שינוי הצבע נכשל: הצבע כבר בשימוש"
 
 #~ msgid "Save current document"
 #~ msgstr "שמור את המסמך הנוכחי"

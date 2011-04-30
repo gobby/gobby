@@ -9,16 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2008-11-27 12:16+0100\n"
-"Last-Translator: Peer Janssen <peer@baden-online.de>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2011-04-15 22:43+0000\n"
+"Last-Translator: bruno <annoa.b@gmail.com>\n"
 "Language-Team: Peer Janssen <peer@baden-online.de>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2007-12-31 17:48+0000\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -52,14 +53,14 @@ msgstr "Liste des documents"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
-msgstr ""
+msgstr "Erreur GtkSpell : %0%"
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
 #. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
 #: ../src/encoding.cpp:53
 msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-msgstr ""
+msgstr "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
 
 #: ../src/encoding.cpp:113
 msgid ""
@@ -71,7 +72,7 @@ msgstr ""
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
-msgstr ""
+msgstr "Détection Automatique"
 
 #: ../src/encoding_selector.cpp:158
 msgid "Character Encoding:"
@@ -172,23 +173,20 @@ msgid "Joins an existing obby session"
 msgstr "Participer à une séance « obby » déjà en cours"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "Enregistrer une séance..."
+msgstr "Enregistrer la session"
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "Enregistre la séance en entier pour une restauration ultérieure"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "Enregistrer une séance..."
+msgstr "Enregistrer la session sous..."
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "Enregistre la séance en entier pour une restauration ultérieure"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -243,14 +241,12 @@ msgid "Saves a document to another location"
 msgstr "Sauvegarde un document dans un autre fichier"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Enregistrer le document"
+msgstr "Enregistrer tous les documents"
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Enregistrer le document"
+msgstr "Enregistre tous les documents"
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -392,9 +388,8 @@ msgid "Name:"
 msgstr "Nom :"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
-msgstr "Couleur :"
+msgstr ""
 
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
@@ -410,11 +405,11 @@ msgstr "Créer une séance"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
-msgstr ""
+msgstr "Fichiers .obby"
 
 #: ../src/hostdialog.cpp:108
 msgid "All files"
-msgstr ""
+msgstr "Tous les fichiers"
 
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
@@ -493,9 +488,8 @@ msgid "Session password:"
 msgstr "Mot de passe de la séance :"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Mot de passe de la séance :"
+msgstr "Mot de passe de session requis"
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -624,11 +618,8 @@ msgid "Remember the positions and states"
 msgstr "Mémoriser les positions et attributs"
 
 #: ../src/preferencesdialog.cpp:229
-#, fuzzy
 msgid "Highlight the window on incoming chat messages"
 msgstr ""
-"Mettre en valeur la fenêtre lorsque des messages instantanés vous "
-"parviennent."
 
 #: ../src/preferencesdialog.cpp:235
 msgid "Show text only"
@@ -721,7 +712,7 @@ msgstr "Aucune langue sélectionnée"
 
 #: ../src/statusbar.cpp:72
 msgid "Line: %0%, Column: %1%"
-msgstr ""
+msgstr "Ligne : %0%, colonne : %1%"
 
 #: ../src/userlist.cpp:94
 msgid "Online"
@@ -796,9 +787,8 @@ msgstr "Ouvrir un nouveau document"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Enregistrer le document"
+msgstr "Enregistrer le document « %0% »"
 
 #: ../src/window.cpp:910
 msgid ""
@@ -829,14 +819,13 @@ msgid ""
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
 msgstr ""
-"Ces préférences affectent uniquement le document « %0% », actuellement actif. "
-"Si vous désirez changer les préférences générales, utiliser la boîte de "
-"dialogue préférences du menu « Éditer »."
+"Ces préférences affectent uniquement le document « %0% », actuellement "
+"actif. Si vous désirez changer les préférences générales, utiliser la boîte "
+"de dialogue préférences du menu « Éditer »."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "Échec du changement de couleur : cette couleur est déjà utilisée"
+msgstr "Le changement de couleur a échoué : couleur déjà utilisée"
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -875,5 +864,33 @@ msgstr "Edition collaborative de fichier texte"
 msgid "Gobby Collaborative Editor"
 msgstr "Editeur collaboratif Gobby"
 
+#~ msgid "Colour:"
+#~ msgstr "Couleur :"
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Voulez-vous fermer Gobby malgré tout ?"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "Échec du changement de couleur : cette couleur est déjà utilisée"
+
+#~ msgid "Set colour..."
+#~ msgstr "Choisir une couleur..."
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Choisir une nouvelle couleur pour cet utilisateur"
+
 #~ msgid "Save current document"
 #~ msgstr "Enregistrer le document actuel"
+
+#~ msgid "Save session..."
+#~ msgstr "Enregistrer une séance..."
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr ""
+#~ "Cette couleur est déjà utilisée. Vous devez choisir une autre couleur ou "
+#~ "annuler la connection."
+
+#~ msgid "Displays a dialog to customise Gobby for your needs"
+#~ msgstr "Afficher une boîte de dialogue pour personnaliser Gobby"

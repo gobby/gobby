@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2007-06-16 00:19+0000\n"
-"Last-Translator: Carlos Z.F. Liu <carlosliu@users.sourceforge.net>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2010-04-18 10:41+0000\n"
+"Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -28,15 +29,15 @@ msgstr ""
 
 #: ../src/chat.cpp:242
 msgid "%0%: %1%"
-msgstr ""
+msgstr "%0%: %1%"
 
 #: ../src/chat.cpp:256
 msgid "Document %0% does not exist"
-msgstr ""
+msgstr "文档 %0% 不存在"
 
 #: ../src/chat.cpp:262
 msgid "Usage: /remove <document>"
-msgstr ""
+msgstr "用法： /remove <document>"
 
 #: ../src/documentlist.cpp:51
 msgid "Subscribe"
@@ -66,11 +67,11 @@ msgstr ""
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
-msgstr ""
+msgstr "自动检测"
 
 #: ../src/encoding_selector.cpp:158
 msgid "Character Encoding:"
-msgstr ""
+msgstr "字符编码："
 
 #: ../src/finddialog.cpp:43
 msgid "Find what:"
@@ -166,23 +167,20 @@ msgid "Joins an existing obby session"
 msgstr "加入到一个已存在的 obby 会话"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
-msgstr "保存会话..."
+msgstr ""
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
 msgstr "保存完成的会话以便以后恢复"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "保存会话..."
+msgstr ""
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "保存完成的会话以便以后恢复"
+msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -202,7 +200,7 @@ msgstr "退出程序"
 
 #: ../src/header.cpp:286
 msgid "_Session"
-msgstr ""
+msgstr "会话(_S)"
 
 #: ../src/header.cpp:292
 msgid "Create document..."
@@ -237,14 +235,12 @@ msgid "Saves a document to another location"
 msgstr "将文档保存至其它位置"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "保存文档"
+msgstr ""
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "保存文档"
+msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -256,7 +252,7 @@ msgstr "关闭一个已打开的文档"
 
 #: ../src/header.cpp:341
 msgid "_Edit"
-msgstr ""
+msgstr "编辑(_E)"
 
 #: ../src/header.cpp:347
 msgid "Find..."
@@ -304,7 +300,7 @@ msgstr "语法"
 
 #: ../src/header.cpp:391
 msgid "_User"
-msgstr ""
+msgstr "用户(_U)"
 
 #: ../src/header.cpp:397
 msgid "Set password..."
@@ -324,7 +320,7 @@ msgstr "为此用户设置新的颜色"
 
 #: ../src/header.cpp:411
 msgid "_Window"
-msgstr ""
+msgstr "窗口(_W)"
 
 #: ../src/header.cpp:417 ../src/icon.cpp:21 ../src/userlist.cpp:122
 msgid "User list"
@@ -332,23 +328,23 @@ msgstr "用户列表"
 
 #: ../src/header.cpp:418
 msgid "Displays a list of users that are currently joined"
-msgstr ""
+msgstr "显示当前加入的用户列表"
 
 #: ../src/header.cpp:427
 msgid "Displays a list of documents within the current session"
-msgstr ""
+msgstr "显示当前会话的文档列表"
 
 #: ../src/header.cpp:436 ../src/icon.cpp:33
 msgid "Chat"
-msgstr ""
+msgstr "聊天"
 
 #: ../src/header.cpp:437
 msgid "Displays a chat to talk to other people in the session"
-msgstr ""
+msgstr "显示一个聊天来和这个会话中的其他人谈话"
 
 #: ../src/header.cpp:442
 msgid "_Help"
-msgstr ""
+msgstr "帮助(_H)"
 
 #: ../src/header.cpp:448
 msgid "About"
@@ -384,7 +380,6 @@ msgid "Name:"
 msgstr "名称："
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
 msgstr "颜色："
 
@@ -402,15 +397,15 @@ msgstr "恢复会话"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
-msgstr ""
+msgstr ".obby 文件"
 
 #: ../src/hostdialog.cpp:108
 msgid "All files"
-msgstr ""
+msgstr "所有文件"
 
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
-msgstr ""
+msgstr "主机(_H)"
 
 #: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
 msgid "Opening obby session..."
@@ -443,7 +438,7 @@ msgstr "端口"
 
 #: ../src/joindialog.cpp:386
 msgid "Failure"
-msgstr ""
+msgstr "失败"
 
 #: ../src/joinprogressdialog.cpp:34
 msgid ""
@@ -478,9 +473,8 @@ msgid "Session password:"
 msgstr "会话密码："
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "会话密码："
+msgstr ""
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -496,7 +490,7 @@ msgstr "加入 obby 会话..."
 #. this that really waits for the welcome packet.
 #: ../src/joinprogressdialog.cpp:418
 msgid "Setting up connection encryption (TLS)..."
-msgstr ""
+msgstr "建立加密连接(TLS)..."
 
 #. Update status message
 #: ../src/joinprogressdialog.cpp:478
@@ -773,9 +767,8 @@ msgstr "打开新文档"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "保存文档"
+msgstr ""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -807,9 +800,8 @@ msgstr ""
 "单的“首选项”。"
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "修改颜色失败：该颜色已被使用"
+msgstr ""
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -846,5 +838,28 @@ msgstr ""
 msgid "Gobby Collaborative Editor"
 msgstr ""
 
+#~ msgid "Set colour..."
+#~ msgstr "设置颜色..."
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "为此用户设置新的颜色"
+
+#~ msgid "Colour:"
+#~ msgstr "颜色："
+
 #~ msgid "Save current document"
 #~ msgstr "保存当前文档"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "修改颜色失败：该颜色已被使用"
+
+#~ msgid "Save session..."
+#~ msgstr "保存会话..."
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr "您选择的色彩已经被使用。你可以选择另外的色彩或取消连接。"
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "你仍然要关闭 Gobby 吗？"

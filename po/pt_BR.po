@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2007-10-16 21:17+0000\n"
-"Last-Translator: Nelson do Vale <nelson@ocastudios.com>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2010-09-22 03:21+0000\n"
+"Last-Translator: André Gondim <andregondim@ubuntu.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 15:04+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -37,7 +38,7 @@ msgstr "Documento %0% não existe"
 
 #: ../src/chat.cpp:262
 msgid "Usage: /remove <document>"
-msgstr "Use: /remove <document>"
+msgstr "Use: /remove <documento>"
 
 #: ../src/documentlist.cpp:51
 msgid "Subscribe"
@@ -49,14 +50,14 @@ msgstr "Lista de documentos"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
-msgstr ""
+msgstr "GtkSpell erro: %0%"
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
 #. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
 #: ../src/encoding.cpp:53
 msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-msgstr ""
+msgstr "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
 
 #: ../src/encoding.cpp:113
 msgid ""
@@ -68,7 +69,7 @@ msgstr ""
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
-msgstr ""
+msgstr "Autodetectar"
 
 #: ../src/encoding_selector.cpp:158
 msgid "Character Encoding:"
@@ -169,7 +170,6 @@ msgid "Joins an existing obby session"
 msgstr "Acessa uma sessão obby existente"
 
 #: ../src/header.cpp:254
-#, fuzzy
 msgid "Save session"
 msgstr "Salvar sessão"
 
@@ -178,14 +178,12 @@ msgid "Saves the complete session for a later restore"
 msgstr "Salva completamente a sessão da última restauração"
 
 #: ../src/header.cpp:263
-#, fuzzy
 msgid "Save session as..."
-msgstr "Salvar sessão"
+msgstr "Salvar sessão como..."
 
 #: ../src/header.cpp:264
-#, fuzzy
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr "Salva completamente a sessão da última restauração"
+msgstr "\"Salvar como...\" a sessão completa para restauração futura"
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -240,14 +238,12 @@ msgid "Saves a document to another location"
 msgstr "Salva um documento em outro local"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Salvar documento"
+msgstr "Salvar todos documentos"
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Salvar documento"
+msgstr "Salvar todos documentos"
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -336,7 +332,7 @@ msgstr "Lista de usuários"
 
 #: ../src/header.cpp:418
 msgid "Displays a list of users that are currently joined"
-msgstr ""
+msgstr "Exibir uma lista de usuários que estão atualmente associados"
 
 #: ../src/header.cpp:427
 msgid "Displays a list of documents within the current session"
@@ -388,7 +384,6 @@ msgid "Name:"
 msgstr "Nome:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
 msgstr "Cor:"
 
@@ -406,11 +401,11 @@ msgstr "Restaurar sessão"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
-msgstr ""
+msgstr "arquivos .obby"
 
 #: ../src/hostdialog.cpp:108
 msgid "All files"
-msgstr ""
+msgstr "Todos os arquivos"
 
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
@@ -485,9 +480,8 @@ msgid "Session password:"
 msgstr "Senha da sessão:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Senha da sessão:"
+msgstr "Senha da sessão é necessária"
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -557,7 +551,7 @@ msgstr ""
 
 #: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
-msgstr ""
+msgstr "Quebra de linha"
 
 #: ../src/preferencesdialog.cpp:132
 msgid "Line numbers"
@@ -617,7 +611,7 @@ msgstr "Lembrar as posições e estados"
 
 #: ../src/preferencesdialog.cpp:229
 msgid "Highlight the window on incoming chat messages"
-msgstr ""
+msgstr "Destacar a janela ao receber mensagens de chat"
 
 #: ../src/preferencesdialog.cpp:235
 msgid "Show text only"
@@ -710,7 +704,7 @@ msgstr "Nenhuma idioma selecionado"
 
 #: ../src/statusbar.cpp:72
 msgid "Line: %0%, Column: %1%"
-msgstr ""
+msgstr "Linhas: %0%, Colunas: %1%"
 
 #: ../src/userlist.cpp:94
 msgid "Online"
@@ -726,6 +720,10 @@ msgid ""
 "mDNSResponder, depending on the library you use, as root prior to Gobby. "
 "Zeroconf support is deactivated for this session."
 msgstr ""
+"Inicialização Zeroconf falhou. Provavelmente você precisa rodar, como "
+"usuário root anteriormente ao Gobby., o avahi-daemon ou mDNSResponder, "
+"dependendo da biblioteca que você utiliza. Suporte ao Zeroconf está "
+"desativado para esta sessão."
 
 #: ../src/window.cpp:280
 msgid "You are still connected to a session"
@@ -737,7 +735,7 @@ msgstr "Você quer fechar a sessão Gobby mesmo assim?"
 
 #: ../src/window.cpp:294
 msgid "C_ancel"
-msgstr ""
+msgstr "C_ancelar"
 
 #: ../src/window.cpp:471
 msgid "Use default .obby extension if none is given"
@@ -766,6 +764,16 @@ msgid ""
 "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
 "PURPOSE.  See the GNU General Public License for more details."
 msgstr ""
+"Este programa é um software livre; você pode redistribuí-lo\n"
+"e/ou modificá-lo sob os termos da GNU General Public\n"
+"License como publicado pela Free Software Foundation; tanto\n"
+"a versão 2 da licença, ou (na sua opinião) qualquer versão\n"
+"posterior.\n"
+"\n"
+"Este programa é distribuído na esperança de ser\n"
+"útil, mas SEM NENHUMA GARANTIA; nem mesmo a garantia\n"
+"implícita de COMERCIALIZAÇÃO ou ADEQUAÇÃO PARA UM USO\n"
+"ESPECÍFICO. Veja a GNU General Public License para mais detalhes."
 
 #: ../src/window.cpp:681
 msgid "Create document"
@@ -781,9 +789,8 @@ msgstr "Abrir novo documento"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Salvar documento"
+msgstr "Salvar documento: \"%0%\""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -818,9 +825,8 @@ msgstr ""
 "mudar as preferências globais, use o menu de preferências no menu \"Editar\""
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "A mudança de cor falhou: a cor já está sendo usada."
+msgstr "Alteração da cor falhou: Cor já está em uso"
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -828,7 +834,7 @@ msgstr "Conectado em %0%"
 
 #: ../src/window.cpp:1423
 msgid "Serving on port %0%"
-msgstr ""
+msgstr "Serviço na porta %0%"
 
 #: ../src/window.cpp:1553
 msgid "Save changes to document \"%0%\" before closing?"
@@ -854,11 +860,38 @@ msgstr "Fechar sem salvar"
 
 #: ../contrib/gobby.desktop.in.h:1
 msgid "Edit text files collaboratively"
-msgstr ""
+msgstr "Editar arquivos de texto colaborativamente"
 
 #: ../contrib/gobby.desktop.in.h:2
 msgid "Gobby Collaborative Editor"
-msgstr ""
+msgstr "Editor colaborativo Gobby"
+
+#~ msgid "Save session..."
+#~ msgstr "Salvar sessão"
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Definir uma nova cor para o usuário"
+
+#~ msgid "Set colour..."
+#~ msgstr "Definir cor..."
+
+#~ msgid "Colour:"
+#~ msgstr "Cor:"
 
 #~ msgid "Save current document"
 #~ msgstr "Salvar documento atual"
+
+#~ msgid "Displays a dialog to customise Gobby for your needs"
+#~ msgstr ""
+#~ "Exibe um diálogo para personalizar o Gobby conforme suas necessidades"
+
+#~ msgid ""
+#~ "Colour is already in use. You may choose another colour or cancel the "
+#~ "connection."
+#~ msgstr "Esta cor já está em uso. Escolha outra cor ou cancele a conexão."
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Você quer fechar a sessão Gobby mesmo assim?"
+
+#~ msgid "Colour change failed: Colour already in use"
+#~ msgstr "A mudança de cor falhou: a cor já está sendo usada."

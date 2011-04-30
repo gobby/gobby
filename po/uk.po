@@ -6,16 +6,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 22:30+0100\n"
-"PO-Revision-Date: 2009-10-06 20:44+0300\n"
-"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2010-02-05 15:16+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@gmail.com>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Lokalize 0.3\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -49,7 +51,7 @@ msgstr "Список документів"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
-msgstr ""
+msgstr "Помилка GtkSpell: %0%"
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
@@ -238,14 +240,12 @@ msgid "Saves a document to another location"
 msgstr "Зберегти документ за іншою адресою"
 
 #: ../src/header.cpp:327
-#, fuzzy
 msgid "Save all documents"
-msgstr "Зберегти документ"
+msgstr "Зберегти всі документи"
 
 #: ../src/header.cpp:328
-#, fuzzy
 msgid "Saves all documents"
-msgstr "Зберегти документ"
+msgstr "Зберігає всі документи"
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -387,7 +387,6 @@ msgid "Name:"
 msgstr "Ім’я:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
-#, fuzzy
 msgid "Color:"
 msgstr "Колір:"
 
@@ -489,9 +488,8 @@ msgid "Session password:"
 msgstr "Пароль сеансу:"
 
 #: ../src/joinprogressdialog.cpp:192
-#, fuzzy
 msgid "Session password required"
-msgstr "Пароль сеансу:"
+msgstr "Слід вказати пароль сеансу"
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -801,9 +799,8 @@ msgstr "Відкрити новий документ"
 
 #. Window title
 #: ../src/window.cpp:804
-#, fuzzy
 msgid "Save document \"%0%\""
-msgstr "Зберегти документ"
+msgstr "Збереження документа «%0%»"
 
 #: ../src/window.cpp:910
 msgid ""
@@ -811,9 +808,9 @@ msgid ""
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
 msgstr ""
-"Натисніть «Застосувати», щоб застосувати нові параметри до поточних відкритих "
-"документів. Натискання кнопки «Гаразд» призведе до збереження параметрів для "
-"наступного використання у нових документах."
+"Натисніть «Застосувати», щоб застосувати нові параметри до поточних "
+"відкритих документів. Натискання кнопки «Гаразд» призведе до збереження "
+"параметрів для наступного використання у нових документах."
 
 #. Build password dialog with info
 #: ../src/window.cpp:954
@@ -840,9 +837,8 @@ msgstr ""
 "параметрів у меню «Правка»."
 
 #: ../src/window.cpp:1127
-#, fuzzy
 msgid "Color change failed: Color already in use"
-msgstr "Спроба зміни кольору була невдалою: цей колір вже використано"
+msgstr "Спроба зміни кольору завершилася невдало: колір вже використано"
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
