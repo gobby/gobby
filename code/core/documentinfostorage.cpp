@@ -158,7 +158,7 @@ Gobby::DocumentInfoStorage::~DocumentInfoStorage()
 	try
 	{
 		create_directory_with_parents(
-			Glib::path_get_dirname(filename()));
+			Glib::path_get_dirname(filename()), 0700);
 		xmlpp::Document document;
 		xmlpp::Element* root = document.create_root_node("documents");
 

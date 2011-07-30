@@ -237,7 +237,7 @@ Gobby::Config::~Config()
 	try
 	{
 		Glib::ustring dirname = Glib::path_get_dirname(m_filename);
-		create_directory_with_parents(dirname);
+		create_directory_with_parents(dirname, 0700);
 
 		document.write_to_file_formatted(m_filename, "UTF-8");
 	}

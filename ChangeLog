@@ -1,3 +1,11 @@
+2011-07-30  Philipp Kern  <phil@0x539.de>
+
+	* code/core/documentinfostorage.cpp:
+	* code/core/folder.cpp:
+	* code/util/config.cpp:
+	* code/util/file.cpp: create directories with mode 0700 (Debian bug
+	  #636015)
+
 2011-04-03  Philipp Kern  <phil@0x539.de>
 
 	* *.cpp, *.hpp: adjusted the address of the Free Software Foundation

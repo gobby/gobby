@@ -37,7 +37,7 @@
 
 namespace
 {
-	void create_directory(const char* path)
+	void create_directory(const char* path, int mode)
 	{
 #ifdef WIN32
 		// TODO: Use widechar API?
@@ -70,7 +70,7 @@ namespace
 					error_message));
 		}
 #else
-		if(g_mkdir(path, 0755) == -1)
+		if(g_mkdir(path, mode) == -1)
 		{
 			throw std::runtime_error(
 				Glib::ustring::compose(
@@ -84,7 +84,7 @@ namespace
 
 namespace Gobby
 {
-	void create_directory_with_parents(const std::string& path)
+	void create_directory_with_parents(const std::string& path, int mode)
 	{
 		// Directory exists, nothing to do
 		if(Glib::file_test(path, Glib::FILE_TEST_IS_DIR) )
@@ -94,10 +94,10 @@ namespace Gobby
 		std::string path_to = Glib::path_get_dirname(path);
 
 		// Create this path, if it doesn't exists
-		create_directory_with_parents(path_to);
+		create_directory_with_parents(path_to, mode);
 
 		// Create new directory
-		create_directory(path.c_str() );
+		create_directory(path.c_str(), mode);
 	}
 
 	std::string config_filename(const std::string& filename)

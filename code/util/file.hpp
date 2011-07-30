@@ -24,7 +24,7 @@
 
 namespace Gobby
 {
-	void create_directory_with_parents(const std::string& path);
+	void create_directory_with_parents(const std::string& path, int mode=0755);
 
 	std::string config_filename(const std::string& filename);
 }

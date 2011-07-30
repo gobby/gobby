@@ -72,7 +72,7 @@ namespace
 
 		try
 		{
-			Gobby::create_directory_with_parents(dirname);
+			Gobby::create_directory_with_parents(dirname, 0700);
 
 			InfAdoptedSessionRecord* record =
 				inf_adopted_session_record_new(
