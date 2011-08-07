@@ -25,6 +25,8 @@
 
 #include <libinfinity/inf-config.h>
 
+#include <atkmm/relationset.h>
+
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
 
@@ -195,6 +197,8 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
 	pack_start(m_expander, Gtk::PACK_SHRINK);
 
+	init_accessibility();
+
 	set_focus_child(m_expander);
 }
 
@@ -218,6 +222,23 @@ Gobby::Browser::~Browser()
 	g_object_unref(m_discovery);
 #endif
 	g_object_unref(m_io);
+}
+
+void Gobby::Browser::init_accessibility()
+{
+	Glib::RefPtr<Atk::RelationSet> relation_set;
+	Glib::RefPtr<Atk::Relation> relation;
+	std::vector<Glib::RefPtr<Atk::Object> > targets;
+
+	// Associate the hostname label with the corresponding entry field.
+	Glib::RefPtr<Atk::Object> entry_hostname_acc = m_entry_hostname.get_accessible();
+	Glib::RefPtr<Atk::Object> label_hostname_acc = m_label_hostname.get_accessible();
+
+	relation_set = entry_hostname_acc->get_relation_set();
+	targets.push_back(label_hostname_acc);
+
+	relation = Atk::Relation::create(targets, Atk::RELATION_LABELLED_BY);
+	relation_set->set_add(relation);
 }
 
 void Gobby::Browser::on_expanded_changed()

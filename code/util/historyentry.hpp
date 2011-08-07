@@ -89,6 +89,8 @@ public:
 
   void commit();
 
+  Glib::RefPtr<Atk::Object> get_accessible();
+
 protected:
   bool on_entry_key_press_event(GdkEventKey* event);
 

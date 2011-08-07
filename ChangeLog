@@ -1,3 +1,11 @@
+2011-08-07  Philipp Kern  <phil@0x539.de>
+
+	* code/core/browser.cpp:
+	* code/core/browser.hpp:
+	* code/util/historyentry.cpp:
+	* code/util/historyentry.hpp: Make direct connection host name entry
+	field accessible. (#570)
+
 2011-07-30  Philipp Kern  <phil@0x539.de>
 
 	* code/core/documentinfostorage.cpp:

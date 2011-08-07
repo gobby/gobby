@@ -366,6 +366,11 @@ void Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry::commit()
 	m_history.commit(get_entry()->get_text());
 }
 
+Glib::RefPtr<Atk::Object> Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry::get_accessible()
+{
+	return get_entry()->get_accessible();
+}
+
 bool Gobby::HistoryComboBoxEntry::on_entry_key_press_event(GdkEventKey* event)
 {
 	Glib::ustring entry;

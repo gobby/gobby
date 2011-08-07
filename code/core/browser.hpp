@@ -85,6 +85,8 @@ public:
 	SignalActivate signal_activate() const { return m_signal_activate; }
 
 protected:
+	void init_accessibility();
+
 	static void on_set_browser_static(InfGtkBrowserModel* model,
 	                                  GtkTreePath* path,
 	                                  GtkTreeIter* iter,
