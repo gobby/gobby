@@ -1,5 +1,9 @@
 2011-10-30  Philipp Kern  <phil@0x539.de>
 
+	* po/ro.po: dropped, no translated string
+
+2011-10-30  Philipp Kern  <phil@0x539.de>
+
 	* po/ast.po:
 	* po/bg.po:
 	* po/ca.po:
