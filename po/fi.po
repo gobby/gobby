@@ -6,34 +6,35 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
-"PO-Revision-Date: 2008-11-30 21:06+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
+"PO-Revision-Date: 2011-08-31 11:43+0000\n"
+"Last-Translator: Timo Jyrinki <timo.jyrinki@gmail.com>\n"
 "Language-Team: Finnish <fi@li.org>\n"
-"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
-msgstr ""
+msgstr "Lähetä"
 
 #: ../src/chat.cpp:231
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
 msgstr ""
+"Komentoa '%0%' ei löytynyt. Kirjoita /help saadaksesi listan olemassa "
+"olevista komennoista."
 
 #: ../src/chat.cpp:242
 msgid "%0%: %1%"
-msgstr ""
+msgstr "%0%: %1%"
 
 #: ../src/chat.cpp:256
 msgid "Document %0% does not exist"
-msgstr ""
+msgstr "Asiakirjaa %0% ei ole olemassa"
 
 #: ../src/chat.cpp:262
 msgid "Usage: /remove <document>"
@@ -41,11 +42,11 @@ msgstr ""
 
 #: ../src/documentlist.cpp:51
 msgid "Subscribe"
-msgstr ""
+msgstr "Tilaa"
 
 #: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
 msgid "Document list"
-msgstr ""
+msgstr "Asiakirjalista"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
@@ -78,7 +79,7 @@ msgstr ""
 
 #: ../src/finddialog.cpp:44
 msgid "Replace with:"
-msgstr ""
+msgstr "Korvaa:"
 
 #: ../src/finddialog.cpp:45
 msgid "Match whole word only"
@@ -94,35 +95,35 @@ msgstr ""
 
 #: ../src/finddialog.cpp:48
 msgid "Direction"
-msgstr ""
+msgstr "Suunta"
 
 #: ../src/finddialog.cpp:49
 msgid "_Up"
-msgstr ""
+msgstr "_Ylös"
 
 #: ../src/finddialog.cpp:50
 msgid "_Down"
-msgstr ""
+msgstr "_Alas"
 
 #: ../src/finddialog.cpp:52
 msgid "_Replace"
-msgstr ""
+msgstr "Ko_rvaa"
 
 #: ../src/finddialog.cpp:53
 msgid "Replace _all"
-msgstr ""
+msgstr "Korvaa k_aikki"
 
 #: ../src/finddialog.cpp:158
 msgid "Search"
-msgstr ""
+msgstr "Etsi"
 
 #: ../src/finddialog.cpp:158
 msgid "Search and replace"
-msgstr ""
+msgstr "Etsi ja korvaa"
 
 #: ../src/finddialog.cpp:182
 msgid "\"%0%\" has not been found in the document."
-msgstr ""
+msgstr "\"%0%\" ei löytynyt tästä asiakirjasta."
 
 #: ../src/finddialog.cpp:265
 msgid "No occurence has been replaced"
@@ -140,19 +141,19 @@ msgstr ""
 
 #: ../src/gotodialog.cpp:30
 msgid "Line number:"
-msgstr ""
+msgstr "Rivinumero:"
 
 #: ../src/gotodialog.cpp:32
 msgid "_Go to line"
-msgstr ""
+msgstr "_Mene riville"
 
 #: ../src/gotodialog.cpp:77
 msgid "Go to line"
-msgstr ""
+msgstr "Mene riville"
 
 #: ../src/header.cpp:236
 msgid "Create session..."
-msgstr ""
+msgstr "Luo istunto..."
 
 #: ../src/header.cpp:237
 msgid "Opens a new obby session"
@@ -160,7 +161,7 @@ msgstr ""
 
 #: ../src/header.cpp:245
 msgid "Join session..."
-msgstr ""
+msgstr "Liity istuntoon..."
 
 #: ../src/header.cpp:246
 msgid "Joins an existing obby session"
@@ -184,7 +185,7 @@ msgstr ""
 
 #: ../src/header.cpp:272
 msgid "Quit session"
-msgstr ""
+msgstr "Sulje istunto"
 
 #: ../src/header.cpp:273
 msgid "Leaves the currently running obby session"
@@ -192,47 +193,47 @@ msgstr ""
 
 #: ../src/header.cpp:281
 msgid "Quit"
-msgstr ""
+msgstr "Sulje"
 
 #: ../src/header.cpp:282
 msgid "Quits the application"
-msgstr ""
+msgstr "Lopettaa ohjelman"
 
 #: ../src/header.cpp:286
 msgid "_Session"
-msgstr ""
+msgstr "_Istunto"
 
 #: ../src/header.cpp:292
 msgid "Create document..."
-msgstr ""
+msgstr "Luo asiakirja..."
 
 #: ../src/header.cpp:293
 msgid "Creates a new document"
-msgstr ""
+msgstr "Luo uuden asiakirjan"
 
 #: ../src/header.cpp:301
 msgid "Open document..."
-msgstr ""
+msgstr "Avaa asiakirja..."
 
 #: ../src/header.cpp:302
 msgid "Loads a file into a new document"
-msgstr ""
+msgstr "Lataa tiedosto uuteen asiakirjaan"
 
 #: ../src/header.cpp:310
 msgid "Save document"
-msgstr ""
+msgstr "Tallenna asiakirja"
 
 #: ../src/header.cpp:311
 msgid "Saves a document into a file"
-msgstr ""
+msgstr "Tallentaa asiakirjan tiedostoon"
 
 #: ../src/header.cpp:319
 msgid "Save document as..."
-msgstr ""
+msgstr "Tallenna asiakirja nimellä..."
 
 #: ../src/header.cpp:320
 msgid "Saves a document to another location"
-msgstr ""
+msgstr "Tallentaa asiakirjan toiseen paikkaan"
 
 #: ../src/header.cpp:327
 msgid "Save all documents"
@@ -244,7 +245,7 @@ msgstr ""
 
 #: ../src/header.cpp:336
 msgid "Close document"
-msgstr ""
+msgstr "Sulje asiakirja"
 
 #: ../src/header.cpp:337
 msgid "Closes an opened document"
@@ -252,11 +253,11 @@ msgstr ""
 
 #: ../src/header.cpp:341
 msgid "_Edit"
-msgstr ""
+msgstr "M_uokkaa"
 
 #: ../src/header.cpp:347
 msgid "Find..."
-msgstr ""
+msgstr "Etsi..."
 
 #: ../src/header.cpp:348
 msgid "Search for a text in the current document"
@@ -264,7 +265,7 @@ msgstr ""
 
 #: ../src/header.cpp:356
 msgid "Find and replace..."
-msgstr ""
+msgstr "Etsi ja korvaa..."
 
 #: ../src/header.cpp:357
 msgid "Search for a text and replace it with another one"
@@ -272,7 +273,7 @@ msgstr ""
 
 #: ../src/header.cpp:365
 msgid "Go to line..."
-msgstr ""
+msgstr "Mene riville..."
 
 #: ../src/header.cpp:366
 msgid "Move cursor to a specified line"
@@ -280,7 +281,7 @@ msgstr ""
 
 #: ../src/header.cpp:374
 msgid "Preferences..."
-msgstr ""
+msgstr "Asetukset..."
 
 #: ../src/header.cpp:375
 msgid "Displays a dialog to customize Gobby for your needs"
@@ -288,7 +289,7 @@ msgstr ""
 
 #: ../src/header.cpp:383
 msgid "Document preferences..."
-msgstr ""
+msgstr "Asiakirjan asetukset..."
 
 #: ../src/header.cpp:384
 msgid "Shows a preferences dialog that is just applied to this document"
@@ -296,19 +297,19 @@ msgstr ""
 
 #: ../src/header.cpp:389
 msgid "Syntax"
-msgstr ""
+msgstr "Syntaksi"
 
 #: ../src/header.cpp:391
 msgid "_User"
-msgstr ""
+msgstr "Käy_ttäjä"
 
 #: ../src/header.cpp:397
 msgid "Set password..."
-msgstr ""
+msgstr "Aseta salasana..."
 
 #: ../src/header.cpp:398
 msgid "Sets a password for this user"
-msgstr ""
+msgstr "Aseta salasana tälle käyttäjälle"
 
 #: ../src/header.cpp:406
 msgid "Set color..."
@@ -320,11 +321,11 @@ msgstr ""
 
 #: ../src/header.cpp:411
 msgid "_Window"
-msgstr ""
+msgstr "_Ikkuna"
 
 #: ../src/header.cpp:417 ../src/icon.cpp:21 ../src/userlist.cpp:122
 msgid "User list"
-msgstr ""
+msgstr "Käyttäjäluettelo"
 
 #: ../src/header.cpp:418
 msgid "Displays a list of users that are currently joined"

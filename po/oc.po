@@ -6,18 +6,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: obby\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
-"PO-Revision-Date: 2010-09-26 06:43+0000\n"
+"Report-Msgid-Bugs-To: http://gobby.0x539.de/\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
+"PO-Revision-Date: 2011-09-03 17:22+0000\n"
 "Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -51,7 +50,7 @@ msgstr "Lista dels documents"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
-msgstr ""
+msgstr "Error GtkSpell : %0%"
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
@@ -180,7 +179,7 @@ msgstr "Enregistra la sesilha en entièr per un restabliment ulterior"
 
 #: ../src/header.cpp:263
 msgid "Save session as..."
-msgstr ""
+msgstr "Enregistrar la sesilha jos..."
 
 #: ../src/header.cpp:264
 msgid "\"Saves as...\" the complete session for a later restore"
@@ -240,11 +239,11 @@ msgstr "Enregistra un document dins un autre fichièr"
 
 #: ../src/header.cpp:327
 msgid "Save all documents"
-msgstr ""
+msgstr "Enregistrar totes los documents"
 
 #: ../src/header.cpp:328
 msgid "Saves all documents"
-msgstr ""
+msgstr "Enregistra totes los documents"
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -404,7 +403,7 @@ msgstr "Restablir la sesilha"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
-msgstr ""
+msgstr "Fichièrs .obby"
 
 #: ../src/hostdialog.cpp:108
 msgid "All files"
@@ -486,7 +485,7 @@ msgstr "Senhal de la sesilha :"
 
 #: ../src/joinprogressdialog.cpp:192
 msgid "Session password required"
-msgstr ""
+msgstr "Senhal de sesilha requesit"
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -709,7 +708,7 @@ msgstr "Pas cap de lenga seleccionada"
 
 #: ../src/statusbar.cpp:72
 msgid "Line: %0%, Column: %1%"
-msgstr ""
+msgstr "Linha : %0%, colomna : %1%"
 
 #: ../src/userlist.cpp:94
 msgid "Online"
@@ -744,7 +743,8 @@ msgstr "_Anullar"
 
 #: ../src/window.cpp:471
 msgid "Use default .obby extension if none is given"
-msgstr "Utilizar l'extension .obby per defaut se cap d'autra es pas precisada"
+msgstr ""
+"Utilizar l'extension .obby per defaut se cap d'autra es pas precisada"
 
 #: ../src/window.cpp:476
 msgid "Save obby session"
@@ -785,7 +785,7 @@ msgstr "Dobrir un document novèl"
 #. Window title
 #: ../src/window.cpp:804
 msgid "Save document \"%0%\""
-msgstr ""
+msgstr "Enregistrar lo document « %0% »"
 
 #: ../src/window.cpp:910
 msgid ""

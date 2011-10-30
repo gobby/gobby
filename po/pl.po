@@ -7,18 +7,52 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
 "PO-Revision-Date: 2011-04-29 12:21+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
-"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
+
+#: ../src/header.cpp:236
+msgid "Create session..."
+msgstr "Utwórz sesję..."
+
+#: ../src/header.cpp:245
+msgid "Join session..."
+msgstr "Dołącz do sesji. . ."
+
+#: ../src/header.cpp:272
+msgid "Quit session"
+msgstr "Zakończ sesję"
+
+#: ../src/header.cpp:282
+msgid "Quits the application"
+msgstr "Kończy pracę programu"
+
+#: ../src/header.cpp:292
+msgid "Create document..."
+msgstr "Utwórz dokument..."
+
+#: ../src/header.cpp:302
+msgid "Loads a file into a new document"
+msgstr "Wczytuje plik do nowego dokumentu"
+
+#: ../src/header.cpp:311
+msgid "Saves a document into a file"
+msgstr "Zapisuje dokument do pliku"
+
+#: ../src/header.cpp:356
+msgid "Find and replace..."
+msgstr "Znajdź i zamień..."
+
+#~ msgid "Save session..."
+#~ msgstr "Zapisz sesję. . ."
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -156,17 +190,9 @@ msgstr "_Przejdź do wiersza"
 msgid "Go to line"
 msgstr "Przejdź do wiersza"
 
-#: ../src/header.cpp:236
-msgid "Create session..."
-msgstr "Utwórz sesję..."
-
 #: ../src/header.cpp:237
 msgid "Opens a new obby session"
 msgstr "Otwiera nową sesję obby"
-
-#: ../src/header.cpp:245
-msgid "Join session..."
-msgstr "Dołącz do sesji. . ."
 
 #: ../src/header.cpp:246
 msgid "Joins an existing obby session"
@@ -188,10 +214,6 @@ msgstr "Zapisz sesję jako..."
 msgid "\"Saves as...\" the complete session for a later restore"
 msgstr "Zapisuje kompletną sesję do późniejszego odtworzenia jako nowy plik"
 
-#: ../src/header.cpp:272
-msgid "Quit session"
-msgstr "Zakończ sesję"
-
 #: ../src/header.cpp:273
 msgid "Leaves the currently running obby session"
 msgstr "Opuszcza obecnie działającą sesję obby"
@@ -200,17 +222,9 @@ msgstr "Opuszcza obecnie działającą sesję obby"
 msgid "Quit"
 msgstr "Zakończ"
 
-#: ../src/header.cpp:282
-msgid "Quits the application"
-msgstr "Kończy pracę programu"
-
 #: ../src/header.cpp:286
 msgid "_Session"
 msgstr "_Sesja"
-
-#: ../src/header.cpp:292
-msgid "Create document..."
-msgstr "Utwórz dokument..."
 
 #: ../src/header.cpp:293
 msgid "Creates a new document"
@@ -220,17 +234,9 @@ msgstr "Tworzy nowy dokument"
 msgid "Open document..."
 msgstr "Otwórz dokument..."
 
-#: ../src/header.cpp:302
-msgid "Loads a file into a new document"
-msgstr "Wczytuje plik do nowego dokumentu"
-
 #: ../src/header.cpp:310
 msgid "Save document"
 msgstr "Zapisz dokument"
-
-#: ../src/header.cpp:311
-msgid "Saves a document into a file"
-msgstr "Zapisuje dokument do pliku"
 
 #: ../src/header.cpp:319
 msgid "Save document as..."
@@ -267,10 +273,6 @@ msgstr "Znajdź..."
 #: ../src/header.cpp:348
 msgid "Search for a text in the current document"
 msgstr "Wyszukuje tekst w bieżącym dokumencie"
-
-#: ../src/header.cpp:356
-msgid "Find and replace..."
-msgstr "Znajdź i zamień..."
 
 #: ../src/header.cpp:357
 msgid "Search for a text and replace it with another one"
@@ -774,8 +776,8 @@ msgstr ""
 "przez Fundację Wolnego Oprogramowania (Free Software Foundation) - według\n"
 "wersji drugiej tej Licencji lub którejś z późniejszych wersji.\n"
 "\n"
-"Niniejszy program rozpowszechniany jest z nadzieją, iż będzie on użyteczny "
-"-\n"
+"Niniejszy program rozpowszechniany jest z nadzieją, iż będzie on użyteczny -"
+"\n"
 "jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domyślnej gwarancji PRZYDATNOŚCI\n"
 "HANDLOWEJ albo PRZYDATNOŚCI DO OKREŚLONYCH ZASTOSOWAŃ. W celu uzyskania\n"
 "bliższych informacji należy zapoznać się z Powszechną Licencją Publiczną GNU."
@@ -827,8 +829,8 @@ msgid ""
 "\"Edit\" menu."
 msgstr ""
 "Te preferencje mają wpływ tylko na obecnie aktywny dokument \"%0%\". Aby "
-"zmienić preferencje globalne, należy wybrać \"Preferencje\" w menu \"Edycja"
-"\"."
+"zmienić preferencje globalne, należy wybrać \"Preferencje\" w menu "
+"\"Edycja\"."
 
 #: ../src/window.cpp:1127
 msgid "Color change failed: Color already in use"
@@ -870,9 +872,6 @@ msgstr "Wspólne modyfikowanie plików tekstowych"
 #: ../contrib/gobby.desktop.in.h:2
 msgid "Gobby Collaborative Editor"
 msgstr "Edytor dla wielu osób Gobby"
-
-#~ msgid "Save session..."
-#~ msgstr "Zapisz sesję. . ."
 
 #~ msgid "Sets a new colour for this user"
 #~ msgstr "Ustawia nowy kolor dla tego użytkownika"

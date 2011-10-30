@@ -6,18 +6,53 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
 "PO-Revision-Date: 2007-11-20 17:26+0000\n"
 "Last-Translator: Dennis Hilmar <dennis.hilmar@gmail.com>\n"
 "Language-Team: Danish <da@li.org>\n"
-"Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
+
+#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
+msgid "Document list"
+msgstr "Dokumentliste"
+
+#: ../src/header.cpp:282
+msgid "Quits the application"
+msgstr "Afslutter applikationen"
+
+#: ../src/header.cpp:292
+msgid "Create document..."
+msgstr "Opret dokument..."
+
+#: ../src/header.cpp:293
+msgid "Creates a new document"
+msgstr "Opretter nyt dokument"
+
+#: ../src/header.cpp:336
+msgid "Close document"
+msgstr "Luk dokumentet"
+
+#: ../src/header.cpp:337
+msgid "Closes an opened document"
+msgstr "Lukker et åbent dokument"
+
+#: ../src/header.cpp:356
+msgid "Find and replace..."
+msgstr "Find og erstat..."
+
+#: ../src/header.cpp:374
+msgid "Preferences..."
+msgstr "Præferencer..."
+
+#: ../src/header.cpp:383
+msgid "Document preferences..."
+msgstr "Dokumentets præferencer..."
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -44,10 +79,6 @@ msgstr "Brug: /remove <document>"
 #: ../src/documentlist.cpp:51
 msgid "Subscribe"
 msgstr "Abonnér"
-
-#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
-msgid "Document list"
-msgstr "Dokumentliste"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
@@ -198,21 +229,9 @@ msgstr "Forlader den kørende obby session"
 msgid "Quit"
 msgstr "Afslut"
 
-#: ../src/header.cpp:282
-msgid "Quits the application"
-msgstr "Afslutter applikationen"
-
 #: ../src/header.cpp:286
 msgid "_Session"
 msgstr "_Session"
-
-#: ../src/header.cpp:292
-msgid "Create document..."
-msgstr "Opret dokument..."
-
-#: ../src/header.cpp:293
-msgid "Creates a new document"
-msgstr "Opretter nyt dokument"
 
 #: ../src/header.cpp:301
 msgid "Open document..."
@@ -246,14 +265,6 @@ msgstr ""
 msgid "Saves all documents"
 msgstr ""
 
-#: ../src/header.cpp:336
-msgid "Close document"
-msgstr "Luk dokumentet"
-
-#: ../src/header.cpp:337
-msgid "Closes an opened document"
-msgstr "Lukker et åbent dokument"
-
 #: ../src/header.cpp:341
 msgid "_Edit"
 msgstr "R_edigér"
@@ -265,10 +276,6 @@ msgstr "Find..."
 #: ../src/header.cpp:348
 msgid "Search for a text in the current document"
 msgstr "Søg efter en tekst i dokumentet"
-
-#: ../src/header.cpp:356
-msgid "Find and replace..."
-msgstr "Find og erstat..."
 
 #: ../src/header.cpp:357
 msgid "Search for a text and replace it with another one"
@@ -282,17 +289,9 @@ msgstr "Gå til..."
 msgid "Move cursor to a specified line"
 msgstr "Flyt cursoren til en spcifik linje"
 
-#: ../src/header.cpp:374
-msgid "Preferences..."
-msgstr "Præferencer..."
-
 #: ../src/header.cpp:375
 msgid "Displays a dialog to customize Gobby for your needs"
 msgstr ""
-
-#: ../src/header.cpp:383
-msgid "Document preferences..."
-msgstr "Dokumentets præferencer..."
 
 #: ../src/header.cpp:384
 msgid "Shows a preferences dialog that is just applied to this document"

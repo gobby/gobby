@@ -7,17 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
-"PO-Revision-Date: 2010-04-18 10:41+0000\n"
-"Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
+"PO-Revision-Date: 2011-06-18 02:01+0000\n"
+"Last-Translator: Tao Wei <weitao1979@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -25,7 +24,7 @@ msgstr "发送"
 
 #: ../src/chat.cpp:231
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
-msgstr ""
+msgstr "命令 '%0%' 没有找到。输入 /help 来获得可用命令的列表。"
 
 #: ../src/chat.cpp:242
 msgid "%0%: %1%"
@@ -62,8 +61,7 @@ msgstr ""
 msgid ""
 "Failed to convert input into UTF-8: Either the encoding is unknown or it is "
 "binary input."
-msgstr ""
-"无法将输入字符转换为 UTF-8 编码：您使用的是未知的编码方式或者二进制输入。"
+msgstr "无法将输入字符转换为 UTF-8 编码：您使用的是未知的编码方式或者二进制输入。"
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
@@ -75,7 +73,7 @@ msgstr "字符编码："
 
 #: ../src/finddialog.cpp:43
 msgid "Find what:"
-msgstr "查找："
+msgstr "查找内容："
 
 #: ../src/finddialog.cpp:44
 msgid "Replace with:"
@@ -444,8 +442,7 @@ msgstr "失败"
 msgid ""
 "User password for user '%0%' required. You may either choose another user "
 "name, type in your user password or cancel the connection."
-msgstr ""
-"用户“%0%”需要用户密码。您可能要选择其他的用户名，输入您的密码或取消连接。"
+msgstr "用户“%0%”需要用户密码。您可能要选择其他的用户名，输入您的密码或取消连接。"
 
 #: ../src/joinprogressdialog.cpp:111
 msgid ""
@@ -538,8 +535,7 @@ msgstr "智能 home/end"
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
-msgstr ""
-"开启此选项，Home/End 键将在移动至 行首/行尾 之前先移动至 最前/最后 一个字符"
+msgstr "开启此选项，Home/End 键将在移动至 行首/行尾 之前先移动至 最前/最后 一个字符"
 
 #: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
@@ -603,7 +599,7 @@ msgstr "记住当前的位置和状态"
 
 #: ../src/preferencesdialog.cpp:229
 msgid "Highlight the window on incoming chat messages"
-msgstr ""
+msgstr "高亮有新消息的聊天信息窗口"
 
 #: ../src/preferencesdialog.cpp:235
 msgid "Show text only"
@@ -619,31 +615,31 @@ msgstr "显示图标和文字"
 
 #: ../src/preferencesdialog.cpp:238
 msgid "Show text besides icons"
-msgstr ""
+msgstr "图标旁显示文字"
 
 #: ../src/preferencesdialog.cpp:309
 msgid "Document management"
-msgstr ""
+msgstr "文档管理"
 
 #: ../src/preferencesdialog.cpp:310
 msgid "Open new remotely-created documents automatically"
-msgstr ""
+msgstr "自动打开新的远程创建的文档"
 
 #: ../src/preferencesdialog.cpp:348
 msgid "Pattern"
-msgstr ""
+msgstr "模式"
 
 #: ../src/preferencesdialog.cpp:349
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 #: ../src/preferencesdialog.cpp:350
 msgid "Mime type"
-msgstr ""
+msgstr "Mime 类型"
 
 #: ../src/preferencesdialog.cpp:352
 msgid "This is a list of all recognized file types"
-msgstr ""
+msgstr "这是一个可识别的文件类型的列表"
 
 #: ../src/preferencesdialog.cpp:513
 msgid "Pattern must not be empty."
@@ -672,7 +668,7 @@ msgstr "外观"
 
 #: ../src/preferencesdialog.cpp:730
 msgid "Font"
-msgstr ""
+msgstr "字体"
 
 #: ../src/preferencesdialog.cpp:731
 msgid "Behaviour"
@@ -775,9 +771,7 @@ msgid ""
 "Click on \"Apply\" to apply the new settings to documents that are currently "
 "open. \"OK\" will just store the values to use them with newly created "
 "documents."
-msgstr ""
-"点击“应用”来使新设置在当前已经打开的文档中生效。“确定”将只保存设置并只对新打"
-"开的会话有效。"
+msgstr "点击“应用”来使新设置在当前已经打开的文档中生效。“确定”将只保存设置并只对新打开的会话有效。"
 
 #. Build password dialog with info
 #: ../src/window.cpp:954
@@ -795,9 +789,7 @@ msgid ""
 "These preferences affect only the currently active document \"%0%\". If you "
 "want to change global preferences, use the preferences menu item in the "
 "\"Edit\" menu."
-msgstr ""
-"这些设置仅对当前活动的文档“%0%”有效。如果你希望更改全局设置，请使用在“编辑”菜"
-"单的“首选项”。"
+msgstr "这些设置仅对当前活动的文档“%0%”有效。如果你希望更改全局设置，请使用在“编辑”菜单的“首选项”。"
 
 #: ../src/window.cpp:1127
 msgid "Color change failed: Color already in use"

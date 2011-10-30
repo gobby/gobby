@@ -7,17 +7,57 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
-"PO-Revision-Date: 2009-12-19 22:28+0000\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
+"PO-Revision-Date: 2011-10-11 07:06+0000\n"
 "Last-Translator: Daniel Nylander <yeager@ubuntu.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
-"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
+
+#: ../src/finddialog.cpp:49
+msgid "_Up"
+msgstr "_Uppåt"
+
+#: ../src/finddialog.cpp:50
+msgid "_Down"
+msgstr "_Nedåt"
+
+#: ../src/header.cpp:397
+msgid "Set password..."
+msgstr "Ange lösenord..."
+
+#: ../src/header.cpp:398
+msgid "Sets a password for this user"
+msgstr "Anger ett lösenord för denna användare"
+
+#: ../src/joinprogressdialog.cpp:34
+msgid ""
+"User password for user '%0%' required. You may either choose another user "
+"name, type in your user password or cancel the connection."
+msgstr ""
+"Ett lösenord för användaren \"%0%\" krävs. Du kan antingen välja ett annat "
+"användarnamn, ange ditt lösenord eller avbryta anslutningen."
+
+#: ../src/preferencesdialog.cpp:139
+msgid "Highlight current line"
+msgstr "Färgmarkera aktuell rad"
+
+#. Build password dialog with info
+#: ../src/window.cpp:954
+msgid "Set user password"
+msgstr "Ange användarlösenord"
+
+#: ../src/window.cpp:956
+msgid ""
+"Set a user password for your user account. When you try to login next time "
+"with this user, you will be prompted for your password."
+msgstr ""
+"Anger ett användarlösenord för ditt användarkonto. Nästa gång du försöker "
+"logga in med denna användare kommer ditt lösenord att efterfrågas."
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -51,14 +91,14 @@ msgstr "Dokumentlista"
 
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
-msgstr ""
+msgstr "GtkSpell-fel: %0%"
 
 #. Translators: the msgid should not be localized.
 #. * The msgstr is the list of encodings separated by bar. e.g.
 #. * msgstr "EUC-JP|SHIFT-JIS|ISO-2022-JP|UTF-8|UCS-2|UCS-4"
 #: ../src/encoding.cpp:53
 msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-msgstr ""
+msgstr "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
 
 #: ../src/encoding.cpp:113
 msgid ""
@@ -70,7 +110,7 @@ msgstr ""
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
-msgstr ""
+msgstr "Detektera automatiskt"
 
 #: ../src/encoding_selector.cpp:158
 msgid "Character Encoding:"
@@ -99,14 +139,6 @@ msgstr "Matcha som ett reguljärt sökuttryck"
 #: ../src/finddialog.cpp:48
 msgid "Direction"
 msgstr "Riktning"
-
-#: ../src/finddialog.cpp:49
-msgid "_Up"
-msgstr "_Uppåt"
-
-#: ../src/finddialog.cpp:50
-msgid "_Down"
-msgstr "_Nedåt"
 
 #: ../src/finddialog.cpp:52
 msgid "_Replace"
@@ -172,7 +204,7 @@ msgstr "Ansluter till en existerande obby-session"
 
 #: ../src/header.cpp:254
 msgid "Save session"
-msgstr ""
+msgstr "Spara session"
 
 #: ../src/header.cpp:255
 msgid "Saves the complete session for a later restore"
@@ -180,11 +212,11 @@ msgstr "Sparar den kompletta sessionen för att kunna återställa den senare"
 
 #: ../src/header.cpp:263
 msgid "Save session as..."
-msgstr ""
+msgstr "Spara session som..."
 
 #: ../src/header.cpp:264
 msgid "\"Saves as...\" the complete session for a later restore"
-msgstr ""
+msgstr "\"Sparar som...\" den kompletta sessionen för att återskapa senare"
 
 #: ../src/header.cpp:272
 msgid "Quit session"
@@ -240,11 +272,11 @@ msgstr "Sparar dokument till annan plats"
 
 #: ../src/header.cpp:327
 msgid "Save all documents"
-msgstr ""
+msgstr "Spara alla dokument"
 
 #: ../src/header.cpp:328
 msgid "Saves all documents"
-msgstr ""
+msgstr "Sparar alla dokument"
 
 #: ../src/header.cpp:336
 msgid "Close document"
@@ -305,14 +337,6 @@ msgstr "Syntax"
 #: ../src/header.cpp:391
 msgid "_User"
 msgstr "_Användare"
-
-#: ../src/header.cpp:397
-msgid "Set password..."
-msgstr "Ange lösenord..."
-
-#: ../src/header.cpp:398
-msgid "Sets a password for this user"
-msgstr "Anger ett lösenord för denna användare"
 
 #: ../src/header.cpp:406
 msgid "Set color..."
@@ -386,7 +410,7 @@ msgstr "Namn:"
 
 #: ../src/hostdialog.cpp:38 ../src/joindialog.cpp:58
 msgid "Color:"
-msgstr ""
+msgstr "Färg:"
 
 #: ../src/hostdialog.cpp:39
 msgid "Password:"
@@ -402,11 +426,11 @@ msgstr "Återställ session"
 
 #: ../src/hostdialog.cpp:106
 msgid ".obby files"
-msgstr ""
+msgstr ".obby-filer"
 
 #: ../src/hostdialog.cpp:108
 msgid "All files"
-msgstr ""
+msgstr "Alla filer"
 
 #: ../src/hostdialog.cpp:120
 msgid "_Host"
@@ -445,14 +469,6 @@ msgstr "Port"
 msgid "Failure"
 msgstr "Fel"
 
-#: ../src/joinprogressdialog.cpp:34
-msgid ""
-"User password for user '%0%' required. You may either choose another user "
-"name, type in your user password or cancel the connection."
-msgstr ""
-"Ett lösenord för användaren \"%0%\" krävs. Du kan antingen välja ett annat "
-"användarnamn, ange ditt lösenord eller avbryta anslutningen."
-
 #: ../src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
@@ -486,7 +502,7 @@ msgstr "Sessionslösenord:"
 
 #: ../src/joinprogressdialog.cpp:192
 msgid "Session password required"
-msgstr ""
+msgstr "Sessionslösenord krävs"
 
 #: ../src/joinprogressdialog.cpp:235
 msgid "User password:"
@@ -585,10 +601,6 @@ msgstr "Dela inte ord över två rader"
 #: ../src/preferencesdialog.cpp:138
 msgid "Display line numbers"
 msgstr "Visa radnummer"
-
-#: ../src/preferencesdialog.cpp:139
-msgid "Highlight current line"
-msgstr "Färgmarkera aktuell rad"
 
 #: ../src/preferencesdialog.cpp:140
 msgid "Display right margin"
@@ -709,7 +721,7 @@ msgstr "Inget språk valt"
 
 #: ../src/statusbar.cpp:72
 msgid "Line: %0%, Column: %1%"
-msgstr ""
+msgstr "Rad: %0%, Kolumn: %1%"
 
 #: ../src/userlist.cpp:94
 msgid "Online"
@@ -739,7 +751,7 @@ msgstr "Vill du stänga Gobby ändå?"
 
 #: ../src/window.cpp:294
 msgid "C_ancel"
-msgstr ""
+msgstr "A_vbryt"
 
 #: ../src/window.cpp:471
 msgid "Use default .obby extension if none is given"
@@ -768,6 +780,15 @@ msgid ""
 "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR\n"
 "PURPOSE.  See the GNU General Public License for more details."
 msgstr ""
+"Detta program är fri programvara. Du kan distribuera det och/eller modifiera "
+"det\n"
+"under villkoren i GNU General Public License, publicerad av Free Software\n"
+"Foundation, antingen version 2 eller (om du så vill) någon senare version.\n"
+"\n"
+"Detta program distribueras i hopp om att det ska vara användbart, men\n"
+"UTAN NÅGON SOM HELST GARANTI, även utan underförstådd garanti\n"
+"om SÄLJBARHET eller LÄMPLIGHET FÖR NÅGOT SPECIELLT ÄNDAMÅL.\n"
+"Se GNU General Public License för ytterligare information."
 
 #: ../src/window.cpp:681
 msgid "Create document"
@@ -784,7 +805,7 @@ msgstr "Öppna nytt dokument"
 #. Window title
 #: ../src/window.cpp:804
 msgid "Save document \"%0%\""
-msgstr ""
+msgstr "Spara dokumentet \"%0%\""
 
 #: ../src/window.cpp:910
 msgid ""
@@ -795,19 +816,6 @@ msgstr ""
 "Klicka på \"Verkställ\" för att tillämpa de nya inställningarna på dokument "
 "som för närvarande är öppna. \"OK\" sparar bara inställningarna för att "
 "använda dem med nya dokument."
-
-#. Build password dialog with info
-#: ../src/window.cpp:954
-msgid "Set user password"
-msgstr "Ange användarlösenord"
-
-#: ../src/window.cpp:956
-msgid ""
-"Set a user password for your user account. When you try to login next time "
-"with this user, you will be prompted for your password."
-msgstr ""
-"Anger ett användarlösenord för ditt användarkonto. Nästa gång du försöker "
-"logga in med denna användare kommer ditt lösenord att efterfrågas."
 
 #: ../src/window.cpp:1017
 msgid ""
@@ -821,7 +829,7 @@ msgstr ""
 
 #: ../src/window.cpp:1127
 msgid "Color change failed: Color already in use"
-msgstr ""
+msgstr "Misslyckades med att byta färg: Färgen används redan"
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
@@ -854,11 +862,11 @@ msgstr "Stäng utan att spara"
 
 #: ../contrib/gobby.desktop.in.h:1
 msgid "Edit text files collaboratively"
-msgstr ""
+msgstr "Redigera textfiler tillsammans med andra"
 
 #: ../contrib/gobby.desktop.in.h:2
 msgid "Gobby Collaborative Editor"
-msgstr ""
+msgstr "Samarbetesredigeraren Gobby"
 
 #~ msgid "Set colour..."
 #~ msgstr "Välj färg..."
@@ -890,49 +898,3 @@ msgstr ""
 
 #~ msgid "Displays a dialog to customise Gobby for your needs"
 #~ msgstr "Öppnar en dialogruta för att anpassa Gobby efter dina behov"
-
-#~ msgid "_View"
-#~ msgstr "_Visa"
-
-#~ msgid "%0% has joined"
-#~ msgstr "%0% har anslutit"
-
-#~ msgid "%0% has left"
-#~ msgstr "%0% har lämn<t"
-
-#~ msgid "Gobby"
-#~ msgstr "Gobby"
-
-#~ msgid "Colour"
-#~ msgstr "Färg"
-
-#~ msgid "Name"
-#~ msgstr "Namn"
-
-#~ msgid "Subscribed"
-#~ msgstr "Prenumererar"
-
-#~ msgid ""
-#~ "You are not subscribed to the document \"%0%\".\n"
-#~ "\n"
-#~ "To view changes that others make or to edit the document yourself, you "
-#~ "have to subscribe to this document. Use the following button to perform "
-#~ "this.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Du prenumererar inte på dokumentet \"%0%\".\n"
-#~ "\n"
-#~ "För att se ändringar andra gör eller för att ändra dokumentet själv måste "
-#~ "du prenumerera på det här dokumentet. Använd följande knapp för att göra "
-#~ "detta.\n"
-#~ "\n"
-
-#~ msgid "Enter user password"
-#~ msgstr "Ange användarlösenord"
-
-#~ msgid ""
-#~ "The document \"%0%\" has been changed since it was saved to disk. Are you "
-#~ "sure that you want to close it?"
-#~ msgstr ""
-#~ "Dokumentet \"%0%\" har ändrats sedan det sparades till disk. Är du säker "
-#~ "på att du vill stänga det?"

@@ -7,17 +7,204 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
 "PO-Revision-Date: 2010-09-22 03:21+0000\n"
-"Last-Translator: André Gondim <andregondim@ubuntu.com>\n"
+"Last-Translator: André Gondim <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
-"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
+
+#: ../src/documentlist.cpp:51
+msgid "Subscribe"
+msgstr "Subscrever"
+
+#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
+msgid "Document list"
+msgstr "Lista de documentos"
+
+#: ../src/encoding.cpp:113
+msgid ""
+"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
+"binary input."
+msgstr ""
+"Falha ao converter para UTF-8: a codificação é desconhecida ou é uma entrada "
+"binária"
+
+#: ../src/finddialog.cpp:44
+msgid "Replace with:"
+msgstr "Substituir por"
+
+#: ../src/finddialog.cpp:158
+msgid "Search"
+msgstr "Pesquisar"
+
+#: ../src/finddialog.cpp:158
+msgid "Search and replace"
+msgstr "Pesquisar e Substituir"
+
+#: ../src/finddialog.cpp:182
+msgid "\"%0%\" has not been found in the document."
+msgstr "O documento \"%0%\" não pôde ser encontrado."
+
+#: ../src/finddialog.cpp:301
+msgid "No document currently opened"
+msgstr "Não há documento aberto"
+
+#: ../src/header.cpp:237
+msgid "Opens a new obby session"
+msgstr "Abrir uma nova sessão obby"
+
+#: ../src/header.cpp:246
+msgid "Joins an existing obby session"
+msgstr "Acessa uma sessão obby existente"
+
+#: ../src/header.cpp:255
+msgid "Saves the complete session for a later restore"
+msgstr "Salva completamente a sessão da última restauração"
+
+#: ../src/header.cpp:273
+msgid "Leaves the currently running obby session"
+msgstr "Abandona a sessão obby atual"
+
+#: ../src/header.cpp:282
+msgid "Quits the application"
+msgstr "Encerrar aplicação"
+
+#: ../src/header.cpp:293
+msgid "Creates a new document"
+msgstr "Criar um novo documento"
+
+#: ../src/header.cpp:302
+msgid "Loads a file into a new document"
+msgstr "Carrega um arquivo em um novo documento"
+
+#: ../src/header.cpp:319
+msgid "Save document as..."
+msgstr "Salvar como..."
+
+#: ../src/header.cpp:336
+msgid "Close document"
+msgstr "Fechar documento"
+
+#: ../src/header.cpp:347
+msgid "Find..."
+msgstr "Procurar..."
+
+#: ../src/header.cpp:356
+msgid "Find and replace..."
+msgstr "Procurar e substituir"
+
+#: ../src/header.cpp:357
+msgid "Search for a text and replace it with another one"
+msgstr "Procura por um texto e o substitui por outro"
+
+#: ../src/header.cpp:366
+msgid "Move cursor to a specified line"
+msgstr "Move o cursor para uma linha especificada"
+
+#: ../src/header.cpp:384
+msgid "Shows a preferences dialog that is just applied to this document"
+msgstr ""
+"Exibe um diálogo de preferências a ser aplicadas apenas a este documento"
+
+#: ../src/header.cpp:398
+msgid "Sets a password for this user"
+msgstr "Definir uma senha para o usuário"
+
+#: ../src/header.cpp:449
+msgid "Shows Gobby's copyright and credits"
+msgstr "Mostra os créditos e direitos autorais do Gobby"
+
+#: ../src/header.cpp:677
+msgid "None"
+msgstr "Nenhum"
+
+#: ../src/header.cpp:678
+msgid "Unselects the current language"
+msgstr "Desmarque o idioma atual."
+
+#. Build description string
+#: ../src/header.cpp:694
+msgid "Selects %0% as language"
+msgstr "Selecione %0% como idioma"
+
+#: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
+msgid "Opening obby session..."
+msgstr "Abrindo sessão obby..."
+
+#: ../src/joindialog.cpp:55
+msgid "Host:"
+msgstr "Host:"
+
+#: ../src/joinprogressdialog.cpp:34
+msgid ""
+"User password for user '%0%' required. You may either choose another user "
+"name, type in your user password or cancel the connection."
+msgstr ""
+"É necessária a senha para o usuário '%0%'. Você pode escolher outro nome de "
+"usuário, digitar sua senha ou cancelar a conexão."
+
+#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:234
+msgid "New name:"
+msgstr "Novo Nome:"
+
+#: ../src/preferencesdialog.cpp:65
+msgid "Tab Stops"
+msgstr "Paradas de tabulação"
+
+#: ../src/preferencesdialog.cpp:136
+msgid "Enable text wrapping"
+msgstr "Ativar seleção de texto"
+
+#: ../src/preferencesdialog.cpp:138
+msgid "Display line numbers"
+msgstr "Mostrar número de linhas"
+
+#: ../src/preferencesdialog.cpp:139
+msgid "Highlight current line"
+msgstr "Realça a linha atual"
+
+#: ../src/preferencesdialog.cpp:225
+msgid "Toolbar"
+msgstr "Barra de ferramentas"
+
+#: ../src/preferencesdialog.cpp:235
+msgid "Show text only"
+msgstr "Mostrar apenas o texto"
+
+#: ../src/preferencesdialog.cpp:236
+msgid "Show icons only"
+msgstr "Mostrar apenas os icones"
+
+#: ../src/statusbar.cpp:56
+msgid "Selected language: %0%"
+msgstr "Idioma selecionado: %0%"
+
+#: ../src/window.cpp:280
+msgid "You are still connected to a session"
+msgstr "Você ainda está conectado a uma sessão"
+
+#: ../src/window.cpp:539
+msgid "A collaborative text editor"
+msgstr "Um editor de textos colaborativo"
+
+#: ../src/window.cpp:681
+msgid "Enter document name"
+msgstr "Insira o nome do documento."
+
+#: ../src/window.cpp:1379
+msgid "Connected to %0%:%1%"
+msgstr "Conectado em %0%"
+
+#~ msgid "Save session..."
+#~ msgstr "Salvar sessão"
+
+#~ msgid "Sets a new colour for this user"
+#~ msgstr "Definir uma nova cor para o usuário"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -40,14 +227,6 @@ msgstr "Documento %0% não existe"
 msgid "Usage: /remove <document>"
 msgstr "Use: /remove <documento>"
 
-#: ../src/documentlist.cpp:51
-msgid "Subscribe"
-msgstr "Subscrever"
-
-#: ../src/documentlist.cpp:107 ../src/header.cpp:426 ../src/icon.cpp:27
-msgid "Document list"
-msgstr "Lista de documentos"
-
 #: ../src/docwindow.cpp:159
 msgid "GtkSpell error: %0%"
 msgstr "GtkSpell erro: %0%"
@@ -58,14 +237,6 @@ msgstr "GtkSpell erro: %0%"
 #: ../src/encoding.cpp:53
 msgid "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
 msgstr "UTF-8|ISO-8859-1|ISO-8859-15|UTF-7|UTF-16|UCS-2|UCS-4"
-
-#: ../src/encoding.cpp:113
-msgid ""
-"Failed to convert input into UTF-8: Either the encoding is unknown or it is "
-"binary input."
-msgstr ""
-"Falha ao converter para UTF-8: a codificação é desconhecida ou é uma entrada "
-"binária"
 
 #: ../src/encoding_selector.cpp:26
 msgid "Auto Detect"
@@ -78,10 +249,6 @@ msgstr "Encriptação de caractere"
 #: ../src/finddialog.cpp:43
 msgid "Find what:"
 msgstr "Procurar por:"
-
-#: ../src/finddialog.cpp:44
-msgid "Replace with:"
-msgstr "Substituir por"
 
 #: ../src/finddialog.cpp:45
 msgid "Match whole word only"
@@ -115,18 +282,6 @@ msgstr "_Substituir"
 msgid "Replace _all"
 msgstr "Substituir _tudo"
 
-#: ../src/finddialog.cpp:158
-msgid "Search"
-msgstr "Pesquisar"
-
-#: ../src/finddialog.cpp:158
-msgid "Search and replace"
-msgstr "Pesquisar e Substituir"
-
-#: ../src/finddialog.cpp:182
-msgid "\"%0%\" has not been found in the document."
-msgstr "O documento \"%0%\" não pôde ser encontrado."
-
 #: ../src/finddialog.cpp:265
 msgid "No occurence has been replaced"
 msgstr "Nenhuma ocorrência foi substituída"
@@ -136,10 +291,6 @@ msgid "%0% occurence has been replaced"
 msgid_plural "%0% occurences have been replaced"
 msgstr[0] "%0% ocorrência foi substituída"
 msgstr[1] "%0% ocorrências foram substituídas"
-
-#: ../src/finddialog.cpp:301
-msgid "No document currently opened"
-msgstr "Não há documento aberto"
 
 #: ../src/gotodialog.cpp:30
 msgid "Line number:"
@@ -157,25 +308,13 @@ msgstr "Ir para a linha"
 msgid "Create session..."
 msgstr "Criar sessão..."
 
-#: ../src/header.cpp:237
-msgid "Opens a new obby session"
-msgstr "Abrir uma nova sessão obby"
-
 #: ../src/header.cpp:245
 msgid "Join session..."
 msgstr "Acessar sessão..."
 
-#: ../src/header.cpp:246
-msgid "Joins an existing obby session"
-msgstr "Acessa uma sessão obby existente"
-
 #: ../src/header.cpp:254
 msgid "Save session"
 msgstr "Salvar sessão"
-
-#: ../src/header.cpp:255
-msgid "Saves the complete session for a later restore"
-msgstr "Salva completamente a sessão da última restauração"
 
 #: ../src/header.cpp:263
 msgid "Save session as..."
@@ -189,17 +328,9 @@ msgstr "\"Salvar como...\" a sessão completa para restauração futura"
 msgid "Quit session"
 msgstr "Sair da sessão"
 
-#: ../src/header.cpp:273
-msgid "Leaves the currently running obby session"
-msgstr "Abandona a sessão obby atual"
-
 #: ../src/header.cpp:281
 msgid "Quit"
 msgstr "Sair"
-
-#: ../src/header.cpp:282
-msgid "Quits the application"
-msgstr "Encerrar aplicação"
 
 #: ../src/header.cpp:286
 msgid "_Session"
@@ -209,17 +340,9 @@ msgstr "_Sessão"
 msgid "Create document..."
 msgstr "Criar documento..."
 
-#: ../src/header.cpp:293
-msgid "Creates a new document"
-msgstr "Criar um novo documento"
-
 #: ../src/header.cpp:301
 msgid "Open document..."
 msgstr "Abrir documento..."
-
-#: ../src/header.cpp:302
-msgid "Loads a file into a new document"
-msgstr "Carrega um arquivo em um novo documento"
 
 #: ../src/header.cpp:310
 msgid "Save document"
@@ -228,10 +351,6 @@ msgstr "Salvar documento"
 #: ../src/header.cpp:311
 msgid "Saves a document into a file"
 msgstr "Salva um documento em um arquivo"
-
-#: ../src/header.cpp:319
-msgid "Save document as..."
-msgstr "Salvar como..."
 
 #: ../src/header.cpp:320
 msgid "Saves a document to another location"
@@ -245,10 +364,6 @@ msgstr "Salvar todos documentos"
 msgid "Saves all documents"
 msgstr "Salvar todos documentos"
 
-#: ../src/header.cpp:336
-msgid "Close document"
-msgstr "Fechar documento"
-
 #: ../src/header.cpp:337
 msgid "Closes an opened document"
 msgstr "Fecha um documento aberto"
@@ -257,29 +372,13 @@ msgstr "Fecha um documento aberto"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/header.cpp:347
-msgid "Find..."
-msgstr "Procurar..."
-
 #: ../src/header.cpp:348
 msgid "Search for a text in the current document"
 msgstr "Procurar por um texto no documento atual"
 
-#: ../src/header.cpp:356
-msgid "Find and replace..."
-msgstr "Procurar e substituir"
-
-#: ../src/header.cpp:357
-msgid "Search for a text and replace it with another one"
-msgstr "Procura por um texto e o substitui por outro"
-
 #: ../src/header.cpp:365
 msgid "Go to line..."
 msgstr "Ir para a linha..."
-
-#: ../src/header.cpp:366
-msgid "Move cursor to a specified line"
-msgstr "Move o cursor para uma linha especificada"
 
 #: ../src/header.cpp:374
 msgid "Preferences..."
@@ -287,16 +386,12 @@ msgstr "Preferências..."
 
 #: ../src/header.cpp:375
 msgid "Displays a dialog to customize Gobby for your needs"
-msgstr "Exibe um diálogo para personalizar o Gobby conforme suas necessidades"
+msgstr ""
+"Exibe um diálogo para personalizar o Gobby conforme suas necessidades"
 
 #: ../src/header.cpp:383
 msgid "Document preferences..."
 msgstr "Preferências do documento..."
-
-#: ../src/header.cpp:384
-msgid "Shows a preferences dialog that is just applied to this document"
-msgstr ""
-"Exibe um diálogo de preferências a ser aplicadas apenas a este documento"
 
 #: ../src/header.cpp:389
 msgid "Syntax"
@@ -309,10 +404,6 @@ msgstr "_Usuário"
 #: ../src/header.cpp:397
 msgid "Set password..."
 msgstr "Definir senha..."
-
-#: ../src/header.cpp:398
-msgid "Sets a password for this user"
-msgstr "Definir uma senha para o usuário"
 
 #: ../src/header.cpp:406
 msgid "Set color..."
@@ -354,23 +445,6 @@ msgstr "_Ajuda"
 msgid "About"
 msgstr "Sobre"
 
-#: ../src/header.cpp:449
-msgid "Shows Gobby's copyright and credits"
-msgstr "Mostra os créditos e direitos autorais do Gobby"
-
-#: ../src/header.cpp:677
-msgid "None"
-msgstr "Nenhum"
-
-#: ../src/header.cpp:678
-msgid "Unselects the current language"
-msgstr "Desmarque o idioma atual."
-
-#. Build description string
-#: ../src/header.cpp:694
-msgid "Selects %0% as language"
-msgstr "Selecione %0% como idioma"
-
 #: ../src/hostdialog.cpp:33
 msgid "Create obby session"
 msgstr "Criar sessão obby"
@@ -411,17 +485,9 @@ msgstr "Todos os arquivos"
 msgid "_Host"
 msgstr "_Host"
 
-#: ../src/hostprogressdialog.cpp:29 ../src/hostprogressdialog.cpp:33
-msgid "Opening obby session..."
-msgstr "Abrindo sessão obby..."
-
 #: ../src/joindialog.cpp:52
 msgid "Join obby session"
 msgstr "Acessar sessão obby"
-
-#: ../src/joindialog.cpp:55
-msgid "Host:"
-msgstr "Host:"
 
 #: ../src/joindialog.cpp:60
 msgid "Local network"
@@ -444,23 +510,11 @@ msgstr "Porta"
 msgid "Failure"
 msgstr "Falha"
 
-#: ../src/joinprogressdialog.cpp:34
-msgid ""
-"User password for user '%0%' required. You may either choose another user "
-"name, type in your user password or cancel the connection."
-msgstr ""
-"É necessária a senha para o usuário '%0%'. Você pode escolher outro nome de "
-"usuário, digitar sua senha ou cancelar a conexão."
-
 #: ../src/joinprogressdialog.cpp:111
 msgid ""
 "Name is already in use. You may choose another name or cancel the connection."
 msgstr ""
 "Nome ká está em uso. Você pode escolher outro nome ou cancelar a conexão."
-
-#: ../src/joinprogressdialog.cpp:116 ../src/joinprogressdialog.cpp:234
-msgid "New name:"
-msgstr "Novo Nome:"
 
 #: ../src/joinprogressdialog.cpp:157
 msgid ""
@@ -512,10 +566,6 @@ msgstr "Logado com sucesso, sincronizando sessão..."
 #: ../src/joinprogressdialog.cpp:574 ../src/window.cpp:1089
 msgid "Connection lost"
 msgstr "Conexão perdida"
-
-#: ../src/preferencesdialog.cpp:65
-msgid "Tab Stops"
-msgstr "Paradas de tabulação"
 
 #: ../src/preferencesdialog.cpp:66
 msgid "Indentation"
@@ -569,21 +619,9 @@ msgstr "Margem direita"
 msgid "Bracket matching"
 msgstr "Combinar parênteses"
 
-#: ../src/preferencesdialog.cpp:136
-msgid "Enable text wrapping"
-msgstr "Ativar seleção de texto"
-
 #: ../src/preferencesdialog.cpp:137
 msgid "Do not split words over two lines"
 msgstr "Não dividir palavras em duas linhas"
-
-#: ../src/preferencesdialog.cpp:138
-msgid "Display line numbers"
-msgstr "Mostrar número de linhas"
-
-#: ../src/preferencesdialog.cpp:139
-msgid "Highlight current line"
-msgstr "Realça a linha atual"
 
 #: ../src/preferencesdialog.cpp:140
 msgid "Display right margin"
@@ -597,10 +635,6 @@ msgstr "Margem direita na coluna:"
 msgid "Highlight matching bracket"
 msgstr "Destacar parênteses correspondentes"
 
-#: ../src/preferencesdialog.cpp:225
-msgid "Toolbar"
-msgstr "Barra de ferramentas"
-
 #: ../src/preferencesdialog.cpp:226
 msgid "Windows"
 msgstr "Janelas"
@@ -612,14 +646,6 @@ msgstr "Lembrar as posições e estados"
 #: ../src/preferencesdialog.cpp:229
 msgid "Highlight the window on incoming chat messages"
 msgstr "Destacar a janela ao receber mensagens de chat"
-
-#: ../src/preferencesdialog.cpp:235
-msgid "Show text only"
-msgstr "Mostrar apenas o texto"
-
-#: ../src/preferencesdialog.cpp:236
-msgid "Show icons only"
-msgstr "Mostrar apenas os icones"
 
 #: ../src/preferencesdialog.cpp:237
 msgid "Show both icons and text"
@@ -694,10 +720,6 @@ msgstr "Arquivos"
 msgid "Not connected"
 msgstr "Não conectado"
 
-#: ../src/statusbar.cpp:56
-msgid "Selected language: %0%"
-msgstr "Idioma selecionado: %0%"
-
 #: ../src/statusbar.cpp:62
 msgid "No language selected"
 msgstr "Nenhuma idioma selecionado"
@@ -725,10 +747,6 @@ msgstr ""
 "dependendo da biblioteca que você utiliza. Suporte ao Zeroconf está "
 "desativado para esta sessão."
 
-#: ../src/window.cpp:280
-msgid "You are still connected to a session"
-msgstr "Você ainda está conectado a uma sessão"
-
 #: ../src/window.cpp:288
 msgid "Do you want to close Gobby anyway?"
 msgstr "Você quer fechar a sessão Gobby mesmo assim?"
@@ -744,10 +762,6 @@ msgstr "Usar extensão padrão .obby se nenhuma for fornecida"
 #: ../src/window.cpp:476
 msgid "Save obby session"
 msgstr "Salvar sessão obby"
-
-#: ../src/window.cpp:539
-msgid "A collaborative text editor"
-msgstr "Um editor de textos colaborativo"
 
 #. Please note in the translation that only the English version is
 #. legally binding.
@@ -778,10 +792,6 @@ msgstr ""
 #: ../src/window.cpp:681
 msgid "Create document"
 msgstr "Criar documento"
-
-#: ../src/window.cpp:681
-msgid "Enter document name"
-msgstr "Insira o nome do documento."
 
 #: ../src/window.cpp:703
 msgid "Open new document"
@@ -828,10 +838,6 @@ msgstr ""
 msgid "Color change failed: Color already in use"
 msgstr "Alteração da cor falhou: Cor já está em uso"
 
-#: ../src/window.cpp:1379
-msgid "Connected to %0%:%1%"
-msgstr "Conectado em %0%"
-
 #: ../src/window.cpp:1423
 msgid "Serving on port %0%"
 msgstr "Serviço na porta %0%"
@@ -865,12 +871,6 @@ msgstr "Editar arquivos de texto colaborativamente"
 #: ../contrib/gobby.desktop.in.h:2
 msgid "Gobby Collaborative Editor"
 msgstr "Editor colaborativo Gobby"
-
-#~ msgid "Save session..."
-#~ msgstr "Salvar sessão"
-
-#~ msgid "Sets a new colour for this user"
-#~ msgstr "Definir uma nova cor para o usuário"
 
 #~ msgid "Set colour..."
 #~ msgstr "Definir cor..."

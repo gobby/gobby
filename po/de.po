@@ -6,21 +6,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gobby 0.4.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"POT-Creation-Date: 2009-12-19 22:00+0100\n"
 "PO-Revision-Date: 2010-01-17 14:47+0000\n"
 "Last-Translator: Daniel Schury <das.surst@googlemail.com>\n"
 "Language-Team: German Translation Team <crew@0x539.de>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-04-30 11:24+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
 msgstr "Versenden"
+
+#: ../src/header.cpp:448
+msgid "About"
+msgstr "_Info"
+
+#: ../src/preferencesdialog.cpp:137
+msgid "Do not split words over two lines"
+msgstr "Nur am Wortende umbrechen"
+
+#. Appearance only affects the global Gobby window
+#: ../src/preferencesdialog.cpp:729
+msgid "Appearance"
+msgstr "Erscheinungsbild"
 
 #: ../src/chat.cpp:231
 msgid "Command '%0%' not found. Type /help for a list of existing commands."
@@ -353,10 +365,6 @@ msgstr ""
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: ../src/header.cpp:448
-msgid "About"
-msgstr "_Info"
-
 #: ../src/header.cpp:449
 msgid "Shows Gobby's copyright and credits"
 msgstr "Zeigt Informationen zu Gobbys Copyright und den Mitwirkenden an"
@@ -554,8 +562,8 @@ msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
 msgstr ""
-"Wenn diese Option aktiviert ist, springen die Pos1/Ende Tasten zum ersten/"
-"letzten Zeichen bevor sie zur ersten/letzten Spalte springen."
+"Wenn diese Option aktiviert ist, springen die Pos1/Ende Tasten zum "
+"ersten/letzten Zeichen bevor sie zur ersten/letzten Spalte springen."
 
 #: ../src/preferencesdialog.cpp:131
 msgid "Text wrapping"
@@ -580,10 +588,6 @@ msgstr "Klammernpaare finden"
 #: ../src/preferencesdialog.cpp:136
 msgid "Enable text wrapping"
 msgstr "Text-Umbruch aktivieren"
-
-#: ../src/preferencesdialog.cpp:137
-msgid "Do not split words over two lines"
-msgstr "Nur am Wortende umbrechen"
 
 #: ../src/preferencesdialog.cpp:138
 msgid "Display line numbers"
@@ -680,11 +684,6 @@ msgstr "Editor"
 #: ../src/preferencesdialog.cpp:726
 msgid "View"
 msgstr "Ansicht"
-
-#. Appearance only affects the global Gobby window
-#: ../src/preferencesdialog.cpp:729
-msgid "Appearance"
-msgstr "Erscheinungsbild"
 
 #: ../src/preferencesdialog.cpp:730
 msgid "Font"
