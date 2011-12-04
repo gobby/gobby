@@ -1,0 +1,908 @@
+# Gobby Traditional Chinese translation.
+# Copyright (C) 2010 THE gobby'S COPYRIGHT HOLDER.
+# This file is distributed under the same license as the gobby package.
+# Wei-Lun Chao <chaoweilun@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gobby 0.4.94\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-06-20 14:26+0200\n"
+"PO-Revision-Date: 2010-06-26 17:11+0800\n"
+"Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
+"Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../code/commands/browser-commands.cpp:109
+msgid "Subscribing to %1..."
+msgstr "訂用 %1…"
+
+#: ../code/commands/browser-commands.cpp:122
+msgid "Subscribing to chat on %1..."
+msgstr "訂用聊天於 %1…"
+
+#: ../code/commands/browser-commands.cpp:307
+msgid "Subscription failed"
+msgstr "訂用失敗"
+
+#: ../code/commands/browser-context-commands.cpp:94
+msgid "Create Do_cument..."
+msgstr "建立文件(_C)…"
+
+#: ../code/commands/browser-context-commands.cpp:129
+msgid "Create Directory..."
+msgstr "建立目錄…"
+
+#: ../code/commands/browser-context-commands.cpp:142
+msgid "_Open Document..."
+msgstr "開啟文件(_O)…"
+
+#: ../code/commands/browser-context-commands.cpp:161
+msgid "D_elete"
+msgstr "刪除(_E)"
+
+#: ../code/commands/browser-context-commands.cpp:197
+msgid "Choose a name for the directory"
+msgstr "選擇目錄名稱"
+
+#: ../code/commands/browser-context-commands.cpp:198
+msgid "Choose a name for the document"
+msgstr "選擇文件名稱"
+
+#: ../code/commands/browser-context-commands.cpp:199
+msgid "_Directory Name:"
+msgstr "目錄名稱(_D)："
+
+#: ../code/commands/browser-context-commands.cpp:200
+msgid "_Document Name:"
+msgstr "文件名稱(_D)："
+
+#: ../code/commands/browser-context-commands.cpp:203
+msgid "C_reate"
+msgstr "建立(_R)"
+
+#: ../code/commands/browser-context-commands.cpp:207
+msgid "New Directory"
+msgstr "新目錄"
+
+#: ../code/commands/browser-context-commands.cpp:208
+#: ../code/commands/file-tasks/task-new.cpp:38
+msgid "New Document"
+msgstr "新文件"
+
+#: ../code/commands/browser-context-commands.cpp:224
+#: ../code/commands/file-tasks/task-open-file.cpp:24
+msgid "Choose a text file to open"
+msgstr "選擇要開啟的文字檔"
+
+#: ../code/commands/file-tasks/task-export-html.cpp:29
+msgid "Choose a location to export document \"%1\" to"
+msgstr "選擇位置以匯出文件「%1」到"
+
+#: ../code/commands/file-tasks/task-open.cpp:48
+msgid "Querying \"%1\"..."
+msgstr "正在查詢「%1」…"
+
+#: ../code/commands/file-tasks/task-open.cpp:105
+#: ../code/operations/operation-open.cpp:437
+#: ../code/operations/operation-open-multiple.cpp:159
+msgid "Failed to open document \"%1\""
+msgstr "開啟文件「%1」時失敗"
+
+#: ../code/commands/file-tasks/task-save.cpp:26
+msgid "Choose a location to save document \"%1\" to"
+msgstr "選擇位置以儲存文件「%1」到"
+
+#. Help browser could not be invoked, show an error message to the user.
+#: ../code/commands/help-commands.cpp:69
+msgid "There was an error displaying help."
+msgstr "出現了錯誤顯示說明。"
+
+#: ../code/commands/help-commands.cpp:92
+msgid "Contributors:"
+msgstr "貢獻者："
+
+#: ../code/commands/help-commands.cpp:98
+msgid "British English:"
+msgstr "英語："
+
+#: ../code/commands/help-commands.cpp:100
+msgid "German:"
+msgstr "德語："
+
+#: ../code/commands/help-commands.cpp:117
+msgid ""
+"This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n\n"
+"This program is distributed in the hope that it will be useful,  but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n\n"
+"You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA"
+msgstr ""
+"這個程式是自由軟體；您可以遵循由自由軟體基金會所發布的 GNU 通用公共授權來再次散布它和/或修改它；無論您依據的是本授權的第二版，或 (您自行選擇的) 任何後續的版本。\n\n"
+"發行本程式是希望該它能夠有用， 但是沒有任何擔保；對於某一特定目的之適售性與適用性亦無暗示性的擔保。參看 GNU 通用公共授權以獲得更多細節。\n\n"
+"您應該已收到隨附於這個程式的 GNU 通用公共授權複本；若無則請寫信到 Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA"
+
+#: ../code/commands/subscription-commands.cpp:259
+msgid ""
+"The connection to the publisher of this document has been lost. Further changes to the document could not be synchronized to others anymore, therefore the document cannot be edited anymore.\n\n"
+"Please note also that it is possible that not all of your latest changes have reached the publisher before the connection was lost."
+msgstr ""
+"已經失去對於這份文件出版者的連線。文件的進一步變更將無法再繼續同步到其他人，因而文件無法再繼續編輯。\n\n"
+"請注意，也有可能在失去與出版者的連線之前，並非您所有的最後變更已送達。"
+
+#: ../code/commands/synchronization-commands.cpp:32
+msgid "Synchronization in progress... %1%%"
+msgstr "同步化正在進行…%1%%"
+
+#. Document cannot be used if an error happened
+#. during synchronization.
+#: ../code/commands/synchronization-commands.cpp:44
+msgid "This document cannot be used."
+msgstr "這個文件無法使用。"
+
+#: ../code/commands/synchronization-commands.cpp:47
+#: ../code/commands/user-join-commands.cpp:40
+msgid "If you have an idea what could have caused the problem, then you may attempt to solve it and try again (after having closed this document). Otherwise it is most likely a bug in the software. In that case, please file a bug report at http://gobby.0x539.de/trac/newticket and provide as much information as you can, including what you did when the problem occurred and how to reproduce the problem (if possible) so that we can fix the problem in a later version. Thank you."
+msgstr "如果您有某個可能造成此問題的想法，那麼您可以試圖解決它並再次嘗試 (於關閉這個文件之後)。否則很有可能是軟體中的錯誤。在這種情況下，請將錯誤回報給 http://gobby.0x539.de/trac/newticket 並儘可能提供足夠的資訊，包括當問題發生時您做了什麼事，以及如何重新產生問題 (如果可能) ，以便讓我們可以在稍後的版本中修正問題。謝謝您。"
+
+#: ../code/commands/synchronization-commands.cpp:61
+msgid "Synchronization failed: %1"
+msgstr "同步化失敗：%1"
+
+#. TODO: Adjust this for chat sessions
+#: ../code/commands/user-join-commands.cpp:35
+msgid "You can still watch others editing the document, but you cannot edit it yourself."
+msgstr "您仍然可以監看其他人編輯文件，但是您無法自行編輯它。"
+
+#: ../code/commands/user-join-commands.cpp:54
+msgid "User Join failed: %1"
+msgstr "使用者加入失敗：%1"
+
+#: ../code/commands/user-join-commands.cpp:283
+msgid "User Join in progress..."
+msgstr "使用者正在加入…"
+
+#: ../code/core/browser.cpp:113
+msgid "_Direct Connection"
+msgstr "直接的連線(_D)"
+
+#: ../code/core/browser.cpp:115
+msgid "Host Name:"
+msgstr "主機名稱："
+
+#: ../code/core/browser.cpp:301 ../code/core/browser.cpp:425
+msgid "Connection to \"%1\" failed"
+msgstr "連線到「%1」失敗"
+
+#: ../code/core/browser.cpp:354
+msgid "Could not resolve \"%1\""
+msgstr "無法解析「%1」"
+
+#: ../code/core/browser.cpp:428
+msgid "Device \"%1\" does not exist"
+msgstr "裝置「%1」不存在"
+
+#: ../code/core/browser.cpp:464
+msgid "Resolving \"%1\"..."
+msgstr "正在解析「%1」…"
+
+#: ../code/core/header.cpp:198
+msgid "_None"
+msgstr "無(_N)"
+
+#: ../code/core/header.cpp:222
+msgid "_File"
+msgstr "檔案(_F)"
+
+#: ../code/core/header.cpp:225
+msgid "_Open..."
+msgstr "開啟(_O)…"
+
+#: ../code/core/header.cpp:228
+msgid "Open _Location..."
+msgstr "開啟位置(_L)…"
+
+#: ../code/core/header.cpp:232
+msgid "Save _As..."
+msgstr "另存新檔(_A)…"
+
+#: ../code/core/header.cpp:236 ../code/core/iconmanager.cpp:40
+msgid "Save All"
+msgstr "全部儲存"
+
+#: ../code/core/header.cpp:236
+msgid "Save all open files locally"
+msgstr "儲存所有開啟檔案於本機"
+
+#: ../code/core/header.cpp:238
+msgid "Export As _HTML..."
+msgstr "匯出為 _HTML…"
+
+#: ../code/core/header.cpp:241
+msgid "Connect _to Server..."
+msgstr "連線到伺服器(_T)…"
+
+#: ../code/core/header.cpp:246
+msgid "_Edit"
+msgstr "編輯(_E)"
+
+#: ../code/core/header.cpp:254
+msgid "_Find..."
+msgstr "尋找(_F)…"
+
+#: ../code/core/header.cpp:256
+msgid "Find Ne_xt"
+msgstr "找下一個(_X)"
+
+#: ../code/core/header.cpp:257
+msgid "Find next match of phrase searched for"
+msgstr "找下一個匹配的片語依據搜尋"
+
+#: ../code/core/header.cpp:260
+msgid "Find Pre_vious"
+msgstr "找上一個(_V)"
+
+#: ../code/core/header.cpp:261
+msgid "Find previous match of phrase searched for"
+msgstr "找上一個匹配的片語依據搜尋"
+
+#: ../code/core/header.cpp:266
+msgid "Find and Rep_lace..."
+msgstr "尋找和置換(_L)…"
+
+#: ../code/core/header.cpp:270
+msgid "Go to _Line..."
+msgstr "前往指定列(_L)…"
+
+#: ../code/core/header.cpp:274
+msgid "Pr_eferences..."
+msgstr "偏好設定(_E)…"
+
+#: ../code/core/header.cpp:276
+msgid "_View"
+msgstr "檢視(_V)"
+
+#: ../code/core/header.cpp:279
+msgid "Reset User Colors"
+msgstr "重置使用者顏色"
+
+#: ../code/core/header.cpp:280
+msgid "Hide user colors in current document"
+msgstr "在目前的文件中隱藏使用者顏色"
+
+#: ../code/core/header.cpp:283
+msgid "View Toolbar"
+msgstr "檢視工具列"
+
+#: ../code/core/header.cpp:284
+msgid "Whether to show the toolbar"
+msgstr "是否要顯示工具列"
+
+#: ../code/core/header.cpp:288
+msgid "View Statusbar"
+msgstr "檢視狀態列"
+
+#: ../code/core/header.cpp:289
+msgid "Whether to show the statusbar"
+msgstr "是否要顯示狀態列"
+
+#: ../code/core/header.cpp:293
+msgid "View Document Browser"
+msgstr "檢視文件瀏覽器"
+
+#: ../code/core/header.cpp:294
+msgid "Whether to show the document browser"
+msgstr "是否要顯示文件瀏覽器"
+
+#: ../code/core/header.cpp:298
+msgid "View Chat"
+msgstr "檢視聊天"
+
+#: ../code/core/header.cpp:299
+msgid "Whether to show the chat pane"
+msgstr "是否要顯示聊天窗格"
+
+#: ../code/core/header.cpp:303
+msgid "View Document User List"
+msgstr "檢視文件使用者清單"
+
+#: ../code/core/header.cpp:304
+msgid "Whether to show the user list for documents"
+msgstr "是否要顯示文件的使用者清單"
+
+#: ../code/core/header.cpp:308
+msgid "View Chat User List"
+msgstr "檢視聊天使用者清單"
+
+#: ../code/core/header.cpp:309
+msgid "Whether to show the user list for the chat"
+msgstr "是否要顯示聊天的使用者清單"
+
+#: ../code/core/header.cpp:313
+msgid "_Highlight Mode"
+msgstr "強調模式(_H)"
+
+#: ../code/core/header.cpp:319
+msgid "_Help"
+msgstr "求助(_H)"
+
+#: ../code/core/header.cpp:322
+msgid "_Contents"
+msgstr "內容(_C)"
+
+#: ../code/core/header.cpp:323
+msgid "Opens the Gobby manual"
+msgstr "手動開啟 Gobby"
+
+#: ../code/core/header.cpp:326
+msgid "_About..."
+msgstr "關於(_A)…"
+
+#: ../code/core/header.cpp:327
+msgid "Shows Gobby's copyright and credits"
+msgstr "顯示 Gobby 的著作權和鳴謝"
+
+#: ../code/core/iconmanager.cpp:46
+msgid "User list"
+msgstr "使用者清單"
+
+#: ../code/core/iconmanager.cpp:52
+msgid "Document list"
+msgstr "文件清單"
+
+#: ../code/core/iconmanager.cpp:58 ../code/window.cpp:49
+msgid "Chat"
+msgstr "聊天"
+
+#: ../code/core/iconmanager.cpp:65
+msgid "User Color Indicator"
+msgstr "使用者顏色指示器"
+
+#: ../code/core/sessionuserview.cpp:41
+msgid "User List"
+msgstr "使用者清單"
+
+#: ../code/core/statusbar.cpp:395
+msgid "Ln %1, Col %2\t%3"
+msgstr "列 %1, 行 %2\t%3"
+
+#: ../code/core/statusbar.cpp:398
+msgid "OVR"
+msgstr "覆寫"
+
+#: ../code/core/statusbar.cpp:398
+msgid "INS"
+msgstr "插入"
+
+#: ../code/core/textsessionview.cpp:519
+msgid "Text written by <b>%1</b>"
+msgstr "文章由 <b>%1</b> 編寫"
+
+#: ../code/core/textsessionview.cpp:525
+msgid "Unowned text"
+msgstr "無主的文章"
+
+#: ../code/core/userlist.cpp:105
+msgid "Users"
+msgstr "使用者"
+
+#: ../code/dialogs/connection-dialog.cpp:28
+msgid "Connect to Server"
+msgstr "連線到伺服器"
+
+#: ../code/dialogs/connection-dialog.cpp:32
+msgid "Please enter a host name with which to establish a connection."
+msgstr "請輸入要與其建立連線的主機名稱。"
+
+#: ../code/dialogs/connection-dialog.cpp:34
+msgid "_Remote Endpoint:"
+msgstr "遠端終點(_R)："
+
+#: ../code/dialogs/document-location-dialog.cpp:29
+msgid "Document Name:"
+msgstr "文件名稱："
+
+#: ../code/dialogs/document-location-dialog.cpp:156
+msgid "Select document's target location"
+msgstr "選取文件目標位置"
+
+#: ../code/dialogs/document-location-dialog.cpp:158
+msgid "Choose a directory to create the document into:"
+msgstr "選擇目錄以於其中建立文件："
+
+#: ../code/dialogs/document-location-dialog.cpp:164
+msgid "Select documents' target location"
+msgstr "選取文件目標位置"
+
+#: ../code/dialogs/document-location-dialog.cpp:166
+msgid "Choose a directory to create the documents into:"
+msgstr "選擇目錄以於其中建立文件："
+
+#: ../code/dialogs/find-dialog.cpp:46 ../code/dialogs/find-dialog.cpp:144
+msgid "Find"
+msgstr "尋找"
+
+#: ../code/dialogs/find-dialog.cpp:49
+msgid "_Search for:"
+msgstr "搜尋(_S)："
+
+#: ../code/dialogs/find-dialog.cpp:51
+msgid "Replace _with:"
+msgstr "置換成(_W)："
+
+#: ../code/dialogs/find-dialog.cpp:53
+msgid "_Match case"
+msgstr "匹配大小寫(_M)"
+
+#: ../code/dialogs/find-dialog.cpp:54
+msgid "Match _entire word only"
+msgstr "匹配完整字詞(_E)"
+
+#: ../code/dialogs/find-dialog.cpp:55
+msgid "Search _backwards"
+msgstr "向後搜尋(_B)"
+
+#: ../code/dialogs/find-dialog.cpp:56
+msgid "Wra_p around"
+msgstr "回到開始部份(_P)"
+
+#: ../code/dialogs/find-dialog.cpp:102
+msgid "Replace _All"
+msgstr "全部置換(_A)"
+
+#: ../code/dialogs/find-dialog.cpp:104
+msgid "_Replace"
+msgstr "置換(_R)"
+
+#: ../code/dialogs/find-dialog.cpp:144
+msgid "Replace"
+msgstr "置換"
+
+#: ../code/dialogs/find-dialog.cpp:163 ../code/dialogs/find-dialog.cpp:179
+msgid "Phrase \"%1\" has not been found"
+msgstr "片語「%1」尚未找到"
+
+#: ../code/dialogs/find-dialog.cpp:337
+msgid "No occurrence has been replaced"
+msgstr "沒有置換任何項目"
+
+#: ../code/dialogs/find-dialog.cpp:343
+msgid "%1 occurrence has been replaced"
+msgid_plural "%1 occurrences have been replaced"
+msgstr[0] "已經置換 %1 個項目"
+
+#: ../code/dialogs/goto-dialog.cpp:27
+msgid "Go to line"
+msgstr "前往指定列"
+
+#: ../code/dialogs/goto-dialog.cpp:30
+msgid "Line _number:"
+msgstr "列號(_N)："
+
+#: ../code/dialogs/goto-dialog.cpp:51
+msgid "Go To _Line"
+msgstr "前往指定列(_L)"
+
+#: ../code/dialogs/initial-dialog.cpp:49
+msgid "Choose a user color"
+msgstr "選擇使用者顏色"
+
+#: ../code/dialogs/initial-dialog.cpp:53
+msgid "Welcome to Gobby"
+msgstr "歡迎使用 Gobby"
+
+#: ../code/dialogs/initial-dialog.cpp:62
+msgid "Before we start, a few options need to be configured. You can later change them by choosing Edit ▸ Preferences from the menu."
+msgstr "在開始之前，需要組配幾個選項。您可以稍後藉由從選單選擇「編輯▸偏好設定」來變更它們。"
+
+#: ../code/dialogs/initial-dialog.cpp:69
+msgid "User Name"
+msgstr "使用者名稱"
+
+#: ../code/dialogs/initial-dialog.cpp:71
+msgid "Your name as shown to other users."
+msgstr "您顯示給其他使用者看的名稱。"
+
+#: ../code/dialogs/initial-dialog.cpp:80
+msgid "User Color"
+msgstr "使用者顏色"
+
+#: ../code/dialogs/initial-dialog.cpp:82
+msgid "The color with which text you have written is branded."
+msgstr "用來標示您所寫文字的顏色。"
+
+#: ../code/dialogs/open-location-dialog.cpp:27
+msgid "Open Location"
+msgstr "開啟位置"
+
+#: ../code/dialogs/open-location-dialog.cpp:28
+msgid "Enter the _location (URI) of the file you would like to open:"
+msgstr "輸入您想要開啟的檔案位置(URI)(_L)："
+
+#: ../code/dialogs/password-dialog.cpp:27
+msgid "Password Required"
+msgstr "必須輸入密碼"
+
+#: ../code/dialogs/password-dialog.cpp:33
+msgid "Connection to host \"%1\" requires a password."
+msgstr "連線到主機「%1」需要密碼。"
+
+#: ../code/dialogs/password-dialog.cpp:34
+msgid "Invalid password for host \"%1\". Please try again."
+msgstr "密碼對於主機「%1」無效。請再試一次。"
+
+#: ../code/dialogs/password-dialog.cpp:37
+msgid "Server _Password:"
+msgstr "伺服器密碼(_P)："
+
+#: ../code/dialogs/preferences-dialog.cpp:232
+msgid "Settings"
+msgstr "設定值"
+
+#: ../code/dialogs/preferences-dialog.cpp:233
+msgid "Paths"
+msgstr "路徑"
+
+#: ../code/dialogs/preferences-dialog.cpp:235
+msgid "User name:"
+msgstr "使用者名稱："
+
+#: ../code/dialogs/preferences-dialog.cpp:237
+msgid "User color:"
+msgstr "使用者顏色："
+
+#: ../code/dialogs/preferences-dialog.cpp:238
+msgid "Choose a new user color"
+msgstr "選擇新的使用者顏色"
+
+#: ../code/dialogs/preferences-dialog.cpp:241
+msgid "Host directory:"
+msgstr "主機目錄："
+
+#: ../code/dialogs/preferences-dialog.cpp:283
+msgid "The directory into which locally hosted sessions are permanently stored"
+msgstr "本機寄存作業階段永久儲存於其中的目錄"
+
+#: ../code/dialogs/preferences-dialog.cpp:300
+msgid "Tab Stops"
+msgstr "定位停駐點"
+
+#: ../code/dialogs/preferences-dialog.cpp:301
+msgid "Indentation"
+msgstr "縮排"
+
+#: ../code/dialogs/preferences-dialog.cpp:302
+msgid "Home/End Behavior"
+msgstr "Home/End 按鍵行為"
+
+#: ../code/dialogs/preferences-dialog.cpp:303
+msgid "File Saving"
+msgstr "檔案儲存"
+
+#: ../code/dialogs/preferences-dialog.cpp:304
+msgid "_Tab width:"
+msgstr "定位點寬度(_T)："
+
+#: ../code/dialogs/preferences-dialog.cpp:306
+msgid "Insert _spaces instead of tabs"
+msgstr "插入空格以代替跳格(_S)"
+
+#: ../code/dialogs/preferences-dialog.cpp:307
+msgid "Enable automatic _indentation"
+msgstr "啟用自動縮排(_I)"
+
+#: ../code/dialogs/preferences-dialog.cpp:308
+msgid "Smart _home/end"
+msgstr "智慧型 _Home/End"
+
+#: ../code/dialogs/preferences-dialog.cpp:309
+msgid "Enable _automatic saving of documents"
+msgstr "啟用文件自動儲存(_A)"
+
+#: ../code/dialogs/preferences-dialog.cpp:311
+msgid "Autosave interval in _minutes:"
+msgstr "自動儲存間隔以分鐘為單位(_M)："
+
+#: ../code/dialogs/preferences-dialog.cpp:332
+msgid "With this option enabled, Home/End keys move to first/last character before going to the start/end of the line."
+msgstr "如果啟用這個選項，Home/End 按鍵會在前往列首/列尾之前移動到第一/最後一個字元。"
+
+#: ../code/dialogs/preferences-dialog.cpp:402
+msgid "Text Wrapping"
+msgstr "文字環繞"
+
+#: ../code/dialogs/preferences-dialog.cpp:403
+msgid "Line Numbers"
+msgstr "列號"
+
+#: ../code/dialogs/preferences-dialog.cpp:404
+msgid "Current Line"
+msgstr "目前的列"
+
+#: ../code/dialogs/preferences-dialog.cpp:405
+msgid "Right Margin"
+msgstr "右邊界"
+
+#: ../code/dialogs/preferences-dialog.cpp:406
+msgid "Bracket Matching"
+msgstr "中括號匹配"
+
+#: ../code/dialogs/preferences-dialog.cpp:407
+msgid "Whitespace Display"
+msgstr "空白顯示"
+
+#: ../code/dialogs/preferences-dialog.cpp:408
+msgid "Enable text wrapping"
+msgstr "啟用文字環繞"
+
+#: ../code/dialogs/preferences-dialog.cpp:409
+msgid "Do not split words over two lines"
+msgstr "不分割單字於兩列"
+
+#: ../code/dialogs/preferences-dialog.cpp:410
+msgid "Display line numbers"
+msgstr "顯示列號"
+
+#: ../code/dialogs/preferences-dialog.cpp:411
+msgid "Highlight current line"
+msgstr "強調目前的列"
+
+#: ../code/dialogs/preferences-dialog.cpp:412
+msgid "Display right margin"
+msgstr "顯示右邊界"
+
+#: ../code/dialogs/preferences-dialog.cpp:413
+msgid "Right margin at column:"
+msgstr "右邊界於行數："
+
+#: ../code/dialogs/preferences-dialog.cpp:414
+msgid "Highlight matching bracket"
+msgstr "強調匹配中括號"
+
+#: ../code/dialogs/preferences-dialog.cpp:465
+msgid "Display no whitespace"
+msgstr "不顯示任何空格"
+
+#: ../code/dialogs/preferences-dialog.cpp:468
+msgid "Display spaces"
+msgstr "顯示空格"
+
+#: ../code/dialogs/preferences-dialog.cpp:472
+msgid "Display tabs"
+msgstr "顯示跳格"
+
+#: ../code/dialogs/preferences-dialog.cpp:476
+msgid "Display tabs and spaces"
+msgstr "顯示跳格和空格"
+
+#: ../code/dialogs/preferences-dialog.cpp:526
+msgid "Toolbar"
+msgstr "工具列"
+
+#: ../code/dialogs/preferences-dialog.cpp:527
+msgid "Font"
+msgstr "字型"
+
+#: ../code/dialogs/preferences-dialog.cpp:528
+msgid "Color Scheme"
+msgstr "配色方案"
+
+#: ../code/dialogs/preferences-dialog.cpp:535
+msgid "Show text only"
+msgstr "只顯示文字"
+
+#: ../code/dialogs/preferences-dialog.cpp:537
+msgid "Show icons only"
+msgstr "只顯示圖示"
+
+#: ../code/dialogs/preferences-dialog.cpp:539
+msgid "Show both icons and text"
+msgstr "顯示圖示和文字"
+
+#: ../code/dialogs/preferences-dialog.cpp:541
+msgid "Show text besides icons"
+msgstr "在圖示旁邊顯示文字"
+
+#: ../code/dialogs/preferences-dialog.cpp:620
+msgid "Trusted CAs"
+msgstr "信賴的 CAs"
+
+#: ../code/dialogs/preferences-dialog.cpp:621
+msgid "Secure Connection"
+msgstr "安全連線"
+
+#: ../code/dialogs/preferences-dialog.cpp:622
+msgid "Select a file containing trusted CAs"
+msgstr "選取包含信賴的 CAs 檔案"
+
+#: ../code/dialogs/preferences-dialog.cpp:639
+msgid "Use TLS if possible"
+msgstr "儘量使用 TLS"
+
+#: ../code/dialogs/preferences-dialog.cpp:642
+msgid "Always use TLS"
+msgstr "一律使用 TLS"
+
+#: ../code/dialogs/preferences-dialog.cpp:654
+msgid "Preferences"
+msgstr "偏好設定"
+
+#: ../code/dialogs/preferences-dialog.cpp:659
+msgid "User"
+msgstr "使用者"
+
+#: ../code/dialogs/preferences-dialog.cpp:660
+msgid "Editor"
+msgstr "編輯器"
+
+#: ../code/dialogs/preferences-dialog.cpp:661
+msgid "View"
+msgstr "檢視"
+
+#: ../code/dialogs/preferences-dialog.cpp:662
+msgid "Appearance"
+msgstr "外觀"
+
+#: ../code/dialogs/preferences-dialog.cpp:663
+msgid "Security"
+msgstr "安全"
+
+#: ../code/main.cpp:196
+msgid "Gobby options"
+msgstr "Gobby 選項"
+
+#: ../code/main.cpp:196
+msgid "Options related to Gobby"
+msgstr "與 Gobby 相關的選項"
+
+#: ../code/main.cpp:201
+msgid "Display version information and exit"
+msgstr "顯示版本資訊然後離開"
+
+#: ../code/main.cpp:208
+msgid "Also start a new Gobby instance when there is one running already"
+msgstr "當已經有一個執行中的 Gobby 時，也要開啟新的實體"
+
+#: ../code/main.cpp:216
+msgid "Connect to given host on startup, can be given multiple times"
+msgstr "啟動時連線到給定的主機，可以多次給定"
+
+#: ../code/main.cpp:217
+msgid "HOSTNAME"
+msgstr "主機名稱"
+
+#: ../code/operations/operation-delete.cpp:42
+msgid "Removing node \"%1\"..."
+msgstr "移除節點「%1」…"
+
+#: ../code/operations/operation-delete.cpp:57
+msgid "Failed to delete node \"%1\""
+msgstr "刪除節點「%1」時失敗"
+
+#: ../code/operations/operation-export-html.cpp:166
+#, c-format
+msgid "written by: %s"
+msgstr "由 %s 所編寫"
+
+#: ../code/operations/operation-export-html.cpp:239
+msgid "<unable to print date>"
+msgstr "<無法印出日期>"
+
+#. %1$s is session name/hostname
+#. %2$s is path within the session
+#. %3$s is current date as formatted by %c,
+#. %4$s is a link to the gobby site, it must be present because
+#. we need to handle that manually to insert a hyperlink
+#. instead of just printf'ing it.
+#: ../code/operations/operation-export-html.cpp:252
+#, c-format
+msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
+msgstr "文件產生自 %1$s:%2$s 於 %3$s 由 %4$s"
+
+#: ../code/operations/operation-export-html.cpp:393
+msgid "Participants"
+msgstr "參加者"
+
+#: ../code/operations/operation-export-html.cpp:454
+msgid "Exporting document \"%1\" to \"%2\" in HTML..."
+msgstr "以 HTML 匯出文件「%1」到「%2」…"
+
+#: ../code/operations/operation-export-html.cpp:526
+msgid "Failed to export document \"%1\" to HTML"
+msgstr "以 HTML 匯出文件「%1」時失敗"
+
+#: ../code/operations/operation-new.cpp:56
+msgid "Creating directory \"%1\"..."
+msgstr "建立目錄「%1」…"
+
+#: ../code/operations/operation-new.cpp:57
+msgid "Creating document \"%1\"..."
+msgstr "建立文件「%1」…"
+
+#: ../code/operations/operation-new.cpp:73
+msgid "Failed to create directory \"%1\""
+msgstr "建立目錄「%1」時失敗"
+
+#: ../code/operations/operation-new.cpp:74
+msgid "Failed to create document \"%1\""
+msgstr "建立文件「%1」時失敗"
+
+#. Translators: This is the 8 bit encoding that is tried when
+#. autodetecting a file's encoding.
+#: ../code/operations/operation-open.cpp:38
+msgid "ISO-8859-1"
+msgstr "UTF-8"
+
+#: ../code/operations/operation-open.cpp:89
+msgid "Opening document \"%1\"..."
+msgstr "開啟文件「%1」…"
+
+#: ../code/operations/operation-open.cpp:124
+msgid "The directory into which the new document was supposed to be inserted has been removed"
+msgstr "預計用來插入新文件的目錄已被移除"
+
+#: ../code/operations/operation-open.cpp:313
+msgid "The file contains data not in the specified encoding"
+msgstr "檔案含有不屬於指定編碼的資料"
+
+#: ../code/operations/operation-open.cpp:324
+msgid "The file either contains data in an unknown encoding, or it contains binary data."
+msgstr "檔案若非含有不明編碼的資料，就是含有二進位資料。"
+
+#: ../code/operations/operation-open-multiple.cpp:84
+msgid "Parent folder was removed"
+msgstr "上層資料夾被移除了"
+
+#: ../code/operations/operation-open-multiple.cpp:172
+msgid "Failed to open multiple documents"
+msgstr "開啟多份文件時失敗"
+
+#: ../code/operations/operation-save.cpp:74
+msgid "Saving document \"%1\" to \"%2\"..."
+msgstr "儲存文件「%1」到「%2」…"
+
+#: ../code/operations/operation-save.cpp:227
+msgid "The document contains one or more characters that cannot be encoded in the specified character coding."
+msgstr "文件含有一或多個不屬於指定字元編碼的字元。"
+
+#: ../code/operations/operation-save.cpp:288
+msgid "Failed to save document \"%1\""
+msgstr "儲存文件「%1」時失敗"
+
+#: ../code/util/file.cpp:67 ../code/util/file.cpp:76
+msgid "Could not create directory \"%1\": %2"
+msgstr "無法建立目錄「%1」：%2"
+
+#: ../code/window.cpp:112
+msgid "Document Browser"
+msgstr "文件瀏覽器"
+
+#: ../code/window.cpp:168
+msgid "You are still connected to a session"
+msgstr "您仍然與作業階段連線"
+
+#: ../code/window.cpp:176
+msgid "Do you want to close Gobby nevertheless?"
+msgstr "您無論如何都要關閉 Gobby 嗎？"
+
+#: ../code/window.cpp:182
+msgid "C_ancel"
+msgstr "取消(_A)"
+
+#: ../gobby-0.5.desktop.in.h:1
+msgid "Collaborative Editor"
+msgstr "共同編輯器"
+
+#: ../gobby-0.5.desktop.in.h:2
+msgid "Edit text files collaboratively"
+msgstr "共同編輯文字檔"
+
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby"
+msgstr "Gobby"
+
+#: ../gobby-0.5.desktop.in.h:4
+msgid "Gobby Collaborative Editor (0.5)"
+msgstr "Gobby 共同編輯器 (0.5)"

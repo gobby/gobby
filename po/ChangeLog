@@ -1,3 +1,8 @@
+2011-12-01  Wei-Lun Chao  <chaoweilun@gmail.com>
+
+	* zh_TW.po: Add traditional Chinese translation.
+	* LINGUAS: Add zh_TW.
+
 2010-11-18  Takahiro Sunaga  <sunagae@sunagae.net>
 
 	* ja.po: Add Japanese translation.
