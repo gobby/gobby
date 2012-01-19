@@ -1,3 +1,8 @@
+2012-01-19  Vincent Untz  <vuntz@opensuse.org>
+
+	* src/gselector.cpp: Fix a build failure when compiled using glibmm
+	2.31 or greater.
+
 2011-10-30  Philipp Kern  <phil@0x539.de>
 
 	* po/ro.po: dropped, no translated string
