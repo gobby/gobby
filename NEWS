@@ -1,7 +1,12 @@
 Gobby
 =====
 
-Verison 0.4.12:
+Version 0.4.13:
+ * Fix compilation with glibmm 2.31 or greater.
+ * Translation roundup:
+   - Added Basque translation (thanks to Oier Mees).
+
+Version 0.4.12:
  * "Save all documents" has been introduced.
  * Fix up the title of the first session password dialog.
  * Add experimental spell checking support based on gtkspell, which needs to be
