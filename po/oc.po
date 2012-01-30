@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: obby\n"
 "Report-Msgid-Bugs-To: http://gobby.0x539.de/\n"
-"POT-Creation-Date: 2009-12-19 22:00+0100\n"
-"PO-Revision-Date: 2011-09-03 17:22+0000\n"
+"POT-Creation-Date: 2010-05-20 18:07+0200\n"
+"PO-Revision-Date: 2012-01-29 12:38+0000\n"
 "Last-Translator: Cédric VALMARY (Tot en òc) <cvalmary@yahoo.fr>\n"
 "Language-Team: Occitan (post 1500) <oc@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2011-10-30 15:20+0000\n"
-"X-Generator: Launchpad (build 14197)\n"
+"X-Launchpad-Export-Date: 2012-01-29 23:36+0000\n"
+"X-Generator: Launchpad (build 14727)\n"
 
 #: ../src/chat.cpp:73
 msgid "Send"
@@ -354,7 +354,7 @@ msgstr "_Ajuda"
 
 #: ../src/header.cpp:448
 msgid "About"
-msgstr "A prepaus de"
+msgstr "A prepaus"
 
 #: ../src/header.cpp:449
 msgid "Shows Gobby's copyright and credits"
@@ -470,6 +470,8 @@ msgid ""
 "Color is already in use. You may choose another color or cancel the "
 "connection."
 msgstr ""
+"Aquesta color es ja utilizada. Vos cal causir una autra color o anullar la "
+"connexion."
 
 #: ../src/joinprogressdialog.cpp:182
 msgid ""
@@ -822,7 +824,7 @@ msgstr ""
 
 #: ../src/window.cpp:1127
 msgid "Color change failed: Color already in use"
-msgstr ""
+msgstr "Lo cambiament de color a fracassat : color ja utilizada"
 
 #: ../src/window.cpp:1379
 msgid "Connected to %0%:%1%"
