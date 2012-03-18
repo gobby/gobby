@@ -27,6 +27,7 @@
 # define USE_GTKMM3
 #endif
 
+#include <gtkmm/stock.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/notebook.h>
 #ifndef USE_GTKMM3
@@ -122,7 +123,11 @@ inline Glib::RefPtr<Gdk::Pixbuf> render_icon(Gtk::Widget& widget,
                                              Gtk::IconSize size)
 {
 #ifdef USE_GTKMM3
-	return widget.render_icon_pixbuf(stock_id, size);
+	Glib::RefPtr<Gdk::Pixbuf> pixbuf = widget.render_icon_pixbuf(stock_id, size);
+	if(!pixbuf) // icon not found
+		pixbuf = widget.render_icon_pixbuf(Gtk::Stock::MISSING_IMAGE, size);
+	g_assert(pixbuf);
+	return pixbuf;
 #else
 	return widget.render_icon(stock_id, size);
 #endif

@@ -1,5 +1,11 @@
 2012-03-18  Philipp Kern  <phil@0x539.de>
 
+	* code/util/gtk-compat.hpp: Fix the call of Gtk3's
+	gtk-widget-render-icon-pixbuf, which is allowed to return NULL if
+	the stock icon does not exist.  Guard it with MISSING_IMAGE.
+
+2012-03-18  Philipp Kern  <phil@0x539.de>
+
 	* configure.ac: Support the new libinfinity library names built
 	against Gtk3.
 
