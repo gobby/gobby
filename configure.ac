@@ -52,9 +52,11 @@ if test "x$with_gtk3" = "xyes"; then
 	# TODO: Increase to 2.99.2 once it's out
 	gtk_requirement="gtkmm-3.0 >= 2.99.1 gtksourceview-3.0 >= 2.91.0"
 	gtk_version=3
+	infgtkver=gtk3
 else
 	gtk_requirement="gtkmm-2.4 >= 2.12.0 gtksourceview-2.0 >= 2.4"
 	gtk_version=2
+	infgtkver=gtk
 fi
 
 required_libs="libxml++-2.6 glibmm-2.4 >= 2.18.0 giomm-2.4 >= 2.18.0 gthread-2.0 libgsasl >= 0.2.21 $gtk_requirement"
@@ -88,17 +90,8 @@ AC_CACHE_SAVE
 ###################################
 
 PKG_CHECK_MODULES([gobby], [$required_libs])
-PKG_CHECK_MODULES([infinote], [libinfinity-0.6 libinftext-0.6 libinfgtk-0.6 libinftextgtk-0.6])
+PKG_CHECK_MODULES([infinote], [libinfinity-0.6 libinftext-0.6 libinf${infgtkver}-0.6 libinftext${infgtkver}-0.6])
 AC_CACHE_SAVE
-
-###################################
-# Check libinfinity GTK+ version
-###################################
-
-inf_gtk_version=`pkg-config --variable=gtk_version libinfgtk-0.6`
-if test "$inf_gtk_version" != "$gtk_version"; then
-	AC_MSG_ERROR([Gobby is being built with GTK+ $gtk_version but libinfinity was built against GTK+ $inf_gtk_version])
-fi
 
 ###################################
 # Check for unique (optional)
