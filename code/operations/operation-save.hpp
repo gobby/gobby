@@ -25,6 +25,7 @@
 
 #include <giomm/file.h>
 #include <giomm/outputstream.h>
+#include <glibmm/convert.h>
 
 #include <ctime>
 

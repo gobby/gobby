@@ -23,6 +23,8 @@
 
 #include "core/sessionuserview.hpp"
 
+#include <glibmm/main.h>
+
 #include <ctime>
 
 class Gobby::AutosaveCommands::Info

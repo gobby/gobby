@@ -21,6 +21,9 @@
 #include "util/i18n.hpp"
 #include "util/color.hpp"
 
+#include <glibmm/main.h>
+#include <glibmm/markup.h>
+#include <glibmm/pattern.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textiter.h>
 

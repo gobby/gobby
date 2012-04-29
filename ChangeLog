@@ -1,3 +1,21 @@
+2012-04-29  Armin Burgmeier  <armin@arbur.net>
+
+	* code/commands/autosave-commands.cpp:
+	* code/commands/folder-commands.cpp:
+	* code/commands/user-join-commands.cpp:
+	* code/core/filechooser.cpp:
+	* code/core/folder.cpp:
+	* code/core/header.cpp:
+	* code/core/preferences.cpp:
+	* code/core/statusbar.cpp:
+	* code/core/textsessionview.cpp:
+	* code/dialogs/initial-dialog.cpp:
+	* code/dialogs/preferences-dialog.cpp:
+	* code/operations/operation-open.cpp:
+	* code/operations/operation-open.hpp:
+	* code/operations/operation-save.hpp: Add some missing glibmm includes
+	that are no longer pulled in by gtkmm since recent gtkmm3 versions.
+
 2012-03-18  Philipp Kern  <phil@0x539.de>
 
 	* code/util/gtk-compat.hpp: Fix the call of Gtk3's

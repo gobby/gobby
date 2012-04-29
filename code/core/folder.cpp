@@ -24,6 +24,8 @@
 #include "core/texttablabel.hpp"
 #include "util/file.hpp"
 
+#include <glibmm/miscutils.h>
+
 #include <gdk/gdkkeysyms.h>
 #include <stdexcept>
 #include <iostream> // For std::cerr

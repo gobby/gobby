@@ -26,6 +26,7 @@
 
 #include <giomm/file.h>
 #include <giomm/inputstream.h>
+#include <glibmm/convert.h>
 
 namespace Gobby
 {

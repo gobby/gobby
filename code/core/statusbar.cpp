@@ -21,6 +21,7 @@
 #include "util/gtk-compat.hpp"
 #include "util/i18n.hpp"
 
+#include <glibmm/main.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/stock.h>
 

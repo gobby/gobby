@@ -22,6 +22,7 @@
 #include "util/i18n.hpp"
 #include "util/gtk-compat.hpp"
 
+#include <glibmm/markup.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/stock.h>

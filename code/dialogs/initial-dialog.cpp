@@ -24,6 +24,7 @@
 #include "util/gtk-compat.hpp"
 #include "features.hpp"
 
+#include <glibmm/markup.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/alignment.h>
 

@@ -22,6 +22,8 @@
 #include "core/noteplugin.hpp"
 #include "util/i18n.hpp"
 
+#include <glibmm/main.h>
+
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 #include <gtksourceview/gtksourcebuffer.h>
 

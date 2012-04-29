@@ -22,6 +22,7 @@
 #include "util/i18n.hpp"
 #include "features.hpp" // For PLATFORM_OSX_NATIVE
 
+#include <glibmm/markup.h>
 #include <gtkmm/stock.h>
 
 #ifdef PLATFORM_OSX_NATIVE

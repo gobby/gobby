@@ -19,6 +19,8 @@
 
 #include "core/filechooser.hpp"
 
+#include <glibmm/miscutils.h>
+#include <glibmm/convert.h>
 #include <gtkmm/stock.h>
 
 Gobby::FileChooser::Dialog::Dialog(Gobby::FileChooser& chooser,

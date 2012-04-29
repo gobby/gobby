@@ -20,6 +20,8 @@
 #include "commands/folder-commands.hpp"
 #include "core/sessionuserview.hpp"
 
+#include <glibmm/main.h>
+
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
 // TODO: Make this work with non-text documents also... maybe split &

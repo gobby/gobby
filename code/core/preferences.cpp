@@ -20,6 +20,10 @@
 #include "features.hpp"
 #include "core/preferences.hpp"
 
+#include <glibmm/miscutils.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/random.h>
+
 // TODO: Support direct enum config storage via context specialization for
 // enums.
 Gobby::Preferences::User::User(Config::ParentEntry& entry):

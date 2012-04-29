@@ -20,6 +20,8 @@
 #include "commands/user-join-commands.hpp"
 #include "util/i18n.hpp"
 
+#include <glibmm/main.h>
+
 #include <libinfinity/common/inf-error.h>
 
 namespace
