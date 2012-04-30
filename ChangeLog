@@ -1,3 +1,7 @@
+2012-04-30  Philipp Kern  <phil@0x539.de>
+
+	* gobby-0.5.1: Fix a grammar mistake.
+
 2012-04-29  Armin Burgmeier  <armin@arbur.net>
 
 	* code/commands/autosave-commands.cpp:
