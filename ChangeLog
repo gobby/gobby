@@ -1,3 +1,8 @@
+2012-12-04  Philipp Kern  <phil@0x539.de>
+
+	* po/LINGUAS:
+	* po/ca.po: Add Catalan translation, thanks to Jordi Mallach.
+
 2012-04-30  Philipp Kern  <phil@0x539.de>
 
 	* gobby-0.5.1: Fix a grammar mistake.
