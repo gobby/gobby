@@ -34,9 +34,9 @@ namespace Gobby
 class SubscriptionCommands: public sigc::trackable
 {
 public:
-	typedef sigc::signal<void, InfcSessionProxy*, Folder&, SessionView&>
+	typedef sigc::signal<void, InfSessionProxy*, Folder&, SessionView&>
 		SignalSubscribeSession;
-	typedef sigc::signal<void, InfcSessionProxy*, Folder&, SessionView&>
+	typedef sigc::signal<void, InfSessionProxy*, Folder&, SessionView&>
 		SignalUnsubscribeSession;
 
 	SubscriptionCommands(Browser& browser, Folder& text_folder,
@@ -44,7 +44,7 @@ public:
 	~SubscriptionCommands();
 
 	// Emitted whenever a session is subscribed to, both for text and
-	// chat sessions. This also provides access to the InfcSessionProxy
+	// chat sessions. This also provides access to the InfSessionProxy
 	// of the subscription to allow others (especially user-join-commands
 	// to make a user join).
 	SignalSubscribeSession signal_subscribe_session() const
@@ -61,49 +61,42 @@ protected:
 	static void on_set_browser_static(InfGtkBrowserModel* model,
 	                                  GtkTreePath* path,
 	                                  GtkTreeIter* iter,
-	                                  InfcBrowser* browser,
+	                                  InfBrowser* browser,
 	                                  gpointer user_data)
 	{
 		static_cast<SubscriptionCommands*>(user_data)->on_set_browser(
 			model, iter, browser);
 	}
 
-	static void on_subscribe_session_static(InfcBrowser* browser,
-	                                        InfcBrowserIter* iter,
-	                                        InfcSessionProxy* proxy,
+	static void on_subscribe_session_static(InfBrowser* browser,
+	                                        const InfBrowserIter* iter,
+	                                        InfSessionProxy* proxy,
 	                                        gpointer user_data)
 	{
 		static_cast<SubscriptionCommands*>(user_data)->
 			on_subscribe_session(browser, iter, proxy);
 	}
 
-	static void on_finished_static(InfcNodeRequest* request,
-	                               const InfcBrowserIter* iter,
-	                               gpointer user_data)
+	static void on_unsubscribe_session_static(InfBrowser* browser,
+	                                          const InfBrowserIter* iter,
+	                                          InfSessionProxy* proxy,
+	                                          gpointer user_data)
 	{
-		static_cast<SubscriptionCommands*>(user_data)->on_finished(
-			request);
-	}
-
-	static void on_failed_static(InfcRequest* request,
-	                             const GError* error,
-	                             gpointer user_data)
-	{
-		static_cast<SubscriptionCommands*>(user_data)->on_failed(
-			INFC_NODE_REQUEST(request), error);
+		static_cast<SubscriptionCommands*>(user_data)->
+			on_unsubscribe_session(browser, iter, proxy);
 	}
 
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
-	                    InfcBrowser* browser);
+	                    InfBrowser* browser);
 
-	void on_finished(InfcNodeRequest* request);
-	void on_failed(InfcNodeRequest* request, const GError* error);
+	void on_subscribe_session(InfBrowser* browser,
+	                          const InfBrowserIter* iter,
+	                          InfSessionProxy* proxy);
+	void on_unsubscribe_session(InfBrowser* browser,
+	                            const InfBrowserIter* iter,
+	                            InfSessionProxy* proxy);
 
-	void on_subscribe_session(InfcBrowser* browser, InfcBrowserIter* iter,
-	                          InfcSessionProxy* proxy);
-
-	void on_close(InfSession* session);
-	void on_notify_connection(InfcSessionProxy* proxy);
+	void on_notify_subscription_group(InfSession* session);
 
 	Browser& m_browser;
 	Folder& m_text_folder;
@@ -113,7 +106,7 @@ protected:
 	gulong m_set_browser_handler;
 
 	class BrowserInfo;
-	typedef std::map<InfcBrowser*, BrowserInfo*> BrowserMap;
+	typedef std::map<InfBrowser*, BrowserInfo*> BrowserMap;
 	BrowserMap m_browser_map;
 
 	class SessionInfo;

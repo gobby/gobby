@@ -23,87 +23,89 @@
 class Gobby::SubscriptionCommands::BrowserInfo
 {
 public:
-	BrowserInfo(SubscriptionCommands& commands, InfcBrowser* browser):
+	BrowserInfo(SubscriptionCommands& commands, InfBrowser* browser):
 		m_browser(browser)
 	{
 		g_object_ref(m_browser);
 
 		m_subscribe_session_handler = g_signal_connect(
-			G_OBJECT(browser), "subscribe-session",
-			G_CALLBACK(&on_subscribe_session_static), &commands);
+			G_OBJECT(browser),
+			"subscribe-session",
+			G_CALLBACK(&on_subscribe_session_static),
+			&commands);
+		m_unsubscribe_session_handler = g_signal_connect(
+			G_OBJECT(browser),
+			"unsubscribe-session",
+			G_CALLBACK(&on_unsubscribe_session_static),
+			&commands);
 	}
 
 	~BrowserInfo()
 	{
 		g_signal_handler_disconnect(G_OBJECT(m_browser),
 		                            m_subscribe_session_handler);
+		g_signal_handler_disconnect(G_OBJECT(m_browser),
+		                            m_unsubscribe_session_handler);
 
 		g_object_unref(m_browser);
 	}
 
 private:
-	InfcBrowser* m_browser;
+	InfBrowser* m_browser;
 	gulong m_subscribe_session_handler;
+	gulong m_unsubscribe_session_handler;
 };
 
 class Gobby::SubscriptionCommands::SessionInfo
 {
 public:
 	SessionInfo(SubscriptionCommands& commands, Folder& folder,
-	            InfcSessionProxy* proxy):
+	            InfSessionProxy* proxy):
 		m_folder(folder), m_proxy(proxy)
 	{
 		g_object_ref(proxy);
 
-		InfSession* session = infc_session_proxy_get_session(proxy);
+		InfSession* session;
+		g_object_get(G_OBJECT(proxy), "session", &session, NULL);
 
-		m_close_handler = g_signal_connect(
-			G_OBJECT(session), "close",
-			G_CALLBACK(on_close_static), &commands);
+		m_notify_subscription_group_handler = g_signal_connect(
+			G_OBJECT(session),
+			"notify::subscription-group",
+			G_CALLBACK(on_notify_subscription_group_static),
+			&commands);
 
-		// TODO: Rather use notify::subscription-group on session?
-		// Then we wouldn't even need proxy here. TextTabLabel does
-		// the same.
-		m_notify_connection_handler = g_signal_connect(
-			G_OBJECT(proxy), "notify::connection",
-			G_CALLBACK(on_notify_connection_static), &commands);
+		g_object_unref(session);
 	}
 
 	~SessionInfo()
 	{
-		InfSession* session = infc_session_proxy_get_session(m_proxy);
+		InfSession* session;
+		g_object_get(G_OBJECT(m_proxy), "session", &session, NULL);
 
-		g_signal_handler_disconnect(G_OBJECT(session),
-		                            m_close_handler);
-		g_signal_handler_disconnect(G_OBJECT(m_proxy),
-		                            m_notify_connection_handler);
+		g_signal_handler_disconnect(
+			G_OBJECT(session),
+			m_notify_subscription_group_handler);
 
+		g_object_unref(session);
 		g_object_unref(m_proxy);
 	}
 
 	Folder& get_folder() { return m_folder; }
-	InfcSessionProxy* get_proxy() { return m_proxy; }
+	InfSessionProxy* get_proxy() { return m_proxy; }
 
 private:
-	static void on_close_static(InfSession* session, gpointer user_data)
+	static void on_notify_subscription_group_static(InfSession* session,
+	                                                GParamSpec* pspec,
+	                                                gpointer user_data)
 	{
 		static_cast<SubscriptionCommands*>(user_data)->
-			on_close(session);
-	}
-
-	static void on_notify_connection_static(InfcSessionProxy* proxy,
-	                                        GParamSpec* pspec,
-	                                        gpointer user_data)
-	{
-		static_cast<SubscriptionCommands*>(user_data)->
-			on_notify_connection(proxy);
+			on_notify_subscription_group(session);
 	}
 
 	Folder& m_folder;
-	InfcSessionProxy* m_proxy;
+	InfSessionProxy* m_proxy;
 
-	gulong m_notify_connection_handler;
-	gulong m_close_handler;
+	gulong m_notify_subscription_group_handler;
 };
 
 Gobby::SubscriptionCommands::SubscriptionCommands(Browser& browser,
@@ -142,9 +144,9 @@ Gobby::SubscriptionCommands::~SubscriptionCommands()
 
 void Gobby::SubscriptionCommands::on_set_browser(InfGtkBrowserModel* model,
                                                  GtkTreeIter* iter,
-                                                 InfcBrowser* browser)
+                                                 InfBrowser* browser)
 {
-	InfcBrowser* old_browser;
+	InfBrowser* old_browser;
 	gtk_tree_model_get(
 		GTK_TREE_MODEL(model), iter,
 		INF_GTK_BROWSER_MODEL_COL_BROWSER, &old_browser, -1);
@@ -165,27 +167,30 @@ void Gobby::SubscriptionCommands::on_set_browser(InfGtkBrowserModel* model,
 	}
 }
 
-void Gobby::SubscriptionCommands::on_subscribe_session(InfcBrowser* browser,
-                                                       InfcBrowserIter* iter,
-                                                       InfcSessionProxy* prxy)
+void Gobby::SubscriptionCommands::on_subscribe_session(
+	InfBrowser* browser,
+	const InfBrowserIter* iter,
+	InfSessionProxy* proxy)
 {
 	gchar* hostname;
-	g_object_get(G_OBJECT(infc_browser_get_connection(browser)),
-	             "remote-hostname", &hostname, NULL);
-	InfSession* session = infc_session_proxy_get_session(prxy);
+	g_object_get(
+		G_OBJECT(infc_browser_get_connection(INFC_BROWSER(browser))),
+		"remote-hostname", &hostname, NULL);
+	InfSession* session;
+	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
 
-	TextSessionView* text_view = NULL;;
+	TextSessionView* text_view = NULL;
 
 	Folder* folder;
 	SessionView* view;
 
 	if(iter != NULL)
 	{
-		gchar* path = infc_browser_iter_get_path(browser, iter);
+		gchar* path = inf_browser_get_path(browser, iter);
 
 		text_view = &m_text_folder.add_text_session(
 			INF_TEXT_SESSION(session),
-			infc_browser_iter_get_name(browser, iter),
+			inf_browser_get_node_name(browser, iter),
 			path, hostname,
 			m_info_storage.get_key(browser, iter));
 
@@ -203,7 +208,7 @@ void Gobby::SubscriptionCommands::on_subscribe_session(InfcBrowser* browser,
 
 	g_free(hostname);
 
-	m_signal_subscribe_session.emit(prxy, *folder, *view);
+	m_signal_subscribe_session.emit(proxy, *folder, *view);
 
 	// For now we always highlight the newly created session...
 	// TODO: If the user issued other browserview events in the meanwhile,
@@ -215,38 +220,43 @@ void Gobby::SubscriptionCommands::on_subscribe_session(InfcBrowser* browser,
 	if(iter) m_browser.set_selected(browser, iter);
 
 	g_assert(m_session_map.find(session) == m_session_map.end());
-	m_session_map[session] = new SessionInfo(*this, *folder, prxy);
+	m_session_map[session] =
+		new SessionInfo(*this, *folder, proxy);
+	g_object_unref(session);
 }
 
-void Gobby::SubscriptionCommands::on_close(InfSession* session)
+void Gobby::SubscriptionCommands::on_unsubscribe_session(
+	InfBrowser* browser,
+	const InfBrowserIter* iter,
+	InfSessionProxy* proxy)
 {
-	SessionMap::iterator iter = m_session_map.find(session);
-	g_assert(iter != m_session_map.end());
+	InfSession* session;
+	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
+	SessionMap::iterator session_iter = m_session_map.find(session);
+	g_assert(session_iter != m_session_map.end());
 
-	Folder& folder = iter->second->get_folder();
+	Folder& folder = session_iter->second->get_folder();
 	SessionView* view = folder.lookup_document(session);
 	g_assert(view != NULL);
 
-	InfcSessionProxy* proxy = iter->second->get_proxy();
 	g_object_ref(proxy);
+	g_object_unref(session);
 
-	delete iter->second;
-	m_session_map.erase(iter);
+	delete session_iter->second;
+	m_session_map.erase(session_iter);
 
 	m_signal_unsubscribe_session.emit(proxy, folder, *view);
 	g_object_unref(proxy);
 }
 
-void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
+void Gobby::SubscriptionCommands::
+	on_notify_subscription_group(InfSession* session)
 {
-	InfSession* session = infc_session_proxy_get_session(prxy);
 	SessionMap::iterator iter = m_session_map.find(session);
 	g_assert(iter != m_session_map.end());
 
-	if(infc_session_proxy_get_connection(prxy) == NULL)
+	if(inf_session_get_subscription_group(session) == NULL)
 	{
-		InfSession* session = infc_session_proxy_get_session(prxy);
-
 		Folder& folder = iter->second->get_folder();
 		SessionView* view = folder.lookup_document(session);
 		g_assert(view != NULL);
@@ -260,7 +270,7 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 		{
 			/* If the session is in SYNCHRONIZING state then the
 			 * session is closed due to a synchronization error.
-			 * In that case synchronization-command.cpp will set
+			 * In that case synchronization-commands.cpp will set
 			 * a more meaningful error message. */
 			if(inf_session_get_status(session) ==
 			   INF_SESSION_RUNNING)
@@ -286,6 +296,7 @@ void Gobby::SubscriptionCommands::on_notify_connection(InfcSessionProxy* prxy)
 			chat_view->set_active_user(NULL);
 		}
 
-		m_signal_unsubscribe_session.emit(prxy, folder, *view);
+		m_signal_unsubscribe_session.emit(
+			iter->second->get_proxy(), folder, *view);
 	}
 }

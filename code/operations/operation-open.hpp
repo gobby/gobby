@@ -35,29 +35,21 @@ class OperationOpen: public Operations::Operation, public sigc::trackable
 {
 public:
 	OperationOpen(Operations& operations, const Preferences& preferences,
-	              InfcBrowser* browser, const InfcBrowserIter* parent,
+	              InfBrowser* browser, const InfBrowserIter* parent,
 	              const std::string& name, const std::string& uri,
-		      const char* encoding /* NULL means auto-detect */);
+	              const char* encoding /* NULL means auto-detect */);
 
 	virtual ~OperationOpen();
 
 protected:
 	static void
-	on_request_failed_static(InfcNodeRequest* request,
-	                         const GError* error,
-	                         gpointer user_data)
-	{
-		static_cast<OperationOpen*>(user_data)->
-			on_request_failed(error);
-	}
-
-	static void
-	on_request_finished_static(InfcNodeRequest* request,
-	                           InfcBrowserIter* iter,
+	on_request_finished_static(InfNodeRequest* request,
+	                           const InfBrowserIter* iter,
+	                           const GError* error,
 	                           gpointer user_data)
 	{
 		static_cast<OperationOpen*>(user_data)->
-			on_request_finished(iter);
+			on_request_finished(iter, error);
 	}
 
 	void on_node_removed();
@@ -69,8 +61,8 @@ protected:
 	void encoding_error();
 	void read_finish();
 
-	void on_request_failed(const GError* error);
-	void on_request_finished(InfcBrowserIter* iter);
+	void on_request_finished(const InfBrowserIter* iter,
+	                         const GError* error);
 
 	void error(const Glib::ustring& message);
 protected:
@@ -94,9 +86,8 @@ protected:
 	std::auto_ptr<buffer> m_buffer;
 	sigc::connection m_idle_connection;
 
-	InfcNodeRequest* m_request;
+	InfNodeRequest* m_request;
 	gulong m_finished_id;
-	gulong m_failed_id;
 
 	std::vector<char> m_raw_content;
 	std::vector<char>::size_type m_raw_pos;

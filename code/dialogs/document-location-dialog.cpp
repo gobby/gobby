@@ -98,8 +98,8 @@ void Gobby::DocumentLocationDialog::set_document_name(
 	m_name_entry.set_text(document_name);
 }
 
-InfcBrowser* Gobby::DocumentLocationDialog::get_selected_directory(
-	InfcBrowserIter* iter) const
+InfBrowser* Gobby::DocumentLocationDialog::get_selected_directory(
+	InfBrowserIter* iter) const
 {
 	GtkTreeIter tree_iter;
 	if(inf_gtk_browser_view_get_selected(m_view, &tree_iter))
@@ -120,8 +120,8 @@ InfcBrowser* Gobby::DocumentLocationDialog::get_selected_directory(
 
 		if(status == INF_GTK_BROWSER_MODEL_CONNECTED)
 		{
-			InfcBrowserIter* browser_iter;
-			InfcBrowser* browser;
+			InfBrowserIter* browser_iter;
+			InfBrowser* browser;
 
 			gtk_tree_model_get(
 				GTK_TREE_MODEL(m_filter_model),
@@ -131,7 +131,7 @@ InfcBrowser* Gobby::DocumentLocationDialog::get_selected_directory(
 				-1);
 
 			*iter = *browser_iter;
-			infc_browser_iter_free(browser_iter);
+			inf_browser_iter_free(browser_iter);
 			g_object_unref(browser);
 			return browser;
 		}
@@ -265,8 +265,8 @@ bool Gobby::DocumentLocationDialog::filter_visible_func(GtkTreeModel* model,
 	}
 	else
 	{
-		InfcBrowserIter* browser_iter;
-		InfcBrowser* browser;
+		InfBrowserIter* browser_iter;
+		InfBrowser* browser;
 
 		gtk_tree_model_get(
 			model, iter,
@@ -274,10 +274,9 @@ bool Gobby::DocumentLocationDialog::filter_visible_func(GtkTreeModel* model,
 			INF_GTK_BROWSER_MODEL_COL_NODE, &browser_iter,
 			-1);
 
-		bool result = infc_browser_iter_is_subdirectory(browser,
-		                                                browser_iter);
+		bool result = inf_browser_is_subdirectory(browser, browser_iter);
 
-		infc_browser_iter_free(browser_iter);
+		inf_browser_iter_free(browser_iter);
 		g_object_unref(browser);
 
 		return result;

@@ -38,10 +38,10 @@
 gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, gpointer user_data)
 {
 	gint result;
-	InfcBrowser* br_one;
-	InfcBrowser* br_two;
-	InfcBrowserIter* bri_one;
-	InfcBrowserIter* bri_two;
+	InfBrowser* br_one;
+	InfBrowser* br_two;
+	InfBrowserIter* bri_one;
+	InfBrowserIter* bri_two;
 	GtkTreeIter parent;
 
 	result = 0;
@@ -60,21 +60,21 @@ gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, 
 			INF_GTK_BROWSER_MODEL_COL_NODE, &bri_two,
 			-1);
 
-		if(infc_browser_iter_is_subdirectory(br_one, bri_one) &&
-		   !infc_browser_iter_is_subdirectory(br_two, bri_two))
+		if(inf_browser_is_subdirectory(br_one, bri_one) &&
+		   !inf_browser_is_subdirectory(br_two, bri_two))
 		{
 			result = -1;
 		}
-		else if(!infc_browser_iter_is_subdirectory(br_one, bri_one) &&
-		        infc_browser_iter_is_subdirectory(br_two, bri_two))
+		else if(!inf_browser_is_subdirectory(br_one, bri_one) &&
+		        inf_browser_is_subdirectory(br_two, bri_two))
 		{
 			result = 1;
 		}
 
 		g_object_unref(br_one);
 		g_object_unref(br_two);
-		infc_browser_iter_free(bri_one);
-		infc_browser_iter_free(bri_two);
+		inf_browser_iter_free(bri_one);
+		inf_browser_iter_free(bri_two);
 	}
 
 	if(!result)
@@ -267,8 +267,8 @@ void Gobby::Browser::on_set_browser(GtkTreeIter* iter,
 
 void Gobby::Browser::on_activate(GtkTreeIter* iter)
 {
-	InfcBrowser* browser;
-	InfcBrowserIter* browser_iter;
+	InfBrowser* browser;
+	InfBrowserIter* browser_iter;
 
 	gtk_tree_model_get(GTK_TREE_MODEL(m_sort_model), iter,
 	                   INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
@@ -277,7 +277,7 @@ void Gobby::Browser::on_activate(GtkTreeIter* iter)
 
 	m_signal_activate.emit(browser, browser_iter);
 
-	infc_browser_iter_free(browser_iter);
+	inf_browser_iter_free(browser_iter);
 	g_object_unref(browser);
 }
 
@@ -382,15 +382,15 @@ void Gobby::Browser::on_resolv_error(ResolvHandle* handle,
 		error.what());
 }
 
-bool Gobby::Browser::get_selected(InfcBrowser** browser,
-                                  InfcBrowserIter* iter)
+bool Gobby::Browser::get_selected(InfBrowser** browser,
+                                  InfBrowserIter* iter)
 {
 	GtkTreeIter tree_iter;
 	if(!inf_gtk_browser_view_get_selected(m_browser_view, &tree_iter))
 		return false;
 
-	InfcBrowser* tmp_browser;
-	InfcBrowserIter* tmp_iter;
+	InfBrowser* tmp_browser;
+	InfBrowserIter* tmp_iter;
 
 	gtk_tree_model_get(
 		GTK_TREE_MODEL(m_sort_model), &tree_iter,
@@ -400,6 +400,11 @@ bool Gobby::Browser::get_selected(InfcBrowser** browser,
 	if(tmp_browser == NULL)
 		return false;
 
+	InfBrowserStatus browser_status;
+	g_object_get(G_OBJECT(tmp_browser), "status", &browser_status, NULL);
+	if(browser_status != INF_BROWSER_OPEN)
+		return true;
+
 	gtk_tree_model_get(
 		GTK_TREE_MODEL(m_sort_model), &tree_iter,
 		INF_GTK_BROWSER_MODEL_COL_NODE, &tmp_iter,
@@ -408,13 +413,14 @@ bool Gobby::Browser::get_selected(InfcBrowser** browser,
 	*browser = tmp_browser;
 	*iter = *tmp_iter;
 
-	infc_browser_iter_free(tmp_iter);
+	inf_browser_iter_free(tmp_iter);
 	g_object_unref(tmp_browser);
 
 	return true;
 }
 
-void Gobby::Browser::set_selected(InfcBrowser* browser, InfcBrowserIter* iter)
+void Gobby::Browser::set_selected(InfBrowser* browser,
+                                  const InfBrowserIter* iter)
 {
 	GtkTreeIter tree_iter;
 

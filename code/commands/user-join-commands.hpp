@@ -36,15 +36,15 @@ public:
 	~UserJoinCommands();
 
 protected:
-	void on_subscribe_session(InfcSessionProxy* proxy,
+	void on_subscribe_session(InfSessionProxy* proxy,
 	                          Folder& folder, SessionView& view);
-	void on_unsubscribe_session(InfcSessionProxy* proxy,
+	void on_unsubscribe_session(InfSessionProxy* proxy,
 	                            Folder& folder, SessionView& view);
 
 	const Preferences& m_preferences;
 
 	class UserJoinInfo;
-	typedef std::map<InfcSessionProxy*, UserJoinInfo*> UserJoinMap;
+	typedef std::map<InfSessionProxy*, UserJoinInfo*> UserJoinMap;
 	UserJoinMap m_user_join_map;
 };
 

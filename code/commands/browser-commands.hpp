@@ -40,7 +40,7 @@ protected:
 	on_set_browser_static(InfGtkBrowserModel* model,
 	                      GtkTreePath* path,
 	                      GtkTreeIter* iter,
-	                      InfcBrowser* browser,
+	                      InfBrowser* browser,
 	                      gpointer user_data)
 	{
 		static_cast<BrowserCommands*>(user_data)->
@@ -48,14 +48,15 @@ protected:
 	}
 
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
-	                    InfcBrowser* browser);
-	void on_notify_status(InfcBrowser* browser);
+	                    InfBrowser* browser);
+	void on_notify_status(InfBrowser* browser);
 
 	void subscribe_chat(InfcBrowser* browser);
 
-	void on_activate(InfcBrowser* browser, InfcBrowserIter* iter);
-	void on_finished(InfcNodeRequest* request);
-	void on_failed(InfcNodeRequest* request, const GError* error);
+	void on_activate(InfBrowser* browser, InfBrowserIter* iter);
+	void on_finished(InfRequest* request,
+	                 const InfBrowserIter* iter,
+	                 const GError* error);
 
 	Browser& m_browser;
 	Folder& m_folder;
@@ -64,11 +65,11 @@ protected:
 	gulong m_set_browser_handler;
 
 	class BrowserInfo;
-	typedef std::map<InfcBrowser*, BrowserInfo*> BrowserMap;
+	typedef std::map<InfBrowser*, BrowserInfo*> BrowserMap;
 	BrowserMap m_browser_map;
 
 	class RequestInfo;
-	typedef std::map<InfcNodeRequest*, RequestInfo*> RequestMap;
+	typedef std::map<InfRequest*, RequestInfo*> RequestMap;
 	RequestMap m_request_map;
 };
 

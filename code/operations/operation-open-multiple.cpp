@@ -27,8 +27,8 @@
 Gobby::OperationOpenMultiple::OperationOpenMultiple(
 		Operations& operations,
 		const Preferences& prefs,
-		InfcBrowser* browser,
-		const InfcBrowserIter* parent,
+		InfBrowser* browser,
+		const InfBrowserIter* parent,
 		unsigned int num_uris):
 	Operation(operations), m_preferences(prefs),
 	m_parent(browser, parent), m_num_uris(num_uris),

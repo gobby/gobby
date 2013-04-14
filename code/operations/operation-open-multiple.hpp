@@ -36,8 +36,8 @@ class OperationOpenMultiple:
 public:
 	OperationOpenMultiple(Operations& operations,
 	                      const Preferences& preferences,
-	                      InfcBrowser* browser,
-	                      const InfcBrowserIter* parent,
+	                      InfBrowser* browser,
+	                      const InfBrowserIter* parent,
 	                      unsigned int num_uris);
 
 	void add_uri(const Glib::ustring& uri,

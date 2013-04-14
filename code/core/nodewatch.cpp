@@ -19,15 +19,18 @@
 
 #include "core/nodewatch.hpp"
 
-Gobby::NodeWatch::NodeWatch(InfcBrowser* browser,
-                            const InfcBrowserIter* iter):
+Gobby::NodeWatch::NodeWatch(InfBrowser* browser,
+                            const InfBrowserIter* iter):
 	m_browser(browser), m_iter(*iter)
 {
 	// Need to have a connection for the browser, otherwise we can't
 	// reach that node anyway.
 
+	// TODO: Instead of all this, use notify::status of the browser
+	// object
+
 	// TODO: (weak-)ref connection and browser?
-	m_connection = infc_browser_get_connection(browser);
+	m_connection = infc_browser_get_connection(INFC_BROWSER(browser));
 	g_assert(m_connection);
 
 	InfXmlConnectionStatus status;
@@ -52,7 +55,8 @@ Gobby::NodeWatch::~NodeWatch()
 
 void Gobby::NodeWatch::on_browser_notify_connection()
 {
-	InfXmlConnection* connection = infc_browser_get_connection(m_browser);
+	InfXmlConnection* connection =
+		infc_browser_get_connection(INFC_BROWSER(m_browser));
 
 	if(connection)
 	{
@@ -87,26 +91,26 @@ void Gobby::NodeWatch::on_connection_notify_status()
 	}
 }
 
-void Gobby::NodeWatch::on_node_removed(InfcBrowser* browser,
-                                       InfcBrowserIter* iter)
+void Gobby::NodeWatch::on_node_removed(InfBrowser* browser,
+                                       InfBrowserIter* iter)
 {
 	g_assert(browser == m_browser);
 
-        InfcBrowserIter test_iter = m_iter;
+	InfBrowserIter test_iter = m_iter;
 
-        do
-        {
-                if(test_iter.node == iter->node &&
-                   test_iter.node_id == iter->node_id)
-                {
+	do
+	{
+		if(test_iter.node == iter->node &&
+		   test_iter.node_id == iter->node_id)
+		{
 			reset();
 			// Note that we want to allow signal handlers to
 			// delete the watch, so make sure we don't access
 			// member variables anymore after having emitted this.
 			m_signal_node_removed.emit();
-                        break;
-                }
-        } while(infc_browser_iter_get_parent(browser, &test_iter));
+			break;
+		}
+	} while(inf_browser_get_parent(browser, &test_iter));
 }
 
 void Gobby::NodeWatch::reset()

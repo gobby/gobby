@@ -21,20 +21,17 @@
 #include "util/i18n.hpp"
 
 Gobby::OperationDelete::OperationDelete(Operations& operations,
-                                        InfcBrowser* browser,
-                                        const InfcBrowserIter* iter):
+                                        InfBrowser* browser,
+                                        const InfBrowserIter* iter):
 	Operation(operations),
-	m_name(infc_browser_iter_get_name(browser, iter))
+	m_name(inf_browser_get_node_name(browser, iter))
 {
-	m_request = infc_browser_remove_node(browser, iter);
+	m_request = inf_browser_remove_node(browser, iter);
 
 	// Note infc_browser_remove_node does not return a
 	// new reference.
 	g_object_ref(m_request);
 
-	m_failed_id = g_signal_connect(
-		G_OBJECT(m_request), "failed",
-		G_CALLBACK(on_request_failed_static), this);
 	m_finished_id = g_signal_connect(
 		G_OBJECT(m_request), "finished",
 		G_CALLBACK(on_request_finished_static), this);
@@ -46,23 +43,26 @@ Gobby::OperationDelete::OperationDelete(Operations& operations,
 Gobby::OperationDelete::~OperationDelete()
 {
 	g_signal_handler_disconnect(G_OBJECT(m_request), m_finished_id);
-	g_signal_handler_disconnect(G_OBJECT(m_request), m_failed_id);
 	g_object_unref(m_request);
 
 	get_status_bar().remove_message(m_message_handle);
 }
 
-void Gobby::OperationDelete::on_request_failed(const GError* error)
+void Gobby::OperationDelete::on_request_finished(const InfBrowserIter* iter,
+                                                 const GError* error)
 {
-	get_status_bar().add_error_message(
-		Glib::ustring::compose(_("Failed to delete node \"%1\""),
-		                       m_name),
-		error->message);
+	if(error)
+	{
+		get_status_bar().add_error_message(
+			Glib::ustring::compose(
+				_("Failed to delete node \"%1\""),
+				m_name),
+			error->message);
 
-	fail();
-}
-
-void Gobby::OperationDelete::on_request_finished(InfcBrowserIter* iter)
-{
-	finish();
+		fail();
+	}
+	else
+	{
+		finish();
+	}
 }

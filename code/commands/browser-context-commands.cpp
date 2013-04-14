@@ -71,135 +71,136 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	m_entry_dialog.reset(NULL);
 	m_file_dialog.reset(NULL);
 
-	InfcBrowser* browser;
-	InfcBrowserIter iter;
+	InfBrowser* browser;
+	InfBrowserIter iter;
+	if(!m_browser.get_selected(&browser, &iter))
+		return;
 
-	if(m_browser.get_selected(&browser, &iter) &&
-	   infc_browser_get_status(browser) == INFC_BROWSER_CONNECTED)
+	InfBrowserStatus browser_status;
+	g_object_get(G_OBJECT(browser), "status", &browser_status, NULL);
+	if(browser_status != INF_BROWSER_OPEN)
+		return;
+
+	InfBrowserIter dummy_iter = iter;
+	bool is_subdirectory = inf_browser_is_subdirectory(browser, &iter);
+	bool is_toplevel = !inf_browser_get_parent(browser, &dummy_iter);
+
+	// Watch the node, and close the popup menu when the node
+	// it refers to is removed.
+	m_watch.reset(new NodeWatch(browser, &iter));
+	m_watch->signal_node_removed().connect(sigc::mem_fun(
+		*this, &BrowserContextCommands::on_node_removed));
+
+	menu->signal_deactivate().connect(sigc::mem_fun(
+		*this, &BrowserContextCommands::on_menu_deactivate));
+
+	// Add "Disconnect" menu option if the connection
+	// item has been clicked at
+	if(is_toplevel && INFC_IS_BROWSER(browser))
 	{
-		InfcBrowserIter dummy_iter = iter;
-		bool is_subdirectory =
-			infc_browser_iter_is_subdirectory(browser, &iter);
-		bool is_toplevel =
-			!infc_browser_iter_get_parent(browser, &dummy_iter);
-
-		// Watch the node, and close the popup menu when the node
-		// it refers to is removed.
-		m_watch.reset(new NodeWatch(browser, &iter));
-		m_watch->signal_node_removed().connect(sigc::mem_fun(
-			*this, &BrowserContextCommands::on_node_removed));
-
-		menu->signal_deactivate().connect(sigc::mem_fun(
-			*this, &BrowserContextCommands::on_menu_deactivate));
-
-		// Add "Disconnect" menu option if the connection
-		// item has been clicked at
-		if(is_toplevel)
-		{
-			Gtk::ImageMenuItem* disconnect_item = Gtk::manage(
-				new Gtk::ImageMenuItem(_("_Disconnect from Server"), true));
-			disconnect_item->set_image(*Gtk::manage(new Gtk::Image(
-				Gtk::Stock::DISCONNECT, Gtk::ICON_SIZE_MENU)));
-			disconnect_item->signal_activate().connect(sigc::bind(
-				sigc::mem_fun(*this,
-					&BrowserContextCommands::on_disconnect),
-				browser));
-			disconnect_item->show();
-			menu->append(*disconnect_item);
-
-			// Separator
-			Gtk::SeparatorMenuItem* sep_item =
-				Gtk::manage(new Gtk::SeparatorMenuItem);
-			sep_item->show();
-			menu->append(*sep_item);
-		}
-
-		// Create Document
-		Gtk::ImageMenuItem* new_document_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("Create Do_cument..."),
-			                       true));
-		new_document_item->set_image(*Gtk::manage(new Gtk::Image(
-			Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU)));
-		new_document_item->signal_activate().connect(sigc::bind(
+		Gtk::ImageMenuItem* disconnect_item = Gtk::manage(
+			new Gtk::ImageMenuItem(_("_Disconnect from Server"), true));
+		disconnect_item->set_image(*Gtk::manage(new Gtk::Image(
+			Gtk::Stock::DISCONNECT, Gtk::ICON_SIZE_MENU)));
+		disconnect_item->signal_activate().connect(sigc::bind(
 			sigc::mem_fun(*this,
-				&BrowserContextCommands::on_new),
-			browser, iter, false));
-		new_document_item->set_sensitive(is_subdirectory);
-		new_document_item->show();
-		menu->append(*new_document_item);
-
-		// Create Directory
-
-		// Check whether we have the folder-new icon, fall back to
-		// Stock::DIRECTORY otherwise
-		Glib::RefPtr<Gdk::Screen> screen = menu->get_screen();
-		Glib::RefPtr<Gtk::IconTheme> icon_theme(
-			Gtk::IconTheme::get_for_screen(screen));
-
-		Gtk::Image* new_directory_image = Gtk::manage(new Gtk::Image);
-		if(icon_theme->lookup_icon("folder-new",
-		                           Gtk::ICON_SIZE_MENU,
-		                           Gtk::ICON_LOOKUP_USE_BUILTIN))
-		{
-			new_directory_image->set_from_icon_name(
-				"folder-new", Gtk::ICON_SIZE_MENU);
-		}
-		else
-		{
-			new_directory_image->set(
-				Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_MENU);
-		}
-
-		Gtk::ImageMenuItem* new_directory_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("Create Di_rectory..."),
-			                       true));
-		new_directory_item->set_image(*new_directory_image);
-		new_directory_item->signal_activate().connect(sigc::bind(
-			sigc::mem_fun(*this,
-				&BrowserContextCommands::on_new),
-			browser, iter, true));
-		new_directory_item->set_sensitive(is_subdirectory);
-		new_directory_item->show();
-		menu->append(*new_directory_item);
-
-		// Open Document
-		Gtk::ImageMenuItem* open_document_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("_Open Document..."), true));
-		open_document_item->set_image(*Gtk::manage(new Gtk::Image(
-			Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU)));
-		open_document_item->signal_activate().connect(sigc::bind(
-			sigc::mem_fun(*this,
-				&BrowserContextCommands::on_open),
-			browser, iter));
-		open_document_item->set_sensitive(is_subdirectory);
-		open_document_item->show();
-		menu->append(*open_document_item);
+				&BrowserContextCommands::on_disconnect),
+			INFC_BROWSER(browser)));
+		disconnect_item->show();
+		menu->append(*disconnect_item);
 
 		// Separator
 		Gtk::SeparatorMenuItem* sep_item =
 			Gtk::manage(new Gtk::SeparatorMenuItem);
 		sep_item->show();
 		menu->append(*sep_item);
-
-		// Delete
-		Gtk::ImageMenuItem* delete_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("D_elete"), true));
-		delete_item->set_image(*Gtk::manage(new Gtk::Image(
-			Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU)));
-		delete_item->signal_activate().connect(sigc::bind(
-			sigc::mem_fun(*this,
-				&BrowserContextCommands::on_delete),
-			browser, iter));
-		delete_item->set_sensitive(!is_toplevel);
-		delete_item->show();
-		menu->append(*delete_item);
-		
-		m_popup_menu = menu;
-		menu->signal_selection_done().connect(
-			sigc::mem_fun(
-				*this,
-				&BrowserContextCommands::on_popdown));
 	}
+
+	// Create Document
+	Gtk::ImageMenuItem* new_document_item = Gtk::manage(
+		new Gtk::ImageMenuItem(_("Create Do_cument..."),
+		                       true));
+	new_document_item->set_image(*Gtk::manage(new Gtk::Image(
+		Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU)));
+	new_document_item->signal_activate().connect(sigc::bind(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_new),
+		browser, iter, false));
+	new_document_item->set_sensitive(is_subdirectory);
+	new_document_item->show();
+	menu->append(*new_document_item);
+
+	// Create Directory
+
+	// Check whether we have the folder-new icon, fall back to
+	// Stock::DIRECTORY otherwise
+	Glib::RefPtr<Gdk::Screen> screen = menu->get_screen();
+	Glib::RefPtr<Gtk::IconTheme> icon_theme(
+		Gtk::IconTheme::get_for_screen(screen));
+
+	Gtk::Image* new_directory_image = Gtk::manage(new Gtk::Image);
+	if(icon_theme->lookup_icon("folder-new",
+	                           Gtk::ICON_SIZE_MENU,
+	                           Gtk::ICON_LOOKUP_USE_BUILTIN))
+	{
+		new_directory_image->set_from_icon_name(
+			"folder-new", Gtk::ICON_SIZE_MENU);
+	}
+	else
+	{
+		new_directory_image->set(
+			Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_MENU);
+	}
+
+	Gtk::ImageMenuItem* new_directory_item = Gtk::manage(
+		new Gtk::ImageMenuItem(_("Create Di_rectory..."),
+		                       true));
+	new_directory_item->set_image(*new_directory_image);
+	new_directory_item->signal_activate().connect(sigc::bind(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_new),
+		browser, iter, true));
+	new_directory_item->set_sensitive(is_subdirectory);
+	new_directory_item->show();
+	menu->append(*new_directory_item);
+
+	// Open Document
+	Gtk::ImageMenuItem* open_document_item = Gtk::manage(
+		new Gtk::ImageMenuItem(_("_Open Document..."), true));
+	open_document_item->set_image(*Gtk::manage(new Gtk::Image(
+		Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU)));
+	open_document_item->signal_activate().connect(sigc::bind(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_open),
+		browser, iter));
+	open_document_item->set_sensitive(is_subdirectory);
+	open_document_item->show();
+	menu->append(*open_document_item);
+
+	// Separator
+	Gtk::SeparatorMenuItem* sep_item =
+		Gtk::manage(new Gtk::SeparatorMenuItem);
+	sep_item->show();
+	menu->append(*sep_item);
+
+	// Delete
+	Gtk::ImageMenuItem* delete_item = Gtk::manage(
+		new Gtk::ImageMenuItem(_("D_elete"), true));
+	delete_item->set_image(*Gtk::manage(new Gtk::Image(
+		Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU)));
+	delete_item->signal_activate().connect(sigc::bind(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_delete),
+		browser, iter));
+	delete_item->set_sensitive(!is_toplevel);
+	delete_item->show();
+	menu->append(*delete_item);
+	
+	m_popup_menu = menu;
+	menu->signal_selection_done().connect(
+		sigc::mem_fun(
+			*this,
+			&BrowserContextCommands::on_popdown));
 }
 
 void Gobby::BrowserContextCommands::on_popdown()
@@ -221,8 +222,8 @@ void Gobby::BrowserContextCommands::on_disconnect(InfcBrowser* browser)
 	}
 }
 
-void Gobby::BrowserContextCommands::on_new(InfcBrowser* browser,
-                                           InfcBrowserIter iter,
+void Gobby::BrowserContextCommands::on_new(InfBrowser* browser,
+                                           InfBrowserIter iter,
                                            bool directory)
 {
 	m_watch.reset(new NodeWatch(browser, &iter));
@@ -251,8 +252,8 @@ void Gobby::BrowserContextCommands::on_new(InfcBrowser* browser,
 	m_entry_dialog->present();
 }
 
-void Gobby::BrowserContextCommands::on_open(InfcBrowser* browser,
-                                            InfcBrowserIter iter)
+void Gobby::BrowserContextCommands::on_open(InfBrowser* browser,
+                                            InfBrowserIter iter)
 {
 	m_watch.reset(new NodeWatch(browser, &iter));
 	m_watch->signal_node_removed().connect(sigc::mem_fun(
@@ -270,8 +271,8 @@ void Gobby::BrowserContextCommands::on_open(InfcBrowser* browser,
 	m_file_dialog->present();
 }
 
-void Gobby::BrowserContextCommands::on_delete(InfcBrowser* browser,
-                                              InfcBrowserIter iter)
+void Gobby::BrowserContextCommands::on_delete(InfBrowser* browser,
+                                              InfBrowserIter iter)
 {
 	m_operations.delete_node(browser, &iter);
 }
@@ -283,8 +284,8 @@ void Gobby::BrowserContextCommands::on_new_node_removed()
 }
 
 void Gobby::BrowserContextCommands::on_new_response(int response_id,
-                                                    InfcBrowser* browser,
-						    InfcBrowserIter iter,
+                                                    InfBrowser* browser,
+						    InfBrowserIter iter,
 						    bool directory)
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
@@ -313,8 +314,8 @@ void Gobby::BrowserContextCommands::on_open_node_removed()
 }
 
 void Gobby::BrowserContextCommands::on_open_response(int response_id,
-                                                     InfcBrowser* browser,
-                                                     InfcBrowserIter iter)
+                                                     InfBrowser* browser,
+                                                     InfBrowserIter iter)
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{

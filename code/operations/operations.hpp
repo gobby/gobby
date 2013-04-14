@@ -90,23 +90,23 @@ public:
 	Operations(DocumentInfoStorage& info_storage, StatusBar& status_bar);
 	~Operations();
 
-	OperationNew* create_directory(InfcBrowser* browser,
-	                               const InfcBrowserIter* parent,
+	OperationNew* create_directory(InfBrowser* browser,
+	                               const InfBrowserIter* parent,
 	                               const Glib::ustring& name);
 
-	OperationNew* create_document(InfcBrowser* browser,
-	                              const InfcBrowserIter* parent,
+	OperationNew* create_document(InfBrowser* browser,
+	                              const InfBrowserIter* parent,
 	                              const Glib::ustring& name);
 
-	OperationOpen* create_document(InfcBrowser* browser,
-	                               const InfcBrowserIter* parent,
+	OperationOpen* create_document(InfBrowser* browser,
+	                               const InfBrowserIter* parent,
 	                               const Glib::ustring& name,
 	                               const Preferences& preferences,
 	                               const Glib::ustring& from_uri,
 	                               const char* encoding);
 
-	OperationOpenMultiple* create_documents(InfcBrowser* browser,
-	                                        const InfcBrowserIter* parent,
+	OperationOpenMultiple* create_documents(InfBrowser* browser,
+	                                        const InfBrowserIter* parent,
 	                                        const Preferences& prefs,
 	                                        unsigned int num_uris);
 
@@ -116,8 +116,8 @@ public:
 	                             const std::string& encoding,
 	                             DocumentInfoStorage::EolStyle eol_style);
 
-	OperationDelete* delete_node(InfcBrowser* browser,
-	                             const InfcBrowserIter* iter);
+	OperationDelete* delete_node(InfBrowser* browser,
+	                             const InfBrowserIter* iter);
 
 	OperationExportHtml* export_html(TextSessionView& view,
 	                                 const std::string& uri);

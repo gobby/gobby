@@ -47,8 +47,8 @@ Gobby::Operations::~Operations()
 }
 
 Gobby::OperationNew*
-Gobby::Operations::create_directory(InfcBrowser* browser,
-                                    const InfcBrowserIter* parent,
+Gobby::Operations::create_directory(InfBrowser* browser,
+                                    const InfBrowserIter* parent,
                                     const Glib::ustring& name)
 {
 	OperationNew* op = new OperationNew(*this, browser, parent,
@@ -59,8 +59,8 @@ Gobby::Operations::create_directory(InfcBrowser* browser,
 }
 
 Gobby::OperationNew*
-Gobby::Operations::create_document(InfcBrowser* browser,
-                                   const InfcBrowserIter* parent,
+Gobby::Operations::create_document(InfBrowser* browser,
+                                   const InfBrowserIter* parent,
                                    const Glib::ustring& name)
 {
 	OperationNew* op = new OperationNew(*this, browser, parent,
@@ -71,8 +71,8 @@ Gobby::Operations::create_document(InfcBrowser* browser,
 }
 
 Gobby::OperationOpen*
-Gobby::Operations::create_document(InfcBrowser* browser,
-                                   const InfcBrowserIter* parent,
+Gobby::Operations::create_document(InfBrowser* browser,
+                                   const InfBrowserIter* parent,
                                    const Glib::ustring& name,
                                    const Preferences& preferences,
                                    const Glib::ustring& from_uri,
@@ -87,8 +87,8 @@ Gobby::Operations::create_document(InfcBrowser* browser,
 }
 
 Gobby::OperationOpenMultiple*
-Gobby::Operations::create_documents(InfcBrowser* browser,
-                                    const InfcBrowserIter* parent,
+Gobby::Operations::create_documents(InfBrowser* browser,
+                                    const InfBrowserIter* parent,
                                     const Preferences& prefs,
                                     unsigned int num_uris)
 {
@@ -122,8 +122,8 @@ Gobby::Operations::save_document(TextSessionView& view,
 }
 
 Gobby::OperationDelete*
-Gobby::Operations::delete_node(InfcBrowser* browser,
-                               const InfcBrowserIter* iter)
+Gobby::Operations::delete_node(InfBrowser* browser,
+                               const InfBrowserIter* iter)
 {
 	OperationDelete* op = new OperationDelete(*this, browser, iter);
 	m_operations.insert(op);

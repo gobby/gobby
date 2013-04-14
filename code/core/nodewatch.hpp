@@ -33,11 +33,11 @@ class NodeWatch
 public:
 	typedef sigc::signal<void> SignalNodeRemoved;
 
-	NodeWatch(InfcBrowser* browser, const InfcBrowserIter* iter);
+	NodeWatch(InfBrowser* browser, const InfBrowserIter* iter);
 	~NodeWatch();
 
-	InfcBrowser* get_browser() const { return m_browser; }
-	const InfcBrowserIter& get_browser_iter() const {
+	InfBrowser* get_browser() const { return m_browser; }
+	const InfBrowserIter& get_browser_iter() const {
 		g_assert(m_browser);
 		return m_iter;
 	}
@@ -57,15 +57,15 @@ protected:
 
 	static void on_browser_notify_connection_static(GObject* object,
 	                                                GParamSpec* pspec,
-							gpointer user_data)
+	                                                gpointer user_data)
 	{
 		static_cast<NodeWatch*>(user_data)->
 			on_browser_notify_connection();
 	}
 
-	static void on_node_removed_static(InfcBrowser* browser,
-	                                   InfcBrowserIter* iter,
-					   gpointer user_data)
+	static void on_node_removed_static(InfBrowser* browser,
+	                                   InfBrowserIter* iter,
+	                                   gpointer user_data)
 	{
 		static_cast<NodeWatch*>(user_data)->
 			on_node_removed(browser, iter);
@@ -73,13 +73,13 @@ protected:
 
 	void on_connection_notify_status();
 	void on_browser_notify_connection();
-	void on_node_removed(InfcBrowser* browser, InfcBrowserIter* iter);
+	void on_node_removed(InfBrowser* browser, InfBrowserIter* iter);
 
 	void reset();
 
-	InfcBrowser* m_browser;
+	InfBrowser* m_browser;
 	InfXmlConnection* m_connection;
-	InfcBrowserIter m_iter;
+	InfBrowserIter m_iter;
 
 	gulong m_connection_notify_status_handler;
 	gulong m_browser_notify_connection_handler;

@@ -43,7 +43,7 @@ public:
 	Glib::ustring get_document_name() const;
 	void set_document_name(const Glib::ustring& document_name);
 
-	InfcBrowser* get_selected_directory(InfcBrowserIter* iter) const;
+	InfBrowser* get_selected_directory(InfBrowserIter* iter) const;
 	InfGtkBrowserModel* get_browser_model() const;
 
 	void set_single_document_mode();

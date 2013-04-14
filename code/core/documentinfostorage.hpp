@@ -49,14 +49,14 @@ public:
 	DocumentInfoStorage(InfGtkBrowserModel* model);
 	~DocumentInfoStorage();
 
-	std::string get_key(InfcBrowser* browser,
-	                    InfcBrowserIter* iter) const;
+	std::string get_key(InfBrowser* browser,
+	                    const InfBrowserIter* iter) const;
 
-	const Info* get_info(InfcBrowser* browser,
-	                     InfcBrowserIter* iter) const;
+	const Info* get_info(InfBrowser* browser,
+	                     const InfBrowserIter* iter) const;
 	const Info* get_info(const std::string& key) const;
 
-	void set_info(InfcBrowser* browser, InfcBrowserIter* iter,
+	void set_info(InfBrowser* browser, const InfBrowserIter* iter,
 	              const Info& info);
 	void set_info(const std::string& key, const Info& info);
 
@@ -64,40 +64,41 @@ protected:
 	static void on_set_browser_static(InfGtkBrowserModel* model,
 	                                  GtkTreePath* path,
 	                                  GtkTreeIter* iter,
-	                                  InfcBrowser* browser,
+	                                  InfBrowser* browser,
 	                                  gpointer user_data)
 	{
 		static_cast<DocumentInfoStorage*>(user_data)->
 			on_set_browser(iter, browser);
 	}
 
-	static void on_begin_explore_static(InfcBrowser* browser,
-	                                    InfcBrowserIter* iter,
-					    InfcExploreRequest* request,
-	                                    gpointer user_data)
+	static void on_begin_request_explore_node_static(InfBrowser* browser,
+	                                                 InfBrowserIter* iter,
+	                                                 InfRequest* request,
+	                                                 gpointer user_data)
 	{
 		static_cast<DocumentInfoStorage*>(user_data)->
-			on_begin_explore(browser, iter, request);
+			on_begin_request_explore_node(browser, iter, request);
 	}
 
-	static void on_node_removed_static(InfcBrowser* browser,
-	                                   InfcBrowserIter* iter,
+	static void on_node_removed_static(InfBrowser* browser,
+	                                   InfBrowserIter* iter,
 	                                   gpointer user_data)
 	{
 		static_cast<DocumentInfoStorage*>(user_data)->
 			on_node_removed(browser, iter);
 	}
 
-	void on_set_browser(GtkTreeIter* iter, InfcBrowser* browser);
-	void on_begin_explore(InfcBrowser* browser, InfcBrowserIter* iter,
-	                      InfcExploreRequest* request);
-	void on_node_removed(InfcBrowser* browser, InfcBrowserIter* iter);
+	void on_set_browser(GtkTreeIter* iter, InfBrowser* browser);
+	void on_begin_request_explore_node(InfBrowser* browser,
+	                                   InfBrowserIter* iter,
+	                                   InfRequest* request);
+	void on_node_removed(InfBrowser* browser, InfBrowserIter* iter);
 
 	typedef std::map<std::string, Info> InfoMap;
 	InfoMap m_infos;
 
 	class BrowserConn;
-	typedef std::map<InfcBrowser*, BrowserConn*> BrowserMap;
+	typedef std::map<InfBrowser*, BrowserConn*> BrowserMap;
 	BrowserMap m_browsers;
 
 	gulong m_set_browser_handler;

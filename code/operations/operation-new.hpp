@@ -28,40 +28,31 @@ namespace Gobby
 class OperationNew: public Operations::Operation
 {
 public:
-	OperationNew(Operations& operations, InfcBrowser* browser,
-	             const InfcBrowserIter* parent, const Glib::ustring& name,
+	OperationNew(Operations& operations, InfBrowser* browser,
+	             const InfBrowserIter* parent, const Glib::ustring& name,
 	             bool directory);
 
 	virtual ~OperationNew();
 
 protected:
 	static void
-	on_request_failed_static(InfcNodeRequest* request,
-	                         const GError* error,
-	                         gpointer user_data)
-	{
-		static_cast<OperationNew*>(user_data)->
-			on_request_failed(error);
-	}
-
-	static void
-	on_request_finished_static(InfcNodeRequest* request,
-	                           InfcBrowserIter* iter,
+	on_request_finished_static(InfNodeRequest* request,
+	                           const InfBrowserIter* iter,
+	                           const GError* error,
 	                           gpointer user_data)
 	{
 		static_cast<OperationNew*>(user_data)->
-			on_request_finished(iter);
+			on_request_finished(iter, error);
 	}
 
-	void on_request_failed(const GError* error);
-	void on_request_finished(InfcBrowserIter* iter);
+	void on_request_finished(const InfBrowserIter* iter,
+	                         const GError* error);
 
 protected:
 	Glib::ustring m_name;
 	bool m_directory;
-	InfcNodeRequest* m_request;
+	InfNodeRequest* m_request;
 	gulong m_finished_id;
-	gulong m_failed_id;
 
 	StatusBar::MessageHandle m_message_handle;
 };

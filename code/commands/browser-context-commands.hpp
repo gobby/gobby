@@ -45,7 +45,7 @@ public:
 protected:
 	static void on_populate_popup_static(InfGtkBrowserView* view,
 	                                     GtkMenu* menu,
-					     gpointer user_data)
+	                                     gpointer user_data)
 	{
 		static_cast<BrowserContextCommands*>(user_data)->
 			on_populate_popup(Glib::wrap(menu));
@@ -60,21 +60,21 @@ protected:
 	// Context commands
 	void on_disconnect(InfcBrowser* browser);
 
-	void on_new(InfcBrowser* browser, InfcBrowserIter iter,
+	void on_new(InfBrowser* browser, InfBrowserIter iter,
 	            bool directory);
-	void on_open(InfcBrowser* browser, InfcBrowserIter iter);
-	void on_delete(InfcBrowser* browser, InfcBrowserIter iter);
+	void on_open(InfBrowser* browser, InfBrowserIter iter);
+	void on_delete(InfBrowser* browser, InfBrowserIter iter);
 
 	// on_new handlers
 	void on_new_node_removed();
 
-	void on_new_response(int response_id, InfcBrowser* browser,
-	                     InfcBrowserIter iter, bool directory);
+	void on_new_response(int response_id, InfBrowser* browser,
+	                     InfBrowserIter iter, bool directory);
 
 	// on_open handlers
 	void on_open_node_removed();
-	void on_open_response(int response_id, InfcBrowser* browser,
-	                      InfcBrowserIter iter);
+	void on_open_response(int response_id, InfBrowser* browser,
+	                      InfBrowserIter iter);
 
 	Gtk::Window& m_parent;
 	Browser& m_browser;

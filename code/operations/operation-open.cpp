@@ -59,15 +59,15 @@ namespace
 
 Gobby::OperationOpen::OperationOpen(Operations& operations,
                                     const Preferences& preferences,
-                                    InfcBrowser* browser,
-                                    const InfcBrowserIter* parent,
+                                    InfBrowser* browser,
+                                    const InfBrowserIter* parent,
                                     const std::string& name,
                                     const std::string& uri,
                                     const char* encoding):
 	Operation(operations), m_preferences(preferences), m_name(name),
 	m_parent(browser, parent), m_encoding_auto_detect_index(-1),
 	m_eol_style(DocumentInfoStorage::EOL_CR), m_request(NULL),
-	m_finished_id(0), m_failed_id(0), m_raw_pos(0)
+	m_finished_id(0), m_raw_pos(0)
 {
 	if(encoding != NULL)
 	{
@@ -114,7 +114,6 @@ Gobby::OperationOpen::~OperationOpen()
 	if(m_request != NULL)
 	{
 		g_signal_handler_disconnect(m_request, m_finished_id);
-		g_signal_handler_disconnect(m_request, m_failed_id);
 		g_object_unref(m_request);
 	}
 
@@ -138,7 +137,7 @@ void Gobby::OperationOpen::on_file_read(
 
 		m_stream->read_async(
 			m_buffer->buf, buffer::SIZE,
-		        sigc::mem_fun(*this, &OperationOpen::on_stream_read));
+			sigc::mem_fun(*this, &OperationOpen::on_stream_read));
 	}
 	catch(const Glib::Exception& ex)
 	{
@@ -379,9 +378,9 @@ void Gobby::OperationOpen::read_finish()
 		inf_text_gtk_buffer_new(m_content, user_table);
 	g_object_unref(user_table);
 
-	InfcBrowser* browser = m_parent.get_browser();
+	InfBrowser* browser = m_parent.get_browser();
 	InfCommunicationManager* communication_manager =
-		infc_browser_get_communication_manager(browser);
+		infc_browser_get_communication_manager(INFC_BROWSER(browser));
 
 	InfIo* io;
 	g_object_get(G_OBJECT(browser), "io", &io, NULL);
@@ -393,18 +392,16 @@ void Gobby::OperationOpen::read_finish()
 	g_object_unref(io);
 	g_object_unref(text_gtk_buffer);
 
-	m_request = infc_browser_add_note_with_content(
+	m_request = inf_browser_add_note(
 		m_parent.get_browser(), &m_parent.get_browser_iter(),
-		m_name.c_str(), Plugins::TEXT, INF_SESSION(session), TRUE);
+		m_name.c_str(), Plugins::TEXT->note_type,
+		INF_SESSION(session), TRUE);
 	g_object_unref(session);
 
 	// Note infc_browser_add_note_with_content does not return a
 	// new reference.
 	g_object_ref(m_request);
 
-	m_failed_id = g_signal_connect(
-		G_OBJECT(m_request), "failed",
-		G_CALLBACK(on_request_failed_static), this);
 	m_finished_id = g_signal_connect(
 		G_OBJECT(m_request), "finished",
 		G_CALLBACK(on_request_finished_static), this);
@@ -414,23 +411,30 @@ void Gobby::OperationOpen::read_finish()
 	// disconnect the signal, or bind it.
 }
 
-void Gobby::OperationOpen::on_request_failed(const GError* error)
+void Gobby::OperationOpen::on_request_finished(const InfBrowserIter* iter,
+                                               const GError* error)
 {
-	OperationOpen::error(error->message);
-}
+	if(error != NULL)
+	{
+		OperationOpen::error(error->message);
+	}
+	else
+	{
+		// Store document info so that we know where we loaded the
+		// file from, so we don't have to ask the user where to store
+		// it when s/he wants to save it again.
+		DocumentInfoStorage::Info info;
+		info.uri = m_file->get_uri();
+		info.encoding = m_encoding;
+		info.eol_style = m_eol_style;
 
-void Gobby::OperationOpen::on_request_finished(InfcBrowserIter* iter)
-{
-	// Store document info so that we know where we loaded the file
-	// from, so we don't have to ask the user where to store it when
-	// s/he wants to save it again.
-	DocumentInfoStorage::Info info;
-	info.uri = m_file->get_uri();
-	info.encoding = m_encoding;
-	info.eol_style = m_eol_style;
-	get_info_storage().set_info(m_parent.get_browser(), iter, info);
+		get_info_storage().set_info(
+			m_parent.get_browser(),
+			iter,
+			info);
 
-	finish();
+		finish();
+	}
 }
 
 void Gobby::OperationOpen::error(const Glib::ustring& message)

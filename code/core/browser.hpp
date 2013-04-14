@@ -58,7 +58,7 @@ public:
 
 	typedef std::map<ResolvHandle*, Resolv> ResolvMap;
 
-	typedef sigc::signal<void, InfcBrowser*, InfcBrowserIter*>
+	typedef sigc::signal<void, InfBrowser*, InfBrowserIter*>
 		SignalActivate;
 
 	Browser(Gtk::Window& parent,
@@ -74,8 +74,8 @@ public:
 
 	InfGtkBrowserView* get_view() { return m_browser_view; }
 
-	bool get_selected(InfcBrowser** browser, InfcBrowserIter* iter);
-	void set_selected(InfcBrowser* browser, InfcBrowserIter* iter);
+	bool get_selected(InfBrowser** browser, InfBrowserIter* iter);
+	void set_selected(InfBrowser* browser, const InfBrowserIter* iter);
 
 	void connect_to_host(Glib::ustring str);
 

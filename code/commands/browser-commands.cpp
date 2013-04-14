@@ -24,21 +24,21 @@ class Gobby::BrowserCommands::BrowserInfo
 {
 public:
 	BrowserInfo(BrowserCommands& commands,
-	            InfcBrowser* browser);
+	            InfBrowser* browser);
 
 	~BrowserInfo();
 
-	InfcBrowser* get_browser() { return m_browser; }
+	InfBrowser* get_browser() { return m_browser; }
 private:
 	static void on_notify_status_static(GObject* object,
 	                                    GParamSpec* pspec,
 	                                    gpointer user_data)
 	{
 		static_cast<BrowserCommands*>(user_data)->on_notify_status(
-			INFC_BROWSER(object));
+			INF_BROWSER(object));
 	}
 
-	InfcBrowser* m_browser;
+	InfBrowser* m_browser;
 
 	gulong m_notify_status_handler;
 };
@@ -47,37 +47,38 @@ class Gobby::BrowserCommands::RequestInfo
 {
 public:
 	RequestInfo(BrowserCommands& commands,
-	            InfcBrowser* browser, InfcBrowserIter* iter,
-	            InfcNodeRequest* request, StatusBar& status_bar);
+	            InfBrowser* browser, InfBrowserIter* iter,
+	            InfRequest* request, StatusBar& status_bar);
 	~RequestInfo();
 
 private:
-	static void on_failed_static(InfcNodeRequest* request,
-	                             const GError* error, gpointer user_data)
+	static void on_node_finished_static(InfNodeRequest* request,
+	                                    const InfBrowserIter* iter,
+	                                    const GError* error,
+	                                    gpointer user_data)
 	{
 		static_cast<BrowserCommands*>(user_data)->
-			on_failed(request, error);
+			on_finished(INF_REQUEST(request), iter, error);
 	}
-
-	static void on_finished_static(InfcNodeRequest* request,
-	                               InfcBrowserIter* iter,
-	                               gpointer user_data)
+	
+	static void on_chat_finished_static(InfcChatRequest* request,
+	                                    const GError* error,
+	                                    gpointer user_data)
 	{
 		static_cast<BrowserCommands*>(user_data)->
-			on_finished(request);
+			on_finished(INF_REQUEST(request), NULL, error);
 	}
 
-	InfcNodeRequest* m_request;
+	InfRequest* m_request;
 
 	StatusBar& m_status_bar;
 	StatusBar::MessageHandle m_handle;
 
-	gulong m_failed_handler;
 	gulong m_finished_handler;
 };
 
 Gobby::BrowserCommands::BrowserInfo::BrowserInfo(BrowserCommands& cmds,
-                                                 InfcBrowser* browser):
+                                                 InfBrowser* browser):
 	m_browser(browser)
 {
 	m_notify_status_handler = g_signal_connect(
@@ -95,9 +96,9 @@ Gobby::BrowserCommands::BrowserInfo::~BrowserInfo()
 }
 
 Gobby::BrowserCommands::RequestInfo::RequestInfo(BrowserCommands& commands,
-                                                 InfcBrowser* browser,
-                                                 InfcBrowserIter* iter,
-                                                 InfcNodeRequest* request,
+                                                 InfBrowser* browser,
+                                                 InfBrowserIter* iter,
+                                                 InfRequest* request,
                                                  StatusBar& status_bar):
 	m_request(request), m_status_bar(status_bar)
 {
@@ -105,16 +106,24 @@ Gobby::BrowserCommands::RequestInfo::RequestInfo(BrowserCommands& commands,
 
 	if(iter)
 	{
+		g_assert(INF_IS_NODE_REQUEST(request));
+
 		m_handle = m_status_bar.add_info_message(
 			Glib::ustring::compose(
 				_("Subscribing to %1..."), Glib::ustring(
-					infc_browser_iter_get_name(
+					inf_browser_get_node_name(
 						browser, iter))));
+
+		m_finished_handler = g_signal_connect(
+			request, "finished",
+			G_CALLBACK(on_node_finished_static), &commands);
 	}
 	else
 	{
+		g_assert(INFC_IS_CHAT_REQUEST(request));
+
 		InfXmlConnection* connection =
-			infc_browser_get_connection(browser);
+			infc_browser_get_connection(INFC_BROWSER(browser));
 		gchar* remote_hostname;
 		g_object_get(G_OBJECT(connection),
 		             "remote-id", &remote_hostname, NULL);
@@ -123,19 +132,17 @@ Gobby::BrowserCommands::RequestInfo::RequestInfo(BrowserCommands& commands,
 				_("Subscribing to chat on %1..."),
 					remote_hostname));
 		g_free(remote_hostname);
+		
+		m_finished_handler = g_signal_connect(
+			request, "finished",
+			G_CALLBACK(on_chat_finished_static), &commands);
 	}
-
-	m_failed_handler = g_signal_connect(request, "failed",
-	                 G_CALLBACK(on_failed_static), &commands);
-	m_finished_handler = g_signal_connect(request, "finished",
-	                 G_CALLBACK(on_finished_static), &commands);
 }
 
 Gobby::BrowserCommands::RequestInfo::~RequestInfo()
 {
 	m_status_bar.remove_message(m_handle);
 
-	g_signal_handler_disconnect(m_request, m_failed_handler);
 	g_signal_handler_disconnect(m_request, m_finished_handler);
 
 	g_object_unref(m_request);
@@ -174,16 +181,16 @@ Gobby::BrowserCommands::~BrowserCommands()
 
 void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
                                             GtkTreeIter* iter,
-                                            InfcBrowser* browser)
+                                            InfBrowser* browser)
 {
-	InfcBrowser* old_browser;
+	InfBrowser* old_browser;
 	gtk_tree_model_get(
 		GTK_TREE_MODEL(model), iter,
 		INF_GTK_BROWSER_MODEL_COL_BROWSER, &old_browser, -1);
 
 	if(old_browser != NULL)
 	{
-		// Find by browser in case old_browser has it's connection
+		// Find by browser in case old_browser has its connection
 		// reset.
 		BrowserMap::iterator iter = m_browser_map.find(old_browser);
 
@@ -199,25 +206,43 @@ void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
 	{
 		g_assert(m_browser_map.find(browser) == m_browser_map.end());
 
+		InfBrowserStatus browser_status;
+		g_object_get(
+			G_OBJECT(browser), "status",
+			&browser_status, NULL);
+
 		m_browser_map[browser] = new BrowserInfo(*this, browser);
-		if(infc_browser_get_status(browser) == INFC_BROWSER_CONNECTED)
-			if(!infc_browser_get_chat_session(browser))
-				subscribe_chat(browser);
+		if(browser_status == INF_BROWSER_OPEN)
+		{
+			if(INFC_IS_BROWSER(browser))
+			{
+				InfcBrowser* infcbrowser =
+					INFC_BROWSER(browser);
+				InfcSessionProxy* proxy =
+					infc_browser_get_chat_session(
+						infcbrowser);
+				if(!proxy)
+					subscribe_chat(infcbrowser);
+			}
+		}
 	}
 }
 
-void Gobby::BrowserCommands::on_notify_status(InfcBrowser* browser)
+void Gobby::BrowserCommands::on_notify_status(InfBrowser* browser)
 {
 	InfXmlConnection* connection;
 	InfXmlConnectionStatus status;
+	InfBrowserStatus browser_status;
 
-	switch(infc_browser_get_status(browser))
+	g_object_get(G_OBJECT(browser), "status", &browser_status, NULL);
+	switch(browser_status)
 	{
-	case INFC_BROWSER_DISCONNECTED:
+	case INF_BROWSER_CLOSED:
 		// Close connection if browser got disconnected. This for
 		// example happens when the server does not send an initial
 		// welcome message.
-		connection = infc_browser_get_connection(browser);
+		connection =
+			infc_browser_get_connection(INFC_BROWSER(browser));
 		g_object_get(G_OBJECT(connection), "status", &status, NULL);
 		if(status != INF_XML_CONNECTION_CLOSED &&
 		   status != INF_XML_CONNECTION_CLOSING)
@@ -226,11 +251,11 @@ void Gobby::BrowserCommands::on_notify_status(InfcBrowser* browser)
 		}
 
 		break;
-	case INFC_BROWSER_CONNECTING:
+	case INF_BROWSER_OPENING:
 		break;
-	case INFC_BROWSER_CONNECTED:
-		if(!infc_browser_get_chat_session(browser))
-			subscribe_chat(browser);
+	case INF_BROWSER_OPEN:
+		if(!infc_browser_get_chat_session(INFC_BROWSER(browser)))
+			subscribe_chat(INFC_BROWSER(browser));
 		break;
 	default:
 		g_assert_not_reached();
@@ -240,21 +265,29 @@ void Gobby::BrowserCommands::on_notify_status(InfcBrowser* browser)
 
 void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)
 {
-	InfcNodeRequest* request = infc_browser_subscribe_chat(browser);
+	InfRequest* request =
+		INF_REQUEST(infc_browser_subscribe_chat(browser));
 	g_assert(m_request_map.find(request) == m_request_map.end());
+
 	m_request_map[request] =
-		new RequestInfo(*this, browser, NULL, request, m_status_bar);
+		new RequestInfo(
+			*this, INF_BROWSER(browser), NULL,
+			request, m_status_bar);
 }
 
-void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
-                                         InfcBrowserIter* iter)
+void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
+                                         InfBrowserIter* iter)
 {
-	InfcSessionProxy* proxy =
-		infc_browser_iter_get_session(browser, iter);
+	InfSessionProxy* object = inf_browser_get_session(browser, iter);
+	g_assert(object == NULL || INFC_IS_SESSION_PROXY(object));
+	InfcSessionProxy* proxy = INFC_SESSION_PROXY(object);
+
 	if(proxy != NULL)
 	{
-		InfSession* session = infc_session_proxy_get_session(proxy);
+		InfSession* session;
+		g_object_get(G_OBJECT(proxy), "session", &session, NULL);
 		SessionView* view = m_folder.lookup_document(session);
+		g_object_unref(session);
 
 		if(view != NULL)
 		{
@@ -269,15 +302,17 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 	}
 	else
 	{
-		InfcNodeRequest* request =
-			infc_browser_iter_get_subscribe_request(browser,
-			                                        iter);
+		InfRequest* request =
+			INF_REQUEST(
+				inf_browser_get_pending_subscribe_request(
+					browser, iter));
 
 		// If there is already a request don't re-request
 		if(request == NULL)
 		{
-			request = infc_browser_iter_subscribe_session(browser,
-			                                              iter);
+			request =
+				INF_REQUEST(
+					inf_browser_subscribe(browser, iter));
 
 			g_assert(m_request_map.find(request) ==
 			         m_request_map.end());
@@ -288,23 +323,19 @@ void Gobby::BrowserCommands::on_activate(InfcBrowser* browser,
 	}
 }
 
-void Gobby::BrowserCommands::on_finished(InfcNodeRequest* request)
+void Gobby::BrowserCommands::on_finished(InfRequest* request,
+                                         const InfBrowserIter* iter,
+                                         const GError* error)
 {
-	RequestMap::iterator iter = m_request_map.find(request);
-	g_assert(iter != m_request_map.end());
-	delete iter->second;
-	m_request_map.erase(iter);
-}
-
-void Gobby::BrowserCommands::on_failed(InfcNodeRequest* request,
-                                       const GError* error)
-{
-	RequestMap::iterator iter = m_request_map.find(request);
-	g_assert(iter != m_request_map.end());
-	delete iter->second;
-	m_request_map.erase(iter);
-
-	m_status_bar.add_error_message(
-		_("Subscription failed"),
-		error->message);
+	RequestMap::iterator map_iter = m_request_map.find(request);
+	g_assert(map_iter != m_request_map.end());
+	delete map_iter->second;
+	m_request_map.erase(map_iter);
+	
+	if(error != NULL)
+	{
+		m_status_bar.add_error_message(
+			_("Subscription failed"),
+			error->message);
+	}
 }

@@ -48,8 +48,8 @@ void Gobby::TaskNew::on_response(int response_id)
 		DocumentLocationDialog& dialog =
 			get_document_location_dialog();
 			
-		InfcBrowserIter iter;
-		InfcBrowser* browser = dialog.get_selected_directory(&iter);
+		InfBrowserIter iter;
+		InfBrowser* browser = dialog.get_selected_directory(&iter);
 		g_assert(browser != NULL);
 
 		get_operations().create_document(browser, &iter,

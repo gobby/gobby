@@ -27,6 +27,8 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/exception.h>
 
+#include <libinfinity/client/infc-explore-request.h>
+
 namespace
 {
 	Gobby::DocumentInfoStorage::EolStyle
@@ -95,12 +97,12 @@ namespace
 class Gobby::DocumentInfoStorage::BrowserConn
 {
 public:
-	BrowserConn(DocumentInfoStorage& storage, InfcBrowser* browser):
+	BrowserConn(DocumentInfoStorage& storage, InfBrowser* browser):
 		m_browser(browser)
 	{
 		m_begin_explore_handler =
-			g_signal_connect(G_OBJECT(browser), "begin-explore",
-			                 G_CALLBACK(on_begin_explore_static),
+			g_signal_connect(G_OBJECT(browser), "begin-request::explore-node",
+			                 G_CALLBACK(on_begin_request_explore_node_static),
 			                 &storage);
 
 		m_node_removed_handler =
@@ -118,7 +120,7 @@ public:
 	}
 
 private:
-	InfcBrowser* m_browser;
+	InfBrowser* m_browser;
 	gulong m_begin_explore_handler;
 	gulong m_node_removed_handler;
 };
@@ -226,13 +228,14 @@ void Gobby::DocumentInfoStorage::init(xmlpp::Element* node)
 }
 
 std::string
-Gobby::DocumentInfoStorage::get_key(InfcBrowser* browser,
-                                    InfcBrowserIter* iter) const
+Gobby::DocumentInfoStorage::get_key(InfBrowser* browser,
+                                    const InfBrowserIter* iter) const
 {
-	InfXmlConnection* connection = infc_browser_get_connection(browser);
+	InfXmlConnection* connection =
+		infc_browser_get_connection(INFC_BROWSER(browser));
 	g_assert(connection != NULL);
 
-	gchar* path = infc_browser_iter_get_path(browser, iter);
+	gchar* path = inf_browser_get_path(browser, iter);
 	gchar* remote_id;
 	g_object_get(G_OBJECT(connection), "remote-id", &remote_id, NULL);
 	std::string result = std::string(remote_id) + "?" + path;
@@ -243,8 +246,8 @@ Gobby::DocumentInfoStorage::get_key(InfcBrowser* browser,
 }
 
 const Gobby::DocumentInfoStorage::Info*
-Gobby::DocumentInfoStorage::get_info(InfcBrowser* browser,
-                                     InfcBrowserIter* iter) const
+Gobby::DocumentInfoStorage::get_info(InfBrowser* browser,
+                                     const InfBrowserIter* iter) const
 {
 	return get_info(get_key(browser, iter));
 }
@@ -257,8 +260,8 @@ Gobby::DocumentInfoStorage::get_info(const std::string& key) const
 	return NULL;
 }
 
-void Gobby::DocumentInfoStorage::set_info(InfcBrowser* browser,
-                                          InfcBrowserIter* iter,
+void Gobby::DocumentInfoStorage::set_info(InfBrowser* browser,
+                                          const InfBrowserIter* iter,
                                           const Info& info)
 {
 	set_info(get_key(browser, iter), info);
@@ -271,7 +274,7 @@ void Gobby::DocumentInfoStorage::set_info(const std::string& key,
 }
 
 void Gobby::DocumentInfoStorage::on_set_browser(GtkTreeIter* iter,
-                                                InfcBrowser* browser)
+                                                InfBrowser* browser)
 {
 	if(browser != NULL)
 	{
@@ -282,11 +285,11 @@ void Gobby::DocumentInfoStorage::on_set_browser(GtkTreeIter* iter,
 		// documents in all explored directories in browser. Also
 		// add all existing explore requests, to check
 		// subdirectories when the explore finishes (see
-		// on_begin_explore).
+		// on_begin_request_explore_node).
 	}
 	else
 	{
-		InfcBrowser* old_browser;
+		InfBrowser* old_browser;
 		gtk_tree_model_get(GTK_TREE_MODEL(m_model), iter,
 		                   INF_GTK_BROWSER_MODEL_COL_BROWSER,
 				   &old_browser,
@@ -305,16 +308,19 @@ void Gobby::DocumentInfoStorage::on_set_browser(GtkTreeIter* iter,
 	}
 }
 
-void Gobby::DocumentInfoStorage::on_begin_explore(InfcBrowser* browser,
-                                                  InfcBrowserIter* iter,
-                                                  InfcExploreRequest* request)
+void Gobby::DocumentInfoStorage::
+	on_begin_request_explore_node(InfBrowser* browser,
+                                InfBrowserIter* iter,
+                                InfRequest* request)
 {
+	g_assert(INFC_IS_EXPLORE_REQUEST(request));
+
 	// TODO: When request has finished, remove all infos that refer to
 	// no longer existing documents in the explored directory.
 }
 
-void Gobby::DocumentInfoStorage::on_node_removed(InfcBrowser* browser,
-                                                 InfcBrowserIter* iter)
+void Gobby::DocumentInfoStorage::on_node_removed(InfBrowser* browser,
+                                                 InfBrowserIter* iter)
 {
 	// Remove info when the corresponding document is removed.
 	std::string key = get_key(browser, iter);

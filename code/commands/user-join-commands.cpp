@@ -68,7 +68,7 @@ class Gobby::UserJoinCommands::UserJoinInfo
 {
 public:
 	UserJoinInfo(UserJoinCommands& commands,
-	             InfcSessionProxy* proxy,
+	             InfSessionProxy* proxy,
 	             Folder& folder,
 	             SessionView& view);
 	~UserJoinInfo();
@@ -82,25 +82,17 @@ private:
 			on_synchronization_complete();
 	}
 
-	static void on_user_join_failed_static(InfcUserRequest* request,
-	                                       const GError* error,
-	                                       gpointer user_data)
-	{
-		static_cast<UserJoinInfo*>(user_data)->
-			on_user_join_failed(error);
-	}
-
-	static void on_user_join_finished_static(InfcUserRequest* request,
+	static void on_user_join_finished_static(InfUserRequest* request,
 	                                         InfUser* user,
+	                                         const GError* error,
 	                                         gpointer user_data)
 	{
 		static_cast<UserJoinInfo*>(user_data)->
-			on_user_join_finished(user);
+			on_user_join_finished(user, error);
 	}
 
 	void on_synchronization_complete();
-	void on_user_join_failed(const GError* error);
-	void on_user_join_finished(InfUser* user);
+	void on_user_join_finished(InfUser* user, const GError* error);
 
 	void attempt_user_join();
 	void user_join_complete(InfUser* user);
@@ -111,35 +103,34 @@ private:
 
 	UserJoinCommands& m_commands;
 
-	InfcSessionProxy* m_proxy;
+	InfSessionProxy* m_proxy;
 	Folder& m_folder;
 	SessionView& m_view;
 
-	InfcUserRequest* m_request;
+	InfUserRequest* m_request;
 
 	gulong m_synchronization_complete_handler;
-	gulong m_user_join_failed_handler;
 	gulong m_user_join_finished_handler;
 
 	guint m_retry_index;
 };
 
 Gobby::UserJoinCommands::UserJoinInfo::UserJoinInfo(UserJoinCommands& cmds,
-                                                    InfcSessionProxy* proxy,
+                                                    InfSessionProxy* proxy,
                                                     Folder& folder,
                                                     SessionView& view):
 	m_commands(cmds), m_proxy(proxy), m_folder(folder), m_view(view),
 	m_request(NULL), m_synchronization_complete_handler(0),
-	m_user_join_failed_handler(0), m_user_join_finished_handler(0),
-	m_retry_index(1)
+	m_user_join_finished_handler(0), m_retry_index(1)
 {
 	g_object_ref(m_proxy);
 
-	InfSession* session = infc_session_proxy_get_session(proxy);
+	InfSession* session;
+	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
 
 	if(inf_session_get_status(session) == INF_SESSION_SYNCHRONIZING)
 	{
-		// If not yet synchronization wait for synchronization until
+		// If not yet synchronized, wait for synchronization until
 		// attempting userjoin
 		m_synchronization_complete_handler = g_signal_connect_after(
 			G_OBJECT(session), "synchronization-complete",
@@ -154,21 +145,25 @@ Gobby::UserJoinCommands::UserJoinInfo::UserJoinInfo(UserJoinCommands& cmds,
 				*this, &UserJoinInfo::attempt_user_join),
 				false));
 	}
+
+	g_object_unref(session);
 }
 
 Gobby::UserJoinCommands::UserJoinInfo::~UserJoinInfo()
 {
 	if(m_synchronization_complete_handler)
 	{
-		InfSession* session = infc_session_proxy_get_session(m_proxy);
+		InfSession* session;
+		g_object_get(G_OBJECT(m_proxy), "session", &session, NULL);
+
 		g_signal_handler_disconnect(
 			session, m_synchronization_complete_handler);
+
+		g_object_unref(session);
 	}
 
 	if(m_request)
 	{
-		g_signal_handler_disconnect(m_request,
-		                            m_user_join_failed_handler);
 		g_signal_handler_disconnect(m_request,
 		                            m_user_join_finished_handler);
 
@@ -183,24 +178,30 @@ void Gobby::UserJoinCommands::UserJoinInfo::on_synchronization_complete()
 	// Disconnect signal handler, so that we don't get notified when
 	// syncing this document in running state to another location
 	// or server.
-	InfSession* session = infc_session_proxy_get_session(m_proxy);
+	InfSession* session;
+	g_object_get(G_OBJECT(m_proxy), "session", &session, NULL);
+
 	g_signal_handler_disconnect(session,
 	                            m_synchronization_complete_handler);
 	m_synchronization_complete_handler = 0;
+	g_object_unref(session);
 
 	// Attempt user join after synchronization
 	attempt_user_join();
 }
 
 void Gobby::UserJoinCommands::UserJoinInfo::
-	on_user_join_failed(const GError* error)
+	on_user_join_finished(InfUser* user, const GError* error)
 {
-	if(error->domain == inf_user_error_quark() &&
-	   error->code == INF_USER_ERROR_NAME_IN_USE)
+	if(error == NULL)
+	{
+		user_join_complete(user);
+	}
+	else if(error->domain == inf_user_error_quark() &&
+	        error->code == INF_USER_ERROR_NAME_IN_USE)
 	{
 		// If name is in use retry with alternative user name
 		++m_retry_index;
-
 		attempt_user_join();
 	}
 	else
@@ -210,23 +211,20 @@ void Gobby::UserJoinCommands::UserJoinInfo::
 	}
 }
 
-void Gobby::UserJoinCommands::UserJoinInfo::
-	on_user_join_finished(InfUser* user)
-{
-	user_join_complete(user);
-}
-
 void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 {
 	const Preferences& preferences = m_commands.m_preferences;
 
 	// Check if there is already a local user, for example for a
 	// synced-in document.
-	InfSession* session = infc_session_proxy_get_session(m_proxy);
+	InfSession* session;
+	g_object_get(G_OBJECT(m_proxy), "session", &session, NULL);
+
 	InfUserTable* user_table = inf_session_get_user_table(session);
 	InfUser* user = NULL;
 	inf_user_table_foreach_local_user(user_table,
 	                                  retr_local_user_func, &user);
+	g_object_unref(session);
 
 	if(user != NULL)
 	{
@@ -267,32 +265,21 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 		if(text_view) add_text_user_properties(params, *text_view);
 
 		GError* error = NULL;
-		m_request = infc_session_proxy_join_user(
-			m_proxy, &params[0], params.size(), &error);
+		m_request = inf_session_proxy_join_user(
+			m_proxy, params.size(), &params[0]);
 
 		for(unsigned int i = 0; i < params.size(); ++i)
-			g_value_unset(&params[i].value);
+		g_value_unset(&params[i].value);
 
-		if(m_request == NULL)
-		{
-			set_error_text(m_view, error->message);
-			g_error_free(error);
-		}
-		else
-		{
-			g_object_ref(m_request);
+		g_object_ref(m_request);
 
-			m_view.set_info(
-				_("User Join in progress..."), false);
+		m_view.set_info(
+			_("User Join in progress..."), false);
 
-			m_user_join_failed_handler = g_signal_connect(
-				m_request, "failed",
-				G_CALLBACK(on_user_join_failed_static), this);
-			m_user_join_finished_handler = g_signal_connect(
-				m_request, "finished",
-				G_CALLBACK(on_user_join_finished_static),
-				this);
-		}
+		m_user_join_finished_handler = g_signal_connect(
+			m_request, "finished",
+			G_CALLBACK(on_user_join_finished_static),
+			this);
 	}
 }
 
@@ -378,7 +365,7 @@ Gobby::UserJoinCommands::~UserJoinCommands()
 	}
 }
 
-void Gobby::UserJoinCommands::on_subscribe_session(InfcSessionProxy* proxy,
+void Gobby::UserJoinCommands::on_subscribe_session(InfSessionProxy* proxy,
                                                    Folder& folder,
                                                    SessionView& view)
 {
@@ -386,7 +373,7 @@ void Gobby::UserJoinCommands::on_subscribe_session(InfcSessionProxy* proxy,
 	m_user_join_map[proxy] = new UserJoinInfo(*this, proxy, folder, view);
 }
 
-void Gobby::UserJoinCommands::on_unsubscribe_session(InfcSessionProxy* proxy,
+void Gobby::UserJoinCommands::on_unsubscribe_session(InfSessionProxy* proxy,
                                                      Folder& folder,
                                                      SessionView& view)
 {

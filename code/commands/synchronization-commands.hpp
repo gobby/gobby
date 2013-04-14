@@ -36,10 +36,10 @@ public:
 protected:
 	class SyncInfo;
 
-	void on_subscribe_session(InfcSessionProxy* proxy,
+	void on_subscribe_session(InfSessionProxy* proxy,
 	                          Folder& folder,
 	                          SessionView& view);
-	void on_unsubscribe_session(InfcSessionProxy* proxy,
+	void on_unsubscribe_session(InfSessionProxy* proxy,
 	                            Folder& folder,
 	                            SessionView& view);
 

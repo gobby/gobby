@@ -174,7 +174,7 @@ Gobby::SynchronizationCommands::~SynchronizationCommands()
 }
 
 void
-Gobby::SynchronizationCommands::on_subscribe_session(InfcSessionProxy* prxy,
+Gobby::SynchronizationCommands::on_subscribe_session(InfSessionProxy* prxy,
                                                      Folder& folder,
                                                      SessionView& view)
 {
@@ -195,7 +195,7 @@ Gobby::SynchronizationCommands::on_subscribe_session(InfcSessionProxy* prxy,
 }
 
 void
-Gobby::SynchronizationCommands::on_unsubscribe_session(InfcSessionProxy* prxy,
+Gobby::SynchronizationCommands::on_unsubscribe_session(InfSessionProxy* prxy,
                                                        Folder& folder,
                                                        SessionView& view)
 {
