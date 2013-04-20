@@ -19,6 +19,7 @@
 
 #include "features.hpp"
 #include "core/preferences.hpp"
+#include "util/file.hpp"
 
 #include <glibmm/miscutils.h>
 #include <glibmm/fileutils.h>
@@ -30,8 +31,6 @@ Gobby::Preferences::User::User(Config::ParentEntry& entry):
 	name(entry.get_value<Glib::ustring>("name", Glib::get_user_name())),
 	hue(entry.get_value<double>("hue", Glib::Rand().get_double())),
 	alpha(entry.get_value<double>("alpha", 1.0)),
-	host_directory(entry.get_value<std::string>("host-directory",
-		Glib::build_filename(Glib::get_home_dir(), ".infinote"))),
 	show_remote_cursors(entry.get_value<bool>(
 		"show-remote-users", true)),
 	show_remote_selections(entry.get_value<bool>(
@@ -39,7 +38,17 @@ Gobby::Preferences::User::User(Config::ParentEntry& entry):
 	show_remote_current_lines(entry.get_value<bool>(
 		"show-remote-current-lines", true)),
 	show_remote_cursor_positions(entry.get_value<bool>(
-		"show-remote-cursor-positions", true))
+		"show-remote-cursor-positions", true)),
+	allow_remote_access(entry.get_value<bool>(
+		"allow-remote-access", true)),
+	require_password(entry.get_value<bool>(
+		"require-password", false)),
+	password(entry.get_value<std::string>(
+		"password")),
+	keep_local_documents(entry.get_value<bool>(
+		"keep-local-documents", keep_local_documents)),
+	host_directory(entry.get_value<std::string>("host-directory",
+		config_filename("local-documents")))
 {
 }
 
@@ -48,13 +57,18 @@ void Gobby::Preferences::User::serialize(Config::ParentEntry& entry) const
 	entry.set_value("name", name);
 	entry.set_value("hue", hue);
 	entry.set_value("alpha", alpha);
-	entry.set_value("host-directory", host_directory);
 	
 	entry.set_value("show-remote-cursors", show_remote_cursors);
 	entry.set_value("show-remote-selections", show_remote_selections);
 	entry.set_value("show-remote-current-lines", show_remote_current_lines);
 	entry.set_value("show-remote-cursor-positions",
 	                show_remote_cursor_positions);
+
+	entry.set_value("allow-remote-access", allow_remote_access);
+	entry.set_value("require-password", require_password);
+	entry.set_value("password", password),
+	entry.set_value("keep-local-documents", keep_local_documents);
+	entry.set_value("host-directory", host_directory);
 }
 
 Gobby::Preferences::Editor::Editor(Config::ParentEntry& entry):
@@ -153,7 +167,11 @@ Gobby::Preferences::Security::Security(Config::ParentEntry& entry):
 	trust_file(entry.get_value<std::string>("trust-file")),
 	policy(static_cast<InfXmppConnectionSecurityPolicy>(
 		entry.get_value<int>("policy", static_cast<int>(
-			INF_XMPP_CONNECTION_SECURITY_BOTH_PREFER_TLS))))
+			INF_XMPP_CONNECTION_SECURITY_BOTH_PREFER_TLS)))),
+	authentication_enabled(
+		entry.get_value<bool>("authentication-enabled", true)),
+	certificate_file(entry.get_value<std::string>("certificate-file")),
+	key_file(entry.get_value<std::string>("key-file"))
 {
 	// Load default trust-file. As this accesses the filesystem, only do
 	// it when we really need it, i.e. when starting Gobby the first time.
@@ -188,6 +206,10 @@ void Gobby::Preferences::Security::serialize(Config::ParentEntry& entry) const
 {
 	entry.set_value("trust-file", trust_file);
 	entry.set_value("policy", static_cast<int>(policy));
+
+	entry.set_value("authentication-enabled", authentication_enabled);
+	entry.set_value("certificate-file", certificate_file);
+	entry.set_value("key-file", key_file);
 }
 
 Gobby::Preferences::Preferences(Config& config):

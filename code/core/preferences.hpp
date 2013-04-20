@@ -106,12 +106,17 @@ public:
 		Option<Glib::ustring> name;
 		Option<double> hue;
 		Option<double> alpha;
-		Option<std::string> host_directory;
 
 		Option<bool> show_remote_cursors;
 		Option<bool> show_remote_selections;
 		Option<bool> show_remote_current_lines;
 		Option<bool> show_remote_cursor_positions;
+
+		Option<bool> allow_remote_access;
+		Option<bool> require_password;
+		Option<std::string> password;
+		Option<bool> keep_local_documents;
+		Option<std::string> host_directory;
 	};
 
 	class Editor
@@ -175,6 +180,10 @@ public:
 
 		Option<std::string> trust_file;
 		Option<InfXmppConnectionSecurityPolicy> policy;
+
+		Option<bool> authentication_enabled;
+		Option<std::string> key_file;
+		Option<std::string> certificate_file;
 	};
 
 	User user;
