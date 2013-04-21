@@ -126,9 +126,13 @@ public:
 		User(Gtk::Window& parent, Preferences& preferences);
 
 	protected:
+		void on_local_allow_connections_toggled();
+		void on_local_require_password_toggled();
+		void on_local_keep_documents_toggled();
+
 		Group m_group_settings;
-		Group m_group_paths;
 		Group m_group_remote;
+		Group m_group_local;
 
 		Gtk::HBox m_box_user_name;
 		Gtk::Label m_lbl_user_name;
@@ -142,14 +146,24 @@ public:
 		Gtk::Label m_lbl_user_alpha;
 		Gtk::HScale m_scl_user_alpha;
 
-		Gtk::HBox m_box_path_host_directory;
-		Gtk::Label m_lbl_path_host_directory;
-		Gtk::FileChooserButton m_btn_path_host_directory;
-
 		Gtk::CheckButton m_btn_remote_show_cursors;
 		Gtk::CheckButton m_btn_remote_show_selections;
 		Gtk::CheckButton m_btn_remote_show_current_lines;
 		Gtk::CheckButton m_btn_remote_show_cursor_positions;
+
+		Gtk::CheckButton m_btn_local_allow_connections;
+		Gtk::CheckButton m_btn_local_require_password;
+		Gtk::Label m_lbl_local_password;
+		Gtk::Entry m_ent_local_password;
+		Gtk::HBox m_box_local_password;
+		Gtk::Label m_lbl_local_port;
+		Gtk::SpinButton m_ent_local_port;
+		Gtk::HBox m_box_local_port;
+		Gtk::VBox m_box_local_connections;
+		Gtk::CheckButton m_btn_local_keep_documents;
+		Gtk::Label m_lbl_local_documents_directory;
+		Gtk::FileChooserButton m_btn_local_documents_directory;
+		Gtk::HBox m_box_local_documents_directory;
 
 		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
 	};

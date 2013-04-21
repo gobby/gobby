@@ -34,6 +34,15 @@ namespace
 {
 	using namespace Gobby;
 
+	Gtk::Widget* indent(Gtk::Widget& widget)
+	{
+		Gtk::Alignment* alignment = new Gtk::Alignment;
+		alignment->set_padding(0, 0, 12, 0);
+		alignment->add(widget);
+		alignment->show();
+		return Gtk::manage(alignment);
+	}
+
 	Gtk::WrapMode
 	wrap_mode_from_check_buttons(Gtk::CheckButton& char_button,
 	                             Gtk::CheckButton& word_button)
@@ -251,8 +260,8 @@ void Gobby::PreferencesDialog::Page::add(Gtk::Widget& widget, bool expand)
 Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
                                      Preferences& preferences):
 	m_group_settings(_("Settings")),
-	m_group_paths(_("Paths")),
 	m_group_remote(_("Remote Users")),
+	m_group_local(_("Local Documents")),
 	m_box_user_name(false, 6),
 	m_lbl_user_name(_("User name:"), GtkCompat::ALIGN_LEFT),
 	m_box_user_color(false, 6),
@@ -261,36 +270,60 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_lbl_user_alpha(_("Color intensity:"), GtkCompat::ALIGN_LEFT),
 	m_scl_user_alpha(0.0, 1.0, 0.025),
 	m_btn_user_color(_("Choose a new user color"), parent),
-	m_box_path_host_directory(false, 6),
-	m_lbl_path_host_directory(_("Host directory:")),
-	m_btn_path_host_directory(Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
 	m_btn_remote_show_cursors(_("Show cursors of remote users")),
 	m_btn_remote_show_selections(_("Show selections of remote users")),
 	m_btn_remote_show_current_lines(
 		_("Highlight current line of remote users")),
 	m_btn_remote_show_cursor_positions(
-		_("Indicate remote users' cursor position in the scrollbar")),
+		_("Indicate cursor position of remote users "
+		  "in the scrollbar")),
+	m_btn_local_allow_connections(
+		_("Allow remote users to edit local documents")),
+	m_btn_local_require_password(
+		_("Ask for a password to edit local documents")),
+	m_lbl_local_password(_("Password:"), GtkCompat::ALIGN_LEFT),
+	m_box_local_password(false, 6),
+	m_lbl_local_port(_("Port:"), GtkCompat::ALIGN_LEFT),
+	m_box_local_port(false, 6),
+	m_box_local_connections(false, 6),
+	m_btn_local_keep_documents(
+		_("Remember local documents after Gobby restart")),
+	m_lbl_local_documents_directory(_("Local documents directory:")),
+	m_box_local_documents_directory(false, 6),
+        m_btn_local_documents_directory(
+		Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
 	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
 {
+	m_btn_local_allow_connections.signal_toggled().connect(
+		sigc::mem_fun(
+			*this, &User::on_local_allow_connections_toggled));
+	m_btn_local_require_password.signal_toggled().connect(
+		sigc::mem_fun(
+			*this, &User::on_local_require_password_toggled));
+	m_btn_local_keep_documents.signal_toggled().connect(
+		sigc::mem_fun(
+			*this, &User::on_local_keep_documents_toggled));
+
 	m_lbl_user_name.show();
 	m_ent_user_name.set_text(preferences.user.name);
 	m_ent_user_name.show();
 	connect_option(m_ent_user_name, preferences.user.name);
 
 	m_box_user_name.pack_start(m_lbl_user_name, Gtk::PACK_SHRINK);
-	m_box_user_name.pack_start(m_ent_user_name, Gtk::PACK_EXPAND_WIDGET);
+	m_box_user_name.pack_start(m_ent_user_name, Gtk::PACK_SHRINK);
 	m_box_user_name.show();
 
 	m_btn_user_color.set_hue(preferences.user.hue);
 	m_btn_user_color.set_saturation(0.35);
 	m_btn_user_color.set_value(1.0);
+	m_btn_user_color.set_size_request(150, -1);
 	m_lbl_user_color.show();
 	m_btn_user_color.show();
 	connect_hue_option(m_btn_user_color, preferences.user.hue);
 
 	m_box_user_color.pack_start(m_lbl_user_color, Gtk::PACK_SHRINK);
 	m_box_user_color.pack_start(
-		m_btn_user_color, Gtk::PACK_EXPAND_WIDGET);
+		m_btn_user_color, Gtk::PACK_SHRINK);
 	m_box_user_color.show();
 
 	m_lbl_user_alpha.show();
@@ -313,29 +346,6 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_size_group->add_widget(m_lbl_user_color);
 	m_size_group->add_widget(m_lbl_user_alpha);
 	m_group_settings.show();
-
-	m_lbl_path_host_directory.show();
-	// Don't call this as long as we are not showing the dialog, to
-	// prevent spurious error messages when the folder does not exist.
-	/*m_btn_path_host_directory.set_current_folder(
-		static_cast<const std::string&>(
-			preferences.user.host_directory));*/
-	m_btn_path_host_directory.show();
-	connect_path_option(m_btn_path_host_directory,
-	                    preferences.user.host_directory);
-
-	m_box_path_host_directory.set_tooltip_text(
-		_("The directory into which locally hosted sessions "
-		  "are permanently stored"));
-	m_box_path_host_directory.pack_start(
-		m_lbl_path_host_directory, Gtk::PACK_SHRINK);
-	m_box_path_host_directory.pack_start(
-		m_btn_path_host_directory, Gtk::PACK_EXPAND_WIDGET);
-	m_box_path_host_directory.show();
-
-	m_group_paths.add(m_box_path_host_directory);
-	// Disable until we support self-hosting:
-	// m_group_paths.show();
 
 	m_btn_remote_show_cursors.set_active(
 		preferences.user.show_remote_cursors);
@@ -367,9 +377,109 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_group_remote.add(m_btn_remote_show_cursor_positions);
 	m_group_remote.show();
 
+	// TODO: Set mnemonics
+	// m_lbl_autosave_interval.set_mnemonic_widget(m_ent_autosave_interval);
+
+	m_btn_local_allow_connections.set_active(
+		preferences.user.allow_remote_access);
+	m_btn_local_allow_connections.show();
+	connect_option(m_btn_local_allow_connections,
+	               preferences.user.allow_remote_access);
+
+	m_btn_local_require_password.set_active(
+		preferences.user.require_password);
+	m_btn_local_require_password.show();
+	connect_option(m_btn_local_require_password,
+	               preferences.user.require_password);
+
+	m_lbl_local_password.show();
+	m_ent_local_password.set_visibility(false);
+	m_ent_local_password.set_text(
+		static_cast<std::string>(preferences.user.password));
+	m_ent_local_password.show();
+	connect_option(m_ent_local_password,
+	               preferences.user.password);
+
+	m_box_local_password.pack_start(m_lbl_local_password,
+	                                Gtk::PACK_SHRINK);
+	m_box_local_password.pack_start(m_ent_local_password,
+	                                Gtk::PACK_SHRINK);
+	m_box_local_password.set_sensitive(preferences.user.require_password);
+	m_box_local_password.show();
+
+	m_lbl_local_port.show();
+	m_ent_local_port.set_range(1, 65535);
+	m_ent_local_port.set_value(preferences.user.port);
+	m_ent_local_port.set_increments(1, 1);
+	m_ent_local_port.show();
+	connect_option(m_ent_local_port, preferences.user.port);
+
+	m_box_local_port.pack_start(m_lbl_local_port,
+	                            Gtk::PACK_SHRINK);
+	m_box_local_port.pack_start(m_ent_local_port,
+	                            Gtk::PACK_SHRINK);
+	m_box_local_port.show();
+
+	m_box_local_connections.pack_start(m_btn_local_require_password,
+	                                   Gtk::PACK_SHRINK);
+	m_box_local_connections.pack_start(*indent(m_box_local_password),
+	                                   Gtk::PACK_SHRINK);
+	m_box_local_connections.pack_start(m_box_local_port,
+	                                   Gtk::PACK_SHRINK);
+	m_box_local_connections.set_sensitive(
+		preferences.user.allow_remote_access);
+	m_box_local_connections.show();
+
+	m_btn_local_keep_documents.set_active(
+		preferences.user.keep_local_documents);
+	m_btn_local_keep_documents.show();
+	connect_option(m_btn_local_keep_documents,
+	               preferences.user.keep_local_documents);
+
+	m_lbl_local_documents_directory.show();
+	m_btn_local_documents_directory.set_filename(
+		static_cast<std::string>(preferences.user.host_directory));
+	m_btn_local_documents_directory.show();
+	connect_path_option(m_btn_local_documents_directory,
+	                    preferences.user.host_directory);
+
+	m_box_local_documents_directory.pack_start(
+		m_lbl_local_documents_directory,
+		Gtk::PACK_SHRINK);
+	m_box_local_documents_directory.pack_start(
+		m_btn_local_documents_directory,
+		Gtk::PACK_SHRINK);
+	m_box_local_documents_directory.set_sensitive(
+		preferences.user.keep_local_documents);
+	m_box_local_documents_directory.show();
+
+	m_group_local.add(m_btn_local_allow_connections);
+	m_group_local.add(*indent(m_box_local_connections));
+	m_group_local.add(m_btn_local_keep_documents);
+	m_group_local.add(*indent(m_box_local_documents_directory));
+	m_group_local.show();
+
 	add(m_group_settings, false);
-	add(m_group_paths, false);
 	add(m_group_remote, false);
+	add(m_group_local, false);
+}
+
+void Gobby::PreferencesDialog::User::on_local_allow_connections_toggled()
+{
+	m_box_local_connections.set_sensitive(
+		m_btn_local_allow_connections.get_active());
+}
+
+void Gobby::PreferencesDialog::User::on_local_require_password_toggled()
+{
+	m_box_local_password.set_sensitive(
+		m_btn_local_require_password.get_active());
+}
+
+void Gobby::PreferencesDialog::User::on_local_keep_documents_toggled()
+{
+	m_box_local_documents_directory.set_sensitive(
+		m_btn_local_keep_documents.get_active());
 }
 
 Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
@@ -436,7 +546,6 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_ent_autosave_interval.set_range(1,60);
 	m_ent_autosave_interval.set_value(autosave_interval);
 	m_ent_autosave_interval.set_increments(1,10);
-	m_ent_autosave_interval.set_sensitive(autosave_enabled);
 	m_ent_autosave_interval.show();
 	connect_option(m_ent_autosave_interval,
 	               preferences.editor.autosave_interval);
@@ -446,6 +555,7 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	                                   Gtk::PACK_SHRINK);
 	m_box_autosave_interval.pack_start(m_ent_autosave_interval,
 	                                   Gtk::PACK_SHRINK);
+	m_box_autosave_interval.set_sensitive(autosave_enabled);
 	m_box_autosave_interval.show();
 
 	m_group_tab.add(m_box_tab_width);
@@ -459,7 +569,7 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_homeend.show();
 
 	m_group_saving.add(m_btn_autosave_enabled);
-	m_group_saving.add(m_box_autosave_interval);
+	m_group_saving.add(*indent(m_box_autosave_interval));
 	m_group_saving.show();
 
 	add(m_group_tab, false);
@@ -470,7 +580,7 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 
 void Gobby::PreferencesDialog::Editor::on_autosave_enabled_toggled()
 {
-	m_ent_autosave_interval.set_sensitive(
+	m_box_autosave_interval.set_sensitive(
 		m_btn_autosave_enabled.get_active());
 }
 
@@ -502,6 +612,7 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	m_btn_wrap_text.signal_toggled().connect(
 		sigc::mem_fun(*this, &View::on_wrap_text_toggled));
 
+	m_lbl_margin_pos.show();
 	m_ent_margin_pos.set_range(1, 1024);
 	m_ent_margin_pos.set_value(margin_pos);
 	m_ent_margin_pos.set_increments(1, 16);
@@ -557,11 +668,12 @@ Gobby::PreferencesDialog::View::View(Preferences& preferences):
 	m_box_margin_pos.set_spacing(6);
 	m_box_margin_pos.set_sensitive(margin_display);
 	m_box_margin_pos.pack_start(m_lbl_margin_pos, Gtk::PACK_SHRINK);
-	m_box_margin_pos.pack_start(m_ent_margin_pos, Gtk::PACK_EXPAND_WIDGET);
+	m_box_margin_pos.pack_start(*indent(m_ent_margin_pos),
+	                            Gtk::PACK_SHRINK);
 	m_box_margin_pos.show();
 
 	m_group_wrap.add(m_btn_wrap_text);
-	m_group_wrap.add(m_btn_wrap_words);
+	m_group_wrap.add(*indent(m_btn_wrap_words));
 	m_group_wrap.show();
 
 	m_group_linenum.add(m_btn_linenum_display);

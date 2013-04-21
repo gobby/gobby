@@ -21,6 +21,8 @@
 #include "core/preferences.hpp"
 #include "util/file.hpp"
 
+#include <libinfinity/common/inf-protocol.h>
+
 #include <glibmm/miscutils.h>
 #include <glibmm/fileutils.h>
 #include <glibmm/random.h>
@@ -45,6 +47,8 @@ Gobby::Preferences::User::User(Config::ParentEntry& entry):
 		"require-password", false)),
 	password(entry.get_value<std::string>(
 		"password")),
+	port(entry.get_value<unsigned int>(
+		"port", inf_protocol_get_default_port())),
 	keep_local_documents(entry.get_value<bool>(
 		"keep-local-documents", keep_local_documents)),
 	host_directory(entry.get_value<std::string>("host-directory",
@@ -67,6 +71,7 @@ void Gobby::Preferences::User::serialize(Config::ParentEntry& entry) const
 	entry.set_value("allow-remote-access", allow_remote_access);
 	entry.set_value("require-password", require_password);
 	entry.set_value("password", password),
+	entry.set_value("port", port);
 	entry.set_value("keep-local-documents", keep_local_documents);
 	entry.set_value("host-directory", host_directory);
 }

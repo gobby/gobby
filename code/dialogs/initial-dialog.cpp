@@ -41,7 +41,7 @@ namespace
 		alignment->show();
 		return Gtk::manage(alignment);
 	}
-	
+
 	Gtk::Widget* indent(Gtk::Widget& widget)
 	{
 		Gtk::Alignment* alignment = new Gtk::Alignment;
@@ -116,7 +116,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 
 	m_remote_label.set_markup(
 		"<b>" +
-		Glib::Markup::escape_text(_("Remote Users")) +
+		Glib::Markup::escape_text(_("Remote Connections")) +
 		"</b>");
 	m_remote_label.set_alignment(GtkCompat::ALIGN_LEFT);
 	m_remote_label.show();
@@ -128,7 +128,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_remote_allow_connections.show();
 
 	m_remote_require_password.set_label(
-		_("Require password to connect to local documents")); 
+		_("Ask for a password to connect to local documents")); 
 	m_remote_require_password.set_active(
 		preferences.user.require_password);
 	m_remote_require_password.show();

@@ -115,6 +115,7 @@ public:
 		Option<bool> allow_remote_access;
 		Option<bool> require_password;
 		Option<std::string> password;
+		Option<unsigned int> port;
 		Option<bool> keep_local_documents;
 		Option<std::string> host_directory;
 	};
