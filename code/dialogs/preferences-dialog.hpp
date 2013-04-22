@@ -271,12 +271,26 @@ public:
 		Security(Preferences& preferences);
 	
 	protected:
+		void on_auth_cert_toggled();
+
 		Group m_group_trust_file;
 		Group m_group_connection_policy;
+		Group m_group_authentication;
 
 		Gtk::FileChooserButton m_btn_path_trust_file;
 		PreferencesComboBox<InfXmppConnectionSecurityPolicy>
 			m_cmb_connection_policy;
+
+		Gtk::RadioButton m_btn_auth_none;
+		Gtk::RadioButton m_btn_auth_cert;
+		Gtk::Label m_lbl_key_file;
+		Gtk::FileChooserButton m_btn_key_file;
+		Gtk::HBox m_box_key_file;
+		Gtk::Label m_lbl_cert_file;
+		Gtk::FileChooserButton m_btn_cert_file;
+		Gtk::HBox m_box_cert_file;
+
+		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
 	};
 
 	PreferencesDialog(Gtk::Window& parent,

@@ -437,6 +437,7 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	               preferences.user.keep_local_documents);
 
 	m_lbl_local_documents_directory.show();
+	m_btn_local_documents_directory.set_width_chars(20);
 	m_btn_local_documents_directory.set_filename(
 		static_cast<std::string>(preferences.user.host_directory));
 	m_btn_local_documents_directory.show();
@@ -811,9 +812,21 @@ void Gobby::PreferencesDialog::Appearance::on_scheme_changed(Preferences& prefer
 Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
 	m_group_trust_file(_("Trusted CAs")),
 	m_group_connection_policy(_("Secure Connection")),
+	m_group_authentication(_("Authentication")),
 	m_btn_path_trust_file(_("Select a file containing trusted CAs")),
-	m_cmb_connection_policy(preferences.security.policy)
+	m_cmb_connection_policy(preferences.security.policy),
+	m_btn_auth_none(_("None")),
+	m_btn_auth_cert(_("Show a certificate to connecting clients")),
+	m_lbl_key_file(_("Private key:"), GtkCompat::ALIGN_LEFT),
+	m_box_key_file(false, 6),
+	m_lbl_cert_file(_("Certificate:"), GtkCompat::ALIGN_LEFT),
+	m_box_cert_file(false, 6),
+	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
 {
+	m_btn_auth_cert.signal_toggled().connect(
+		sigc::mem_fun(*this, &Security::on_auth_cert_toggled));
+
+	m_btn_path_trust_file.set_width_chars(20);
 	const std::string& trust_file = preferences.security.trust_file;
 	if(!trust_file.empty())
 		m_btn_path_trust_file.set_filename(trust_file);
@@ -837,8 +850,66 @@ Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
 	m_group_connection_policy.add(m_cmb_connection_policy);
 	m_group_connection_policy.show();
 
+	Gtk::RadioButton::Group group;
+	m_btn_auth_none.set_group(group);
+	m_btn_auth_none.show();
+	m_btn_auth_cert.set_group(group);
+	m_btn_auth_cert.show();
+	if(preferences.security.authentication_enabled)
+		m_btn_auth_cert.set_active(true);
+	else
+		m_btn_auth_none.set_active(true);
+	connect_option(m_btn_auth_cert,
+	               preferences.security.authentication_enabled);
+
+	m_lbl_key_file.show();
+	m_btn_key_file.set_width_chars(20);
+	const std::string& key_file = preferences.security.key_file;
+	if(!key_file.empty())
+		m_btn_key_file.set_filename(key_file);
+	m_btn_key_file.show();
+	connect_path_option(m_btn_key_file,
+	                    preferences.security.key_file);
+
+	m_box_key_file.pack_start(m_lbl_key_file, Gtk::PACK_SHRINK);
+	m_box_key_file.pack_start(m_btn_key_file, Gtk::PACK_SHRINK);
+	m_box_key_file.set_sensitive(
+		preferences.security.authentication_enabled);
+	m_box_key_file.show();
+
+	m_lbl_cert_file.show();
+	m_btn_cert_file.set_width_chars(20);
+	const std::string& cert_file = preferences.security.certificate_file;
+	if(!cert_file.empty())
+		m_btn_cert_file.set_filename(cert_file);
+	m_btn_cert_file.show();
+	connect_path_option(m_btn_cert_file,
+	                    preferences.security.certificate_file);
+
+	m_box_cert_file.pack_start(m_lbl_cert_file, Gtk::PACK_SHRINK);
+	m_box_cert_file.pack_start(m_btn_cert_file, Gtk::PACK_SHRINK);
+	m_box_cert_file.set_sensitive(
+		preferences.security.authentication_enabled);
+	m_box_cert_file.show();
+
+	m_size_group->add_widget(m_lbl_key_file);
+	m_size_group->add_widget(m_lbl_cert_file);
+
+	m_group_authentication.add(m_btn_auth_none);
+	m_group_authentication.add(m_btn_auth_cert);
+	m_group_authentication.add(*indent(m_box_key_file));
+	m_group_authentication.add(*indent(m_box_cert_file));
+	m_group_authentication.show();
+
 	add(m_group_trust_file, false);
 	add(m_group_connection_policy, false);
+	add(m_group_authentication, false);
+}
+
+void Gobby::PreferencesDialog::Security::on_auth_cert_toggled()
+{
+	m_box_key_file.set_sensitive(m_btn_auth_cert.get_active());
+	m_box_cert_file.set_sensitive(m_btn_auth_cert.get_active());
 }
 
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
