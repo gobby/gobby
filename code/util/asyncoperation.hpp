@@ -17,34 +17,52 @@
  * MA 02110-1301, USA.
  */
 
-#ifndef _GOBBY_RESOLV_HPP_
-#define _GOBBY_RESOLV_HPP_
+#ifndef _GOBBY_ASYNC_OPERATION_HPP_
+#define _GOBBY_ASYNC_OPERATION_HPP_
 
-#include "util/asyncoperation.hpp"
+#include <glibmm/thread.h>
 
-#include <libinfinity/common/inf-ip-address.h>
-
-#include <glibmm/ustring.h>
-#include <sigc++/sigc++.h>
-
-#include <stdexcept>
 #include <memory>
 
 namespace Gobby
 {
 
-typedef AsyncOperation::Handle ResolvHandle;
+class AsyncOperation
+{
+public:
+	class Handle
+	{
+		friend class AsyncOperation;
+	public:
+		Handle(AsyncOperation& operation);
+		~Handle();
 
-typedef sigc::slot<void, const ResolvHandle*, InfIpAddress*, guint>
-	SlotResolvDone;
-typedef sigc::slot<void, const ResolvHandle*, const std::runtime_error&>
-	SlotResolvError;
+		void cancel();
+	private:
+		AsyncOperation* m_operation;
+	};
 
-std::auto_ptr<ResolvHandle> resolve(const Glib::ustring& hostname,
-                                    const Glib::ustring& service,
-                                    const SlotResolvDone& done_slot,
-                                    const SlotResolvError& error_slot);
+	AsyncOperation();
+	virtual ~AsyncOperation();
+
+	static std::auto_ptr<Handle>
+	start(std::auto_ptr<AsyncOperation> operation);
+
+protected:
+	virtual void run() = 0;
+	virtual void finish() = 0;
+
+	const Handle* get_handle() const { return m_handle; }
+
+private:
+	void thread_run();
+	bool done();
+
+	Glib::Thread* m_thread;
+	Handle* m_handle;
+	bool m_finished;
+};
 
 }
-
-#endif // _GOBBY_RESOLV_HPP_
+	
+#endif // _GOBBY_ASYNC_OPERATION_HPP_

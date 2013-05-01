@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libgobby-util.a
 
 libgobby_util_a_SOURCES = \
+	asyncoperation.cpp \
 	closebutton.cpp \
 	color.cpp \
 	config.cpp \
@@ -11,6 +12,7 @@ libgobby_util_a_SOURCES = \
 	serialize.cpp
 
 noinst_HEADERS = \
+	asyncoperation.hpp \
         closebutton.hpp \
         color.hpp \
         config.hpp \

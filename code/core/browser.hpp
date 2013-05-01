@@ -51,13 +51,6 @@ namespace Gobby
 class Browser: public Gtk::VBox
 {
 public:
-	struct Resolv
-	{
-		StatusBar::MessageHandle message_handle;
-	};
-
-	typedef std::map<ResolvHandle*, Resolv> ResolvMap;
-
 	typedef sigc::signal<void, InfBrowser*, InfBrowserIter*>
 		SignalActivate;
 
@@ -113,10 +106,10 @@ protected:
 	void on_activate(GtkTreeIter* iter);
 	void on_hostname_activate();
 
-	void on_resolv_done(ResolvHandle* handle, InfIpAddress* address,
+	void on_resolv_done(const ResolvHandle* handle, InfIpAddress* address,
 	                    guint port, const Glib::ustring& hostname,
 	                    unsigned int device_index);
-	void on_resolv_error(ResolvHandle* handle,
+	void on_resolv_error(const ResolvHandle* handle,
 	                     const std::runtime_error& error,
 	                     const Glib::ustring& hostname);
 
@@ -145,7 +138,16 @@ protected:
 	Gtk::Label m_label_hostname;
 	HistoryComboBoxEntry m_entry_hostname;
 
+	// TODO: This can be simplified with std::unique_ptr
+	struct Resolv
+	{
+		ResolvHandle* resolv_handle;
+		StatusBar::MessageHandle message_handle;
+	};
+
+	typedef std::map<const ResolvHandle*, Resolv> ResolvMap;
 	ResolvMap m_resolv_map;
+
 	SignalActivate m_signal_activate;
 	
 	InfGtkBrowserModelSort* m_sort_model;

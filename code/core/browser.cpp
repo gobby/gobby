@@ -208,7 +208,7 @@ Gobby::Browser::~Browser()
 	    iter != m_resolv_map.end();
 	    ++ iter)
 	{
-		cancel(iter->first);
+		delete iter->second.resolv_handle;
 	}
 
 	if(m_sasl_context)
@@ -292,7 +292,7 @@ void Gobby::Browser::on_hostname_activate()
 	m_entry_hostname.get_entry()->set_text("");
 }
 
-void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
+void Gobby::Browser::on_resolv_done(const ResolvHandle* handle,
                                     InfIpAddress* address, guint port,
                                     const Glib::ustring& hostname,
                                     unsigned int device_index)
@@ -300,6 +300,7 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 	ResolvMap::iterator iter = m_resolv_map.find(handle);
 	g_assert(iter != m_resolv_map.end());
 
+	delete iter->second.resolv_handle;
 	m_status_bar.remove_message(iter->second.message_handle);
 	m_resolv_map.erase(iter);
 
@@ -366,13 +367,14 @@ void Gobby::Browser::on_resolv_done(ResolvHandle* handle,
 	}
 }
 
-void Gobby::Browser::on_resolv_error(ResolvHandle* handle,
+void Gobby::Browser::on_resolv_error(const ResolvHandle* handle,
                                      const std::runtime_error& error,
                                      const Glib::ustring& hostname)
 {
 	ResolvMap::iterator iter = m_resolv_map.find(handle);
 	g_assert(iter != m_resolv_map.end());
 
+	delete iter->second.resolv_handle;
 	m_status_bar.remove_message(iter->second.message_handle);
 	m_resolv_map.erase(iter);
 
@@ -483,7 +485,7 @@ void Gobby::Browser::connect_to_host(Glib::ustring str)
 			host = str;
 	}
 
-	ResolvHandle* resolv_handle = resolve(host, service,
+	std::auto_ptr<ResolvHandle> resolv_handle = resolve(host, service,
 	        sigc::bind(
 			sigc::mem_fun(*this, &Browser::on_resolv_done),
 			host, device_index),
@@ -496,7 +498,8 @@ void Gobby::Browser::connect_to_host(Glib::ustring str)
 			Glib::ustring::compose(_("Resolving \"%1\"..."),
 			                       host));
 
-	m_resolv_map[resolv_handle].message_handle = message_handle;
+	Resolv resolv = { resolv_handle.release(), message_handle };
+	m_resolv_map[resolv.resolv_handle] = resolv;
 }
 
 void Gobby::Browser::set_sasl_context(InfSaslContext* sasl_context,

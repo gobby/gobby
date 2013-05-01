@@ -19,9 +19,6 @@
 
 #include "util/resolv.hpp"
 
-#include <glibmm/main.h>
-#include <glibmm/thread.h>
-
 #ifdef G_OS_WIN32
 # include <ws2tcpip.h>
 /* We need to include wspiapi.h to support getaddrinfo on Windows 2000.
@@ -36,42 +33,43 @@
 # include <netdb.h>
 #endif
 
-struct Gobby::ResolvHandle
-{
-	Glib::ustring hostname;
-	Glib::ustring service;
-	SlotResolvDone slot_done;
-	SlotResolvError slot_error;
-
-	bool cancel;
-};
-
 namespace
 {
-	using namespace Gobby;
-
-	bool on_done(ResolvHandle* handle, InfIpAddress* address, guint port)
+	class Resolver: public Gobby::AsyncOperation
 	{
-		std::auto_ptr<ResolvHandle> auto_handle(handle);
-		if(!handle->cancel)
-			handle->slot_done(handle, address, port);
-		inf_ip_address_free(address);
-		return false;
-	}
-
-	bool on_error(ResolvHandle* handle, int errcode)
-	{
-		std::auto_ptr<ResolvHandle> auto_handle(handle);
-		if(!handle->cancel)
+	public:
+		Resolver(const Glib::ustring& hostname,
+		         const Glib::ustring& service,
+		         const Gobby::SlotResolvDone& slot_done,
+		         const Gobby::SlotResolvError& slot_error):
+			m_hostname(hostname), m_service(service),
+			m_slot_done(slot_done), m_slot_error(slot_error),
+			m_address(NULL), m_port(0), m_errcode(0)
 		{
-			std::runtime_error error(gai_strerror(errcode));
-			handle->slot_error(handle, error);
 		}
 
-		return false;;
-	}
+		~Resolver()
+		{
+			if(m_address)
+				inf_ip_address_free(m_address);
+		}
 
-	void on_resolv_thread(ResolvHandle* handle)
+	protected:
+		virtual void run();
+		virtual void finish();
+
+	private:
+		const Glib::ustring m_hostname;
+		const Glib::ustring m_service;
+		const Gobby::SlotResolvDone m_slot_done;
+		const Gobby::SlotResolvError m_slot_error;
+
+		InfIpAddress* m_address;
+		guint m_port;
+		int m_errcode;
+	};
+
+	void Resolver::run()
 	{
 		addrinfo hint;
 #ifdef AI_ADDRCONFIG
@@ -88,42 +86,35 @@ namespace
 		hint.ai_next = NULL;
 
 		addrinfo* res = NULL;
-		int val = getaddrinfo(handle->hostname.c_str(),
-		                      handle->service.c_str(),
-		                      &hint, &res);
-		if(val != 0)
+		m_errcode = getaddrinfo(m_hostname.c_str(),
+		                        m_service.c_str(),
+		                        &hint, &res);
+		if(m_errcode != 0)
 		{
 			g_assert(res == NULL);
-
-			Glib::signal_idle().connect(
-				sigc::bind(sigc::ptr_fun(&on_error),
-					handle, val));
 		}
 		else
 		{
 			g_assert(res != NULL);
 
-			InfIpAddress* addr;
-			guint port;
-
 			switch(res->ai_family)
 			{
 			case AF_INET:
-				addr = inf_ip_address_new_raw4(
+				m_address = inf_ip_address_new_raw4(
 					reinterpret_cast<sockaddr_in*>(
 						res->ai_addr)
 					->sin_addr.s_addr);
-				port = ntohs(
+				m_port = ntohs(
 					reinterpret_cast<sockaddr_in*>(
 						res->ai_addr)->sin_port);
 
 				break;
 			case AF_INET6:
-				addr = inf_ip_address_new_raw6(
+				m_address = inf_ip_address_new_raw6(
 					reinterpret_cast<sockaddr_in6*>(
 						res->ai_addr)
 					->sin6_addr.s6_addr);
-				port = ntohs(
+				m_port = ntohs(
 					reinterpret_cast<sockaddr_in6*>(
 						res->ai_addr)->sin6_port);
 
@@ -134,34 +125,31 @@ namespace
 			}
 
 			freeaddrinfo(res);
+		}
+	}
 
-			Glib::signal_idle().connect(
-				sigc::bind(sigc::ptr_fun(&on_done),
-					handle, addr, port));
+	void Resolver::finish()
+	{
+		if(m_errcode != 0)
+		{
+			const std::runtime_error error(
+				gai_strerror(m_errcode));
+			m_slot_error(get_handle(), error);
+		}
+		else
+		{
+			m_slot_done(get_handle(), m_address, m_port);
 		}
 	}
 }
 
-Gobby::ResolvHandle* Gobby::resolve(const Glib::ustring& hostname,
-                                    const Glib::ustring& service,
-                                    const SlotResolvDone& slot_done,
-                                    const SlotResolvError& slot_error)
+std::auto_ptr<Gobby::ResolvHandle>
+Gobby::resolve(const Glib::ustring& hostname,
+               const Glib::ustring& service,
+               const SlotResolvDone& slot_done,
+               const SlotResolvError& slot_error)
 {
-	std::auto_ptr<ResolvHandle> handle(new ResolvHandle);
-	handle->hostname = hostname;
-	handle->service = service;
-	handle->slot_done = slot_done;
-	handle->slot_error = slot_error;
-	handle->cancel = false;
-
-	Glib::Thread::create(
-		sigc::bind(sigc::ptr_fun(on_resolv_thread), handle.get()),
-		false);
-
-	return handle.release();
-}
-
-void Gobby::cancel(ResolvHandle* handle)
-{
-	handle->cancel = TRUE;
+	std::auto_ptr<AsyncOperation> resolver(new Resolver(
+		hostname, service, slot_done, slot_error));
+	return AsyncOperation::start(resolver);
 }
