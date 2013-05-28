@@ -70,6 +70,24 @@ namespace
 	}
 
 	template<typename OptionType>
+	void connect_option(Gtk::Scale& scale,
+	                    Preferences::Option<OptionType>& option)
+	{
+		scale.signal_value_changed().connect(
+			sigc::compose(
+				sigc::mem_fun(
+					option,
+					&Preferences::Option<OptionType>::set
+				),
+				sigc::mem_fun(
+					scale,
+					&Gtk::Scale::get_value
+				)
+			)
+		);
+	}
+
+	template<typename OptionType>
 	void connect_option(Gtk::SpinButton& spinbutton,
 	                    Preferences::Option<OptionType>& option)
 	{
@@ -239,6 +257,9 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_lbl_user_name(_("User name:"), GtkCompat::ALIGN_LEFT),
 	m_box_user_color(false, 6),
 	m_lbl_user_color(_("User color:"), GtkCompat::ALIGN_LEFT),
+	m_box_user_alpha(false, 6),
+	m_lbl_user_alpha(_("Color intensity:"), GtkCompat::ALIGN_LEFT),
+	m_scl_user_alpha(0.0, 1.0, 0.025),
 	m_btn_user_color(_("Choose a new user color"), parent),
 	m_box_path_host_directory(false, 6),
 	m_lbl_path_host_directory(_("Host directory:")),
@@ -272,11 +293,25 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 		m_btn_user_color, Gtk::PACK_EXPAND_WIDGET);
 	m_box_user_color.show();
 
+	m_lbl_user_alpha.show();
+	m_scl_user_alpha.set_value(preferences.user.alpha);
+	m_scl_user_alpha.set_show_fill_level(false);
+	m_scl_user_alpha.set_draw_value(false);
+	m_scl_user_alpha.show();
+	connect_option(m_scl_user_alpha, preferences.user.alpha);
+
+	m_box_user_alpha.pack_start(m_lbl_user_alpha, Gtk::PACK_SHRINK);
+	m_box_user_alpha.pack_start(
+		m_scl_user_alpha, Gtk::PACK_EXPAND_WIDGET);
+	m_box_user_alpha.show();
+
 	m_group_settings.add(m_box_user_name);
 	m_group_settings.add(m_box_user_color);
+	m_group_settings.add(m_box_user_alpha);
 
 	m_size_group->add_widget(m_lbl_user_name);
 	m_size_group->add_widget(m_lbl_user_color);
+	m_size_group->add_widget(m_lbl_user_alpha);
 	m_group_settings.show();
 
 	m_lbl_path_host_directory.show();

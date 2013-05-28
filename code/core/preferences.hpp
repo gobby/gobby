@@ -105,6 +105,7 @@ public:
 
 		Option<Glib::ustring> name;
 		Option<double> hue;
+		Option<double> alpha;
 		Option<std::string> host_directory;
 
 		Option<bool> show_remote_cursors;

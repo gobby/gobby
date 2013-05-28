@@ -32,6 +32,7 @@
 #include <gtkmm/combobox.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/alignment.h>
+#include <gtkmm/scale.h>
 #include <gtkmm/filechooserbutton.h>
 #include <gtkmm/fontbutton.h>
 #include <gtkmm/sizegroup.h>
@@ -136,6 +137,10 @@ public:
 		Gtk::HBox m_box_user_color;
 		Gtk::Label m_lbl_user_color;
 		HueButton m_btn_user_color;
+
+		Gtk::HBox m_box_user_alpha;
+		Gtk::Label m_lbl_user_alpha;
+		Gtk::HScale m_scl_user_alpha;
 
 		Gtk::HBox m_box_path_host_directory;
 		Gtk::Label m_lbl_path_host_directory;

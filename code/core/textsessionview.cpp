@@ -170,6 +170,9 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	m_preferences.user.hue.signal_changed().connect(
 		sigc::mem_fun(
 			*this, &TextSessionView::on_user_color_changed));
+	m_preferences.user.alpha.signal_changed().connect(
+		sigc::mem_fun(
+			*this, &TextSessionView::on_alpha_changed));
 	m_preferences.user.show_remote_cursors.signal_changed().connect(
 		sigc::mem_fun(
 			*this, &TextSessionView::on_show_remote_cursors_changed));
@@ -427,6 +430,19 @@ void Gobby::TextSessionView::on_user_color_changed()
 	}
 }
 
+void Gobby::TextSessionView::on_alpha_changed()
+{
+	GtkStyle* style = gtk_widget_get_style(GTK_WIDGET(m_view));
+	g_assert(style != NULL);
+
+	const GdkColor& color = style->base[GTK_STATE_NORMAL];
+
+	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
+		inf_session_get_buffer(INF_SESSION(m_session)));
+
+	inf_text_gtk_buffer_set_fade(
+		buffer, m_preferences.user.alpha, &color);
+}
 
 void Gobby::TextSessionView::on_show_remote_cursors_changed()
 {
@@ -621,4 +637,6 @@ void Gobby::TextSessionView::on_style_set()
 		inf_session_get_buffer(INF_SESSION(m_session)));
 
 	inf_text_gtk_buffer_set_saturation_value(buffer, my_sat, my_val);
+	inf_text_gtk_buffer_set_fade(
+		buffer, m_preferences.user.alpha, &color);
 }

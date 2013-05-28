@@ -29,6 +29,7 @@
 Gobby::Preferences::User::User(Config::ParentEntry& entry):
 	name(entry.get_value<Glib::ustring>("name", Glib::get_user_name())),
 	hue(entry.get_value<double>("hue", Glib::Rand().get_double())),
+	alpha(entry.get_value<double>("alpha", 1.0)),
 	host_directory(entry.get_value<std::string>("host-directory",
 		Glib::build_filename(Glib::get_home_dir(), ".infinote"))),
 	show_remote_cursors(entry.get_value<bool>(
@@ -46,6 +47,7 @@ void Gobby::Preferences::User::serialize(Config::ParentEntry& entry) const
 {
 	entry.set_value("name", name);
 	entry.set_value("hue", hue);
+	entry.set_value("alpha", alpha);
 	entry.set_value("host-directory", host_directory);
 	
 	entry.set_value("show-remote-cursors", show_remote_cursors);

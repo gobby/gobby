@@ -85,6 +85,7 @@ public:
 
 protected:
 	void on_user_color_changed();
+	void on_alpha_changed();
 
 	void on_show_remote_cursors_changed();
 	void on_show_remote_selections_changed();
