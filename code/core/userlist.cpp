@@ -202,20 +202,31 @@ void Gobby::UserList::icon_cell_data_func(Gtk::CellRenderer* renderer,
 	pixbuf_renderer->property_stock_size() = Gtk::ICON_SIZE_MENU;
 
 	InfUser* user = (*iter)[m_columns.user];
-	switch(inf_user_get_status(user))
+
+	if(user == NULL)
 	{
-	case INF_USER_ACTIVE:
-	case INF_USER_INACTIVE:
-		pixbuf_renderer->property_stock_id() =
-			Gtk::Stock::CONNECT.id;
-		break;
-	case INF_USER_UNAVAILABLE:
-		pixbuf_renderer->property_stock_id() =
-			Gtk::Stock::DISCONNECT.id;
-		break;
-	default:
-		g_assert_not_reached();
-		break;
+		// Can happen after creation of the node when the user
+		// object has not yet been set
+		pixbuf_renderer->property_visible() = false;
+	}
+	else
+	{
+		pixbuf_renderer->property_visible() = true;
+		switch(inf_user_get_status(user))
+		{
+		case INF_USER_ACTIVE:
+		case INF_USER_INACTIVE:
+			pixbuf_renderer->property_stock_id() =
+				Gtk::Stock::CONNECT.id;
+			break;
+		case INF_USER_UNAVAILABLE:
+			pixbuf_renderer->property_stock_id() =
+				Gtk::Stock::DISCONNECT.id;
+			break;
+		default:
+			g_assert_not_reached();
+			break;
+		}
 	}
 }
 
@@ -246,20 +257,29 @@ void Gobby::UserList::name_cell_data_func(Gtk::CellRenderer* renderer,
 	g_assert(text_renderer);
 
 	InfUser* user = (*iter)[m_columns.user];
-	switch(inf_user_get_status(INF_USER(user)))
+	if(user == NULL)
 	{
-	case INF_USER_ACTIVE:
-		text_renderer->property_foreground_set() = false;
-		break;
-	case INF_USER_INACTIVE:
-		text_renderer->property_foreground() = "#606060";
-		break;
-	case INF_USER_UNAVAILABLE:
-		text_renderer->property_foreground() = "#a0a0a0";
-		break;
+		// Can happen after creation of the node when the user
+		// object has not yet been set
+		text_renderer->property_visible() = false;
 	}
+	else
+	{
+		switch(inf_user_get_status(INF_USER(user)))
+		{
+		case INF_USER_ACTIVE:
+			text_renderer->property_foreground_set() = false;
+			break;
+		case INF_USER_INACTIVE:
+			text_renderer->property_foreground() = "#606060";
+			break;
+		case INF_USER_UNAVAILABLE:
+			text_renderer->property_foreground() = "#a0a0a0";
+			break;
+		}
 
-	text_renderer->property_text() = inf_user_get_name(user);
+		text_renderer->property_text() = inf_user_get_name(user);
+	}
 }
 
 int Gobby::UserList::sort_func(const Gtk::TreeIter& iter1,
