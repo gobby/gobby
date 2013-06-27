@@ -237,7 +237,19 @@ int main(int argc, char* argv[]) try
 	}
 	catch(Glib::Exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+		// Protect for non-UTF8 command lines (GTK probably already
+		// converts to UTF-8 in case the system locale is not UTF-8,
+		// but it can happen that input is given not in the system
+		// locale, or simply invalid UTF-8. In that case, printing
+		// e.what() on stdout would throw another exception, which we
+		// want to avoid here, because otherwise we would want to
+		// show that exception in an error dialog, but GTK+ failed
+		// to initialize.
+		if(e.what().validate())
+			std::cerr << e.what() << std::endl;
+		else
+			std::cerr << "Invalid input on command line" << std::endl;
+
 		return EXIT_FAILURE;
 	}
 
