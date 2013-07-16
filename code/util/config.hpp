@@ -35,6 +35,52 @@
 namespace Gobby
 {
 
+namespace serialize
+{
+
+/** @brief Used to convert Gdk::Color to a string.
+ */
+template<>
+class default_context_to<Gdk::Color>: public context_base_to<Gdk::Color>
+{
+public:
+        typedef Gdk::Color data_type;
+
+        virtual std::string to_string(const data_type& from) const;
+};
+
+/** @brief Used to convert a string to Gdk::Color.
+ */
+template<>
+class default_context_from<Gdk::Color>: public context_base_from<Gdk::Color>
+{
+public:
+        typedef Gdk::Color data_type;
+
+        virtual data_type from_string(const std::string& from) const;
+};
+
+template<>
+class default_context_to<Glib::ustring>: public context_base_to<Glib::ustring>
+{
+public:
+        typedef Glib::ustring data_type;
+
+        virtual std::string to_string(const data_type& from) const;
+};
+
+template<>
+class default_context_from<Glib::ustring>:
+        public context_base_from<Glib::ustring>
+{
+public:
+        typedef Glib::ustring data_type;
+
+        virtual data_type from_string(const std::string& from) const;
+};
+
+} // namespace serialize
+
 class Config
 {
 public:
@@ -426,52 +472,6 @@ void Config::ParentEntry::
 
 	m_map[name] = new TypedValueEntry<DataType>(name, value, ctx);
 }
-
-namespace serialize
-{
-
-/** @brief Used to convert Gdk::Color to a string.
- */
-template<>
-class default_context_to<Gdk::Color>: public context_base_to<Gdk::Color>
-{
-public:
-	typedef Gdk::Color data_type;
-
-	virtual std::string to_string(const data_type& from) const;
-};
-
-/** @brief Used to convert a string to Gdk::Color.
- */
-template<>
-class default_context_from<Gdk::Color>: public context_base_from<Gdk::Color>
-{
-public:
-	typedef Gdk::Color data_type;
-
-	virtual data_type from_string(const std::string& from) const;
-};
-
-template<>
-class default_context_to<Glib::ustring>: public context_base_to<Glib::ustring>
-{
-public:
-	typedef Glib::ustring data_type;
-
-	virtual std::string to_string(const data_type& from) const;
-};
-
-template<>
-class default_context_from<Glib::ustring>:
-	public context_base_from<Glib::ustring>
-{
-public:
-	typedef Glib::ustring data_type;
-
-	virtual data_type from_string(const std::string& from) const;
-};
-
-} // namespace serialize
 
 } // namespace Gobby
 
