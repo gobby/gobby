@@ -24,6 +24,7 @@
 
 #include <glibmm/markup.h>
 #include <gtkmm/stock.h>
+#include <gtksourceview/gtksourcelanguage.h>
 
 #ifdef PLATFORM_OSX_NATIVE
 #include <ige-mac-menu.h>

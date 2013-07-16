@@ -27,6 +27,9 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textiter.h>
 
+#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksourcelanguagemanager.h>
+
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
 // TODO: Put all the preferences handling into an extra class
