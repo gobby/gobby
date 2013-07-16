@@ -32,7 +32,7 @@ Gobby::OperationNew::OperationNew(Operations& operations,
 	if(directory)
 	{
 		m_request = inf_browser_add_subdirectory(browser, parent,
-		                                         name.c_str());
+		                                         name.c_str(), NULL);
 	}
 	else
 	{
@@ -40,6 +40,7 @@ Gobby::OperationNew::OperationNew(Operations& operations,
 		                                 parent,
 		                                 name.c_str(),
 		                                 Plugins::TEXT->note_type,
+		                                 NULL,
 		                                 NULL,
 		                                 TRUE);
 	}

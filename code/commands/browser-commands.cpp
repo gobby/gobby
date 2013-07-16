@@ -303,9 +303,8 @@ void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
 	else
 	{
 		InfRequest* request =
-			INF_REQUEST(
-				inf_browser_get_pending_subscribe_request(
-					browser, iter));
+			inf_browser_get_pending_request(
+				browser, iter, "subscribe-session");
 
 		// If there is already a request don't re-request
 		if(request == NULL)
