@@ -152,6 +152,7 @@ void Gobby::CertificateManager::load_trust()
 				reinterpret_cast<gnutls_x509_crt_t*>(
 					g_ptr_array_free(array, FALSE));
 			m_trust.assign(certs, certs + n_certs);
+			g_free(certs);
 		}
 	}
 
