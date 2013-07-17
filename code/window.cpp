@@ -31,8 +31,10 @@
 #include <gtkmm/frame.h>
 
 Gobby::Window::Window(unsigned int argc, const char* const argv[],
-                      const IconManager& icon_mgr,
-                      Config& config
+                      Config& config,
+                      Preferences& preferences,
+                      const IconManager& icon_manager,
+                      CertificateManager& cert_manager
 #ifdef WITH_UNIQUE
                       , UniqueApp* app
 #endif
@@ -40,8 +42,8 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
 	m_argc(argc), m_argv(argv), m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
-	m_preferences(m_config), m_cert_manager(m_preferences),
-	m_icon_mgr(icon_mgr),
+	m_preferences(preferences), m_cert_manager(cert_manager),
+	m_icon_manager(icon_manager),
 #ifdef WITH_UNIQUE
 	m_app(app),
 #endif
@@ -74,7 +76,7 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	                m_preferences),
 	m_view_commands(m_header, m_text_folder, m_chat_frame, m_chat_folder,
 	                m_preferences),
-	m_help_commands(*this, m_header, m_icon_mgr),
+	m_help_commands(*this, m_header, m_icon_manager),
 	m_title_bar(*this, m_text_folder)
 {
 #ifdef WITH_UNIQUE
@@ -153,9 +155,6 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 
 Gobby::Window::~Window()
 {
-	// Serialise preferences into config
-	m_preferences.serialize(m_config);
-
 #ifdef WITH_UNIQUE
 	g_object_unref(m_app);
 #endif
@@ -238,7 +237,7 @@ void Gobby::Window::on_show()
 	if(!m_config.get_root()["initial"].get_value<bool>("run", false))
 	{
 		m_initial_dlg.reset(new InitialDialog(*this, m_preferences,
-		                                      m_icon_mgr));
+		                                      m_icon_manager));
 		m_initial_dlg->present();
 		m_initial_dlg->signal_hide().connect(
 			sigc::mem_fun(*this,

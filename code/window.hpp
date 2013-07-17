@@ -71,7 +71,9 @@ class Window : public Gtk::Window
 {
 public:
 	Window(unsigned int argc, const char* const argv[],
-	       const IconManager& icon_mgr, Config& config
+	       Config& config, Preferences& preferences,
+	       const IconManager& icon_manager,
+	       CertificateManager& cert_manager
 #ifdef WITH_UNIQUE
 	       , UniqueApp* app
 #endif
@@ -152,9 +154,9 @@ protected:
 	// Config
 	Config& m_config;
 	GtkSourceLanguageManager* m_lang_manager;
-	Preferences m_preferences;
-	CertificateManager m_cert_manager;
-	const IconManager& m_icon_mgr;
+	Preferences& m_preferences;
+	CertificateManager& m_cert_manager;
+	const IconManager& m_icon_manager;
 
 #ifdef WITH_UNIQUE
 	UniqueApp* m_app;

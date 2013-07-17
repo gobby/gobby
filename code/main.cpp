@@ -284,20 +284,24 @@ int main(int argc, char* argv[]) try
 		throw std::runtime_error(message);
 	}
 
+
+	// Read the configuration
+	Gobby::Config config(Gobby::config_filename("config.xml"));
+	Gobby::Preferences preferences(config);
+	Gobby::CertificateManager cert_manager(preferences);
 	Gobby::IconManager icon_manager;
 
 	// Set default icon
 	Gtk::Window::set_default_icon_name("gobby-0.5");
 
-	// Read the configuration
-	Gobby::Config config(Gobby::config_filename("config.xml"));
-
 	// Create window
 	Gobby::Window wnd(
 		argc-1,
 		argv+1,
+		config,
+		preferences,
 		icon_manager,
-		config
+		cert_manager
 #ifdef WITH_UNIQUE
 		, app
 #endif
@@ -318,6 +322,8 @@ int main(int argc, char* argv[]) try
 
 	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
 	kit->run();
+
+	preferences.serialize(config);
 
 	//inf_deinit();
 	return 0;
