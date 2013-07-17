@@ -153,6 +153,7 @@ protected:
 	Config& m_config;
 	GtkSourceLanguageManager* m_lang_manager;
 	Preferences m_preferences;
+	CertificateManager m_cert_manager;
 	const IconManager& m_icon_mgr;
 
 #ifdef WITH_UNIQUE

@@ -108,10 +108,12 @@ gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, 
 Gobby::Browser::Browser(Gtk::Window& parent,
                         const InfcNotePlugin* text_plugin,
                         StatusBar& status_bar,
-                        Preferences& preferences):
+                        const CertificateManager& cert_manager,
+                        const Preferences& preferences):
 	m_parent(parent),
 	m_text_plugin(text_plugin),
 	m_status_bar(status_bar),
+	m_cert_manager(cert_manager),
 	m_preferences(preferences),
 	m_sasl_context(NULL),
 	m_expander(_("_Direct Connection"), true),
@@ -146,8 +148,9 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 
 	m_xmpp_manager = inf_xmpp_manager_new();
 #ifdef LIBINFINITY_HAVE_AVAHI
-	m_discovery = inf_discovery_avahi_new(INF_IO(m_io), m_xmpp_manager,
-	                                      NULL, NULL, NULL);
+	m_discovery = inf_discovery_avahi_new(
+		INF_IO(m_io), m_xmpp_manager,
+		m_cert_manager.get_credentials(), NULL, NULL);
 	inf_discovery_avahi_set_security_policy(
 		m_discovery, m_preferences.security.policy);
 	inf_gtk_browser_store_add_discovery(m_browser_store,
@@ -156,10 +159,8 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 
 	Glib::ustring known_hosts_file = config_filename("known_hosts");
 
-	const std::string trust_file = m_preferences.security.trust_file;
-	m_cert_manager = inf_gtk_certificate_manager_new(
+	m_cert_checker = inf_gtk_certificate_manager_new(
 		parent.gobj(), m_xmpp_manager,
-		trust_file.empty() ? NULL : trust_file.c_str(),
 		known_hosts_file.c_str());
 
 	m_browser_view =
@@ -190,8 +191,8 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 
 	m_preferences.security.policy.signal_changed().connect(
 		sigc::mem_fun(*this, &Browser::on_security_policy_changed));
-	m_preferences.security.trust_file.signal_changed().connect(
-		sigc::mem_fun(*this, &Browser::on_trust_file_changed));
+	m_cert_manager.signal_credentials_changed().connect(
+		sigc::mem_fun(*this, &Browser::on_credentials_changed));
 
 	set_spacing(6);
 	pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
@@ -216,7 +217,7 @@ Gobby::Browser::~Browser()
 
 	g_object_unref(m_browser_store);
 	g_object_unref(m_sort_model);
-	g_object_unref(m_cert_manager);
+	g_object_unref(m_cert_checker);
 	g_object_unref(m_xmpp_manager);
 #ifdef LIBINFINITY_HAVE_AVAHI
 	g_object_unref(m_discovery);
@@ -335,7 +336,7 @@ void Gobby::Browser::on_resolv_done(const ResolvHandle* handle,
 				connection, INF_XMPP_CONNECTION_CLIENT,
 				NULL, hostname.c_str(),
 				m_preferences.security.policy,
-				NULL,
+				m_cert_manager.get_credentials(),
 				m_sasl_context,
 				m_sasl_mechanisms.empty()
 					? ""
@@ -526,10 +527,15 @@ void Gobby::Browser::on_security_policy_changed()
 #endif
 }
 
-void Gobby::Browser::on_trust_file_changed()
+void Gobby::Browser::on_credentials_changed()
 {
-	const std::string trust_file = m_preferences.security.trust_file;
+	// Keep existing connections with current credentials
 
-	g_object_set(G_OBJECT(m_cert_manager), "trust-file",
-		     trust_file.empty() ? NULL : trust_file.c_str(), NULL);
+#ifdef LIBINFINITY_HAVE_AVAHI
+	g_object_set(
+		G_OBJECT(m_discovery),
+		"credentials",
+		m_cert_manager.get_credentials(),
+		NULL);
+#endif
 }

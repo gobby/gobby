@@ -22,6 +22,7 @@
 
 #include "core/statusbar.hpp"
 #include "core/preferences.hpp"
+#include "core/certificatemanager.hpp"
 #include "util/resolv.hpp"
 #include "util/historyentry.hpp"
 
@@ -57,7 +58,8 @@ public:
 	Browser(Gtk::Window& parent,
 	        const InfcNotePlugin* text_plugin,
 	        StatusBar& status_bar,
-	        Preferences& preferences);
+	        const CertificateManager& cert_manager,
+	        const Preferences& preferences);
 	~Browser();
 
 	InfGtkBrowserModelSort* get_store() { return m_sort_model; }
@@ -114,12 +116,13 @@ protected:
 	                     const Glib::ustring& hostname);
 
 	void on_security_policy_changed();
-	void on_trust_file_changed();
+	void on_credentials_changed();
 
 	Gtk::Window& m_parent;
 	const InfcNotePlugin* m_text_plugin;
 	StatusBar& m_status_bar;
-	Preferences& m_preferences;
+	const CertificateManager& m_cert_manager;
+	const Preferences& m_preferences;
 
 	InfSaslContext* m_sasl_context;
 	std::string m_sasl_mechanisms;
@@ -128,7 +131,7 @@ protected:
 	InfDiscoveryAvahi* m_discovery;
 #endif
 	InfGtkIo* m_io;
-	InfGtkCertificateManager* m_cert_manager;
+	InfGtkCertificateManager* m_cert_checker;
 	InfGtkBrowserStore* m_browser_store;
 	InfGtkBrowserView* m_browser_view;
 	Gtk::ScrolledWindow m_scroll;

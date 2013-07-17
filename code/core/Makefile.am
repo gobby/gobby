@@ -2,6 +2,7 @@ noinst_LIBRARIES = libgobby-core.a
 
 libgobby_core_a_SOURCES = \
 	browser.cpp \
+	certificatemanager.cpp \
 	chatsessionview.cpp \
 	chattablabel.cpp \
 	closableframe.cpp \
@@ -27,6 +28,7 @@ libgobby_core_a_SOURCES = \
 
 noinst_HEADERS = \
         browser.hpp \
+	certificatemanager.hpp \
 	chatsessionview.hpp \
 	chattablabel.hpp \
         closableframe.hpp \
