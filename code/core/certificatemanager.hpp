@@ -45,8 +45,6 @@ namespace Gobby
 
 		// If an error occurs with the loading, the error can be
 		// queried here.
-		// TODO: Show these in the preferences dialog in red below
-		// the corresponding fields.
 		const GError* get_key_error() const
 			{ return m_key_error; }
 		const GError* get_certificate_error() const

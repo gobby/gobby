@@ -40,7 +40,8 @@ class EditCommands: public sigc::trackable
 public:
 	EditCommands(Gtk::Window& parent, Header& header,
 	             Folder& folder, StatusBar& status_bar,
-	             Preferences& preferences);
+	             Preferences& preferences,
+	             const CertificateManager& cert_manager);
 	~EditCommands();
 
 protected:
@@ -112,6 +113,7 @@ protected:
 	Folder& m_folder;
 	StatusBar& m_status_bar;
 	Preferences& m_preferences;
+	const CertificateManager& m_cert_manager;
 
 	std::auto_ptr<FindDialog> m_find_dialog;
 	std::auto_ptr<GotoDialog> m_goto_dialog;

@@ -21,6 +21,7 @@
 #define _GOBBY_PREFERENCESDIALOG_HPP_
 
 #include "core/preferences.hpp"
+#include "core/certificatemanager.hpp"
 #include "core/huebutton.hpp"
 
 #include <gtkmm/dialog.h>
@@ -268,16 +269,23 @@ public:
 	class Security: public Page
 	{
 	public:
-		Security(Preferences& preferences);
+		Security(Preferences& preferences,
+		         const CertificateManager& m_cert_manager);
 	
 	protected:
+		void set_file_error(Gtk::Label& label, const GError* error);
+
+		void on_credentials_changed();
 		void on_auth_cert_toggled();
+
+		const CertificateManager& m_cert_manager;
 
 		Group m_group_trust_file;
 		Group m_group_connection_policy;
 		Group m_group_authentication;
 
 		Gtk::FileChooserButton m_btn_path_trust_file;
+		Gtk::Label m_error_trust_file;
 		PreferencesComboBox<InfXmppConnectionSecurityPolicy>
 			m_cmb_connection_policy;
 
@@ -286,15 +294,18 @@ public:
 		Gtk::Label m_lbl_key_file;
 		Gtk::FileChooserButton m_btn_key_file;
 		Gtk::HBox m_box_key_file;
+		Gtk::Label m_error_key_file;
 		Gtk::Label m_lbl_cert_file;
 		Gtk::FileChooserButton m_btn_cert_file;
 		Gtk::HBox m_box_cert_file;
+		Gtk::Label m_error_cert_file;
 
 		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
 	};
 
 	PreferencesDialog(Gtk::Window& parent,
-	                  Preferences& preferences);
+	                  Preferences& preferences,
+	                  const CertificateManager& cert_manager);
 
 protected:
 	virtual void on_response(int id);

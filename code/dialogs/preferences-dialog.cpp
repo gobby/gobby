@@ -809,20 +809,27 @@ void Gobby::PreferencesDialog::Appearance::on_scheme_changed(Preferences& prefer
 	preferences.appearance.scheme_id = gtk_source_style_scheme_get_id(scheme);
 }
 
-Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
+Gobby::PreferencesDialog::Security::Security(Preferences& preferences,
+                                             const CertificateManager& cm):
+	m_cert_manager(cm),
 	m_group_trust_file(_("Trusted CAs")),
 	m_group_connection_policy(_("Secure Connection")),
 	m_group_authentication(_("Authentication")),
 	m_btn_path_trust_file(_("Select a file containing trusted CAs")),
+	m_error_trust_file("", GtkCompat::ALIGN_LEFT),
 	m_cmb_connection_policy(preferences.security.policy),
 	m_btn_auth_none(_("None")),
 	m_btn_auth_cert(_("Show a certificate to connecting clients")),
 	m_lbl_key_file(_("Private key:"), GtkCompat::ALIGN_LEFT),
 	m_box_key_file(false, 6),
+	m_error_key_file("", GtkCompat::ALIGN_LEFT),
 	m_lbl_cert_file(_("Certificate:"), GtkCompat::ALIGN_LEFT),
 	m_box_cert_file(false, 6),
+	m_error_cert_file("", GtkCompat::ALIGN_LEFT),
 	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
 {
+	m_cert_manager.signal_credentials_changed().connect(
+		sigc::mem_fun(*this, &Security::on_credentials_changed));
 	m_btn_auth_cert.signal_toggled().connect(
 		sigc::mem_fun(*this, &Security::on_auth_cert_toggled));
 
@@ -835,6 +842,7 @@ Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
 	                    preferences.security.trust_file);
 	m_btn_path_trust_file.show();
 	m_group_trust_file.add(m_btn_path_trust_file);
+	m_group_trust_file.add(m_error_trust_file);
 	m_group_trust_file.show();
 
 /*	m_cmb_connection_policy.add(
@@ -898,12 +906,45 @@ Gobby::PreferencesDialog::Security::Security(Preferences& preferences):
 	m_group_authentication.add(m_btn_auth_none);
 	m_group_authentication.add(m_btn_auth_cert);
 	m_group_authentication.add(*indent(m_box_key_file));
+	m_group_authentication.add(*indent(m_error_key_file));
 	m_group_authentication.add(*indent(m_box_cert_file));
+	m_group_authentication.add(*indent(m_error_cert_file));
 	m_group_authentication.show();
+
+	on_credentials_changed();
 
 	add(m_group_trust_file, false);
 	add(m_group_connection_policy, false);
 	add(m_group_authentication, false);
+}
+
+void Gobby::PreferencesDialog::Security::set_file_error(Gtk::Label& label,
+                                                        const GError* error)
+{
+	if(error != NULL)
+	{
+		label.set_markup(
+			//"<span style='color: red;'>" +
+			"<span foreground='red'>" +
+			std::string(_("Error reading file:")) + " " +
+			Glib::Markup::escape_text(error->message) +
+			"</span>");
+		label.show();
+	}
+	else
+	{
+		label.hide();
+	}
+}
+
+void Gobby::PreferencesDialog::Security::on_credentials_changed()
+{
+	set_file_error(m_error_trust_file,
+	               m_cert_manager.get_trust_error());
+	set_file_error(m_error_key_file,
+	               m_cert_manager.get_key_error());
+	set_file_error(m_error_cert_file,
+	               m_cert_manager.get_certificate_error());
 }
 
 void Gobby::PreferencesDialog::Security::on_auth_cert_toggled()
@@ -913,11 +954,12 @@ void Gobby::PreferencesDialog::Security::on_auth_cert_toggled()
 }
 
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
-                                            Preferences& preferences):
+                                            Preferences& preferences,
+	                                    const CertificateManager& cm):
 	Gtk::Dialog(_("Preferences"), parent), m_preferences(preferences),
 	m_page_user(*this, preferences), m_page_editor(preferences),
 	m_page_view(preferences), m_page_appearance(preferences),
-	m_page_security(preferences)
+	m_page_security(preferences, cm)
 {
 	m_notebook.append_page(m_page_user, _("User"));
 	m_notebook.append_page(m_page_editor, _("Editor"));
