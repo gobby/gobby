@@ -22,6 +22,7 @@
 #include "operations/operation-open-multiple.hpp"
 #include "operations/operation-save.hpp"
 #include "operations/operation-delete.hpp"
+#include "operations/operation-subscribe-path.hpp"
 #include "operations/operation-export-html.hpp"
 
 #include "operations/operations.hpp"
@@ -32,8 +33,10 @@
 Gobby::Operations::Operation::~Operation() {}
 
 Gobby::Operations::Operations(DocumentInfoStorage& info_storage,
+                              Browser& browser,
                               StatusBar& status_bar):
-	m_info_storage(info_storage), m_status_bar(status_bar)
+	m_info_storage(info_storage), m_browser(browser),
+	m_status_bar(status_bar)
 {
 }
 
@@ -126,6 +129,26 @@ Gobby::Operations::delete_node(InfBrowser* browser,
                                const InfBrowserIter* iter)
 {
 	OperationDelete* op = new OperationDelete(*this, browser, iter);
+	m_operations.insert(op);
+	return op;
+}
+
+Gobby::OperationSubscribePath*
+Gobby::Operations::subscribe_path(Folder& folder,
+                                  const std::string& uri)
+{
+	OperationSubscribePath* op = new OperationSubscribePath(*this, folder, uri);
+	m_operations.insert(op);
+	return op;
+}
+
+Gobby::OperationSubscribePath*
+Gobby::Operations::subscribe_path(Folder& folder,
+                                  InfBrowser* browser,
+                                  const std::string& path)
+{
+	OperationSubscribePath* op =
+		new OperationSubscribePath(*this, folder, browser, path);
 	m_operations.insert(op);
 	return op;
 }

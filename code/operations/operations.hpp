@@ -20,6 +20,7 @@
 #ifndef _GOBBY_OPERATIONS_OPERATIONS_HPP_
 #define _GOBBY_OPERATIONS_OPERATIONS_HPP_
 
+#include "core/browser.hpp"
 #include "core/statusbar.hpp"
 #include "core/documentinfostorage.hpp"
 #include "core/textsessionview.hpp"
@@ -39,6 +40,7 @@ class OperationOpen;
 class OperationOpenMultiple;
 class OperationSave;
 class OperationDelete;
+class OperationSubscribePath;
 class OperationExportHtml;
 
 class Operations: public sigc::trackable
@@ -56,6 +58,11 @@ public:
 		StatusBar& get_status_bar()
 		{
 			return m_operations.m_status_bar;
+		}
+
+		Browser& get_browser()
+		{
+			return m_operations.m_browser;
 		}
 
 		DocumentInfoStorage& get_info_storage()
@@ -87,7 +94,8 @@ public:
 
 	typedef sigc::signal<void, OperationSave*> SignalBeginSaveOperation;
 
-	Operations(DocumentInfoStorage& info_storage, StatusBar& status_bar);
+	Operations(DocumentInfoStorage& info_storage,
+	           Browser& browser, StatusBar& status_bar);
 	~Operations();
 
 	OperationNew* create_directory(InfBrowser* browser,
@@ -119,6 +127,13 @@ public:
 	OperationDelete* delete_node(InfBrowser* browser,
 	                             const InfBrowserIter* iter);
 
+	// uri must be of kind infinote://[hostname]/[path]
+	OperationSubscribePath* subscribe_path(Folder& folder,
+	                                       const std::string& uri);
+	OperationSubscribePath* subscribe_path(Folder& folder,
+	                                       InfBrowser* browser,
+	                                       const std::string& path);
+
 	OperationExportHtml* export_html(TextSessionView& view,
 	                                 const std::string& uri);
 
@@ -134,6 +149,7 @@ protected:
 	void finish_operation(Operation* operation);
 
 	DocumentInfoStorage& m_info_storage;
+	Browser& m_browser;
 	StatusBar& m_status_bar;
 
 	typedef std::set<Operation*> OperationSet;

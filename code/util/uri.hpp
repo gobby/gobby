@@ -24,6 +24,11 @@
 
 namespace Gobby
 {
+	void parse_uri(const std::string& uri,
+	               std::string& scheme,
+	               std::string& netloc,
+	               std::string& path);
+
 	void parse_netloc(const std::string& netloc,
 	                  std::string& hostname,
 	                  std::string& service,

@@ -285,6 +285,12 @@ void Gobby::Browser::set_selected(InfBrowser* browser,
 		browser, iter, &tree_iter);
 	g_assert(has_iter == TRUE);
 
+	// Expand if necessary
+	GtkTreePath* path = gtk_tree_model_get_path(
+		GTK_TREE_MODEL(m_sort_model), &tree_iter);
+	gtk_tree_view_expand_to_path(GTK_TREE_VIEW(m_browser_view), path);
+	gtk_tree_path_free(path);
+
 	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
 }
 
@@ -346,12 +352,9 @@ InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
 		GError* error = NULL;
 		if(!inf_tcp_connection_open(connection, &error))
 		{
-			m_status_bar.add_error_message(
-				Glib::ustring::compose(
-					_("Connection to \"%1\" failed"),
-					hostname), error->message);
+			std::string message = error->message;
 			g_error_free(error);
-			return NULL;
+			throw std::runtime_error(message);
 		}
 		else
 		{
@@ -370,6 +373,23 @@ InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
 		}
 
 		g_object_unref(connection);
+	}
+	else
+	{
+		InfXmlConnectionStatus status;
+		g_object_get(G_OBJECT(xmpp), "status", &status, NULL);
+		if(status == INF_XML_CONNECTION_CLOSED)
+		{
+			GError* error = NULL;
+			inf_xml_connection_open(INF_XML_CONNECTION(xmpp),
+			                        &error);
+			if(error != NULL)
+			{
+				std::string message = error->message;
+				g_error_free(error);
+				throw std::runtime_error(message);
+			}
+		}
 	}
 
 	// TODO: Check whether there is already an item with this

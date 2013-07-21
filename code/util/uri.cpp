@@ -28,6 +28,41 @@
 namespace Gobby
 {
 
+void parse_uri(const std::string& uri,
+               std::string& scheme,
+               std::string& netloc,
+               std::string& path)
+{
+	// First, parse the scheme. If there is no scheme found, default
+	// to infinote:
+	std::string::size_type scheme_delim = uri.find(':');
+	if(scheme_delim == std::string::npos)
+	{
+		scheme = "infinote";
+		scheme_delim = 0;
+	}
+	else
+	{
+		scheme = uri.substr(0, scheme_delim);
+
+		// Skip ':' and all following '/'
+		do { ++scheme_delim; } while(uri[scheme_delim] == '/');
+	}
+
+	std::string::size_type path_delim = uri.find('/', scheme_delim);
+	if(path_delim == std::string::npos)
+	{
+		netloc = uri.substr(scheme_delim);
+		path.clear();
+	}
+	else
+	{
+		netloc = Glib::uri_unescape_string(
+			uri.substr(scheme_delim, path_delim - scheme_delim));
+		path = Glib::uri_unescape_string(uri.substr(path_delim));
+	}
+}
+
 void parse_netloc(const std::string& netloc,
                   std::string& hostname,
                   std::string& service,
