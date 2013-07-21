@@ -74,6 +74,10 @@ public:
 
 	void connect_to_host(Glib::ustring str);
 
+	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,
+	                            unsigned int device_index,
+	                            const std::string& hostname);
+
 	void set_sasl_context(InfSaslContext* sasl_context,
 	                      const char* mechanisms);
 
@@ -152,7 +156,7 @@ protected:
 	ResolvMap m_resolv_map;
 
 	SignalActivate m_signal_activate;
-	
+
 	InfGtkBrowserModelSort* m_sort_model;
 };
 

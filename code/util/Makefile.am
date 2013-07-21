@@ -9,7 +9,8 @@ libgobby_util_a_SOURCES = \
 	historyentry.cpp \
 	i18n.cpp \
 	resolv.cpp \
-	serialize.cpp
+	serialize.cpp \
+	uri.cpp
 
 noinst_HEADERS = \
 	asyncoperation.hpp \
@@ -22,7 +23,8 @@ noinst_HEADERS = \
 	historyentry.hpp \
         i18n.hpp \
         resolv.hpp \
-        serialize.hpp
+        serialize.hpp \
+	uri.hpp
 
 AM_CPPFLAGS = $(gobby_CFLAGS) $(unique_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code

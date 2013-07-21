@@ -21,6 +21,7 @@
 #include "core/browser.hpp"
 #include "util/gtk-compat.hpp"
 #include "util/file.hpp"
+#include "util/uri.hpp"
 #include "util/i18n.hpp"
 
 #include <libinfinity/inf-config.h>
@@ -29,11 +30,6 @@
 
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
-
-#ifndef G_OS_WIN32
-# include <sys/socket.h>
-# include <net/if.h>
-#endif
 
 gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, gpointer user_data)
 {
@@ -242,6 +238,170 @@ void Gobby::Browser::init_accessibility()
 	relation_set->set_add(relation);
 }
 
+bool Gobby::Browser::get_selected(InfBrowser** browser,
+                                  InfBrowserIter* iter)
+{
+	GtkTreeIter tree_iter;
+	if(!inf_gtk_browser_view_get_selected(m_browser_view, &tree_iter))
+		return false;
+
+	InfBrowser* tmp_browser;
+	InfBrowserIter* tmp_iter;
+
+	gtk_tree_model_get(
+		GTK_TREE_MODEL(m_sort_model), &tree_iter,
+		INF_GTK_BROWSER_MODEL_COL_BROWSER, &tmp_browser,
+		-1);
+
+	if(tmp_browser == NULL)
+		return false;
+
+	InfBrowserStatus browser_status;
+	g_object_get(G_OBJECT(tmp_browser), "status", &browser_status, NULL);
+	if(browser_status != INF_BROWSER_OPEN)
+		return true;
+
+	gtk_tree_model_get(
+		GTK_TREE_MODEL(m_sort_model), &tree_iter,
+		INF_GTK_BROWSER_MODEL_COL_NODE, &tmp_iter,
+		-1);
+
+	*browser = tmp_browser;
+	*iter = *tmp_iter;
+
+	inf_browser_iter_free(tmp_iter);
+	g_object_unref(tmp_browser);
+
+	return true;
+}
+
+void Gobby::Browser::set_selected(InfBrowser* browser,
+                                  const InfBrowserIter* iter)
+{
+	GtkTreeIter tree_iter;
+
+	gboolean has_iter = inf_gtk_browser_model_browser_iter_to_tree_iter(
+		INF_GTK_BROWSER_MODEL(m_sort_model),
+		browser, iter, &tree_iter);
+	g_assert(has_iter == TRUE);
+
+	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
+}
+
+void Gobby::Browser::connect_to_host(Glib::ustring str)
+{
+	std::string host, service;
+	unsigned int device_index;
+
+	try
+	{
+		parse_netloc(str, host, service, device_index);
+	}
+	catch(const std::exception& ex)
+	{
+		m_status_bar.add_error_message(
+			Glib::ustring::compose(
+				_("Connection to \"%1\" failed"),
+				host), ex.what());
+	}
+
+	std::auto_ptr<ResolvHandle> resolv_handle = resolve(host, service,
+	        sigc::bind(
+			sigc::mem_fun(*this, &Browser::on_resolv_done),
+			host, device_index),
+	        sigc::bind(
+			sigc::mem_fun(*this, &Browser::on_resolv_error),
+			host));
+
+	StatusBar::MessageHandle message_handle =
+		m_status_bar.add_info_message(
+			Glib::ustring::compose(_("Resolving \"%1\"..."),
+			                       host));
+
+	Resolv resolv = { resolv_handle.release(), message_handle };
+	m_resolv_map[resolv.resolv_handle] = resolv;
+}
+
+InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
+                                            guint port,
+                                            unsigned int device_index,
+                                            const std::string& hostname)
+{
+	// Check whether we do have such a connection already:
+	InfXmppConnection* xmpp =
+		inf_xmpp_manager_lookup_connection_by_address(
+			m_xmpp_manager, address, port);
+
+	if(!xmpp)
+	{
+		InfTcpConnection* connection = inf_tcp_connection_new(
+			INF_IO(m_io),
+			address,
+			port);
+
+		g_object_set(G_OBJECT(connection),
+			"device-index", device_index,
+			NULL);
+
+		GError* error = NULL;
+		if(!inf_tcp_connection_open(connection, &error))
+		{
+			m_status_bar.add_error_message(
+				Glib::ustring::compose(
+					_("Connection to \"%1\" failed"),
+					hostname), error->message);
+			g_error_free(error);
+			return NULL;
+		}
+		else
+		{
+			xmpp = inf_xmpp_connection_new(
+				connection, INF_XMPP_CONNECTION_CLIENT,
+				NULL, hostname.c_str(),
+				m_preferences.security.policy,
+				m_cert_manager.get_credentials(),
+				m_sasl_context,
+				m_sasl_mechanisms.empty()
+					? ""
+					: m_sasl_mechanisms.c_str());
+
+			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
+			g_object_unref(xmpp);
+		}
+
+		g_object_unref(connection);
+	}
+
+	// TODO: Check whether there is already an item with this
+	// connection in the browser. If yes, don't add, but highlight for
+	// feedback.
+
+	// TODO: Remove erroneous entry with same name, if any, before
+	// adding.
+
+	g_assert(xmpp != NULL);
+
+	return inf_gtk_browser_store_add_connection(
+		m_browser_store, INF_XML_CONNECTION(xmpp),
+		hostname.c_str());
+}
+
+void Gobby::Browser::set_sasl_context(InfSaslContext* sasl_context,
+                                      const char* mechanisms)
+{
+	if(m_sasl_context) inf_sasl_context_unref(m_sasl_context);
+	m_sasl_context = sasl_context;
+	if(m_sasl_context) inf_sasl_context_ref(m_sasl_context);
+	m_sasl_mechanisms = mechanisms ? mechanisms : "";
+
+#ifdef LIBINFINITY_HAVE_AVAHI
+	g_object_set(G_OBJECT(m_discovery),
+		"sasl-context", m_sasl_context,
+		"sasl-mechanisms", mechanisms,
+		NULL);
+#endif
+}
+
 void Gobby::Browser::on_expanded_changed()
 {
 	if(m_expander.get_expanded())
@@ -305,67 +465,7 @@ void Gobby::Browser::on_resolv_done(const ResolvHandle* handle,
 	m_status_bar.remove_message(iter->second.message_handle);
 	m_resolv_map.erase(iter);
 
-	InfXmppConnection* xmpp =
-		inf_xmpp_manager_lookup_connection_by_address(m_xmpp_manager,
-		                                              address,
-		                                              port);
-
-	if(!xmpp)
-	{
-		InfTcpConnection* connection = inf_tcp_connection_new(
-			INF_IO(m_io),
-			address,
-			port);
-
-		g_object_set(G_OBJECT(connection),
-			"device-index", device_index,
-			NULL);
-
-		GError* error = NULL;
-		if(!inf_tcp_connection_open(connection, &error))
-		{
-			m_status_bar.add_error_message(
-				Glib::ustring::compose(
-					_("Connection to \"%1\" failed"),
-					hostname), error->message);
-			g_error_free(error);
-		}
-		else
-		{
-			xmpp = inf_xmpp_connection_new(
-				connection, INF_XMPP_CONNECTION_CLIENT,
-				NULL, hostname.c_str(),
-				m_preferences.security.policy,
-				m_cert_manager.get_credentials(),
-				m_sasl_context,
-				m_sasl_mechanisms.empty()
-					? ""
-					: m_sasl_mechanisms.c_str());
-
-			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
-			g_object_unref(xmpp);
-		}
-
-		g_object_unref(connection);
-	}
-
-	// TODO: Check whether there is already an item with this
-	// connection in the browser. If yes, don't add, but highlight for
-	// feedback.
-
-	// TODO: Remove erroneous entry with same name, if any, before
-	// adding.
-
-	if(xmpp != NULL)
-	{
-		inf_gtk_browser_store_add_connection(
-			m_browser_store, INF_XML_CONNECTION(xmpp),
-			hostname.c_str());
-
-		/* TODO: Initial root node expansion for the newly added node.
-		 * This probably requires additional API in
-		 * InfGtkBrowserView */
-	}
+	connect_to_host(address, port, device_index, hostname);
 }
 
 void Gobby::Browser::on_resolv_error(const ResolvHandle* handle,
@@ -383,140 +483,6 @@ void Gobby::Browser::on_resolv_error(const ResolvHandle* handle,
 		Glib::ustring::compose(_("Could not resolve \"%1\""),
 		                       hostname),
 		error.what());
-}
-
-bool Gobby::Browser::get_selected(InfBrowser** browser,
-                                  InfBrowserIter* iter)
-{
-	GtkTreeIter tree_iter;
-	if(!inf_gtk_browser_view_get_selected(m_browser_view, &tree_iter))
-		return false;
-
-	InfBrowser* tmp_browser;
-	InfBrowserIter* tmp_iter;
-
-	gtk_tree_model_get(
-		GTK_TREE_MODEL(m_sort_model), &tree_iter,
-		INF_GTK_BROWSER_MODEL_COL_BROWSER, &tmp_browser,
-		-1);
-
-	if(tmp_browser == NULL)
-		return false;
-
-	InfBrowserStatus browser_status;
-	g_object_get(G_OBJECT(tmp_browser), "status", &browser_status, NULL);
-	if(browser_status != INF_BROWSER_OPEN)
-		return true;
-
-	gtk_tree_model_get(
-		GTK_TREE_MODEL(m_sort_model), &tree_iter,
-		INF_GTK_BROWSER_MODEL_COL_NODE, &tmp_iter,
-		-1);
-
-	*browser = tmp_browser;
-	*iter = *tmp_iter;
-
-	inf_browser_iter_free(tmp_iter);
-	g_object_unref(tmp_browser);
-
-	return true;
-}
-
-void Gobby::Browser::set_selected(InfBrowser* browser,
-                                  const InfBrowserIter* iter)
-{
-	GtkTreeIter tree_iter;
-
-	gboolean has_iter = inf_gtk_browser_model_browser_iter_to_tree_iter(
-		INF_GTK_BROWSER_MODEL(m_sort_model),
-		browser, iter, &tree_iter);
-	g_assert(has_iter == TRUE);
-
-	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
-}
-
-void Gobby::Browser::connect_to_host(Glib::ustring str)
-{
-	Glib::ustring host;
-	Glib::ustring service = "6523"; // Default
-	unsigned int device_index = 0; // Default
-
-	// Strip away device name
-	Glib::ustring::size_type pos;
-	if( (pos = str.rfind('%')) != Glib::ustring::npos)
-	{
-		Glib::ustring device_name = str.substr(pos + 1);
-		str.erase(pos);
-
-#ifdef G_OS_WIN32
-		// TODO: Implement
-		device_index = 0;
-#else
-		device_index = if_nametoindex(device_name.c_str());
-		if(device_index == 0)
-		{
-			m_status_bar.add_error_message(
-				Glib::ustring::compose(
-					_("Connection to \"%1\" failed"),
-					host),
-				Glib::ustring::compose(
-					_("Device \"%1\" does not exist"),
-					device_name));
-		}
-#endif
-	}
-
-	if(str[0] == '[' && ((pos = str.find(']', 1)) != Glib::ustring::npos))
-	{
-		// Hostname surrounded by '[...]'
-		host = str.substr(1, pos-1);
-		++ pos;
-		if(pos < str.length() && str[pos] == ':')
-			service = str.substr(pos + 1);
-	}
-	else
-	{
-		pos = str.find(':');
-		if(pos != Glib::ustring::npos)
-		{
-			host = str.substr(0, pos);
-			service = str.substr(pos + 1);
-		}
-		else
-			host = str;
-	}
-
-	std::auto_ptr<ResolvHandle> resolv_handle = resolve(host, service,
-	        sigc::bind(
-			sigc::mem_fun(*this, &Browser::on_resolv_done),
-			host, device_index),
-	        sigc::bind(
-			sigc::mem_fun(*this, &Browser::on_resolv_error),
-			host));
-
-	StatusBar::MessageHandle message_handle =
-		m_status_bar.add_info_message(
-			Glib::ustring::compose(_("Resolving \"%1\"..."),
-			                       host));
-
-	Resolv resolv = { resolv_handle.release(), message_handle };
-	m_resolv_map[resolv.resolv_handle] = resolv;
-}
-
-void Gobby::Browser::set_sasl_context(InfSaslContext* sasl_context,
-                                      const char* mechanisms)
-{
-	if(m_sasl_context) inf_sasl_context_unref(m_sasl_context);
-	m_sasl_context = sasl_context;
-	if(m_sasl_context) inf_sasl_context_ref(m_sasl_context);
-	m_sasl_mechanisms = mechanisms ? mechanisms : "";
-
-#ifdef LIBINFINITY_HAVE_AVAHI
-	g_object_set(G_OBJECT(m_discovery),
-		"sasl-context", m_sasl_context,
-		"sasl-mechanisms", mechanisms,
-		NULL);
-#endif
 }
 
 void Gobby::Browser::on_security_policy_changed()
