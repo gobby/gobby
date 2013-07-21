@@ -275,7 +275,9 @@ void Gobby::FileCommands::on_connect_response(int response_id)
 	{
 		const Glib::ustring& host = m_connection_dialog->get_host_name();
 		if(!host.empty())
-			m_browser.connect_to_host(host);
+		{
+			m_operations.subscribe_path(m_folder, host);
+		}
 	}
 
 	m_connection_dialog->hide();

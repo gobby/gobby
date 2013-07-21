@@ -88,7 +88,12 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
 	std::string scheme, netloc, path;
 	parse_uri(uri, scheme, netloc, path);
 	if(scheme != "infinote")
-		throw std::runtime_error(_("URI is not an infinote:// URI"));
+	{
+		throw std::runtime_error(
+			Glib::ustring::compose(
+				_("URI scheme \"%1\" not supported"),
+				scheme));
+	}
 
 	m_path = split_path(path);
 
@@ -110,8 +115,18 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
 				&OperationSubscribePath::on_resolv_error),
 			hostname));
 
-	m_message_handle = get_status_bar().add_info_message(
-		Glib::ustring::compose(_("Subscribing to \"%1\"..."), uri));
+	if(path.empty())
+	{
+		m_message_handle = get_status_bar().add_info_message(
+			Glib::ustring::compose(
+				_("Connecting to \"%1\"..."), uri));
+	}
+	else
+	{
+		m_message_handle = get_status_bar().add_info_message(
+			Glib::ustring::compose(
+				_("Subscribing to \"%1\"..."), uri));
+	}
 }
 
 Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
@@ -312,17 +327,29 @@ void Gobby::OperationSubscribePath::on_resolv_done(
 	{
 		m_browser = get_browser().connect_to_host(
 			address, port, device_index, hostname);
+		g_assert(m_browser != NULL);
 
 		// From here, go on as if we started from the 2nd destructor
 		start_with_browser();
 	}
 	catch(const std::exception& ex)
 	{
-		get_status_bar().add_error_message(
-			Glib::ustring::compose(
-				_("Could not subscribe to \"%1\""),
-				m_target),
-			ex.what());
+		if(m_path.empty())
+		{
+			get_status_bar().add_error_message(
+				Glib::ustring::compose(
+					_("Failed to connect to \"%1\""),
+					m_target),
+				ex.what());
+		}
+		else
+		{
+			get_status_bar().add_error_message(
+				Glib::ustring::compose(
+					_("Could not subscribe to \"%1\""),
+					m_target),
+				ex.what());
+		}
 
 		fail();
 	}
@@ -335,12 +362,24 @@ void Gobby::OperationSubscribePath::on_resolv_error(
 	get_status_bar().remove_message(m_message_handle);
 	m_message_handle = get_status_bar().invalid_handle();
 
-	get_status_bar().add_error_message(
-		Glib::ustring::compose(
-			_("Could not subscribe to \"%1\""), m_target),
-		Glib::ustring::compose(
-			_("Failed to resolve \"%1\": %2"),
-			hostname, error.what()));
+	if(m_path.empty())
+	{
+		get_status_bar().add_error_message(
+			Glib::ustring::compose(
+				_("Failed to connect to \"%1\""), m_target),
+			Glib::ustring::compose(
+				_("Failed to resolve \"%1\": %2"),
+				hostname, error.what()));
+	}
+	else
+	{
+		get_status_bar().add_error_message(
+			Glib::ustring::compose(
+				_("Could not subscribe to \"%1\""), m_target),
+			Glib::ustring::compose(
+				_("Failed to resolve \"%1\": %2"),
+				hostname, error.what()));
+	}
 
 	fail();
 }
@@ -412,4 +451,5 @@ void Gobby::OperationSubscribePath::on_subscribe_finished(
 	}
 
 	/* From this point on subscription-commands takes over */
+	finish();
 }

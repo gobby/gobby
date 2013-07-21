@@ -31,7 +31,8 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
 
-gint compare_func(GtkTreeModel* model, GtkTreeIter* first, GtkTreeIter* second, gpointer user_data)
+gint compare_func(GtkTreeModel* model, GtkTreeIter* first,
+                  GtkTreeIter* second, gpointer user_data)
 {
 	gint result;
 	InfBrowser* br_one;
@@ -139,8 +140,10 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	                                            communication_manager);
 	g_object_unref(communication_manager);
 	
-	m_sort_model = inf_gtk_browser_model_sort_new(INF_GTK_BROWSER_MODEL(m_browser_store));
-	gtk_tree_sortable_set_default_sort_func(GTK_TREE_SORTABLE(m_sort_model), compare_func, NULL, NULL);
+	m_sort_model = inf_gtk_browser_model_sort_new(
+		INF_GTK_BROWSER_MODEL(m_browser_store));
+	gtk_tree_sortable_set_default_sort_func(
+		GTK_TREE_SORTABLE(m_sort_model), compare_func, NULL, NULL);
 
 	m_xmpp_manager = inf_xmpp_manager_new();
 #ifdef LIBINFINITY_HAVE_AVAHI
@@ -201,13 +204,6 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 
 Gobby::Browser::~Browser()
 {
-	for(ResolvMap::iterator iter = m_resolv_map.begin();
-	    iter != m_resolv_map.end();
-	    ++ iter)
-	{
-		delete iter->second.resolv_handle;
-	}
-
 	if(m_sasl_context)
 		inf_sasl_context_unref(m_sasl_context);
 
@@ -228,8 +224,10 @@ void Gobby::Browser::init_accessibility()
 	std::vector<Glib::RefPtr<Atk::Object> > targets;
 
 	// Associate the hostname label with the corresponding entry field.
-	Glib::RefPtr<Atk::Object> entry_hostname_acc = m_entry_hostname.get_accessible();
-	Glib::RefPtr<Atk::Object> label_hostname_acc = m_label_hostname.get_accessible();
+	Glib::RefPtr<Atk::Object> entry_hostname_acc =
+		m_entry_hostname.get_accessible();
+	Glib::RefPtr<Atk::Object> label_hostname_acc =
+		m_label_hostname.get_accessible();
 
 	relation_set = entry_hostname_acc->get_relation_set();
 	targets.push_back(label_hostname_acc);
@@ -292,40 +290,6 @@ void Gobby::Browser::set_selected(InfBrowser* browser,
 	gtk_tree_path_free(path);
 
 	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
-}
-
-void Gobby::Browser::connect_to_host(Glib::ustring str)
-{
-	std::string host, service;
-	unsigned int device_index;
-
-	try
-	{
-		parse_netloc(str, host, service, device_index);
-	}
-	catch(const std::exception& ex)
-	{
-		m_status_bar.add_error_message(
-			Glib::ustring::compose(
-				_("Connection to \"%1\" failed"),
-				host), ex.what());
-	}
-
-	std::auto_ptr<ResolvHandle> resolv_handle = resolve(host, service,
-	        sigc::bind(
-			sigc::mem_fun(*this, &Browser::on_resolv_done),
-			host, device_index),
-	        sigc::bind(
-			sigc::mem_fun(*this, &Browser::on_resolv_error),
-			host));
-
-	StatusBar::MessageHandle message_handle =
-		m_status_bar.add_info_message(
-			Glib::ustring::compose(_("Resolving \"%1\"..."),
-			                       host));
-
-	Resolv resolv = { resolv_handle.release(), message_handle };
-	m_resolv_map[resolv.resolv_handle] = resolv;
 }
 
 InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
@@ -467,42 +431,10 @@ void Gobby::Browser::on_hostname_activate()
 	Glib::ustring str = m_entry_hostname.get_entry()->get_text();
 	if(str.empty()) return;
 
-	connect_to_host(str);
-
 	m_entry_hostname.commit();
 	m_entry_hostname.get_entry()->set_text("");
-}
 
-void Gobby::Browser::on_resolv_done(const ResolvHandle* handle,
-                                    InfIpAddress* address, guint port,
-                                    const Glib::ustring& hostname,
-                                    unsigned int device_index)
-{
-	ResolvMap::iterator iter = m_resolv_map.find(handle);
-	g_assert(iter != m_resolv_map.end());
-
-	delete iter->second.resolv_handle;
-	m_status_bar.remove_message(iter->second.message_handle);
-	m_resolv_map.erase(iter);
-
-	connect_to_host(address, port, device_index, hostname);
-}
-
-void Gobby::Browser::on_resolv_error(const ResolvHandle* handle,
-                                     const std::runtime_error& error,
-                                     const Glib::ustring& hostname)
-{
-	ResolvMap::iterator iter = m_resolv_map.find(handle);
-	g_assert(iter != m_resolv_map.end());
-
-	delete iter->second.resolv_handle;
-	m_status_bar.remove_message(iter->second.message_handle);
-	m_resolv_map.erase(iter);
-
-	m_status_bar.add_error_message(
-		Glib::ustring::compose(_("Could not resolve \"%1\""),
-		                       hostname),
-		error.what());
+	m_signal_connect.emit(str);
 }
 
 void Gobby::Browser::on_security_policy_changed()

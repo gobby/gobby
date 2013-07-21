@@ -20,6 +20,7 @@
 #ifndef _GOBBY_BROWSER_COMMANDS_HPP_
 #define _GOBBY_BROWSER_COMMANDS_HPP_
 
+#include "operations/operations.hpp"
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
 
@@ -32,7 +33,7 @@ class BrowserCommands: public sigc::trackable
 {
 public:
 	BrowserCommands(Browser& browser, Folder& folder,
-	                StatusBar& status_bar);
+	                StatusBar& status_bar, Operations& operations);
 	~BrowserCommands();
 
 protected:
@@ -53,7 +54,9 @@ protected:
 
 	void subscribe_chat(InfcBrowser* browser);
 
+	void on_connect(const Glib::ustring& hostname);
 	void on_activate(InfBrowser* browser, InfBrowserIter* iter);
+
 	void on_finished(InfRequest* request,
 	                 const InfBrowserIter* iter,
 	                 const GError* error);
@@ -61,7 +64,7 @@ protected:
 	Browser& m_browser;
 	Folder& m_folder;
 	StatusBar& m_status_bar;
-
+	Operations& m_operations;
 	gulong m_set_browser_handler;
 
 	class BrowserInfo;

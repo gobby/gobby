@@ -137,9 +137,22 @@ Gobby::OperationSubscribePath*
 Gobby::Operations::subscribe_path(Folder& folder,
                                   const std::string& uri)
 {
-	OperationSubscribePath* op = new OperationSubscribePath(*this, folder, uri);
-	m_operations.insert(op);
-	return op;
+	try
+	{
+		OperationSubscribePath* op =
+			new OperationSubscribePath(*this, folder, uri);
+		m_operations.insert(op);
+		return op;
+	}
+	catch(const std::exception& ex)
+	{
+		m_status_bar.add_error_message(
+		Glib::ustring::compose(
+			_("Failed to connect to \"%1\""), uri),
+		ex.what());
+
+		return NULL;
+	}
 }
 
 Gobby::OperationSubscribePath*

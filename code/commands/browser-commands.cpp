@@ -150,9 +150,13 @@ Gobby::BrowserCommands::RequestInfo::~RequestInfo()
 
 Gobby::BrowserCommands::BrowserCommands(Browser& browser,
                                         Folder& folder,
-                                        StatusBar& status_bar):
-	m_browser(browser), m_folder(folder), m_status_bar(status_bar)
+                                        StatusBar& status_bar,
+                                        Operations& operations):
+	m_browser(browser), m_folder(folder), m_operations(operations),
+	m_status_bar(status_bar)
 {
+	m_browser.signal_connect().connect(
+		sigc::mem_fun(*this, &BrowserCommands::on_connect));
 	m_browser.signal_activate().connect(
 		sigc::mem_fun(*this, &BrowserCommands::on_activate));
 
@@ -273,6 +277,11 @@ void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)
 		new RequestInfo(
 			*this, INF_BROWSER(browser), NULL,
 			request, m_status_bar);
+}
+
+void Gobby::BrowserCommands::on_connect(const Glib::ustring& hostname)
+{
+	m_operations.subscribe_path(m_folder, hostname);
 }
 
 void Gobby::BrowserCommands::on_activate(InfBrowser* browser,

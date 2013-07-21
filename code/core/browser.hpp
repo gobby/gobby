@@ -52,6 +52,8 @@ namespace Gobby
 class Browser: public Gtk::VBox
 {
 public:
+	typedef sigc::signal<void, Glib::ustring>
+		SignalConnect;
 	typedef sigc::signal<void, InfBrowser*, InfBrowserIter*>
 		SignalActivate;
 
@@ -72,8 +74,6 @@ public:
 	bool get_selected(InfBrowser** browser, InfBrowserIter* iter);
 	void set_selected(InfBrowser* browser, const InfBrowserIter* iter);
 
-	void connect_to_host(Glib::ustring str);
-
 	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,
 	                            unsigned int device_index,
 	                            const std::string& hostname);
@@ -82,6 +82,7 @@ public:
 	                      const char* mechanisms);
 
 	SignalActivate signal_activate() const { return m_signal_activate; }
+	SignalConnect signal_connect() const { return m_signal_connect; }
 
 protected:
 	void init_accessibility();
@@ -92,12 +93,8 @@ protected:
 	                                  InfcBrowser* browser,
 	                                  gpointer user_data)
 	{
-		Browser* browserpp = static_cast<Browser*>(user_data);
-
-		browserpp->on_set_browser(iter, browser);
-			//Gtk::TreeIter(
-			//	GTK_TREE_MODEL(browserpp->m_browser_store),
-			//	iter), browser);
+		static_cast<Browser*>(user_data)->on_set_browser(
+			iter, browser);
 	}
 
 	static void on_activate_static(InfGtkBrowserView* view,
@@ -111,13 +108,6 @@ protected:
 	void on_set_browser(GtkTreeIter* iter, InfcBrowser* browser);
 	void on_activate(GtkTreeIter* iter);
 	void on_hostname_activate();
-
-	void on_resolv_done(const ResolvHandle* handle, InfIpAddress* address,
-	                    guint port, const Glib::ustring& hostname,
-	                    unsigned int device_index);
-	void on_resolv_error(const ResolvHandle* handle,
-	                     const std::runtime_error& error,
-	                     const Glib::ustring& hostname);
 
 	void on_security_policy_changed();
 	void on_credentials_changed();
@@ -145,19 +135,10 @@ protected:
 	Gtk::Label m_label_hostname;
 	HistoryComboBoxEntry m_entry_hostname;
 
-	// TODO: This can be simplified with std::unique_ptr
-	struct Resolv
-	{
-		ResolvHandle* resolv_handle;
-		StatusBar::MessageHandle message_handle;
-	};
-
-	typedef std::map<const ResolvHandle*, Resolv> ResolvMap;
-	ResolvMap m_resolv_map;
-
-	SignalActivate m_signal_activate;
-
 	InfGtkBrowserModelSort* m_sort_model;
+
+	SignalConnect m_signal_connect;
+	SignalActivate m_signal_activate;
 };
 
 }

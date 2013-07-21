@@ -85,7 +85,7 @@ public:
 
 	void connect_to_host(const Glib::ustring& hostname)
 	{
-		m_browser.connect_to_host(hostname);
+		m_operations.subscribe_path(m_text_folder, hostname);
 	}
 
 protected:
