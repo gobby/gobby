@@ -284,7 +284,6 @@ int main(int argc, char* argv[]) try
 		throw std::runtime_error(message);
 	}
 
-
 	// Read the configuration
 	Gobby::Config config(Gobby::config_filename("config.xml"));
 	Gobby::Preferences preferences(config);

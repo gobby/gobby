@@ -148,7 +148,7 @@ protected:
 	// document location dialog, and therefore ends up having focus,
 	// which it shouldn't. Maybe we'll find a better solution which does
 	// not require these member variables.
-	const unsigned int m_argc;
+	unsigned int m_argc;
 	const char* const* m_argv;
 
 	// Config

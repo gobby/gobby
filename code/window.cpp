@@ -245,30 +245,43 @@ void Gobby::Window::on_show()
 			              &Window::on_initial_dialog_hide));
 	}
 
+	// Open infinote:// URIs passed on the command line
+	std::vector<std::string> filenames;
+	for(int i = 0; i < m_argc; ++i)
+	{
+		if(g_str_has_prefix(m_argv[i], "infinote://"))
+			connect_to_host(m_argv[i]);
+		else
+			filenames.push_back(m_argv[i]);
+	}
+
 	// Open files passed on the command line
-	// TODO: Only do this when the Window is shown the first time
-	if(m_argc == 1)
+	if(filenames.size() == 1)
 	{
 		Glib::RefPtr<Gio::File> file(
-			Gio::File::create_for_commandline_arg(m_argv[0]));
+			Gio::File::create_for_commandline_arg(filenames[0]));
 		m_file_commands.set_task(new TaskOpen(m_file_commands, file));
 	}
-	else if(m_argc > 1)
+	else if(filenames.size() > 1)
 	{
 		TaskOpenMultiple* task =
 			new TaskOpenMultiple(m_file_commands);
 
-		const char* const* arg = m_argv;
-		do
+		for(std::vector<std::string>::const_iterator iter =
+			filenames.begin();
+		    iter != filenames.end(); ++iter)
 		{
 			Glib::RefPtr<Gio::File> file(
-				Gio::File::create_for_commandline_arg(*arg));
+				Gio::File::create_for_commandline_arg(*iter));
 			task->add_file(file->get_uri());
-		} while(*++arg);
+		}
 
 		m_file_commands.set_task(task);
 	}
 
+	// To avoid doing this again, should on_show() be called again:
+	m_argc = 0;
+	m_argv = NULL;
 }
 
 void Gobby::Window::on_initial_dialog_hide()
