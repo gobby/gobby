@@ -163,29 +163,21 @@ Gobby::OperationSubscribePath::~OperationSubscribePath()
 
 void Gobby::OperationSubscribePath::start_with_browser()
 {
-	if(m_path.empty())
+	InfBrowserStatus status;
+	g_object_get(G_OBJECT(m_browser), "status", &status, NULL);
+
+	if(status == INF_BROWSER_OPEN)
 	{
-		get_browser().set_selected(m_browser, NULL);
-		finish();
+		inf_browser_get_root(m_browser, &m_path_iter);
+		m_path_index = 0;
+
+		explore();
 	}
 	else
 	{
-		InfBrowserStatus status;
-		g_object_get(G_OBJECT(m_browser), "status", &status, NULL);
-
-		if(status == INF_BROWSER_OPEN)
-		{
-			inf_browser_get_root(m_browser, &m_path_iter);
-			m_path_index = 0;
-
-			explore();
-		}
-		else
-		{
-			m_notify_status_id = g_signal_connect(
-				G_OBJECT(m_browser), "notify::status",
-				G_CALLBACK(on_notify_status_static), this);
-		}
+		m_notify_status_id = g_signal_connect(
+			G_OBJECT(m_browser), "notify::status",
+			G_CALLBACK(on_notify_status_static), this);
 	}
 }
 
