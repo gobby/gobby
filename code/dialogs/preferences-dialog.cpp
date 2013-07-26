@@ -217,30 +217,6 @@ namespace
 	}
 }
 
-Gobby::PreferencesDialog::Group::Group(const Glib::ustring& title):
-	m_box(false, 6)
-{
-	Gtk::Label* title_label = Gtk::manage(new Gtk::Label);
-	title_label->set_markup(
-		"<b>" + Glib::Markup::escape_text(title) + "</b>");
-	set_label_widget(*title_label);
-	title_label->show();
-
-	m_box.show();
-
-	m_alignment.set_padding(6, 0, 12, 0);
-	m_alignment.add(m_box);
-	m_alignment.show();
-
-	set_shadow_type(Gtk::SHADOW_NONE);
-	Gtk::Frame::add(m_alignment);
-}
-
-void Gobby::PreferencesDialog::Group::add(Gtk::Widget& widget)
-{
-	m_box.pack_start(widget, Gtk::PACK_EXPAND_WIDGET);
-}
-
 Gobby::PreferencesDialog::Page::Page():
 	Gtk::Frame(), m_box(false, 12)
 {

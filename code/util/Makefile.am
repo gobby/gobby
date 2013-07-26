@@ -6,6 +6,7 @@ libgobby_util_a_SOURCES = \
 	color.cpp \
 	config.cpp \
 	file.cpp \
+	groupframe.cpp \
 	historyentry.cpp \
 	i18n.cpp \
 	resolv.cpp \
@@ -19,6 +20,7 @@ noinst_HEADERS = \
         config.hpp \
         defaultaccumulator.hpp \
         file.hpp \
+	groupframe.hpp \
 	gtk-compat.hpp \
 	historyentry.hpp \
         i18n.hpp \

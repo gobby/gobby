@@ -23,6 +23,7 @@
 #include "core/preferences.hpp"
 #include "core/certificatemanager.hpp"
 #include "core/huebutton.hpp"
+#include "util/groupframe.hpp"
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/frame.h>
@@ -100,17 +101,6 @@ public:
 	{
 	};
 
-	class Group: public Gtk::Frame
-	{
-	public:
-		Group(const Glib::ustring& title);
-		void add(Gtk::Widget& widget);
-
-	protected:
-		Gtk::Alignment m_alignment;
-		Gtk::VBox m_box;
-	};
-
 	class Page: public Gtk::Frame
 	{
 	public:
@@ -131,9 +121,9 @@ public:
 		void on_local_require_password_toggled();
 		void on_local_keep_documents_toggled();
 
-		Group m_group_settings;
-		Group m_group_remote;
-		Group m_group_local;
+		GroupFrame m_group_settings;
+		GroupFrame m_group_remote;
+		GroupFrame m_group_local;
 
 		Gtk::HBox m_box_user_name;
 		Gtk::Label m_lbl_user_name;
@@ -177,10 +167,10 @@ public:
 	protected:
 		void on_autosave_enabled_toggled();
 
-		Group m_group_tab;
-		Group m_group_indentation;
-		Group m_group_homeend;
-		Group m_group_saving;
+		GroupFrame m_group_tab;
+		GroupFrame m_group_indentation;
+		GroupFrame m_group_homeend;
+		GroupFrame m_group_saving;
 
 		Gtk::HBox m_box_tab_width;
 		Gtk::Label m_lbl_tab_width;
@@ -208,12 +198,12 @@ public:
 		void on_wrap_text_toggled();
 		void on_margin_display_toggled();
 
-		Group m_group_wrap;
-		Group m_group_linenum;
-		Group m_group_curline;
-		Group m_group_margin;
-		Group m_group_bracket;
-		Group m_group_spaces;
+		GroupFrame m_group_wrap;
+		GroupFrame m_group_linenum;
+		GroupFrame m_group_curline;
+		GroupFrame m_group_margin;
+		GroupFrame m_group_bracket;
+		GroupFrame m_group_spaces;
 
 		Gtk::CheckButton m_btn_wrap_text;
 		Gtk::CheckButton m_btn_wrap_words;
@@ -254,9 +244,9 @@ public:
 
 		void on_scheme_changed(Preferences& preferences);
 
-		Group m_group_toolbar;
-		Group m_group_font;
-		Group m_group_scheme;
+		GroupFrame m_group_toolbar;
+		GroupFrame m_group_font;
+		GroupFrame m_group_scheme;
 
 		PreferencesComboBox<Gtk::ToolbarStyle> m_cmb_toolbar_style;
 		Gtk::FontButton m_btn_font;
@@ -280,9 +270,9 @@ public:
 
 		const CertificateManager& m_cert_manager;
 
-		Group m_group_trust_file;
-		Group m_group_connection_policy;
-		Group m_group_authentication;
+		GroupFrame m_group_trust_file;
+		GroupFrame m_group_connection_policy;
+		GroupFrame m_group_authentication;
 
 		Gtk::FileChooserButton m_btn_path_trust_file;
 		Gtk::Label m_error_trust_file;
