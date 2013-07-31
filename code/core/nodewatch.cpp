@@ -27,7 +27,7 @@ Gobby::NodeWatch::NodeWatch(InfBrowser* browser,
 	// reach that node anyway.
 
 	// TODO: Instead of all this, use notify::status of the browser
-	// object
+	// object, or, even better, InfBrowserNodeRef
 
 	// TODO: (weak-)ref connection and browser?
 	m_connection = infc_browser_get_connection(INFC_BROWSER(browser));

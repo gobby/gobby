@@ -219,7 +219,6 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 void Gobby::BrowserContextCommands::on_popdown()
 {
 	m_popup_menu = NULL;
-	m_watch.reset(NULL);
 }
 
 void Gobby::BrowserContextCommands::on_disconnect(InfcBrowser* browser)
