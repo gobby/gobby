@@ -278,6 +278,7 @@ void Gobby::UserList::name_cell_data_func(Gtk::CellRenderer* renderer,
 			break;
 		}
 
+		text_renderer->property_visible() = true;
 		text_renderer->property_text() = inf_user_get_name(user);
 	}
 }
