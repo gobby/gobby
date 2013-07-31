@@ -283,12 +283,6 @@ void Gobby::Browser::set_selected(InfBrowser* browser,
 		browser, iter, &tree_iter);
 	g_assert(has_iter == TRUE);
 
-	// Expand if necessary
-	GtkTreePath* path = gtk_tree_model_get_path(
-		GTK_TREE_MODEL(m_sort_model), &tree_iter);
-	gtk_tree_view_expand_to_path(GTK_TREE_VIEW(m_browser_view), path);
-	gtk_tree_path_free(path);
-
 	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
 }
 
