@@ -21,6 +21,8 @@
 #include "operations/operation-open-multiple.hpp"
 #include "util/i18n.hpp"
 
+#include <libinfgtk/inf-gtk-permissions-dialog.h>
+
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
@@ -48,7 +50,7 @@ Gobby::BrowserContextCommands::~BrowserContextCommands()
 	                            m_populate_popup_handler);
 }
 
-void Gobby::BrowserContextCommands::on_node_removed()
+void Gobby::BrowserContextCommands::on_menu_node_removed()
 {
 	g_assert(m_popup_menu != NULL);
 
@@ -68,8 +70,7 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 
 	// Cancel previous attempts
 	m_watch.reset(NULL);
-	m_entry_dialog.reset(NULL);
-	m_file_dialog.reset(NULL);
+	m_dialog.reset(NULL);
 
 	InfBrowser* browser;
 	InfBrowserIter iter;
@@ -89,7 +90,7 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	// it refers to is removed.
 	m_watch.reset(new NodeWatch(browser, &iter));
 	m_watch->signal_node_removed().connect(sigc::mem_fun(
-		*this, &BrowserContextCommands::on_node_removed));
+		*this, &BrowserContextCommands::on_menu_node_removed));
 
 	menu->signal_deactivate().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_menu_deactivate));
@@ -183,6 +184,18 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	sep_item->show();
 	menu->append(*sep_item);
 
+	// Permissions
+	Gtk::ImageMenuItem* permissions_item = Gtk::manage(
+		new Gtk::ImageMenuItem(_("_Permissions..."), true));
+	permissions_item->set_image(*Gtk::manage(new Gtk::Image(
+		Gtk::Stock::PROPERTIES, Gtk::ICON_SIZE_MENU)));
+	permissions_item->signal_activate().connect(sigc::bind(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_permissions),
+		browser, iter));
+	permissions_item->show();
+	menu->append(*permissions_item);
+
 	// Delete
 	Gtk::ImageMenuItem* delete_item = Gtk::manage(
 		new Gtk::ImageMenuItem(_("D_elete"), true));
@@ -228,9 +241,9 @@ void Gobby::BrowserContextCommands::on_new(InfBrowser* browser,
 {
 	m_watch.reset(new NodeWatch(browser, &iter));
 	m_watch->signal_node_removed().connect(sigc::mem_fun(
-		*this, &BrowserContextCommands::on_new_node_removed));
+		*this, &BrowserContextCommands::on_dialog_node_removed));
 
-	m_entry_dialog.reset(
+	std::auto_ptr<EntryDialog> entry_dialog(
 		new EntryDialog(
 			m_parent,
 			directory ? _("Choose a name for the directory")
@@ -238,18 +251,20 @@ void Gobby::BrowserContextCommands::on_new(InfBrowser* browser,
 			directory ? _("_Directory Name:")
 			          : _("_Document Name:")));
 
-	m_entry_dialog->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	m_entry_dialog->add_button(_("C_reate"), Gtk::RESPONSE_ACCEPT)
+	entry_dialog->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	entry_dialog->add_button(_("C_reate"), Gtk::RESPONSE_ACCEPT)
 		->set_image(*Gtk::manage(new Gtk::Image(
 			Gtk::Stock::NEW, Gtk::ICON_SIZE_BUTTON)));
 
-	m_entry_dialog->set_text(directory ? _("New Directory")
+	entry_dialog->set_text(directory ? _("New Directory")
 	                                   : _("New Document"));
-	m_entry_dialog->signal_response().connect(sigc::bind(
+	entry_dialog->signal_response().connect(sigc::bind(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_new_response),
 		browser, iter, directory));
-	m_entry_dialog->present();
+
+	m_dialog = entry_dialog;
+	m_dialog->present();
 }
 
 void Gobby::BrowserContextCommands::on_open(InfBrowser* browser,
@@ -257,18 +272,45 @@ void Gobby::BrowserContextCommands::on_open(InfBrowser* browser,
 {
 	m_watch.reset(new NodeWatch(browser, &iter));
 	m_watch->signal_node_removed().connect(sigc::mem_fun(
-		*this, &BrowserContextCommands::on_open_node_removed));
+		*this, &BrowserContextCommands::on_dialog_node_removed));
 
-	m_file_dialog.reset(new FileChooser::Dialog(
-		m_file_chooser, m_parent, _("Choose a text file to open"),
-		Gtk::FILE_CHOOSER_ACTION_OPEN));
-	m_file_dialog->signal_response().connect(sigc::bind(
+	std::auto_ptr<FileChooser::Dialog> file_dialog(
+		new FileChooser::Dialog(
+			m_file_chooser, m_parent,
+			_("Choose a text file to open"),
+			Gtk::FILE_CHOOSER_ACTION_OPEN));
+	file_dialog->signal_response().connect(sigc::bind(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_open_response),
 		browser, iter));
 
-	m_file_dialog->set_select_multiple(true);
-	m_file_dialog->present();
+	file_dialog->set_select_multiple(true);
+
+	m_dialog = file_dialog;
+	m_dialog->present();
+}
+
+void Gobby::BrowserContextCommands::on_permissions(InfBrowser* browser,
+                                                   InfBrowserIter iter)
+{
+	m_watch.reset(new NodeWatch(browser, &iter));
+	m_watch->signal_node_removed().connect(sigc::mem_fun(
+		*this, &BrowserContextCommands::on_dialog_node_removed));
+
+	InfGtkPermissionsDialog* dlg = inf_gtk_permissions_dialog_new(
+		m_parent.gobj(), static_cast<GtkDialogFlags>(0),
+		browser, &iter);
+	std::auto_ptr<Gtk::Dialog> permissions_dialog(
+		Glib::wrap(GTK_DIALOG(dlg)));
+
+	permissions_dialog->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+
+	permissions_dialog->signal_response().connect(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_permissions_response));
+
+	m_dialog = permissions_dialog;
+	m_dialog->present();
 }
 
 void Gobby::BrowserContextCommands::on_delete(InfBrowser* browser,
@@ -277,10 +319,10 @@ void Gobby::BrowserContextCommands::on_delete(InfBrowser* browser,
 	m_operations.delete_node(browser, &iter);
 }
 
-void Gobby::BrowserContextCommands::on_new_node_removed()
+void Gobby::BrowserContextCommands::on_dialog_node_removed()
 {
 	m_watch.reset(NULL);
-	m_entry_dialog.reset(NULL);
+	m_dialog.reset(NULL);
 }
 
 void Gobby::BrowserContextCommands::on_new_response(int response_id,
@@ -288,51 +330,57 @@ void Gobby::BrowserContextCommands::on_new_response(int response_id,
 						    InfBrowserIter iter,
 						    bool directory)
 {
+	EntryDialog* entry_dialog = static_cast<EntryDialog*>(m_dialog.get());
+
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
 		if(directory)
 		{
 			// TODO: Select the newly created directory in tree
 			m_operations.create_directory(
-				browser, &iter, m_entry_dialog->get_text());
+				browser, &iter, entry_dialog->get_text());
 		}
 		else
 		{
 			m_operations.create_document(
-				browser, &iter, m_entry_dialog->get_text());
+				browser, &iter, entry_dialog->get_text());
 		}
 	}
 
 	m_watch.reset(NULL);
-	m_entry_dialog.reset(NULL);
-}
-
-void Gobby::BrowserContextCommands::on_open_node_removed()
-{
-	m_watch.reset(NULL);
-	m_file_dialog.reset(NULL);
+	m_dialog.reset(NULL);
 }
 
 void Gobby::BrowserContextCommands::on_open_response(int response_id,
                                                      InfBrowser* browser,
                                                      InfBrowserIter iter)
 {
+	FileChooser::Dialog* dialog =
+		static_cast<FileChooser::Dialog*>(m_dialog.get());
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
-		Glib::SListHandle<Glib::ustring> uris = m_file_dialog->get_uris();
+		Glib::SListHandle<Glib::ustring> uris = dialog->get_uris();
 
 		OperationOpenMultiple* operation =
 			m_operations.create_documents(browser, &iter, m_preferences, uris.size());
 
-		for(Glib::SListHandle<Glib::ustring>::iterator i = uris.begin(); i != uris.end(); ++i)
+		for(Glib::SListHandle<Glib::ustring>::iterator iter =
+			uris.begin();
+		    iter != uris.end(); ++iter)
 		{
 			Glib::RefPtr<Gio::File> file =
-				Gio::File::create_for_uri(*i);
+				Gio::File::create_for_uri(*iter);
 
-			operation->add_uri(*i, NULL, NULL);
+			operation->add_uri(*iter, NULL, NULL);
 		}
 	}
 
 	m_watch.reset(NULL);
-	m_file_dialog.reset(NULL);
+	m_dialog.reset(NULL);
+}
+
+void Gobby::BrowserContextCommands::on_permissions_response(int response_id)
+{
+	m_watch.reset(NULL);
+	m_dialog.reset(NULL);
 }

@@ -51,7 +51,7 @@ protected:
 			on_populate_popup(Glib::wrap(menu));
 	}
 
-	void on_node_removed();
+	void on_menu_node_removed();
 	void on_menu_deactivate();
 
 	void on_populate_popup(Gtk::Menu* menu);
@@ -63,18 +63,15 @@ protected:
 	void on_new(InfBrowser* browser, InfBrowserIter iter,
 	            bool directory);
 	void on_open(InfBrowser* browser, InfBrowserIter iter);
+	void on_permissions(InfBrowser* browser, InfBrowserIter iter);
 	void on_delete(InfBrowser* browser, InfBrowserIter iter);
 
-	// on_new handlers
-	void on_new_node_removed();
-
+	void on_dialog_node_removed();
 	void on_new_response(int response_id, InfBrowser* browser,
 	                     InfBrowserIter iter, bool directory);
-
-	// on_open handlers
-	void on_open_node_removed();
 	void on_open_response(int response_id, InfBrowser* browser,
 	                      InfBrowserIter iter);
+	void on_permissions_response(int response_id);
 
 	Gtk::Window& m_parent;
 	Browser& m_browser;
@@ -85,8 +82,7 @@ protected:
 	// Browser item for which
 	Gtk::Menu* m_popup_menu;
 	std::auto_ptr<NodeWatch> m_watch;
-	std::auto_ptr<EntryDialog> m_entry_dialog;
-	std::auto_ptr<FileChooser::Dialog> m_file_dialog;
+	std::auto_ptr<Gtk::Dialog> m_dialog;
 
 	gulong m_populate_popup_handler;
 };
