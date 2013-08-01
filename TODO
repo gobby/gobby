@@ -1,3 +1,8 @@
+Modernization:
+  Replace unique by GtkApplication
+  Replace GtkUIManager by GApplication/GMenu/GtkBuilder(?)
+  Replace context menu by GMenu/GtkBuilder?
+
 Some features that would be nice for a final Gobby 0.5 release. We could
 perhaps do pre-releases with some of these missing before:
 
