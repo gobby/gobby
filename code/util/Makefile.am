@@ -9,6 +9,7 @@ libgobby_util_a_SOURCES = \
 	groupframe.cpp \
 	historyentry.cpp \
 	i18n.cpp \
+	keygen.cpp \
 	resolv.cpp \
 	serialize.cpp \
 	uri.cpp
@@ -24,6 +25,7 @@ noinst_HEADERS = \
 	gtk-compat.hpp \
 	historyentry.hpp \
         i18n.hpp \
+	keygen.hpp \
         resolv.hpp \
         serialize.hpp \
 	uri.hpp
