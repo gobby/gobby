@@ -36,10 +36,14 @@ public:
 	~UserJoinCommands();
 
 protected:
-	void on_subscribe_session(InfSessionProxy* proxy,
-	                          Folder& folder, SessionView& view);
+	void on_subscribe_session(InfBrowser* browser,
+	                          const InfBrowserIter* iter,
+	                          InfSessionProxy* proxy,
+	                          Folder& folder,
+                                  SessionView& view);
 	void on_unsubscribe_session(InfSessionProxy* proxy,
-	                            Folder& folder, SessionView& view);
+	                            Folder& folder,
+	                            SessionView& view);
 
 	const Preferences& m_preferences;
 

@@ -34,7 +34,8 @@ namespace Gobby
 class SubscriptionCommands: public sigc::trackable
 {
 public:
-	typedef sigc::signal<void, InfSessionProxy*, Folder&, SessionView&>
+	typedef sigc::signal<void, InfBrowser*, const InfBrowserIter*,
+	                     InfSessionProxy*, Folder&, SessionView&>
 		SignalSubscribeSession;
 	typedef sigc::signal<void, InfSessionProxy*, Folder&, SessionView&>
 		SignalUnsubscribeSession;

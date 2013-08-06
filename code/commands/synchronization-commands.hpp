@@ -36,7 +36,9 @@ public:
 protected:
 	class SyncInfo;
 
-	void on_subscribe_session(InfSessionProxy* proxy,
+	void on_subscribe_session(InfBrowser* browser,
+	                          const InfBrowserIter* iter,
+	                          InfSessionProxy* proxy,
 	                          Folder& folder,
 	                          SessionView& view);
 	void on_unsubscribe_session(InfSessionProxy* proxy,

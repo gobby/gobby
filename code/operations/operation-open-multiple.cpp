@@ -141,7 +141,7 @@ void Gobby::OperationOpenMultiple::load_info(const info_list::iterator& iter)
 	g_assert(!iter->name.empty());
 
 	m_current = m_operations.create_document(
-		m_parent.get_browser(), &m_parent.get_browser_iter(),
+		m_parent.get_browser(), m_parent.get_browser_iter(),
 		iter->name, m_preferences, iter->uri, iter->encoding);
 
 	m_current->signal_finished().connect(

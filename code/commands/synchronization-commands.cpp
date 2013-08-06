@@ -174,7 +174,9 @@ Gobby::SynchronizationCommands::~SynchronizationCommands()
 }
 
 void
-Gobby::SynchronizationCommands::on_subscribe_session(InfSessionProxy* prxy,
+Gobby::SynchronizationCommands::on_subscribe_session(InfBrowser* browser,
+                                                     const InfBrowserIter* it,
+                                                     InfSessionProxy* proxy,
                                                      Folder& folder,
                                                      SessionView& view)
 {

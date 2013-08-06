@@ -18,6 +18,7 @@
  */
 
 #include "commands/user-join-commands.hpp"
+#include "core/nodewatch.hpp"
 #include "util/i18n.hpp"
 
 #include <glibmm/main.h>
@@ -58,6 +59,13 @@ namespace
 			"\n\n" + type_text + "\n\n" + info_text, true);
 	}
 
+	void set_permission_denied_text(Gobby::SessionView& view)
+	{
+		view.set_info(
+			_("Permissions are not granted to modify the document.") ,
+			true);
+	}
+
 	void retr_local_user_func(InfUser* user, gpointer user_data)
 	{
 		(*static_cast<InfUser**>(user_data)) = user;
@@ -68,6 +76,8 @@ class Gobby::UserJoinCommands::UserJoinInfo
 {
 public:
 	UserJoinInfo(UserJoinCommands& commands,
+	             InfBrowser* browser,
+	             const InfBrowserIter* iter,
 	             InfSessionProxy* proxy,
 	             Folder& folder,
 	             SessionView& view);
@@ -103,6 +113,7 @@ private:
 
 	UserJoinCommands& m_commands;
 
+	NodeWatch m_node;
 	InfSessionProxy* m_proxy;
 	Folder& m_folder;
 	SessionView& m_view;
@@ -116,11 +127,14 @@ private:
 };
 
 Gobby::UserJoinCommands::UserJoinInfo::UserJoinInfo(UserJoinCommands& cmds,
+                                                    InfBrowser* browser,
+                                                    const InfBrowserIter* it,
                                                     InfSessionProxy* proxy,
                                                     Folder& folder,
                                                     SessionView& view):
-	m_commands(cmds), m_proxy(proxy), m_folder(folder), m_view(view),
-	m_request(NULL), m_synchronization_complete_handler(0),
+	m_node(browser, it), m_commands(cmds), m_proxy(proxy),
+	m_folder(folder), m_view(view), m_request(NULL),
+	m_synchronization_complete_handler(0),
 	m_user_join_finished_handler(0), m_retry_index(1)
 {
 	g_object_ref(m_proxy);
@@ -204,6 +218,12 @@ void Gobby::UserJoinCommands::UserJoinInfo::
 		++m_retry_index;
 		attempt_user_join();
 	}
+	else if(error->domain == inf_request_error_quark() &&
+	        error->code == INF_REQUEST_ERROR_NOT_AUTHORIZED)
+	{
+		set_permission_denied_text(m_view);
+		finish();
+	}
 	else
 	{
 		set_error_text(m_view, error->message);
@@ -229,58 +249,73 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 	if(user != NULL)
 	{
 		user_join_complete(user);
+		return;
+	}
+
+	// Next, check whether we are allowed to join a user
+	if(m_node.get_browser() && m_node.get_browser_iter())
+	{
+		InfBrowser* browser = m_node.get_browser();
+		const InfBrowserIter* iter = m_node.get_browser_iter();
+		const InfAclUser* user =
+			inf_browser_get_acl_local_user(browser);
+		guint64 mask = 1 << INF_ACL_CAN_JOIN_USER;
+		if(inf_browser_check_acl(browser, iter, user, mask) != mask)
+		{
+			set_permission_denied_text(m_view);
+			finish();
+			return;
+		}
+	}
+
+	// We are allowed, so attempt to join the user now.
+	std::vector<GParameter> params;
+	const GParameter name_param = { "name", { 0 } };
+	params.push_back(name_param);
+	const GParameter status_param = { "status", { 0 } };
+	params.push_back(status_param);
+
+	g_value_init(&params[0].value, G_TYPE_STRING);
+	g_value_init(&params[1].value, INF_TYPE_USER_STATUS);
+
+	const Glib::ustring& pref_name = preferences.user.name;
+	if(m_retry_index > 1)
+	{
+		gchar* name = g_strdup_printf(
+			"%s %u", pref_name.c_str(), m_retry_index);
+		g_value_take_string(&params[0].value, name);
 	}
 	else
 	{
-		std::vector<GParameter> params;
-		const GParameter name_param = { "name", { 0 } };
-		params.push_back(name_param);
-		const GParameter status_param = { "status", { 0 } };
-		params.push_back(status_param);
+		g_value_set_static_string(
+			&params[0].value, pref_name.c_str());
+	}
 
-		g_value_init(&params[0].value, G_TYPE_STRING);
-		g_value_init(&params[1].value, INF_TYPE_USER_STATUS);
+	if(m_folder.get_current_document() == &m_view)
+		g_value_set_enum(&params[1].value, INF_USER_ACTIVE);
+	else
+		g_value_set_enum(&params[1].value, INF_USER_INACTIVE);
 
-		const Glib::ustring& pref_name = preferences.user.name;
-		if(m_retry_index > 1)
-		{
-			gchar* name = g_strdup_printf(
-				"%s %u", pref_name.c_str(), m_retry_index);
-			g_value_take_string(&params[0].value, name);
-		}
-		else
-		{
-			g_value_set_static_string(
-				&params[0].value, pref_name.c_str());
-		}
+	// Extra properties for text session:
+	TextSessionView* text_view =
+		dynamic_cast<TextSessionView*>(&m_view);
+	if(text_view) add_text_user_properties(params, *text_view);
 
-		if(m_folder.get_current_document() == &m_view)
-			g_value_set_enum(&params[1].value, INF_USER_ACTIVE);
-		else
-			g_value_set_enum(&params[1].value, INF_USER_INACTIVE);
+	GError* error = NULL;
+	m_request = inf_session_proxy_join_user(
+		m_proxy, params.size(), &params[0]);
 
-		// Extra properties for text session:
-		TextSessionView* text_view =
-			dynamic_cast<TextSessionView*>(&m_view);
-		if(text_view) add_text_user_properties(params, *text_view);
-
-		GError* error = NULL;
-		m_request = inf_session_proxy_join_user(
-			m_proxy, params.size(), &params[0]);
-
-		for(unsigned int i = 0; i < params.size(); ++i)
+	for(unsigned int i = 0; i < params.size(); ++i)
 		g_value_unset(&params[i].value);
 
-		g_object_ref(m_request);
+	g_object_ref(m_request);
 
-		m_view.set_info(
-			_("User Join in progress..."), false);
+	m_view.set_info(_("User Join in progress..."), false);
 
-		m_user_join_finished_handler = g_signal_connect(
-			m_request, "finished",
-			G_CALLBACK(on_user_join_finished_static),
-			this);
-	}
+	m_user_join_finished_handler = g_signal_connect(
+		m_request, "finished",
+		G_CALLBACK(on_user_join_finished_static),
+		this);
 }
 
 void Gobby::UserJoinCommands::UserJoinInfo::user_join_complete(InfUser* user)
@@ -365,12 +400,17 @@ Gobby::UserJoinCommands::~UserJoinCommands()
 	}
 }
 
-void Gobby::UserJoinCommands::on_subscribe_session(InfSessionProxy* proxy,
+void Gobby::UserJoinCommands::on_subscribe_session(InfBrowser* browser,
+                                                   const InfBrowserIter* iter,
+                                                   InfSessionProxy* proxy,
                                                    Folder& folder,
                                                    SessionView& view)
 {
+	// TODO: Add browser and browser iter to this callback, so we can check the ACL
+
 	g_assert(m_user_join_map.find(proxy) == m_user_join_map.end());
-	m_user_join_map[proxy] = new UserJoinInfo(*this, proxy, folder, view);
+	m_user_join_map[proxy] =
+		new UserJoinInfo(*this, browser, iter, proxy, folder, view);
 }
 
 void Gobby::UserJoinCommands::on_unsubscribe_session(InfSessionProxy* proxy,

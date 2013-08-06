@@ -21,13 +21,18 @@
 
 Gobby::NodeWatch::NodeWatch(InfBrowser* browser,
                             const InfBrowserIter* iter):
-	m_browser(browser), m_iter(*iter)
+	m_browser(browser), m_node_removed_handler(0)
 {
+	if(iter != NULL)
+		m_iter = *iter;
+	else
+		m_iter.node = NULL;
+
 	// Need to have a connection for the browser, otherwise we can't
 	// reach that node anyway.
 
 	// TODO: Instead of all this, use notify::status of the browser
-	// object, or, even better, InfBrowserNodeRef
+	// object
 
 	// TODO: (weak-)ref connection and browser?
 	m_connection = infc_browser_get_connection(INFC_BROWSER(browser));
@@ -40,8 +45,12 @@ Gobby::NodeWatch::NodeWatch(InfBrowser* browser,
 	m_browser_notify_connection_handler = g_signal_connect(
 		browser, "notify::connection",
 		G_CALLBACK(on_browser_notify_connection_static), this);
-	m_node_removed_handler = g_signal_connect(m_browser, "node-removed",
-	                 G_CALLBACK(on_node_removed_static), this);
+	if(m_iter.node != NULL)
+	{
+		m_node_removed_handler = g_signal_connect(
+			m_browser, "node-removed",
+			G_CALLBACK(on_node_removed_static), this);
+	}
 	m_connection_notify_status_handler = g_signal_connect(
 		m_connection, "notify::status",
 		G_CALLBACK(on_connection_notify_status_static), this);
@@ -95,8 +104,11 @@ void Gobby::NodeWatch::on_node_removed(InfBrowser* browser,
                                        InfBrowserIter* iter)
 {
 	g_assert(browser == m_browser);
+	g_assert(m_iter.node != NULL);
 
 	InfBrowserIter test_iter = m_iter;
+
+	// TODO: Use inf_browser_is_ancestor
 
 	do
 	{
@@ -121,9 +133,14 @@ void Gobby::NodeWatch::reset()
 
 	g_signal_handler_disconnect(
 		m_browser, m_browser_notify_connection_handler);
-	g_signal_handler_disconnect(
-		m_browser, m_node_removed_handler);
 
+	if(m_node_removed_handler != 0)
+	{
+		g_signal_handler_disconnect(
+			m_browser, m_node_removed_handler);
+	}
+
+	m_iter.node = NULL;
 	m_browser = NULL;
 }
 

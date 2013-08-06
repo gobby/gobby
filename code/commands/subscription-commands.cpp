@@ -208,7 +208,8 @@ void Gobby::SubscriptionCommands::on_subscribe_session(
 
 	g_free(hostname);
 
-	m_signal_subscribe_session.emit(proxy, *folder, *view);
+	m_signal_subscribe_session.emit(
+		browser, iter, proxy, *folder, *view);
 
 	// For now we always highlight the newly created session...
 	// TODO: If the user issued other browserview events in the meanwhile,
@@ -245,7 +246,8 @@ void Gobby::SubscriptionCommands::on_unsubscribe_session(
 	delete session_iter->second;
 	m_session_map.erase(session_iter);
 
-	m_signal_unsubscribe_session.emit(proxy, folder, *view);
+	m_signal_unsubscribe_session.emit(
+		proxy, folder, *view);
 	g_object_unref(proxy);
 }
 
