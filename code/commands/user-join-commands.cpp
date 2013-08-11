@@ -257,10 +257,11 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 	{
 		InfBrowser* browser = m_node.get_browser();
 		const InfBrowserIter* iter = m_node.get_browser_iter();
-		const InfAclUser* user =
-			inf_browser_get_acl_local_user(browser);
-		guint64 mask = 1 << INF_ACL_CAN_JOIN_USER;
-		if(inf_browser_check_acl(browser, iter, user, mask) != mask)
+		const InfAclAccount* account =
+			inf_browser_get_acl_local_account(browser);
+		InfAclMask msk;
+		inf_acl_mask_set1(&msk, INF_ACL_CAN_JOIN_USER);
+		if(!inf_browser_check_acl(browser, iter, account, &msk, NULL))
 		{
 			set_permission_denied_text(m_view);
 			finish();
