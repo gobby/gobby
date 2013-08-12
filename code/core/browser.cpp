@@ -19,6 +19,7 @@
 
 #include "dialogs/password-dialog.hpp"
 #include "core/browser.hpp"
+#include "core/noteplugin.hpp"
 #include "util/gtk-compat.hpp"
 #include "util/file.hpp"
 #include "util/uri.hpp"
@@ -103,12 +104,10 @@ gint compare_func(GtkTreeModel* model, GtkTreeIter* first,
 }
 
 Gobby::Browser::Browser(Gtk::Window& parent,
-                        const InfcNotePlugin* text_plugin,
                         StatusBar& status_bar,
                         const CertificateManager& cert_manager,
                         const Preferences& preferences):
 	m_parent(parent),
-	m_text_plugin(text_plugin),
 	m_status_bar(status_bar),
 	m_cert_manager(cert_manager),
 	m_preferences(preferences),
@@ -401,7 +400,10 @@ void Gobby::Browser::on_set_browser(GtkTreeIter* iter,
                                     InfcBrowser* browser)
 {
 	if(browser)
-		infc_browser_add_plugin(browser, m_text_plugin);
+	{
+		infc_browser_add_plugin(browser, Plugins::TEXT);
+		infc_browser_add_plugin(browser, Plugins::CHAT);
+	}
 }
 
 void Gobby::Browser::on_activate(GtkTreeIter* iter)

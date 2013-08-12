@@ -58,7 +58,6 @@ public:
 		SignalActivate;
 
 	Browser(Gtk::Window& parent,
-	        const InfcNotePlugin* text_plugin,
 	        StatusBar& status_bar,
 	        const CertificateManager& cert_manager,
 	        const Preferences& preferences);
@@ -113,7 +112,6 @@ protected:
 	void on_credentials_changed();
 
 	Gtk::Window& m_parent;
-	const InfcNotePlugin* m_text_plugin;
 	StatusBar& m_status_bar;
 	const CertificateManager& m_cert_manager;
 	const Preferences& m_preferences;

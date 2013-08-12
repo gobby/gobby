@@ -23,7 +23,6 @@
 #include "commands/file-tasks/task-open.hpp"
 #include "commands/file-tasks/task-open-multiple.hpp"
 #include "core/iconmanager.hpp"
-#include "core/noteplugin.hpp"
 
 #include "util/i18n.hpp"
 #include "util/gtk-compat.hpp"
@@ -48,8 +47,7 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_app(app),
 #endif
 	m_header(m_preferences, m_lang_manager),
-	m_browser(*this, Plugins::TEXT, m_statusbar, m_cert_manager,
-	          m_preferences),
+	m_browser(*this, m_statusbar, m_cert_manager, m_preferences),
 	m_text_folder(false, m_preferences, m_lang_manager),
 	m_chat_folder(true, m_preferences, m_lang_manager),
 	m_chat_frame(_("Chat"), IconManager::STOCK_CHAT,

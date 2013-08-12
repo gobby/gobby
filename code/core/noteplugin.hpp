@@ -27,6 +27,7 @@ namespace Gobby
 	namespace Plugins
 	{
 		extern const InfcNotePlugin* TEXT;
+		extern const InfcNotePlugin* CHAT;
 	}
 }
 

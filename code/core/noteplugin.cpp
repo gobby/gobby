@@ -23,6 +23,7 @@
 #include <libinftext/inf-text-session.h>
 #include <libinftext/inf-text-buffer.h>
 
+#include <libinfinity/common/inf-chat-session.h>
 #include <libinfinity/common/inf-session.h>
 #include <libinfinity/common/inf-io.h>
 
@@ -31,10 +32,11 @@
 namespace
 {
 	InfSession*
-	session_new(InfIo* io, InfCommunicationManager* manager,
-	            InfSessionStatus status,
-	            InfCommunicationJoinedGroup* sync_group,
-	            InfXmlConnection* sync_connection, gpointer user_data)
+	text_session_new(InfIo* io, InfCommunicationManager* manager,
+	                 InfSessionStatus status,
+	                 InfCommunicationJoinedGroup* sync_group,
+	                 InfXmlConnection* sync_connection,
+	                 gpointer user_data)
 	{
 		GtkSourceBuffer* textbuffer = gtk_source_buffer_new(NULL);
 		// We never end this non-undoable action since we have our
@@ -56,12 +58,36 @@ namespace
 		return INF_SESSION(session);
 	}
 
+	InfSession*
+	chat_session_new(InfIo* io,
+	                 InfCommunicationManager* manager,
+	                 InfSessionStatus status,
+	                 InfCommunicationJoinedGroup* sync_group,
+	                 InfXmlConnection* sync_connection,
+	                 gpointer user_data)
+	{
+		InfChatSession* session = inf_chat_session_new(
+			manager, 256, status,
+			INF_COMMUNICATION_GROUP(sync_group),
+			sync_connection);
+
+		return INF_SESSION(session);
+	}
+
 	const InfcNotePlugin TEXT_PLUGIN =
 	{
 		NULL,
 		"InfText",
-		session_new
+		text_session_new
+	};
+
+	const InfcNotePlugin CHAT_PLUGIN =
+	{
+		NULL,
+		"InfChat",
+		chat_session_new
 	};
 }
 
 const InfcNotePlugin* Gobby::Plugins::TEXT = &TEXT_PLUGIN;
+const InfcNotePlugin* Gobby::Plugins::CHAT = &CHAT_PLUGIN;

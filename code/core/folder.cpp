@@ -181,7 +181,8 @@ Gobby::Folder::add_chat_session(InfChatSession* session,
 			m_preferences.appearance.chat_userlist_width));
 	userview->show();
 
-	TabLabel* tablabel = Gtk::manage(new ChatTabLabel(*this, *view));
+	TabLabel* tablabel = Gtk::manage(
+		new ChatTabLabel(*this, *view, path != ""));
 	tablabel->signal_close_request().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Folder::on_tab_close_request),

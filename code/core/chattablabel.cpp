@@ -18,12 +18,19 @@
  */
 
 #include "core/chattablabel.hpp"
+#include "core/iconmanager.hpp"
 #include <gtkmm/stock.h>
 
-Gobby::ChatTabLabel::ChatTabLabel(Folder& folder, ChatSessionView& view):
-	TabLabel(folder, view, Gtk::Stock::NETWORK)
+Gobby::ChatTabLabel::ChatTabLabel(Folder& folder, ChatSessionView& view,
+                                  bool always_show_close_button):
+	TabLabel(folder, view,
+	         always_show_close_button ?
+	         Gobby::IconManager::STOCK_CHAT :
+	         Gtk::Stock::NETWORK),
+	m_always_show_close_button(always_show_close_button)
 {
-	m_button.hide(); // Only show when disconnected
+	if(!m_always_show_close_button)
+		m_button.hide(); // Only show when disconnected
 
 	InfChatBuffer* buffer = INF_CHAT_BUFFER(
 		inf_session_get_buffer(INF_SESSION(view.get_session())));
@@ -44,10 +51,15 @@ Gobby::ChatTabLabel::~ChatTabLabel()
 void Gobby::ChatTabLabel::on_notify_subscription_group()
 {
 	InfSession* session = INF_SESSION(m_view.get_session());
-	if(inf_session_get_subscription_group(session) != NULL)
+	if(inf_session_get_subscription_group(session) != NULL &&
+	   !m_always_show_close_button)
+	{
 		m_button.hide();
+	}
 	else
+	{
 		m_button.show();
+	}
 }
 
 void Gobby::ChatTabLabel::on_changed(InfUser* author)

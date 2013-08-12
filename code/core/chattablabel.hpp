@@ -29,7 +29,8 @@ namespace Gobby
 class ChatTabLabel: public TabLabel
 {
 public:
-	ChatTabLabel(Folder& folder, ChatSessionView& view);
+	ChatTabLabel(Folder& folder, ChatSessionView& view,
+	             bool always_show_close_button);
 	~ChatTabLabel();
 
 protected:
@@ -46,6 +47,7 @@ protected:
 	void on_changed(InfUser* author);
 
 private:
+	const bool m_always_show_close_button;
 	gulong m_add_message_handle;
 };
 

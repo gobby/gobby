@@ -184,7 +184,7 @@ void Gobby::SubscriptionCommands::on_subscribe_session(
 	Folder* folder;
 	SessionView* view;
 
-	if(iter != NULL)
+	if(INF_TEXT_IS_SESSION(session))
 	{
 		gchar* path = inf_browser_get_path(browser, iter);
 
@@ -199,11 +199,33 @@ void Gobby::SubscriptionCommands::on_subscribe_session(
 
 		g_free(path);
 	}
+	else if(INF_IS_CHAT_SESSION(session))
+	{
+		if(iter == NULL)
+		{
+			view = &m_chat_folder.add_chat_session(
+				INF_CHAT_SESSION(session), hostname, "", hostname);
+		}
+		else
+		{
+			gchar* path = inf_browser_get_path(browser, iter);
+
+			view = &m_chat_folder.add_chat_session(
+				INF_CHAT_SESSION(session),
+				inf_browser_get_node_name(browser, iter),
+				path,
+				hostname);
+
+			g_free(path);
+		}
+
+		folder = &m_chat_folder;
+	}
 	else
 	{
-		view = &m_chat_folder.add_chat_session(
-			INF_CHAT_SESSION(session), hostname, "", hostname);
-		folder = &m_chat_folder;
+		// Cannot happen, because we don't have any other note plugins
+		// installed in the browser.
+		g_assert_not_reached();
 	}
 
 	g_free(hostname);
