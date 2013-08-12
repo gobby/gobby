@@ -256,21 +256,23 @@ void Gobby::SubscriptionCommands::on_unsubscribe_session(
 	InfSession* session;
 	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
 	SessionMap::iterator session_iter = m_session_map.find(session);
-	g_assert(session_iter != m_session_map.end());
 
-	Folder& folder = session_iter->second->get_folder();
-	SessionView* view = folder.lookup_document(session);
-	g_assert(view != NULL);
+	// Note that the session might not be in the session map anymore, in
+	// case the subscription-group notification came before.
+	if(session_iter != m_session_map.end())
+	{
+		Folder& folder = session_iter->second->get_folder();
+		SessionView* view = folder.lookup_document(session);
+		g_assert(view != NULL);
 
-	g_object_ref(proxy);
-	g_object_unref(session);
+		// Note that what this means is only that the document has been
+		// removed from the browser. The session might still be running.
+		// So at this point we keep it alive.
 
-	delete session_iter->second;
-	m_session_map.erase(session_iter);
-
-	m_signal_unsubscribe_session.emit(
-		proxy, folder, *view);
-	g_object_unref(proxy);
+		// TODO: We could think about adding an info to the session view,
+		// to inform the user.
+		g_object_unref(session);
+	}
 }
 
 void Gobby::SubscriptionCommands::
@@ -320,7 +322,15 @@ void Gobby::SubscriptionCommands::
 			chat_view->set_active_user(NULL);
 		}
 
+		InfSessionProxy* proxy = iter->second->get_proxy();
+		g_object_ref(proxy);
+
+		delete iter->second;
+		m_session_map.erase(iter);
+
 		m_signal_unsubscribe_session.emit(
-			iter->second->get_proxy(), folder, *view);
+			proxy, folder, *view);
+
+		g_object_unref(proxy);
 	}
 }
