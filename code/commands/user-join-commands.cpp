@@ -121,7 +121,6 @@ private:
 	InfUserRequest* m_request;
 
 	gulong m_synchronization_complete_handler;
-	gulong m_user_join_finished_handler;
 
 	guint m_retry_index;
 };
@@ -134,8 +133,7 @@ Gobby::UserJoinCommands::UserJoinInfo::UserJoinInfo(UserJoinCommands& cmds,
                                                     SessionView& view):
 	m_node(browser, it), m_commands(cmds), m_proxy(proxy),
 	m_folder(folder), m_view(view), m_request(NULL),
-	m_synchronization_complete_handler(0),
-	m_user_join_finished_handler(0), m_retry_index(1)
+	m_synchronization_complete_handler(0), m_retry_index(1)
 {
 	g_object_ref(m_proxy);
 
@@ -178,8 +176,10 @@ Gobby::UserJoinCommands::UserJoinInfo::~UserJoinInfo()
 
 	if(m_request)
 	{
-		g_signal_handler_disconnect(m_request,
-		                            m_user_join_finished_handler);
+		g_signal_handlers_disconnect_by_func(
+			G_OBJECT(m_request),
+			(gpointer)G_CALLBACK(on_user_join_finished_static),
+			this);
 
 		g_object_unref(m_request);
 	}
@@ -207,6 +207,12 @@ void Gobby::UserJoinCommands::UserJoinInfo::on_synchronization_complete()
 void Gobby::UserJoinCommands::UserJoinInfo::
 	on_user_join_finished(InfUser* user, const GError* error)
 {
+	if(m_request != NULL)
+	{
+		g_object_unref(m_request);
+		m_request = NULL;
+	}
+
 	if(error == NULL)
 	{
 		user_join_complete(user);
@@ -304,19 +310,17 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 
 	GError* error = NULL;
 	m_request = inf_session_proxy_join_user(
-		m_proxy, params.size(), &params[0]);
+		m_proxy, params.size(), &params[0],
+		on_user_join_finished_static, this);
 
 	for(unsigned int i = 0; i < params.size(); ++i)
 		g_value_unset(&params[i].value);
 
-	g_object_ref(m_request);
-
-	m_view.set_info(_("User Join in progress..."), false);
-
-	m_user_join_finished_handler = g_signal_connect(
-		m_request, "finished",
-		G_CALLBACK(on_user_join_finished_static),
-		this);
+	if(m_request != NULL)
+	{
+		g_object_ref(m_request);
+		m_view.set_info(_("User Join in progress..."), false);
+	}
 }
 
 void Gobby::UserJoinCommands::UserJoinInfo::user_join_complete(InfUser* user)

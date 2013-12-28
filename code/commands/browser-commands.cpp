@@ -269,14 +269,19 @@ void Gobby::BrowserCommands::on_notify_status(InfBrowser* browser)
 
 void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)
 {
-	InfRequest* request =
-		INF_REQUEST(infc_browser_subscribe_chat(browser));
-	g_assert(m_request_map.find(request) == m_request_map.end());
+	InfRequest* request = INF_REQUEST(
+		infc_browser_subscribe_chat(
+			browser, on_subscribe_chat_finished_static, this));
 
-	m_request_map[request] =
-		new RequestInfo(
-			*this, INF_BROWSER(browser), NULL,
-			request, m_status_bar);
+	if(request != NULL)
+	{
+		g_assert(m_request_map.find(request) == m_request_map.end());
+
+		m_request_map[request] =
+			new RequestInfo(
+				*this, INF_BROWSER(browser), NULL,
+				request, m_status_bar);
+	}
 }
 
 void Gobby::BrowserCommands::on_connect(const Glib::ustring& hostname)
@@ -318,15 +323,20 @@ void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
 		// If there is already a request don't re-request
 		if(request == NULL)
 		{
-			request =
-				INF_REQUEST(
-					inf_browser_subscribe(browser, iter));
+			request = INF_REQUEST(
+				inf_browser_subscribe(
+					browser, iter,
+					on_subscribe_node_finished_static,
+					this));
 
-			g_assert(m_request_map.find(request) ==
-			         m_request_map.end());
-			m_request_map[request] =
-				new RequestInfo(*this, browser, iter,
-				                request, m_status_bar);
+			if(request != NULL)
+			{
+				g_assert(m_request_map.find(request) ==
+				         m_request_map.end());
+				m_request_map[request] = new RequestInfo(
+					*this, browser, iter, request,
+					m_status_bar);
+			}
 		}
 	}
 }
@@ -336,9 +346,11 @@ void Gobby::BrowserCommands::on_finished(InfRequest* request,
                                          const GError* error)
 {
 	RequestMap::iterator map_iter = m_request_map.find(request);
-	g_assert(map_iter != m_request_map.end());
-	delete map_iter->second;
-	m_request_map.erase(map_iter);
+	if(map_iter != m_request_map.end())
+	{
+		delete map_iter->second;
+		m_request_map.erase(map_iter);
+	}
 	
 	if(error != NULL)
 	{

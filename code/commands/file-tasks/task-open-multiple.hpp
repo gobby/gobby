@@ -21,6 +21,7 @@
 #define _GOBBY_FILE_TASK_OPEN_MULTIPLE_HPP_
 
 #include "commands/file-commands.hpp"
+#include "operations/operation-open-multiple.hpp"
 
 #include <giomm/file.h>
 
@@ -42,15 +43,7 @@ public:
 private:
 	void on_location_response(int response_id);
 
-	struct FileInfo {
-		FileInfo(const Glib::RefPtr<Gio::File>& f,
-		         const Glib::ustring& n) : file(f), name(n) {}
-
-		Glib::RefPtr<Gio::File> file;
-		Glib::ustring name;
-	};
-
-	typedef std::vector<Glib::ustring> uri_list;
+	typedef OperationOpenMultiple::uri_list uri_list;
 	uri_list m_uris;
 };
 

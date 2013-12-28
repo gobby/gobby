@@ -82,11 +82,76 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
                                                       Folder& folder,
                                                       const std::string& uri):
 	Operation(operations), m_folder(folder), m_browser(NULL),
-	m_target(uri), m_request(NULL), m_request_finished_id(0),
-	m_notify_status_id(0)
+	m_target(uri), m_request(NULL), m_notify_status_id(0)
+{
+}
+
+Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
+                                                      Folder& folder,
+                                                      InfBrowser* inf_browser,
+                                                      const std::string& p):
+	Operation(operations), m_folder(folder), m_browser(inf_browser),
+	m_target(p), m_request(NULL), m_notify_status_id(0)
+{
+}
+
+Gobby::OperationSubscribePath::~OperationSubscribePath()
+{
+	if(m_request != NULL)
+	{
+		g_signal_handlers_disconnect_by_func(
+			G_OBJECT(m_request),
+			(gpointer)G_CALLBACK(on_subscribe_finished_static),
+			this);
+
+		g_signal_handlers_disconnect_by_func(
+			G_OBJECT(m_request),
+			(gpointer)G_CALLBACK(on_explore_finished_static),
+			this);
+	}
+
+	if(m_notify_status_id != 0)
+		g_signal_handler_disconnect(m_browser, m_notify_status_id);
+
+	if(m_message_handle != get_status_bar().invalid_handle())
+		get_status_bar().remove_message(m_message_handle);
+}
+
+void Gobby::OperationSubscribePath::start()
+{
+	try
+	{
+		if(m_browser)
+		{
+			m_path = split_path(m_target);
+
+			m_message_handle = get_status_bar().add_info_message(
+				Glib::ustring::compose(
+					_("Subscribing to \"%1\"..."),
+					m_target));
+
+			start_with_browser();
+		}
+		else
+		{
+			start_without_browser();
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		get_status_bar().add_error_message(
+			Glib::ustring::compose(
+				_("Failed to connect to \"%1\""), m_target),
+			ex.what());
+
+		fail();
+	}
+}
+
+void Gobby::OperationSubscribePath::start_without_browser()
 {
 	std::string scheme, netloc, path;
-	parse_uri(uri, scheme, netloc, path);
+	parse_uri(m_target, scheme, netloc, path);
 	if(scheme != "infinote")
 	{
 		throw std::runtime_error(
@@ -102,6 +167,21 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
 
 	parse_netloc(netloc, hostname, service, device_index);
 
+	if(path.empty())
+	{
+		m_message_handle = get_status_bar().add_info_message(
+			Glib::ustring::compose(
+				_("Connecting to \"%1\"..."),
+				m_target));
+	}
+	else
+	{
+		m_message_handle = get_status_bar().add_info_message(
+			Glib::ustring::compose(
+				_("Subscribing to \"%1\"..."),
+				m_target));
+	}
+
 	m_resolve_handle = Gobby::resolve(
 		hostname, service,
 		sigc::bind(
@@ -114,51 +194,6 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
 				*this,
 				&OperationSubscribePath::on_resolv_error),
 			hostname));
-
-	if(path.empty())
-	{
-		m_message_handle = get_status_bar().add_info_message(
-			Glib::ustring::compose(
-				_("Connecting to \"%1\"..."), uri));
-	}
-	else
-	{
-		m_message_handle = get_status_bar().add_info_message(
-			Glib::ustring::compose(
-				_("Subscribing to \"%1\"..."), uri));
-	}
-}
-
-Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
-                                                      Folder& folder,
-                                                      InfBrowser* inf_browser,
-                                                      const std::string& p):
-	Operation(operations), m_folder(folder), m_browser(inf_browser),
-	m_target(p), m_path(split_path(p)), m_request(NULL),
-	m_request_finished_id(0), m_notify_status_id(0)
-{
-	// This might finish immediately, however the Operations manager
-	// does not support this. Therefore, delay the call.
-	Glib::signal_idle().connect(
-		sigc::bind_return(
-			sigc::mem_fun(
-				*this,
-				&OperationSubscribePath::start_with_browser),
-			false));
-
-	m_message_handle = get_status_bar().add_info_message(
-		Glib::ustring::compose(_("Subscribing to \"%1\"..."), p));
-}
-
-Gobby::OperationSubscribePath::~OperationSubscribePath()
-{
-	if(m_request != NULL)
-		g_signal_handler_disconnect(m_request, m_request_finished_id);
-	if(m_notify_status_id != 0)
-		g_signal_handler_disconnect(m_browser, m_notify_status_id);
-
-	if(m_message_handle != get_status_bar().invalid_handle())
-		get_status_bar().remove_message(m_message_handle);
 }
 
 void Gobby::OperationSubscribePath::start_with_browser()
@@ -187,7 +222,11 @@ void Gobby::OperationSubscribePath::explore()
 	{
 		// We are done
 		get_browser().set_selected(m_browser, &m_path_iter);
-		if(!inf_browser_is_subdirectory(m_browser, &m_path_iter))
+		if(inf_browser_is_subdirectory(m_browser, &m_path_iter))
+		{
+			finish();
+		}
+		else
 		{
 			InfSessionProxy* proxy =
 				inf_browser_get_session(
@@ -204,29 +243,14 @@ void Gobby::OperationSubscribePath::explore()
 
 				g_assert(view != NULL);
 				m_folder.switch_to_document(*view);
+
+				finish();
 			}
 			else
 			{
-				m_request = INF_NODE_REQUEST(
-					inf_browser_get_pending_request(
-						m_browser, &m_path_iter,
-						"subscribe-session"));
-
-				if(m_request == NULL)
-				{
-					m_request = inf_browser_subscribe(
-						m_browser, &m_path_iter);
-				}
-
-				m_request_finished_id = g_signal_connect(
-					G_OBJECT(m_request), "finished",
-					G_CALLBACK(
-						on_subscribe_finished_static),
-					this);
+				make_subscribe_request();
 			}
 		}
-
-		finish();
 	}
 	else
 	{
@@ -239,24 +263,7 @@ void Gobby::OperationSubscribePath::explore()
 			}
 			else
 			{
-				m_request = INF_NODE_REQUEST(
-					inf_browser_get_pending_request(
-						m_browser, &m_path_iter,
-						"explore-node"));
-
-				if(m_request == NULL)
-				{
-					m_request = INF_NODE_REQUEST(
-						inf_browser_explore(
-							m_browser,
-							&m_path_iter));
-				}
-
-				m_request_finished_id = g_signal_connect(
-					G_OBJECT(m_request), "finished",
-					G_CALLBACK(
-						on_explore_finished_static),
-					this);
+				make_explore_request();
 			}
 		}
 		else
@@ -268,7 +275,8 @@ void Gobby::OperationSubscribePath::explore()
 			get_status_bar().remove_message(m_message_handle);
 			get_status_bar().add_error_message(
 				Glib::ustring::compose(
-					_("Could not subscribe to \"%1\""), m_target),
+					_("Could not subscribe to \"%1\""),
+					m_target),
 				Glib::ustring::compose(
 					_("Path \"%1\" does not exist"),
 					make_path_string(m_path)));
@@ -309,6 +317,60 @@ void Gobby::OperationSubscribePath::descend()
 			_("Path \"%1\" does not exist"),
 			make_path_string(m_path)));
 	fail();
+}
+
+void Gobby::OperationSubscribePath::make_explore_request()
+{
+	g_assert(m_request == NULL);
+
+	m_request = INF_NODE_REQUEST(
+		inf_browser_get_pending_request(
+			m_browser, &m_path_iter,
+			"explore-node"));
+
+	if(m_request == NULL)
+	{
+		m_request = INF_NODE_REQUEST(
+			inf_browser_explore(
+				m_browser,
+				&m_path_iter,
+				on_explore_finished_static, // ???
+				this));
+	}
+	else
+	{
+		g_signal_connect(
+			G_OBJECT(m_request),
+			"finished",
+			G_CALLBACK(on_explore_finished_static), // ???
+			this);
+	}
+}
+
+void Gobby::OperationSubscribePath::make_subscribe_request()
+{
+	g_assert(m_request == NULL);
+
+	m_request = INF_NODE_REQUEST(
+		inf_browser_get_pending_request(
+			m_browser, &m_path_iter,
+			"subscribe-session"));
+
+	if(m_request == NULL)
+	{
+		m_request = inf_browser_subscribe(
+			m_browser, &m_path_iter,
+			on_subscribe_finished_static,
+			this);
+	}
+	else
+	{
+		g_signal_connect(
+			G_OBJECT(m_request),
+			"finished",
+			G_CALLBACK(on_subscribe_finished_static), // ???
+			this);
+	}
 }
 
 void Gobby::OperationSubscribePath::on_resolv_done(
@@ -409,7 +471,6 @@ void Gobby::OperationSubscribePath::on_explore_finished(
 	const InfBrowserIter* iter, const GError* error)
 {
 	m_request = NULL;
-	m_request_finished_id = 0;
 
 	if(error != NULL)
 	{
@@ -430,7 +491,6 @@ void Gobby::OperationSubscribePath::on_subscribe_finished(
 	const InfBrowserIter* iter, const GError* error)
 {
 	m_request = NULL;
-	m_request_finished_id = 0;
 
 	if(error != NULL)
 	{

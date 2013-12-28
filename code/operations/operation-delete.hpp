@@ -33,9 +33,11 @@ public:
 
 	virtual ~OperationDelete();
 
+	virtual void start();
+
 protected:
 	static void
-	on_request_finished_static(InfcNodeRequest* request,
+	on_request_finished_static(InfNodeRequest* request,
 	                           const InfBrowserIter* iter,
 	                           const GError* error,
 	                           gpointer user_data)
@@ -48,10 +50,11 @@ protected:
 	                         const GError* error);
 
 protected:
-	Glib::ustring m_name;
-	InfNodeRequest* m_request;
-	gulong m_finished_id;
+	InfBrowser* m_browser;
+	const InfBrowserIter m_iter;
+	const Glib::ustring m_name;
 
+	InfNodeRequest* m_request;
 	StatusBar::MessageHandle m_message_handle;
 };
 

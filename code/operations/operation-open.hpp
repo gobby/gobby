@@ -41,6 +41,8 @@ public:
 
 	virtual ~OperationOpen();
 
+	virtual void start();
+
 protected:
 	static void
 	on_request_finished_static(InfNodeRequest* request,
@@ -67,7 +69,8 @@ protected:
 	void error(const Glib::ustring& message);
 protected:
 	const Preferences& m_preferences;
-	std::string m_name;
+	const std::string m_name;
+	const std::string m_uri;
 	NodeWatch m_parent;
 
 	int m_encoding_auto_detect_index;
@@ -87,7 +90,6 @@ protected:
 	sigc::connection m_idle_connection;
 
 	InfNodeRequest* m_request;
-	gulong m_finished_id;
 
 	std::vector<char> m_raw_content;
 	std::vector<char>::size_type m_raw_pos;

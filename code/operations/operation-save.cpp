@@ -29,13 +29,16 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 				    const std::string& uri,
 				    const std::string& encoding,
 				    DocumentInfoStorage::EolStyle eol_style):
-	Operation(operations), m_view(&view),
+	Operation(operations), m_uri(uri), m_view(&view),
 	m_start_time(std::time(NULL)), m_current_line_index(0),
 	m_encoding(encoding), m_eol_style(eol_style),
 	m_storage_key(view.get_info_storage_key()),
 	m_iconv(encoding.c_str(), "UTF-8"),
 	m_buffer_size(0), m_buffer_index(0)
 {
+	folder.signal_document_removed().connect(
+		sigc::mem_fun(*this, &OperationSave::on_document_removed));
+
 	// Load content so that the session can go on while saving
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(view.get_text_buffer());
 	GtkTextIter prev;
@@ -65,18 +68,6 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 	} while(!gtk_text_iter_equal(&pos, &old_pos));
 
 	m_current_line = m_lines.begin();
-
-	m_file = Gio::File::create_for_uri(uri);
-	m_file->replace_async(sigc::mem_fun(*this,
-	                                   &OperationSave::on_file_replace));
-
-	m_message_handle = get_status_bar().add_info_message(
-		Glib::ustring::compose(
-			_("Saving document \"%1\" to \"%2\"..."),
-			view.get_title(), uri));
-
-	folder.signal_document_removed().connect(
-		sigc::mem_fun(*this, &OperationSave::on_document_removed));
 }
 
 Gobby::OperationSave::~OperationSave()
@@ -95,6 +86,18 @@ Gobby::OperationSave::~OperationSave()
 	// existing files are not overriden with the temporary files we
 	// actually wrote to, at least for local files.
 	m_file.reset();
+}
+
+void Gobby::OperationSave::start()
+{
+	m_file = Gio::File::create_for_uri(m_uri);
+	m_file->replace_async(sigc::mem_fun(*this,
+	                                   &OperationSave::on_file_replace));
+
+	m_message_handle = get_status_bar().add_info_message(
+		Glib::ustring::compose(
+			_("Saving document \"%1\" to \"%2\"..."),
+			m_view->get_title(), m_uri));
 }
 
 void Gobby::OperationSave::on_document_removed(SessionView& view)

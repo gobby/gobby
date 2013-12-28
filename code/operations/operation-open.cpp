@@ -64,10 +64,12 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
                                     const std::string& name,
                                     const std::string& uri,
                                     const char* encoding):
-	Operation(operations), m_preferences(preferences), m_name(name),
-	m_parent(browser, parent), m_encoding_auto_detect_index(-1),
+	Operation(operations), m_preferences(preferences),
+	m_name(name), m_uri(uri), m_parent(browser, parent),
+	m_encoding_auto_detect_index(-1),
 	m_eol_style(DocumentInfoStorage::EOL_CR), m_request(NULL),
-	m_finished_id(0), m_raw_pos(0)
+	m_raw_pos(0), m_content(NULL),
+	m_message_handle(get_status_bar().invalid_handle())
 {
 	if(encoding != NULL)
 	{
@@ -78,18 +80,41 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 		m_encoding_auto_detect_index = 0;
 		m_encoding = get_autodetect_encoding(0);
 	}
+}
 
+Gobby::OperationOpen::~OperationOpen()
+{
+	// TODO: Cancel outstanding async operations?
+
+	if(m_request != NULL)
+	{
+		g_signal_handlers_disconnect_by_func(
+			G_OBJECT(m_request),
+			(gpointer)G_CALLBACK(on_request_finished_static),
+			this);
+		g_object_unref(m_request);
+	}
+
+	if(m_content != NULL)
+		g_object_unref(m_content);
+
+	if(m_message_handle != get_status_bar().invalid_handle())
+		get_status_bar().remove_message(m_message_handle);
+}
+
+void Gobby::OperationOpen::start()
+{
 	m_iconv.reset(new Glib::IConv("UTF-8", m_encoding));
 
 	try
 	{
-		m_file = Gio::File::create_for_uri(uri);
+		m_file = Gio::File::create_for_uri(m_uri);
 		m_file->read_async(sigc::mem_fun(
 			*this, &OperationOpen::on_file_read));
 
 		m_message_handle = get_status_bar().add_info_message(
 			Glib::ustring::compose(
-				_("Opening document \"%1\"..."), uri));
+				_("Opening document \"%1\"..."), m_uri));
 
 		m_parent.signal_node_removed().connect(
 			sigc::mem_fun(
@@ -105,20 +130,6 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
 	{
 		error(err.what());
 	}
-}
-
-Gobby::OperationOpen::~OperationOpen()
-{
-	// TODO: Cancel outstanding async operations?
-
-	if(m_request != NULL)
-	{
-		g_signal_handler_disconnect(m_request, m_finished_id);
-		g_object_unref(m_request);
-	}
-
-	g_object_unref(m_content);
-	get_status_bar().remove_message(m_message_handle);
 }
 
 void Gobby::OperationOpen::on_node_removed()
@@ -395,20 +406,18 @@ void Gobby::OperationOpen::read_finish()
 	m_request = inf_browser_add_note(
 		m_parent.get_browser(), m_parent.get_browser_iter(),
 		m_name.c_str(), Plugins::TEXT->note_type, NULL,
-		INF_SESSION(session), TRUE);
+		INF_SESSION(session), TRUE,
+		on_request_finished_static, this);
 	g_object_unref(session);
 
-	// Note infc_browser_add_note_with_content does not return a
-	// new reference.
-	g_object_ref(m_request);
+	if(m_request != NULL)
+	{
+		g_object_ref(m_request);
 
-	m_finished_id = g_signal_connect(
-		G_OBJECT(m_request), "finished",
-		G_CALLBACK(on_request_finished_static), this);
-
-	// TODO: We can remove the node watch here, but need to have the
-	// browser available in on_request_finished then. Maybe just
-	// disconnect the signal, or bind it.
+		// TODO: We can remove the node watch here, but need to have
+		// the browser available in on_request_finished then. Maybe
+		// just disconnect the signal, or bind it.
+	}
 }
 
 void Gobby::OperationOpen::on_request_finished(const InfBrowserIter* iter,

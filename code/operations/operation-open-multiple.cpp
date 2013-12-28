@@ -29,32 +29,41 @@ Gobby::OperationOpenMultiple::OperationOpenMultiple(
 		const Preferences& prefs,
 		InfBrowser* browser,
 		const InfBrowserIter* parent,
-		unsigned int num_uris):
+		const uri_list& uris):
 	Operation(operations), m_preferences(prefs),
-	m_parent(browser, parent), m_num_uris(num_uris),
-	m_current(NULL)
+	m_parent(browser, parent), m_current(NULL)
 {
 	m_parent.signal_node_removed().connect(
 		sigc::mem_fun(*this,
 			&OperationOpenMultiple::on_node_removed));
+
+	for(uri_list::const_iterator iter = uris.begin();
+	    iter != uris.end(); ++iter)
+	{
+		info_list::iterator info_iter =
+			m_infos.insert(m_infos.end(), Info());
+		Info& info = *info_iter;
+
+		info.uri = *iter;
+		info.encoding = NULL; /* auto-detect... */
+	}
 }
 
-void Gobby::OperationOpenMultiple::add_uri(const Glib::ustring& uri,
-                                           const char* name,
-                                           const char* encoding)
+void Gobby::OperationOpenMultiple::start()
 {
-	g_assert(m_num_uris > 0);
-	-- m_num_uris;
+	for(info_list::iterator iter = m_infos.begin();
+	    iter != m_infos.end(); ++iter)
+	{
+		query(iter);
+	}
+}
 
-	Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(uri);
+void Gobby::OperationOpenMultiple::query(const info_list::iterator& info)
+{
+	Glib::RefPtr<Gio::File> file =
+		Gio::File::create_for_uri(info->uri);
 
-	info_list::iterator iter = m_infos.insert(m_infos.end(), Info());
-	Info& info = *iter;
-
-	info.uri = uri;
-	info.encoding = encoding;
-
-	if(name == NULL)
+	if(info->name.empty())
 	{
 		try
 		{
@@ -65,18 +74,18 @@ void Gobby::OperationOpenMultiple::add_uri(const Glib::ustring& uri,
 						*this,
 						&OperationOpenMultiple::
 							on_query_info),
-					file, iter),
-				G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
+					file, info),
+					G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 		}
 		catch(const Gio::Error& ex)
 		{
-			single_error(iter, ex.what());
+			single_error(info, ex.what());
 		}
 	}
 	else
 	{
-		info.name = name;
-		if(!m_current) load_info(iter);
+		if(!m_current)
+			load_info(info);
 	}
 }
 
@@ -111,7 +120,7 @@ void Gobby::OperationOpenMultiple::on_finished(
 	m_infos.erase(info);
 	m_current = NULL;
 
-	if(!m_num_uris && m_infos.empty())
+	if(m_infos.empty())
 	{
 		// All documents loaded
 		finish();
@@ -130,8 +139,7 @@ void Gobby::OperationOpenMultiple::on_finished(
 		}
 
 		// If no info was found, then wait for names to become
-		// available, either by the user adding more uris via
-		// add_uri(), or by query info results.
+		// available, by query info results
 	}
 }
 
@@ -144,11 +152,26 @@ void Gobby::OperationOpenMultiple::load_info(const info_list::iterator& iter)
 		m_parent.get_browser(), m_parent.get_browser_iter(),
 		iter->name, m_preferences, iter->uri, iter->encoding);
 
-	m_current->signal_finished().connect(
-		sigc::bind(
-			sigc::mem_fun(
-				*this, &OperationOpenMultiple::on_finished),
-			iter));
+	// TODO: In principle this could be NULL if the whole operation
+	// finished synchrounously. In this case with the current API we
+	// cannot find out whether the operation was successful or not. What
+	// we do does not depend on whether the operation is successful,
+	// so it does not matter at this point. But in principle we should
+	// change the API so that we can find it out here. Note also that
+	// currently, OperationOpen can never finish synchrounously.
+	if(m_current == NULL)
+	{
+		on_finished(true, iter);
+	}
+	else
+	{
+		m_current->signal_finished().connect(
+			sigc::bind(
+				sigc::mem_fun(
+					*this,
+					&OperationOpenMultiple::on_finished),
+				iter));
+	}
 }
 
 void Gobby::OperationOpenMultiple::single_error(
@@ -163,7 +186,7 @@ void Gobby::OperationOpenMultiple::single_error(
 	m_infos.erase(iter);
 
 	// Finish operation if there are no more URIs to load
-	if(!m_num_uris && m_infos.empty())
+	if(m_infos.empty())
 		finish();
 }
 

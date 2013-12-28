@@ -27,44 +27,55 @@ Gobby::OperationNew::OperationNew(Operations& operations,
                                   const InfBrowserIter* parent,
                                   const Glib::ustring& name,
                                   bool directory):
-	Operation(operations), m_name(name), m_directory(directory)
+	Operation(operations), m_request(NULL), m_browser(browser),
+	m_parent(*parent), m_name(name), m_directory(directory)
 {
-	if(directory)
-	{
-		m_request = inf_browser_add_subdirectory(browser, parent,
-		                                         name.c_str(), NULL);
-	}
-	else
-	{
-		m_request = inf_browser_add_note(browser,
-		                                 parent,
-		                                 name.c_str(),
-		                                 Plugins::TEXT->note_type,
-		                                 NULL,
-		                                 NULL,
-		                                 TRUE);
-	}
-
-	// Note infc_browser_add_note does not return a
-	// new reference.
-	g_object_ref(m_request);
-
-	m_finished_id = g_signal_connect(
-		G_OBJECT(m_request), "finished",
-		G_CALLBACK(on_request_finished_static), this);
-
-	m_message_handle = get_status_bar().add_info_message(
-		Glib::ustring::compose(
-			directory ? _("Creating directory \"%1\"...")
-			          : _("Creating document \"%1\"..."), name));
+	g_object_ref(browser);
 }
 
 Gobby::OperationNew::~OperationNew()
 {
-	g_signal_handler_disconnect(G_OBJECT(m_request), m_finished_id);
-	g_object_unref(m_request);
+	if(m_request != NULL)
+	{
+		g_signal_handlers_disconnect_by_func(
+			G_OBJECT(m_request),
+			(gpointer)G_CALLBACK(on_request_finished_static),
+			this);
+		g_object_unref(m_request);
 
-	get_status_bar().remove_message(m_message_handle);
+		get_status_bar().remove_message(m_message_handle);
+	}
+
+	g_object_unref(m_browser);
+}
+
+void Gobby::OperationNew::start()
+{
+	if(m_directory)
+	{
+		m_request = inf_browser_add_subdirectory(
+			m_browser, &m_parent, m_name.c_str(), NULL,
+			on_request_finished_static, this);
+	}
+	else
+	{
+		m_request = inf_browser_add_note(
+			m_browser, &m_parent, m_name.c_str(),
+			Plugins::TEXT->note_type, NULL, NULL, TRUE,
+			on_request_finished_static, this);
+	}
+
+	if(m_request != NULL)
+	{
+		g_object_ref(m_request);
+
+		m_message_handle = get_status_bar().add_info_message(
+			Glib::ustring::compose(
+				m_directory ?
+					_("Creating directory \"%1\"...") :
+					_("Creating document \"%1\"..."),
+				m_name));
+  	}
 }
 
 void Gobby::OperationNew::on_request_finished(const InfBrowserIter* iter,

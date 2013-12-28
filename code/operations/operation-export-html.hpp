@@ -39,6 +39,8 @@ public:
 
 	virtual ~OperationExportHtml();
 
+	virtual void start();
+
 protected:
 	void on_file_replace(const Glib::RefPtr<Gio::AsyncResult>& result);
 	void on_stream_write(const Glib::RefPtr<Gio::AsyncResult>& result);
@@ -46,6 +48,8 @@ protected:
 	void error(const Glib::ustring& message);
 
 protected:
+	const std::string m_title;
+	const std::string m_uri;
 	const std::string m_xml;
 	std::string::size_type m_index;
 

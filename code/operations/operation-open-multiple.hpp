@@ -34,15 +34,15 @@ class OperationOpenMultiple:
 	public Operations::Operation, public sigc::trackable
 {
 public:
+	typedef Operations::uri_list uri_list;
+
 	OperationOpenMultiple(Operations& operations,
 	                      const Preferences& preferences,
 	                      InfBrowser* browser,
 	                      const InfBrowserIter* parent,
-	                      unsigned int num_uris);
+	                      const uri_list& uris);
 
-	void add_uri(const Glib::ustring& uri,
-	             const char* name /* Autodetected if NULL */,
-	             const char* encoding /* Autodetected if NULL */);
+	virtual void start();
 
 protected:
 	struct Info
@@ -53,6 +53,8 @@ protected:
 	};
 
 	typedef std::list<Info> info_list;
+
+	void query(const info_list::iterator& info);
 
 	void on_node_removed();
 	void on_query_info(const Glib::RefPtr<Gio::AsyncResult>& result,

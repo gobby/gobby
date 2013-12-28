@@ -36,11 +36,17 @@ public:
 
 	virtual ~OperationSubscribePath();
 
+	virtual void start();
+
 private:
+	void start_without_browser();
 	void start_with_browser();
 
 	void explore();
 	void descend();
+
+	void make_explore_request();
+	void make_subscribe_request();
 
 	static void on_notify_status_static(GObject* object,
 	                                    GParamSpec* pspec,
@@ -50,7 +56,7 @@ private:
 			on_notify_status();
 	}
 
-	static void on_explore_finished_static(InfExploreRequest* request,
+	static void on_explore_finished_static(InfNodeRequest* request,
 	                                       const InfBrowserIter* iter,
 	                                       const GError* error,
 	                                       gpointer user_data)
@@ -92,7 +98,6 @@ private:
 	InfBrowserIter m_path_iter;
 
 	InfNodeRequest* m_request;
-	gulong m_request_finished_id;
 	gulong m_notify_status_id;
 
 	std::auto_ptr<ResolvHandle> m_resolve_handle;

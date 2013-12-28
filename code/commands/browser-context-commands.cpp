@@ -360,18 +360,12 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 	{
 		Glib::SListHandle<Glib::ustring> uris = dialog->get_uris();
 
+		OperationOpenMultiple::uri_list uri_list(
+			uris.begin(), uris.end());
+
 		OperationOpenMultiple* operation =
-			m_operations.create_documents(browser, &iter, m_preferences, uris.size());
-
-		for(Glib::SListHandle<Glib::ustring>::iterator iter =
-			uris.begin();
-		    iter != uris.end(); ++iter)
-		{
-			Glib::RefPtr<Gio::File> file =
-				Gio::File::create_for_uri(*iter);
-
-			operation->add_uri(*iter, NULL, NULL);
-		}
+			m_operations.create_documents(
+				browser, &iter, m_preferences, uri_list);
 	}
 
 	m_watch.reset(NULL);

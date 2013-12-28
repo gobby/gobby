@@ -59,13 +59,7 @@ void Gobby::TaskOpenMultiple::on_location_response(int response_id)
 		OperationOpenMultiple* operation =
 			get_operations().create_documents(
 				browser, &iter,
-				get_preferences(), m_uris.size());
-
-		for(uri_list::const_iterator iter = m_uris.begin();
-		    iter != m_uris.end(); ++iter)
-		{
-			operation->add_uri(*iter, NULL, NULL);
-		}
+				get_preferences(), m_uris);
 	}
 
 	finish();

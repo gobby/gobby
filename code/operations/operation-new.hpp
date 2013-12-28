@@ -34,6 +34,8 @@ public:
 
 	virtual ~OperationNew();
 
+	virtual void start();
+
 protected:
 	static void
 	on_request_finished_static(InfNodeRequest* request,
@@ -49,10 +51,11 @@ protected:
 	                         const GError* error);
 
 protected:
+	InfBrowser* m_browser;
+	const InfBrowserIter m_parent;
 	Glib::ustring m_name;
 	bool m_directory;
 	InfNodeRequest* m_request;
-	gulong m_finished_id;
 
 	StatusBar::MessageHandle m_message_handle;
 };

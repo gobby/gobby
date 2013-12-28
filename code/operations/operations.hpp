@@ -55,6 +55,8 @@ public:
 			m_operations(operations) {}
 		virtual ~Operation() = 0;
 
+		virtual void start() = 0;
+
 		StatusBar& get_status_bar()
 		{
 			return m_operations.m_status_bar;
@@ -93,6 +95,7 @@ public:
 	};
 
 	typedef sigc::signal<void, OperationSave*> SignalBeginSaveOperation;
+	typedef std::vector<Glib::ustring> uri_list;
 
 	Operations(DocumentInfoStorage& info_storage,
 	           Browser& browser, StatusBar& status_bar);
@@ -116,7 +119,7 @@ public:
 	OperationOpenMultiple* create_documents(InfBrowser* browser,
 	                                        const InfBrowserIter* parent,
 	                                        const Preferences& prefs,
-	                                        unsigned int num_uris);
+	                                        const uri_list& uris);
 
 	OperationSave* save_document(TextSessionView& view,
 	                             Folder& folder,
@@ -156,6 +159,14 @@ protected:
 	OperationSet m_operations;
 
 	SignalBeginSaveOperation m_signal_begin_save_operation;
+private:
+	template<typename OperationType>
+	OperationType* check_operation(OperationType* op)
+	{
+		if(m_operations.find(op) == m_operations.end())
+			return NULL;
+		return op;
+	}
 };
 
 }

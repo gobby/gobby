@@ -54,11 +54,11 @@ Gobby::Operations::create_directory(InfBrowser* browser,
                                     const InfBrowserIter* parent,
                                     const Glib::ustring& name)
 {
-	OperationNew* op = new OperationNew(*this, browser, parent,
-	                                    name, true);
-
+	OperationNew* op =
+		new OperationNew(*this, browser, parent, name, true);
 	m_operations.insert(op);
-	return op;
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationNew*
@@ -66,11 +66,11 @@ Gobby::Operations::create_document(InfBrowser* browser,
                                    const InfBrowserIter* parent,
                                    const Glib::ustring& name)
 {
-	OperationNew* op = new OperationNew(*this, browser, parent,
-	                                    name, false);
-
+	OperationNew* op =
+		new OperationNew(*this, browser, parent, name, false);
 	m_operations.insert(op);
-	return op;
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationOpen*
@@ -84,23 +84,23 @@ Gobby::Operations::create_document(InfBrowser* browser,
 	OperationOpen* op = new OperationOpen(*this, preferences, browser,
 	                                      parent, name, from_uri,
 	                                      encoding);
-
 	m_operations.insert(op);
-	return op;
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationOpenMultiple*
 Gobby::Operations::create_documents(InfBrowser* browser,
                                     const InfBrowserIter* parent,
                                     const Preferences& prefs,
-                                    unsigned int num_uris)
+                                    const uri_list& uris)
 {
 	OperationOpenMultiple* op = new OperationOpenMultiple(*this, prefs,
 	                                                      browser, parent,
-	                                                      num_uris);
-
+	                                                      uris);
 	m_operations.insert(op);
-	return op;
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationSave*
@@ -121,7 +121,8 @@ Gobby::Operations::save_document(TextSessionView& view,
 
 	m_operations.insert(op);
 	m_signal_begin_save_operation.emit(op);
-	return op;
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationDelete*
@@ -130,29 +131,20 @@ Gobby::Operations::delete_node(InfBrowser* browser,
 {
 	OperationDelete* op = new OperationDelete(*this, browser, iter);
 	m_operations.insert(op);
-	return op;
+
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationSubscribePath*
 Gobby::Operations::subscribe_path(Folder& folder,
                                   const std::string& uri)
 {
-	try
-	{
-		OperationSubscribePath* op =
-			new OperationSubscribePath(*this, folder, uri);
-		m_operations.insert(op);
-		return op;
-	}
-	catch(const std::exception& ex)
-	{
-		m_status_bar.add_error_message(
-		Glib::ustring::compose(
-			_("Failed to connect to \"%1\""), uri),
-		ex.what());
-
-		return NULL;
-	}
+	OperationSubscribePath* op =
+		new OperationSubscribePath(*this, folder, uri);
+	m_operations.insert(op);
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationSubscribePath*
@@ -163,7 +155,8 @@ Gobby::Operations::subscribe_path(Folder& folder,
 	OperationSubscribePath* op =
 		new OperationSubscribePath(*this, folder, browser, path);
 	m_operations.insert(op);
-	return op;
+	op->start();
+	return check_operation(op);
 }
 
 Gobby::OperationExportHtml*
@@ -173,6 +166,7 @@ Gobby::Operations::export_html(TextSessionView& view,
 	OperationExportHtml* op =
 		new OperationExportHtml(*this, view, uri);
 	m_operations.insert(op);
+	op->start();
 	return op;
 }
 

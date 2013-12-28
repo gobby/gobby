@@ -48,6 +48,25 @@ protected:
 			on_set_browser(model, iter, browser);
 	}
 
+	static void
+	on_subscribe_chat_finished_static(InfcChatRequest* request,
+	                                  const GError* error,
+	                                  gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_finished(INF_REQUEST(request), NULL, error);
+	}
+
+	static void
+	on_subscribe_node_finished_static(InfNodeRequest* request,
+	                                  const InfBrowserIter* iter,
+	                                  const GError* error,
+	                                  gpointer user_data)
+	{
+		static_cast<BrowserCommands*>(user_data)->
+			on_finished(INF_REQUEST(request), iter, error);
+	}
+
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
 	                    InfBrowser* browser);
 	void on_notify_status(InfBrowser* browser);

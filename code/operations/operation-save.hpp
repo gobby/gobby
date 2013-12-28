@@ -44,6 +44,8 @@ public:
 
 	virtual ~OperationSave();
 
+	virtual void start();
+
 	// Note these can return NULL in case the view has been closed
 	// in the meanwhile.
 	TextSessionView* get_view() { return m_view; }
@@ -60,6 +62,7 @@ protected:
 	void write_next();
 	void error(const Glib::ustring& message);
 protected:
+	const std::string m_uri;
 	TextSessionView* m_view;
 	std::time_t m_start_time;
 

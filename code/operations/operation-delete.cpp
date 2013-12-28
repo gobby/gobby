@@ -23,29 +23,50 @@
 Gobby::OperationDelete::OperationDelete(Operations& operations,
                                         InfBrowser* browser,
                                         const InfBrowserIter* iter):
-	Operation(operations),
-	m_name(inf_browser_get_node_name(browser, iter))
+	Operation(operations), m_browser(browser), m_iter(*iter),
+	m_name(inf_browser_get_node_name(browser, iter)), m_request(NULL)
 {
-	m_request = inf_browser_remove_node(browser, iter);
-
-	// Note infc_browser_remove_node does not return a
-	// new reference.
-	g_object_ref(m_request);
-
-	m_finished_id = g_signal_connect(
-		G_OBJECT(m_request), "finished",
-		G_CALLBACK(on_request_finished_static), this);
-
-	m_message_handle = get_status_bar().add_info_message(
-		Glib::ustring::compose(_("Removing node \"%1\"..."), m_name));
+	g_object_ref(browser);
 }
 
 Gobby::OperationDelete::~OperationDelete()
 {
-	g_signal_handler_disconnect(G_OBJECT(m_request), m_finished_id);
-	g_object_unref(m_request);
+	if(m_request != NULL)
+	{
+		g_signal_handlers_disconnect_by_func(
+			G_OBJECT(m_request),
+			(gpointer)G_CALLBACK(on_request_finished_static),
+			this);
+		g_object_unref(m_request);
 
-	get_status_bar().remove_message(m_message_handle);
+		get_status_bar().remove_message(m_message_handle);
+	}
+
+	g_object_unref(m_browser);
+}
+
+void Gobby::OperationDelete::start()
+{
+	InfNodeRequest* request = inf_browser_remove_node(
+		m_browser,
+		&m_iter,
+		on_request_finished_static,
+		this
+	);
+
+	// Object might be gone at this point, so check stack variable
+	if(request != NULL)
+	{
+		m_request = request;
+
+		// Note infc_browser_remove_node does not return a
+		// new reference.
+		g_object_ref(m_request);
+
+		m_message_handle = get_status_bar().add_info_message(
+			Glib::ustring::compose(
+				_("Removing node \"%1\"..."), m_name));
+	}
 }
 
 void Gobby::OperationDelete::on_request_finished(const InfBrowserIter* iter,
