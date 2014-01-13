@@ -18,6 +18,7 @@
  */
 
 #include "core/certificatemanager.hpp"
+#include "util/file.hpp"
 
 #include <libinfinity/common/inf-cert-util.h>
 
@@ -25,8 +26,8 @@
 
 Gobby::CertificateManager::CertificateManager(const Preferences& preferences):
 	m_preferences(preferences),
-	m_key(NULL), m_certificates(NULL), m_credentials(NULL),
-	m_key_error(NULL), m_certificate_error(NULL),
+	m_dh_params(NULL), m_key(NULL), m_certificates(NULL),
+	m_credentials(NULL), m_key_error(NULL), m_certificate_error(NULL),
 	m_trust_error(NULL)
 {
 	m_preferences.security.key_file.signal_changed().connect(
@@ -48,6 +49,7 @@ Gobby::CertificateManager::CertificateManager(const Preferences& preferences):
 					on_authentication_enabled_changed));
 
 	// TODO: Load these only on request, to improve the startup time
+	load_dh_params();
 	load_key();
 	load_certificate();
 	load_trust();
@@ -65,6 +67,52 @@ Gobby::CertificateManager::~CertificateManager()
 		inf_certificate_chain_unref(m_certificates);
 	if(m_key != NULL)
 		gnutls_x509_privkey_deinit(m_key);
+	if(m_dh_params != NULL)
+		gnutls_dh_params_deinit(m_dh_params);
+}
+
+void Gobby::CertificateManager::set_dh_params(gnutls_dh_params_t dh_params)
+{
+	gnutls_dh_params_t old_dh_params = m_dh_params;
+
+	m_dh_params = dh_params;
+
+	make_credentials();
+
+	// TODO: Note that the credentials do only store a pointer to the
+	// DH params, so we cannot just delete the DH params here, since the
+	// old credentials might still be in use.
+	// For the moment we don't let this happen -- in principle it should
+	// not happen; once we have valid DH params at one point we don't
+	// need to change them again.
+	// For the future maybe it could make sense to store the DH params
+	// in the InfCertificateCredentials struct, so that their lifetime
+	// is coupled.
+	g_assert(old_dh_params == NULL);
+}
+
+void Gobby::CertificateManager::load_dh_params()
+{
+	const std::string filename = config_filename("dh_params.pem");
+
+	GError* error = NULL;
+	gnutls_dh_params_t dh_params =
+		inf_cert_util_read_dh_params(filename.c_str(), &error);
+
+	if(error != NULL)
+	{
+		if(error->domain != G_FILE_ERROR ||
+		   error->code != G_FILE_ERROR_NOENT)
+		{
+			g_warning("Failed to read DH params: %s",
+			          error->message);
+		}
+
+		g_error_free(error);
+	}
+
+	if(dh_params != NULL)
+		set_dh_params(dh_params);
 }
 
 void Gobby::CertificateManager::load_key()
@@ -193,6 +241,9 @@ void Gobby::CertificateManager::make_credentials()
 			m_trust.size()
 		);
 	}
+
+	if(m_dh_params != NULL)
+		gnutls_certificate_set_dh_params(gnutls_creds, m_dh_params);
 
 	gnutls_certificate_set_verify_flags(
 		gnutls_creds, GNUTLS_VERIFY_ALLOW_X509_V1_CA_CRT);
