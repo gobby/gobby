@@ -20,22 +20,16 @@
 #ifndef _GOBBY_BROWSER_HPP_
 #define _GOBBY_BROWSER_HPP_
 
+#include "core/connectionmanager.hpp"
 #include "core/statusbar.hpp"
-#include "core/preferences.hpp"
-#include "core/certificatemanager.hpp"
-#include "util/resolv.hpp"
 #include "util/historyentry.hpp"
 
-#include <libinfgtk/inf-gtk-io.h>
 #include <libinfgtk/inf-gtk-browser-store.h>
 #include <libinfgtk/inf-gtk-browser-view.h>
 #include <libinfgtk/inf-gtk-certificate-manager.h>
-#include <libinfinity/client/infc-browser.h>
-#include <libinfinity/common/inf-discovery-avahi.h>
-#include <libinfinity/common/inf-xmpp-manager.h>
-#include <libinfinity/inf-config.h>
 #include <libinfgtk/inf-gtk-browser-model.h>
 #include <libinfgtk/inf-gtk-browser-model-sort.h>
+#include <libinfinity/client/infc-browser.h>
 
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
@@ -59,8 +53,7 @@ public:
 
 	Browser(Gtk::Window& parent,
 	        StatusBar& status_bar,
-	        const CertificateManager& cert_manager,
-	        const Preferences& preferences);
+	        ConnectionManager& connection_manager);
 	~Browser();
 
 	InfGtkBrowserModelSort* get_store() { return m_sort_model; }
@@ -76,9 +69,6 @@ public:
 	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,
 	                            unsigned int device_index,
 	                            const std::string& hostname);
-
-	void set_sasl_context(InfSaslContext* sasl_context,
-	                      const char* mechanisms);
 
 	SignalActivate signal_activate() const { return m_signal_activate; }
 	SignalConnect signal_connect() const { return m_signal_connect; }
@@ -108,21 +98,10 @@ protected:
 	void on_activate(GtkTreeIter* iter);
 	void on_hostname_activate();
 
-	void on_security_policy_changed();
-	void on_credentials_changed();
-
 	Gtk::Window& m_parent;
 	StatusBar& m_status_bar;
-	const CertificateManager& m_cert_manager;
-	const Preferences& m_preferences;
+	ConnectionManager& m_connection_manager;
 
-	InfSaslContext* m_sasl_context;
-	std::string m_sasl_mechanisms;
-	InfXmppManager* m_xmpp_manager;
-#ifdef LIBINFINITY_HAVE_AVAHI
-	InfDiscoveryAvahi* m_discovery;
-#endif
-	InfGtkIo* m_io;
 	InfGtkCertificateManager* m_cert_checker;
 	InfGtkBrowserStore* m_browser_store;
 	InfGtkBrowserView* m_browser_view;

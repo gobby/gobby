@@ -157,7 +157,7 @@ protected:
 	Preferences& m_preferences;
 	CertificateManager& m_cert_manager;
 	const IconManager& m_icon_manager;
-
+	ConnectionManager m_connection_manager;
 #ifdef WITH_UNIQUE
 	UniqueApp* m_app;
 #endif

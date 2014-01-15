@@ -60,9 +60,11 @@ namespace
 Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
                                   Browser& browser,
                                   StatusBar& statusbar,
+                                  ConnectionManager& connection_manager,
                                   const Preferences& preferences):
 	m_parent(parent),
 	m_browser(browser),
+	m_connection_manager(connection_manager),
 	m_statusbar(statusbar),
 	m_preferences(preferences)
 {
@@ -81,7 +83,9 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
 	inf_sasl_context_set_callback(
 		m_sasl_context, &AuthCommands::sasl_callback_static, this);
 
-	m_browser.set_sasl_context(m_sasl_context, "ANONYMOUS PLAIN");
+	// Set SASL context for new connections:
+	m_connection_manager.set_sasl_context(m_sasl_context,
+	                                      "ANONYMOUS PLAIN");
 
 	g_signal_connect(
 		G_OBJECT(m_browser.get_store()),
@@ -92,7 +96,7 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
 
 Gobby::AuthCommands::~AuthCommands()
 {
-	m_browser.set_sasl_context(NULL, NULL);
+	m_connection_manager.set_sasl_context(NULL, NULL);
 	inf_sasl_context_unref(m_sasl_context);
 
 	for(RetryMap::iterator iter = m_retries.begin();

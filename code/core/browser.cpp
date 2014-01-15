@@ -25,8 +25,6 @@
 #include "util/uri.hpp"
 #include "util/i18n.hpp"
 
-#include <libinfinity/inf-config.h>
-
 #include <atkmm/relationset.h>
 
 #include <gtkmm/stock.h>
@@ -105,13 +103,11 @@ gint compare_func(GtkTreeModel* model, GtkTreeIter* first,
 
 Gobby::Browser::Browser(Gtk::Window& parent,
                         StatusBar& status_bar,
-                        const CertificateManager& cert_manager,
-                        const Preferences& preferences):
+                        ConnectionManager& connection_manager):
 	m_parent(parent),
 	m_status_bar(status_bar),
-	m_cert_manager(cert_manager),
-	m_preferences(preferences),
-	m_sasl_context(NULL),
+	m_connection_manager(connection_manager),
+
 	m_expander(_("_Direct Connection"), true),
 	m_hbox(false, 6),
 	m_label_hostname(_("Host Name:")),
@@ -130,35 +126,27 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_expander.show();
 	m_expander.property_expanded().signal_changed().connect(
 		sigc::mem_fun(*this, &Browser::on_expanded_changed));
-	
-	m_io = inf_gtk_io_new();
-	InfCommunicationManager* communication_manager =
-		inf_communication_manager_new();
 
-	m_browser_store = inf_gtk_browser_store_new(INF_IO(m_io),
-	                                            communication_manager);
-	g_object_unref(communication_manager);
+	m_browser_store = inf_gtk_browser_store_new(
+		connection_manager.get_io(),
+		connection_manager.get_communication_manager());
 	
 	m_sort_model = inf_gtk_browser_model_sort_new(
 		INF_GTK_BROWSER_MODEL(m_browser_store));
 	gtk_tree_sortable_set_default_sort_func(
 		GTK_TREE_SORTABLE(m_sort_model), compare_func, NULL, NULL);
 
-	m_xmpp_manager = inf_xmpp_manager_new();
-#ifdef LIBINFINITY_HAVE_AVAHI
-	m_discovery = inf_discovery_avahi_new(
-		INF_IO(m_io), m_xmpp_manager,
-		m_cert_manager.get_credentials(), NULL, NULL);
-	inf_discovery_avahi_set_security_policy(
-		m_discovery, m_preferences.security.policy);
-	inf_gtk_browser_store_add_discovery(m_browser_store,
-	                                    INF_DISCOVERY(m_discovery));
-#endif
+	if(m_connection_manager.get_discovery() != NULL)
+	{
+		inf_gtk_browser_store_add_discovery(
+			m_browser_store,
+			m_connection_manager.get_discovery());
+	}
 
 	Glib::ustring known_hosts_file = config_filename("known_hosts");
 
 	m_cert_checker = inf_gtk_certificate_manager_new(
-		parent.gobj(), m_xmpp_manager,
+		parent.gobj(), m_connection_manager.get_xmpp_manager(),
 		known_hosts_file.c_str());
 
 	m_browser_view =
@@ -187,11 +175,6 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 		this
 	);
 
-	m_preferences.security.policy.signal_changed().connect(
-		sigc::mem_fun(*this, &Browser::on_security_policy_changed));
-	m_cert_manager.signal_credentials_changed().connect(
-		sigc::mem_fun(*this, &Browser::on_credentials_changed));
-
 	set_spacing(6);
 	pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
 	pack_start(m_expander, Gtk::PACK_SHRINK);
@@ -203,17 +186,9 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 
 Gobby::Browser::~Browser()
 {
-	if(m_sasl_context)
-		inf_sasl_context_unref(m_sasl_context);
-
 	g_object_unref(m_browser_store);
 	g_object_unref(m_sort_model);
 	g_object_unref(m_cert_checker);
-	g_object_unref(m_xmpp_manager);
-#ifdef LIBINFINITY_HAVE_AVAHI
-	g_object_unref(m_discovery);
-#endif
-	g_object_unref(m_io);
 }
 
 void Gobby::Browser::init_accessibility()
@@ -291,92 +266,20 @@ InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
                                             const std::string& hostname)
 {
 	// Check whether we do have such a connection already:
-	InfXmppConnection* xmpp =
-		inf_xmpp_manager_lookup_connection_by_address(
-			m_xmpp_manager, address, port);
+	InfXmppConnection* xmpp = m_connection_manager.make_connection(
+		address, port, device_index, hostname);
 
-	if(!xmpp)
-	{
-		InfTcpConnection* connection = inf_tcp_connection_new(
-			INF_IO(m_io),
-			address,
-			port);
-
-		g_object_set(G_OBJECT(connection),
-			"device-index", device_index,
-			NULL);
-
-		GError* error = NULL;
-		if(!inf_tcp_connection_open(connection, &error))
-		{
-			std::string message = error->message;
-			g_error_free(error);
-			throw std::runtime_error(message);
-		}
-		else
-		{
-			xmpp = inf_xmpp_connection_new(
-				connection, INF_XMPP_CONNECTION_CLIENT,
-				NULL, hostname.c_str(),
-				m_preferences.security.policy,
-				m_cert_manager.get_credentials(),
-				m_sasl_context,
-				m_sasl_mechanisms.empty()
-					? ""
-					: m_sasl_mechanisms.c_str());
-
-			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
-			g_object_unref(xmpp);
-		}
-
-		g_object_unref(connection);
-	}
-	else
-	{
-		InfXmlConnectionStatus status;
-		g_object_get(G_OBJECT(xmpp), "status", &status, NULL);
-		if(status == INF_XML_CONNECTION_CLOSED)
-		{
-			GError* error = NULL;
-			inf_xml_connection_open(INF_XML_CONNECTION(xmpp),
-			                        &error);
-			if(error != NULL)
-			{
-				std::string message = error->message;
-				g_error_free(error);
-				throw std::runtime_error(message);
-			}
-		}
-	}
-
-	// TODO: Check whether there is already an item with this
-	// connection in the browser. If yes, don't add, but highlight for
-	// feedback.
+	// Should have thrown otherwise:
+	g_assert(xmpp != NULL);
 
 	// TODO: Remove erroneous entry with same name, if any, before
 	// adding.
 
-	g_assert(xmpp != NULL);
-
-	return inf_gtk_browser_store_add_connection(
+	InfBrowser* browser = inf_gtk_browser_store_add_connection(
 		m_browser_store, INF_XML_CONNECTION(xmpp),
 		hostname.c_str());
-}
 
-void Gobby::Browser::set_sasl_context(InfSaslContext* sasl_context,
-                                      const char* mechanisms)
-{
-	if(m_sasl_context) inf_sasl_context_unref(m_sasl_context);
-	m_sasl_context = sasl_context;
-	if(m_sasl_context) inf_sasl_context_ref(m_sasl_context);
-	m_sasl_mechanisms = mechanisms ? mechanisms : "";
-
-#ifdef LIBINFINITY_HAVE_AVAHI
-	g_object_set(G_OBJECT(m_discovery),
-		"sasl-context", m_sasl_context,
-		"sasl-mechanisms", mechanisms,
-		NULL);
-#endif
+	return browser;
 }
 
 void Gobby::Browser::on_expanded_changed()
@@ -431,25 +334,4 @@ void Gobby::Browser::on_hostname_activate()
 	m_entry_hostname.get_entry()->set_text("");
 
 	m_signal_connect.emit(str);
-}
-
-void Gobby::Browser::on_security_policy_changed()
-{
-#ifdef LIBINFINITY_HAVE_AVAHI
-	inf_discovery_avahi_set_security_policy(
-		m_discovery, m_preferences.security.policy);
-#endif
-}
-
-void Gobby::Browser::on_credentials_changed()
-{
-	// Keep existing connections with current credentials
-
-#ifdef LIBINFINITY_HAVE_AVAHI
-	g_object_set(
-		G_OBJECT(m_discovery),
-		"credentials",
-		m_cert_manager.get_credentials(),
-		NULL);
-#endif
 }

@@ -22,6 +22,7 @@
 
 #include "operations/operations.hpp"
 #include "core/browser.hpp"
+#include "util/resolv.hpp"
 
 namespace Gobby
 {

@@ -38,6 +38,7 @@ public:
 	AuthCommands(Gtk::Window& parent,
 	             Browser& browser,
 	             StatusBar& statusbar,
+	             ConnectionManager& connection_manager,
 	             const Preferences& preferences);
 
 	~AuthCommands();
@@ -113,6 +114,7 @@ protected:
 	Gtk::Window& m_parent;
 	Browser& m_browser;
 	StatusBar& m_statusbar;
+	ConnectionManager& m_connection_manager;
 	const Preferences& m_preferences;
 	InfSaslContext* m_sasl_context;
 
