@@ -30,6 +30,8 @@
 
 #include <gtksourceview/gtksourcestyleschememanager.h>
 
+#include <gnutls/x509.h>
+
 namespace
 {
 	using namespace Gobby;
@@ -785,24 +787,37 @@ void Gobby::PreferencesDialog::Appearance::on_scheme_changed(Preferences& prefer
 	preferences.appearance.scheme_id = gtk_source_style_scheme_get_id(scheme);
 }
 
-Gobby::PreferencesDialog::Security::Security(Preferences& preferences,
-                                             const CertificateManager& cm):
-	m_cert_manager(cm),
+Gobby::PreferencesDialog::Security::Security(Gtk::Window& parent,
+                                             FileChooser& file_chooser,
+                                             Preferences& preferences,
+                                             CertificateManager& cert_manager):
+	m_preferences(preferences), m_parent(parent), m_file_chooser(file_chooser),
+	m_cert_manager(cert_manager),
 	m_group_trust_file(_("Trusted CAs")),
 	m_group_connection_policy(_("Secure Connection")),
 	m_group_authentication(_("Authentication")),
 	m_btn_path_trust_file(_("Select a file containing trusted CAs")),
+	m_conn_path_trust_file(m_btn_path_trust_file,
+	                       preferences.security.trust_file),
 	m_error_trust_file("", GtkCompat::ALIGN_LEFT),
 	m_cmb_connection_policy(preferences.security.policy),
 	m_btn_auth_none(_("None")),
-	m_btn_auth_cert(_("Show a certificate to connecting clients")),
+	m_btn_auth_cert(_("Use a certificate")),
 	m_lbl_key_file(_("Private key:"), GtkCompat::ALIGN_LEFT),
+	m_btn_key_file(_("Select a private key file")),
+	m_conn_path_key_file(m_btn_key_file, preferences.security.key_file),
+	m_btn_key_file_create(_("Create New...")),
 	m_box_key_file(false, 6),
 	m_error_key_file("", GtkCompat::ALIGN_LEFT),
 	m_lbl_cert_file(_("Certificate:"), GtkCompat::ALIGN_LEFT),
+	m_btn_cert_file(_("Select a certificate file")),
+	m_conn_path_cert_file(m_btn_cert_file,
+	                      preferences.security.certificate_file),
+	m_btn_cert_file_create(_("Create New...")),
 	m_box_cert_file(false, 6),
 	m_error_cert_file("", GtkCompat::ALIGN_LEFT),
-	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
+	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL)),
+	m_key_generator_handle(NULL), m_cert_generator_handle(NULL)
 {
 	m_cert_manager.signal_credentials_changed().connect(
 		sigc::mem_fun(*this, &Security::on_credentials_changed));
@@ -814,8 +829,6 @@ Gobby::PreferencesDialog::Security::Security(Preferences& preferences,
 	if(!trust_file.empty())
 		m_btn_path_trust_file.set_filename(trust_file);
 
-	connect_path_option(m_btn_path_trust_file,
-	                    preferences.security.trust_file);
 	m_btn_path_trust_file.show();
 	m_group_trust_file.add(m_btn_path_trust_file);
 	m_group_trust_file.add(m_error_trust_file);
@@ -850,13 +863,20 @@ Gobby::PreferencesDialog::Security::Security(Preferences& preferences,
 	m_btn_key_file.set_width_chars(20);
 	const std::string& key_file = preferences.security.key_file;
 	if(!key_file.empty())
+	{
+		m_conn_path_key_file.block();
 		m_btn_key_file.set_filename(key_file);
+		m_conn_path_key_file.unblock();
+	}
 	m_btn_key_file.show();
-	connect_path_option(m_btn_key_file,
-	                    preferences.security.key_file);
+
+	m_btn_key_file_create.signal_clicked().connect(
+		sigc::mem_fun(*this, &Security::on_create_key_clicked));
+	m_btn_key_file_create.show();
 
 	m_box_key_file.pack_start(m_lbl_key_file, Gtk::PACK_SHRINK);
 	m_box_key_file.pack_start(m_btn_key_file, Gtk::PACK_SHRINK);
+	m_box_key_file.pack_start(m_btn_key_file_create, Gtk::PACK_SHRINK);
 	m_box_key_file.set_sensitive(
 		preferences.security.authentication_enabled);
 	m_box_key_file.show();
@@ -865,13 +885,20 @@ Gobby::PreferencesDialog::Security::Security(Preferences& preferences,
 	m_btn_cert_file.set_width_chars(20);
 	const std::string& cert_file = preferences.security.certificate_file;
 	if(!cert_file.empty())
+	{
+		m_conn_path_cert_file.block();
 		m_btn_cert_file.set_filename(cert_file);
+		m_conn_path_cert_file.unblock();
+	}
 	m_btn_cert_file.show();
-	connect_path_option(m_btn_cert_file,
-	                    preferences.security.certificate_file);
+
+	m_btn_cert_file_create.signal_clicked().connect(
+		sigc::mem_fun(*this, &Security::on_create_cert_clicked));
+	m_btn_cert_file_create.show();
 
 	m_box_cert_file.pack_start(m_lbl_cert_file, Gtk::PACK_SHRINK);
 	m_box_cert_file.pack_start(m_btn_cert_file, Gtk::PACK_SHRINK);
+	m_box_cert_file.pack_start(m_btn_cert_file_create, Gtk::PACK_SHRINK);
 	m_box_cert_file.set_sensitive(
 		preferences.security.authentication_enabled);
 	m_box_cert_file.show();
@@ -917,10 +944,35 @@ void Gobby::PreferencesDialog::Security::on_credentials_changed()
 {
 	set_file_error(m_error_trust_file,
 	               m_cert_manager.get_trust_error());
-	set_file_error(m_error_key_file,
-	               m_cert_manager.get_key_error());
-	set_file_error(m_error_cert_file,
-	               m_cert_manager.get_certificate_error());
+
+	if(m_key_generator_handle.get() == NULL)
+	{
+		set_file_error(m_error_key_file,
+		               m_cert_manager.get_key_error());
+	}
+	else
+	{
+		m_error_key_file.set_text(
+			_("2048-bit RSA private key is being "
+			  "generated, please wait..."));
+		m_error_key_file.show();
+	}
+
+	if(m_cert_generator_handle.get() == NULL)
+		set_file_error(m_error_cert_file,
+		               m_cert_manager.get_certificate_error());
+
+	const bool operation_in_progress =
+		m_key_generator_handle.get() != NULL ||
+		m_cert_generator_handle.get() != NULL;
+
+	m_btn_key_file.set_sensitive(!operation_in_progress);
+	m_btn_key_file_create.set_sensitive(!operation_in_progress);
+	m_btn_cert_file.set_sensitive(!operation_in_progress);
+
+	m_btn_cert_file_create.set_sensitive(
+		!operation_in_progress &&
+		m_cert_manager.get_private_key() != NULL);
 }
 
 void Gobby::PreferencesDialog::Security::on_auth_cert_toggled()
@@ -929,13 +981,134 @@ void Gobby::PreferencesDialog::Security::on_auth_cert_toggled()
 	m_box_cert_file.set_sensitive(m_btn_auth_cert.get_active());
 }
 
+void Gobby::PreferencesDialog::Security::on_create_key_clicked()
+{
+	m_file_dialog.reset(new FileChooser::Dialog(
+		m_file_chooser, m_parent,
+		_("Select a location for the generated key"),
+		Gtk::FILE_CHOOSER_ACTION_SAVE));
+
+	const std::string& key_file = m_preferences.security.key_file;
+	if(!key_file.empty())
+		m_file_dialog->set_filename(key_file);
+
+	m_file_dialog->signal_response().connect(
+		sigc::mem_fun(
+			*this, &Security::on_file_dialog_response_key));
+
+	m_file_dialog->present();
+}
+
+void Gobby::PreferencesDialog::Security::on_create_cert_clicked()
+{
+	m_file_dialog.reset(new FileChooser::Dialog(
+		m_file_chooser, m_parent,
+		_("Select a location for the generated certificate"),
+		Gtk::FILE_CHOOSER_ACTION_SAVE));
+
+	const std::string& certificate_file =
+		m_preferences.security.certificate_file;
+	if(!certificate_file.empty())
+		m_file_dialog->set_filename(certificate_file);
+
+	m_file_dialog->signal_response().connect(
+		sigc::mem_fun(
+			*this,
+			&Security::on_file_dialog_response_certificate));
+
+	m_file_dialog->present();
+}
+
+void Gobby::PreferencesDialog::Security::on_file_dialog_response_key(
+	int response_id)
+{
+	const std::string filename = m_file_dialog->get_filename();
+
+	m_file_dialog.reset(NULL);
+
+	if(response_id == Gtk::RESPONSE_ACCEPT)
+	{
+		m_key_generator_handle = create_key(
+			GNUTLS_PK_RSA,
+			2048,
+			sigc::bind(
+				sigc::mem_fun(
+					*this,
+					&Security::on_key_generated),
+				filename));
+
+		on_credentials_changed();
+	}
+}
+
+void Gobby::PreferencesDialog::Security::on_file_dialog_response_certificate(
+	int response_id)
+{
+	const std::string filename = m_file_dialog->get_filename();
+
+	m_file_dialog.reset(NULL);
+
+	if(response_id == Gtk::RESPONSE_ACCEPT &&
+	   m_cert_manager.get_private_key() != NULL)
+	{
+		m_cert_generator_handle = create_self_signed_certificate(
+			m_cert_manager.get_private_key(),
+			sigc::bind(
+				sigc::mem_fun(
+					*this,
+					&Security::on_cert_generated),
+				filename));
+
+		on_credentials_changed();
+	}
+}
+
+void Gobby::PreferencesDialog::Security::on_key_generated(
+	const KeyGeneratorHandle* handle,
+	gnutls_x509_privkey_t key,
+	const GError* error,
+	const std::string& filename)
+{
+	m_key_generator_handle.reset(NULL);
+
+	m_cert_manager.set_private_key(key, filename.c_str(), error);
+}
+
+void Gobby::PreferencesDialog::Security::on_cert_generated(
+	const CertificateGeneratorHandle* hndl,
+	gnutls_x509_crt_t cert,
+	const GError* error,
+	const std::string& filename)
+{
+	m_cert_generator_handle.reset(NULL);
+
+	if(cert != NULL)
+	{
+		// Note this needs to be allocated with g_malloc, since it
+		// is directly passed and freed by libinfinity
+		gnutls_x509_crt_t* crt_array =
+			static_cast<gnutls_x509_crt_t*>(
+				g_malloc(sizeof(gnutls_x509_crt_t)));
+		crt_array[0] = cert;
+
+		m_cert_manager.set_certificates(
+			crt_array, 1, filename.c_str(), error);
+	}
+	else
+	{
+		m_cert_manager.set_certificates(
+			NULL, 0, filename.c_str(), error);
+	}
+}
+
 Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
+                                            FileChooser& file_chooser,
                                             Preferences& preferences,
-	                                    const CertificateManager& cm):
+	                                    CertificateManager& cert_manager):
 	Gtk::Dialog(_("Preferences"), parent), m_preferences(preferences),
 	m_page_user(*this, preferences), m_page_editor(preferences),
 	m_page_view(preferences), m_page_appearance(preferences),
-	m_page_security(preferences, cm)
+	m_page_security(*this, file_chooser, preferences, cert_manager)
 {
 	m_notebook.append_page(m_page_user, _("User"));
 	m_notebook.append_page(m_page_editor, _("Editor"));

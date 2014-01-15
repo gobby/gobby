@@ -19,6 +19,8 @@
 
 #include "dialogs/initial-dialog.hpp"
 
+#include "core/credentialsgenerator.hpp"
+
 #include "util/color.hpp"
 #include "util/file.hpp"
 #include "util/i18n.hpp"
@@ -50,13 +52,151 @@ namespace
 		alignment->show();
 		return Gtk::manage(alignment);
 	}
+
+	class InitialCertGenerator
+	{
+	public:
+		InitialCertGenerator(Gobby::CertificateManager& cert_manager,
+		                     Gobby::StatusBar& status_bar,
+		                     const std::string& key_filename,
+		                     const std::string& cert_filename):
+			m_cert_manager(cert_manager),
+			m_status_bar(status_bar),
+			m_key_filename(key_filename),
+			m_cert_filename(cert_filename),
+			m_key(NULL),
+			m_status_handle(m_status_bar.invalid_handle())
+		{
+			m_key_handle = Gobby::create_key(
+				GNUTLS_PK_RSA,
+				2048,
+				sigc::mem_fun(
+					*this,
+					&InitialCertGenerator::
+						on_key_generated));
+
+			m_status_handle = m_status_bar.add_info_message(
+				Gobby::_("Generating 2048-bit "
+				         "RSA private key..."));
+		}
+
+		~InitialCertGenerator()
+		{
+			if(m_key != NULL)
+				gnutls_x509_privkey_deinit(m_key);
+			if(m_status_handle != m_status_bar.invalid_handle())
+				m_status_bar.remove_message(m_status_handle);
+		}
+
+	private:
+		void on_key_generated(const Gobby::KeyGeneratorHandle* handle,
+		                      gnutls_x509_privkey_t key,
+		                      const GError* error)
+		{
+			m_key_handle.reset(NULL);
+			m_key = key;
+
+			if(error != NULL)
+			{
+				m_status_bar.add_error_message(
+					Gobby::_("Failed to generate "
+					         "private key"),
+					Glib::ustring::compose(
+						Gobby::_("%1\n\nYou can try "
+						         "again to create a "
+						         "key in the "
+						         "Security tab of "
+						         "the preferences "
+						         "dialog."),
+						error->message));
+
+				m_cert_manager.set_private_key(
+					NULL, m_key_filename.c_str(), error);
+
+				done();
+				return;
+			}
+
+			m_crt_handle = Gobby::create_self_signed_certificate(
+				m_key,
+				sigc::mem_fun(
+					*this,
+					&InitialCertGenerator::
+						on_cert_generated));
+		}
+
+		void on_cert_generated(
+			const Gobby::CertificateGeneratorHandle* hndl,
+			gnutls_x509_crt_t cert,
+			const GError* error)
+		{
+			m_status_bar.remove_message(m_status_handle);
+			m_status_handle = m_status_bar.invalid_handle();
+			m_crt_handle.reset(NULL);
+
+			m_cert_manager.set_private_key(
+				m_key, m_key_filename.c_str(), NULL);
+			m_key = NULL;
+
+			if(error != NULL)
+			{
+				m_status_bar.add_error_message(
+					Gobby::_("Failed to generate "
+					         "self-signed certificate"),
+					Glib::ustring::compose(
+						Gobby::_("%1\n\nYou can try "
+						         "again to create a "
+						         "certificate in the "
+						         "Security tab of "
+						         "the preferences "
+						         "dialog."),
+						error->message));
+			}
+			else
+			{
+				// Note this needs to be allocated with
+				// g_malloc, since it is directly passed and
+				// freed by libinfinity
+				gnutls_x509_crt_t* crt_array =
+					static_cast<gnutls_x509_crt_t*>(
+						g_malloc(sizeof(
+							gnutls_x509_crt_t)));
+				crt_array[0] = cert;
+
+				m_cert_manager.set_certificates(
+					crt_array, 1,
+					m_cert_filename.c_str(), NULL);
+			}
+
+			done();
+		}
+
+		void done()
+		{
+			delete this;
+		}
+
+		Gobby::CertificateManager& m_cert_manager;
+		Gobby::StatusBar& m_status_bar;
+		const std::string m_key_filename;
+		const std::string m_cert_filename;
+
+		gnutls_x509_privkey_t m_key;
+		std::auto_ptr<Gobby::KeyGeneratorHandle> m_key_handle;
+		std::auto_ptr<Gobby::CertificateGeneratorHandle> m_crt_handle;
+		Gobby::StatusBar::MessageHandle m_status_handle;
+	};
 }
 
 Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
+                                    StatusBar& status_bar,
                                     Preferences& preferences,
+                                    CertificateManager& cert_manager,
                                     const IconManager& icon_manager):
 	Gtk::Dialog("Gobby", parent),
+	m_status_bar(status_bar),
 	m_preferences(preferences),
+	m_cert_manager(cert_manager),
 	m_vbox(false, 12),
 	m_color_button(_("Choose a user color"), *this),
 	m_user_table(3, 2),
@@ -128,7 +268,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_remote_allow_connections.show();
 
 	m_remote_require_password.set_label(
-		_("Ask for a password to connect to local documents")); 
+		_("Ask remote users for a password")); 
 	m_remote_require_password.set_active(
 		preferences.user.require_password);
 	m_remote_require_password.show();
@@ -330,12 +470,11 @@ void Gobby::InitialDialog::on_response(int id)
 		!m_remote_auth_none.get_active();
 	if(m_remote_auth_self.get_active())
 	{
-		m_preferences.security.key_file =
-			config_filename("key.pem");
-		m_preferences.security.certificate_file =
-			config_filename("cert.pem");
-
-		// TODO: Start generation of private key and certificate
+		// The certificate generator takes care of its own:
+		new InitialCertGenerator(
+			m_cert_manager, m_status_bar,
+			config_filename("key.pem"),
+			config_filename("cert.pem"));
 	}
 	else
 	{

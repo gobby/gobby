@@ -21,7 +21,9 @@
 #define _GOBBY_PREFERENCESDIALOG_HPP_
 
 #include "core/preferences.hpp"
+#include "core/filechooser.hpp"
 #include "core/certificatemanager.hpp"
+#include "core/credentialsgenerator.hpp"
 #include "core/huebutton.hpp"
 #include "util/groupframe.hpp"
 
@@ -96,6 +98,92 @@ private:
 class PreferencesDialog : public Gtk::Dialog
 {
 public:
+	// An object which keeps two values in sync with each other, using
+	// notification signals of both objects.
+	template<typename Type>
+	class DuplexConnection
+	{
+	public:
+		template<typename Sig1, typename Sig2>
+		DuplexConnection(Sig1 sig1, Sig2 sig2)
+		{
+			m_conn1 = sig1.connect(sigc::mem_fun(*this, &DuplexConnection<Type>::changed1));
+			m_conn2 = sig2.connect(sigc::mem_fun(*this, &DuplexConnection<Type>::changed2));
+		}
+		
+		virtual ~DuplexConnection()
+		{
+			m_conn1.disconnect();
+			m_conn2.disconnect();
+		}
+
+		void block()
+		{
+			m_conn1.block();
+			m_conn2.block();
+		}
+
+		void unblock()
+		{
+			m_conn1.unblock();
+			m_conn2.unblock();
+		}
+	private:
+		void changed1()
+		{
+			m_conn2.block();
+			if(get2() != get1())
+				set2(get1());
+			m_conn2.unblock();
+		}
+
+		void changed2()
+		{
+			m_conn1.block();
+			if(get1() != get2())
+				set1(get2());
+			m_conn1.unblock();
+		}
+
+	protected:
+		virtual Type get1() const = 0;
+		virtual Type get2() const = 0;
+		virtual void set1(const Type& t) = 0;
+		virtual void set2(const Type& t) = 0;
+
+	private:
+		sigc::connection m_conn1;
+		sigc::connection m_conn2;
+	};
+
+	class PathConnection: public DuplexConnection<std::string>
+	{
+	public:
+		PathConnection(Gtk::FileChooser& file_chooser,
+		               Preferences::Option<std::string>& option):
+			DuplexConnection<std::string>(
+				file_chooser.signal_selection_changed(),
+				option.signal_changed()),
+			m_file_chooser(file_chooser),
+			m_option(option)
+		{
+		}
+
+	protected:
+		virtual std::string get1() const
+			{ return m_file_chooser.get_filename(); }
+		virtual std::string get2() const
+			{ return m_option.get(); }
+		virtual void set1(const std::string& val)
+			{ m_file_chooser.set_filename(val); }
+		virtual void set2(const std::string& val)
+			{ m_option.set(val); }
+
+	private:
+		Gtk::FileChooser& m_file_chooser;
+		Preferences::Option<std::string>& m_option;
+	};
+
 	template<typename OptionType>
 	class ComboColumns: public Gtk::TreeModelColumnRecord
 	{
@@ -259,8 +347,10 @@ public:
 	class Security: public Page
 	{
 	public:
-		Security(Preferences& preferences,
-		         const CertificateManager& m_cert_manager);
+		Security(Gtk::Window& parent,
+		         FileChooser& file_chooser,
+		         Preferences& preferences,
+		         CertificateManager& cert_manager);
 	
 	protected:
 		void set_file_error(Gtk::Label& label, const GError* error);
@@ -268,13 +358,32 @@ public:
 		void on_credentials_changed();
 		void on_auth_cert_toggled();
 
-		const CertificateManager& m_cert_manager;
+		void on_create_key_clicked();
+		void on_create_cert_clicked();
+
+		void on_file_dialog_response_key(int response_id);
+		void on_file_dialog_response_certificate(int response_id);
+		
+		void on_key_generated(const KeyGeneratorHandle* handle,
+		                      gnutls_x509_privkey_t key,
+		                      const GError* error,
+		                      const std::string& filename);
+		void on_cert_generated(const CertificateGeneratorHandle* hndl,
+		                       gnutls_x509_crt_t cert,
+		                       const GError* error,
+		                       const std::string& filename);
+
+		Preferences& m_preferences;
+		FileChooser& m_file_chooser;
+		Gtk::Window& m_parent;
+		CertificateManager& m_cert_manager;
 
 		GroupFrame m_group_trust_file;
 		GroupFrame m_group_connection_policy;
 		GroupFrame m_group_authentication;
 
 		Gtk::FileChooserButton m_btn_path_trust_file;
+		PathConnection m_conn_path_trust_file;
 		Gtk::Label m_error_trust_file;
 		PreferencesComboBox<InfXmppConnectionSecurityPolicy>
 			m_cmb_connection_policy;
@@ -283,19 +392,28 @@ public:
 		Gtk::RadioButton m_btn_auth_cert;
 		Gtk::Label m_lbl_key_file;
 		Gtk::FileChooserButton m_btn_key_file;
+		PathConnection m_conn_path_key_file;
+		Gtk::Button m_btn_key_file_create;
 		Gtk::HBox m_box_key_file;
 		Gtk::Label m_error_key_file;
 		Gtk::Label m_lbl_cert_file;
 		Gtk::FileChooserButton m_btn_cert_file;
+		PathConnection m_conn_path_cert_file;
+		Gtk::Button m_btn_cert_file_create;
 		Gtk::HBox m_box_cert_file;
 		Gtk::Label m_error_cert_file;
 
 		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
+
+		std::auto_ptr<KeyGeneratorHandle> m_key_generator_handle;
+		std::auto_ptr<CertificateGeneratorHandle> m_cert_generator_handle;
+		std::auto_ptr<FileChooser::Dialog> m_file_dialog;
 	};
 
 	PreferencesDialog(Gtk::Window& parent,
+	                  FileChooser& file_chooser,
 	                  Preferences& preferences,
-	                  const CertificateManager& cert_manager);
+	                  CertificateManager& cert_manager);
 
 protected:
 	virtual void on_response(int id);

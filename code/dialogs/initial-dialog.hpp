@@ -20,6 +20,8 @@
 #ifndef _GOBBY_INITIALDIALOG_HPP_
 #define _GOBBY_INITIALDIALOG_HPP_
 
+#include "core/certificatemanager.hpp"
+#include "core/statusbar.hpp"
 #include "core/preferences.hpp"
 #include "core/iconmanager.hpp"
 #include "core/huebutton.hpp"
@@ -39,7 +41,9 @@ class InitialDialog : public Gtk::Dialog
 {
 public:
 	InitialDialog(Gtk::Window& parent,
+	              StatusBar& status_bar,
 	              Preferences& preferences,
+	              CertificateManager& cert_manager,
 	              const IconManager& icon_manager);
 
 protected:
@@ -49,7 +53,9 @@ protected:
 	void on_remote_require_password_toggled();
 	void on_remote_auth_external_toggled();
 
+	StatusBar& m_status_bar;
 	Preferences& m_preferences;
+	CertificateManager& m_cert_manager;
 
 	Gtk::VBox m_topbox;
 	Gtk::Label m_title;

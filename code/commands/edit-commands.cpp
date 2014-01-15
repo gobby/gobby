@@ -27,11 +27,13 @@ namespace
 
 Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
                                   Folder& folder, StatusBar& status_bar,
+                                  FileChooser& file_chooser,
                                   Preferences& preferences,
-                                  const CertificateManager& cert_manager):
+                                  CertificateManager& cert_manager):
 	m_parent(parent), m_header(header), m_folder(folder),
-	m_status_bar(status_bar), m_preferences(preferences),
-	m_cert_manager(cert_manager), m_current_view(NULL)
+	m_status_bar(status_bar), m_file_chooser(file_chooser),
+	m_preferences(preferences), m_cert_manager(cert_manager),
+	m_current_view(NULL)
 {
 	m_header.action_edit_undo->signal_activate().connect(
 		sigc::mem_fun(*this, &EditCommands::on_undo));
@@ -477,8 +479,8 @@ void Gobby::EditCommands::on_preferences()
 	if(!m_preferences_dialog.get())
 	{
 		m_preferences_dialog.reset(
-			new PreferencesDialog(m_parent, m_preferences,
-			                      m_cert_manager));
+			new PreferencesDialog(m_parent, m_file_chooser,
+			                      m_preferences, m_cert_manager));
 	}
 
 	m_preferences_dialog->present();

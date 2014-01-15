@@ -72,7 +72,7 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	                m_statusbar, m_file_chooser, m_operations,
 	                m_info_storage, m_preferences),
 	m_edit_commands(*this, m_header, m_text_folder, m_statusbar,
-	                m_preferences, m_cert_manager),
+	                m_file_chooser, m_preferences, m_cert_manager),
 	m_view_commands(m_header, m_text_folder, m_chat_frame, m_chat_folder,
 	                m_preferences),
 	m_help_commands(*this, m_header, m_icon_manager),
@@ -235,8 +235,10 @@ void Gobby::Window::on_show()
 
 	if(!m_config.get_root()["initial"].get_value<bool>("run", false))
 	{
-		m_initial_dlg.reset(new InitialDialog(*this, m_preferences,
-		                                      m_icon_manager));
+		m_initial_dlg.reset(
+			new InitialDialog(
+				*this, m_statusbar, m_preferences,
+				m_cert_manager, m_icon_manager));
 		m_initial_dlg->present();
 		m_initial_dlg->signal_hide().connect(
 			sigc::mem_fun(*this,
