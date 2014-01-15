@@ -76,7 +76,19 @@ void Gobby::CertificateManager::set_dh_params(gnutls_dh_params_t dh_params)
 {
 	gnutls_dh_params_t old_dh_params = m_dh_params;
 
-	// TODO: Attempt to write DH params to disk. 
+	GError* error = NULL;
+	std::string filename = config_filename("dh_params.pem");
+	inf_cert_util_write_dh_params(dh_params, filename.c_str(), &error);
+
+	if(error != NULL)
+	{
+		g_warning(
+			_("Failed to write Diffie-Hellman parameters "
+			  "to \"%s\": %s"),
+			filename.c_str(),
+			error->message);
+		g_error_free(error);
+	}
 
 	m_dh_params = dh_params;
 
