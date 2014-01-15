@@ -6,6 +6,7 @@ libgobby_core_a_SOURCES = \
 	chatsessionview.cpp \
 	chattablabel.cpp \
 	closableframe.cpp \
+	credentialsgenerator.cpp \
 	documentinfostorage.cpp \
 	filechooser.cpp \
 	folder.cpp \
@@ -32,6 +33,7 @@ noinst_HEADERS = \
 	chatsessionview.hpp \
 	chattablabel.hpp \
         closableframe.hpp \
+	credentialsgenerator.hpp \
         documentinfostorage.hpp \
         filechooser.hpp \
         folder.hpp \
