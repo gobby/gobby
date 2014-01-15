@@ -193,7 +193,7 @@ void Gobby::Server::set_credentials(InfXmppConnectionSecurityPolicy policy,
 	{
 		g_object_set(
 			G_OBJECT(m_xmpp6),
-			"security-policy", &policy,
+			"security-policy", policy,
 			"credentials", credentials,
 			NULL);
 	}
@@ -202,7 +202,7 @@ void Gobby::Server::set_credentials(InfXmppConnectionSecurityPolicy policy,
 	{
 		g_object_set(
 			G_OBJECT(m_xmpp4),
-			"security-policy", &policy,
+			"security-policy", policy,
 			"credentials", credentials,
 			NULL);
 	}

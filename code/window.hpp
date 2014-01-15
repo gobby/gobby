@@ -38,6 +38,7 @@
 
 #include "dialogs/initial-dialog.hpp"
 
+#include "core/selfhoster.hpp"
 #include "core/iconmanager.hpp"
 #include "core/header.hpp"
 #include "core/folder.hpp"
@@ -178,6 +179,8 @@ protected:
 	DocumentInfoStorage m_info_storage;
 	FileChooser m_file_chooser;
 	Operations m_operations;
+
+	SelfHoster m_self_hoster;
 
 	BrowserCommands m_browser_commands;
 	BrowserContextCommands m_browser_context_commands;

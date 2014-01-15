@@ -17,6 +17,7 @@ libgobby_core_a_SOURCES = \
 	nodewatch.cpp \
 	noteplugin.cpp \
 	preferences.cpp \
+	selfhoster.cpp \
 	server.cpp \
 	sessionuserview.cpp \
 	sessionview.cpp \
@@ -46,6 +47,7 @@ noinst_HEADERS = \
         nodewatch.hpp \
         noteplugin.hpp \
         preferences.hpp \
+	selfhoster.hpp \
 	server.hpp \
 	sessionuserview.hpp \
 	sessionview.hpp \

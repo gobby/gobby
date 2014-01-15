@@ -319,7 +319,8 @@ void Gobby::StatusBar::on_document_changed(SessionView* view)
 			G_CALLBACK(on_changed_static), this);
 
 		m_toverwrite_handler = g_signal_connect_after(
-			G_OBJECT(GTK_TEXT_VIEW(m_current_view->get_text_view())), "notify::overwrite",
+			G_OBJECT(m_current_view->get_text_view()),
+			"notify::overwrite",
 			G_CALLBACK(on_toggled_overwrite_static), this);
 	}
 
