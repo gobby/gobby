@@ -19,22 +19,23 @@
 
 #include "core/certificatemanager.hpp"
 #include "util/file.hpp"
+#include "util/i18n.hpp"
 
 #include <libinfinity/common/inf-cert-util.h>
 
 #include <gnutls/x509.h>
 
-Gobby::CertificateManager::CertificateManager(const Preferences& preferences):
+Gobby::CertificateManager::CertificateManager(Preferences& preferences):
 	m_preferences(preferences),
 	m_dh_params(NULL), m_key(NULL), m_certificates(NULL),
 	m_credentials(NULL), m_key_error(NULL), m_certificate_error(NULL),
 	m_trust_error(NULL)
 {
-	m_preferences.security.key_file.signal_changed().connect(
-		sigc::mem_fun(
+	m_conn_key_file = m_preferences.security.key_file.
+		signal_changed().connect(sigc::mem_fun(
 			*this, &CertificateManager::on_key_file_changed));
-	m_preferences.security.certificate_file.signal_changed().connect(
-		sigc::mem_fun(
+	m_conn_certificate_file = m_preferences.security.certificate_file.
+		signal_changed().connect(sigc::mem_fun(
 			*this,
 			 &CertificateManager::on_certificate_file_changed));
 	m_preferences.security.trust_file.signal_changed().connect(
@@ -75,6 +76,8 @@ void Gobby::CertificateManager::set_dh_params(gnutls_dh_params_t dh_params)
 {
 	gnutls_dh_params_t old_dh_params = m_dh_params;
 
+	// TODO: Attempt to write DH params to disk. 
+
 	m_dh_params = dh_params;
 
 	make_credentials();
@@ -91,6 +94,163 @@ void Gobby::CertificateManager::set_dh_params(gnutls_dh_params_t dh_params)
 	g_assert(old_dh_params == NULL);
 }
 
+void Gobby::CertificateManager::set_private_key(gnutls_x509_privkey_t key,
+                                                const GError* error)
+{
+	g_assert(key == NULL || error == NULL);
+
+	gnutls_x509_privkey_t old_key = m_key;
+	InfCertificateChain* old_certificates = m_certificates;
+
+	if(old_certificates != NULL)
+		inf_certificate_chain_ref(old_certificates);
+
+	m_key = key;
+	if(m_key_error != NULL)
+		g_error_free(m_key_error);
+	if(error != NULL)
+		m_key_error = g_error_copy(error);
+	else
+		m_key_error = NULL;
+
+	// Attempt to re-load the certificate if there was an error -- maybe
+	// the new key fixes the problem. This makes sure that if the new key
+	// is compatible to the certificate, the certificate is loaded.
+
+	// TODO: It would be nicer to still keep the certificate in memory
+	// when it does not match the key, so we don't need to re-load it.
+	// Basically we just need to be able to handle the case when both
+	// cert_error and certificate itself are non-NULL.
+	if(m_certificate_error != NULL)
+	{
+		load_certificate();
+	}
+	else
+	{
+		check_certificate_signature();
+		make_credentials();
+	}
+
+	// Note that this relies on the fact that
+	// gnutls_certificate_set_x509_key makes a copy of the key
+	// and certificate
+	if(old_certificates != NULL)
+		inf_certificate_chain_unref(old_certificates);
+	if(old_key != NULL) gnutls_x509_privkey_deinit(old_key);
+}
+
+void Gobby::CertificateManager::set_private_key(gnutls_x509_privkey_t key,
+                                                const char* filename,
+                                                const GError* error)
+{
+	if(error != NULL)
+	{
+		g_assert(key == NULL);
+
+		set_private_key(NULL, error);
+	}
+	else
+	{
+		GError* local_error = NULL;
+		if(filename != NULL)
+		{
+			m_conn_key_file.block();
+			m_preferences.security.key_file = filename;
+			m_conn_key_file.unblock();
+
+			if(key != NULL)
+			{
+				inf_cert_util_write_private_key(
+					key, filename, &local_error);
+			}
+		}
+
+		if(local_error != NULL)
+		{
+			set_private_key(NULL, local_error);
+			if(key != NULL) gnutls_x509_privkey_deinit(key);
+			g_error_free(local_error);
+		}
+		else
+		{
+			set_private_key(key, NULL);
+		}
+	}
+}
+
+void Gobby::CertificateManager::set_certificates(gnutls_x509_crt_t* certs,
+                                                 guint n_certs,
+                                                 const GError* error)
+{
+	g_assert(n_certs == 0 || error == NULL);
+
+	InfCertificateChain* old_certificates = m_certificates;
+	m_certificates = NULL;
+
+	if(n_certs > 0)
+		m_certificates = inf_certificate_chain_new(certs, n_certs);
+	else
+		m_certificates = NULL;
+
+	if(m_certificate_error != NULL)
+		g_error_free(m_certificate_error);
+
+	if(error != NULL)
+		m_certificate_error = g_error_copy(error);
+	else
+		m_certificate_error = NULL;
+
+	check_certificate_signature();
+	make_credentials();
+
+	// Note that this relies on the fact that
+	// gnutls_certificate_set_x509_key makes a copy of the certificates
+	if(old_certificates != NULL)
+		inf_certificate_chain_unref(old_certificates);
+}
+
+void Gobby::CertificateManager::set_certificates(gnutls_x509_crt_t* certs,
+                                                 guint n_certs,
+                                                 const char* filename,
+                                                 const GError* error)
+{
+	if(error != NULL)
+	{
+		g_assert(n_certs == 0);
+
+		set_certificates(NULL, 0, error);
+	}
+	else
+	{
+		GError* local_error = NULL;
+		if(filename != NULL)
+		{
+			m_conn_certificate_file.block();
+			m_preferences.security.certificate_file = filename;
+			m_conn_certificate_file.unblock();
+
+			if(n_certs > 0)
+			{
+				inf_cert_util_write_certificate(
+					certs, n_certs, filename,
+					&local_error);
+			}
+		}
+
+		if(local_error != NULL)
+		{
+			set_certificates(NULL, 0, local_error);
+			for(guint i = 0; i < n_certs; ++i)
+				gnutls_x509_crt_deinit(certs[i]);
+			g_error_free(local_error);
+		}
+		else
+		{
+			set_certificates(certs, n_certs, NULL);
+		}
+	}
+}
+
 void Gobby::CertificateManager::load_dh_params()
 {
 	const std::string filename = config_filename("dh_params.pem");
@@ -104,7 +264,8 @@ void Gobby::CertificateManager::load_dh_params()
 		if(error->domain != G_FILE_ERROR ||
 		   error->code != G_FILE_ERROR_NOENT)
 		{
-			g_warning("Failed to read DH params: %s",
+			g_warning(_("Failed to read Diffie-Hellman "
+			            "parameters: %s"),
 			          error->message);
 		}
 
@@ -117,68 +278,75 @@ void Gobby::CertificateManager::load_dh_params()
 
 void Gobby::CertificateManager::load_key()
 {
-	gnutls_x509_privkey_t old_key = m_key;
-
-	GError* error = NULL;
 	const std::string& filename = m_preferences.security.key_file;
 
 	if(!filename.empty())
 	{
-		m_key = inf_cert_util_read_private_key(
+		GError* error = NULL;
+		gnutls_x509_privkey_t key = inf_cert_util_read_private_key(
 			filename.c_str(), &error);
+
+		set_private_key(key, error);
+		if(error != NULL)
+			g_error_free(error);
 	}
 	else
 	{
-		m_key = NULL;
+		set_private_key(NULL, NULL);
 	}
-
-	if(m_key_error != NULL)
-		g_error_free(m_key_error);
-	m_key_error = error;
-
-	make_credentials();
-
-	// Note that this relies on the fact that
-	// gnutls_certificate_set_x509_key makes a copy of the key
-	if(old_key != NULL) gnutls_x509_privkey_deinit(old_key);
 }
 
 void Gobby::CertificateManager::load_certificate()
 {
-	InfCertificateChain* old_certificates = m_certificates;
-
-	GError* error = NULL;
 	const std::string& filename = m_preferences.security.certificate_file;
 
 	if(!filename.empty())
 	{
+		GError* error = NULL;
 		GPtrArray* array = inf_cert_util_read_certificate(
 			filename.c_str(), NULL, &error);
 		if(array != NULL)
 		{
+			g_assert(error == NULL);
 			guint n_certs = array->len;
 			gnutls_x509_crt_t* certs =
 				reinterpret_cast<gnutls_x509_crt_t*>(
 					g_ptr_array_free(array, FALSE));
-			m_certificates =
-				inf_certificate_chain_new(certs, n_certs);
+
+			if(n_certs > 0)
+			{
+				set_certificates(certs, n_certs, NULL);
+			}
+			else
+			{
+				g_set_error(
+					&error,
+					g_quark_from_static_string(
+						"GOBBY_CERTIFICATE_MANAGER_"
+						"ERROR"),
+					1,
+					"%s",
+					_("File does not contain a "
+					  "X.509 certificate")
+				);
+				
+				set_certificates(NULL, 0, error);
+
+				g_error_free(error);
+				g_free(certs);
+			}
+		}
+		else
+		{
+			g_assert(error != NULL);
+			set_certificates(NULL, 0, error);
+			g_error_free(error);
 		}
 	}
 	else
 	{
-		m_certificates = NULL;
+		set_certificates(NULL, 0, NULL);
 	}
-
-	if(m_certificate_error != NULL)
-		g_error_free(m_certificate_error);
-	m_certificate_error = error;
-
-	make_credentials();
-
-	// Note that this relies on the fact that
-	// gnutls_certificate_set_x509_key makes a copy of the certificates
-	if(old_certificates != NULL)
-		inf_certificate_chain_unref(old_certificates);
 }
 
 void Gobby::CertificateManager::load_trust()
@@ -214,6 +382,29 @@ void Gobby::CertificateManager::load_trust()
 	// gnutls_certificate_set_x509_trust makes a copy of the certificates
 	for(unsigned int i = 0; i < old_trust.size(); ++i)
 		gnutls_x509_crt_deinit(old_trust[i]);
+}
+
+void Gobby::CertificateManager::check_certificate_signature()
+{
+	if(!m_key || !m_certificates) return;
+	g_assert(m_key_error == NULL && m_certificate_error == NULL);
+
+	gnutls_x509_crt_t crt =
+		inf_certificate_chain_get_own_certificate(m_certificates);
+	if(!inf_cert_util_check_certificate_signature(crt, m_key))
+	{
+		inf_certificate_chain_unref(m_certificates);
+		m_certificates = NULL;
+
+		g_set_error(
+			&m_certificate_error,
+			g_quark_from_static_string(
+				"GOBBY_CERTIFICATE_MANAGER_ERROR"),
+			0,
+			"%s",
+			_("Certificate is not signed by chosen key")
+		);
+	}
 }
 
 void Gobby::CertificateManager::make_credentials()
@@ -260,19 +451,19 @@ void Gobby::CertificateManager::make_credentials()
 void Gobby::CertificateManager::on_key_file_changed()
 {
 	load_key();
-	make_credentials();
+	//make_credentials();
 }
 
 void Gobby::CertificateManager::on_certificate_file_changed()
 {
 	load_certificate();
-	make_credentials();
+	//make_credentials();
 }
 
 void Gobby::CertificateManager::on_trust_file_changed()
 {
 	load_trust();
-	make_credentials();
+	//make_credentials();
 }
 
 void Gobby::CertificateManager::on_authentication_enabled_changed()

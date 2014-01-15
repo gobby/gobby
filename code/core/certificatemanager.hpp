@@ -27,7 +27,7 @@ namespace Gobby
 	class CertificateManager
 	{
 	public:
-		CertificateManager(const Preferences& preferences);
+		CertificateManager(Preferences& preferences);
 		~CertificateManager();
 
 		gnutls_dh_params_t get_dh_params() const
@@ -38,6 +38,20 @@ namespace Gobby
 			{ return m_certificates; }
 
 		void set_dh_params(gnutls_dh_params_t dh_params);
+
+		void set_private_key(gnutls_x509_privkey_t key,
+		                     const GError* error);
+		void set_private_key(gnutls_x509_privkey_t key,
+		                     const char* filename,
+		                     const GError* error);
+
+		void set_certificates(gnutls_x509_crt_t* certs,
+		                      guint n_certs,
+		                      const GError* error);
+		void set_certificates(gnutls_x509_crt_t* certs,
+		                      guint n_certs,
+		                      const char* filename,
+		                      const GError* error);
 
 		unsigned int get_n_trusted_cas() const
 			{ return m_trust.size(); }
@@ -63,7 +77,10 @@ namespace Gobby
 			return m_signal_credentials_changed;
 		}
 	protected:
-		const Preferences& m_preferences;
+		Preferences& m_preferences;
+
+		sigc::connection m_conn_key_file;
+		sigc::connection m_conn_certificate_file;
 
 		gnutls_dh_params_t m_dh_params;
 		gnutls_x509_privkey_t m_key;
@@ -82,6 +99,8 @@ namespace Gobby
 		void load_key();
 		void load_certificate();
 		void load_trust();
+
+		void check_certificate_signature();
 		void make_credentials();
 
 		void on_key_file_changed();
