@@ -79,7 +79,7 @@ protected:
 	static void on_set_browser_static(InfGtkBrowserModel* model,
 	                                  GtkTreePath* path,
 	                                  GtkTreeIter* iter,
-	                                  InfcBrowser* browser,
+	                                  InfBrowser* browser,
 	                                  gpointer user_data)
 	{
 		static_cast<Browser*>(user_data)->on_set_browser(
@@ -94,7 +94,7 @@ protected:
 	}
 
 	void on_expanded_changed();
-	void on_set_browser(GtkTreeIter* iter, InfcBrowser* browser);
+	void on_set_browser(GtkTreeIter* iter, InfBrowser* browser);
 	void on_activate(GtkTreeIter* iter);
 	void on_hostname_activate();
 
