@@ -18,38 +18,50 @@
  */
 
 #include "core/selfhoster.hpp"
-#include "util/file.hpp"
 #include "util/i18n.hpp"
 
-#include <libinfinity/common/inf-cert-util.h>
-#include <libinfinity/common/inf-error.h>
-
-#include <gnutls/x509.h>
-
-#include <cassert>
+#include <libinfinity/server/infd-filesystem-storage.h>
 
 Gobby::SelfHoster::SelfHoster(InfIo* io,
+                              InfCommunicationManager* communication_manager,
                               InfLocalPublisher* publisher,
+                              InfSaslContext* sasl_context,
                               StatusBar& status_bar,
                               CertificateManager& cert_manager,
                               const Preferences& preferences):
+	m_sasl_context(sasl_context),
 	m_status_bar(status_bar),
 	m_cert_manager(cert_manager),
 	m_preferences(preferences),
 	m_dh_params_loaded(false),
 	m_info_handle(status_bar.invalid_handle()),
 	m_dh_params_message_handle(status_bar.invalid_handle()),
-	m_server(io, publisher),
-	m_directory(NULL)
+	m_directory(infd_directory_new(io, NULL, communication_manager)),
+	m_server(io, publisher)
 {
-	// TODO: Create a directory, and server pool,
-	// set server pool for m_server
+	inf_sasl_context_ref(m_sasl_context);
+
+	if(m_preferences.user.keep_local_documents)
+	{
+		const std::string directory =
+			m_preferences.user.host_directory;
+		InfdFilesystemStorage* storage =
+			infd_filesystem_storage_new(directory.c_str());
+		g_object_set(G_OBJECT(m_directory), "storage", storage, NULL);
+		g_object_unref(storage);
+	}
+
+	InfdServerPool* pool = infd_server_pool_new(m_directory);
+	m_server.set_pool(pool);
+	g_object_unref(pool);
+
+	m_preferences.user.require_password.signal_changed().connect(
+		sigc::mem_fun(
+			*this, &SelfHoster::on_require_password_changed));
+	/*m_preferences.user.password.signal_changed().connect(
+		sigc::mem_fun(*this, &SelfHoster::on_password));*/
 
 	m_preferences.user.allow_remote_access.signal_changed().connect(
-		sigc::mem_fun(*this, &SelfHoster::apply_preferences));
-	m_preferences.user.require_password.signal_changed().connect(
-		sigc::mem_fun(*this, &SelfHoster::apply_preferences));
-	m_preferences.user.password.signal_changed().connect(
 		sigc::mem_fun(*this, &SelfHoster::apply_preferences));
 	m_preferences.user.port.signal_changed().connect(
 		sigc::mem_fun(*this, &SelfHoster::apply_preferences));
@@ -70,6 +82,7 @@ Gobby::SelfHoster::SelfHoster(InfIo* io,
 Gobby::SelfHoster::~SelfHoster()
 {
 	g_object_unref(m_directory);
+	inf_sasl_context_unref(m_sasl_context);
 }
 
 bool Gobby::SelfHoster::ensure_dh_params()
@@ -89,7 +102,7 @@ bool Gobby::SelfHoster::ensure_dh_params()
 	// Otherwise go and create a new set of parameters
 	if(m_dh_params_handle.get() == NULL)
 	{
-		m_info_handle = m_status_bar.add_info_message(
+		m_dh_params_message_handle = m_status_bar.add_info_message(
 			_("Generating 2048-bit Diffie-Hellman "
 			  "parameters..."));
 
@@ -132,25 +145,117 @@ void Gobby::SelfHoster::on_dh_params_done(const DHParamsGeneratorHandle* hndl,
 	}
 }
 
+void Gobby::SelfHoster::directory_foreach_func_close_static(
+	InfXmlConnection* connection,
+	gpointer user_data)
+{
+	inf_xml_connection_close(connection);
+}
+
+void Gobby::SelfHoster::directory_foreach_func_set_sasl_context_static(
+	InfXmlConnection* connection,
+	gpointer user_data)
+{
+	g_assert(INF_IS_XMPP_CONNECTION(connection));
+
+	SelfHoster* hoster = static_cast<SelfHoster*>(user_data);
+
+	inf_xmpp_connection_reset_sasl_authentication(
+		INF_XMPP_CONNECTION(connection),
+		hoster->m_sasl_context, hoster->get_sasl_mechanisms());
+}
+
+const char* Gobby::SelfHoster::get_sasl_mechanisms() const
+{
+	if(m_preferences.user.require_password)
+		return "PLAIN";
+	else
+		return "ANONYMOUS";
+}
+
+void Gobby::SelfHoster::on_require_password_changed()
+{
+	// Update SASL context and mechanisms for new connections:
+	m_server.set_sasl_context(m_sasl_context, get_sasl_mechanisms());
+
+	// Also update the SASL context for all existing connections. This is
+	// important, so that the new password requirement setting also
+	// affects already connected but not yet authorized clients.
+	infd_directory_foreach_connection(
+		m_directory, directory_foreach_func_set_sasl_context_static,
+		this);
+}
+
 void Gobby::SelfHoster::apply_preferences()
 {
+	// Update directory storage
+	if(m_preferences.user.keep_local_documents)
+	{
+		InfdStorage* storage =
+			infd_directory_get_storage(m_directory);
+		g_assert(storage == NULL ||
+		         INFD_IS_FILESYSTEM_STORAGE(storage));
+		InfdFilesystemStorage* fs_storage =
+			INFD_FILESYSTEM_STORAGE(storage);
+
+		const std::string new_directory =
+			m_preferences.user.host_directory;
+
+		bool set_new_storage = true;
+		if(fs_storage != NULL)
+		{
+			gchar* root_directory;
+			g_object_get(
+				G_OBJECT(fs_storage),
+				"root-directory", &root_directory, NULL);
+
+			if(strcmp(root_directory, new_directory.c_str()) == 0)
+				set_new_storage = false;
+
+			g_free(root_directory);
+		}
+
+		if(set_new_storage)
+		{
+			fs_storage = infd_filesystem_storage_new(
+				new_directory.c_str());
+			g_object_set(
+				G_OBJECT(m_directory),
+				"storage", fs_storage, NULL);
+			g_object_unref(fs_storage);
+		}
+	}
+	else
+	{
+		if(infd_directory_get_storage(m_directory) != NULL)
+		{
+			g_object_set(
+				G_OBJECT(m_directory), "storage", NULL, NULL);
+		}
+	}
+
+	// Remove old statusbar message, if any
 	if(m_info_handle != m_status_bar.invalid_handle())
 	{
 		m_status_bar.remove_message(m_info_handle);
 		m_info_handle = m_status_bar.invalid_handle();
 	}
 
+	// Close server and all connections if no access is required
 	if(!m_preferences.user.allow_remote_access)
 	{
-		// TODO: Disconnect all connections from InfdDirectory
-		m_server.close();
-
+		infd_directory_foreach_connection(
+			m_directory, directory_foreach_func_close_static,
+			this);
+		if(m_server.is_open())
+			m_server.close();
 		return;
 	}
 
-	if(!ensure_dh_params()) return;
+	// Okay, we want to share our documents, so let's try to start a
+	// server for it.
 
-	// Make sure TLS credentials are available
+	// Make sure TLS credentials are available.
 	if(m_preferences.security.policy !=
 	   INF_XMPP_CONNECTION_SECURITY_ONLY_UNSECURED &&
 	   (m_cert_manager.get_private_key() == NULL ||
@@ -160,13 +265,20 @@ void Gobby::SelfHoster::apply_preferences()
 			_("In order to start sharing your documents, "
 			  "choose a private key and certificate or "
 			  "create a new pair in the preferences"));
+		return;
 	}
 
+	// Make sure we have DH parameters
+	if(!ensure_dh_params()) return;
+
+	// Okay, go and open a server. If the server is already open the
+	// command below will only change the port and/or security policy.
 	try
 	{
 		m_server.open(m_preferences.user.port,
 		              m_preferences.security.policy,
-		              m_cert_manager.get_credentials());
+		              m_cert_manager.get_credentials(),
+		              m_sasl_context, get_sasl_mechanisms());
 	}
 	catch(const std::exception& ex)
 	{
@@ -174,26 +286,5 @@ void Gobby::SelfHoster::apply_preferences()
 		                               ex.what());
 
 		return;
-	}
-
-	if(m_preferences.user.require_password)
-	{
-		// TODO: Change m_sasl_context, if necessary
-	}
-	else
-	{
-		// TODO: Change m_sasl_context, if necessary
-	}
-
-	// If m_sasl_context changed, apply it to the
-	// server and all connections
-
-	if(m_preferences.user.keep_local_documents)
-	{
-		// TODO: Set storage, and set path in storage if it changed
-	}
-	else
-	{
-		// TODO: Unset storage
 	}
 }

@@ -37,7 +37,9 @@ public:
 	// Can throw; can be used on already open servers:
 	void open(unsigned int port,
 	          InfXmppConnectionSecurityPolicy security_policy,
-	          InfCertificateCredentials* creds);
+	          InfCertificateCredentials* creds,
+	          InfSaslContext* sasl_context,
+	          const char* sasl_mechanisms);
 
 	void close();
 
@@ -48,6 +50,10 @@ public:
 	// Use new credentials on running server, for new connections:
 	void set_credentials(InfXmppConnectionSecurityPolicy security_policy,
 	                     InfCertificateCredentials* credentials);
+
+	// Set SASL context, for new connections.
+	void set_sasl_context(InfSaslContext* sasl_context,
+	                      const char* m_sasl_mechanisms);
 
 	// Set a server pool to which to add the servers, and which to
 	// use for publishing with the publisher.

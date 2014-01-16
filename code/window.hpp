@@ -180,12 +180,21 @@ protected:
 	FileChooser m_file_chooser;
 	Operations m_operations;
 
-	SelfHoster m_self_hoster;
-
 	BrowserCommands m_browser_commands;
 	BrowserContextCommands m_browser_context_commands;
 
+	// TODO: This setup is a bit awkward. We need the auth commands to
+	// provide a SASL context to the self hoster.
+	// A better solution would be to have a new class, say AuthManager,
+	// which creates the SASL context, and the auth manager is passed to
+	// both connection manager and self hoster. The new class would not
+	// do any UI, but it would do password checking from remote. For the
+	// UI it would provide a hook which allows m_auth_commands to hook in.
+	// This would also get rid of the ugly
+	// connection_manager.set_sasl_context() call, since the connection
+	// manager would then set the SASL context by itself.
 	AuthCommands m_auth_commands;
+	SelfHoster m_self_hoster;
 
 	AutosaveCommands m_autosave_commands;
 	SubscriptionCommands m_subscription_commands;

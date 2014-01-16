@@ -143,7 +143,8 @@ void Gobby::ConnectionManager::set_sasl_context(InfSaslContext* sasl_context,
 	m_sasl_mechanisms = mechanisms ? mechanisms : "";
 
 	// TODO: Should we also change the SASL context
-	// for existing connections?
+	// for existing connections? Doesn't really matter because
+	// SASL context does not change for client side...
 
 #ifdef LIBINFINITY_HAVE_AVAHI
 	g_object_set(G_OBJECT(m_discovery),

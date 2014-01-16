@@ -37,19 +37,33 @@ namespace Gobby
 class SelfHoster: public sigc::trackable
 {
 public:
-	SelfHoster(InfIo* io, InfLocalPublisher* publisher,
+	SelfHoster(InfIo* io, InfCommunicationManager* communication_manager,
+	           InfLocalPublisher* publisher,
+	           InfSaslContext* sasl_context,
 	           StatusBar& status_bar,
 	           CertificateManager& cert_manager,
 	           const Preferences& preferences);
 	~SelfHoster();
 
 protected:
+	static void directory_foreach_func_close_static(
+		InfXmlConnection* connection,
+		gpointer user_data);
+	static void directory_foreach_func_set_sasl_context_static(
+		InfXmlConnection* connection,
+		gpointer user_data);
+
+	const char* get_sasl_mechanisms() const;
+
 	bool ensure_dh_params();
 	void on_dh_params_done(const DHParamsGeneratorHandle* handle,
 	                       gnutls_dh_params_t dh_params,
 	                       const GError* error);
 
+	void on_require_password_changed();
 	void apply_preferences();
+
+	InfSaslContext* m_sasl_context;
 
 	StatusBar& m_status_bar;
 	CertificateManager& m_cert_manager;
@@ -60,8 +74,8 @@ protected:
 	StatusBar::MessageHandle m_info_handle;
 	StatusBar::MessageHandle m_dh_params_message_handle;
 
-	Server m_server;
 	InfdDirectory* m_directory;
+	Server m_server;
 
 	std::auto_ptr<DHParamsGeneratorHandle> m_dh_params_handle;
 };

@@ -106,11 +106,27 @@ Gobby::AuthCommands::~AuthCommands()
 	}
 }
 
+void Gobby::AuthCommands::set_sasl_error(InfXmppConnection* connection,
+                                         const gchar* message)
+{
+	GError* error = g_error_new_literal(
+		inf_authentication_detail_error_quark(),
+		INF_AUTHENTICATION_DETAIL_ERROR_AUTHENTICATION_FAILED,
+		message
+	);
+
+	inf_xmpp_connection_set_sasl_error(connection, error);
+	g_error_free(error);
+}
+
 void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
                                         InfXmppConnection* xmpp,
                                         Gsasl_property prop)
 {
-	Glib::ustring username = m_preferences.user.name;
+	const Glib::ustring username = m_preferences.user.name;
+	const std::string correct_password = m_preferences.user.password;
+	const char* password;
+
 	switch(prop)
 	{
 	case GSASL_ANONYMOUS_TOKEN:
@@ -169,6 +185,40 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 
 				info.password_dialog->present();
 			}
+		}
+
+		break;
+	case GSASL_VALIDATE_ANONYMOUS:
+		if(m_preferences.user.require_password)
+		{
+			inf_sasl_context_session_continue(
+				session,
+				GSASL_AUTHENTICATION_ERROR
+			);
+
+			set_sasl_error(xmpp, _("Password required"));
+		}
+		else
+		{
+			inf_sasl_context_session_continue(session, GSASL_OK);
+		}
+
+		break;
+	case GSASL_VALIDATE_SIMPLE:
+		password = inf_sasl_context_session_get_property(
+			session, GSASL_PASSWORD);
+		if(strcmp(password, correct_password.c_str()) != 0)
+		{
+			inf_sasl_context_session_continue(
+				session,
+				GSASL_AUTHENTICATION_ERROR
+			);
+
+			set_sasl_error(xmpp, _("Incorrect password"));
+		}
+		else
+		{
+			inf_sasl_context_session_continue(session, GSASL_OK);
 		}
 
 		break;

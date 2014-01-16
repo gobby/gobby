@@ -43,6 +43,7 @@ public:
 
 	~AuthCommands();
 
+	InfSaslContext* get_sasl_context() { return m_sasl_context; }
 protected:
 	static void sasl_callback_static(InfSaslContextSession* session,
 	                                 Gsasl_property prop,
@@ -82,6 +83,9 @@ protected:
 
 		auth->browser_error_callback(browser, error);
 	}
+
+	void set_sasl_error(InfXmppConnection* connection,
+	                    const gchar* message);
 
 	void sasl_callback(InfSaslContextSession* session,
 	                   InfXmppConnection* xmpp,

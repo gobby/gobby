@@ -46,15 +46,21 @@ Gobby::Server::~Server()
 
 void Gobby::Server::open(unsigned int port,
                          InfXmppConnectionSecurityPolicy security_policy,
-                         InfCertificateCredentials* creds)
+                         InfCertificateCredentials* creds,
+                         InfSaslContext* context,
+                         const char* sasl_mechanisms)
 {
 	// If we can open one of tcp4 or tcp6 that's a success.
 	InfdTcpServer* tcp4;
 	InfdTcpServer* tcp6;
 
+	// If the server is already open and we do not need to change the
+	// port, then just change the credentials and SASL context without
+	// doing anything else.
 	if(is_open() && get_port() == port)
 	{
 		set_credentials(security_policy, creds);
+		set_sasl_context(context, sasl_mechanisms);
 		return;
 	}
 
@@ -111,14 +117,16 @@ void Gobby::Server::open(unsigned int port,
 	if(tcp4)
 	{
 		m_xmpp4 = infd_xmpp_server_new(
-			tcp4, security_policy, creds, NULL, NULL);
+			tcp4, security_policy, creds,
+			context, sasl_mechanisms);
 		g_object_unref(tcp4);
 	}
 
 	if(tcp6)
 	{
 		m_xmpp6 = infd_xmpp_server_new(
-			tcp6, security_policy, creds, NULL, NULL);
+			tcp6, security_policy, creds,
+			context, sasl_mechanisms);
 		g_object_unref(tcp6);
 	}
 
@@ -184,6 +192,28 @@ unsigned int Gobby::Server::get_port() const
 	g_object_unref(tcp);
 
 	return port;
+}
+
+void Gobby::Server::set_sasl_context(InfSaslContext* context,
+                                     const char* sasl_mechanisms)
+{
+	if(m_xmpp6 != NULL)
+	{
+		g_object_set(
+			G_OBJECT(m_xmpp6),
+			"sasl-context", context,
+			"sasl-mechanisms", sasl_mechanisms,
+			NULL);
+	}
+
+	if(m_xmpp4 != NULL)
+	{
+		g_object_set(
+			G_OBJECT(m_xmpp4),
+			"sasl-context", context,
+			"sasl-mechanisms", sasl_mechanisms,
+			NULL);
+	}
 }
 
 void Gobby::Server::set_credentials(InfXmppConnectionSecurityPolicy policy,
