@@ -82,7 +82,8 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
                                                       Folder& folder,
                                                       const std::string& uri):
 	Operation(operations), m_folder(folder), m_browser(NULL),
-	m_target(uri), m_request(NULL), m_notify_status_id(0)
+	m_target(uri), m_request(NULL), m_notify_status_id(0),
+	m_message_handle(get_status_bar().invalid_handle())
 {
 }
 
@@ -91,7 +92,8 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
                                                       InfBrowser* inf_browser,
                                                       const std::string& p):
 	Operation(operations), m_folder(folder), m_browser(inf_browser),
-	m_target(p), m_request(NULL), m_notify_status_id(0)
+	m_target(p), m_request(NULL), m_notify_status_id(0),
+	m_message_handle(get_status_bar().invalid_handle())
 {
 }
 
