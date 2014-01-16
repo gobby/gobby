@@ -35,7 +35,7 @@ void parse_uri(const std::string& uri,
 {
 	// First, parse the scheme. If there is no scheme found, default
 	// to infinote:
-	std::string::size_type scheme_delim = uri.find(':');
+	std::string::size_type scheme_delim = uri.find("://");
 	if(scheme_delim == std::string::npos)
 	{
 		scheme = "infinote";
