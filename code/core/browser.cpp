@@ -282,6 +282,13 @@ InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
 	return browser;
 }
 
+void Gobby::Browser::add_browser(InfBrowser* browser,
+                                 const char* name)
+{
+	inf_gtk_browser_store_add_browser(
+		m_browser_store, browser, name);
+}
+
 void Gobby::Browser::on_expanded_changed()
 {
 	if(m_expander.get_expanded())

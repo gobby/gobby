@@ -69,6 +69,7 @@ public:
 	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,
 	                            unsigned int device_index,
 	                            const std::string& hostname);
+	void add_browser(InfBrowser* browser, const char* name);
 
 	SignalActivate signal_activate() const { return m_signal_activate; }
 	SignalConnect signal_connect() const { return m_signal_connect; }

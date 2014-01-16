@@ -98,6 +98,9 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_chat_frame.signal_hide().connect(
 		sigc::mem_fun(*this, &Window::on_chat_hide), false);
 
+	m_browser.add_browser(INF_BROWSER(m_self_hoster.get_directory()),
+	                      _("This Computer"));
+
 	m_header.show();
 	m_browser.show();
 	m_text_folder.show();

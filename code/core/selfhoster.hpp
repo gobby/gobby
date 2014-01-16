@@ -45,6 +45,7 @@ public:
 	           const Preferences& preferences);
 	~SelfHoster();
 
+	InfdDirectory* get_directory() { return m_directory; }
 protected:
 	static void directory_foreach_func_close_static(
 		InfXmlConnection* connection,
