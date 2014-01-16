@@ -258,7 +258,7 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_btn_local_allow_connections(
 		_("Allow remote users to edit local documents")),
 	m_btn_local_require_password(
-		_("Ask for a password to edit local documents")),
+		_("Require remote users to enter a password")),
 	m_lbl_local_password(_("Password:"), GtkCompat::ALIGN_LEFT),
 	m_box_local_password(false, 6),
 	m_lbl_local_port(_("Port:"), GtkCompat::ALIGN_LEFT),
