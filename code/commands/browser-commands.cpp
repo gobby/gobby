@@ -185,13 +185,9 @@ Gobby::BrowserCommands::~BrowserCommands()
 
 void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
                                             GtkTreeIter* iter,
-                                            InfBrowser* browser)
+                                            InfBrowser* old_browser,
+                                            InfBrowser* new_browser)
 {
-	InfBrowser* old_browser;
-	gtk_tree_model_get(
-		GTK_TREE_MODEL(model), iter,
-		INF_GTK_BROWSER_MODEL_COL_BROWSER, &old_browser, -1);
-
 	if(old_browser != NULL)
 	{
 		// Find by browser in case old_browser has its connection
@@ -202,26 +198,26 @@ void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
 
 		delete iter->second;
 		m_browser_map.erase(iter);
-
-		g_object_unref(old_browser);
 	}
 
-	if(browser != NULL)
+	if(new_browser != NULL)
 	{
-		g_assert(m_browser_map.find(browser) == m_browser_map.end());
+		g_assert(m_browser_map.find(new_browser) ==
+		         m_browser_map.end());
 
 		InfBrowserStatus browser_status;
 		g_object_get(
-			G_OBJECT(browser), "status",
+			G_OBJECT(new_browser), "status",
 			&browser_status, NULL);
 
-		m_browser_map[browser] = new BrowserInfo(*this, browser);
+		m_browser_map[new_browser] =
+			new BrowserInfo(*this, new_browser);
 		if(browser_status == INF_BROWSER_OPEN)
 		{
-			if(INFC_IS_BROWSER(browser))
+			if(INFC_IS_BROWSER(new_browser))
 			{
 				InfcBrowser* infcbrowser =
-					INFC_BROWSER(browser);
+					INFC_BROWSER(new_browser);
 				InfcSessionProxy* proxy =
 					infc_browser_get_chat_session(
 						infcbrowser);

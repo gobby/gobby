@@ -62,11 +62,12 @@ protected:
 	static void on_set_browser_static(InfGtkBrowserModel* model,
 	                                  GtkTreePath* path,
 	                                  GtkTreeIter* iter,
-	                                  InfBrowser* browser,
+	                                  InfBrowser* old_browser,
+	                                  InfBrowser* new_browser,
 	                                  gpointer user_data)
 	{
 		static_cast<SubscriptionCommands*>(user_data)->on_set_browser(
-			model, iter, browser);
+			model, iter, old_browser, new_browser);
 	}
 
 	static void on_subscribe_session_static(InfBrowser* browser,
@@ -88,7 +89,7 @@ protected:
 	}
 
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
-	                    InfBrowser* browser);
+	                    InfBrowser* old_browser, InfBrowser* new_browser);
 
 	void on_subscribe_session(InfBrowser* browser,
 	                          const InfBrowserIter* iter,

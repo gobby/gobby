@@ -80,11 +80,12 @@ protected:
 	static void on_set_browser_static(InfGtkBrowserModel* model,
 	                                  GtkTreePath* path,
 	                                  GtkTreeIter* iter,
-	                                  InfBrowser* browser,
+	                                  InfBrowser* old_browser,
+	                                  InfBrowser* new_browser,
 	                                  gpointer user_data)
 	{
 		static_cast<Browser*>(user_data)->on_set_browser(
-			iter, browser);
+			iter, old_browser, new_browser);
 	}
 
 	static void on_activate_static(InfGtkBrowserView* view,
@@ -95,7 +96,8 @@ protected:
 	}
 
 	void on_expanded_changed();
-	void on_set_browser(GtkTreeIter* iter, InfBrowser* browser);
+	void on_set_browser(GtkTreeIter* iter, InfBrowser* old_browser,
+	                    InfBrowser* new_browser);
 	void on_activate(GtkTreeIter* iter);
 	void on_hostname_activate();
 

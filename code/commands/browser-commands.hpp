@@ -41,11 +41,12 @@ protected:
 	on_set_browser_static(InfGtkBrowserModel* model,
 	                      GtkTreePath* path,
 	                      GtkTreeIter* iter,
-	                      InfBrowser* browser,
+	                      InfBrowser* old_browser,
+	                      InfBrowser* new_browser,
 	                      gpointer user_data)
 	{
 		static_cast<BrowserCommands*>(user_data)->
-			on_set_browser(model, iter, browser);
+			on_set_browser(model, iter, old_browser, new_browser);
 	}
 
 	static void
@@ -68,7 +69,7 @@ protected:
 	}
 
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
-	                    InfBrowser* browser);
+	                    InfBrowser* old_browser, InfBrowser* new_browser);
 	void on_notify_status(InfBrowser* browser);
 
 	void subscribe_chat(InfcBrowser* browser);

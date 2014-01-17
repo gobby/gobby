@@ -274,37 +274,29 @@ void Gobby::DocumentInfoStorage::set_info(const std::string& key,
 }
 
 void Gobby::DocumentInfoStorage::on_set_browser(GtkTreeIter* iter,
-                                                InfBrowser* browser)
+                                                InfBrowser* old_browser,
+                                                InfBrowser* new_browser)
 {
-	if(browser != NULL)
+	if(old_browser != NULL)
 	{
-		g_assert(m_browsers.find(browser) == m_browsers.end());
-		m_browsers[browser] = new BrowserConn(*this, browser);
+		BrowserMap::iterator iter =
+			m_browsers.find(old_browser);
+		g_assert(iter != m_browsers.end());
+
+		delete iter->second;
+		m_browsers.erase(iter);
+	}
+
+	if(new_browser != NULL)
+	{
+		g_assert(m_browsers.find(new_browser) == m_browsers.end());
+		m_browsers[new_browser] = new BrowserConn(*this, new_browser);
 
 		// TODO: Remove all infos that refer to no longer existing
 		// documents in all explored directories in browser. Also
 		// add all existing explore requests, to check
 		// subdirectories when the explore finishes (see
 		// on_begin_request_explore_node).
-	}
-	else
-	{
-		InfBrowser* old_browser;
-		gtk_tree_model_get(GTK_TREE_MODEL(m_model), iter,
-		                   INF_GTK_BROWSER_MODEL_COL_BROWSER,
-				   &old_browser,
-				   -1);
-
-		if(old_browser)
-		{
-			BrowserMap::iterator iter =
-				m_browsers.find(old_browser);
-			g_assert(iter != m_browsers.end());
-
-			delete iter->second;
-			m_browsers.erase(iter);
-			g_object_unref(old_browser);
-		}
 	}
 }
 

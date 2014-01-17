@@ -64,11 +64,12 @@ protected:
 	static void on_set_browser_static(InfGtkBrowserModel* model,
 	                                  GtkTreePath* path,
 	                                  GtkTreeIter* iter,
-	                                  InfBrowser* browser,
+	                                  InfBrowser* old_browser,
+	                                  InfBrowser* new_browser,
 	                                  gpointer user_data)
 	{
 		static_cast<DocumentInfoStorage*>(user_data)->
-			on_set_browser(iter, browser);
+			on_set_browser(iter, old_browser, new_browser);
 	}
 
 	static void on_begin_request_explore_node_static(InfBrowser* browser,
@@ -88,7 +89,8 @@ protected:
 			on_node_removed(browser, iter);
 	}
 
-	void on_set_browser(GtkTreeIter* iter, InfBrowser* browser);
+	void on_set_browser(GtkTreeIter* iter, InfBrowser* old_browser,
+	                    InfBrowser* new_browser);
 	void on_begin_request_explore_node(InfBrowser* browser,
 	                                   InfBrowserIter* iter,
 	                                   InfRequest* request);

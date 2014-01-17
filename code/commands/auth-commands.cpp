@@ -258,13 +258,18 @@ void Gobby::AuthCommands::on_response(int response_id,
 	}
 }
 
-void Gobby::AuthCommands::set_browser_callback(InfcBrowser* browser)
+void Gobby::AuthCommands::set_browser_callback(InfBrowser* old_browser,
+                                               InfBrowser* new_browser)
 {
-	g_signal_connect(
-		G_OBJECT(browser),
-		"error",
-		G_CALLBACK(browser_error_callback_static),
-		this);
+	// TODO: Disconnect from the signal on destruction?
+	if(new_browser != NULL && INFC_IS_BROWSER(new_browser))
+	{
+		g_signal_connect(
+			G_OBJECT(new_browser),
+			"error",
+			G_CALLBACK(browser_error_callback_static),
+			this);
+	}
 }
 
 void Gobby::AuthCommands::browser_error_callback(InfcBrowser* browser,

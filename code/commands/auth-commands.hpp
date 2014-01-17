@@ -57,13 +57,14 @@ protected:
 	}
 
 	static void set_browser_callback_static(InfGtkBrowserModel*,
-	                                       GtkTreePath*,
-	                                       GtkTreeIter*,
-	                                       InfcBrowser* browser,
-	                                       gpointer user_data)
+	                                        GtkTreePath*,
+	                                        GtkTreeIter*,
+	                                        InfBrowser* old_browser,
+	                                        InfBrowser* new_browser,
+	                                        gpointer user_data)
 	{
 		AuthCommands* auth = static_cast<AuthCommands*>(user_data);
-		auth->set_browser_callback(browser);
+		auth->set_browser_callback(old_browser, new_browser);
 	}
 
 	static void on_notify_status_static(GObject* connection_obj,
@@ -91,7 +92,8 @@ protected:
 	                   InfXmppConnection* xmpp,
 	                   Gsasl_property prop);
 
-	void set_browser_callback(InfcBrowser* browser);
+	void set_browser_callback(InfBrowser* old_browser,
+	                          InfBrowser* new_browser);
 
 	void browser_error_callback(InfcBrowser* browser, GError* error);
 

@@ -307,14 +307,15 @@ void Gobby::Browser::on_expanded_changed()
 }
 
 void Gobby::Browser::on_set_browser(GtkTreeIter* iter,
-                                    InfBrowser* browser)
+                                    InfBrowser* old_browser,
+                                    InfBrowser* new_browser)
 {
-	if(browser && INFC_IS_BROWSER(browser))
+	if(new_browser && INFC_IS_BROWSER(new_browser))
 	{
 		// TODO: Also add plugins for InfdDirectories here. We
 		// should think about how to recycle the functionality
 		// from infinoted's note plugins.
-		InfcBrowser* infc_browser = INFC_BROWSER(browser);
+		InfcBrowser* infc_browser = INFC_BROWSER(new_browser);
 		infc_browser_add_plugin(infc_browser, Plugins::TEXT);
 		infc_browser_add_plugin(infc_browser, Plugins::CHAT);
 	}

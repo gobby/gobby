@@ -144,26 +144,23 @@ Gobby::SubscriptionCommands::~SubscriptionCommands()
 
 void Gobby::SubscriptionCommands::on_set_browser(InfGtkBrowserModel* model,
                                                  GtkTreeIter* iter,
-                                                 InfBrowser* browser)
+                                                 InfBrowser* old_browser,
+                                                 InfBrowser* new_browser)
 {
-	InfBrowser* old_browser;
-	gtk_tree_model_get(
-		GTK_TREE_MODEL(model), iter,
-		INF_GTK_BROWSER_MODEL_COL_BROWSER, &old_browser, -1);
-
 	if(old_browser != NULL)
 	{
 		BrowserMap::iterator iter = m_browser_map.find(old_browser);
 		g_assert(iter != m_browser_map.end());
 		delete iter->second;
 		m_browser_map.erase(iter);
-		g_object_unref(old_browser);
 	}
 
-	if(browser != NULL)
+	if(new_browser != NULL)
 	{
-		g_assert(m_browser_map.find(browser) == m_browser_map.end());
-		m_browser_map[browser] = new BrowserInfo(*this, browser);
+		g_assert(m_browser_map.find(new_browser) ==
+		         m_browser_map.end());
+		m_browser_map[new_browser] =
+			new BrowserInfo(*this, new_browser);
 	}
 }
 
