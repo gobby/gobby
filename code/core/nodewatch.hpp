@@ -50,20 +50,12 @@ public:
 		return m_signal_node_removed;
 	}
 protected:
-	static void on_connection_notify_status_static(GObject* object,
-	                                               GParamSpec* pspec,
-	                                               gpointer user_data)
+	static void on_notify_status_static(GObject* object,
+	                                    GParamSpec* pspec,
+	                                    gpointer user_data)
 	{
 		static_cast<NodeWatch*>(user_data)->
-			on_connection_notify_status();
-	}
-
-	static void on_browser_notify_connection_static(GObject* object,
-	                                                GParamSpec* pspec,
-	                                                gpointer user_data)
-	{
-		static_cast<NodeWatch*>(user_data)->
-			on_browser_notify_connection();
+			on_notify_status();
 	}
 
 	static void on_node_removed_static(InfBrowser* browser,
@@ -74,8 +66,7 @@ protected:
 			on_node_removed(browser, iter);
 	}
 
-	void on_connection_notify_status();
-	void on_browser_notify_connection();
+	void on_notify_status();
 	void on_node_removed(InfBrowser* browser, InfBrowserIter* iter);
 
 	void reset();
@@ -84,13 +75,10 @@ protected:
 	InfXmlConnection* m_connection;
 	InfBrowserIter m_iter;
 
-	gulong m_connection_notify_status_handler;
-	gulong m_browser_notify_connection_handler;
+	gulong m_notify_status_handler;
 	gulong m_node_removed_handler;
 
 	SignalNodeRemoved m_signal_node_removed;
-private:
-	void set_connection(InfXmlConnection* connection);
 };
 
 }
