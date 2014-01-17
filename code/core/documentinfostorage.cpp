@@ -231,16 +231,26 @@ std::string
 Gobby::DocumentInfoStorage::get_key(InfBrowser* browser,
                                     const InfBrowserIter* iter) const
 {
-	InfXmlConnection* connection =
-		infc_browser_get_connection(INFC_BROWSER(browser));
-	g_assert(connection != NULL);
+	std::string prefix;
+	if(INFC_IS_BROWSER(browser))
+	{
+		InfXmlConnection* connection =
+			infc_browser_get_connection(INFC_BROWSER(browser));
+		g_assert(connection != NULL);
+		gchar* remote_id;
+		g_object_get(
+			G_OBJECT(connection), "remote-id", &remote_id, NULL);
+		prefix = remote_id;
+		g_free(remote_id);
+	}
+	else
+	{
+		prefix = "selfhosted";
+	}
 
 	gchar* path = inf_browser_get_path(browser, iter);
-	gchar* remote_id;
-	g_object_get(G_OBJECT(connection), "remote-id", &remote_id, NULL);
-	std::string result = std::string(remote_id) + "?" + path;
+	std::string result = prefix + "?" + path;
 	g_free(path);
-	g_free(remote_id);
 
 	return result;
 }
@@ -305,7 +315,7 @@ void Gobby::DocumentInfoStorage::
                                 InfBrowserIter* iter,
                                 InfRequest* request)
 {
-	g_assert(INFC_IS_EXPLORE_REQUEST(request));
+	g_assert(INF_IS_EXPLORE_REQUEST(request));
 
 	// TODO: When request has finished, remove all infos that refer to
 	// no longer existing documents in the explored directory.
