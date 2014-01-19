@@ -21,13 +21,15 @@
 #define _GOBBY_NOTEPLUGIN_HPP_
 
 #include <libinfinity/client/infc-note-plugin.h>
+#include <libinfinity/server/infd-note-plugin.h>
 
 namespace Gobby
 {
 	namespace Plugins
 	{
-		extern const InfcNotePlugin* TEXT;
-		extern const InfcNotePlugin* CHAT;
+		extern const InfcNotePlugin* C_TEXT;
+		extern const InfcNotePlugin* C_CHAT;
+		extern const InfdNotePlugin* D_TEXT;
 	}
 }
 

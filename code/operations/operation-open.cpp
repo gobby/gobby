@@ -405,7 +405,7 @@ void Gobby::OperationOpen::read_finish()
 
 	m_request = inf_browser_add_note(
 		m_parent.get_browser(), m_parent.get_browser_iter(),
-		m_name.c_str(), Plugins::TEXT->note_type, NULL,
+		m_name.c_str(), "InfText", NULL,
 		INF_SESSION(session), TRUE,
 		on_request_finished_static, this);
 	g_object_unref(session);

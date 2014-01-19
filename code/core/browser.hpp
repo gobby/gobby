@@ -29,7 +29,7 @@
 #include <libinfgtk/inf-gtk-certificate-manager.h>
 #include <libinfgtk/inf-gtk-browser-model.h>
 #include <libinfgtk/inf-gtk-browser-model-sort.h>
-#include <libinfinity/client/infc-browser.h>
+#include <libinfinity/common/inf-browser.h>
 
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>

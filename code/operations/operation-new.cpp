@@ -61,7 +61,7 @@ void Gobby::OperationNew::start()
 	{
 		m_request = inf_browser_add_note(
 			m_browser, &m_parent, m_name.c_str(),
-			Plugins::TEXT->note_type, NULL, NULL, TRUE,
+			"InfText", NULL, NULL, TRUE,
 			on_request_finished_static, this);
 	}
 

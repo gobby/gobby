@@ -30,6 +30,9 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/image.h>
 
+#include <libinfinity/server/infd-directory.h>
+#include <libinfinity/client/infc-browser.h>
+
 gint compare_func(GtkTreeModel* model, GtkTreeIter* first,
                   GtkTreeIter* second, gpointer user_data)
 {
@@ -310,14 +313,20 @@ void Gobby::Browser::on_set_browser(GtkTreeIter* iter,
                                     InfBrowser* old_browser,
                                     InfBrowser* new_browser)
 {
-	if(new_browser && INFC_IS_BROWSER(new_browser))
+	if(new_browser)
 	{
-		// TODO: Also add plugins for InfdDirectories here. We
-		// should think about how to recycle the functionality
-		// from infinoted's note plugins.
-		InfcBrowser* infc_browser = INFC_BROWSER(new_browser);
-		infc_browser_add_plugin(infc_browser, Plugins::TEXT);
-		infc_browser_add_plugin(infc_browser, Plugins::CHAT);
+		if(INFC_IS_BROWSER(new_browser))
+		{
+			InfcBrowser* browser = INFC_BROWSER(new_browser);
+			infc_browser_add_plugin(browser, Plugins::C_TEXT);
+			infc_browser_add_plugin(browser, Plugins::C_CHAT);
+		}
+		else if(INFD_IS_DIRECTORY(new_browser))
+		{
+			InfdDirectory* directory =
+				INFD_DIRECTORY(new_browser);
+			infd_directory_add_plugin(directory, Plugins::D_TEXT);
+		}
 	}
 }
 
