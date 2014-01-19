@@ -20,6 +20,8 @@
 #include "commands/subscription-commands.hpp"
 #include "util/i18n.hpp"
 
+#include <libinfinity/server/infd-directory.h>
+
 class Gobby::SubscriptionCommands::BrowserInfo
 {
 public:
@@ -170,9 +172,25 @@ void Gobby::SubscriptionCommands::on_subscribe_session(
 	InfSessionProxy* proxy)
 {
 	gchar* hostname;
-	g_object_get(
-		G_OBJECT(infc_browser_get_connection(INFC_BROWSER(browser))),
-		"remote-hostname", &hostname, NULL);
+
+	if(INFC_IS_BROWSER(browser))
+	{
+		InfXmlConnection* connection =
+			infc_browser_get_connection(INFC_BROWSER(browser));
+		g_object_get(
+			G_OBJECT(connection),
+			"remote-hostname", &hostname, NULL);
+	}
+	else if(INFD_IS_DIRECTORY(browser))
+	{
+		hostname = g_strdup(g_get_host_name());
+	}
+	else
+	{
+		g_assert_not_reached();
+		hostname = NULL;
+	}
+
 	InfSession* session;
 	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
 
@@ -201,7 +219,8 @@ void Gobby::SubscriptionCommands::on_subscribe_session(
 		if(iter == NULL)
 		{
 			view = &m_chat_folder.add_chat_session(
-				INF_CHAT_SESSION(session), hostname, "", hostname);
+				INF_CHAT_SESSION(session),
+				hostname, "", hostname);
 		}
 		else
 		{
