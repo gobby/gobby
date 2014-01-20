@@ -169,7 +169,8 @@ void Gobby::SubscriptionCommands::on_set_browser(InfGtkBrowserModel* model,
 void Gobby::SubscriptionCommands::on_subscribe_session(
 	InfBrowser* browser,
 	const InfBrowserIter* iter,
-	InfSessionProxy* proxy)
+	InfSessionProxy* proxy,
+	InfRequest* request)
 {
 	gchar* hostname;
 

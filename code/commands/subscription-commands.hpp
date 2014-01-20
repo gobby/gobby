@@ -73,10 +73,11 @@ protected:
 	static void on_subscribe_session_static(InfBrowser* browser,
 	                                        const InfBrowserIter* iter,
 	                                        InfSessionProxy* proxy,
+	                                        InfRequest* request,
 	                                        gpointer user_data)
 	{
 		static_cast<SubscriptionCommands*>(user_data)->
-			on_subscribe_session(browser, iter, proxy);
+			on_subscribe_session(browser, iter, proxy, request);
 	}
 
 	static void on_unsubscribe_session_static(InfBrowser* browser,
@@ -93,7 +94,8 @@ protected:
 
 	void on_subscribe_session(InfBrowser* browser,
 	                          const InfBrowserIter* iter,
-	                          InfSessionProxy* proxy);
+	                          InfSessionProxy* proxy,
+	                          InfRequest* request);
 	void on_unsubscribe_session(InfBrowser* browser,
 	                            const InfBrowserIter* iter,
 	                            InfSessionProxy* proxy);

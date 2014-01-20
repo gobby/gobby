@@ -83,10 +83,11 @@ protected:
 
 	static void on_node_removed_static(InfBrowser* browser,
 	                                   InfBrowserIter* iter,
+	                                   InfNodeRequest* request,
 	                                   gpointer user_data)
 	{
 		static_cast<DocumentInfoStorage*>(user_data)->
-			on_node_removed(browser, iter);
+			on_node_removed(browser, iter, request);
 	}
 
 	void on_set_browser(GtkTreeIter* iter, InfBrowser* old_browser,
@@ -94,7 +95,8 @@ protected:
 	void on_begin_request_explore_node(InfBrowser* browser,
 	                                   InfBrowserIter* iter,
 	                                   InfRequest* request);
-	void on_node_removed(InfBrowser* browser, InfBrowserIter* iter);
+	void on_node_removed(InfBrowser* browser, InfBrowserIter* iter,
+	                     InfNodeRequest* request);
 
 	typedef std::map<std::string, Info> InfoMap;
 	InfoMap m_infos;

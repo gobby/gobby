@@ -288,9 +288,7 @@ void Gobby::BrowserCommands::on_connect(const Glib::ustring& hostname)
 void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
                                          InfBrowserIter* iter)
 {
-	InfSessionProxy* object = inf_browser_get_session(browser, iter);
-	g_assert(object == NULL || INFC_IS_SESSION_PROXY(object));
-	InfcSessionProxy* proxy = INFC_SESSION_PROXY(object);
+	InfSessionProxy* proxy = inf_browser_get_session(browser, iter);
 
 	if(proxy != NULL)
 	{

@@ -312,8 +312,8 @@ void Gobby::DocumentInfoStorage::on_set_browser(GtkTreeIter* iter,
 
 void Gobby::DocumentInfoStorage::
 	on_begin_request_explore_node(InfBrowser* browser,
-                                InfBrowserIter* iter,
-                                InfRequest* request)
+	                              InfBrowserIter* iter,
+	                              InfRequest* request)
 {
 	g_assert(INF_IS_EXPLORE_REQUEST(request));
 
@@ -322,7 +322,8 @@ void Gobby::DocumentInfoStorage::
 }
 
 void Gobby::DocumentInfoStorage::on_node_removed(InfBrowser* browser,
-                                                 InfBrowserIter* iter)
+                                                 InfBrowserIter* iter,
+                                                 InfNodeRequest* request)
 {
 	// Remove info when the corresponding document is removed.
 	std::string key = get_key(browser, iter);
