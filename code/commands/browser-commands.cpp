@@ -318,8 +318,7 @@ void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
 		}
 		else
 		{
-			// TODO: Needs to be handled
-			g_assert_not_reached();
+			m_folder_manager.add_document(browser, iter, proxy);
 		}
 	}
 	else

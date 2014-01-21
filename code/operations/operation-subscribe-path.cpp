@@ -242,10 +242,18 @@ void Gobby::OperationSubscribePath::explore()
 						session);
 				g_object_unref(session);
 
-				// TODO: Handle the case for view == NULL
-				g_assert(view != NULL);
-				get_folder_manager().switch_to_document(
-					*view);
+				if(view != NULL)
+				{
+					get_folder_manager().
+						switch_to_document(
+							*view);
+				}
+				else
+				{
+					get_folder_manager().add_document(
+						m_browser, &m_path_iter,
+						proxy);
+				}
 
 				finish();
 			}
