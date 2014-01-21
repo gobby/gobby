@@ -34,7 +34,7 @@ namespace Gobby
 class AutosaveCommands: public sigc::trackable
 {
 public:
-	AutosaveCommands(Folder& folder, Operations& operations,
+	AutosaveCommands(const Folder& folder, Operations& operations,
 	                 const DocumentInfoStorage& storage,
 	                 const Preferences& preferences);
 	~AutosaveCommands();
@@ -47,7 +47,7 @@ protected:
 	void on_autosave_enabled_changed();
 	void on_autosave_interval_changed();
 
-	Folder& m_folder;
+	const Folder& m_folder;
 	Operations& m_operations;
 	const DocumentInfoStorage& m_info_storage;
 	const Preferences& m_preferences;

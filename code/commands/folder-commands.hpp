@@ -30,7 +30,7 @@ namespace Gobby
 class FolderCommands: public sigc::trackable
 {
 public:
-	FolderCommands(Folder& folder);
+	FolderCommands(const Folder& folder);
 	~FolderCommands();
 
 protected:
@@ -39,8 +39,7 @@ protected:
 	void on_document_removed(SessionView& view);
 	void on_document_changed(SessionView* view);
 
-	Folder& m_folder;
-
+	const Folder& m_folder;
 	SessionView* m_current_view;
 
 	class DocInfo;

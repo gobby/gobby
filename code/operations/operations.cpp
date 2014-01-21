@@ -34,9 +34,10 @@ Gobby::Operations::Operation::~Operation() {}
 
 Gobby::Operations::Operations(DocumentInfoStorage& info_storage,
                               Browser& browser,
+                              FolderManager& folder_manager,
                               StatusBar& status_bar):
 	m_info_storage(info_storage), m_browser(browser),
-	m_status_bar(status_bar)
+	m_folder_manager(folder_manager), m_status_bar(status_bar)
 {
 }
 
@@ -105,7 +106,6 @@ Gobby::Operations::create_documents(InfBrowser* browser,
 
 Gobby::OperationSave*
 Gobby::Operations::save_document(TextSessionView& view,
-                                 Folder& folder,
                                  const std::string& uri,
                                  const std::string& encoding,
                                  DocumentInfoStorage::EolStyle eol_style)
@@ -116,7 +116,7 @@ Gobby::Operations::save_document(TextSessionView& view,
 	if(prev_op != NULL)
 		fail_operation(prev_op);
 
-	OperationSave* op = new OperationSave(*this, view, folder, uri,
+	OperationSave* op = new OperationSave(*this, view, uri,
 	                                      encoding, eol_style);
 
 	m_operations.insert(op);
@@ -137,23 +137,21 @@ Gobby::Operations::delete_node(InfBrowser* browser,
 }
 
 Gobby::OperationSubscribePath*
-Gobby::Operations::subscribe_path(Folder& folder,
-                                  const std::string& uri)
+Gobby::Operations::subscribe_path(const std::string& uri)
 {
 	OperationSubscribePath* op =
-		new OperationSubscribePath(*this, folder, uri);
+		new OperationSubscribePath(*this, uri);
 	m_operations.insert(op);
 	op->start();
 	return check_operation(op);
 }
 
 Gobby::OperationSubscribePath*
-Gobby::Operations::subscribe_path(Folder& folder,
-                                  InfBrowser* browser,
+Gobby::Operations::subscribe_path(InfBrowser* browser,
                                   const std::string& path)
 {
 	OperationSubscribePath* op =
-		new OperationSubscribePath(*this, folder, browser, path);
+		new OperationSubscribePath(*this, browser, path);
 	m_operations.insert(op);
 	op->start();
 	return check_operation(op);

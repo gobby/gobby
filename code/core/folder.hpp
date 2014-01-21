@@ -63,11 +63,9 @@ public:
 	                                  const Glib::ustring& hostname);
 	void remove_document(SessionView& view);
 
-	SessionView& get_document(unsigned int n);
-
-	SessionView* lookup_document(InfSession* session);
-	SessionView* get_current_document();
-	const SessionView* get_current_document() const;
+	SessionView& get_document(unsigned int n) const;
+	SessionView* lookup_document(InfSession* session) const;
+	SessionView* get_current_document() const;
 	void switch_to_document(SessionView& document);
 
 	SignalDocumentAdded signal_document_added() const

@@ -79,20 +79,18 @@ namespace
 }
 
 Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
-                                                      Folder& folder,
                                                       const std::string& uri):
-	Operation(operations), m_folder(folder), m_browser(NULL),
-	m_target(uri), m_request(NULL), m_notify_status_id(0),
+	Operation(operations), m_browser(NULL), m_target(uri),
+	m_request(NULL), m_notify_status_id(0),
 	m_message_handle(get_status_bar().invalid_handle())
 {
 }
 
 Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
-                                                      Folder& folder,
                                                       InfBrowser* inf_browser,
                                                       const std::string& p):
-	Operation(operations), m_folder(folder), m_browser(inf_browser),
-	m_target(p), m_request(NULL), m_notify_status_id(0),
+	Operation(operations), m_browser(inf_browser), m_target(p),
+	m_request(NULL), m_notify_status_id(0),
 	m_message_handle(get_status_bar().invalid_handle())
 {
 }
@@ -240,11 +238,14 @@ void Gobby::OperationSubscribePath::explore()
 				g_object_get(G_OBJECT(proxy),
 				             "session", &session, NULL);
 				SessionView* view =
-					m_folder.lookup_document(session);
+					get_folder_manager().lookup_document(
+						session);
 				g_object_unref(session);
 
+				// TODO: Handle the case for view == NULL
 				g_assert(view != NULL);
-				m_folder.switch_to_document(*view);
+				get_folder_manager().switch_to_document(
+					*view);
 
 				finish();
 			}
@@ -370,7 +371,7 @@ void Gobby::OperationSubscribePath::make_subscribe_request()
 		g_signal_connect(
 			G_OBJECT(m_request),
 			"finished",
-			G_CALLBACK(on_subscribe_finished_static), // ???
+			G_CALLBACK(on_subscribe_finished_static),
 			this);
 	}
 }
@@ -502,6 +503,14 @@ void Gobby::OperationSubscribePath::on_subscribe_finished(
 			error->message);
 
 		fail();
+	}
+	else
+	{
+		InfSessionProxy* proxy =
+			inf_browser_get_session(m_browser, iter);
+		g_assert(proxy != NULL);
+
+		get_folder_manager().add_document(m_browser, iter, proxy);
 	}
 
 	/* From this point on subscription-commands takes over */

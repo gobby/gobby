@@ -20,105 +20,35 @@
 #ifndef _GOBBY_SUBSCRIPTION_COMMANDS_HPP_
 #define _GOBBY_SUBSCRIPTION_COMMANDS_HPP_
 
-#include "core/browser.hpp"
 #include "core/folder.hpp"
-#include "core/sessionview.hpp"
-#include "core/documentinfostorage.hpp"
-
-#include <libinfinity/client/infc-browser.h>
-#include <libinfinity/client/infc-session-proxy.h>
 
 namespace Gobby
 {
 
+// This class does not do much anymore. All it does is showing an error
+// message when a session loses the connection to its publisher, and resets
+// the active user to NULL.
+// TODO: The name of this class is a bit misleading now.
 class SubscriptionCommands: public sigc::trackable
 {
 public:
-	typedef sigc::signal<void, InfBrowser*, const InfBrowserIter*,
-	                     InfSessionProxy*, Folder&, SessionView&>
-		SignalSubscribeSession;
-	typedef sigc::signal<void, InfSessionProxy*, Folder&, SessionView&>
-		SignalUnsubscribeSession;
-
-	SubscriptionCommands(Browser& browser, Folder& text_folder,
-	                     Folder& chat_folder, DocumentInfoStorage& strg);
+	SubscriptionCommands(const Folder& text_folder,
+	                     const Folder& chat_folder);
 	~SubscriptionCommands();
 
-	// Emitted whenever a session is subscribed to, both for text and
-	// chat sessions. This also provides access to the InfSessionProxy
-	// of the subscription to allow others (especially user-join-commands
-	// to make a user join).
-	SignalSubscribeSession signal_subscribe_session() const
-	{
-		return m_signal_subscribe_session;
-	}
-
-	SignalUnsubscribeSession signal_unsubscribe_session() const
-	{
-		return m_signal_unsubscribe_session;
-	}
-
 protected:
-	static void on_set_browser_static(InfGtkBrowserModel* model,
-	                                  GtkTreePath* path,
-	                                  GtkTreeIter* iter,
-	                                  InfBrowser* old_browser,
-	                                  InfBrowser* new_browser,
-	                                  gpointer user_data)
-	{
-		static_cast<SubscriptionCommands*>(user_data)->on_set_browser(
-			model, iter, old_browser, new_browser);
-	}
-
-	static void on_subscribe_session_static(InfBrowser* browser,
-	                                        const InfBrowserIter* iter,
-	                                        InfSessionProxy* proxy,
-	                                        InfRequest* request,
-	                                        gpointer user_data)
-	{
-		static_cast<SubscriptionCommands*>(user_data)->
-			on_subscribe_session(browser, iter, proxy, request);
-	}
-
-	static void on_unsubscribe_session_static(InfBrowser* browser,
-	                                          const InfBrowserIter* iter,
-	                                          InfSessionProxy* proxy,
-	                                          gpointer user_data)
-	{
-		static_cast<SubscriptionCommands*>(user_data)->
-			on_unsubscribe_session(browser, iter, proxy);
-	}
-
-	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
-	                    InfBrowser* old_browser, InfBrowser* new_browser);
-
-	void on_subscribe_session(InfBrowser* browser,
-	                          const InfBrowserIter* iter,
-	                          InfSessionProxy* proxy,
-	                          InfRequest* request);
-	void on_unsubscribe_session(InfBrowser* browser,
-	                            const InfBrowserIter* iter,
-	                            InfSessionProxy* proxy);
+	void on_text_document_added(SessionView& view);
+	void on_chat_document_added(SessionView& view);
+	void on_document_removed(SessionView& view);
 
 	void on_notify_subscription_group(InfSession* session);
 
-	Browser& m_browser;
-	Folder& m_text_folder;
-	Folder& m_chat_folder;
-	DocumentInfoStorage& m_info_storage;
-
-	gulong m_set_browser_handler;
-
-	class BrowserInfo;
-	typedef std::map<InfBrowser*, BrowserInfo*> BrowserMap;
-	BrowserMap m_browser_map;
+	const Folder& m_text_folder;
+	const Folder& m_chat_folder;
 
 	class SessionInfo;
 	typedef std::map<InfSession*, SessionInfo*> SessionMap;
 	SessionMap m_session_map;
-
-	SignalSubscribeSession m_signal_subscribe_session;
-	SignalUnsubscribeSession m_signal_unsubscribe_session;
 };
 
 }

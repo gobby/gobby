@@ -240,7 +240,7 @@ public:
 	}
 };
 
-Gobby::FolderCommands::FolderCommands(Folder& folder):
+Gobby::FolderCommands::FolderCommands(const Folder& folder):
 	m_folder(folder), m_current_view(NULL)
 {
 	m_folder.signal_document_added().connect(
@@ -256,8 +256,9 @@ Gobby::FolderCommands::FolderCommands(Folder& folder):
 	{
 		// TODO: Convenience API in Folder to retrieve SessionView,
 		// so that we don't need to know about SessionUserView here.
-		SessionUserView* user_view = static_cast<SessionUserView*>(
-			m_folder.get_nth_page(i));
+		const SessionUserView* user_view =
+			static_cast<const SessionUserView*>(
+				m_folder.get_nth_page(i));
 		SessionView& view = user_view->get_session_view();
 
 		on_document_added(view);

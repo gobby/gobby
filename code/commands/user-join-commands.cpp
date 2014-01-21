@@ -182,6 +182,16 @@ Gobby::UserJoinCommands::UserJoinInfo::~UserJoinInfo()
 			this);
 
 		g_object_unref(m_request);
+
+		// TODO: Keep watching the request, and when it finishes, make
+		// the user unavailable. This should typically not be
+		// necessary, because on the server side user join requests
+		// finish immediately, and on the client side the only thing
+		// that leads to the UserJoinInfo being deleted is when the
+		// document is removed and we are unsubscribed from the
+		// session, in which case we do not care about the user join
+		// anymore anyway.
+		// However, it would be good to handle this, just in case.
 	}
 
 	g_object_unref(m_proxy);
@@ -383,17 +393,16 @@ void Gobby::UserJoinCommands::UserJoinInfo::
 	params.push_back(caret_param);
 }
 
-Gobby::UserJoinCommands::
-	UserJoinCommands(SubscriptionCommands& subscription_commands,
-	                 const Preferences& preferences):
+Gobby::UserJoinCommands::UserJoinCommands(FolderManager& folder_manager,
+	                                  const Preferences& preferences):
 	m_preferences(preferences)
 {
-	subscription_commands.signal_subscribe_session().connect(
+	folder_manager.signal_document_added().connect(
 		sigc::mem_fun(
-			*this, &UserJoinCommands::on_subscribe_session));
-	subscription_commands.signal_unsubscribe_session().connect(
+			*this, &UserJoinCommands::on_document_added));
+	folder_manager.signal_document_removed().connect(
 		sigc::mem_fun(
-			*this, &UserJoinCommands::on_unsubscribe_session));
+			*this, &UserJoinCommands::on_document_removed));
 }
 
 Gobby::UserJoinCommands::~UserJoinCommands()
@@ -405,30 +414,33 @@ Gobby::UserJoinCommands::~UserJoinCommands()
 	}
 }
 
-void Gobby::UserJoinCommands::on_subscribe_session(InfBrowser* browser,
-                                                   const InfBrowserIter* iter,
-                                                   InfSessionProxy* proxy,
-                                                   Folder& folder,
-                                                   SessionView& view)
+void Gobby::UserJoinCommands::on_document_added(InfBrowser* browser,
+                                                const InfBrowserIter* iter,
+                                                InfSessionProxy* proxy,
+                                                Folder& folder,
+                                                SessionView& view)
 {
-	// TODO: Add browser and browser iter to this callback, so we can check the ACL
+	g_assert(proxy != NULL);
 
 	g_assert(m_user_join_map.find(proxy) == m_user_join_map.end());
 	m_user_join_map[proxy] =
 		new UserJoinInfo(*this, browser, iter, proxy, folder, view);
 }
 
-void Gobby::UserJoinCommands::on_unsubscribe_session(InfSessionProxy* proxy,
-                                                     Folder& folder,
-                                                     SessionView& view)
+void Gobby::UserJoinCommands::on_document_removed(InfBrowser* browser,
+                                                  const InfBrowserIter* iter,
+                                                  InfSessionProxy* proxy,
+                                                  Folder& folder,
+                                                  SessionView& view)
 {
-	UserJoinMap::iterator iter = m_user_join_map.find(proxy);
+	g_assert(proxy != NULL);
 
-	// If the user join was successful the session is no longer in
-	// our map, so don't assert here.
-	if(iter != m_user_join_map.end())
+	UserJoinMap::iterator user_iter = m_user_join_map.find(proxy);
+
+	// If the user join was successful the session is no longer in the map
+	if(user_iter != m_user_join_map.end())
 	{
-		delete iter->second;
-		m_user_join_map.erase(iter);
+		delete user_iter->second;
+		m_user_join_map.erase(user_iter);
 	}
 }

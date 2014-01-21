@@ -25,10 +25,9 @@
 
 Gobby::OperationSave::OperationSave(Operations& operations,
                                     TextSessionView& view,
-                                    Folder& folder,
-				    const std::string& uri,
-				    const std::string& encoding,
-				    DocumentInfoStorage::EolStyle eol_style):
+                                    const std::string& uri,
+                                    const std::string& encoding,
+                                    DocumentInfoStorage::EolStyle eol_style):
 	Operation(operations), m_uri(uri), m_view(&view),
 	m_start_time(std::time(NULL)), m_current_line_index(0),
 	m_encoding(encoding), m_eol_style(eol_style),
@@ -36,6 +35,7 @@ Gobby::OperationSave::OperationSave(Operations& operations,
 	m_iconv(encoding.c_str(), "UTF-8"),
 	m_buffer_size(0), m_buffer_index(0)
 {
+	const Folder& folder = get_folder_manager().get_text_folder();
 	folder.signal_document_removed().connect(
 		sigc::mem_fun(*this, &OperationSave::on_document_removed));
 

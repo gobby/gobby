@@ -75,7 +75,7 @@ void Gobby::TaskSave::on_response(int response_id)
 		// TODO: Get encoding from file dialog
 		// TODO: Default to CRLF on Windows
 		get_operations().save_document(
-			*m_view, get_folder(), m_file_dialog.get_uri(),
+			*m_view, m_file_dialog.get_uri(),
 			info ? info->encoding : "UTF-8",
 			info ? info->eol_style : DocumentInfoStorage::EOL_LF);
 	}

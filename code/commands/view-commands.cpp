@@ -23,9 +23,9 @@
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
-Gobby::ViewCommands::ViewCommands(Header& header, Folder& text_folder,
+Gobby::ViewCommands::ViewCommands(Header& header, const Folder& text_folder,
                                   ClosableFrame& chat_frame,
-	                          Folder& chat_folder,
+	                          const Folder& chat_folder,
                                   Preferences& preferences):
 	m_header(header), m_text_folder(text_folder),
 	m_chat_frame(chat_frame), m_chat_folder(chat_folder),

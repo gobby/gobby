@@ -22,7 +22,7 @@
 
 #include <sigc++/trackable.h>
 
-#include "commands/subscription-commands.hpp"
+#include "core/folder.hpp"
 
 namespace Gobby
 {
@@ -30,20 +30,15 @@ namespace Gobby
 class SynchronizationCommands: public sigc::trackable
 {
 public:
-	SynchronizationCommands(SubscriptionCommands& subscription_commands);
+	SynchronizationCommands(const Folder& text_folder,
+	                        const Folder& chat_folder);
 	~SynchronizationCommands();
 
 protected:
 	class SyncInfo;
 
-	void on_subscribe_session(InfBrowser* browser,
-	                          const InfBrowserIter* iter,
-	                          InfSessionProxy* proxy,
-	                          Folder& folder,
-	                          SessionView& view);
-	void on_unsubscribe_session(InfSessionProxy* proxy,
-	                            Folder& folder,
-	                            SessionView& view);
+	void on_document_added(SessionView& view);
+	void on_document_removed(SessionView& view);
 
 	void on_synchronization_failed(InfSession* session,
 	                               InfXmlConnection* connection,

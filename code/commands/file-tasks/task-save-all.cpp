@@ -89,7 +89,7 @@ void Gobby::TaskSaveAll::process_current()
 		if(info != NULL && !info->uri.empty())
 		{
 			get_operations().save_document(
-				view, get_folder(), info->uri,
+				view, info->uri,
 				info->encoding, info->eol_style);
 
 			m_current = m_views.erase(m_current);

@@ -45,35 +45,50 @@ private:
 
 class Gobby::BrowserCommands::RequestInfo
 {
+	friend class BrowserCommands;
 public:
 	RequestInfo(BrowserCommands& commands,
 	            InfBrowser* browser, InfBrowserIter* iter,
-	            InfRequest* request, StatusBar& status_bar);
+	            StatusBar& status_bar);
 	~RequestInfo();
 
+	InfBrowser* get_browser() { return m_browser; }
+
+	void set_request(InfRequest* request);
 private:
 	static void on_node_finished_static(InfNodeRequest* request,
 	                                    const InfBrowserIter* iter,
 	                                    const GError* error,
 	                                    gpointer user_data)
 	{
-		static_cast<BrowserCommands*>(user_data)->
-			on_finished(INF_REQUEST(request), iter, error);
+		RequestInfo* info = static_cast<RequestInfo*>(user_data);
+
+		g_assert(iter->node == info->m_iter.node);
+		g_assert(iter->node_id == info->m_iter.node_id);
+
+		info->m_commands.on_finished(
+			INF_REQUEST(request),
+			info->m_browser, iter, error);
 	}
 	
 	static void on_chat_finished_static(InfcChatRequest* request,
 	                                    const GError* error,
 	                                    gpointer user_data)
 	{
-		static_cast<BrowserCommands*>(user_data)->
-			on_finished(INF_REQUEST(request), NULL, error);
+		RequestInfo* info = static_cast<RequestInfo*>(user_data);
+
+		info->m_commands.on_finished(
+			INF_REQUEST(request), info->m_browser, NULL, error);
 	}
 
-	InfRequest* m_request;
+	BrowserCommands& m_commands;
+	InfBrowser* m_browser;
+	InfBrowserIter m_iter;
 
 	StatusBar& m_status_bar;
 	StatusBar::MessageHandle m_handle;
 
+	InfRequest* m_request;
 	gulong m_finished_handler;
 };
 
@@ -98,44 +113,32 @@ Gobby::BrowserCommands::BrowserInfo::~BrowserInfo()
 Gobby::BrowserCommands::RequestInfo::RequestInfo(BrowserCommands& commands,
                                                  InfBrowser* browser,
                                                  InfBrowserIter* iter,
-                                                 InfRequest* request,
                                                  StatusBar& status_bar):
-	m_request(request), m_status_bar(status_bar)
+	m_commands(commands), m_browser(browser), m_status_bar(status_bar),
+	m_request(NULL), m_finished_handler(0)
 {
-	g_object_ref(request);
-
 	if(iter)
 	{
-		g_assert(INF_IS_NODE_REQUEST(request));
+		m_iter = *iter;
 
 		m_handle = m_status_bar.add_info_message(
 			Glib::ustring::compose(
 				_("Subscribing to %1..."), Glib::ustring(
 					inf_browser_get_node_name(
 						browser, iter))));
-
-		m_finished_handler = g_signal_connect(
-			request, "finished",
-			G_CALLBACK(on_node_finished_static), &commands);
 	}
 	else
 	{
-		g_assert(INFC_IS_CHAT_REQUEST(request));
-
 		InfXmlConnection* connection =
 			infc_browser_get_connection(INFC_BROWSER(browser));
 		gchar* remote_hostname;
 		g_object_get(G_OBJECT(connection),
-		             "remote-id", &remote_hostname, NULL);
+		             "remote-hostname", &remote_hostname, NULL);
 		m_handle = m_status_bar.add_info_message(
 			Glib::ustring::compose(
 				_("Subscribing to chat on %1..."),
 					remote_hostname));
 		g_free(remote_hostname);
-		
-		m_finished_handler = g_signal_connect(
-			request, "finished",
-			G_CALLBACK(on_chat_finished_static), &commands);
 	}
 }
 
@@ -143,17 +146,28 @@ Gobby::BrowserCommands::RequestInfo::~RequestInfo()
 {
 	m_status_bar.remove_message(m_handle);
 
-	g_signal_handler_disconnect(m_request, m_finished_handler);
+	if(m_request != NULL)
+	{
+		g_signal_handler_disconnect(m_request, m_finished_handler);
+		g_object_unref(m_request);
+	}
+}
 
-	g_object_unref(m_request);
+void Gobby::BrowserCommands::RequestInfo::set_request(InfRequest* request)
+{
+	g_assert(m_request == NULL);
+
+	m_finished_handler = g_signal_handler_find(
+		request, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this);
+	g_assert(m_finished_handler != 0);
 }
 
 Gobby::BrowserCommands::BrowserCommands(Browser& browser,
-                                        Folder& folder,
+                                        FolderManager& folder_manager,
                                         StatusBar& status_bar,
                                         Operations& operations):
-	m_browser(browser), m_folder(folder), m_operations(operations),
-	m_status_bar(status_bar)
+	m_browser(browser), m_folder_manager(folder_manager),
+	m_operations(operations), m_status_bar(status_bar)
 {
 	m_browser.signal_connect().connect(
 		sigc::mem_fun(*this, &BrowserCommands::on_connect));
@@ -265,24 +279,25 @@ void Gobby::BrowserCommands::on_notify_status(InfBrowser* browser)
 
 void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)
 {
+	std::auto_ptr<RequestInfo> info(new RequestInfo(
+		*this, INF_BROWSER(browser), NULL, m_status_bar));
+
 	InfRequest* request = INF_REQUEST(
 		infc_browser_subscribe_chat(
-			browser, on_subscribe_chat_finished_static, this));
+			browser,
+			RequestInfo::on_chat_finished_static, info.get()));
 
 	if(request != NULL)
 	{
+		info->set_request(request);
 		g_assert(m_request_map.find(request) == m_request_map.end());
-
-		m_request_map[request] =
-			new RequestInfo(
-				*this, INF_BROWSER(browser), NULL,
-				request, m_status_bar);
+		m_request_map[request] = info.release();
 	}
 }
 
 void Gobby::BrowserCommands::on_connect(const Glib::ustring& hostname)
 {
-	m_operations.subscribe_path(m_folder, hostname);
+	m_operations.subscribe_path(hostname);
 }
 
 void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
@@ -294,17 +309,16 @@ void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
 	{
 		InfSession* session;
 		g_object_get(G_OBJECT(proxy), "session", &session, NULL);
-		SessionView* view = m_folder.lookup_document(session);
+		SessionView* view = m_folder_manager.lookup_document(session);
 		g_object_unref(session);
 
 		if(view != NULL)
 		{
-			m_folder.switch_to_document(*view);
+			m_folder_manager.switch_to_document(*view);
 		}
 		else
 		{
-			// This should not happen: We insert every document
-			// we subscribe to directly into the folder.
+			// TODO: Needs to be handled
 			g_assert_not_reached();
 		}
 	}
@@ -317,25 +331,28 @@ void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
 		// If there is already a request don't re-request
 		if(request == NULL)
 		{
+			std::auto_ptr<RequestInfo> info(new RequestInfo(
+				*this, browser, iter, m_status_bar));
+
 			request = INF_REQUEST(
 				inf_browser_subscribe(
 					browser, iter,
-					on_subscribe_node_finished_static,
-					this));
+					RequestInfo::on_node_finished_static,
+					info.get()));
 
 			if(request != NULL)
 			{
+				info->set_request(request);
 				g_assert(m_request_map.find(request) ==
 				         m_request_map.end());
-				m_request_map[request] = new RequestInfo(
-					*this, browser, iter, request,
-					m_status_bar);
+				m_request_map[request] = info.release();
 			}
 		}
 	}
 }
 
 void Gobby::BrowserCommands::on_finished(InfRequest* request,
+                                         InfBrowser* browser,
                                          const InfBrowserIter* iter,
                                          const GError* error)
 {
@@ -345,11 +362,31 @@ void Gobby::BrowserCommands::on_finished(InfRequest* request,
 		delete map_iter->second;
 		m_request_map.erase(map_iter);
 	}
-	
+
 	if(error != NULL)
 	{
 		m_status_bar.add_error_message(
 			_("Subscription failed"),
 			error->message);
+	}
+	else if(iter != NULL)
+	{
+		InfSessionProxy* proxy =
+			inf_browser_get_session(browser, iter);
+		g_assert(proxy != NULL);
+
+		m_folder_manager.add_document(browser, iter, proxy);
+	}
+	else
+	{
+		if(INFC_IS_BROWSER(browser))
+		{
+			InfSessionProxy* proxy = INF_SESSION_PROXY(
+				infc_browser_get_chat_session(
+					INFC_BROWSER(browser)));
+			g_assert(proxy != NULL);
+
+			m_folder_manager.add_document(browser, NULL, proxy);
+		}
 	}
 }

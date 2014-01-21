@@ -96,7 +96,7 @@ protected:
 };
 
 Gobby::StatusBar::StatusBar(Gtk::Window& window,
-                            Folder& folder,
+                            const Folder& folder,
                             const Preferences& preferences):
 	Gtk::HBox(false, 2), m_folder(folder), m_preferences(preferences),
 	m_visible_messages(0), m_current_view(NULL), m_position_context_id(0)

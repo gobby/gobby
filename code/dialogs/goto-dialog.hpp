@@ -34,7 +34,7 @@ namespace Gobby
 class GotoDialog: public Gtk::Dialog
 {
 public:
-	GotoDialog(Gtk::Window& parent, Folder& m_folder);
+	GotoDialog(Gtk::Window& parent, const Folder& m_folder);
 	~GotoDialog();
 
 protected:
@@ -50,7 +50,7 @@ protected:
 	void on_document_changed(SessionView* view);
 	void on_changed();
 
-	Folder& m_folder;
+	const Folder& m_folder;
 
 	Gtk::Table m_table;
 

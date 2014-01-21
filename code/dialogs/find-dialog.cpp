@@ -42,7 +42,7 @@ namespace
 	const int RESPONSE_REPLACE_ALL = 3;
 }
 
-Gobby::FindDialog::FindDialog(Gtk::Window& parent, Folder& folder,
+Gobby::FindDialog::FindDialog(Gtk::Window& parent, const Folder& folder,
                               StatusBar& status_bar):
 	Gtk::Dialog(_("Find"), parent),
 	m_folder(folder), m_status_bar(status_bar),

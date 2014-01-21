@@ -20,7 +20,7 @@
 #ifndef _GOBBY_USER_JOIN_COMMANDS_HPP_
 #define _GOBBY_USER_JOIN_COMMANDS_HPP_
 
-#include "commands/subscription-commands.hpp"
+#include "core/foldermanager.hpp"
 #include "core/preferences.hpp"
 
 #include <sigc++/trackable.h>
@@ -31,19 +31,21 @@ namespace Gobby
 class UserJoinCommands: public sigc::trackable
 {
 public:
-	UserJoinCommands(SubscriptionCommands& subscription_commands,
+	UserJoinCommands(FolderManager& folder_manager,
 	                 const Preferences& preferences);
 	~UserJoinCommands();
 
 protected:
-	void on_subscribe_session(InfBrowser* browser,
-	                          const InfBrowserIter* iter,
-	                          InfSessionProxy* proxy,
-	                          Folder& folder,
-                                  SessionView& view);
-	void on_unsubscribe_session(InfSessionProxy* proxy,
-	                            Folder& folder,
-	                            SessionView& view);
+	void on_document_added(InfBrowser* browser,
+	                       const InfBrowserIter* iter,
+	                       InfSessionProxy* proxy,
+	                       Folder& folder,
+                               SessionView& view);
+	void on_document_removed(InfBrowser* browser,
+	                         const InfBrowserIter* iter,
+	                         InfSessionProxy* proxy,
+	                         Folder& folder,
+	                         SessionView& view);
 
 	const Preferences& m_preferences;
 

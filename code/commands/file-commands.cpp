@@ -48,9 +48,9 @@ Gtk::Window& Gobby::FileCommands::Task::get_parent()
 	return m_file_commands.m_parent;
 }
 
-Gobby::Folder& Gobby::FileCommands::Task::get_folder()
+const Gobby::Folder& Gobby::FileCommands::Task::get_folder()
 {
-	return m_file_commands.m_folder;
+	return m_file_commands.m_folder_manager.get_text_folder();
 }
 
 Gobby::StatusBar& Gobby::FileCommands::Task::get_status_bar()
@@ -96,14 +96,15 @@ Gobby::FileCommands::Task::get_document_location_dialog()
 }
 
 Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
-                                  Browser& browser, Folder& folder,
-				  StatusBar& status_bar,
+                                  Browser& browser,
+                                  FolderManager& folder_manager,
+                                  StatusBar& status_bar,
                                   FileChooser& file_chooser,
                                   Operations& operations,
-				  const DocumentInfoStorage& info_storage,
+                                  const DocumentInfoStorage& info_storage,
                                   Preferences& preferences):
 	m_parent(parent), m_header(header), m_browser(browser),
-	m_folder(folder), m_status_bar(status_bar),
+	m_folder_manager(folder_manager), m_status_bar(status_bar),
 	m_file_chooser(file_chooser), m_operations(operations),
 	m_document_info_storage(info_storage), m_preferences(preferences)
 {
@@ -128,7 +129,7 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
 	header.action_file_quit->signal_activate().connect(
 		sigc::mem_fun(*this, &FileCommands::on_quit));
 
-	folder.signal_document_changed().connect(
+	folder_manager.get_text_folder().signal_document_changed().connect(
 		sigc::mem_fun(*this, &FileCommands::on_document_changed));
 
 	InfGtkBrowserModelSort* store = browser.get_store();
@@ -194,7 +195,8 @@ void Gobby::FileCommands::on_open_location()
 
 void Gobby::FileCommands::on_save()
 {
-	SessionView* view = m_folder.get_current_document();
+	SessionView* view =
+		m_folder_manager.get_text_folder().get_current_document();
 	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
 	g_assert(text_view != NULL);
 
@@ -205,8 +207,8 @@ void Gobby::FileCommands::on_save()
 	if(info != NULL && !info->uri.empty())
 	{
 		m_operations.save_document(
-			*text_view, m_folder, info->uri, info->encoding,
-			info->eol_style);
+			*text_view, info->uri,
+			info->encoding, info->eol_style);
 	}
 	else
 	{
@@ -216,7 +218,8 @@ void Gobby::FileCommands::on_save()
 
 void Gobby::FileCommands::on_save_as()
 {
-	SessionView* view = m_folder.get_current_document();
+	SessionView* view =
+		m_folder_manager.get_text_folder().get_current_document();
 	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
 	g_assert(text_view != NULL);
 
@@ -230,7 +233,8 @@ void Gobby::FileCommands::on_save_all()
 
 void Gobby::FileCommands::on_export_html()
 {
-	SessionView* view = m_folder.get_current_document();
+	SessionView* view =
+		m_folder_manager.get_text_folder().get_current_document();
 	TextSessionView* text_view = dynamic_cast<TextSessionView*>(view);
 	g_assert(text_view != NULL);
 
@@ -258,10 +262,11 @@ void Gobby::FileCommands::on_connect()
 
 void Gobby::FileCommands::on_close()
 {
-	SessionView* view = m_folder.get_current_document();
+	SessionView* view =
+		m_folder_manager.get_text_folder().get_current_document();
 	g_assert(view != NULL);
 
-	m_folder.remove_document(*view);
+	m_folder_manager.remove_document(*view);
 }
 
 void Gobby::FileCommands::on_quit()
@@ -273,10 +278,11 @@ void Gobby::FileCommands::on_connect_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
-		const Glib::ustring& host = m_connection_dialog->get_host_name();
+		const Glib::ustring& host =
+			m_connection_dialog->get_host_name();
 		if(!host.empty())
 		{
-			m_operations.subscribe_path(m_folder, host);
+			m_operations.subscribe_path(host);
 		}
 	}
 
@@ -289,7 +295,8 @@ void Gobby::FileCommands::update_sensitivity()
 	bool create_sensitivity = gtk_tree_model_get_iter_first(
 		GTK_TREE_MODEL(m_browser.get_store()), &dummy_iter);
 
-	SessionView* view = m_folder.get_current_document();
+	SessionView* view =
+		m_folder_manager.get_text_folder().get_current_document();
 	gboolean view_sensitivity = view != NULL;
 
 	// We can only save text documents currently

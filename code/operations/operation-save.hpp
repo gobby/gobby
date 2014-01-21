@@ -38,8 +38,7 @@ public:
 	// TODO: This should maybe just take a text buffer to save, not a
 	// textsessionview.
 	OperationSave(Operations& operations, TextSessionView& view,
-	              Folder& folder, const std::string& uri,
-	              const std::string& encoding,
+	              const std::string& uri, const std::string& encoding,
 	              DocumentInfoStorage::EolStyle eol_style);
 
 	virtual ~OperationSave();

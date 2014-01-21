@@ -25,7 +25,7 @@
 #include <gtkmm/textbuffer.h>
 #include <gtkmm/stock.h>
 
-Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, Folder& folder):
+Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, const Folder& folder):
 	Gtk::Dialog(_("Go to line"), parent),
 	m_folder(folder),
 	m_table(1, 2),

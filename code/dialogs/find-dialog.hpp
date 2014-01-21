@@ -40,7 +40,7 @@ public:
 	typedef sigc::signal<void> SignalFindTextChanged;
 	typedef sigc::signal<void> SignalReplaceTextChanged;
 
-	FindDialog(Gtk::Window& parent, Folder& folder,
+	FindDialog(Gtk::Window& parent, const Folder& folder,
 	           StatusBar& status_bar);
 	~FindDialog();
 
@@ -107,7 +107,7 @@ protected:
 	                     GtkTextIter* match_start,
 	                     GtkTextIter* match_end);
 
-	Folder& m_folder;
+	const Folder& m_folder;
 	StatusBar& m_status_bar;
 
 	sigc::connection m_active_user_changed_connection;

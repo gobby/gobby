@@ -23,6 +23,7 @@
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
 #include "core/documentinfostorage.hpp"
+#include "core/foldermanager.hpp"
 #include "core/textsessionview.hpp"
 
 #include <libinfinity/client/infc-browser.h>
@@ -67,6 +68,11 @@ public:
 			return m_operations.m_browser;
 		}
 
+		FolderManager& get_folder_manager()
+		{
+			return m_operations.m_folder_manager;
+		}
+
 		DocumentInfoStorage& get_info_storage()
 		{
 			return m_operations.m_info_storage;
@@ -98,7 +104,9 @@ public:
 	typedef std::vector<Glib::ustring> uri_list;
 
 	Operations(DocumentInfoStorage& info_storage,
-	           Browser& browser, StatusBar& status_bar);
+	           Browser& browser,
+	           FolderManager& folder_manager,
+	           StatusBar& status_bar);
 	~Operations();
 
 	OperationNew* create_directory(InfBrowser* browser,
@@ -122,7 +130,6 @@ public:
 	                                        const uri_list& uris);
 
 	OperationSave* save_document(TextSessionView& view,
-	                             Folder& folder,
 	                             const std::string& uri,
 	                             const std::string& encoding,
 	                             DocumentInfoStorage::EolStyle eol_style);
@@ -131,10 +138,8 @@ public:
 	                             const InfBrowserIter* iter);
 
 	// uri must be of kind infinote://[hostname]/[path]
-	OperationSubscribePath* subscribe_path(Folder& folder,
-	                                       const std::string& uri);
-	OperationSubscribePath* subscribe_path(Folder& folder,
-	                                       InfBrowser* browser,
+	OperationSubscribePath* subscribe_path(const std::string& uri);
+	OperationSubscribePath* subscribe_path(InfBrowser* browser,
 	                                       const std::string& path);
 
 	OperationExportHtml* export_html(TextSessionView& view,
@@ -153,6 +158,7 @@ protected:
 
 	DocumentInfoStorage& m_info_storage;
 	Browser& m_browser;
+	FolderManager& m_folder_manager;
 	StatusBar& m_status_bar;
 
 	typedef std::set<Operation*> OperationSet;

@@ -32,7 +32,7 @@ namespace Gobby
 class BrowserCommands: public sigc::trackable
 {
 public:
-	BrowserCommands(Browser& browser, Folder& folder,
+	BrowserCommands(Browser& browser, FolderManager& folder_manager,
 	                StatusBar& status_bar, Operations& operations);
 	~BrowserCommands();
 
@@ -49,25 +49,6 @@ protected:
 			on_set_browser(model, iter, old_browser, new_browser);
 	}
 
-	static void
-	on_subscribe_chat_finished_static(InfcChatRequest* request,
-	                                  const GError* error,
-	                                  gpointer user_data)
-	{
-		static_cast<BrowserCommands*>(user_data)->
-			on_finished(INF_REQUEST(request), NULL, error);
-	}
-
-	static void
-	on_subscribe_node_finished_static(InfNodeRequest* request,
-	                                  const InfBrowserIter* iter,
-	                                  const GError* error,
-	                                  gpointer user_data)
-	{
-		static_cast<BrowserCommands*>(user_data)->
-			on_finished(INF_REQUEST(request), iter, error);
-	}
-
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
 	                    InfBrowser* old_browser, InfBrowser* new_browser);
 	void on_notify_status(InfBrowser* browser);
@@ -78,11 +59,12 @@ protected:
 	void on_activate(InfBrowser* browser, InfBrowserIter* iter);
 
 	void on_finished(InfRequest* request,
+	                 InfBrowser* browser,
 	                 const InfBrowserIter* iter,
 	                 const GError* error);
 
 	Browser& m_browser;
-	Folder& m_folder;
+	FolderManager& m_folder_manager;
 	StatusBar& m_status_bar;
 	Operations& m_operations;
 	gulong m_set_browser_handler;

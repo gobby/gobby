@@ -81,12 +81,9 @@ public:
 	       );
 	~Window();
 
-	const Folder& get_text_folder() const { return m_text_folder; }
-	Folder& get_text_folder() { return m_text_folder; }
-
 	void connect_to_host(const Glib::ustring& hostname)
 	{
-		m_operations.subscribe_path(m_text_folder, hostname);
+		m_operations.subscribe_path(hostname);
 	}
 
 protected:
@@ -177,6 +174,7 @@ protected:
 
 	// Functionality
 	DocumentInfoStorage m_info_storage;
+	FolderManager m_folder_manager;
 	FileChooser m_file_chooser;
 	Operations m_operations;
 

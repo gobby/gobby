@@ -32,8 +32,8 @@ namespace Gobby
 class ViewCommands: public sigc::trackable
 {
 public:
-	ViewCommands(Header& header, Folder& text_folder,
-	             ClosableFrame& chat_frame, Folder& chat_folder,
+	ViewCommands(Header& header, const Folder& text_folder,
+	             ClosableFrame& chat_frame, const Folder& chat_folder,
 	             Preferences& preferences);
 	~ViewCommands();
 
@@ -68,9 +68,9 @@ protected:
 	void on_doc_language_changed(GtkSourceLanguage* language);
 
 	Header& m_header;
-	Folder& m_text_folder;
+	const Folder& m_text_folder;
 	ClosableFrame& m_chat_frame;
-	Folder& m_chat_folder;
+	const Folder& m_chat_folder;
 	Preferences& m_preferences;
 
 	TextSessionView* m_current_view;

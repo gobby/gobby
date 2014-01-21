@@ -54,7 +54,7 @@ public:
 	typedef MessageList::iterator MessageHandle;
 
 	StatusBar(Gtk::Window& window,
-	          Folder& folder,
+	          const Folder& folder,
 	          const Preferences& preferences);
 	~StatusBar();
 
@@ -113,7 +113,7 @@ protected:
 
 	void update_pos_display();
 
-	Folder& m_folder;
+	const Folder& m_folder;
 	const Preferences& m_preferences;
 	MessageList m_list;
 	unsigned int m_visible_messages;

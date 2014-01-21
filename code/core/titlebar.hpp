@@ -32,7 +32,7 @@ namespace Gobby
 class TitleBar: public sigc::trackable
 {
 public:
-	TitleBar(Gtk::Window& window, Folder& folder);
+	TitleBar(Gtk::Window& window, const Folder& folder);
 
 private:
 	static void on_notify_status_static(GObject* object,
@@ -58,7 +58,7 @@ private:
 	void update_title();
 
 	Gtk::Window& m_window;
-	Folder& m_folder;
+	const Folder& m_folder;
 	SessionView* m_current_view;
 
 	gulong m_notify_status_handler;

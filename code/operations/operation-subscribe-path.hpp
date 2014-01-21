@@ -30,10 +30,11 @@ namespace Gobby
 class OperationSubscribePath: public Operations::Operation
 {
 public:
-	OperationSubscribePath(Operations& operations, Folder& folder,
+	OperationSubscribePath(Operations& operations,
 	                       const std::string& uri);
-	OperationSubscribePath(Operations& operations, Folder& folder,
-	                       InfBrowser* browser, const std::string& path);
+	OperationSubscribePath(Operations& operations,
+	                       InfBrowser* browser,
+	                       const std::string& path);
 
 	virtual ~OperationSubscribePath();
 
@@ -90,7 +91,6 @@ private:
 	void on_subscribe_finished(const InfBrowserIter* iter,
 	                           const GError* error);
 
-	Folder& m_folder;
 	InfBrowser* m_browser;
 	std::string m_target;
 

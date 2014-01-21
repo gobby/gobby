@@ -151,17 +151,27 @@ void Gobby::SynchronizationCommands::SyncInfo::
 }
 
 Gobby::SynchronizationCommands::
-	SynchronizationCommands(SubscriptionCommands& subscription_commands)
+	SynchronizationCommands(const Folder& text_folder,
+	                        const Folder& chat_folder)
 {
-	subscription_commands.signal_subscribe_session().connect(
+	text_folder.signal_document_added().connect(
 		sigc::mem_fun(
 			*this,
-			&SynchronizationCommands::on_subscribe_session));
+			&SynchronizationCommands::on_document_added));
+	chat_folder.signal_document_added().connect(
+		sigc::mem_fun(
+			*this,
+			&SynchronizationCommands::on_document_added));
 
-	subscription_commands.signal_unsubscribe_session().connect(
+	text_folder.signal_document_removed().connect(
 		sigc::mem_fun(
 			*this,
-			&SynchronizationCommands::on_unsubscribe_session));
+			&SynchronizationCommands::on_document_removed));
+
+	text_folder.signal_document_removed().connect(
+		sigc::mem_fun(
+			*this,
+			&SynchronizationCommands::on_document_removed));
 }
 
 Gobby::SynchronizationCommands::~SynchronizationCommands()
@@ -174,11 +184,7 @@ Gobby::SynchronizationCommands::~SynchronizationCommands()
 }
 
 void
-Gobby::SynchronizationCommands::on_subscribe_session(InfBrowser* browser,
-                                                     const InfBrowserIter* it,
-                                                     InfSessionProxy* proxy,
-                                                     Folder& folder,
-                                                     SessionView& view)
+Gobby::SynchronizationCommands::on_document_added(SessionView& view)
 {
 	InfSession* session = view.get_session();
 	if(inf_session_get_status(session) == INF_SESSION_SYNCHRONIZING)
@@ -197,9 +203,7 @@ Gobby::SynchronizationCommands::on_subscribe_session(InfBrowser* browser,
 }
 
 void
-Gobby::SynchronizationCommands::on_unsubscribe_session(InfSessionProxy* prxy,
-                                                       Folder& folder,
-                                                       SessionView& view)
+Gobby::SynchronizationCommands::on_document_removed(SessionView& view)
 {
 	InfSession* session = view.get_session();
 	SyncMap::iterator iter = m_sync_map.find(session);

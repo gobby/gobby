@@ -19,7 +19,7 @@
 
 #include "core/titlebar.hpp"
 
-Gobby::TitleBar::TitleBar(Gtk::Window& window, Folder& folder):
+Gobby::TitleBar::TitleBar(Gtk::Window& window, const Folder& folder):
 	m_window(window), m_folder(folder), m_current_view(NULL)
 {
 	folder.signal_document_removed().connect(

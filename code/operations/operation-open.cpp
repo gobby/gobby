@@ -442,6 +442,13 @@ void Gobby::OperationOpen::on_request_finished(const InfBrowserIter* iter,
 			iter,
 			info);
 
+		InfSessionProxy* proxy =
+			inf_browser_get_session(m_parent.get_browser(), iter);
+		g_assert(proxy != NULL);
+
+		get_folder_manager().add_document(
+			m_parent.get_browser(), iter, proxy);
+
 		finish();
 	}
 }

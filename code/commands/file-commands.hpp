@@ -40,8 +40,9 @@ class FileCommands: public sigc::trackable
 {
 public:
 	FileCommands(Gtk::Window& parent, Header& header,
-	             Browser& browser, Folder& folder, StatusBar& status_bar,
-	             FileChooser& file_chooser, Operations& operations,
+	             Browser& browser, FolderManager& folder_manager,
+	             StatusBar& status_bar, FileChooser& file_chooser,
+	             Operations& operations,
 	             const DocumentInfoStorage& info_storage,
 	             Preferences& preferences);
 	~FileCommands();
@@ -58,7 +59,7 @@ public:
 		void finish();
 
 		Gtk::Window& get_parent();
-		Folder& get_folder();
+		const Folder& get_folder();
 		StatusBar& get_status_bar();
 		FileChooser& get_file_chooser();
 		Operations& get_operations();
@@ -119,7 +120,7 @@ protected:
 	Gtk::Window& m_parent;
 	Header& m_header;
 	Browser& m_browser;
-	Folder& m_folder;
+	FolderManager& m_folder_manager;
 	StatusBar& m_status_bar;
 	FileChooser& m_file_chooser;
 	Operations& m_operations;

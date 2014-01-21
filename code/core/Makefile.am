@@ -11,6 +11,7 @@ libgobby_core_a_SOURCES = \
 	documentinfostorage.cpp \
 	filechooser.cpp \
 	folder.cpp \
+	foldermanager.cpp \
 	header.cpp \
 	huebutton.cpp \
 	iconmanager.cpp \
@@ -41,6 +42,7 @@ noinst_HEADERS = \
         documentinfostorage.hpp \
         filechooser.hpp \
         folder.hpp \
+        foldermanager.hpp \
         header.hpp \
         huebutton.hpp \
         iconmanager.hpp \

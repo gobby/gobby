@@ -37,8 +37,7 @@ public:
 	                Preferences::Option<bool>& userlist_view,
 	                Preferences::Option<unsigned int>& userlist_width);
 
-	SessionView& get_session_view() { return m_view; }
-	const SessionView& get_session_view() const { return m_view; }
+	SessionView& get_session_view() const { return m_view; }
 
 protected:
 	virtual void on_size_allocate(Gtk::Allocation& allocation);

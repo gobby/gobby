@@ -26,7 +26,7 @@ namespace
 } // anonymous namespace
 
 Gobby::EditCommands::EditCommands(Gtk::Window& parent, Header& header,
-                                  Folder& folder, StatusBar& status_bar,
+                                  const Folder& folder, StatusBar& status_bar,
                                   FileChooser& file_chooser,
                                   Preferences& preferences,
                                   CertificateManager& cert_manager):

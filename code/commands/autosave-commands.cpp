@@ -175,8 +175,8 @@ protected:
 		if(info != NULL)
 		{
 			m_commands.m_operations.save_document(
-				m_view, m_commands.m_folder,
-				info->uri, info->encoding, info->eol_style);
+				m_view, info->uri,
+				info->encoding, info->eol_style);
 
 			g_assert(m_save_op != NULL);
 
@@ -209,7 +209,7 @@ private:
 	std::time_t m_sync_time;
 };
 
-Gobby::AutosaveCommands::AutosaveCommands(Folder& folder,
+Gobby::AutosaveCommands::AutosaveCommands(const Folder& folder,
                                           Operations& operations,
                                           const DocumentInfoStorage& storage,
 					  const Preferences& preferences):
@@ -309,8 +309,8 @@ void Gobby::AutosaveCommands::on_autosave_enabled_changed()
 			// TODO: Add convenience API to folder, so that we
 			// don't need to know here that it actually contains
 			// SessionUserViews.
-			SessionUserView* userview =
-				static_cast<SessionUserView*>(
+			const SessionUserView* userview =
+				static_cast<const SessionUserView*>(
 					m_folder.get_nth_page(i));
 
 			SessionView& view = userview->get_session_view();

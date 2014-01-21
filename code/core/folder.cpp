@@ -222,17 +222,18 @@ void Gobby::Folder::remove_document(SessionView& view)
 		set_show_tabs(false);
 }
 
-Gobby::SessionView& Gobby::Folder::get_document(unsigned int n)
+Gobby::SessionView& Gobby::Folder::get_document(unsigned int n) const
 {
-	SessionUserView* child =
-		static_cast<SessionUserView*>(get_nth_page(n));
+	const SessionUserView* child =
+		static_cast<const SessionUserView*>(get_nth_page(n));
 	if(!child)
-		throw std::logic_error("Gobby::Folder::get_document: out of bounds");
+		throw std::logic_error(
+			"Gobby::Folder::get_document: out of bounds");
 	return child->get_session_view();
 }
 
 Gobby::SessionView*
-Gobby::Folder::lookup_document(InfSession* session)
+Gobby::Folder::lookup_document(InfSession* session) const
 {
 	const unsigned int n_pages = get_n_pages();
 	for(unsigned int i = 0; i < n_pages; ++i)
@@ -241,18 +242,7 @@ Gobby::Folder::lookup_document(InfSession* session)
 	return NULL;
 }
 
-Gobby::SessionView*
-Gobby::Folder::get_current_document()
-{
-	SessionUserView* child = static_cast<SessionUserView*>(
-		get_nth_page(get_current_page()));
-	if(!child) return NULL;
-
-	return &child->get_session_view();
-}
-
-const Gobby::SessionView*
-Gobby::Folder::get_current_document() const
+Gobby::SessionView* Gobby::Folder::get_current_document() const
 {
 	const SessionUserView* child = static_cast<const SessionUserView*>(
 		get_nth_page(get_current_page()));

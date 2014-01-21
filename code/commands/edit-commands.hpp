@@ -39,7 +39,7 @@ class EditCommands: public sigc::trackable
 {
 public:
 	EditCommands(Gtk::Window& parent, Header& header,
-	             Folder& folder, StatusBar& status_bar,
+	             const Folder& folder, StatusBar& status_bar,
 	             FileChooser& file_chooser,
 	             Preferences& preferences,
 	             CertificateManager& cert_manager);
@@ -111,7 +111,7 @@ protected:
 
 	Gtk::Window& m_parent;
 	Header& m_header;
-	Folder& m_folder;
+	const Folder& m_folder;
 	StatusBar& m_status_bar;
 	FileChooser& m_file_chooser;
 	Preferences& m_preferences;
