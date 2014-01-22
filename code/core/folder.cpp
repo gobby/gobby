@@ -205,10 +205,6 @@ void Gobby::Folder::remove_document(SessionView& view)
 	g_object_set_data(G_OBJECT(session), "GOBBY_SESSION_RECORD", NULL);
 
 	g_object_ref(session);
-	// Session could be closed already, for example if synchronization
-	// failed.
-	if(inf_session_get_status(session) != INF_SESSION_CLOSED)
-		inf_session_close(session);
 	// This relies on the sessionuserview being the direct parent of
 	// view - maybe we should make a loop here instead which searches
 	// the folder in the widget hierarchy, to be more robust.

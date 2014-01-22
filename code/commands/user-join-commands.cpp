@@ -23,6 +23,7 @@
 
 #include <glibmm/main.h>
 
+#include <libinfinity/server/infd-session-proxy.h>
 #include <libinfinity/common/inf-error.h>
 
 namespace
@@ -442,5 +443,50 @@ void Gobby::UserJoinCommands::on_document_removed(InfBrowser* browser,
 	{
 		delete user_iter->second;
 		m_user_join_map.erase(user_iter);
+	}
+	else
+	{
+		// The user has removed the document. What we do now depends
+		// on whether we are hosting the document or whether we are a
+		// client. If we are a client we reset the connection of the
+		// session proxy, which basically leads to us being
+		// unsubscribed from the document. If we are hosting the
+		// document, we do not want to unsubscribe from it, since
+		// other users might still be connected. We therefore only
+		// remove the local user from the session. If there are indeed
+		// no other clients, then InfdDirectory will take care of
+		// unsubscribing the session 60s after it became idle.
+		if(INFD_IS_SESSION_PROXY(proxy))
+		{
+			InfUser* user = view.get_active_user();
+			if(user != NULL)
+			{
+				InfSession* session;
+				g_object_get(G_OBJECT(proxy), "session",
+				             &session, NULL);
+				inf_session_set_user_status(
+					session, user, INF_USER_UNAVAILABLE);
+				g_object_unref(session);
+
+				// TODO: set_active_user should go to
+				// SessionView base:
+				// TODO: The libinftextgtk objects should
+				// reset the active user automatically when it
+				// becomes unavailable.
+				TextSessionView* text_view =
+					dynamic_cast<TextSessionView*>(&view);
+				if(text_view)
+					text_view->set_active_user(NULL);
+				ChatSessionView* chat_view =
+					dynamic_cast<ChatSessionView*>(&view);
+				if(chat_view)
+					chat_view->set_active_user(NULL);
+			}
+		}
+		else if(INFC_IS_SESSION_PROXY(proxy))
+		{
+			infc_session_proxy_set_connection(
+				INFC_SESSION_PROXY(proxy), NULL, NULL, 0);
+		}
 	}
 }
