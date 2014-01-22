@@ -56,6 +56,9 @@ public:
 	        ConnectionManager& connection_manager);
 	~Browser();
 
+	ConnectionManager& get_connection_manager()
+		{ return m_connection_manager; }
+
 	InfGtkBrowserModelSort* get_store() { return m_sort_model; }
 	const InfGtkBrowserModelSort* get_store() const {
 		return m_sort_model;

@@ -389,9 +389,12 @@ void Gobby::OperationOpen::read_finish()
 		inf_text_gtk_buffer_new(m_content, user_table);
 	g_object_unref(user_table);
 
-	InfBrowser* browser = m_parent.get_browser();
+	ConnectionManager& connection_manager =
+		get_browser().get_connection_manager();
 	InfCommunicationManager* communication_manager =
-		infc_browser_get_communication_manager(INFC_BROWSER(browser));
+		connection_manager.get_communication_manager();
+
+	InfBrowser* browser = m_parent.get_browser();
 
 	InfIo* io;
 	g_object_get(G_OBJECT(browser), "io", &io, NULL);
