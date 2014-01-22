@@ -30,6 +30,11 @@ Gobby::TitleBar::TitleBar(Gtk::Window& window, const Folder& folder):
 	on_document_changed(folder.get_current_document());
 }
 
+Gobby::TitleBar::~TitleBar()
+{
+	on_document_changed(NULL);
+}
+
 void Gobby::TitleBar::on_document_removed(SessionView& view)
 {
 	// TODO: Isn't this called by Folder already?

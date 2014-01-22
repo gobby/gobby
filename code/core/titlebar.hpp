@@ -33,6 +33,7 @@ class TitleBar: public sigc::trackable
 {
 public:
 	TitleBar(Gtk::Window& window, const Folder& folder);
+	~TitleBar();
 
 private:
 	static void on_notify_status_static(GObject* object,
