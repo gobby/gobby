@@ -51,22 +51,25 @@ Gobby::OperationNew::~OperationNew()
 
 void Gobby::OperationNew::start()
 {
+	InfNodeRequest* request;
+
 	if(m_directory)
 	{
-		m_request = inf_browser_add_subdirectory(
+		request = inf_browser_add_subdirectory(
 			m_browser, &m_parent, m_name.c_str(), NULL,
 			on_request_finished_static, this);
 	}
 	else
 	{
-		m_request = inf_browser_add_note(
+		request = inf_browser_add_note(
 			m_browser, &m_parent, m_name.c_str(),
 			"InfText", NULL, NULL, TRUE,
 			on_request_finished_static, this);
 	}
 
-	if(m_request != NULL)
+	if(request != NULL)
 	{
+		m_request = request;
 		g_object_ref(m_request);
 
 		m_message_handle = get_status_bar().add_info_message(

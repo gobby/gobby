@@ -320,15 +320,16 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 	if(text_view) add_text_user_properties(params, *text_view);
 
 	GError* error = NULL;
-	m_request = inf_session_proxy_join_user(
+	InfUserRequest* request = inf_session_proxy_join_user(
 		m_proxy, params.size(), &params[0],
 		on_user_join_finished_static, this);
 
 	for(unsigned int i = 0; i < params.size(); ++i)
 		g_value_unset(&params[i].value);
 
-	if(m_request != NULL)
+	if(request != NULL)
 	{
+		m_request = request;
 		g_object_ref(m_request);
 		m_view.set_info(_("User Join in progress..."), false);
 	}

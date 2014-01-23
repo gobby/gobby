@@ -406,15 +406,16 @@ void Gobby::OperationOpen::read_finish()
 	g_object_unref(io);
 	g_object_unref(text_gtk_buffer);
 
-	m_request = inf_browser_add_note(
+	InfNodeRequest* request = inf_browser_add_note(
 		m_parent.get_browser(), m_parent.get_browser_iter(),
 		m_name.c_str(), "InfText", NULL,
 		INF_SESSION(session), TRUE,
 		on_request_finished_static, this);
 	g_object_unref(session);
 
-	if(m_request != NULL)
+	if(request != NULL)
 	{
+		m_request = request;
 		g_object_ref(m_request);
 
 		// TODO: We can remove the node watch here, but need to have
