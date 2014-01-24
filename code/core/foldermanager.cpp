@@ -18,6 +18,7 @@
  */
 
 #include "core/foldermanager.hpp"
+#include "util/i18n.hpp"
 
 #include <libinfinity/client/infc-browser.h>
 #include <libinfinity/server/infd-directory.h>
@@ -295,7 +296,6 @@ void Gobby::FolderManager::on_unsubscribe_session(InfBrowser* browser,
 	InfSession* session;
 	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
 	SessionMap::iterator session_iter = m_session_map.find(session);
-	g_object_unref(session);
 
 	// Note that the session might not be in the session map, for example
 	// if we are subscribed but do not show a document for the session.
@@ -305,7 +305,28 @@ void Gobby::FolderManager::on_unsubscribe_session(InfBrowser* browser,
 		// our iterator. The session is now "floating", without any
 		// browser entry.
 		session_iter->second->reset_browser();
+
+		// When the subscription group of the session is still
+		// available, then close the session. This can essentially
+		// only happen on the server side, and it closes the session
+		// when it is removed from the document tree. In principle
+		// the session could go on until the document is closed by
+		// the server, but this probably causes more confusion than
+		// anything else. So we close it.
+		// TODO: It would be nice to keep the session itself alive,
+		// and to only unsubscribe all clients and set the local users
+		// to unavailable.
+		if(inf_session_get_subscription_group(session) != NULL)
+		{
+			lookup_document(session)->set_info(
+				_("The document has been removed from the server."),
+				true);
+
+			inf_session_close(session);
+		}
 	}
+
+	g_object_unref(session);
 }
 
 void Gobby::FolderManager::on_text_document_added(SessionView& view)
