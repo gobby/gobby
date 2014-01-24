@@ -50,7 +50,7 @@ Gobby::Preferences::User::User(Config::ParentEntry& entry):
 	port(entry.get_value<unsigned int>(
 		"port", inf_protocol_get_default_port())),
 	keep_local_documents(entry.get_value<bool>(
-		"keep-local-documents", keep_local_documents)),
+		"keep-local-documents", true)),
 	host_directory(entry.get_value<std::string>("host-directory",
 		config_filename("local-documents")))
 {
