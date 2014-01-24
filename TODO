@@ -7,8 +7,6 @@ Modernization:
 Some features that would be nice for a final Gobby 0.5 release. We could
 perhaps do pre-releases with some of these missing before:
 
- - Implement self-hosting, this also requires showing and handling directories
-   in InfGtkBrowserModel/Store
  - Add base preferences class with Preferences::Option definition to util/,
    inherit in core/, move ClosableFrame to util/
  - Show in tab and userlist when others are typing, using an icon
