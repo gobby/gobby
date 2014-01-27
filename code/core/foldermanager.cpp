@@ -291,7 +291,8 @@ void Gobby::FolderManager::on_set_browser(InfGtkBrowserModel* model,
 
 void Gobby::FolderManager::on_unsubscribe_session(InfBrowser* browser,
                                                   const InfBrowserIter* iter,
-                                                  InfSessionProxy* proxy)
+                                                  InfSessionProxy* proxy,
+                                                  InfRequest* request)
 {
 	InfSession* session;
 	g_object_get(G_OBJECT(proxy), "session", &session, NULL);

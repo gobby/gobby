@@ -88,10 +88,11 @@ protected:
 	static void on_unsubscribe_session_static(InfBrowser* browser,
 	                                          const InfBrowserIter* iter,
 	                                          InfSessionProxy* proxy,
+	                                          InfRequest* request,
 	                                          gpointer user_data)
 	{
 		static_cast<FolderManager*>(user_data)->
-			on_unsubscribe_session(browser, iter, proxy);
+			on_unsubscribe_session(browser, iter, proxy, request);
 	}
 
 	void on_set_browser(InfGtkBrowserModel* model, GtkTreeIter* iter,
@@ -99,7 +100,8 @@ protected:
 
 	void on_unsubscribe_session(InfBrowser* browser,
 	                            const InfBrowserIter* iter,
-	                            InfSessionProxy* proxy);
+	                            InfSessionProxy* proxy,
+	                            InfRequest* request);
 
 	void on_text_document_added(SessionView& view);
 	void on_chat_document_added(SessionView& view);
