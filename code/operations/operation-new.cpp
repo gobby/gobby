@@ -98,11 +98,16 @@ void Gobby::OperationNew::on_request_finished(const InfBrowserIter* iter,
 	}
 	else
 	{
-		InfSessionProxy* proxy =
-			inf_browser_get_session(m_browser, iter);
-		g_assert(proxy != NULL);
+		if(!m_directory)
+		{
+			InfSessionProxy* proxy =
+				inf_browser_get_session(m_browser, iter);
+			g_assert(proxy != NULL);
 
-		get_folder_manager().add_document(m_browser, iter, proxy);
+			get_folder_manager().add_document(
+				m_browser, iter, proxy);
+		}
+
 		finish();
 	}
 }
