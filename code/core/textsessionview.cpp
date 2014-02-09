@@ -449,8 +449,14 @@ void Gobby::TextSessionView::on_alpha_changed()
 		gtk_widget_get_style_context(GTK_WIDGET(m_view));
 	g_assert(style != NULL);
 
+	// Get the view background, not the one for the side panels:
+	gtk_style_context_save(style);
+	gtk_style_context_add_class(style, GTK_STYLE_CLASS_VIEW);
+
 	GdkRGBA rgba;
 	gtk_style_context_get_background_color(style, GTK_STATE_FLAG_NORMAL, &rgba);
+	gtk_style_context_restore(style);
+
 	Gdk::RGBA rgbacpp(&rgba);
 	const Gdk::Color colorcpp = GtkCompat::color_from_rgba(rgbacpp);
 	const GdkColor& color = *colorcpp.gobj();
@@ -649,8 +655,14 @@ void Gobby::TextSessionView::on_style_set()
 		gtk_widget_get_style_context(GTK_WIDGET(m_view));
 	g_assert(style != NULL);
 
+	// Get the view background, not the one for the side panels:
+	gtk_style_context_save(style);
+	gtk_style_context_add_class(style, GTK_STYLE_CLASS_VIEW);
+
 	GdkRGBA rgba;
 	gtk_style_context_get_background_color(style, GTK_STATE_FLAG_NORMAL, &rgba);
+	gtk_style_context_restore(style);
+
 	Gdk::RGBA rgbacpp(&rgba);
 	const Gdk::Color colorcpp = GtkCompat::color_from_rgba(rgbacpp);
 	const GdkColor& color = *colorcpp.gobj();
