@@ -33,6 +33,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/radiobutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/alignment.h>

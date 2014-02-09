@@ -20,6 +20,10 @@
 #include "util/uri.hpp"
 #include "util/i18n.hpp"
 
+#include <glibmm/uriutils.h>
+
+#include <stdexcept>
+
 #ifndef G_OS_WIN32
 # include <sys/socket.h>
 # include <net/if.h>

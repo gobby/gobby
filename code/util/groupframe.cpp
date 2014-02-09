@@ -20,6 +20,7 @@
 #include "util/groupframe.hpp"
 
 #include <gtkmm/label.h>
+#include <glibmm/markup.h>
 
 Gobby::GroupFrame::GroupFrame(const Glib::ustring& title):
 	m_box(false, 6)

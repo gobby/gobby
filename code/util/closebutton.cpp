@@ -41,8 +41,12 @@ Gobby::CloseButton::CloseButton()
         button_image->show();
 }
 
+#ifdef USE_GTKMM3
+void Gobby::CloseButton::on_style_updated()
+#else
 void Gobby::CloseButton::on_style_changed(
 	const Glib::RefPtr<Gtk::Style>& previous_style)
+#endif
 {
 	int width;
 	int height;

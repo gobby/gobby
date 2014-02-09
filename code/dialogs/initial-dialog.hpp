@@ -29,6 +29,8 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
+#include <gtkmm/checkbutton.h>
+#include <gtkmm/radiobutton.h>
 #include <gtkmm/image.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/table.h>

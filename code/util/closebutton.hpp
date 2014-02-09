@@ -20,6 +20,8 @@
 #ifndef _GOBBY_CLOSEBUTTON_HPP_
 #define _GOBBY_CLOSEBUTTON_HPP_
 
+#include "util/gtk-compat.hpp"
+
 #include <gtkmm/button.h>
 
 namespace Gobby
@@ -31,8 +33,12 @@ public:
 	CloseButton();
 
 protected:
+#ifdef USE_GTKMM3
+	virtual void on_style_updated();
+#else
 	virtual void on_style_changed(
 		const Glib::RefPtr<Gtk::Style>& previous_style);
+#endif
 };
 
 } // namespace Gobby

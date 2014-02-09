@@ -188,6 +188,17 @@ public:
 inline IconSet create_icon_set() { return IconSet(); }
 #endif
 
+#ifdef USE_GTKMM3
+inline Gdk::Color color_from_rgba(const Gdk::RGBA& rgba)
+{
+	Gdk::Color c;
+	c.set_red(rgba.get_red_u());
+	c.set_green(rgba.get_green_u());
+	c.set_blue(rgba.get_blue_u());
+	return c;
+}
+#endif
+
 } // namespace GtkCompat
 
 } // namespace Gobby
