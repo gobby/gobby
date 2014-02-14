@@ -63,8 +63,9 @@ private:
 	{
 		RequestInfo* info = static_cast<RequestInfo*>(user_data);
 
-		g_assert(iter->node == info->m_iter.node);
-		g_assert(iter->node_id == info->m_iter.node_id);
+		g_assert(iter == NULL || iter->node == info->m_iter.node);
+		g_assert(iter == NULL ||
+		         iter->node_id == info->m_iter.node_id);
 
 		info->m_commands.on_finished(
 			INF_REQUEST(request),
