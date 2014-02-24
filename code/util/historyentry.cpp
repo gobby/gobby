@@ -22,6 +22,29 @@
 #include <giomm/file.h>
 #include <giomm/asyncresult.h>
 
+namespace
+{
+	Glib::ustring strip(const Glib::ustring& string)
+	{
+		gchar* dup = g_strdup(string.c_str());
+		dup = g_strchug(dup);
+		Glib::ustring retval(dup);
+		g_free(dup);
+		return retval;
+	}
+
+	bool strequal(const Glib::ustring& string1,
+	              const Glib::ustring& string2)
+	{
+		gchar* casefold1 = g_utf8_casefold(string1.c_str(), -1);
+		gchar* casefold2 = g_utf8_casefold(string2.c_str(), -1);
+		int collate = g_utf8_collate(casefold1, casefold2);
+		g_free(casefold1);
+		g_free(casefold2);
+		return collate == 0;
+	}
+}
+
 // Load history asynchronously, to save startup time
 class Gobby::History::Loader
 {
@@ -279,19 +302,30 @@ void Gobby::History::commit(const Glib::ustring& str)
 
 void Gobby::History::commit_noscroll(const Glib::ustring& str)
 {
-	if(m_history->children().begin() == m_history->children().end() ||
-	   (*m_history->children().begin())[m_history_columns.text] != str)
+	const Glib::ustring stripped = strip(str);
+
+	// Check if the entry already exists in the list, and if yes,
+	// remove it.
+	for(Gtk::TreeIter iter = m_history->children().begin();
+	    iter != m_history->children().end(); ++iter)
 	{
-		Gtk::TreeIter iter = m_history->prepend();
-		(*iter)[m_history_columns.text] = str;
-
-		while(m_history->children().size() > m_length)
+		const Glib::ustring& entry = (*iter)[m_history_columns.text];
+		if(strequal(entry, stripped))
 		{
-			iter = m_history->children().end();
-			-- iter;
-
 			m_history->erase(iter);
+			break;
 		}
+	}
+
+	Gtk::TreeIter iter = m_history->prepend();
+	(*iter)[m_history_columns.text] = stripped;
+
+	while(m_history->children().size() > m_length)
+	{
+		iter = m_history->children().end();
+		-- iter;
+
+		m_history->erase(iter);
 	}
 }
 
