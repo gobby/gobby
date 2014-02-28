@@ -20,6 +20,8 @@
 #include "commands/browser-commands.hpp"
 #include "util/i18n.hpp"
 
+#include <libinfinity/common/inf-request-result.h>
+
 class Gobby::BrowserCommands::BrowserInfo
 {
 public:
@@ -56,11 +58,14 @@ public:
 
 	void set_request(InfRequest* request);
 private:
-	static void on_node_finished_static(InfNodeRequest* request,
-	                                    const InfBrowserIter* iter,
+	static void on_node_finished_static(InfRequest* request,
+	                                    const InfRequestResult* result,
 	                                    const GError* error,
 	                                    gpointer user_data)
 	{
+		const InfBrowserIter* iter;
+		inf_request_result_get_subscribe_session(
+			result, NULL, &iter, NULL);
 		RequestInfo* info = static_cast<RequestInfo*>(user_data);
 
 		g_assert(iter == NULL || iter->node == info->m_iter.node);
@@ -72,7 +77,8 @@ private:
 			info->m_browser, iter, error);
 	}
 	
-	static void on_chat_finished_static(InfcChatRequest* request,
+	static void on_chat_finished_static(InfRequest* request,
+	                                    const InfRequestResult* result,
 	                                    const GError* error,
 	                                    gpointer user_data)
 	{

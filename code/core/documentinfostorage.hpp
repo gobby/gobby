@@ -83,7 +83,7 @@ protected:
 
 	static void on_node_removed_static(InfBrowser* browser,
 	                                   InfBrowserIter* iter,
-	                                   InfNodeRequest* request,
+	                                   InfRequest* request,
 	                                   gpointer user_data)
 	{
 		static_cast<DocumentInfoStorage*>(user_data)->
@@ -96,7 +96,7 @@ protected:
 	                                   InfBrowserIter* iter,
 	                                   InfRequest* request);
 	void on_node_removed(InfBrowser* browser, InfBrowserIter* iter,
-	                     InfNodeRequest* request);
+	                     InfRequest* request);
 
 	typedef std::map<std::string, Info> InfoMap;
 	InfoMap m_infos;

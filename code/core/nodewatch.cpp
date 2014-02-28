@@ -66,7 +66,7 @@ void Gobby::NodeWatch::on_notify_status()
 
 void Gobby::NodeWatch::on_node_removed(InfBrowser* browser,
                                        InfBrowserIter* iter,
-                                       InfNodeRequest* request)
+                                       InfRequest* request)
 {
 	g_assert(browser == m_browser);
 	g_assert(m_iter.node != NULL);

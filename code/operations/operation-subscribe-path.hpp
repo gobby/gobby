@@ -24,6 +24,8 @@
 #include "core/browser.hpp"
 #include "util/resolv.hpp"
 
+#include <libinfinity/common/inf-request-result.h>
+
 namespace Gobby
 {
 
@@ -58,20 +60,24 @@ private:
 			on_notify_status();
 	}
 
-	static void on_explore_finished_static(InfNodeRequest* request,
-	                                       const InfBrowserIter* iter,
+	static void on_explore_finished_static(InfRequest* request,
+	                                       const InfRequestResult* result,
 	                                       const GError* error,
 	                                       gpointer user_data)
 	{
 		static_cast<OperationSubscribePath*>(user_data)->
-			on_explore_finished(iter, error);
+			on_explore_finished(error);
 	}
 
-	static void on_subscribe_finished_static(InfNodeRequest* request,
-	                                         const InfBrowserIter* iter,
+	static void on_subscribe_finished_static(InfRequest* request,
+	                                         const InfRequestResult* res,
 	                                         const GError* error,
 	                                         gpointer user_data)
 	{
+		const InfBrowserIter* iter;
+		inf_request_result_get_subscribe_session(
+			res, NULL, &iter, NULL);
+
 		static_cast<OperationSubscribePath*>(user_data)->
 			on_subscribe_finished(iter, error);
 	}
@@ -86,8 +92,7 @@ private:
 	                     const std::string& hostname);
 
 	void on_notify_status();
-	void on_explore_finished(const InfBrowserIter* iter,
-	                         const GError* error);
+	void on_explore_finished(const GError* error);
 	void on_subscribe_finished(const InfBrowserIter* iter,
 	                           const GError* error);
 
@@ -98,7 +103,7 @@ private:
 	std::vector<std::string>::size_type m_path_index;
 	InfBrowserIter m_path_iter;
 
-	InfNodeRequest* m_request;
+	InfRequest* m_request;
 	gulong m_notify_status_id;
 
 	std::auto_ptr<ResolvHandle> m_resolve_handle;

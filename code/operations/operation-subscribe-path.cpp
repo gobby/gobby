@@ -334,27 +334,20 @@ void Gobby::OperationSubscribePath::make_explore_request()
 {
 	g_assert(m_request == NULL);
 
-	m_request = INF_NODE_REQUEST(
-		inf_browser_get_pending_request(
-			m_browser, &m_path_iter,
-			"explore-node"));
+	m_request = inf_browser_get_pending_request(
+		m_browser, &m_path_iter, "explore-node");
 
 	if(m_request == NULL)
 	{
-		m_request = INF_NODE_REQUEST(
-			inf_browser_explore(
-				m_browser,
-				&m_path_iter,
-				on_explore_finished_static, // ???
-				this));
+		m_request = inf_browser_explore(
+			m_browser, &m_path_iter,
+			on_explore_finished_static, this);
 	}
 	else
 	{
 		g_signal_connect(
-			G_OBJECT(m_request),
-			"finished",
-			G_CALLBACK(on_explore_finished_static), // ???
-			this);
+			G_OBJECT(m_request), "finished",
+			G_CALLBACK(on_explore_finished_static), this);
 	}
 }
 
@@ -362,25 +355,20 @@ void Gobby::OperationSubscribePath::make_subscribe_request()
 {
 	g_assert(m_request == NULL);
 
-	m_request = INF_NODE_REQUEST(
-		inf_browser_get_pending_request(
-			m_browser, &m_path_iter,
-			"subscribe-session"));
+	m_request = inf_browser_get_pending_request(
+		m_browser, &m_path_iter, "subscribe-session");
 
 	if(m_request == NULL)
 	{
 		m_request = inf_browser_subscribe(
 			m_browser, &m_path_iter,
-			on_subscribe_finished_static,
-			this);
+			on_subscribe_finished_static, this);
 	}
 	else
 	{
 		g_signal_connect(
-			G_OBJECT(m_request),
-			"finished",
-			G_CALLBACK(on_subscribe_finished_static),
-			this);
+			G_OBJECT(m_request), "finished",
+			G_CALLBACK(on_subscribe_finished_static), this);
 	}
 }
 
@@ -478,8 +466,7 @@ void Gobby::OperationSubscribePath::on_notify_status()
 	}
 }
 
-void Gobby::OperationSubscribePath::on_explore_finished(
-	const InfBrowserIter* iter, const GError* error)
+void Gobby::OperationSubscribePath::on_explore_finished(const GError* error)
 {
 	m_request = NULL;
 

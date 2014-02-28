@@ -24,6 +24,7 @@
 #include <glibmm/main.h>
 
 #include <libinfinity/server/infd-session-proxy.h>
+#include <libinfinity/common/inf-request-result.h>
 #include <libinfinity/common/inf-error.h>
 
 namespace
@@ -93,11 +94,14 @@ private:
 			on_synchronization_complete();
 	}
 
-	static void on_user_join_finished_static(InfUserRequest* request,
-	                                         InfUser* user,
+	static void on_user_join_finished_static(InfRequest* request,
+	                                         const InfRequestResult* res,
 	                                         const GError* error,
 	                                         gpointer user_data)
 	{
+		InfUser* user;
+		inf_request_result_get_join_user(res, NULL, &user);
+
 		static_cast<UserJoinInfo*>(user_data)->
 			on_user_join_finished(user, error);
 	}
@@ -119,7 +123,7 @@ private:
 	Folder& m_folder;
 	SessionView& m_view;
 
-	InfUserRequest* m_request;
+	InfRequest* m_request;
 
 	gulong m_synchronization_complete_handler;
 
@@ -320,7 +324,7 @@ void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
 	if(text_view) add_text_user_properties(params, *text_view);
 
 	GError* error = NULL;
-	InfUserRequest* request = inf_session_proxy_join_user(
+	InfRequest* request = inf_session_proxy_join_user(
 		m_proxy, params.size(), &params[0],
 		on_user_join_finished_static, this);
 

@@ -60,7 +60,7 @@ protected:
 
 	static void on_node_removed_static(InfBrowser* browser,
 	                                   InfBrowserIter* iter,
-	                                   InfNodeRequest* request,
+	                                   InfRequest* request,
 	                                   gpointer user_data)
 	{
 		static_cast<NodeWatch*>(user_data)->
@@ -69,7 +69,7 @@ protected:
 
 	void on_notify_status();
 	void on_node_removed(InfBrowser* browser, InfBrowserIter* iter,
-	                     InfNodeRequest* request);
+	                     InfRequest* request);
 
 	void reset();
 

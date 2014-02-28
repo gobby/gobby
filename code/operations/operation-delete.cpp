@@ -47,7 +47,7 @@ Gobby::OperationDelete::~OperationDelete()
 
 void Gobby::OperationDelete::start()
 {
-	InfNodeRequest* request = inf_browser_remove_node(
+	InfRequest* request = inf_browser_remove_node(
 		m_browser,
 		&m_iter,
 		on_request_finished_static,
@@ -69,8 +69,7 @@ void Gobby::OperationDelete::start()
 	}
 }
 
-void Gobby::OperationDelete::on_request_finished(const InfBrowserIter* iter,
-                                                 const GError* error)
+void Gobby::OperationDelete::on_request_finished(const GError* error)
 {
 	if(error)
 	{

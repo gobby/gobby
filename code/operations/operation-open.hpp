@@ -28,6 +28,8 @@
 #include <giomm/inputstream.h>
 #include <glibmm/convert.h>
 
+#include <libinfinity/common/inf-request-result.h>
+
 namespace Gobby
 {
 
@@ -45,11 +47,14 @@ public:
 
 protected:
 	static void
-	on_request_finished_static(InfNodeRequest* request,
-	                           const InfBrowserIter* iter,
+	on_request_finished_static(InfRequest* request,
+	                           const InfRequestResult* result,
 	                           const GError* error,
 	                           gpointer user_data)
 	{
+		const InfBrowserIter* iter;
+		inf_request_result_get_add_node(result, NULL, NULL, &iter);
+
 		static_cast<OperationOpen*>(user_data)->
 			on_request_finished(iter, error);
 	}
@@ -89,7 +94,7 @@ protected:
 	std::auto_ptr<buffer> m_buffer;
 	sigc::connection m_idle_connection;
 
-	InfNodeRequest* m_request;
+	InfRequest* m_request;
 
 	std::vector<char> m_raw_content;
 	std::vector<char>::size_type m_raw_pos;

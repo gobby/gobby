@@ -37,24 +37,23 @@ public:
 
 protected:
 	static void
-	on_request_finished_static(InfNodeRequest* request,
-	                           const InfBrowserIter* iter,
+	on_request_finished_static(InfRequest* request,
+	                           const InfRequestResult* result,
 	                           const GError* error,
 	                           gpointer user_data)
 	{
 		static_cast<OperationDelete*>(user_data)->
-			on_request_finished(iter, error);
+			on_request_finished(error);
 	}
 
-	void on_request_finished(const InfBrowserIter* iter,
-	                         const GError* error);
+	void on_request_finished(const GError* error);
 
 protected:
 	InfBrowser* m_browser;
 	const InfBrowserIter m_iter;
 	const Glib::ustring m_name;
 
-	InfNodeRequest* m_request;
+	InfRequest* m_request;
 	StatusBar::MessageHandle m_message_handle;
 };
 

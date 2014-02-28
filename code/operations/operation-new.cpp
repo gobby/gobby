@@ -51,7 +51,7 @@ Gobby::OperationNew::~OperationNew()
 
 void Gobby::OperationNew::start()
 {
-	InfNodeRequest* request;
+	InfRequest* request;
 
 	if(m_directory)
 	{

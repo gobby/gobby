@@ -22,6 +22,8 @@
 
 #include "operations/operations.hpp"
 
+#include <libinfinity/common/inf-request-result.h>
+
 namespace Gobby
 {
 
@@ -38,11 +40,14 @@ public:
 
 protected:
 	static void
-	on_request_finished_static(InfNodeRequest* request,
-	                           const InfBrowserIter* iter,
+	on_request_finished_static(InfRequest* request,
+	                           const InfRequestResult* result,
 	                           const GError* error,
 	                           gpointer user_data)
 	{
+		const InfBrowserIter* iter;
+		inf_request_result_get_add_node(result, NULL, NULL, &iter);
+
 		static_cast<OperationNew*>(user_data)->
 			on_request_finished(iter, error);
 	}
@@ -55,7 +60,7 @@ protected:
 	const InfBrowserIter m_parent;
 	Glib::ustring m_name;
 	bool m_directory;
-	InfNodeRequest* m_request;
+	InfRequest* m_request;
 
 	StatusBar::MessageHandle m_message_handle;
 };

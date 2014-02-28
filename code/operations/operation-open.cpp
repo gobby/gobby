@@ -406,7 +406,7 @@ void Gobby::OperationOpen::read_finish()
 	g_object_unref(io);
 	g_object_unref(text_gtk_buffer);
 
-	InfNodeRequest* request = inf_browser_add_note(
+	InfRequest* request = inf_browser_add_note(
 		m_parent.get_browser(), m_parent.get_browser_iter(),
 		m_name.c_str(), "InfText", NULL,
 		INF_SESSION(session), TRUE,

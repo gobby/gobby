@@ -315,15 +315,13 @@ void Gobby::DocumentInfoStorage::
 	                              InfBrowserIter* iter,
 	                              InfRequest* request)
 {
-	g_assert(INF_IS_EXPLORE_REQUEST(request));
-
 	// TODO: When request has finished, remove all infos that refer to
 	// no longer existing documents in the explored directory.
 }
 
 void Gobby::DocumentInfoStorage::on_node_removed(InfBrowser* browser,
                                                  InfBrowserIter* iter,
-                                                 InfNodeRequest* request)
+                                                 InfRequest* request)
 {
 	// Remove info when the corresponding document is removed.
 	std::string key = get_key(browser, iter);
