@@ -63,14 +63,19 @@ private:
 	                                    const GError* error,
 	                                    gpointer user_data)
 	{
-		const InfBrowserIter* iter;
-		inf_request_result_get_subscribe_session(
-			result, NULL, &iter, NULL);
+		const InfBrowserIter* iter = NULL;
 		RequestInfo* info = static_cast<RequestInfo*>(user_data);
 
-		g_assert(iter == NULL || iter->node == info->m_iter.node);
-		g_assert(iter == NULL ||
-		         iter->node_id == info->m_iter.node_id);
+		if(error == NULL)
+		{
+			inf_request_result_get_subscribe_session(
+				result, NULL, &iter, NULL);
+
+			g_assert(iter == NULL ||
+			         iter->node == info->m_iter.node);
+			g_assert(iter == NULL ||
+		        	 iter->node_id == info->m_iter.node_id);
+		}
 
 		info->m_commands.on_finished(
 			INF_REQUEST(request),
