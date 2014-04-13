@@ -31,6 +31,8 @@
 #include <gtksourceview/gtksourcebuffer.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gtksourceview/gtksourcelanguagemanager.h>
+#include <gtksourceview/gtksourcebuffer.h>
+
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
