@@ -29,6 +29,7 @@
 #include <stdexcept>
 
 #include <gtksourceview/gtksourcestyleschememanager.h>
+#include <gtksourceview/gtksourcestylescheme.h>
 
 #include <gnutls/x509.h>
 
