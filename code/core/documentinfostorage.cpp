@@ -27,8 +27,6 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/exception.h>
 
-#include <libinfinity/client/infc-explore-request.h>
-
 namespace
 {
 	Gobby::DocumentInfoStorage::EolStyle
