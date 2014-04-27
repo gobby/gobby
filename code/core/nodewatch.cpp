@@ -71,7 +71,7 @@ void Gobby::NodeWatch::on_node_removed(InfBrowser* browser,
 	g_assert(browser == m_browser);
 	g_assert(m_iter.node != NULL);
 
-	if(inf_browser_is_ancestor(m_browser, &m_iter, iter))
+	if(inf_browser_is_ancestor(m_browser, iter, &m_iter))
 	{
 		reset();
 		m_signal_node_removed.emit();
