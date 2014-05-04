@@ -97,8 +97,13 @@ namespace
 	protected:
 		virtual void run()
 		{
+			InfCertUtilDescription desc;
+			desc.validity = 365 * 24 * 3600;
+			desc.dn_common_name = g_get_user_name();
+			desc.san_dnsname = g_get_host_name();
+
 			m_cert = inf_cert_util_create_self_signed_certificate(
-				m_key, &m_error);
+				m_key, &desc, &m_error);
 		}
 
 		virtual void finish()

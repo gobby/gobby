@@ -403,7 +403,7 @@ void Gobby::CertificateManager::check_certificate_signature()
 
 	gnutls_x509_crt_t crt =
 		inf_certificate_chain_get_own_certificate(m_certificates);
-	if(!inf_cert_util_check_certificate_signature(crt, m_key))
+	if(!inf_cert_util_check_certificate_key(crt, m_key))
 	{
 		inf_certificate_chain_unref(m_certificates);
 		m_certificates = NULL;
@@ -414,7 +414,7 @@ void Gobby::CertificateManager::check_certificate_signature()
 				"GOBBY_CERTIFICATE_MANAGER_ERROR"),
 			0,
 			"%s",
-			_("Certificate is not signed by chosen key")
+			_("Certificate does not belong to the chosen key")
 		);
 	}
 }
