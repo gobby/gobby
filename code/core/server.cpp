@@ -117,7 +117,7 @@ void Gobby::Server::open(unsigned int port,
 	if(tcp4)
 	{
 		m_xmpp4 = infd_xmpp_server_new(
-			tcp4, security_policy, creds,
+			tcp4, policy, creds,
 			context, sasl_mechanisms);
 		g_object_unref(tcp4);
 	}
@@ -125,7 +125,7 @@ void Gobby::Server::open(unsigned int port,
 	if(tcp6)
 	{
 		m_xmpp6 = infd_xmpp_server_new(
-			tcp6, security_policy, creds,
+			tcp6, policy, creds,
 			context, sasl_mechanisms);
 		g_object_unref(tcp6);
 	}
