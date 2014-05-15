@@ -363,9 +363,8 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 		OperationOpenMultiple::uri_list uri_list(
 			uris.begin(), uris.end());
 
-		OperationOpenMultiple* operation =
-			m_operations.create_documents(
-				browser, &iter, m_preferences, uri_list);
+		m_operations.create_documents(
+			browser, &iter, m_preferences, uri_list);
 	}
 
 	m_watch.reset(NULL);
