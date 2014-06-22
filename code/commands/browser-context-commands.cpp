@@ -77,11 +77,6 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	if(!m_browser.get_selected(&browser, &iter))
 		return;
 
-	InfBrowserStatus browser_status;
-	g_object_get(G_OBJECT(browser), "status", &browser_status, NULL);
-	if(browser_status != INF_BROWSER_OPEN)
-		return;
-
 	InfBrowserIter dummy_iter = iter;
 	bool is_subdirectory = inf_browser_is_subdirectory(browser, &iter);
 	bool is_toplevel = !inf_browser_get_parent(browser, &dummy_iter);
