@@ -66,7 +66,8 @@ public:
 
 	InfGtkBrowserView* get_view() { return m_browser_view; }
 
-	bool get_selected(InfBrowser** browser, InfBrowserIter* iter);
+	bool get_selected_browser(InfBrowser** browser);
+	bool get_selected_iter(InfBrowser* browser, InfBrowserIter* iter);
 	void set_selected(InfBrowser* browser, const InfBrowserIter* iter);
 
 	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,

@@ -74,7 +74,10 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 
 	InfBrowser* browser;
 	InfBrowserIter iter;
-	if(!m_browser.get_selected(&browser, &iter))
+	if(!m_browser.get_selected_browser(&browser))
+		return;
+
+	if(!m_browser.get_selected_iter(browser, &iter))
 		return;
 
 	InfBrowserIter dummy_iter = iter;
