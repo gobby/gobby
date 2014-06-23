@@ -74,6 +74,7 @@ public:
 	                            unsigned int device_index,
 	                            const std::string& hostname);
 	void add_browser(InfBrowser* browser, const char* name);
+	void remove_browser(InfBrowser* browser);
 
 	SignalActivate signal_activate() const { return m_signal_activate; }
 	SignalConnect signal_connect() const { return m_signal_connect; }

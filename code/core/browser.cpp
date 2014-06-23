@@ -304,6 +304,17 @@ void Gobby::Browser::add_browser(InfBrowser* browser,
 		m_browser_store, browser, name);
 }
 
+void Gobby::Browser::remove_browser(InfBrowser* browser)
+{
+	inf_gtk_browser_store_remove_browser(
+		m_browser_store, browser);
+
+	m_connection_manager.remove_connection(
+		INF_XMPP_CONNECTION(
+			infc_browser_get_connection(
+				INFC_BROWSER(browser))));
+}
+
 void Gobby::Browser::on_expanded_changed()
 {
 	if(m_expander.get_expanded())

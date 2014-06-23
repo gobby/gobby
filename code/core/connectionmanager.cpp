@@ -134,6 +134,12 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 	return xmpp;
 }
 
+void Gobby::ConnectionManager::remove_connection(InfXmppConnection* connection)
+{
+	inf_xmpp_manager_remove_connection(
+		m_xmpp_manager, connection);
+}
+
 void Gobby::ConnectionManager::set_sasl_context(InfSaslContext* sasl_context,
                                                 const char* mechanisms)
 {

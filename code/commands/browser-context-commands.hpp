@@ -59,6 +59,7 @@ protected:
 
 	// Context commands
 	void on_disconnect(InfcBrowser* browser);
+	void on_remove(InfBrowser* browser);
 
 	void on_new(InfBrowser* browser, InfBrowserIter iter,
 	            bool directory);
