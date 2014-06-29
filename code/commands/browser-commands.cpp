@@ -309,7 +309,7 @@ void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)
 
 void Gobby::BrowserCommands::on_connect(const Glib::ustring& hostname)
 {
-	m_operations.subscribe_path(hostname);
+	m_operations.subscribe_path(hostname, true);
 }
 
 void Gobby::BrowserCommands::on_activate(InfBrowser* browser,

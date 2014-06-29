@@ -79,8 +79,9 @@ namespace
 }
 
 Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
-                                                      const std::string& uri):
-	Operation(operations), m_browser(NULL), m_target(uri),
+                                                      const std::string& uri,
+                                                      bool connect):
+	Operation(operations), m_browser(NULL), m_target(uri), m_connect(connect),
 	m_request(NULL), m_notify_status_id(0),
 	m_message_handle(get_status_bar().invalid_handle())
 {
@@ -167,19 +168,22 @@ void Gobby::OperationSubscribePath::start_without_browser()
 
 	parse_netloc(netloc, hostname, service, device_index);
 
-	if(path.empty())
+	if(m_connect)
 	{
-		m_message_handle = get_status_bar().add_info_message(
-			Glib::ustring::compose(
-				_("Connecting to \"%1\"..."),
-				m_target));
-	}
-	else
-	{
-		m_message_handle = get_status_bar().add_info_message(
-			Glib::ustring::compose(
-				_("Subscribing to \"%1\"..."),
-				m_target));
+		if(path.empty())
+		{
+			m_message_handle = get_status_bar().add_info_message(
+				Glib::ustring::compose(
+					_("Connecting to \"%1\"..."),
+					m_target));
+		}
+		else
+		{
+			m_message_handle = get_status_bar().add_info_message(
+				Glib::ustring::compose(
+					_("Subscribing to \"%1\"..."),
+					m_target));
+		}
 	}
 
 	m_resolve_handle = Gobby::resolve(
@@ -379,7 +383,7 @@ void Gobby::OperationSubscribePath::on_resolv_done(
 	try
 	{
 		m_browser = get_browser().connect_to_host(
-			address, port, device_index, hostname);
+			address, port, device_index, hostname, m_connect);
 		g_assert(m_browser != NULL);
 
 		// From here, go on as if we started from the 2nd destructor

@@ -59,7 +59,8 @@ public:
 	InfXmppConnection* make_connection(const InfIpAddress* address,
 	                                   guint port,
 	                                   unsigned int device_index,
-	                                   const std::string& hostname);
+	                                   const std::string& hostname,
+	                                   bool connect);
 
 	void remove_connection(InfXmppConnection* connection);
 

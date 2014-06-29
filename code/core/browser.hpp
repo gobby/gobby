@@ -72,7 +72,8 @@ public:
 
 	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,
 	                            unsigned int device_index,
-	                            const std::string& hostname);
+	                            const std::string& hostname,
+	                            bool connect);
 	void add_browser(InfBrowser* browser, const char* name);
 	void remove_browser(InfBrowser* browser);
 

@@ -278,11 +278,12 @@ void Gobby::Browser::set_selected(InfBrowser* browser,
 InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
                                             guint port,
                                             unsigned int device_index,
-                                            const std::string& hostname)
+                                            const std::string& hostname,
+                                            bool connect)
 {
 	// Check whether we do have such a connection already:
 	InfXmppConnection* xmpp = m_connection_manager.make_connection(
-		address, port, device_index, hostname);
+		address, port, device_index, hostname, connect);
 
 	// Should have thrown otherwise:
 	g_assert(xmpp != NULL);

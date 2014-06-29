@@ -287,6 +287,7 @@ int main(int argc, char* argv[]) try
 	// Read the configuration
 	Gobby::Config config(Gobby::config_filename("config.xml"));
 	Gobby::Preferences preferences(config);
+	Gobby::HostsStorage hosts(Gobby::config_filename("hosts.xml"));
 	Gobby::CertificateManager cert_manager(preferences);
 	Gobby::IconManager icon_manager;
 
@@ -299,6 +300,7 @@ int main(int argc, char* argv[]) try
 		argv+1,
 		config,
 		preferences,
+		hosts,
 		icon_manager,
 		cert_manager
 #ifdef WITH_UNIQUE
