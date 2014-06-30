@@ -261,7 +261,7 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 		m_view, m_preferences.editor.indentation_auto);
 	gtk_source_view_set_smart_home_end(
 		m_view, m_preferences.editor.homeend_smart ?
-			GTK_SOURCE_SMART_HOME_END_ALWAYS :
+			GTK_SOURCE_SMART_HOME_END_AFTER :
 			GTK_SOURCE_SMART_HOME_END_DISABLED);
 	gtk_text_view_set_wrap_mode(
 		GTK_TEXT_VIEW(m_view),
@@ -529,7 +529,7 @@ void Gobby::TextSessionView::on_homeend_smart_changed()
 {
 	gtk_source_view_set_smart_home_end(
 		m_view, m_preferences.editor.homeend_smart ?
-			GTK_SOURCE_SMART_HOME_END_ALWAYS :
+			GTK_SOURCE_SMART_HOME_END_AFTER :
 			GTK_SOURCE_SMART_HOME_END_DISABLED);
 }
 

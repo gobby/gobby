@@ -74,13 +74,31 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 
 	InfBrowser* browser;
 	InfBrowserIter iter;
-	if(!m_browser.get_selected(&browser, &iter))
+
+	if(!m_browser.get_selected_browser(&browser))
 		return;
 
-	InfBrowserStatus browser_status;
-	g_object_get(G_OBJECT(browser), "status", &browser_status, NULL);
-	if(browser_status != INF_BROWSER_OPEN)
+	if(!m_browser.get_selected_iter(browser, &iter))
+	{
+		InfBrowserStatus browser_status;
+		g_object_get(G_OBJECT(browser), "status", &browser_status, NULL);
+
+		if(browser_status == INF_BROWSER_CLOSED)
+		{
+			Gtk::ImageMenuItem *remove_item = Gtk::manage(
+				new Gtk::ImageMenuItem(_("_Remove"), true));
+			remove_item->set_image(*Gtk::manage(new Gtk::Image(
+				Gtk::Stock::CLOSE, Gtk::ICON_SIZE_MENU)));
+			remove_item->signal_activate().connect(sigc::bind(
+				sigc::mem_fun(*this,
+					&BrowserContextCommands::on_remove),
+				browser));
+			remove_item->show();
+			menu->append(*remove_item);
+		}
+
 		return;
+	}
 
 	InfBrowserIter dummy_iter = iter;
 	bool is_subdirectory = inf_browser_is_subdirectory(browser, &iter);
@@ -232,6 +250,16 @@ void Gobby::BrowserContextCommands::on_disconnect(InfcBrowser* browser)
 	{
 		inf_xml_connection_close(connection);
 	}
+}
+
+void Gobby::BrowserContextCommands::on_remove(InfBrowser* browser)
+{
+	InfBrowserStatus status;
+	g_object_get(G_OBJECT(browser), "status", &status, NULL);
+
+	g_assert(status == INF_BROWSER_CLOSED);
+
+	m_browser.remove_browser(browser);
 }
 
 void Gobby::BrowserContextCommands::on_new(InfBrowser* browser,

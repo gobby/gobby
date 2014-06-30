@@ -61,6 +61,8 @@ public:
 	                                   unsigned int device_index,
 	                                   const std::string& hostname);
 
+	void remove_connection(InfXmppConnection* connection);
+
 	// SASL context to be used for all new connections
 	void set_sasl_context(InfSaslContext* sasl_context,
 	                      const char* mechanisms);

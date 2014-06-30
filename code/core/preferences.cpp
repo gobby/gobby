@@ -34,7 +34,7 @@ Gobby::Preferences::User::User(Config::ParentEntry& entry):
 	hue(entry.get_value<double>("hue", Glib::Rand().get_double())),
 	alpha(entry.get_value<double>("alpha", 1.0)),
 	show_remote_cursors(entry.get_value<bool>(
-		"show-remote-users", true)),
+		"show-remote-cursors", true)),
 	show_remote_selections(entry.get_value<bool>(
 		"show-remote-selections", true)),
 	show_remote_current_lines(entry.get_value<bool>(
