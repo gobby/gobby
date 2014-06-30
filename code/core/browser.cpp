@@ -234,7 +234,10 @@ bool Gobby::Browser::get_selected(InfBrowser** browser,
 	InfBrowserStatus browser_status;
 	g_object_get(G_OBJECT(tmp_browser), "status", &browser_status, NULL);
 	if(browser_status != INF_BROWSER_OPEN)
+	{
+		g_object_unref(tmp_browser);
 		return true;
+	}
 
 	gtk_tree_model_get(
 		GTK_TREE_MODEL(m_sort_model), &tree_iter,
