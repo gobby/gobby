@@ -40,6 +40,7 @@ class OperationNew;
 class OperationOpen;
 class OperationOpenMultiple;
 class OperationSave;
+class OperationRename;
 class OperationDelete;
 class OperationSubscribePath;
 class OperationExportHtml;
@@ -133,6 +134,10 @@ public:
 	                             const std::string& uri,
 	                             const std::string& encoding,
 	                             DocumentInfoStorage::EolStyle eol_style);
+
+	OperationRename* rename_node(InfBrowser* browser,
+	                             const InfBrowserIter* iter,
+				     const Glib::ustring& name);
 
 	OperationDelete* delete_node(InfBrowser* browser,
 	                             const InfBrowserIter* iter);
