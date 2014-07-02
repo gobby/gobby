@@ -75,8 +75,12 @@ private:
 	                                         gpointer user_data)
 	{
 		const InfBrowserIter* iter;
-		inf_request_result_get_subscribe_session(
-			res, NULL, &iter, NULL);
+
+		if(error == NULL)
+		{
+			inf_request_result_get_subscribe_session(
+				res, NULL, &iter, NULL);
+		}
 
 		static_cast<OperationSubscribePath*>(user_data)->
 			on_subscribe_finished(iter, error);

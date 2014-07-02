@@ -506,8 +506,8 @@ void Gobby::OperationSubscribePath::on_subscribe_finished(
 		g_assert(proxy != NULL);
 
 		get_folder_manager().add_document(m_browser, iter, proxy);
-	}
 
-	/* From this point on subscription-commands takes over */
-	finish();
+		/* From this point on subscription-commands takes over */
+		finish();
+	}
 }
