@@ -19,26 +19,90 @@
 
 #include "commands/browser-context-commands.hpp"
 #include "operations/operation-open-multiple.hpp"
+#include "util/file.hpp"
 #include "util/i18n.hpp"
-
-#include <libinfgtk/inf-gtk-permissions-dialog.h>
 
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 #include <gtkmm/stock.h>
 #include <giomm/file.h>
+#include <glibmm/fileutils.h>
+
+#include <libinfgtk/inf-gtk-permissions-dialog.h>
+#include <libinfinity/common/inf-cert-util.h>
 
 // TODO: Use file tasks for the commands, once we made them public
 
-Gobby::BrowserContextCommands::BrowserContextCommands(Gtk::Window& parent,
-                                                      Browser& browser,
-                                                      FileChooser& chooser,
-                                                      Operations& operations,
-						      const Preferences& prf):
-	m_parent(parent), m_browser(browser), m_file_chooser(chooser),
-	m_operations(operations), m_preferences(prf), m_popup_menu(NULL)
+namespace
 {
+	std::string make_safe_filename(const Glib::ustring& cn)
+	{
+		Glib::ustring output(cn);
+
+		for(Glib::ustring::iterator iter = output.begin();
+			iter != output.end(); )
+		{
+			if(Glib::Unicode::isspace(*iter) || *iter == '/' ||
+			   *iter == '\\' || *iter == ':' || *iter == '?')
+			{
+				iter = output.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
+
+		return output;
+	}
+
+	bool check_file(const std::string& filename)
+	{
+		return Glib::file_test(filename, Glib::FILE_TEST_EXISTS);
+	}
+
+	std::string make_certificate_filename(const Glib::ustring& cn,
+	                                      const Glib::ustring& hostname)
+	{
+		const std::string basename =
+			make_safe_filename(hostname) + "-" +
+			make_safe_filename(cn);
+
+		const std::string prefname =
+			Gobby::config_filename(basename + ".pem");
+		if(!check_file(prefname)) return prefname;
+
+		for(unsigned int i = 2; i < 10000; ++i)
+		{
+			const std::string altname =
+				Gobby::config_filename(
+					basename + "-" +
+					Glib::ustring::compose(
+						"%1", i) + ".pem");
+
+			if(!check_file(altname))
+				return altname;
+		}
+
+		throw std::runtime_error(
+			Gobby::_("Could not find a location "
+			         "where to store the certificate"));
+	}
+}
+
+Gobby::BrowserContextCommands::BrowserContextCommands(
+	Gtk::Window& parent, InfIo* io, Browser& browser, FileChooser& chooser,
+	Operations& operations, const CertificateManager& cert_manager,
+	Preferences& prefs)
+:
+	m_parent(parent), m_io(io), m_browser(browser),
+	m_file_chooser(chooser), m_operations(operations),
+	m_cert_manager(cert_manager), m_preferences(prefs),
+	m_popup_menu(NULL)
+{
+	g_object_ref(io);
+
 	m_populate_popup_handler = g_signal_connect(
 		m_browser.get_view(), "populate-popup",
 		G_CALLBACK(on_populate_popup_static), this);
@@ -48,6 +112,8 @@ Gobby::BrowserContextCommands::~BrowserContextCommands()
 {
 	g_signal_handler_disconnect(m_browser.get_view(),
 	                            m_populate_popup_handler);
+
+	g_object_unref(m_io);
 }
 
 void Gobby::BrowserContextCommands::on_menu_node_removed()
@@ -81,7 +147,8 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	if(!m_browser.get_selected_iter(browser, &iter))
 	{
 		InfBrowserStatus browser_status;
-		g_object_get(G_OBJECT(browser), "status", &browser_status, NULL);
+		g_object_get(G_OBJECT(browser), "status",
+		             &browser_status, NULL);
 
 		if(browser_status == INF_BROWSER_CLOSED)
 		{
@@ -113,12 +180,15 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	menu->signal_deactivate().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_menu_deactivate));
 
+	bool have_toplevel_entries = false;
+
 	// Add "Disconnect" menu option if the connection
 	// item has been clicked at
 	if(is_toplevel && INFC_IS_BROWSER(browser))
 	{
 		Gtk::ImageMenuItem* disconnect_item = Gtk::manage(
-			new Gtk::ImageMenuItem(_("_Disconnect from Server"), true));
+			new Gtk::ImageMenuItem(
+				_("_Disconnect from Server"), true));
 		disconnect_item->set_image(*Gtk::manage(new Gtk::Image(
 			Gtk::Stock::DISCONNECT, Gtk::ICON_SIZE_MENU)));
 		disconnect_item->signal_activate().connect(sigc::bind(
@@ -127,8 +197,42 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 			INFC_BROWSER(browser)));
 		disconnect_item->show();
 		menu->append(*disconnect_item);
+		have_toplevel_entries = true;
+	}
 
-		// Separator
+	// Add create account option if the connection item has been clicked at
+	if(is_toplevel)
+	{
+		const InfAclAccount* account =
+			inf_browser_get_acl_local_account(browser);
+
+		InfAclMask mask;
+		inf_acl_mask_set1(&mask, INF_ACL_CAN_CREATE_ACCOUNT);
+		inf_browser_check_acl(browser, &iter, account, &mask, &mask);
+		if(inf_acl_mask_has(&mask, INF_ACL_CAN_CREATE_ACCOUNT))
+		{
+			Gtk::Image* image = Gtk::manage(new Gtk::Image);
+			image->set_from_icon_name("application-certificate",
+			                          Gtk::ICON_SIZE_MENU);
+			Gtk::ImageMenuItem* item =
+				Gtk::manage(new Gtk::ImageMenuItem(
+	                                _("Create _Account..."), true));
+			item->set_image(*image);
+			item->signal_activate().connect(sigc::bind(
+				sigc::mem_fun(
+					*this,
+					&BrowserContextCommands::
+						on_create_account),
+				browser));
+			item->show();
+			menu->append(*item);
+			have_toplevel_entries = true;
+		}
+	}
+
+	// Separator, if we have entries dedicated to the browser itself
+	if(have_toplevel_entries)
+	{
 		Gtk::SeparatorMenuItem* sep_item =
 			Gtk::manage(new Gtk::SeparatorMenuItem);
 		sep_item->show();
@@ -252,6 +356,30 @@ void Gobby::BrowserContextCommands::on_disconnect(InfcBrowser* browser)
 	}
 }
 
+void Gobby::BrowserContextCommands::on_create_account(InfBrowser* browser)
+{
+	InfGtkAccountCreationDialog* dlg =
+		inf_gtk_account_creation_dialog_new(
+			m_parent.gobj(), static_cast<GtkDialogFlags>(0),
+			m_io, browser);
+	std::auto_ptr<Gtk::Dialog> account_creation_dialog(
+		Glib::wrap(GTK_DIALOG(dlg)));
+
+	account_creation_dialog->add_button(
+		Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+
+	account_creation_dialog->signal_response().connect(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_create_account_response));
+
+	g_signal_connect(
+		G_OBJECT(account_creation_dialog->gobj()), "account-created",
+		G_CALLBACK(on_account_created_static), this);
+
+	m_dialog = account_creation_dialog;
+	m_dialog->present();
+}
+
 void Gobby::BrowserContextCommands::on_remove(InfBrowser* browser)
 {
 	InfBrowserStatus status;
@@ -349,6 +477,129 @@ void Gobby::BrowserContextCommands::on_delete(InfBrowser* browser,
 void Gobby::BrowserContextCommands::on_dialog_node_removed()
 {
 	m_watch.reset(NULL);
+	m_dialog.reset(NULL);
+}
+
+void Gobby::BrowserContextCommands::on_create_account_response(int response_id)
+{
+	m_watch.reset(NULL);
+	m_dialog.reset(NULL);
+}
+
+void Gobby::BrowserContextCommands::on_account_created(
+	gnutls_x509_privkey_t key,
+	InfCertificateChain* certificate,
+	const InfAclAccount* account)
+{
+	InfBrowser* browser;
+	g_object_get(G_OBJECT(m_dialog->gobj()), "browser", &browser, NULL);
+	const InfAclAccount* default_account =
+		inf_browser_get_acl_local_account(browser);
+	const bool is_default_account =
+		(strcmp(default_account->id, "default") == 0);
+	g_object_unref(browser);
+
+	gnutls_x509_crt_t cert =
+		inf_certificate_chain_get_own_certificate(certificate);
+	gchar* name = inf_cert_util_get_dn_by_oid(
+		cert, GNUTLS_OID_X520_COMMON_NAME, 0);
+	const std::string cn = name;
+	g_free(name);
+
+	std::string host;
+	if(INFC_IS_BROWSER(browser))
+	{
+		InfXmlConnection* xml =
+			infc_browser_get_connection(INFC_BROWSER(browser));
+		if(INF_IS_XMPP_CONNECTION(xml))
+		{
+			gchar* hostname;
+			g_object_get(G_OBJECT(xml), "remote-hostname",
+			             &hostname, NULL);
+			host = hostname;
+			g_free(hostname);
+		}
+	}
+
+	if(host.empty())
+		host = "local";
+
+	gnutls_x509_crt_t* certs = inf_certificate_chain_get_raw(certificate);
+	const unsigned int n_certs =
+		inf_certificate_chain_get_n_certificates(certificate);
+
+	std::auto_ptr<Gtk::MessageDialog> dlg;
+
+	try
+	{
+		const std::string filename = make_certificate_filename(cn, host);
+
+		GError* error = NULL;
+		inf_cert_util_write_certificate_with_key(
+			key, certs, n_certs, filename.c_str(), &error);
+
+		if(error != NULL)
+		{
+			const std::string message = error->message;
+			g_error_free(error);
+			throw std::runtime_error(message);
+		}
+
+		if(is_default_account &&
+		   (m_cert_manager.get_private_key() == NULL ||
+		    m_cert_manager.get_certificates() == NULL))
+		{
+			m_preferences.security.key_file = filename;
+			m_preferences.security.certificate_file = filename;
+
+			dlg.reset(new Gtk::MessageDialog(
+				m_parent, _("Account successfully created"),
+				false, Gtk::MESSAGE_INFO,
+				Gtk::BUTTONS_CLOSE));
+			dlg->set_secondary_text(
+				_("When re-connecting to the server, the "
+				  "new account will be used."));
+		}
+		else
+		{
+			// TODO: Gobby should support multiple certificates
+			dlg.reset(new Gtk::MessageDialog(
+				m_parent, _("Account successfully created"),
+				false, Gtk::MESSAGE_INFO,
+				Gtk::BUTTONS_CLOSE));
+			dlg->set_secondary_text(Glib::ustring::compose(
+				_("The certificate has been stored at %1.\n\n"
+				  "To login to this account, set the "
+				  "certificate in Gobby's preferences "
+				  "and re-connect to the server."),
+				filename));
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		// This is actually a bit unfortunate, because the
+		// account was actually created and we have a valid
+		// certificate for it, but we cannot keep it...
+		dlg.reset(new Gtk::MessageDialog(
+			m_parent, _("Failed to create account"),
+			false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_CLOSE));
+		dlg->set_secondary_text(Glib::ustring::compose(
+			_("Could not save the certificate for the "
+			  "account: %1"), ex.what()));
+	}
+
+	m_dialog = dlg;
+	m_dialog->signal_response().connect(
+		sigc::mem_fun(
+			*this,
+			&BrowserContextCommands::
+				on_account_created_response));
+	m_dialog->present();
+}
+
+void Gobby::BrowserContextCommands::on_account_created_response(
+	int response_id)
+{
 	m_dialog.reset(NULL);
 }
 

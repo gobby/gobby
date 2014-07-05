@@ -30,6 +30,8 @@
 
 #include <sigc++/trackable.h>
 
+#include <libinfgtk/inf-gtk-account-creation-dialog.h>
+
 namespace Gobby
 {
 
@@ -37,9 +39,11 @@ class BrowserContextCommands: public sigc::trackable
 {
 public:
 	BrowserContextCommands(Gtk::Window& parent,
+	                       InfIo* io,
 	                       Browser& browser, FileChooser& chooser,
 	                       Operations& operations,
-	                       const Preferences& prf);
+	                       const CertificateManager& cert_manager,
+	                       Preferences& prf);
 	~BrowserContextCommands();
 
 protected:
@@ -51,6 +55,17 @@ protected:
 			on_populate_popup(Glib::wrap(menu));
 	}
 
+	static void on_account_created_static(
+		InfGtkAccountCreationDialog* dlg,
+		gnutls_x509_privkey_t key,
+		InfCertificateChain* certificate,
+		const InfAclAccount* account,
+		gpointer user_data)
+	{
+		static_cast<BrowserContextCommands*>(user_data)->
+			on_account_created(key, certificate, account);
+	}
+
 	void on_menu_node_removed();
 	void on_menu_deactivate();
 
@@ -59,6 +74,7 @@ protected:
 
 	// Context commands
 	void on_disconnect(InfcBrowser* browser);
+	void on_create_account(InfBrowser* browser);
 	void on_remove(InfBrowser* browser);
 
 	void on_new(InfBrowser* browser, InfBrowserIter iter,
@@ -68,6 +84,11 @@ protected:
 	void on_delete(InfBrowser* browser, InfBrowserIter iter);
 
 	void on_dialog_node_removed();
+	void on_create_account_response(int response_id);
+	void on_account_created(gnutls_x509_privkey_t key,
+	                        InfCertificateChain* certificate,
+	                        const InfAclAccount* account);
+	void on_account_created_response(int response_id);
 	void on_new_response(int response_id, InfBrowser* browser,
 	                     InfBrowserIter iter, bool directory);
 	void on_open_response(int response_id, InfBrowser* browser,
@@ -75,10 +96,12 @@ protected:
 	void on_permissions_response(int response_id);
 
 	Gtk::Window& m_parent;
+	InfIo* m_io;
 	Browser& m_browser;
 	FileChooser& m_file_chooser;
 	Operations& m_operations;
-	const Preferences& m_preferences;
+	const CertificateManager& m_cert_manager;
+	Preferences& m_preferences;
 
 	// Browser item for which
 	Gtk::Menu* m_popup_menu;
