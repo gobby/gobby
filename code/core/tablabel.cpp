@@ -42,6 +42,9 @@ Gobby::TabLabel::TabLabel(Folder& folder, SessionView& view,
 	view.signal_active_user_changed().connect(
 		sigc::mem_fun(*this, &TabLabel::on_active_user_changed));
 
+	view.signal_session_name_changed().connect(
+		sigc::mem_fun(*this, &TabLabel::on_session_name_changed));
+
 	m_notify_status_handle = g_signal_connect(
 		G_OBJECT(view.get_session()), "notify::status",
 		G_CALLBACK(on_notify_status_static), this);
@@ -78,6 +81,11 @@ void Gobby::TabLabel::on_active_user_changed(InfUser* user)
 	update_icon();
 }
 
+void Gobby::TabLabel::on_session_name_changed(const Glib::ustring& new_name)
+{
+	update_text();
+}
+
 void Gobby::TabLabel::on_notify_status()
 {
 	update_icon();
@@ -103,6 +111,11 @@ void Gobby::TabLabel::set_changed()
 		m_changed = true;
 		update_color();
 	}
+}
+
+void Gobby::TabLabel::update_text()
+{
+	m_title.set_text(m_view.get_title());
 }
 
 void Gobby::TabLabel::update_icon()

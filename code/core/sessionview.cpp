@@ -52,12 +52,18 @@ Gobby::SessionView::SessionView(InfSession* session,
 	// Don't show infoframe by default
 
 	pack_start(m_info_frame, Gtk::PACK_SHRINK);
+	
+	// TODO: Would this be the best way to handle it?
+	/*m_notify_rename_handler = g_signal_connect(
+		G_OBJECT(session), "notify::rename",
+		G_CALLBACK(on_session_name_changed_static), this);*/
 }
 
 Gobby::SessionView::~SessionView()
 {
+	/*g_signal_handler_disconnect(G_OBJECT(m_session),
+					m_notify_rename_handler);*/
 	g_object_unref(m_session);
-	//m_session = NULL; // TODO: Any reason to reset this?
 }
 
 void Gobby::SessionView::set_info(const Glib::ustring& info, bool closable)
@@ -83,4 +89,11 @@ InfUser* Gobby::SessionView::get_active_user() const
 void Gobby::SessionView::active_user_changed(InfUser* new_user)
 {
 	m_signal_active_user_changed.emit(new_user);
+}
+
+void Gobby::SessionView::session_name_changed(const gchar* new_name)
+{
+	const Glib::ustring& str(new_name);
+	m_title = str;
+	m_signal_session_name_changed.emit(str);
 }

@@ -35,6 +35,7 @@ class SessionView: public Gtk::VBox
 {
 public:
 	typedef sigc::signal<void, InfUser*> SignalActiveUserChanged;
+	typedef sigc::signal<void, const Glib::ustring&> SignalSessionNameChanged;
 
 	SessionView(InfSession* session, const Glib::ustring& title,
 	            const Glib::ustring& path, const Glib::ustring& hostname);
@@ -57,12 +58,24 @@ public:
 		return m_signal_active_user_changed;
 	}
 
+	SignalSessionNameChanged signal_session_name_changed() const
+	{
+		return m_signal_session_name_changed;
+	}
+
+	static void on_session_name_changed_static(const gchar* new_name,
+	                                      gpointer user_data)
+	{
+		static_cast<SessionView*>(user_data)->session_name_changed(new_name);
+	}
+
 protected:
 	void active_user_changed(InfUser* new_user);
+	void session_name_changed(const gchar* new_name);
 
 	InfSession* m_session;
 
-	const Glib::ustring m_title;
+	Glib::ustring m_title;
 	const Glib::ustring m_path;
 	const Glib::ustring m_hostname;
 
@@ -74,6 +87,8 @@ protected:
 
 private:
 	SignalActiveUserChanged m_signal_active_user_changed;
+	SignalSessionNameChanged m_signal_session_name_changed;
+	gulong m_notify_rename_handler;
 };
 
 }

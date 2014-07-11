@@ -62,6 +62,7 @@ protected:
 	void on_folder_document_changed(SessionView* view);
 
 	// Can be overriden by derived classes:
+	virtual void on_session_name_changed(const Glib::ustring& new_name);
 	virtual void on_active_user_changed(InfUser* user);
 	virtual void on_notify_status();
 	virtual void on_notify_subscription_group();
@@ -81,6 +82,7 @@ protected:
 	bool m_changed;
 
 private:
+	void update_text();
 	void update_icon();
 	void update_color();
 

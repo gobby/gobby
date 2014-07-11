@@ -52,7 +52,7 @@ void Gobby::OperationRename::start()
 	InfRequest* request = inf_browser_rename_node(
 		m_browser,
 		&m_iter,
-		new_name.c_str(),
+		m_new_name.c_str(),
 		on_request_finished_static,
 		this
 	);
@@ -68,7 +68,7 @@ void Gobby::OperationRename::start()
 
 		m_message_handle = get_status_bar().add_info_message(
 			Glib::ustring::compose(
-				_("Renaming node \"%1\"..."), m_name));
+				_("Renaming node \"%1\" to \"%2\"..."), m_name, m_new_name));
 	}
 }
 

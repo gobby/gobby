@@ -164,7 +164,6 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 
 	set_default_size(800, 600);
 	set_role("Gobby");
-	set_title("Derpy!");
 }
 
 Gobby::Window::~Window()

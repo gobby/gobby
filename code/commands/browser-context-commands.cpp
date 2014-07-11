@@ -422,8 +422,8 @@ void Gobby::BrowserContextCommands::on_permissions_response(int response_id)
 }
 
 void Gobby::BrowserContextCommands::on_rename_response(int response_id,
-						InfBrowser* browser,
-						InfBrowserIter iter)
+                                                       InfBrowser* browser,
+                                                       InfBrowserIter iter)
 {
 	EntryDialog* entry_dialog = static_cast<EntryDialog*>(m_dialog.get());
 

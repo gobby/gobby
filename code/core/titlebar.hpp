@@ -55,6 +55,7 @@ private:
 
 	void on_notify_status();
 	void on_notify_modified();
+	virtual void on_session_name_changed(const Glib::ustring& new_name);
 
 	void update_title();
 
@@ -63,7 +64,8 @@ private:
 	SessionView* m_current_view;
 
 	gulong m_notify_status_handler;
-	gulong m_modified_changed_handler;
+	gulong m_notify_modified_handler;
+	sigc::connection m_rename_handler;
 };
 
 }
