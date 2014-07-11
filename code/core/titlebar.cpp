@@ -52,7 +52,9 @@ void Gobby::TitleBar::on_document_changed(SessionView* view)
 		g_signal_handler_disconnect(G_OBJECT(session),
 		                            m_notify_status_handler);
 		g_signal_handler_disconnect(G_OBJECT(buffer),
-		                            m_modified_changed_handler);
+		                            m_notify_modified_handler);
+		
+		m_rename_handler.disconnect();
 	}
 
 	m_current_view = view;
@@ -65,9 +67,14 @@ void Gobby::TitleBar::on_document_changed(SessionView* view)
 		m_notify_status_handler = g_signal_connect(
 			G_OBJECT(session), "notify::status",
 			G_CALLBACK(on_notify_status_static), this);
-		m_modified_changed_handler = g_signal_connect(
+		m_notify_modified_handler = g_signal_connect(
 			G_OBJECT(buffer), "notify::modified",
 			G_CALLBACK(on_notify_modified_static), this);
+		
+		// We are subscribing to the view's signal to avoid a race condition,
+		// since we can't otherwise guarantee that the view's new name has already been set
+		m_rename_handler = m_current_view->signal_session_name_changed().connect(
+			sigc::mem_fun(*this, &TitleBar::on_session_name_changed));
 	}
 
 	update_title();
@@ -79,6 +86,11 @@ void Gobby::TitleBar::on_notify_status()
 }
 
 void Gobby::TitleBar::on_notify_modified()
+{
+	update_title();
+}
+
+void Gobby::TitleBar::on_session_name_changed(const Glib::ustring& new_name)
 {
 	update_title();
 }

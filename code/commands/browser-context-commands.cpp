@@ -318,6 +318,19 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	permissions_item->show();
 	menu->append(*permissions_item);
 
+	// Rename
+	Gtk::ImageMenuItem* rename_item = Gtk::manage(
+		new Gtk::ImageMenuItem(_("Re_name"), true));
+	rename_item->set_image(*Gtk::manage(new Gtk::Image(
+		Gtk::Stock::EDIT, Gtk::ICON_SIZE_MENU)));
+	rename_item->signal_activate().connect(sigc::bind(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_rename),
+		browser, iter));
+	rename_item->set_sensitive(!is_toplevel);
+	rename_item->show();
+	menu->append(*rename_item);
+
 	// Delete
 	Gtk::ImageMenuItem* delete_item = Gtk::manage(
 		new Gtk::ImageMenuItem(_("D_elete"), true));
@@ -465,6 +478,37 @@ void Gobby::BrowserContextCommands::on_permissions(InfBrowser* browser,
 			&BrowserContextCommands::on_permissions_response));
 
 	m_dialog = permissions_dialog;
+	m_dialog->present();
+}
+
+void Gobby::BrowserContextCommands::on_rename(InfBrowser* browser,
+                                              InfBrowserIter iter)
+{
+	bool directory = inf_browser_is_subdirectory(browser, &iter);
+	m_watch.reset(new NodeWatch(browser, &iter));
+	m_watch->signal_node_removed().connect(sigc::mem_fun(
+		*this, &BrowserContextCommands::on_dialog_node_removed));
+
+	std::auto_ptr<EntryDialog> entry_dialog(
+		new EntryDialog(
+			m_parent,
+			directory ? _("Choose a name for the directory")
+			          : _("Choose a name for the document"),
+			directory ? _("_Directory Name:")
+			          : _("_Document Name:")));
+
+	entry_dialog->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	entry_dialog->add_button(_("_Rename"), Gtk::RESPONSE_ACCEPT)
+		->set_image(*Gtk::manage(new Gtk::Image(
+			Gtk::Stock::EDIT, Gtk::ICON_SIZE_BUTTON)));
+
+	entry_dialog->set_text(inf_browser_get_node_name(browser, &iter));
+	entry_dialog->signal_response().connect(sigc::bind(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_rename_response),
+		browser, iter));
+
+	m_dialog = entry_dialog;
 	m_dialog->present();
 }
 
@@ -652,6 +696,21 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 
 void Gobby::BrowserContextCommands::on_permissions_response(int response_id)
 {
+	m_watch.reset(NULL);
+	m_dialog.reset(NULL);
+}
+
+void Gobby::BrowserContextCommands::on_rename_response(int response_id,
+                                                       InfBrowser* browser,
+                                                       InfBrowserIter iter)
+{
+	EntryDialog* entry_dialog = static_cast<EntryDialog*>(m_dialog.get());
+
+	if(response_id == Gtk::RESPONSE_ACCEPT)
+	{
+		m_operations.rename_node(browser, &iter, entry_dialog->get_text());
+	}
+
 	m_watch.reset(NULL);
 	m_dialog.reset(NULL);
 }

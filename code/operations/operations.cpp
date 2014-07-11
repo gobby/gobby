@@ -21,6 +21,7 @@
 #include "operations/operation-open.hpp"
 #include "operations/operation-open-multiple.hpp"
 #include "operations/operation-save.hpp"
+#include "operations/operation-rename.hpp"
 #include "operations/operation-delete.hpp"
 #include "operations/operation-subscribe-path.hpp"
 #include "operations/operation-export-html.hpp"
@@ -121,6 +122,18 @@ Gobby::Operations::save_document(TextSessionView& view,
 
 	m_operations.insert(op);
 	m_signal_begin_save_operation.emit(op);
+	op->start();
+	return check_operation(op);
+}
+
+Gobby::OperationRename*
+Gobby::Operations::rename_node(InfBrowser* browser,
+                               const InfBrowserIter* iter,
+			       const Glib::ustring& new_name)
+{
+	OperationRename* op = new OperationRename(*this, browser, iter, new_name);
+	m_operations.insert(op);
+
 	op->start();
 	return check_operation(op);
 }

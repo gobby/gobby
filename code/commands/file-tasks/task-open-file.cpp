@@ -45,6 +45,7 @@ void Gobby::TaskOpenFile::on_file_response(int response_id)
 		
 		g_assert(uris.size() >= 1);
 		
+		// Single file selected
 		if (uris.size() == 1)
 		{
 			Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(*uris.begin());
@@ -53,7 +54,7 @@ void Gobby::TaskOpenFile::on_file_response(int response_id)
 				sigc::mem_fun(*this, &TaskOpenFile::finish));
 			m_open_task->run();
 		}
-		else
+		else // Multiple files selected
 		{
 			TaskOpenMultiple *task = new TaskOpenMultiple(m_file_commands);
 			

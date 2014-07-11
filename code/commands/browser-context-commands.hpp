@@ -81,6 +81,7 @@ protected:
 	            bool directory);
 	void on_open(InfBrowser* browser, InfBrowserIter iter);
 	void on_permissions(InfBrowser* browser, InfBrowserIter iter);
+	void on_rename(InfBrowser* browser, InfBrowserIter iter);
 	void on_delete(InfBrowser* browser, InfBrowserIter iter);
 
 	void on_dialog_node_removed();
@@ -94,6 +95,8 @@ protected:
 	void on_open_response(int response_id, InfBrowser* browser,
 	                      InfBrowserIter iter);
 	void on_permissions_response(int response_id);
+	void on_rename_response(int response_id, InfBrowser* browser,
+	                      InfBrowserIter iter);
 
 	Gtk::Window& m_parent;
 	InfIo* m_io;
