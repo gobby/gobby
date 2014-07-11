@@ -705,59 +705,59 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:526
 msgid "Toolbar"
-msgstr ""
+msgstr "Barra de Ferramentas"
 
 #: ../code/dialogs/preferences-dialog.cpp:527
 msgid "Font"
-msgstr ""
+msgstr "Fontes"
 
 #: ../code/dialogs/preferences-dialog.cpp:528
 msgid "Color Scheme"
-msgstr ""
+msgstr "Esquema de cores"
 
 #: ../code/dialogs/preferences-dialog.cpp:535
 msgid "Show text only"
-msgstr ""
+msgstr "Mostrar apenas texto"
 
 #: ../code/dialogs/preferences-dialog.cpp:537
 msgid "Show icons only"
-msgstr ""
+msgstr "Mostrar apenas ícones"
 
 #: ../code/dialogs/preferences-dialog.cpp:539
 msgid "Show both icons and text"
-msgstr ""
+msgstr "Mostrar os ícones e texto"
 
 #: ../code/dialogs/preferences-dialog.cpp:541
 msgid "Show text besides icons"
-msgstr ""
+msgstr "Mostrar texto além de ícones"
 
 #: ../code/dialogs/preferences-dialog.cpp:620
 msgid "Trusted CAs"
-msgstr ""
+msgstr "CAs confiáveis"
 
 #: ../code/dialogs/preferences-dialog.cpp:621
 msgid "Secure Connection"
-msgstr ""
+msgstr "Conexão Segura"
 
 #: ../code/dialogs/preferences-dialog.cpp:622
 msgid "Select a file containing trusted CAs"
-msgstr ""
+msgstr "Selecionar um arquivo contendo dados confiáveis CAs "
 
 #: ../code/dialogs/preferences-dialog.cpp:639
 msgid "Use TLS if possible"
-msgstr ""
+msgstr "Usar TLS se possível"
 
 #: ../code/dialogs/preferences-dialog.cpp:642
 msgid "Always use TLS"
-msgstr ""
+msgstr "Sempre usar TLS"
 
 #: ../code/dialogs/preferences-dialog.cpp:654
 msgid "Preferences"
-msgstr ""
+msgstr "Preferências"
 
 #: ../code/dialogs/preferences-dialog.cpp:659
 msgid "User"
-msgstr ""
+msgstr "Usuário"
 
 #: ../code/dialogs/preferences-dialog.cpp:660
 msgid "Editor"
@@ -765,27 +765,27 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:661
 msgid "View"
-msgstr ""
+msgstr "Exibir"
 
 #: ../code/dialogs/preferences-dialog.cpp:662
 msgid "Appearance"
-msgstr ""
+msgstr "Aparência"
 
 #: ../code/dialogs/preferences-dialog.cpp:663
 msgid "Security"
-msgstr ""
+msgstr "Segurança"
 
 #: ../code/main.cpp:196
 msgid "Gobby options"
-msgstr ""
+msgstr "Opções do Gobby"
 
 #: ../code/main.cpp:196
 msgid "Options related to Gobby"
-msgstr ""
+msgstr "Opções relacionadas do Gobby"
 
 #: ../code/main.cpp:201
 msgid "Display version information and exit"
-msgstr ""
+msgstr "Exibir informação da versão e sair"
 
 #: ../code/main.cpp:208
 msgid "Also start a new Gobby instance when there is one running already"
@@ -801,16 +801,16 @@ msgstr ""
 
 #: ../code/operations/operation-delete.cpp:42
 msgid "Removing node \"%1\"..."
-msgstr ""
+msgstr "Removendo nó \"%1\"..."
 
 #: ../code/operations/operation-delete.cpp:57
 msgid "Failed to delete node \"%1\""
-msgstr ""
+msgstr "Falha ao excluir nó \"%1\""
 
 #: ../code/operations/operation-export-html.cpp:166
 #, c-format
 msgid "written by: %s"
-msgstr ""
+msgstr "escrito por: %s"
 
 #: ../code/operations/operation-export-html.cpp:239
 msgid "<unable to print date>"
@@ -825,35 +825,35 @@ msgstr ""
 #: ../code/operations/operation-export-html.cpp:252
 #, c-format
 msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
-msgstr ""
+msgstr "Documento gerado a partir de %1$s:%2$s at %3$s by %4$s"
 
 #: ../code/operations/operation-export-html.cpp:393
 msgid "Participants"
-msgstr ""
+msgstr "Participantes"
 
 #: ../code/operations/operation-export-html.cpp:454
 msgid "Exporting document \"%1\" to \"%2\" in HTML..."
-msgstr ""
+msgstr "Exportando o documento \"%1\" to \"%2\" em HTML..."
 
 #: ../code/operations/operation-export-html.cpp:526
 msgid "Failed to export document \"%1\" to HTML"
-msgstr ""
+msgstr "Falha ao exportar documento \"%1\" para HTML"
 
 #: ../code/operations/operation-new.cpp:56
 msgid "Creating directory \"%1\"..."
-msgstr ""
+msgstr "Criando diretório \"%1\"..."
 
 #: ../code/operations/operation-new.cpp:57
 msgid "Creating document \"%1\"..."
-msgstr ""
+msgstr "Criação de documento \"%1\"..."
 
 #: ../code/operations/operation-new.cpp:73
 msgid "Failed to create directory \"%1\""
-msgstr ""
+msgstr "Falha ao criar diretório \"%1\""
 
 #: ../code/operations/operation-new.cpp:74
 msgid "Failed to create document \"%1\""
-msgstr ""
+msgstr "Falha ao criar documento \"%1\""
 
 #. Translators: This is the 8 bit encoding that is tried when
 #. autodetecting a file's encoding.
@@ -863,73 +863,76 @@ msgstr ""
 
 #: ../code/operations/operation-open.cpp:89
 msgid "Opening document \"%1\"..."
-msgstr ""
+msgstr "Abrindo documento \"%1\"..."
 
 #: ../code/operations/operation-open.cpp:124
 msgid ""
 "The directory into which the new document was supposed to be inserted has "
 "been removed"
-msgstr ""
+msgstr "O diretório no qual o suposto novo documento foi inserido"
+"foi removido"
 
 #: ../code/operations/operation-open.cpp:313
 msgid "The file contains data not in the specified encoding"
-msgstr ""
+msgstr "O arquivo não contém dados no encoding especificado"
 
 #: ../code/operations/operation-open.cpp:324
 msgid ""
 "The file either contains data in an unknown encoding, or it contains binary "
 "data."
-msgstr ""
+msgstr "O arquivo também contém dados em uma codificação desconhecida, ou que contém o binário"
+"dados."
 
 #: ../code/operations/operation-open-multiple.cpp:84
 msgid "Parent folder was removed"
-msgstr ""
+msgstr "Pasta pai foi removida"
 
 #: ../code/operations/operation-open-multiple.cpp:172
 msgid "Failed to open multiple documents"
-msgstr ""
+msgstr "Falha ao abrir vários documentos"
 
 #: ../code/operations/operation-save.cpp:74
 msgid "Saving document \"%1\" to \"%2\"..."
-msgstr ""
+msgstr "Salvar documento \"%1\" de \"%2\"..."
 
 #: ../code/operations/operation-save.cpp:227
 msgid ""
 "The document contains one or more characters that cannot be encoded in the "
 "specified character coding."
-msgstr ""
+msgstr "O documento contém um ou mais caracteres que não podem ser codificados na"
+"codificação de caractere especificado."
 
 #: ../code/operations/operation-save.cpp:288
 msgid "Failed to save document \"%1\""
-msgstr ""
+msgstr "Falha ao salvar o documento \"%1\""
 
 #: ../code/util/file.cpp:67 ../code/util/file.cpp:76
 msgid "Could not create directory \"%1\": %2"
-msgstr ""
+msgstr "Não foi possível criar o diretório \"%1\": %2"
 
 #: ../code/window.cpp:112
 msgid "Document Browser"
-msgstr ""
+msgstr "Navegador do documento"
 
 #: ../code/window.cpp:168
 msgid "You are still connected to a session"
-msgstr ""
+msgstr "Você ainda está conectado a uma sessão"
 
 #: ../code/window.cpp:176
 msgid "Do you want to close Gobby nevertheless?"
-msgstr ""
+msgstr "Você quer fechar Gobby?"
 
 #: ../code/window.cpp:182
 msgid "C_ancel"
-msgstr ""
+msgstr "C_ancelar"
 
 #: ../gobby-0.5.desktop.in.h:1
 msgid "Collaborative Editor"
-msgstr ""
+msgstr "Editor colaborativo"
 
 #: ../gobby-0.5.desktop.in.h:2
 msgid "Edit text files collaboratively"
-msgstr ""
+msgstr "Editar arquivos de texto de forma colaborativa"
 
 #: ../gobby-0.5.desktop.in.h:3
 msgid "Gobby"
