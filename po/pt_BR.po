@@ -435,11 +435,11 @@ msgstr ""
 
 #: ../code/dialogs/document-location-dialog.cpp:164
 msgid "Select documents' target location"
-msgstr ""
+msgstr "Selecione o local de destino dos documentos"
 
 #: ../code/dialogs/document-location-dialog.cpp:166
 msgid "Choose a directory to create the documents into:"
-msgstr ""
+msgstr "Escolha um diretório para criar os documentos em:"
 
 #: ../code/dialogs/find-dialog.cpp:46 ../code/dialogs/find-dialog.cpp:144
 msgid "Find"
@@ -487,29 +487,29 @@ msgstr ""
 
 #: ../code/dialogs/find-dialog.cpp:337
 msgid "No occurrence has been replaced"
-msgstr ""
+msgstr "Nenhuma ocorrência foi substituída"
 
 #: ../code/dialogs/find-dialog.cpp:343
 msgid "%1 occurrence has been replaced"
 msgid_plural "%1 occurrences have been replaced"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 ocorrência foi substituída"
+msgstr[1] "%1 as ocorrências foram substituídas"
 
 #: ../code/dialogs/goto-dialog.cpp:27
 msgid "Go to line"
-msgstr "Vá para a linha"
+msgstr "Ir até a linha"
 
 #: ../code/dialogs/goto-dialog.cpp:30
 msgid "Line _number:"
-msgstr ""
+msgstr "Número de _linhas:"
 
 #: ../code/dialogs/goto-dialog.cpp:51
 msgid "Go To _Line"
-msgstr ""
+msgstr "Ir até a _Linha"
 
 #: ../code/dialogs/initial-dialog.cpp:49
 msgid "Choose a user color"
-msgstr ""
+msgstr "Escolha uma cor para o usuário"
 
 #: ../code/dialogs/initial-dialog.cpp:53
 msgid "Welcome to Gobby"
@@ -517,8 +517,8 @@ msgstr "Bem-vindo ao Gobby"
 
 #: ../code/dialogs/initial-dialog.cpp:62
 msgid ""
-"Before we start, a few options need to be configured. You can later change "
-"them by choosing Edit ▸ Preferences from the menu."
+"Antes de começarmos, algumas opções precisam ser configuradas. Você pode alterar mais tarde "
+"escolhendo Editar ▸ preferências no menu."
 msgstr ""
 
 #: ../code/dialogs/initial-dialog.cpp:69
@@ -535,7 +535,7 @@ msgstr "Cor do Usuário"
 
 #: ../code/dialogs/initial-dialog.cpp:82
 msgid "The color with which text you have written is branded."
-msgstr ""
+msgstr "A cor com o texto que você escreveu é marcado"
 
 #: ../code/dialogs/open-location-dialog.cpp:27
 msgid "Open Location"
@@ -555,7 +555,7 @@ msgstr ""
 
 #: ../code/dialogs/password-dialog.cpp:34
 msgid "Invalid password for host \"%1\". Please try again."
-msgstr ""
+msgstr "Senha inválida para o host \"%1\". Por favor, tente novamente."
 
 #: ../code/dialogs/password-dialog.cpp:37
 msgid "Server _Password:"
@@ -579,11 +579,11 @@ msgstr "Cor do usuário:"
 
 #: ../code/dialogs/preferences-dialog.cpp:238
 msgid "Choose a new user color"
-msgstr ""
+msgstr "Escolha uma nova cor para o usuário"
 
 #: ../code/dialogs/preferences-dialog.cpp:241
 msgid "Host directory:"
-msgstr ""
+msgstr "Diretório do Host:"
 
 #: ../code/dialogs/preferences-dialog.cpp:283
 msgid "The directory into which locally hosted sessions are permanently stored"
@@ -595,7 +595,7 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:301
 msgid "Indentation"
-msgstr ""
+msgstr "Indentação"
 
 #: ../code/dialogs/preferences-dialog.cpp:302
 msgid "Home/End Behavior"
@@ -603,15 +603,15 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:303
 msgid "File Saving"
-msgstr ""
+msgstr "Salvar Arquivo"
 
 #: ../code/dialogs/preferences-dialog.cpp:304
 msgid "_Tab width:"
-msgstr ""
+msgstr "Larguda da _Tabulação"
 
 #: ../code/dialogs/preferences-dialog.cpp:306
 msgid "Insert _spaces instead of tabs"
-msgstr ""
+msgstr "Inserir _espaços em vez de tabulações "
 
 #: ../code/dialogs/preferences-dialog.cpp:307
 msgid "Enable automatic _indentation"
@@ -623,17 +623,18 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:309
 msgid "Enable _automatic saving of documents"
-msgstr ""
+msgstr "Ativar _salvar documentos automaticamente"
 
 #: ../code/dialogs/preferences-dialog.cpp:311
 msgid "Autosave interval in _minutes:"
-msgstr ""
+msgstr "Salvar automaticamente no intervalo de _minutos"
 
 #: ../code/dialogs/preferences-dialog.cpp:332
 msgid ""
 "With this option enabled, Home/End keys move to first/last character before "
 "going to the start/end of the line."
-msgstr ""
+msgstr "Com esta opção habilitada, chaves Home/End movem-se para o primeiro/último caractere"
+"indo para o início/fim da linha".
 
 #: ../code/dialogs/preferences-dialog.cpp:402
 msgid "Text Wrapping"
@@ -641,15 +642,15 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:403
 msgid "Line Numbers"
-msgstr ""
+msgstr "Número de Linhas"
 
 #: ../code/dialogs/preferences-dialog.cpp:404
 msgid "Current Line"
-msgstr ""
+msgstr "Linha Atual"
 
 #: ../code/dialogs/preferences-dialog.cpp:405
 msgid "Right Margin"
-msgstr ""
+msgstr "Margem Direita"
 
 #: ../code/dialogs/preferences-dialog.cpp:406
 msgid "Bracket Matching"
@@ -657,11 +658,11 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:407
 msgid "Whitespace Display"
-msgstr ""
+msgstr "Mostrar espaços em branco"
 
 #: ../code/dialogs/preferences-dialog.cpp:408
 msgid "Enable text wrapping"
-msgstr ""
+msgstr "Ativar quebra-linha"
 
 #: ../code/dialogs/preferences-dialog.cpp:409
 msgid "Do not split words over two lines"
@@ -669,39 +670,39 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:410
 msgid "Display line numbers"
-msgstr ""
+msgstr "Mostrar números de linhas"
 
 #: ../code/dialogs/preferences-dialog.cpp:411
 msgid "Highlight current line"
-msgstr ""
+msgstr "Realçar linha atual"
 
 #: ../code/dialogs/preferences-dialog.cpp:412
 msgid "Display right margin"
-msgstr ""
+msgstr "Mostrar margem direita"
 
 #: ../code/dialogs/preferences-dialog.cpp:413
 msgid "Right margin at column:"
-msgstr ""
+msgstr "Margem direita na coluna"
 
 #: ../code/dialogs/preferences-dialog.cpp:414
 msgid "Highlight matching bracket"
-msgstr ""
+msgstr "Fechar colchete correspondente"
 
 #: ../code/dialogs/preferences-dialog.cpp:465
 msgid "Display no whitespace"
-msgstr ""
+msgstr "Não mostrar espaços em branco"
 
 #: ../code/dialogs/preferences-dialog.cpp:468
 msgid "Display spaces"
-msgstr ""
+msgstr "Mostrar espaçamentos"
 
 #: ../code/dialogs/preferences-dialog.cpp:472
 msgid "Display tabs"
-msgstr ""
+msgstr "Mostrar tabulações"
 
 #: ../code/dialogs/preferences-dialog.cpp:476
 msgid "Display tabs and spaces"
-msgstr ""
+msgstr "Mostrar tabulações e espaços"
 
 #: ../code/dialogs/preferences-dialog.cpp:526
 msgid "Toolbar"
