@@ -11,8 +11,11 @@ code/commands/subscription-commands.cpp
 code/commands/synchronization-commands.cpp
 code/commands/user-join-commands.cpp
 code/core/browser.cpp
+code/core/certificatemanager.cpp
+code/core/foldermanager.cpp
 code/core/header.cpp
 code/core/iconmanager.cpp
+code/core/selfhoster.cpp
 code/core/sessionuserview.cpp
 code/core/statusbar.cpp
 code/core/textsessionview.cpp
@@ -32,8 +35,10 @@ code/operations/operation-new.cpp
 code/operations/operation-open.cpp
 code/operations/operation-open-multiple.cpp
 code/operations/operation-save.cpp
+code/operations/operation-subscribe-path.cpp
 code/util/file.cpp
 code/util/i18n.cpp
 code/util/i18n.hpp
+code/util/uri.cpp
 code/window.cpp
 gobby-0.5.desktop.in
