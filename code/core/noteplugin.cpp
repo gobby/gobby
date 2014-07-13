@@ -87,15 +87,17 @@ namespace
 		InfUserTable* user_table = inf_user_table_new();
 		InfTextBuffer* buffer = make_buffer(user_table);
 
-		InfTextSession* session = 
-			inf_text_filesystem_format_read(
-				INFD_FILESYSTEM_STORAGE(storage),
-				io,
-				manager,
-				path,
-				user_table,
-				buffer,
-				error);
+		const gboolean result = inf_text_filesystem_format_read(
+			INFD_FILESYSTEM_STORAGE(storage),
+			path, user_table, buffer, error);
+
+		InfTextSession* session = NULL;
+		if(result)
+		{
+			session = inf_text_session_new_with_user_table(
+				manager, buffer, io, user_table,
+				INF_SESSION_RUNNING, NULL, NULL);
+		}
 
 		g_object_unref(buffer);
 		g_object_unref(user_table);
@@ -112,8 +114,9 @@ namespace
 	{
 		return inf_text_filesystem_format_write(
 			INFD_FILESYSTEM_STORAGE(storage),
-			INF_TEXT_SESSION(session),
 			path,
+			inf_session_get_user_table(session),
+			INF_TEXT_BUFFER(inf_session_get_buffer(session)),
 			error
 		);
 	}
