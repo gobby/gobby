@@ -165,12 +165,12 @@ protected:
 	Gtk::HPaned m_paned;
 	Gtk::VPaned m_chat_paned;
 
-	Header m_header;
-	Browser m_browser;
 	Folder m_text_folder;
 	Folder m_chat_folder;
-	ClosableFrame m_chat_frame;
 	StatusBar m_statusbar;
+	Header m_header;
+	Browser m_browser;
+	ClosableFrame m_chat_frame;
 
 	// Functionality
 	DocumentInfoStorage m_info_storage;
