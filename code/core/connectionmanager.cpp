@@ -30,6 +30,14 @@ Gobby::ConnectionManager::ConnectionManager(const CertificateManager& manager,
 	m_xmpp_manager(inf_xmpp_manager_new()),
 	m_sasl_context(NULL)
 {
+	m_add_connection_handler = g_signal_connect_after(
+		G_OBJECT(m_xmpp_manager), "add-connection",
+		G_CALLBACK(on_add_connection_static), this);
+
+	m_remove_connection_handler = g_signal_connect_after(
+		G_OBJECT(m_xmpp_manager), "remove-connection",
+		G_CALLBACK(on_remove_connection_static), this);
+
 #ifdef LIBINFINITY_HAVE_AVAHI
 	m_discovery = inf_discovery_avahi_new(m_io, m_xmpp_manager,
 			                      m_cert_manager.get_credentials(),
@@ -56,6 +64,20 @@ Gobby::ConnectionManager::~ConnectionManager()
 #endif
 	if(m_sasl_context)
 		inf_sasl_context_unref(m_sasl_context);
+
+	for(std::map<InfXmppConnection*, gulong>::const_iterator iter =
+		m_connections.begin();
+	    iter != m_connections.end(); ++iter)
+	{
+		g_signal_handler_disconnect(
+			G_OBJECT(iter->first), iter->second);
+	}
+
+	g_signal_handler_disconnect(G_OBJECT(m_xmpp_manager),
+	                            m_add_connection_handler);
+	g_signal_handler_disconnect(G_OBJECT(m_xmpp_manager),
+	                            m_remove_connection_handler);
+
 	g_object_unref(m_xmpp_manager);
 	g_object_unref(m_communication_manager);
 	g_object_unref(m_io);
@@ -114,10 +136,6 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 		g_object_get(G_OBJECT(xmpp), "status", &status, NULL);
 		if(status == INF_XML_CONNECTION_CLOSED)
 		{
-			// TODO: Set new credentials and SASL
-			// context before connecting... needs change in
-			// libinfinity to allow re-setting credentials
-
 			GError* error = NULL;
 			inf_xml_connection_open(INF_XML_CONNECTION(xmpp),
 			                        &error);
@@ -160,6 +178,25 @@ void Gobby::ConnectionManager::set_sasl_context(InfSaslContext* sasl_context,
 #endif
 }
 
+void Gobby::ConnectionManager::on_add_connection(InfXmppConnection* xmpp)
+{
+	g_assert(m_connections.find(xmpp) == m_connections.end());
+
+	m_connections[xmpp] = g_signal_connect(
+		G_OBJECT(xmpp), "notify::status",
+		G_CALLBACK(on_notify_status_static), this);
+}
+
+void Gobby::ConnectionManager::on_remove_connection(InfXmppConnection* xmpp)
+{
+	std::map<InfXmppConnection*, gulong>::iterator iter =
+		m_connections.find(xmpp);
+	g_assert(iter != m_connections.end());
+
+	g_signal_handler_disconnect(G_OBJECT(xmpp), iter->second);
+	m_connections.erase(iter);
+}
+
 void Gobby::ConnectionManager::on_security_policy_changed()
 {
 #ifdef LIBINFINITY_HAVE_AVAHI
@@ -170,7 +207,21 @@ void Gobby::ConnectionManager::on_security_policy_changed()
 
 void Gobby::ConnectionManager::on_credentials_changed()
 {
-	// Keep existing connections with current credentials
+	// Keep existing connections with current credentials but set
+	// new credentials for all closed connections.
+	for(std::map<InfXmppConnection*, gulong>::const_iterator iter =
+		m_connections.begin();
+	    iter != m_connections.end(); ++iter)
+	{
+		InfXmlConnectionStatus status;
+		g_object_get(G_OBJECT(iter->first), "status", &status, NULL);
+		if(status == INF_XML_CONNECTION_CLOSED)
+		{
+			g_object_set(
+				G_OBJECT(iter->first), "credentials",
+				m_cert_manager.get_credentials(), NULL);
+		}
+	}
 
 #ifdef LIBINFINITY_HAVE_AVAHI
 	g_object_set(
@@ -181,3 +232,17 @@ void Gobby::ConnectionManager::on_credentials_changed()
 #endif
 }
 
+void Gobby::ConnectionManager::on_notify_status(InfXmppConnection* connection)
+{
+	InfXmlConnectionStatus status;
+	g_object_get(G_OBJECT(connection), "status", &status, NULL);
+
+	// When the connection was closed, update the certificate credentials,
+	// so that in case it is reopened the current credentials are used.
+	if(status == INF_XML_CONNECTION_CLOSED)
+	{
+		g_object_set(
+			G_OBJECT(connection), "credentials",
+			m_cert_manager.get_credentials(), NULL);
+	}
+}

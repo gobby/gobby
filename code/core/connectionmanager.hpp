@@ -67,9 +67,37 @@ public:
 	void set_sasl_context(InfSaslContext* sasl_context,
 	                      const char* mechanisms);
 
+private:
+	static void on_notify_status_static(GObject* object,
+	                                    GParamSpec* pspec,
+	                                    gpointer user_data)
+	{
+		static_cast<ConnectionManager*>(user_data)->on_notify_status(
+			INF_XMPP_CONNECTION(object));
+	}
+
+	static void on_add_connection_static(InfXmppManager* manager,
+	                                     InfXmppConnection* xmpp,
+	                                     gpointer user_data)
+	{
+		static_cast<ConnectionManager*>(user_data)->on_add_connection(
+			xmpp);
+	}
+
+	static void on_remove_connection_static(InfXmppManager* manager,
+	                                        InfXmppConnection* xmpp,
+	                                        gpointer user_data)
+	{
+		static_cast<ConnectionManager*>(user_data)->
+			on_remove_connection(xmpp);
+	}
+
 protected:
+	void on_add_connection(InfXmppConnection* xmpp);
+	void on_remove_connection(InfXmppConnection* xmpp);
 	void on_security_policy_changed();
 	void on_credentials_changed();
+	void on_notify_status(InfXmppConnection* connection);
 
 	const CertificateManager& m_cert_manager;
 	const Preferences& m_preferences;
@@ -77,6 +105,10 @@ protected:
 	InfIo* m_io;
 	InfCommunicationManager* m_communication_manager;
 	InfXmppManager* m_xmpp_manager;
+	std::map<InfXmppConnection*, gulong> m_connections;
+
+	gulong m_add_connection_handler;
+	gulong m_remove_connection_handler;
 
 	InfSaslContext* m_sasl_context;
 	std::string m_sasl_mechanisms;
