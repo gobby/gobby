@@ -332,6 +332,20 @@ Gobby::Header::Header(Preferences& preferences,
 	// Add basic menu
 	m_ui_manager->add_ui_from_string(ui_desc);
 
+	// Set all toolbar actions to be "important", so that their text
+	// shows up in the toolbar when the toolbar style is set to
+	// GTK_TOOLBAR_STYLE_BOTH_HORIZ.
+	action_file_new->set_is_important(true);
+	action_file_open->set_is_important(true);
+	action_file_save->set_is_important(true);
+	action_edit_undo->set_is_important(true);
+	action_edit_redo->set_is_important(true);
+	action_edit_cut->set_is_important(true);
+	action_edit_copy->set_is_important(true);
+	action_edit_paste->set_is_important(true);
+	action_edit_find->set_is_important(true);
+	action_edit_find_replace->set_is_important(true);
+
 	group_file->add(action_file);
 	group_file->add(action_file_new);
 	group_file->add(action_file_open);
