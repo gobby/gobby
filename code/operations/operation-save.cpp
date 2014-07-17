@@ -21,6 +21,7 @@
 
 #include "util/i18n.hpp"
 
+#include <cassert>
 #include <cerrno>
 
 Gobby::OperationSave::OperationSave(Operations& operations,
@@ -133,19 +134,16 @@ void Gobby::OperationSave::attempt_next()
 	}
 	else
 	{
-		// Don't add newline after last line
-		std::list<Line>::iterator next(m_current_line);
-		++ next;
+		// Always save a newline at the end, except the document
+		// is empty.
+		assert(!m_lines.empty());
+		std::list<Line>::const_iterator iter = m_lines.begin();
+		++iter;
 
-		if(next == m_lines.end() &&
-		   m_current_line_index == m_current_line->second)
-		{
+		if(iter == m_lines.end() && m_lines.front().first[0] == '\0')
 			done = true;
-		}
 		else
-		{
 			done = false;
-		}
 	}
 
 	if(done)

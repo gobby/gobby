@@ -363,6 +363,19 @@ void Gobby::OperationOpen::encoding_error()
 
 void Gobby::OperationOpen::read_finish()
 {
+	// If the last character is a newline character, remove it.
+	GtkTextIter end_iter, test_iter;
+	gtk_text_buffer_get_end_iter(m_content, &end_iter);
+	test_iter = end_iter;
+	if(gtk_text_iter_backward_char(&test_iter))
+	{
+		if(gtk_text_iter_get_char(&test_iter) == '\n')
+		{
+			gtk_text_buffer_delete(
+				m_content, &test_iter, &end_iter);
+		}
+	}
+
 	gtk_text_buffer_set_modified(m_content, FALSE);
 
 	GtkTextIter insert_iter;
