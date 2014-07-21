@@ -34,6 +34,11 @@ Gobby::ViewCommands::ViewCommands(Header& header, const Folder& text_folder,
 	m_header.action_view_hide_user_colors->signal_activate().connect(
 		sigc::mem_fun(*this, &ViewCommands::on_hide_user_colors));
 
+	m_header.action_view_zoom_in->signal_activate().connect(
+		sigc::mem_fun(*this, &ViewCommands::on_zoom_in));
+	m_header.action_view_zoom_out->signal_activate().connect(
+		sigc::mem_fun(*this, &ViewCommands::on_zoom_out));
+
 	m_menu_view_toolbar_connection =
 		m_header.action_view_toolbar->signal_toggled().connect(
 			sigc::mem_fun(
@@ -167,6 +172,8 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 	if(m_current_view != NULL)
 	{
 		m_header.action_view_hide_user_colors->set_sensitive(true);
+		m_header.action_view_zoom_in->set_sensitive(true);
+		m_header.action_view_zoom_out->set_sensitive(true);
 		m_header.action_view_highlight_mode->set_sensitive(true);
 		m_header.action_view_document_userlist->set_sensitive(true);
 
@@ -180,6 +187,8 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 	else
 	{
 		m_header.action_view_hide_user_colors->set_sensitive(false);
+		m_header.action_view_zoom_in->set_sensitive(false);
+		m_header.action_view_zoom_out->set_sensitive(false);
 
 		m_menu_language_changed_connection.block();
 		m_header.action_view_highlight_mode->set_sensitive(false);
@@ -238,6 +247,20 @@ void Gobby::ViewCommands::on_chat_show()
 void Gobby::ViewCommands::on_chat_hide()
 {
 	m_header.action_view_chat_userlist->set_sensitive(false);
+}
+
+void Gobby::ViewCommands::on_zoom_in()
+{
+	Pango::FontDescription desc = m_preferences.appearance.font;
+	desc.set_size(desc.get_size() * PANGO_SCALE_LARGE);
+	m_preferences.appearance.font = desc;
+}
+
+void Gobby::ViewCommands::on_zoom_out()
+{
+	Pango::FontDescription desc = m_preferences.appearance.font;
+	desc.set_size(desc.get_size() / PANGO_SCALE_LARGE);
+	m_preferences.appearance.font = desc;
 }
 
 void Gobby::ViewCommands::on_hide_user_colors()

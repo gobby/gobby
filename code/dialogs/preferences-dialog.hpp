@@ -157,6 +157,39 @@ public:
 		sigc::connection m_conn2;
 	};
 
+	class FontConnection: public DuplexConnection<Pango::FontDescription>
+	{
+	public:
+		FontConnection(
+			Gtk::FontButton& font_button,
+		        Preferences::Option<Pango::FontDescription>& option)
+		:
+			DuplexConnection<Pango::FontDescription>(
+				font_button.signal_font_set(),
+				option.signal_changed()),
+			m_font_button(font_button),
+			m_option(option)
+		{
+		}
+	protected:
+		virtual Pango::FontDescription get1() const
+		{
+			return Pango::FontDescription(
+				m_font_button.get_font_name());
+		}
+
+		virtual Pango::FontDescription get2() const
+			{ return m_option.get(); }
+		virtual void set1(const Pango::FontDescription& val)
+			{ m_font_button.set_font_name(val.to_string()); }
+		virtual void set2(const Pango::FontDescription& val)
+			{ m_option.set(val); }
+
+	private:
+		Gtk::FontButton& m_font_button;
+		Preferences::Option<Pango::FontDescription>& m_option;
+	};
+
 	class PathConnection: public DuplexConnection<std::string>
 	{
 	public:
@@ -331,6 +364,8 @@ public:
 			}
 		};
 
+		void on_pref_font_changed();
+
 		void on_scheme_changed(Preferences& preferences);
 
 		GroupFrame m_group_toolbar;
@@ -339,6 +374,7 @@ public:
 
 		PreferencesComboBox<Gtk::ToolbarStyle> m_cmb_toolbar_style;
 		Gtk::FontButton m_btn_font;
+		FontConnection m_conn_font;
 
 		Columns m_columns;
 		Glib::RefPtr<Gtk::ListStore> m_list;

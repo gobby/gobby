@@ -48,7 +48,8 @@ protected:
 	void on_chat_hide();
 
 	void on_hide_user_colors();
-
+	void on_zoom_in();
+	void on_zoom_out();
 	void on_menu_toolbar_toggled();
 	void on_menu_statusbar_toggled();
 	void on_menu_browser_toggled();

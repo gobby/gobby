@@ -195,29 +195,6 @@ namespace
 			)
 		);
 	}
-
-	void connect_font_option(Gtk::FontButton& button,
-	                         Preferences::Option<Pango::FontDescription>&
-	                         option)
-	{
-		button.signal_font_set().connect(
-			sigc::compose(
-				sigc::mem_fun(
-					option,
-					&Preferences::Option<
-						Pango::FontDescription>::set
-				),
-				sigc::compose(
-					sigc::ptr_fun(&create_description),
-					sigc::mem_fun(
-						button,
-						&Gtk::FontButton::
-							get_font_name
-					)
-				)
-			)
-		);
-	}
 }
 
 Gobby::PreferencesDialog::Page::Page():
@@ -695,6 +672,7 @@ Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
 	m_group_font(_("Font") ),
 	m_group_scheme(_("Color Scheme")),
 	m_cmb_toolbar_style(preferences.appearance.toolbar_style),
+	m_conn_font(m_btn_font, preferences.appearance.font),
 	m_list(Gtk::ListStore::create(m_columns)),
 	m_tree(m_list)
 {
@@ -710,9 +688,10 @@ Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
 	                        Gtk::TOOLBAR_BOTH_HORIZ );
 	m_cmb_toolbar_style.show();
 
+	m_conn_font.block();
 	m_btn_font.set_font_name(font.to_string());
 	m_btn_font.show();
-	connect_font_option(m_btn_font, preferences.appearance.font);
+	m_conn_font.unblock();
 
 	m_group_toolbar.add(m_cmb_toolbar_style);
 	m_group_toolbar.show();

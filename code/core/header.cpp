@@ -25,6 +25,7 @@
 #include <glibmm/markup.h>
 #include <gtkmm/stock.h>
 #include <gtksourceview/gtksourcelanguage.h>
+#include <gdk/gdkkeysyms.h>
 
 #ifdef PLATFORM_OSX_NATIVE
 #include <ige-mac-menu.h>
@@ -67,6 +68,9 @@ namespace {
 		"    </menu>"
 		"    <menu action=\"MenuView\">"
 		"      <menuitem action=\"ViewHideUserColors\" />"
+		"      <separator />"
+		"      <menuitem action=\"ViewZoomIn\" />"
+		"      <menuitem action=\"ViewZoomOut\" />"
 		"      <separator />"
 		"      <menuitem action=\"ViewToolbar\" />"
 		"      <menuitem action=\"ViewStatusbar\" />"
@@ -281,6 +285,12 @@ Gobby::Header::Header(Preferences& preferences,
 		Gtk::Action::create(
 			"ViewHideUserColors", _("Reset User Colors"),
 			_("Hide user colors in current document"))),
+	action_view_zoom_in(
+		Gtk::Action::create(
+			"ViewZoomIn", Gtk::Stock::ZOOM_IN, _("Zoom In"))),
+	action_view_zoom_out(
+		Gtk::Action::create(
+			"ViewZoomOut", Gtk::Stock::ZOOM_OUT, _("Zoom Out"))),
 	action_view_toolbar(
 		Gtk::ToggleAction::create(
 			"ViewToolbar", _("View Toolbar"),
@@ -398,6 +408,14 @@ Gobby::Header::Header(Preferences& preferences,
 		action_view_hide_user_colors,
 		Gtk::AccelKey("<shift><control>C",
 		              "<Actions>/MenuView/ViewHideUserColors"));
+	group_view->add(
+		action_view_zoom_in,
+		Gtk::AccelKey('+', Gdk::CONTROL_MASK,
+		              "<Actions>/MenuView/ViewZoomIn"));
+	group_view->add(
+		action_view_zoom_out,
+		Gtk::AccelKey('-', Gdk::CONTROL_MASK,
+		              "<Actions>/MenuView/ViewZoomOut"));
 	group_view->add(action_view_toolbar);
 	group_view->add(action_view_statusbar);
 	group_view->add(action_view_browser, Gtk::AccelKey(
