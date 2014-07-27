@@ -33,7 +33,8 @@ class OperationSubscribePath: public Operations::Operation
 {
 public:
 	OperationSubscribePath(Operations& operations,
-	                       const std::string& uri);
+	                       const std::string& uri,
+	                       bool connect);
 	OperationSubscribePath(Operations& operations,
 	                       InfBrowser* browser,
 	                       const std::string& path);
@@ -102,6 +103,7 @@ private:
 
 	InfBrowser* m_browser;
 	std::string m_target;
+	bool m_connect;
 
 	std::vector<std::string> m_path;
 	std::vector<std::string>::size_type m_path_index;

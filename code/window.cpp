@@ -32,6 +32,7 @@
 Gobby::Window::Window(unsigned int argc, const char* const argv[],
                       Config& config,
                       Preferences& preferences,
+                      HostsStorage& hosts,
                       const IconManager& icon_manager,
                       CertificateManager& cert_manager
 #ifdef WITH_UNIQUE
@@ -55,6 +56,7 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_chat_frame(_("Chat"), IconManager::STOCK_CHAT,
 	             m_preferences.appearance.show_chat),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
+	m_hosts_storage(hosts),
 	m_folder_manager(m_browser, m_info_storage,
 	                 m_text_folder, m_chat_folder),
 	m_operations(m_info_storage, m_browser,
@@ -165,10 +167,16 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 
 	set_default_size(800, 600);
 	set_role("Gobby");
+
+	m_hosts_storage.load(m_operations);
 }
 
 Gobby::Window::~Window()
 {
+	m_hosts_storage.save(
+		INF_GTK_BROWSER_MODEL(
+			m_browser.get_store()));
+
 #ifdef WITH_UNIQUE
 	g_object_unref(m_app);
 #endif

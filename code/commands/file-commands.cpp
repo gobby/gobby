@@ -282,7 +282,7 @@ void Gobby::FileCommands::on_connect_response(int response_id)
 			m_connection_dialog->get_host_name();
 		if(!host.empty())
 		{
-			m_operations.subscribe_path(host);
+			m_operations.subscribe_path(host, true);
 		}
 	}
 

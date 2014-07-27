@@ -138,7 +138,8 @@ public:
 	                             const InfBrowserIter* iter);
 
 	// uri must be of kind infinote://[hostname]/[path]
-	OperationSubscribePath* subscribe_path(const std::string& uri);
+	OperationSubscribePath* subscribe_path(const std::string& uri,
+	                                       bool connect);
 	OperationSubscribePath* subscribe_path(InfBrowser* browser,
 	                                       const std::string& path);
 

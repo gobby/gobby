@@ -13,6 +13,7 @@ libgobby_core_a_SOURCES = \
 	folder.cpp \
 	foldermanager.cpp \
 	header.cpp \
+	hostsstorage.cpp \
 	huebutton.cpp \
 	iconmanager.cpp \
 	nodewatch.cpp \
@@ -44,6 +45,7 @@ noinst_HEADERS = \
         folder.hpp \
         foldermanager.hpp \
         header.hpp \
+        hostsstorage.hpp \
         huebutton.hpp \
         iconmanager.hpp \
         nodewatch.hpp \

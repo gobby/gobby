@@ -137,10 +137,11 @@ Gobby::Operations::delete_node(InfBrowser* browser,
 }
 
 Gobby::OperationSubscribePath*
-Gobby::Operations::subscribe_path(const std::string& uri)
+Gobby::Operations::subscribe_path(const std::string& uri,
+                                  bool connect)
 {
 	OperationSubscribePath* op =
-		new OperationSubscribePath(*this, uri);
+		new OperationSubscribePath(*this, uri, connect);
 	m_operations.insert(op);
 	op->start();
 	return check_operation(op);

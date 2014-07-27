@@ -39,6 +39,7 @@
 #include "dialogs/initial-dialog.hpp"
 
 #include "core/selfhoster.hpp"
+#include "core/hostsstorage.hpp"
 #include "core/iconmanager.hpp"
 #include "core/header.hpp"
 #include "core/folder.hpp"
@@ -73,6 +74,7 @@ class Window : public Gtk::Window
 public:
 	Window(unsigned int argc, const char* const argv[],
 	       Config& config, Preferences& preferences,
+	       HostsStorage &hosts,
 	       const IconManager& icon_manager,
 	       CertificateManager& cert_manager
 #ifdef WITH_UNIQUE
@@ -83,7 +85,7 @@ public:
 
 	void connect_to_host(const Glib::ustring& hostname)
 	{
-		m_operations.subscribe_path(hostname);
+		m_operations.subscribe_path(hostname, true);
 	}
 
 protected:
@@ -174,6 +176,7 @@ protected:
 
 	// Functionality
 	DocumentInfoStorage m_info_storage;
+	HostsStorage m_hosts_storage;
 	FolderManager m_folder_manager;
 	FileChooser m_file_chooser;
 	Operations m_operations;

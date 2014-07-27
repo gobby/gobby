@@ -87,7 +87,8 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 	const InfIpAddress* address,
 	guint port,
 	unsigned int device_index,
-	const std::string& hostname)
+	const std::string& hostname,
+	bool connect)
 {
 	// Check whether we do have such a connection already:
 	InfXmppConnection* xmpp =
@@ -106,7 +107,7 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 			NULL);
 
 		GError* error = NULL;
-		if(!inf_tcp_connection_open(connection, &error))
+		if(connect && !inf_tcp_connection_open(connection, &error))
 		{
 			std::string message = error->message;
 			g_error_free(error);
