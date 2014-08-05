@@ -51,14 +51,13 @@ For a build with Gtk3:
 
 ## More information
 
-The development of the obby family is coordinated on its Trac
-project page on <http://gobby.0x539.de/>. The primary distribution point is
-<http://releases.0x539.de/>.
+The development of Gobby is coordinated on github at <http://github.com/gobby>.
+The primary distribution point is <http://releases.0x539.de/>.
 
 ### How to report bugs
 
-Bugs could be filed as tickets at <http://gobby.0x539.de/trac/newticket> or
-submitted directly to us at crew@0x539.de. Please include a
+Bugs should be files as issues on the github issue tracker at
+<https://github.com/gobby/gobby/issues>. Please include a
 reachable email address in your bug report as we often need to
 contact the reporters for clarifications. Commonly bugs are
 scheduled for the next major release and will be listed in the
@@ -110,5 +109,5 @@ Copyright (C) 2008-2014 Armin Burgmeier <armin@arbur.net>
 To get in contact with the developers, either use the obby-users mailing
 list mentioned above or drop by in our IRC channel #infinote on
 irc.freenode.org. To get the up-to-date Gobby code to hack on, use
-`git clone git://git.0x539.de/git/gobby.git'. Pull requests against
+`git clone https://github.com/gobby/gobby.git'. Pull requests against
 our [GitHub repository](https://github.com/gobby/gobby) are appreciated.
