@@ -41,11 +41,10 @@
       <para>To report a bug or make a suggestion regarding this manual,
         please file a ticket on <ulink url="http://gobby.0x539.de/"> http://gobby.0x539.de</ulink>.</para>
       <para>The application <application>&appname;</application> and this manual
-        are both licensed under the GNU General Public License (GPL) version 2
-        or any later version.  They are distributed in the hope that they will
-        be useful, but WITHOUT ANY WARRANTY; without even the implied warrenty
-        of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  Please see
-        the GNU General Public License for more details.</para>
+        are both licensed under the ISC license.  They are distributed in the
+        hope that they will be useful, but WITHOUT ANY WARRANTY; without even
+        the implied warrenty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+        PURPOSE.  Please see the full license text for more details.</para>
 <!-- Translators may also add here feedback address for translations -->    </legalnotice>
   </articleinfo>
 <!-- ============= Document Body ============================= --><!-- ============= Introduction ============================== -->  <sect1 id="intro">
