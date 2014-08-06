@@ -66,6 +66,7 @@ namespace {
 		"    <menu action=\"MenuView\">"
 		"      <menuitem action=\"ViewHideUserColors\" />"
 		"      <separator />"
+		"      <menuitem action=\"ViewFullscreen\" />"
 		"      <menuitem action=\"ViewZoomIn\" />"
 		"      <menuitem action=\"ViewZoomOut\" />"
 		"      <separator />"
@@ -282,6 +283,12 @@ Gobby::Header::Header(Preferences& preferences,
 		Gtk::Action::create(
 			"ViewHideUserColors", _("Reset User Colors"),
 			_("Hide user colors in current document"))),
+	action_view_fullscreen(
+		Gtk::ToggleAction::create(
+			"ViewFullscreen", Gtk::Stock::FULLSCREEN,
+			_("Fullscreen"),
+			_("Show the editing window in fullscreen mode"),
+			false)),
 	action_view_zoom_in(
 		Gtk::Action::create(
 			"ViewZoomIn", Gtk::Stock::ZOOM_IN, _("Zoom In"))),
@@ -405,6 +412,8 @@ Gobby::Header::Header(Preferences& preferences,
 		action_view_hide_user_colors,
 		Gtk::AccelKey("<shift><control>C",
 		              "<Actions>/MenuView/ViewHideUserColors"));
+	group_view->add(action_view_fullscreen, Gtk::AccelKey(
+		"F11", "<Actions>/MenuView/ViewFullscreen"));
 	group_view->add(
 		action_view_zoom_in,
 		Gtk::AccelKey('+', Gdk::CONTROL_MASK,

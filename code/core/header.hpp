@@ -120,6 +120,7 @@ public:
 
 	const Glib::RefPtr<Gtk::Action> action_view;
 	const Glib::RefPtr<Gtk::Action> action_view_hide_user_colors;
+	const Glib::RefPtr<Gtk::ToggleAction> action_view_fullscreen;
 	const Glib::RefPtr<Gtk::Action> action_view_zoom_in;
 	const Glib::RefPtr<Gtk::Action> action_view_zoom_out;
 	const Glib::RefPtr<Gtk::ToggleAction> action_view_toolbar;

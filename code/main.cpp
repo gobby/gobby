@@ -290,34 +290,39 @@ int main(int argc, char* argv[]) try
 	// Set default icon
 	Gtk::Window::set_default_icon_name("gobby-0.5");
 
-	// Create window
-	Gobby::Window wnd(
-		argc-1,
-		argv+1,
-		config,
-		preferences,
-		icon_manager,
-		cert_manager
-#ifdef WITH_UNIQUE
-		, app
-#endif
-		);
-
-#ifdef WITH_UNIQUE
-	g_object_unref(app);
-#endif
-
-	wnd.show();
-
-	for(std::vector<Glib::ustring>::const_iterator i = hostnames.begin();
-	    i != hostnames.end();
-			++ i)
+	// Open a scope here, so that the main window is destructed
+	// before we serialize the preferences, so that if the window
+	// sets options at destruction time, they are stored correctly.
 	{
-		wnd.connect_to_host(*i);
-	}
+		// Create window
+		Gobby::Window wnd(
+			argc-1,
+			argv+1,
+			config,
+			preferences,
+			icon_manager,
+			cert_manager
+#ifdef WITH_UNIQUE
+			, app
+#endif
+			);
 
-	wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
-	kit->run();
+#ifdef WITH_UNIQUE
+		g_object_unref(app);
+#endif
+
+		wnd.show();
+
+		for(std::vector<Glib::ustring>::const_iterator i =
+			hostnames.begin();
+		    i != hostnames.end(); ++ i)
+		{
+			wnd.connect_to_host(*i);
+		}
+
+		wnd.signal_hide().connect(sigc::ptr_fun(&Gtk::Main::quit) );
+		kit->run();
+	}
 
 	preferences.serialize(config);
 

@@ -18,19 +18,100 @@
 #include "util/i18n.hpp"
 #include "util/gtk-compat.hpp"
 
+#include <gtkmm/window.h>
+
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 
-Gobby::ViewCommands::ViewCommands(Header& header, const Folder& text_folder,
+class Gobby::ViewCommands::Fullscreen
+{
+public:
+	class Preserve: public sigc::trackable
+	{
+	public:
+		Preserve(const Glib::RefPtr<Gtk::ToggleAction>& action);
+		~Preserve();
+	
+	private:
+		void on_toggled();
+
+		const Glib::RefPtr<Gtk::ToggleAction>& m_action;
+		bool m_value;
+	};
+
+	Fullscreen(ViewCommands& commands);
+	~Fullscreen();
+
+private:
+	ViewCommands& m_commands;
+
+	Preserve m_preserve_toolbar;
+	Preserve m_preserve_browser;
+	Preserve m_preserve_chat;
+	Preserve m_preserve_document_userlist;
+	Preserve m_preserve_chat_userlist;
+};
+
+Gobby::ViewCommands::Fullscreen::Preserve::Preserve(
+	const Glib::RefPtr<Gtk::ToggleAction>& action)
+:
+	m_action(action)
+{
+	// De-activate all the clutter, but remember their state before
+	// we went fullscreen, so that we can restore when we leave
+	// fullscreen again.
+	m_value = action->get_active();
+	action->set_active(false);
+
+	action->signal_toggled().connect(sigc::mem_fun(
+		*this, &Preserve::on_toggled));
+}
+
+Gobby::ViewCommands::Fullscreen::Preserve::~Preserve()
+{
+	m_action->set_active(m_value);
+}
+
+void Gobby::ViewCommands::Fullscreen::Preserve::on_toggled()
+{
+	// Update value; if one of the options is toggled we keep the
+	// toggled version when fullscreen is left.
+	m_value = m_action->get_active();
+}
+
+Gobby::ViewCommands::Fullscreen::Fullscreen(ViewCommands& commands):
+	m_commands(commands),
+	m_preserve_toolbar(commands.m_header.action_view_toolbar),
+	m_preserve_browser(commands.m_header.action_view_browser),
+	m_preserve_chat(commands.m_header.action_view_chat),
+	m_preserve_document_userlist(
+		commands.m_header.action_view_document_userlist),
+	m_preserve_chat_userlist(
+		commands.m_header.action_view_chat_userlist)
+{
+	m_commands.m_main_window.fullscreen();
+}
+
+Gobby::ViewCommands::Fullscreen::~Fullscreen()
+{
+	m_commands.m_main_window.unfullscreen();
+}
+
+
+Gobby::ViewCommands::ViewCommands(Gtk::Window& main_window,
+                                  Header& header, const Folder& text_folder,
                                   ClosableFrame& chat_frame,
 	                          const Folder& chat_folder,
                                   Preferences& preferences):
-	m_header(header), m_text_folder(text_folder),
-	m_chat_frame(chat_frame), m_chat_folder(chat_folder),
-	m_preferences(preferences), m_current_view(NULL)
+	m_main_window(main_window), m_header(header),
+	m_text_folder(text_folder), m_chat_frame(chat_frame),
+	m_chat_folder(chat_folder), m_preferences(preferences),
+	m_current_view(NULL)
 {
 	m_header.action_view_hide_user_colors->signal_activate().connect(
 		sigc::mem_fun(*this, &ViewCommands::on_hide_user_colors));
 
+	m_header.action_view_fullscreen->signal_toggled().connect(
+		sigc::mem_fun(*this, &ViewCommands::on_fullscreen_toggled));
 	m_header.action_view_zoom_in->signal_activate().connect(
 		sigc::mem_fun(*this, &ViewCommands::on_zoom_in));
 	m_header.action_view_zoom_out->signal_activate().connect(
@@ -169,6 +250,7 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 	if(m_current_view != NULL)
 	{
 		m_header.action_view_hide_user_colors->set_sensitive(true);
+		//m_header.action_view_fullscreen->set_sensitive(true);
 		m_header.action_view_zoom_in->set_sensitive(true);
 		m_header.action_view_zoom_out->set_sensitive(true);
 		m_header.action_view_highlight_mode->set_sensitive(true);
@@ -184,6 +266,7 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 	else
 	{
 		m_header.action_view_hide_user_colors->set_sensitive(false);
+		//m_header.action_view_fullscreen->set_sensitive(false);
 		m_header.action_view_zoom_in->set_sensitive(false);
 		m_header.action_view_zoom_out->set_sensitive(false);
 
@@ -277,6 +360,23 @@ void Gobby::ViewCommands::on_hide_user_colors()
 	gtk_text_buffer_get_end_iter(textbuffer, &end);
 
 	inf_text_gtk_buffer_show_user_colors(infbuffer, FALSE, &start, &end);
+}
+
+void Gobby::ViewCommands::on_fullscreen_toggled()
+{
+	if(m_header.action_view_fullscreen->get_active())
+	{
+		if(!m_fullscreen.get())
+			m_fullscreen.reset(new Fullscreen(*this));
+	}
+	else
+	{
+		m_fullscreen.reset(NULL);
+	}
+/*		bool browser_was_open = m_header.action_
+		m_main_window.fullscreen();
+	else
+		m_main_window.unfullscreen();*/
 }
 
 void Gobby::ViewCommands::on_menu_toolbar_toggled()

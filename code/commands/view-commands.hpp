@@ -28,10 +28,13 @@ namespace Gobby
 
 class ViewCommands: public sigc::trackable
 {
+private:
+	class Fullscreen;
+
 public:
-	ViewCommands(Header& header, const Folder& text_folder,
-	             ClosableFrame& chat_frame, const Folder& chat_folder,
-	             Preferences& preferences);
+	ViewCommands(Gtk::Window& main_window, Header& header,
+	             const Folder& text_folder, ClosableFrame& chat_frame,
+	             const Folder& chat_folder, Preferences& preferences);
 	~ViewCommands();
 
 protected:
@@ -45,6 +48,7 @@ protected:
 	void on_chat_hide();
 
 	void on_hide_user_colors();
+	void on_fullscreen_toggled();
 	void on_zoom_in();
 	void on_zoom_out();
 	void on_menu_toolbar_toggled();
@@ -65,6 +69,7 @@ protected:
 		const Glib::RefPtr<Gtk::RadioAction>& action);
 	void on_doc_language_changed(GtkSourceLanguage* language);
 
+	Gtk::Window& m_main_window;
 	Header& m_header;
 	const Folder& m_text_folder;
 	ClosableFrame& m_chat_frame;
@@ -72,6 +77,7 @@ protected:
 	Preferences& m_preferences;
 
 	TextSessionView* m_current_view;
+	std::auto_ptr<Fullscreen> m_fullscreen;
 
 	sigc::connection m_menu_language_changed_connection;
 	sigc::connection m_document_language_changed_connection;
