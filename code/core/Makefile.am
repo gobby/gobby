@@ -29,6 +29,7 @@ libgobby_core_a_SOURCES = \
 	textundogrouping.cpp \
 	texttablabel.cpp \
 	titlebar.cpp \
+	userjoin.cpp \
 	userlist.cpp
 
 noinst_HEADERS = \
@@ -60,6 +61,7 @@ noinst_HEADERS = \
 	textundogrouping.hpp \
 	texttablabel.hpp \
 	titlebar.hpp \
+	userjoin.hpp \
         userlist.hpp
 
 appicondir = $(datadir)/pixmaps

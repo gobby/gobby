@@ -65,9 +65,89 @@ namespace
 			true);
 	}
 
-	void retr_local_user_func(InfUser* user, gpointer user_data)
+	class ParameterProvider: public Gobby::UserJoin::ParameterProvider
 	{
-		(*static_cast<InfUser**>(user_data)) = user;
+	public:
+		ParameterProvider(Gobby::SessionView& view,
+		                  Gobby::Folder& folder,
+		                  const Gobby::Preferences& preferences):
+			m_view(view), m_folder(folder),
+			m_preferences(preferences)
+		{
+		}
+	
+		virtual std::vector<GParameter> get_user_join_parameters();
+	protected:
+		void add_text_parameters(std::vector<GParameter>& parameters,
+		                         Gobby::TextSessionView& view);
+
+		Gobby::SessionView& m_view;
+		Gobby::Folder& m_folder;
+		const Gobby::Preferences& m_preferences;
+	};
+
+	std::vector<GParameter> ParameterProvider::get_user_join_parameters()
+	{
+		// Otherwise join a new user.
+		std::vector<GParameter> params;
+		const GParameter name_param = { "name", { 0 } };
+		params.push_back(name_param);
+		const GParameter status_param = { "status", { 0 } };
+		params.push_back(status_param);
+
+		g_value_init(&params[0].value, G_TYPE_STRING);
+		g_value_init(&params[1].value, INF_TYPE_USER_STATUS);
+
+		const Glib::ustring& pref_name = m_preferences.user.name;
+		g_value_set_string(&params[0].value, pref_name.c_str());
+
+		if(m_folder.get_current_document() == &m_view)
+			g_value_set_enum(&params[1].value, INF_USER_ACTIVE);
+		else
+			g_value_set_enum(&params[1].value, INF_USER_INACTIVE);
+
+		Gobby::TextSessionView* text_view =
+			dynamic_cast<Gobby::TextSessionView*>(&m_view);
+		if(text_view) add_text_parameters(params, *text_view);
+
+		return params;
+	}
+
+	void ParameterProvider::add_text_parameters(
+		std::vector<GParameter>& params,
+		Gobby::TextSessionView& view)
+	{
+		InfTextSession* session = view.get_session();
+
+		GParameter hue_param = { "hue", { 0 } };
+		g_value_init(&hue_param.value, G_TYPE_DOUBLE);
+		g_value_set_double(&hue_param.value, m_preferences.user.hue);
+		params.push_back(hue_param);
+
+		GParameter vector_param = { "vector", { 0 } };
+		g_value_init(&vector_param.value,
+		             INF_ADOPTED_TYPE_STATE_VECTOR);
+
+		g_value_take_boxed(&vector_param.value,
+			inf_adopted_state_vector_copy(
+				inf_adopted_algorithm_get_current(
+					inf_adopted_session_get_algorithm(
+						INF_ADOPTED_SESSION(
+							session)))));
+		params.push_back(vector_param);
+
+		GParameter caret_param = { "caret-position", { 0 } };
+		g_value_init(&caret_param.value, G_TYPE_UINT);
+
+		GtkTextBuffer* buffer =
+			GTK_TEXT_BUFFER(view.get_text_buffer());
+		GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
+		GtkTextIter caret_iter;
+
+		gtk_text_buffer_get_iter_at_mark(buffer, &caret_iter, mark);
+		g_value_set_uint(&caret_param.value,
+		                 gtk_text_iter_get_offset(&caret_iter));
+		params.push_back(caret_param);
 	}
 }
 
@@ -75,325 +155,41 @@ class Gobby::UserJoinCommands::UserJoinInfo
 {
 public:
 	UserJoinInfo(UserJoinCommands& commands,
-	             InfBrowser* browser,
-	             const InfBrowserIter* iter,
-	             InfSessionProxy* proxy,
+	             std::auto_ptr<UserJoin> userjoin,
 	             Folder& folder,
 	             SessionView& view);
-	~UserJoinInfo();
 
 private:
-	static void on_synchronization_complete_static(InfSession* session,
-	                                               InfXmlConnection* conn,
-	                                               gpointer user_data)
-	{
-		static_cast<UserJoinInfo*>(user_data)->
-			on_synchronization_complete();
-	}
-
-	static void on_user_join_finished_static(InfRequest* request,
-	                                         const InfRequestResult* res,
-	                                         const GError* error,
-	                                         gpointer user_data)
-	{
-		InfUser* user;
-		inf_request_result_get_join_user(res, NULL, &user);
-
-		static_cast<UserJoinInfo*>(user_data)->
-			on_user_join_finished(user, error);
-	}
-
-	void on_synchronization_complete();
 	void on_user_join_finished(InfUser* user, const GError* error);
 
-	void attempt_user_join();
-	void user_join_complete(InfUser* user);
-	void finish();
-
-	void add_text_user_properties(std::vector<GParameter>& params,
-	                              TextSessionView& view);
-
 	UserJoinCommands& m_commands;
-
-	NodeWatch m_node;
-	InfSessionProxy* m_proxy;
+	std::auto_ptr<UserJoin> m_userjoin;
 	Folder& m_folder;
 	SessionView& m_view;
-
-	InfRequest* m_request;
-
-	gulong m_synchronization_complete_handler;
-
-	guint m_retry_index;
 };
 
 Gobby::UserJoinCommands::UserJoinInfo::UserJoinInfo(UserJoinCommands& cmds,
-                                                    InfBrowser* browser,
-                                                    const InfBrowserIter* it,
-                                                    InfSessionProxy* proxy,
+                                                    std::auto_ptr<UserJoin> j,
                                                     Folder& folder,
                                                     SessionView& view):
-	m_node(browser, it), m_commands(cmds), m_proxy(proxy),
-	m_folder(folder), m_view(view), m_request(NULL),
-	m_synchronization_complete_handler(0), m_retry_index(1)
+	m_commands(cmds), m_userjoin(j), m_folder(folder), m_view(view)
 {
-	g_object_ref(m_proxy);
+	// Only if userjoin is still running:
+	g_assert(m_userjoin->get_user() == NULL);
+	g_assert(m_userjoin->get_error() == NULL);
 
-	InfSession* session;
-	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
-
-	if(inf_session_get_status(session) == INF_SESSION_SYNCHRONIZING)
-	{
-		// If not yet synchronized, wait for synchronization until
-		// attempting userjoin
-		m_synchronization_complete_handler = g_signal_connect_after(
-			G_OBJECT(session), "synchronization-complete",
-			G_CALLBACK(on_synchronization_complete_static), this);
-	}
-	else
-	{
-		// Delay this call to make sure we don't call finish()
-		// right inside the constructor.
-		Glib::signal_idle().connect(
-			sigc::bind_return(sigc::mem_fun(
-				*this, &UserJoinInfo::attempt_user_join),
-				false));
-	}
-
-	g_object_unref(session);
-}
-
-Gobby::UserJoinCommands::UserJoinInfo::~UserJoinInfo()
-{
-	if(m_synchronization_complete_handler)
-	{
-		InfSession* session;
-		g_object_get(G_OBJECT(m_proxy), "session", &session, NULL);
-
-		g_signal_handler_disconnect(
-			session, m_synchronization_complete_handler);
-
-		g_object_unref(session);
-	}
-
-	if(m_request)
-	{
-		g_signal_handlers_disconnect_by_func(
-			G_OBJECT(m_request),
-			(gpointer)G_CALLBACK(on_user_join_finished_static),
-			this);
-
-		g_object_unref(m_request);
-
-		// TODO: Keep watching the request, and when it finishes, make
-		// the user unavailable. This should typically not be
-		// necessary, because on the server side user join requests
-		// finish immediately, and on the client side the only thing
-		// that leads to the UserJoinInfo being deleted is when the
-		// document is removed and we are unsubscribed from the
-		// session, in which case we do not care about the user join
-		// anymore anyway.
-		// However, it would be good to handle this, just in case.
-	}
-
-	g_object_unref(m_proxy);
-}
-
-void Gobby::UserJoinCommands::UserJoinInfo::on_synchronization_complete()
-{
-	// Disconnect signal handler, so that we don't get notified when
-	// syncing this document in running state to another location
-	// or server.
-	InfSession* session;
-	g_object_get(G_OBJECT(m_proxy), "session", &session, NULL);
-
-	g_signal_handler_disconnect(session,
-	                            m_synchronization_complete_handler);
-	m_synchronization_complete_handler = 0;
-	g_object_unref(session);
-
-	// Attempt user join after synchronization
-	attempt_user_join();
+	// Wait for userjoin to finish
+	m_userjoin->signal_finished().connect(
+		sigc::mem_fun(
+			*this, &UserJoinInfo::on_user_join_finished));
 }
 
 void Gobby::UserJoinCommands::UserJoinInfo::
 	on_user_join_finished(InfUser* user, const GError* error)
 {
-	if(m_request != NULL)
-	{
-		g_object_unref(m_request);
-		m_request = NULL;
-	}
-
-	if(error == NULL)
-	{
-		user_join_complete(user);
-	}
-	else if(error->domain == inf_user_error_quark() &&
-	        error->code == INF_USER_ERROR_NAME_IN_USE)
-	{
-		// If name is in use retry with alternative user name
-		++m_retry_index;
-		attempt_user_join();
-	}
-	else if(error->domain == inf_request_error_quark() &&
-	        error->code == INF_REQUEST_ERROR_NOT_AUTHORIZED)
-	{
-		set_permission_denied_text(m_view);
-		finish();
-	}
-	else
-	{
-		set_error_text(m_view, error->message);
-		finish();
-	}
-}
-
-void Gobby::UserJoinCommands::UserJoinInfo::attempt_user_join()
-{
-	const Preferences& preferences = m_commands.m_preferences;
-
-	// Check if there is already a local user, for example for a
-	// synced-in document.
-	InfSession* session;
-	g_object_get(G_OBJECT(m_proxy), "session", &session, NULL);
-
-	InfUserTable* user_table = inf_session_get_user_table(session);
-	InfUser* user = NULL;
-	inf_user_table_foreach_local_user(user_table,
-	                                  retr_local_user_func, &user);
-	g_object_unref(session);
-
-	if(user != NULL)
-	{
-		user_join_complete(user);
-		return;
-	}
-
-	// Next, check whether we are allowed to join a user
-	if(m_node.get_browser() && m_node.get_browser_iter())
-	{
-		InfBrowser* browser = m_node.get_browser();
-		const InfBrowserIter* iter = m_node.get_browser_iter();
-		const InfAclAccount* account =
-			inf_browser_get_acl_local_account(browser);
-		InfAclMask msk;
-		inf_acl_mask_set1(&msk, INF_ACL_CAN_JOIN_USER);
-		if(!inf_browser_check_acl(browser, iter, account, &msk, NULL))
-		{
-			set_permission_denied_text(m_view);
-			finish();
-			return;
-		}
-	}
-
-	// We are allowed, so attempt to join the user now.
-	std::vector<GParameter> params;
-	const GParameter name_param = { "name", { 0 } };
-	params.push_back(name_param);
-	const GParameter status_param = { "status", { 0 } };
-	params.push_back(status_param);
-
-	g_value_init(&params[0].value, G_TYPE_STRING);
-	g_value_init(&params[1].value, INF_TYPE_USER_STATUS);
-
-	const Glib::ustring& pref_name = preferences.user.name;
-	if(m_retry_index > 1)
-	{
-		gchar* name = g_strdup_printf(
-			"%s %u", pref_name.c_str(), m_retry_index);
-		g_value_take_string(&params[0].value, name);
-	}
-	else
-	{
-		g_value_set_static_string(
-			&params[0].value, pref_name.c_str());
-	}
-
-	if(m_folder.get_current_document() == &m_view)
-		g_value_set_enum(&params[1].value, INF_USER_ACTIVE);
-	else
-		g_value_set_enum(&params[1].value, INF_USER_INACTIVE);
-
-	// Extra properties for text session:
-	TextSessionView* text_view =
-		dynamic_cast<TextSessionView*>(&m_view);
-	if(text_view) add_text_user_properties(params, *text_view);
-
-	GError* error = NULL;
-	InfRequest* request = inf_session_proxy_join_user(
-		m_proxy, params.size(), &params[0],
-		on_user_join_finished_static, this);
-
-	for(unsigned int i = 0; i < params.size(); ++i)
-		g_value_unset(&params[i].value);
-
-	if(request != NULL)
-	{
-		m_request = request;
-		g_object_ref(m_request);
-		m_view.set_info(_("User Join in progress..."), false);
-	}
-}
-
-void Gobby::UserJoinCommands::UserJoinInfo::user_join_complete(InfUser* user)
-{
-	// TODO: Notify the user about alternative user name if s/he uses any
-	m_view.unset_info();
-
-	// TODO: set_active_user should maybe go to SessionView base:
-	TextSessionView* text_view = dynamic_cast<TextSessionView*>(&m_view);
-	if(text_view)
-		text_view->set_active_user(INF_TEXT_USER(user));
-	ChatSessionView* chat_view = dynamic_cast<ChatSessionView*>(&m_view);
-	if(chat_view)
-		chat_view->set_active_user(user);
-
-	finish();
-}
-
-void Gobby::UserJoinCommands::UserJoinInfo::finish()
-{
-	UserJoinCommands::UserJoinMap::iterator iter =
-		m_commands.m_user_join_map.find(m_proxy);
-	g_assert(iter != m_commands.m_user_join_map.end());
-
-	m_commands.m_user_join_map.erase(iter);
-	delete this;
-}
-
-void Gobby::UserJoinCommands::UserJoinInfo::
-	add_text_user_properties(std::vector<GParameter>& params,
-	                         TextSessionView& view)
-{
-	InfTextSession* session = view.get_session();
-
-	GParameter hue_param = { "hue", { 0 } };
-	g_value_init(&hue_param.value, G_TYPE_DOUBLE);
-	g_value_set_double(&hue_param.value,
-	                   m_commands.m_preferences.user.hue);
-	params.push_back(hue_param);
-
-	GParameter vector_param = { "vector", { 0 } };
-	g_value_init(&vector_param.value, INF_ADOPTED_TYPE_STATE_VECTOR);
-
-	g_value_take_boxed(&vector_param.value, inf_adopted_state_vector_copy(
-		inf_adopted_algorithm_get_current(
-			inf_adopted_session_get_algorithm(
-				INF_ADOPTED_SESSION(session)))));
-	params.push_back(vector_param);
-
-	GParameter caret_param = { "caret-position", { 0 } };
-	g_value_init(&caret_param.value, G_TYPE_UINT);
-
-	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(view.get_text_buffer());
-	GtkTextMark* mark = gtk_text_buffer_get_insert(buffer);
-	GtkTextIter caret_iter;
-
-	gtk_text_buffer_get_iter_at_mark(buffer, &caret_iter, mark);
-	g_value_set_uint(&caret_param.value,
-	                 gtk_text_iter_get_offset(&caret_iter));
-	params.push_back(caret_param);
+	m_commands.on_user_join_finished(
+		m_userjoin->get_proxy(), m_folder, m_view, user, error);
+	// Note that the above call deletes this object!
 }
 
 Gobby::UserJoinCommands::UserJoinCommands(FolderManager& folder_manager,
@@ -426,8 +222,13 @@ void Gobby::UserJoinCommands::on_document_added(InfBrowser* browser,
 	g_assert(proxy != NULL);
 
 	g_assert(m_user_join_map.find(proxy) == m_user_join_map.end());
+
+	std::auto_ptr<UserJoin::ParameterProvider> provider(
+		new ParameterProvider(view, folder, m_preferences));
+	std::auto_ptr<UserJoin> userjoin(
+		new UserJoin(browser, iter, proxy, provider));
 	m_user_join_map[proxy] =
-		new UserJoinInfo(*this, browser, iter, proxy, folder, view);
+		new UserJoinInfo(*this, userjoin, folder, view);
 }
 
 void Gobby::UserJoinCommands::on_document_removed(InfBrowser* browser,
@@ -490,5 +291,48 @@ void Gobby::UserJoinCommands::on_document_removed(InfBrowser* browser,
 			infc_session_proxy_set_connection(
 				INFC_SESSION_PROXY(proxy), NULL, NULL, 0);
 		}
+	}
+}
+
+void Gobby::UserJoinCommands::on_user_join_finished(InfSessionProxy* proxy,
+                                                    Folder& folder,
+                                                    SessionView& view,
+                                                    InfUser* user,
+                                                    const GError* error)
+{
+	g_assert(user != NULL || error != NULL);
+
+	// Remove userjoin object. It might not exist if
+	// on_document_added() was passed a user immediately.
+	UserJoinMap::iterator user_iter = m_user_join_map.find(proxy);
+	if(user_iter != m_user_join_map.end())
+	{
+		delete user_iter->second;
+		m_user_join_map.erase(user_iter);
+	}
+
+	if(error == NULL)
+	{
+		// TODO: Notify the user about alternative user name if s/he uses any
+		view.unset_info();
+
+		// TODO: set_active_user should maybe go to SessionView base:
+		TextSessionView* text_view =
+			dynamic_cast<TextSessionView*>(&view);
+		if(text_view)
+			text_view->set_active_user(INF_TEXT_USER(user));
+		ChatSessionView* chat_view =
+			dynamic_cast<ChatSessionView*>(&view);
+		if(chat_view)
+			chat_view->set_active_user(user);
+	}
+	else if(error->domain == inf_request_error_quark() &&
+	        error->code == INF_REQUEST_ERROR_NOT_AUTHORIZED)
+	{
+		set_permission_denied_text(view);
+	}
+	else
+	{
+		set_error_text(view, error->message);
 	}
 }

@@ -19,6 +19,7 @@
 
 #include "core/foldermanager.hpp"
 #include "core/preferences.hpp"
+#include "core/userjoin.hpp"
 
 #include <sigc++/trackable.h>
 
@@ -43,6 +44,11 @@ protected:
 	                         InfSessionProxy* proxy,
 	                         Folder& folder,
 	                         SessionView& view);
+	void on_user_join_finished(InfSessionProxy* proxy,
+	                           Folder& folder,
+	                           SessionView& view,
+	                           InfUser* user,
+	                           const GError* error);
 
 	const Preferences& m_preferences;
 
