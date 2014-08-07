@@ -173,6 +173,13 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	g_signal_connect(m_view, "query-tooltip",
 	                 G_CALLBACK(on_query_tooltip_static), this);
 
+	gtk_source_buffer_set_style_scheme(
+		m_buffer,
+		gtk_source_style_scheme_manager_get_scheme(
+			gtk_source_style_scheme_manager_get_default(),
+			static_cast<Glib::ustring>(
+				preferences.appearance.scheme_id).c_str()));
+
 	gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_view),
 	                         GTK_TEXT_BUFFER(m_buffer));
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(m_view), FALSE);
@@ -294,13 +301,6 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	);
 
 	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
-
-	gtk_source_buffer_set_style_scheme(
-		m_buffer,
-		gtk_source_style_scheme_manager_get_scheme(
-			gtk_source_style_scheme_manager_get_default(),
-			static_cast<Glib::ustring>(
-				preferences.appearance.scheme_id).c_str()));
 }
 
 Gobby::TextSessionView::~TextSessionView()
