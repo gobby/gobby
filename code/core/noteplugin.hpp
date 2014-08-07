@@ -27,6 +27,7 @@ namespace Gobby
 		extern const InfcNotePlugin* C_TEXT;
 		extern const InfcNotePlugin* C_CHAT;
 		extern const InfdNotePlugin* D_TEXT;
+		extern const InfdNotePlugin* D_CHAT;
 	}
 }
 

@@ -22,6 +22,7 @@
 #include <libinftext/inf-text-filesystem-format.h>
 
 #include <libinfinity/server/infd-filesystem-storage.h>
+#include <libinfinity/server/infd-chat-filesystem-format.h>
 
 #include <libinfinity/common/inf-chat-session.h>
 #include <libinfinity/common/inf-session.h>
@@ -126,11 +127,56 @@ namespace
 	                 InfXmlConnection* sync_connection,
 	                 gpointer user_data)
 	{
+		InfChatBuffer* buffer = inf_chat_buffer_new(256);
 		InfChatSession* session = inf_chat_session_new(
-			manager, 256, status, sync_group, sync_connection);
+			manager, buffer, status, sync_group, sync_connection);
+		g_object_unref(buffer);
 
 		return INF_SESSION(session);
 	}
+
+	InfSession*
+	chat_session_read(InfdStorage* storage,
+	                  InfIo* io,
+	                  InfCommunicationManager* manager,
+	                  const gchar* path,
+	                  gpointer user_data,
+	                  GError** error)
+	{
+		InfChatBuffer* buffer = inf_chat_buffer_new(256);
+
+		const gboolean result = infd_chat_filesystem_format_read(
+			INFD_FILESYSTEM_STORAGE(storage),
+			path, buffer, error);
+
+		InfChatSession* session = NULL;
+		if(result)
+		{
+			session = inf_chat_session_new(
+				manager, buffer,
+				INF_SESSION_RUNNING, NULL, NULL);
+		}
+
+		g_object_unref(buffer);
+		return INF_SESSION(session);
+	}
+
+	gboolean
+	chat_session_write(InfdStorage* storage,
+	                   InfSession* session,
+	                   const gchar* path,
+	                   gpointer user_data,
+	                   GError** error)
+	{
+		return infd_chat_filesystem_format_write(
+			INFD_FILESYSTEM_STORAGE(storage),
+			path,
+			INF_CHAT_BUFFER(inf_session_get_buffer(session)),
+			error
+		);
+	}
+
+
 
 	const InfcNotePlugin C_TEXT_PLUGIN =
 	{
@@ -155,8 +201,19 @@ namespace
 		text_session_read,
 		text_session_write
 	};
+
+	const InfdNotePlugin D_CHAT_PLUGIN =
+	{
+		NULL,
+		"InfdFilesystemStorage",
+		"InfChat",
+		chat_session_new,
+		chat_session_read,
+		chat_session_write
+	};
 }
 
 const InfcNotePlugin* Gobby::Plugins::C_TEXT = &C_TEXT_PLUGIN;
 const InfcNotePlugin* Gobby::Plugins::C_CHAT = &C_CHAT_PLUGIN;
 const InfdNotePlugin* Gobby::Plugins::D_TEXT = &D_TEXT_PLUGIN;
+const InfdNotePlugin* Gobby::Plugins::D_CHAT = &D_CHAT_PLUGIN;

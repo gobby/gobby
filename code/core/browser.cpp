@@ -346,6 +346,7 @@ void Gobby::Browser::on_set_browser(GtkTreeIter* iter,
 			InfdDirectory* directory =
 				INFD_DIRECTORY(new_browser);
 			infd_directory_add_plugin(directory, Plugins::D_TEXT);
+			infd_directory_add_plugin(directory, Plugins::D_CHAT);
 		}
 	}
 }
