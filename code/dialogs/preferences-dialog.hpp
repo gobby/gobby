@@ -187,6 +187,24 @@ public:
 		Preferences::Option<Pango::FontDescription>& m_option;
 	};
 
+	// Note that old GTK+ versions do not emit the file-set signal
+	// of Gtk::FileChooserButton when a new entry is chosen from
+	// the combo box, but only from the dialog. The bug was fixed
+	// only in GTK+ 3.10.0.
+	//
+	// Therefore, we are using the selection-changed signal
+	// instead. However, when the button is constructed, the
+	// signal is emitted "too often" since it is first emitted
+	// with the home folder of the current user, and then again
+	// with what was specified when set_filename() is called
+	// to set the initial name. In the case of the local documents
+	// directory, this causes a significant overhead and running
+	// sessions being closed once the preferences dialog is opened.
+	//
+	// To work around this, we ignore all signal emissions until
+	// the first signal emission with the initially set value occurs.
+	// Once we depend on GTK+ 3.10 or greater, the workaround
+	// can be removed and we can switch to signal_file_set().
 	class PathConnection: public DuplexConnection<std::string>
 	{
 	public:
@@ -196,7 +214,10 @@ public:
 				file_chooser.signal_selection_changed(),
 				option.signal_changed()),
 			m_file_chooser(file_chooser),
-			m_option(option)
+			m_option(option),
+			m_initial_value(option),
+			m_seen_initial_value(file_chooser.get_filename() ==
+			                     m_initial_value)
 		{
 		}
 
@@ -204,15 +225,30 @@ public:
 		virtual std::string get1() const
 			{ return m_file_chooser.get_filename(); }
 		virtual std::string get2() const
-			{ return m_option.get(); }
+		{
+			if(m_seen_initial_value)
+				return m_option.get();
+			else
+				return "";
+		}
+
 		virtual void set1(const std::string& val)
 			{ m_file_chooser.set_filename(val); }
 		virtual void set2(const std::string& val)
-			{ m_option.set(val); }
+		{
+			if(!m_seen_initial_value)
+				if(val == m_initial_value)
+					m_seen_initial_value = true;
+
+			if(m_seen_initial_value)
+				m_option.set(val);
+		}
 
 	private:
 		Gtk::FileChooser& m_file_chooser;
 		Preferences::Option<std::string>& m_option;
+		const std::string m_initial_value;
+		bool m_seen_initial_value;
 	};
 
 	template<typename OptionType>
@@ -273,6 +309,7 @@ public:
 		Gtk::CheckButton m_btn_local_keep_documents;
 		Gtk::Label m_lbl_local_documents_directory;
 		Gtk::FileChooserButton m_btn_local_documents_directory;
+		PathConnection m_conn_local_documents_directory;
 		Gtk::HBox m_box_local_documents_directory;
 
 		Glib::RefPtr<Gtk::SizeGroup> m_size_group;

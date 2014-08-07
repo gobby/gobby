@@ -175,23 +175,6 @@ namespace
 			)
 		);
 	}
-
-	void connect_path_option(Gtk::FileChooser& file_chooser,
-	                         Preferences::Option<std::string>& option)
-	{
-		file_chooser.signal_selection_changed().connect(
-			sigc::compose(
-				sigc::mem_fun(
-					option,
-					&Preferences::Option<std::string>::set
-				),
-				sigc::mem_fun(
-					file_chooser,
-					&Gtk::FileChooser::get_filename
-				)
-			)
-		);
-	}
 }
 
 Gobby::PreferencesDialog::Page::Page():
@@ -242,9 +225,11 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_btn_local_keep_documents(
 		_("Remember local documents after Gobby restart")),
 	m_lbl_local_documents_directory(_("Local documents directory:")),
-	m_box_local_documents_directory(false, 6),
-        m_btn_local_documents_directory(
+	m_btn_local_documents_directory(
 		Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
+	m_conn_local_documents_directory(m_btn_local_documents_directory,
+	                                 preferences.user.host_directory),
+	m_box_local_documents_directory(false, 6),
 	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
 {
 	m_btn_local_allow_connections.signal_toggled().connect(
@@ -394,8 +379,6 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_btn_local_documents_directory.set_filename(
 		static_cast<std::string>(preferences.user.host_directory));
 	m_btn_local_documents_directory.show();
-	connect_path_option(m_btn_local_documents_directory,
-	                    preferences.user.host_directory);
 
 	m_box_local_documents_directory.pack_start(
 		m_lbl_local_documents_directory,
