@@ -71,6 +71,7 @@ protected:
 
 private:
 	void update_modified();
+	void update_dot_char();
 	void update_dots();
 
 	gunichar m_dot_char;

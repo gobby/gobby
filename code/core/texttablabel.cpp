@@ -66,9 +66,6 @@ void Gobby::TextTabLabel::UserWatcher::on_notify_hue(GObject* user_object,
 Gobby::TextTabLabel::TextTabLabel(Folder& folder, TextSessionView& view):
 	TabLabel(folder, view, Gtk::Stock::EDIT), m_dot_char(0)
 {
-	update_modified();
-	update_dots();
-
 	m_modified_changed_handle = g_signal_connect_after(
 		G_OBJECT(view.get_text_buffer()), "modified-changed",
 		G_CALLBACK(on_modified_changed_static), this);
@@ -85,6 +82,9 @@ Gobby::TextTabLabel::TextTabLabel(Folder& folder, TextSessionView& view):
 		G_CALLBACK(on_text_erased_static), this);
 
 	m_extra.pack_start(m_dots, Gtk::PACK_SHRINK);
+
+	update_modified();
+	update_dot_char();
 }
 
 Gobby::TextTabLabel::~TextTabLabel()
@@ -115,27 +115,7 @@ Gobby::TextTabLabel::on_style_changed(const Glib::RefPtr<Gtk::Style>& prev)
 	TabLabel::on_style_changed(prev);
 #endif
 
-	static const gunichar dot_chars[] = {
-		0x270E, /* pencil */
-		0x26AB, /* medium black circle */
-		0x25CF, /* black circle */
-		0x002A, /* asterisk */
-		0x0000
-	};
-
-	// Find a glyph for the user dots
-	const gunichar* c;
-	for(c = dot_chars; *c; ++c)
-	{
-		m_dots.set_text(Glib::ustring(1, *c));
-		if(m_dots.get_layout()->get_unknown_glyphs_count() == 0)
-			break;
-	}
-
-	m_dot_char = *c;
-
-	// Update dots using this char
-	update_dots();
+	update_dot_char();
 }
 
 void Gobby::TextTabLabel::on_notify_status()
@@ -197,8 +177,34 @@ void Gobby::TextTabLabel::update_modified()
 		m_title.set_text(m_view.get_title());
 }
 
+void Gobby::TextTabLabel::update_dot_char()
+{
+	static const gunichar dot_chars[] = {
+		0x270E, /* pencil */
+		0x26AB, /* medium black circle */
+		0x25CF, /* black circle */
+		0x002A, /* asterisk */
+		0x0000
+	};
+
+	// Find a glyph for the user dots
+	const gunichar* c;
+	for(c = dot_chars; *c; ++c)
+	{
+		m_dots.set_text(Glib::ustring(1, *c));
+		if(m_dots.get_layout()->get_unknown_glyphs_count() == 0)
+			break;
+	}
+
+	m_dot_char = *c;
+
+	// Update dots using this char
+	update_dots();
+}
+
 void Gobby::TextTabLabel::update_dots()
 {
+	g_assert(m_dot_char != 0);
 	if (m_changed_by.empty())
 	{
 		m_dots.hide();
