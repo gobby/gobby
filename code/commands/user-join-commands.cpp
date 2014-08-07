@@ -217,18 +217,39 @@ void Gobby::UserJoinCommands::on_document_added(InfBrowser* browser,
                                                 const InfBrowserIter* iter,
                                                 InfSessionProxy* proxy,
                                                 Folder& folder,
-                                                SessionView& view)
+                                                SessionView& view,
+                                                FolderManager::UserJoinRef j)
 {
 	g_assert(proxy != NULL);
 
 	g_assert(m_user_join_map.find(proxy) == m_user_join_map.end());
 
-	std::auto_ptr<UserJoin::ParameterProvider> provider(
-		new ParameterProvider(view, folder, m_preferences));
-	std::auto_ptr<UserJoin> userjoin(
-		new UserJoin(browser, iter, proxy, provider));
-	m_user_join_map[proxy] =
-		new UserJoinInfo(*this, userjoin, folder, view);
+	std::auto_ptr<UserJoin> userjoin;
+	if(j && j->get())
+	{
+		// If there is a user already joined for this session,
+		// then simply use that user instead of joining another one.
+		userjoin = *j;
+	}
+	else
+	{
+		// Otherwise join a new user.
+		std::auto_ptr<UserJoin::ParameterProvider> provider(
+			new ParameterProvider(view, folder, m_preferences));
+		userjoin.reset(new UserJoin(browser, iter, proxy, provider));
+	}
+
+	if(userjoin->get_user() == NULL && userjoin->get_error() == NULL)
+	{
+		m_user_join_map[proxy] =
+			new UserJoinInfo(*this, userjoin, folder, view);
+	}
+	else
+	{
+		on_user_join_finished(
+			proxy, folder, view,
+			userjoin->get_user(), userjoin->get_error());
+	}
 }
 
 void Gobby::UserJoinCommands::on_document_removed(InfBrowser* browser,

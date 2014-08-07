@@ -30,7 +30,8 @@ class BrowserCommands: public sigc::trackable
 {
 public:
 	BrowserCommands(Browser& browser, FolderManager& folder_manager,
-	                StatusBar& status_bar, Operations& operations);
+	                StatusBar& status_bar, Operations& operations,
+	                const Preferences& preferences);
 	~BrowserCommands();
 
 protected:
@@ -50,7 +51,8 @@ protected:
 	                    InfBrowser* old_browser, InfBrowser* new_browser);
 	void on_notify_status(InfBrowser* browser);
 
-	void subscribe_chat(InfcBrowser* browser);
+	void subscribe_chat(InfBrowser* browser);
+	bool create_chat_document(InfBrowser* browser);
 
 	void on_connect(const Glib::ustring& hostname);
 	void on_activate(InfBrowser* browser, InfBrowserIter* iter);
@@ -64,6 +66,7 @@ protected:
 	FolderManager& m_folder_manager;
 	StatusBar& m_status_bar;
 	Operations& m_operations;
+	const Preferences& m_preferences;
 	gulong m_set_browser_handler;
 
 	class BrowserInfo;

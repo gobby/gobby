@@ -18,6 +18,59 @@
 #include "util/i18n.hpp"
 
 #include <libinfinity/common/inf-request-result.h>
+#include <libinfinity/server/infd-directory.h>
+
+namespace
+{
+	void count_available_users_func(InfUser* user, gpointer user_data)
+	{
+		if(inf_user_get_status(user) != INF_USER_UNAVAILABLE &&
+		   ~inf_user_get_flags(user) & INF_USER_LOCAL)
+		{
+			++(*(unsigned int*)user_data);
+		}
+	}
+
+	unsigned int count_available_users(InfUserTable* user_table)
+	{
+		// Count available remote users
+		unsigned int n_users = 0;
+		inf_user_table_foreach_user(
+			user_table, count_available_users_func, &n_users);
+		return n_users;
+	}
+
+	class ParameterProvider: public Gobby::UserJoin::ParameterProvider
+	{
+	public:
+		ParameterProvider(const Gobby::Preferences& preferences):
+			m_preferences(preferences)
+		{
+		}
+
+		virtual std::vector<GParameter> get_user_join_parameters();
+
+		const Gobby::Preferences& m_preferences;
+	};
+
+	std::vector<GParameter> ParameterProvider::get_user_join_parameters()
+	{
+		std::vector<GParameter> params;
+		const GParameter name_param = { "name", { 0 } };
+		params.push_back(name_param);
+		const GParameter status_param = { "status", { 0 } };
+		params.push_back(status_param);
+
+		g_value_init(&params[0].value, G_TYPE_STRING);
+		g_value_init(&params[1].value, INF_TYPE_USER_STATUS);
+
+		const Glib::ustring& name = m_preferences.user.name;
+		g_value_set_string(&params[0].value, name.c_str());
+		g_value_set_enum(&params[1].value, INF_USER_INACTIVE);
+
+		return params;
+	}
+}
 
 class Gobby::BrowserCommands::BrowserInfo
 {
@@ -28,6 +81,10 @@ public:
 	~BrowserInfo();
 
 	InfBrowser* get_browser() { return m_browser; }
+
+	void set_pending_chat(InfSessionProxy* proxy);
+	void clear_pending_chat();
+	void check_pending_chat();
 private:
 	static void on_notify_status_static(GObject* object,
 	                                    GParamSpec* pspec,
@@ -37,9 +94,21 @@ private:
 			INF_BROWSER(object));
 	}
 
-	InfBrowser* m_browser;
+	static void on_add_available_user_static(InfUserTable* user_table,
+	                                         InfUser* user,
+	                                         gpointer user_data)
+	{
+		static_cast<BrowserInfo*>(user_data)->check_pending_chat();
+	}
 
+	BrowserCommands& m_commands;
+	std::auto_ptr<UserJoin> m_userjoin;
+
+	InfBrowser* m_browser;
 	gulong m_notify_status_handler;
+
+	InfSessionProxy* m_pending_chat;
+	gulong m_add_available_user_handler;
 };
 
 class Gobby::BrowserCommands::RequestInfo
@@ -103,7 +172,7 @@ private:
 
 Gobby::BrowserCommands::BrowserInfo::BrowserInfo(BrowserCommands& cmds,
                                                  InfBrowser* browser):
-	m_browser(browser)
+	m_commands(cmds), m_browser(browser), m_pending_chat(NULL)
 {
 	m_notify_status_handler = g_signal_connect(
 		m_browser, "notify::status",
@@ -114,9 +183,93 @@ Gobby::BrowserCommands::BrowserInfo::BrowserInfo(BrowserCommands& cmds,
 
 Gobby::BrowserCommands::BrowserInfo::~BrowserInfo()
 {
-	g_signal_handler_disconnect(m_browser, m_notify_status_handler);
+	if(m_pending_chat != NULL)
+	{
+		InfSession* session;
+		g_object_get(G_OBJECT(m_pending_chat), "session", &session, NULL);
+		InfUserTable* table = inf_session_get_user_table(session);
 
+		g_signal_handler_disconnect(
+			table, m_add_available_user_handler);
+
+		g_object_unref(session);
+		g_object_unref(m_pending_chat);
+	}
+
+	g_signal_handler_disconnect(m_browser, m_notify_status_handler);
 	g_object_unref(m_browser);
+}
+
+void
+Gobby::BrowserCommands::BrowserInfo::set_pending_chat(InfSessionProxy* proxy)
+{
+	g_assert(m_pending_chat == NULL);
+
+	m_pending_chat = proxy;
+	g_object_ref(proxy);
+
+	InfSession* session;
+	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
+	InfUserTable* table = inf_session_get_user_table(session);
+
+	m_add_available_user_handler = g_signal_connect(
+		G_OBJECT(table), "add-available-user",
+		G_CALLBACK(on_add_available_user_static), this);
+
+	g_object_unref(session);
+
+	// Attempt a user join already here before the document is added to
+	// the folder manager so that we can correctly show the document when
+	// enough users are available. Otherwise if no party would join a user
+	// before other users show up, the chat would never be shown.
+	std::auto_ptr<UserJoin::ParameterProvider> provider(
+		new ParameterProvider(m_commands.m_preferences));
+	m_userjoin.reset(new UserJoin(m_browser, NULL, proxy, provider));
+
+	check_pending_chat();
+}
+
+void Gobby::BrowserCommands::BrowserInfo::clear_pending_chat()
+{
+	if(m_pending_chat != NULL)
+	{
+		InfSession* session;
+		g_object_get(G_OBJECT(m_pending_chat),
+		             "session", &session, NULL);
+		InfUserTable* table = inf_session_get_user_table(session);
+
+		g_signal_handler_disconnect(
+			table, m_add_available_user_handler);
+
+		m_userjoin.reset(NULL);
+		g_object_unref(m_pending_chat);
+		m_pending_chat = NULL;
+
+		g_object_unref(session);
+	}
+}
+
+void Gobby::BrowserCommands::BrowserInfo::check_pending_chat()
+{
+	g_assert(m_pending_chat != NULL);
+
+	InfSession* session;
+	g_object_get(G_OBJECT(m_pending_chat), "session", &session, NULL);
+	InfUserTable* table = inf_session_get_user_table(session);
+
+	if(count_available_users(table) > 0)
+	{
+		g_signal_handler_disconnect(
+			table, m_add_available_user_handler);
+
+		m_commands.m_folder_manager.add_document(
+			m_browser, NULL, m_pending_chat, &m_userjoin);
+
+		g_object_unref(m_pending_chat);
+		m_pending_chat = NULL;
+	}
+
+	g_object_unref(session);
 }
 
 Gobby::BrowserCommands::RequestInfo::RequestInfo(BrowserCommands& commands,
@@ -174,9 +327,11 @@ void Gobby::BrowserCommands::RequestInfo::set_request(InfRequest* request)
 Gobby::BrowserCommands::BrowserCommands(Browser& browser,
                                         FolderManager& folder_manager,
                                         StatusBar& status_bar,
-                                        Operations& operations):
+                                        Operations& operations,
+                                        const Preferences& preferences):
 	m_browser(browser), m_folder_manager(folder_manager),
-	m_operations(operations), m_status_bar(status_bar)
+	m_operations(operations), m_status_bar(status_bar),
+	m_preferences(preferences)
 {
 	m_browser.signal_connect().connect(
 		sigc::mem_fun(*this, &BrowserCommands::on_connect));
@@ -216,7 +371,6 @@ void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
 		// Find by browser in case old_browser has its connection
 		// reset.
 		BrowserMap::iterator iter = m_browser_map.find(old_browser);
-
 		g_assert(iter != m_browser_map.end());
 
 		delete iter->second;
@@ -236,18 +390,8 @@ void Gobby::BrowserCommands::on_set_browser(InfGtkBrowserModel* model,
 		m_browser_map[new_browser] =
 			new BrowserInfo(*this, new_browser);
 		if(browser_status == INF_BROWSER_OPEN)
-		{
-			if(INFC_IS_BROWSER(new_browser))
-			{
-				InfcBrowser* infcbrowser =
-					INFC_BROWSER(new_browser);
-				InfcSessionProxy* proxy =
-					infc_browser_get_chat_session(
-						infcbrowser);
-				if(!proxy)
-					subscribe_chat(infcbrowser);
-			}
-		}
+			if(!create_chat_document(new_browser))
+				subscribe_chat(new_browser);
 	}
 }
 
@@ -257,28 +401,37 @@ void Gobby::BrowserCommands::on_notify_status(InfBrowser* browser)
 	InfXmlConnectionStatus status;
 	InfBrowserStatus browser_status;
 
+	const BrowserMap::iterator iter = m_browser_map.find(browser);
+	g_assert(iter != m_browser_map.end());
+
 	g_object_get(G_OBJECT(browser), "status", &browser_status, NULL);
 	switch(browser_status)
 	{
 	case INF_BROWSER_CLOSED:
+		iter->second->clear_pending_chat();
+
 		// Close connection if browser got disconnected. This for
 		// example happens when the server does not send an initial
 		// welcome message.
-		connection =
-			infc_browser_get_connection(INFC_BROWSER(browser));
-		g_object_get(G_OBJECT(connection), "status", &status, NULL);
-		if(status != INF_XML_CONNECTION_CLOSED &&
-		   status != INF_XML_CONNECTION_CLOSING)
+		if(INFC_IS_BROWSER(browser))
 		{
-			inf_xml_connection_close(connection);
+			connection = infc_browser_get_connection(
+				INFC_BROWSER(browser));
+			g_object_get(G_OBJECT(connection),
+			             "status", &status, NULL);
+			if(status != INF_XML_CONNECTION_CLOSED &&
+			   status != INF_XML_CONNECTION_CLOSING)
+			{
+				inf_xml_connection_close(connection);
+			}
 		}
 
 		break;
 	case INF_BROWSER_OPENING:
 		break;
 	case INF_BROWSER_OPEN:
-		if(!infc_browser_get_chat_session(INFC_BROWSER(browser)))
-			subscribe_chat(INFC_BROWSER(browser));
+		if(!create_chat_document(browser))
+			subscribe_chat(browser);
 		break;
 	default:
 		g_assert_not_reached();
@@ -286,21 +439,81 @@ void Gobby::BrowserCommands::on_notify_status(InfBrowser* browser)
 	}
 }
 
-void Gobby::BrowserCommands::subscribe_chat(InfcBrowser* browser)
+void Gobby::BrowserCommands::subscribe_chat(InfBrowser* browser)
 {
-	std::auto_ptr<RequestInfo> info(new RequestInfo(
-		*this, INF_BROWSER(browser), NULL, m_status_bar));
-
-	InfRequest* request = INF_REQUEST(
-		infc_browser_subscribe_chat(
-			browser,
-			RequestInfo::on_chat_finished_static, info.get()));
-
-	if(request != NULL)
+	if(INFC_IS_BROWSER(browser))
 	{
-		info->set_request(request);
-		g_assert(m_request_map.find(request) == m_request_map.end());
-		m_request_map[request] = info.release();
+		std::auto_ptr<RequestInfo> info(new RequestInfo(
+			*this, INF_BROWSER(browser), NULL, m_status_bar));
+
+		InfRequest* request = INF_REQUEST(
+			infc_browser_subscribe_chat(
+				INFC_BROWSER(browser),
+				RequestInfo::on_chat_finished_static,
+				info.get()));
+
+		if(request != NULL)
+		{
+			info->set_request(request);
+			g_assert(m_request_map.find(request) == m_request_map.end());
+			m_request_map[request] = info.release();
+		}
+	}
+	else if(INFD_IS_DIRECTORY(browser))
+	{
+		infd_directory_enable_chat(INFD_DIRECTORY(browser), TRUE);
+		create_chat_document(browser);
+	}
+}
+
+bool Gobby::BrowserCommands::create_chat_document(InfBrowser* browser)
+{
+	// Get the chat session from the browser
+	InfSessionProxy* proxy = NULL;
+	if(INFC_IS_BROWSER(browser))
+	{
+		proxy = INF_SESSION_PROXY(
+			infc_browser_get_chat_session(INFC_BROWSER(browser)));
+	}
+	else if(INFD_IS_DIRECTORY(browser))
+	{
+		proxy = INF_SESSION_PROXY(
+			infd_directory_get_chat_session(
+				INFD_DIRECTORY(browser)));
+	}
+
+	// Chat session not available
+	if(!proxy) return false;
+
+	// First, check whether there is already a document for this
+	// chat session. If there is, then don't create another one.
+	InfSession* session;
+	g_object_get(G_OBJECT(proxy), "session", &session, NULL);
+
+	SessionView* view =
+		m_folder_manager.get_chat_folder().lookup_document(session);
+	g_object_unref(session);
+
+	g_assert(view == NULL); // Can it happen?
+	if(view) return true; // Document exists already
+
+	if(INFC_IS_BROWSER(browser))
+	{
+		// For clients, just add the document
+		m_folder_manager.add_document(
+			browser, NULL, proxy, NULL);
+		return true;
+	}
+	else if(INFD_IS_DIRECTORY(browser))
+	{
+		// For our local chat, only show it if there is at least
+		// one remote user, otherwise wait until users show up.
+		BrowserMap::iterator iter =
+			m_browser_map.find(browser);
+		g_assert(iter != m_browser_map.end());
+
+		iter->second->set_pending_chat(proxy);
+		return true;
 	}
 }
 
@@ -327,7 +540,8 @@ void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
 		}
 		else
 		{
-			m_folder_manager.add_document(browser, iter, proxy);
+			m_folder_manager.add_document(browser, iter,
+			                              proxy, NULL);
 		}
 	}
 	else
@@ -383,18 +597,13 @@ void Gobby::BrowserCommands::on_finished(InfRequest* request,
 			inf_browser_get_session(browser, iter);
 		g_assert(proxy != NULL);
 
-		m_folder_manager.add_document(browser, iter, proxy);
+		m_folder_manager.add_document(browser, iter, proxy, NULL);
 	}
 	else
 	{
-		if(INFC_IS_BROWSER(browser))
-		{
-			InfSessionProxy* proxy = INF_SESSION_PROXY(
-				infc_browser_get_chat_session(
-					INFC_BROWSER(browser)));
-			g_assert(proxy != NULL);
-
-			m_folder_manager.add_document(browser, NULL, proxy);
-		}
+		// For InfdDirectory we do not make a request for subscribing
+		// to the chat.
+		const bool created = create_chat_document(browser);
+		g_assert(created); // Must work now
 	}
 }

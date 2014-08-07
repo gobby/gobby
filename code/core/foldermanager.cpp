@@ -143,7 +143,8 @@ Gobby::FolderManager::~FolderManager()
 
 void Gobby::FolderManager::add_document(InfBrowser* browser,
                                         const InfBrowserIter* iter,
-                                        InfSessionProxy* proxy)
+                                        InfSessionProxy* proxy,
+                                        UserJoinRef userjoin)
 {
 	gchar* hostname;
 
@@ -237,7 +238,8 @@ void Gobby::FolderManager::add_document(InfBrowser* browser,
 		new SessionInfo(*folder, browser, iter, proxy);
 	g_object_unref(session);
 
-	m_signal_document_added.emit(browser, iter, proxy, *folder, *view);
+	m_signal_document_added.emit(
+		browser, iter, proxy, *folder, *view, userjoin);
 }
 
 void Gobby::FolderManager::remove_document(SessionView& view)
@@ -339,7 +341,8 @@ void Gobby::FolderManager::on_text_document_added(SessionView& view)
 	g_assert(m_session_map.find(session) == m_session_map.end());
 	m_session_map[session] =
 		new SessionInfo(m_text_folder, NULL, NULL, NULL);
-	m_signal_document_added.emit(NULL, NULL, NULL, m_text_folder, view);
+	m_signal_document_added.emit(NULL, NULL, NULL,
+	                             m_text_folder, view, NULL);
 }
 
 void Gobby::FolderManager::on_chat_document_added(SessionView& view)
@@ -354,7 +357,8 @@ void Gobby::FolderManager::on_chat_document_added(SessionView& view)
 	g_assert(m_session_map.find(session) == m_session_map.end());
 	m_session_map[session] =
 		new SessionInfo(m_chat_folder, NULL, NULL, NULL);
-	m_signal_document_added.emit(NULL, NULL, NULL, m_chat_folder, view);
+	m_signal_document_added.emit(NULL, NULL, NULL,
+	                             m_chat_folder, view, NULL);
 }
 
 void Gobby::FolderManager::on_document_removed(SessionView& view)

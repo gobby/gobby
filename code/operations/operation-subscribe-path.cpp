@@ -249,7 +249,7 @@ void Gobby::OperationSubscribePath::explore()
 				{
 					get_folder_manager().add_document(
 						m_browser, &m_path_iter,
-						proxy);
+						proxy, NULL);
 				}
 
 				finish();
@@ -502,7 +502,8 @@ void Gobby::OperationSubscribePath::on_subscribe_finished(
 			inf_browser_get_session(m_browser, iter);
 		g_assert(proxy != NULL);
 
-		get_folder_manager().add_document(m_browser, iter, proxy);
+		get_folder_manager().add_document(
+			m_browser, iter, proxy, NULL);
 
 		/* From this point on subscription-commands takes over */
 		finish();

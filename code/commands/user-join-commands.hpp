@@ -38,7 +38,8 @@ protected:
 	                       const InfBrowserIter* iter,
 	                       InfSessionProxy* proxy,
 	                       Folder& folder,
-                               SessionView& view);
+	                       SessionView& view,
+	                       FolderManager::UserJoinRef j);
 	void on_document_removed(InfBrowser* browser,
 	                         const InfBrowserIter* iter,
 	                         InfSessionProxy* proxy,

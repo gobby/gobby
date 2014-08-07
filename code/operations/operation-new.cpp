@@ -102,7 +102,7 @@ void Gobby::OperationNew::on_request_finished(const InfBrowserIter* iter,
 			g_assert(proxy != NULL);
 
 			get_folder_manager().add_document(
-				m_browser, iter, proxy);
+				m_browser, iter, proxy, NULL);
 		}
 
 		finish();

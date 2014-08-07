@@ -19,6 +19,7 @@
 
 #include "core/browser.hpp"
 #include "core/folder.hpp"
+#include "core/userjoin.hpp"
 #include "core/documentinfostorage.hpp"
 
 #include <libinfinity/common/inf-browser.h>
@@ -33,8 +34,11 @@ namespace Gobby
 class FolderManager: public sigc::trackable
 {
 public:
+	typedef std::auto_ptr<UserJoin>* UserJoinRef;
+
 	typedef sigc::signal<void, InfBrowser*, const InfBrowserIter*,
-	                     InfSessionProxy*, Folder&, SessionView&>
+	                     InfSessionProxy*, Folder&, SessionView&,
+	                     UserJoinRef>
 		SignalDocumentAdded;
 
 	typedef sigc::signal<void, InfBrowser*, const InfBrowserIter*,
@@ -52,7 +56,7 @@ public:
 
 	// Add a SessionView for the given session
 	void add_document(InfBrowser* browser, const InfBrowserIter* iter,
-	                  InfSessionProxy* proxy);
+	                  InfSessionProxy* proxy, UserJoinRef userjoin);
 	void remove_document(SessionView& view);
 
 	SessionView* lookup_document(InfSession* session) const;
