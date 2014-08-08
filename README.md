@@ -13,23 +13,23 @@ nicely into the GNOME desktop environment if you want it to.
 
 ## Features
 
-- Realtime collaboration through encrypted connections
+- Realtime collaboration through encrypted connections (including PFS)
 - Each user has its own colour to be identified by others
 - Local group Undo
-- IRC-like chat
+- Group chat
 - Shows cursors and selections of remote users
 - Sidebar with all the others having joined the session
 - Syntax highlighting, auto indentation, configurable tab
   width
 - Multiple documents in one session
-- Document subscriptions
 - Zeroconf support (optional)
 - Unicode support
 - Internationalisation
+- Highly configurable dedicated server
+- Sophisticated Access Control Lists (ACLs)
 - Cross-platform: Microsoft Windows, Linux, Mac OS X, other
   flavours of Unix
-- Free software, licenced under the terms of the GNU General
-  Public License
+- Free software, licenced under the terms of the ISC license
 
 ## Requirements
 
