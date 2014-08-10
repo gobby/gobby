@@ -39,7 +39,7 @@
     <legalnotice>
       <title>Feedback</title>
       <para>To report a bug or make a suggestion regarding this manual,
-        please file a ticket on <ulink url="http://gobby.0x539.de/"> http://gobby.0x539.de</ulink>.</para>
+        please file an issue on <ulink url="https://github.com/gobby/gobby/issues">https://github.com/gobby/gobby/issues</ulink>.</para>
       <para>The application <application>&appname;</application> and this manual
         are both licensed under the ISC license.  They are distributed in the
         hope that they will be useful, but WITHOUT ANY WARRANTY; without even
@@ -406,8 +406,8 @@ gobby-0.5
     <title>About Gobby</title>
     <para><application>Gobby</application> was written by Armin Burgmeier and others.</para>
     <para>To report a bug or make a suggestion regarding this application or this
-      manual, please file a ticket on
-      <ulink url="http://gobby.0x539.de/">http://gobby.0x539.de</ulink>.
+      manual, please file an issue on
+      <ulink url="https://github.com/gobby/gobby/issues">https://github.com/gobby/gobby/issues</ulink>.
       Please include a reachable email address in your bug report as we often
       need to contact the reporters for further clarifications.</para>
     <sect2 id="mailinglists">
@@ -421,8 +421,8 @@ gobby-0.5
           <para><literal>obby-users</literal>: Discussions about Gobby&apos;s usage and installation problems. The announcements are also posted there.</para>
         </listitem>
       </itemizedlist>
-      <para>More information about how to subscribe can be found on <ulink url="http://gobby.0x539.de/trac/wiki/MailingLists">
-          <literal>http://gobby.0x539.de/trac/wiki/MailingLists</literal>
+      <para>More information about how to subscribe can be found on <ulink url="https://github.com/gobby/gobby/wiki/Mailing%20Lists">
+          <literal>https://github.com/gobby/gobby/wiki/Mailing%20Lists</literal>
         </ulink>.</para>
     </sect2>
     <sect2 id="irc">
