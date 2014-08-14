@@ -202,10 +202,12 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	{
 		const InfAclAccount* account =
 			inf_browser_get_acl_local_account(browser);
+		const InfAclAccountId acc_id =
+			(account != NULL) ? account->id : 0;
 
 		InfAclMask mask;
 		inf_acl_mask_set1(&mask, INF_ACL_CAN_CREATE_ACCOUNT);
-		inf_browser_check_acl(browser, &iter, account, &mask, &mask);
+		inf_browser_check_acl(browser, &iter, acc_id, &mask, &mask);
 		if(inf_acl_mask_has(&mask, INF_ACL_CAN_CREATE_ACCOUNT))
 		{
 			Gtk::Image* image = Gtk::manage(new Gtk::Image);
@@ -490,10 +492,11 @@ void Gobby::BrowserContextCommands::on_account_created(
 {
 	InfBrowser* browser;
 	g_object_get(G_OBJECT(m_dialog->gobj()), "browser", &browser, NULL);
-	const InfAclAccount* default_account =
+	const InfAclAccount* own_account =
 		inf_browser_get_acl_local_account(browser);
-	const bool is_default_account =
-		(strcmp(default_account->id, "default") == 0);
+	const InfAclAccountId default_id =
+		inf_acl_account_id_from_string("default");
+	const bool is_default_account = (own_account->id == default_id);
 	g_object_unref(browser);
 
 	gnutls_x509_crt_t cert =

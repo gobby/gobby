@@ -191,9 +191,11 @@ void Gobby::UserJoin::attempt_user_join()
 		const InfBrowserIter* iter = m_node.get_browser_iter();
 		const InfAclAccount* account =
 			inf_browser_get_acl_local_account(browser);
+		const InfAclAccountId acc_id =
+			(account != NULL) ? account->id : 0;
 		InfAclMask msk;
 		inf_acl_mask_set1(&msk, INF_ACL_CAN_JOIN_USER);
-		if(!inf_browser_check_acl(browser, iter, account, &msk, NULL))
+		if(!inf_browser_check_acl(browser, iter, acc_id, &msk, NULL))
 		{
 			GError* error = NULL;
 			g_set_error(
