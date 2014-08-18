@@ -198,7 +198,9 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	}
 
 	// Add create account option if the connection item has been clicked at
-	if(is_toplevel)
+	// Only offer this for clients at the moment, since local servers do
+	// not support this.
+	if(is_toplevel && INFC_IS_BROWSER(browser))
 	{
 		const InfAclAccount* account =
 			inf_browser_get_acl_local_account(browser);
