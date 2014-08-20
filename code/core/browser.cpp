@@ -161,6 +161,9 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_scroll.set_shadow_type(Gtk::SHADOW_IN);
 	m_scroll.show();
 
+	connection_manager.signal_connection_replaced().connect(
+		sigc::mem_fun(*this, &Browser::on_connection_replaced));
+
 	g_signal_connect(
 		m_browser_store,
 		"set-browser",
@@ -272,6 +275,27 @@ void Gobby::Browser::set_selected(InfBrowser* browser,
 	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
 }
 
+InfBrowser* Gobby::Browser::connect_to_host(const std::string& hostname,
+                                            const std::string& service,
+                                            unsigned int device_index)
+{
+	// Check whether we do have such a connection already:
+	InfXmppConnection* xmpp = m_connection_manager.make_connection(
+		hostname, service, device_index);
+
+	// Should have thrown otherwise:
+	g_assert(xmpp != NULL);
+
+	// TODO: Remove erroneous entry with same name, if any, before
+	// adding.
+
+	InfBrowser* browser = inf_gtk_browser_store_add_connection(
+		m_browser_store, INF_XML_CONNECTION(xmpp),
+		hostname.c_str());
+
+	return browser;
+}
+
 InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
                                             guint port,
                                             unsigned int device_index,
@@ -303,13 +327,31 @@ void Gobby::Browser::add_browser(InfBrowser* browser,
 
 void Gobby::Browser::remove_browser(InfBrowser* browser)
 {
-	inf_gtk_browser_store_remove_browser(
-		m_browser_store, browser);
-
 	m_connection_manager.remove_connection(
 		INF_XMPP_CONNECTION(
 			infc_browser_get_connection(
 				INFC_BROWSER(browser))));
+
+	inf_gtk_browser_store_remove_browser(
+		m_browser_store, browser);
+}
+
+void Gobby::Browser::on_connection_replaced(InfXmppConnection* connection,
+                                            InfXmppConnection* by)
+{
+	// Remove the browser for the replaced connection, and highlight the
+	// one it was replaced with.
+	inf_gtk_browser_store_remove_connection(
+		m_browser_store, INF_XML_CONNECTION(connection));
+
+	/* The connection exists already, we just use this function to obtain
+	 * the browser.
+	 * TODO: There should be a
+	 * inf_gtk_browser_store_find_browser_for_connection() function */
+	InfBrowser* browser = inf_gtk_browser_store_add_connection(
+		m_browser_store, INF_XML_CONNECTION(by), "");
+
+	set_selected(browser, NULL);
 }
 
 void Gobby::Browser::on_expanded_changed()

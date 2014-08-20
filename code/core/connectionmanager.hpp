@@ -36,6 +36,9 @@ namespace Gobby
 class ConnectionManager: public sigc::trackable
 {
 public:
+	typedef sigc::signal<void, InfXmppConnection*, InfXmppConnection*>
+		SignalConnectionReplaced;
+
 	ConnectionManager(const CertificateManager& cert_manager,
 	                  const Preferences& preferences);
 	~ConnectionManager();
@@ -53,6 +56,9 @@ public:
 #endif
 
 	// Use existing connection if any, otherwise make new one. May throw.
+	InfXmppConnection* make_connection(const std::string& hostname,
+	                                   const std::string& service,
+					   unsigned int device_index);
 	InfXmppConnection* make_connection(const InfIpAddress* address,
 	                                   guint port,
 	                                   unsigned int device_index,
@@ -64,7 +70,13 @@ public:
 	void set_sasl_context(InfSaslContext* sasl_context,
 	                      const char* mechanisms);
 
+	SignalConnectionReplaced signal_connection_replaced() const
+		{ return m_signal_connection_replaced; }
 private:
+	InfXmppConnection* create_connection(InfTcpConnection* connection,
+	                                     unsigned int device_index,
+	                                     const std::string& hostname);
+
 	static void on_notify_status_static(GObject* object,
 	                                    GParamSpec* pspec,
 	                                    gpointer user_data)
@@ -73,25 +85,27 @@ private:
 			INF_XMPP_CONNECTION(object));
 	}
 
-	static void on_add_connection_static(InfXmppManager* manager,
-	                                     InfXmppConnection* xmpp,
-	                                     gpointer user_data)
-	{
-		static_cast<ConnectionManager*>(user_data)->on_add_connection(
-			xmpp);
-	}
-
-	static void on_remove_connection_static(InfXmppManager* manager,
-	                                        InfXmppConnection* xmpp,
-	                                        gpointer user_data)
+	static void on_connection_added_static(InfXmppManager* manager,
+	                                       InfXmppConnection* xmpp,
+	                                       gpointer user_data)
 	{
 		static_cast<ConnectionManager*>(user_data)->
-			on_remove_connection(xmpp);
+			on_connection_added(xmpp);
+	}
+
+	static void on_connection_removed_static(InfXmppManager* manager,
+	                                         InfXmppConnection* xmpp,
+						 InfXmppConnection* replaced,
+	                                         gpointer user_data)
+	{
+		static_cast<ConnectionManager*>(user_data)->
+			on_connection_removed(xmpp, replaced);
 	}
 
 protected:
-	void on_add_connection(InfXmppConnection* xmpp);
-	void on_remove_connection(InfXmppConnection* xmpp);
+	void on_connection_added(InfXmppConnection* xmpp);
+	void on_connection_removed(InfXmppConnection* xmpp,
+	                           InfXmppConnection* replaced_by);
 	void on_security_policy_changed();
 	void on_credentials_changed();
 	void on_notify_status(InfXmppConnection* connection);
@@ -102,16 +116,24 @@ protected:
 	InfIo* m_io;
 	InfCommunicationManager* m_communication_manager;
 	InfXmppManager* m_xmpp_manager;
-	std::map<InfXmppConnection*, gulong> m_connections;
 
-	gulong m_add_connection_handler;
-	gulong m_remove_connection_handler;
+	struct ConnectionInfo
+	{
+		gulong notify_status_handler;
+	};
+
+	std::map<InfXmppConnection*, ConnectionInfo> m_connections;
+
+	gulong m_connection_added_handler;
+	gulong m_connection_removed_handler;
 
 	InfSaslContext* m_sasl_context;
 	std::string m_sasl_mechanisms;
 #ifdef LIBINFINITY_HAVE_AVAHI
 	InfDiscoveryAvahi* m_discovery;
 #endif
+
+	SignalConnectionReplaced m_signal_connection_replaced;
 };
 
 }

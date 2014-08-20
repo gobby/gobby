@@ -19,7 +19,6 @@
 
 #include "operations/operations.hpp"
 #include "core/browser.hpp"
-#include "util/resolv.hpp"
 
 #include <libinfinity/common/inf-request-result.h>
 
@@ -57,6 +56,13 @@ private:
 			on_notify_status();
 	}
 
+	static void on_browser_deleted_static(gpointer user_data,
+	                                      GObject* where_the_object_was)
+	{
+		static_cast<OperationSubscribePath*>(user_data)->
+			on_browser_deleted();
+	}
+
 	static void on_explore_finished_static(InfRequest* request,
 	                                       const InfRequestResult* result,
 	                                       const GError* error,
@@ -83,16 +89,8 @@ private:
 			on_subscribe_finished(iter, error);
 	}
 
-	void on_resolv_done(const ResolvHandle* handle,
-	                    const InfIpAddress* address,
-	                    guint port,
-	                    const std::string& hostname,
-	                    unsigned int device_index);
-	void on_resolv_error(const ResolvHandle* handle,
-	                     const std::runtime_error& error,
-	                     const std::string& hostname);
-
 	void on_notify_status();
+	void on_browser_deleted();
 	void on_explore_finished(const GError* error);
 	void on_subscribe_finished(const InfBrowserIter* iter,
 	                           const GError* error);
@@ -107,7 +105,6 @@ private:
 	InfRequest* m_request;
 	gulong m_notify_status_id;
 
-	std::auto_ptr<ResolvHandle> m_resolve_handle;
 	StatusBar::MessageHandle m_message_handle;
 };
 

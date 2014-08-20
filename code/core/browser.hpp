@@ -67,6 +67,9 @@ public:
 	bool get_selected_iter(InfBrowser* browser, InfBrowserIter* iter);
 	void set_selected(InfBrowser* browser, const InfBrowserIter* iter);
 
+	InfBrowser* connect_to_host(const std::string& hostname,
+	                            const std::string& service,
+	                            unsigned int device_index);
 	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,
 	                            unsigned int device_index,
 	                            const std::string& hostname);
@@ -97,6 +100,8 @@ protected:
 		static_cast<Browser*>(user_data)->on_activate(iter);
 	}
 
+	void on_connection_replaced(InfXmppConnection* connection,
+	                            InfXmppConnection* by);
 	void on_expanded_changed();
 	void on_set_browser(GtkTreeIter* iter, InfBrowser* old_browser,
 	                    InfBrowser* new_browser);
@@ -124,5 +129,5 @@ protected:
 };
 
 }
-	
+
 #endif // _GOBBY_BROWSER_HPP_

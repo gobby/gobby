@@ -27,13 +27,13 @@ Gobby::ConnectionManager::ConnectionManager(const CertificateManager& manager,
 	m_xmpp_manager(inf_xmpp_manager_new()),
 	m_sasl_context(NULL)
 {
-	m_add_connection_handler = g_signal_connect_after(
-		G_OBJECT(m_xmpp_manager), "add-connection",
-		G_CALLBACK(on_add_connection_static), this);
+	m_connection_added_handler = g_signal_connect_after(
+		G_OBJECT(m_xmpp_manager), "connection-added",
+		G_CALLBACK(on_connection_added_static), this);
 
-	m_remove_connection_handler = g_signal_connect_after(
-		G_OBJECT(m_xmpp_manager), "remove-connection",
-		G_CALLBACK(on_remove_connection_static), this);
+	m_connection_removed_handler = g_signal_connect_after(
+		G_OBJECT(m_xmpp_manager), "connection-removed",
+		G_CALLBACK(on_connection_removed_static), this);
 
 #ifdef LIBINFINITY_HAVE_AVAHI
 	m_discovery = inf_discovery_avahi_new(m_io, m_xmpp_manager,
@@ -62,18 +62,19 @@ Gobby::ConnectionManager::~ConnectionManager()
 	if(m_sasl_context)
 		inf_sasl_context_unref(m_sasl_context);
 
-	for(std::map<InfXmppConnection*, gulong>::const_iterator iter =
+	for(std::map<InfXmppConnection*, ConnectionInfo>::const_iterator it =
 		m_connections.begin();
-	    iter != m_connections.end(); ++iter)
+	    it != m_connections.end(); ++it)
 	{
 		g_signal_handler_disconnect(
-			G_OBJECT(iter->first), iter->second);
+			G_OBJECT(it->first),
+			it->second.notify_status_handler);
 	}
 
 	g_signal_handler_disconnect(G_OBJECT(m_xmpp_manager),
-	                            m_add_connection_handler);
+	                            m_connection_added_handler);
 	g_signal_handler_disconnect(G_OBJECT(m_xmpp_manager),
-	                            m_remove_connection_handler);
+	                            m_connection_removed_handler);
 
 	g_object_unref(m_xmpp_manager);
 	g_object_unref(m_communication_manager);
@@ -81,51 +82,27 @@ Gobby::ConnectionManager::~ConnectionManager()
 }
 
 InfXmppConnection* Gobby::ConnectionManager::make_connection(
-	const InfIpAddress* address,
-	guint port,
-	unsigned int device_index,
-	const std::string& hostname)
+	const std::string& hostname, const std::string& service,
+	unsigned int device_index)
 {
 	// Check whether we do have such a connection already:
 	InfXmppConnection* xmpp =
-		inf_xmpp_manager_lookup_connection_by_address(
-			m_xmpp_manager, address, port);
+		inf_xmpp_manager_lookup_connection_by_hostname(
+			m_xmpp_manager, hostname.c_str(),
+			service.c_str(), "_infinote._tcp");
 
 	if(!xmpp)
 	{
-		InfTcpConnection* connection = inf_tcp_connection_new(
-			m_io,
-			address,
-			port);
+		InfNameResolver* resolver = inf_name_resolver_new(
+			m_io, hostname.c_str(),
+			service.c_str(), "_infinote._tcp");
 
-		g_object_set(G_OBJECT(connection),
-			"device-index", device_index,
-			NULL);
+		InfTcpConnection* connection = inf_tcp_connection_new_resolve(
+			m_io, resolver);
 
-		GError* error = NULL;
-		if(!inf_tcp_connection_open(connection, &error))
-		{
-			std::string message = error->message;
-			g_error_free(error);
-			throw std::runtime_error(message);
-		}
-		else
-		{
-			xmpp = inf_xmpp_connection_new(
-				connection, INF_XMPP_CONNECTION_CLIENT,
-				NULL, hostname.c_str(),
-				m_preferences.security.policy,
-				m_cert_manager.get_credentials(),
-				m_sasl_context,
-				m_sasl_mechanisms.empty()
-					? ""
-					: m_sasl_mechanisms.c_str());
+		g_object_unref(resolver);
 
-			inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
-			g_object_unref(xmpp);
-		}
-
-		g_object_unref(connection);
+		xmpp = create_connection(connection, device_index, hostname);
 	}
 	else
 	{
@@ -147,6 +124,83 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 
 	g_assert(xmpp != NULL);
 	return xmpp;
+
+}
+
+InfXmppConnection* Gobby::ConnectionManager::make_connection(
+	const InfIpAddress* address,
+	guint port,
+	unsigned int device_index,
+	const std::string& hostname)
+{
+	// Check whether we do have such a connection already:
+	InfXmppConnection* xmpp =
+		inf_xmpp_manager_lookup_connection_by_address(
+			m_xmpp_manager, address, port);
+
+	if(!xmpp)
+	{
+		InfTcpConnection* connection = inf_tcp_connection_new(
+			m_io, address, port);
+		xmpp = create_connection(connection, device_index, hostname);
+	}
+	else
+	{
+		InfXmlConnectionStatus status;
+		g_object_get(G_OBJECT(xmpp), "status", &status, NULL);
+		if(status == INF_XML_CONNECTION_CLOSED)
+		{
+			GError* error = NULL;
+			inf_xml_connection_open(INF_XML_CONNECTION(xmpp),
+			                        &error);
+			if(error != NULL)
+			{
+				std::string message = error->message;
+				g_error_free(error);
+				throw std::runtime_error(message);
+			}
+		}
+	}
+
+	g_assert(xmpp != NULL);
+	return xmpp;
+}
+
+InfXmppConnection*
+Gobby::ConnectionManager::create_connection(InfTcpConnection* connection,
+                                            unsigned int device_index,
+                                            const std::string& hostname)
+{
+	g_object_set(G_OBJECT(connection),
+		"device-index", device_index,
+		NULL);
+
+	GError* error = NULL;
+	if(!inf_tcp_connection_open(connection, &error))
+	{
+		std::string message = error->message;
+		g_error_free(error);
+		g_object_unref(connection);
+		throw std::runtime_error(message);
+	}
+	else
+	{
+		InfXmppConnection* xmpp = inf_xmpp_connection_new(
+			connection, INF_XMPP_CONNECTION_CLIENT,
+			NULL, hostname.c_str(),
+			m_preferences.security.policy,
+			m_cert_manager.get_credentials(),
+			m_sasl_context,
+			m_sasl_mechanisms.empty()
+				? ""
+				: m_sasl_mechanisms.c_str());
+
+		inf_xmpp_manager_add_connection(m_xmpp_manager, xmpp);
+		g_object_unref(xmpp);
+
+		g_object_unref(connection);
+		return xmpp;
+	}
 }
 
 void Gobby::ConnectionManager::remove_connection(InfXmppConnection* connection)
@@ -175,23 +229,44 @@ void Gobby::ConnectionManager::set_sasl_context(InfSaslContext* sasl_context,
 #endif
 }
 
-void Gobby::ConnectionManager::on_add_connection(InfXmppConnection* xmpp)
+void Gobby::ConnectionManager::on_connection_added(InfXmppConnection* xmpp)
 {
 	g_assert(m_connections.find(xmpp) == m_connections.end());
 
-	m_connections[xmpp] = g_signal_connect(
+	ConnectionInfo info;
+
+	info.notify_status_handler = g_signal_connect(
 		G_OBJECT(xmpp), "notify::status",
 		G_CALLBACK(on_notify_status_static), this);
+
+	m_connections[xmpp] = info;
 }
 
-void Gobby::ConnectionManager::on_remove_connection(InfXmppConnection* xmpp)
+void Gobby::ConnectionManager::on_connection_removed(
+	InfXmppConnection* xmpp,
+	InfXmppConnection* replaced_by)
 {
-	std::map<InfXmppConnection*, gulong>::iterator iter =
+	std::map<InfXmppConnection*, ConnectionInfo>::iterator iter =
 		m_connections.find(xmpp);
 	g_assert(iter != m_connections.end());
 
-	g_signal_handler_disconnect(G_OBJECT(xmpp), iter->second);
+	ConnectionInfo& info = iter->second;
+	g_signal_handler_disconnect(G_OBJECT(xmpp),
+	                            info.notify_status_handler);
+
 	m_connections.erase(iter);
+
+	if(replaced_by != NULL)
+	{
+		m_signal_connection_replaced.emit(xmpp, replaced_by);
+
+		// This is not needed, since the connection will be
+		// removed anyway, because nobody holds a reference
+		// anymore. If it turns out that the connection stays
+		// alive, and for example the certificate dialog shows
+		// up, then it means we have a memory leak somewhere.
+		//inf_xml_connection_close(INF_XML_CONNECTION(xmpp));
+	}
 }
 
 void Gobby::ConnectionManager::on_security_policy_changed()
@@ -206,16 +281,16 @@ void Gobby::ConnectionManager::on_credentials_changed()
 {
 	// Keep existing connections with current credentials but set
 	// new credentials for all closed connections.
-	for(std::map<InfXmppConnection*, gulong>::const_iterator iter =
+	for(std::map<InfXmppConnection*, ConnectionInfo>::const_iterator it =
 		m_connections.begin();
-	    iter != m_connections.end(); ++iter)
+	    it != m_connections.end(); ++it)
 	{
 		InfXmlConnectionStatus status;
-		g_object_get(G_OBJECT(iter->first), "status", &status, NULL);
+		g_object_get(G_OBJECT(it->first), "status", &status, NULL);
 		if(status == INF_XML_CONNECTION_CLOSED)
 		{
 			g_object_set(
-				G_OBJECT(iter->first), "credentials",
+				G_OBJECT(it->first), "credentials",
 				m_cert_manager.get_credentials(), NULL);
 		}
 	}

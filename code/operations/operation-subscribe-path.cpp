@@ -90,6 +90,8 @@ Gobby::OperationSubscribePath::OperationSubscribePath(Operations& operations,
 	m_request(NULL), m_notify_status_id(0),
 	m_message_handle(get_status_bar().invalid_handle())
 {
+	g_object_weak_ref(G_OBJECT(m_browser),
+	                  on_browser_deleted_static, this);
 }
 
 Gobby::OperationSubscribePath::~OperationSubscribePath()
@@ -112,6 +114,12 @@ Gobby::OperationSubscribePath::~OperationSubscribePath()
 
 	if(m_message_handle != get_status_bar().invalid_handle())
 		get_status_bar().remove_message(m_message_handle);
+
+	if(m_browser != NULL)
+	{
+		g_object_weak_unref(G_OBJECT(m_browser),
+		                    on_browser_deleted_static, this);
+	}
 }
 
 void Gobby::OperationSubscribePath::start()
@@ -164,33 +172,58 @@ void Gobby::OperationSubscribePath::start_without_browser()
 
 	parse_netloc(netloc, hostname, service, device_index);
 
-	if(path.empty())
+	try
 	{
-		m_message_handle = get_status_bar().add_info_message(
-			Glib::ustring::compose(
-				_("Connecting to \"%1\"..."),
-				m_target));
-	}
-	else
-	{
-		m_message_handle = get_status_bar().add_info_message(
-			Glib::ustring::compose(
-				_("Subscribing to \"%1\"..."),
-				m_target));
-	}
+		m_browser = get_browser().connect_to_host(
+			hostname, service, device_index);
+		g_assert(m_browser != NULL);
 
-	m_resolve_handle = Gobby::resolve(
-		hostname, service,
-		sigc::bind(
-			sigc::mem_fun(
-				*this,
-				&OperationSubscribePath::on_resolv_done),
-			hostname, device_index),
-		sigc::bind(
-			sigc::mem_fun(
-				*this,
-				&OperationSubscribePath::on_resolv_error),
-			hostname));
+		// We need a weak reference on the browser, so that we can
+		// cancel the operation in case it disappears. This happens
+		// when the connection manager notices that a connection to
+		// the host which the new connection is trying to connect to
+		// exists already.
+		g_object_weak_ref(G_OBJECT(m_browser),
+		                  on_browser_deleted_static, this);
+
+		if(m_path.empty())
+		{
+			m_message_handle = get_status_bar().add_info_message(
+				Glib::ustring::compose(
+					_("Connecting to \"%1\"..."),
+					m_target));
+		}
+		else
+		{
+			m_message_handle = get_status_bar().add_info_message(
+				Glib::ustring::compose(
+					_("Subscribing to \"%1\"..."),
+					m_target));
+		}
+
+		start_with_browser();
+	}
+	catch(const std::exception& ex)
+	{
+		if(m_path.empty())
+		{
+			get_status_bar().add_error_message(
+				Glib::ustring::compose(
+					_("Failed to connect to \"%1\""),
+					m_target),
+				ex.what());
+		}
+		else
+		{
+			get_status_bar().add_error_message(
+				Glib::ustring::compose(
+					_("Could not subscribe to \"%1\""),
+					m_target),
+				ex.what());
+		}
+
+		fail();
+	}
 }
 
 void Gobby::OperationSubscribePath::start_with_browser()
@@ -369,71 +402,6 @@ void Gobby::OperationSubscribePath::make_subscribe_request()
 	}
 }
 
-void Gobby::OperationSubscribePath::on_resolv_done(
-	const ResolvHandle* handle, const InfIpAddress* address, guint port,
-	const std::string& hostname, unsigned int device_index)
-{
-	try
-	{
-		m_browser = get_browser().connect_to_host(
-			address, port, device_index, hostname);
-		g_assert(m_browser != NULL);
-
-		// From here, go on as if we started from the 2nd destructor
-		start_with_browser();
-	}
-	catch(const std::exception& ex)
-	{
-		if(m_path.empty())
-		{
-			get_status_bar().add_error_message(
-				Glib::ustring::compose(
-					_("Failed to connect to \"%1\""),
-					m_target),
-				ex.what());
-		}
-		else
-		{
-			get_status_bar().add_error_message(
-				Glib::ustring::compose(
-					_("Could not subscribe to \"%1\""),
-					m_target),
-				ex.what());
-		}
-
-		fail();
-	}
-}
-
-void Gobby::OperationSubscribePath::on_resolv_error(
-	const ResolvHandle* handle, const std::runtime_error& error,
-	const std::string& hostname)
-{
-	get_status_bar().remove_message(m_message_handle);
-	m_message_handle = get_status_bar().invalid_handle();
-
-	if(m_path.empty())
-	{
-		get_status_bar().add_error_message(
-			Glib::ustring::compose(
-				_("Failed to connect to \"%1\""), m_target),
-			Glib::ustring::compose(
-				_("Failed to resolve \"%1\": %2"),
-				hostname, error.what()));
-	}
-	else
-	{
-		get_status_bar().add_error_message(
-			Glib::ustring::compose(
-				_("Could not subscribe to \"%1\""), m_target),
-			Glib::ustring::compose(
-				_("Failed to resolve \"%1\": %2"),
-				hostname, error.what()));
-	}
-
-	fail();
-}
-
 void Gobby::OperationSubscribePath::on_notify_status()
 {
 	InfBrowserStatus status;
@@ -461,6 +429,16 @@ void Gobby::OperationSubscribePath::on_notify_status()
 		g_assert_not_reached();
 		break;
 	}
+}
+
+void Gobby::OperationSubscribePath::on_browser_deleted()
+{
+	m_browser = NULL;
+	m_notify_status_id = 0;
+
+	// Don't set an error message, the user will already be
+	// notified by the closed browser.
+	fail();
 }
 
 void Gobby::OperationSubscribePath::on_explore_finished(const GError* error)
