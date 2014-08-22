@@ -237,11 +237,14 @@ public:
 		virtual void set2(const std::string& val)
 		{
 			if(!m_seen_initial_value)
+			{
 				if(val == m_initial_value)
 					m_seen_initial_value = true;
-
-			if(m_seen_initial_value)
+			}
+			else
+			{
 				m_option.set(val);
+			}
 		}
 
 	private:
