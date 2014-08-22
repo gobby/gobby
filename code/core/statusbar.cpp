@@ -83,6 +83,9 @@ public:
 
 	bool is_error() { return !m_detail_desc.empty(); }
 
+	const Glib::ustring& get_simple_text() const { return m_simple_desc; }
+	const Glib::ustring& get_detail_text() const { return m_detail_desc; }
+
 	Gtk::Widget* widget() const { return m_widget; }
 
 protected:
@@ -233,6 +236,21 @@ Gobby::StatusBar::add_error_message(const Glib::ustring& brief_desc,
                                     const Glib::ustring& detailed_desc,
                                     unsigned int timeout)
 {
+	MessageHandle next;
+	for(MessageHandle iter = m_list.begin(); iter != m_list.end(); iter = next)
+	{
+		next = iter;
+		++next;
+
+		if(*iter && (*iter)->is_error())
+		{
+			if( (*iter)->get_simple_text() == brief_desc)
+			{
+				remove_message(iter);
+			}
+		}
+	}
+
 	Gobby::StatusBar::add_message(ERROR,
 	                              brief_desc,
 	                              detailed_desc,
