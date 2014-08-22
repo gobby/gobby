@@ -151,7 +151,7 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 		}
 	}
 
-	Gtk::HBox* bar = Gtk::manage(new Gtk::HBox);
+	Gtk::HBox* bar = Gtk::manage(new Gtk::HBox(false, 6));
 
 	Gtk::Image* image = Gtk::manage(new Gtk::Image(
 		message_type_to_stock_id(type), Gtk::ICON_SIZE_MENU));
