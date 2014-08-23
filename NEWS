@@ -1,6 +1,19 @@
 Gobby
 =====
 
+Version 0.5.0:
+  * Allow to run a server within the Gobby process; infinoted is no longer
+    required to connect to other people
+  * Added support for user accounts and different permissions for different
+    accounts
+  * Added limited support for chat nodes in the document tree
+  * Added an option to set the opacity with which user colors are shown
+    behind the text.
+  * Added Fullscreen option and Ctrl++ and Ctrl+- shortcuts to
+    increase/decrease the font size.
+  * Gobby can open infinote://XXX URIs given on the command line to directly
+    open one or more documents at startup.
+
 Version 0.4.94:
   * Show cursors and selections of remote users in the own viewport and
     scrollbar
