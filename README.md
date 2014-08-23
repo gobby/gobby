@@ -33,7 +33,7 @@ nicely into the GNOME desktop environment if you want it to.
 
 ## Requirements
 
-- libinfinity (0.6.x)
+- libinfinity (0.7.x)
 - Glib (>= 2.18.0)
 - Glibmm (>= 2.18.0)
 - libxml++ (>= 2.6.0)

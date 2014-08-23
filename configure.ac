@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([gobby], [0.5.0], [crew@0x539.de])
+AC_INIT([gobby], [0.6.0], [crew@0x539.de])
 AM_INIT_AUTOMAKE(1.9 check-news foreign)
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
 AC_CONFIG_SRCDIR([code/window.hpp])
@@ -90,7 +90,7 @@ AC_CACHE_SAVE
 ###################################
 
 PKG_CHECK_MODULES([gobby], [$required_libs])
-PKG_CHECK_MODULES([infinote], [libinfinity-0.6 libinftext-0.6 libinf${infgtkver}-0.6 libinftext${infgtkver}-0.6])
+PKG_CHECK_MODULES([infinote], [libinfinity-0.7 libinftext-0.7 libinf${infgtkver}-0.7 libinftext${infgtkver}-0.7])
 AC_CACHE_SAVE
 
 ###################################
