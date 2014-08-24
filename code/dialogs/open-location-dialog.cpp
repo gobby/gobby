@@ -18,14 +18,13 @@
 
 #include "util/file.hpp"
 #include "util/i18n.hpp"
-#include "util/gtk-compat.hpp"
 
 #include "features.hpp"
 
 Gobby::OpenLocationDialog::OpenLocationDialog(Gtk::Window& parent):
 	Gtk::Dialog(_("Open Location"), parent), m_box(false, 6),
 	m_label(_("Enter the _location (URI) of the file you would "
-	          "like to open:"), GtkCompat::ALIGN_LEFT,
+	          "like to open:"), Gtk::ALIGN_START,
 	        Gtk::ALIGN_CENTER, true),
 	m_combo(config_filename("recent_uris"), 8)
 {

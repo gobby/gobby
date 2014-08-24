@@ -120,7 +120,7 @@ protected:
 	Gtk::Expander m_expander;
 	Gtk::HBox m_hbox;
 	Gtk::Label m_label_hostname;
-	HistoryComboBoxEntry m_entry_hostname;
+	HistoryComboBox m_entry_hostname;
 
 	InfGtkBrowserModelSort* m_sort_model;
 

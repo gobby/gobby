@@ -365,44 +365,42 @@ bool Gobby::HistoryEntry::on_key_press_event(GdkEventKey* event)
 	return Gtk::Entry::on_key_press_event(event);
 }
 
-Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry(
-	const std::string& history_file, unsigned int length):
-	m_history(history_file, length)
+Gobby::HistoryComboBox::HistoryComboBox(const std::string& history_file,
+                                        unsigned int length):
+	Gtk::ComboBox(true), m_history(history_file, length)
 {
 	set_model(m_history.get_store());
-	set_text_column(m_history.get_columns().text);
+	set_entry_text_column(m_history.get_columns().text);
 
 	get_entry()->signal_key_press_event().connect(
 		sigc::mem_fun(
-			*this,
-			&HistoryComboBoxEntry::on_entry_key_press_event),
+			*this, &HistoryComboBox::on_entry_key_press_event),
 		false);
 }
 
-Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry(unsigned int length):
-	m_history(length)
+Gobby::HistoryComboBox::HistoryComboBox(unsigned int length):
+	Gtk::ComboBox(true), m_history(length)
 {
 	set_model(m_history.get_store());
-	set_text_column(m_history.get_columns().text);
+	set_entry_text_column(m_history.get_columns().text);
 
 	get_entry()->signal_key_press_event().connect(
 		sigc::mem_fun(
-			*this,
-			&HistoryComboBoxEntry::on_entry_key_press_event),
+			*this, &HistoryComboBox::on_entry_key_press_event),
 		false);
 }
 
-void Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry::commit()
+void Gobby::HistoryComboBox::commit()
 {
 	m_history.commit(get_entry()->get_text());
 }
 
-Glib::RefPtr<Atk::Object> Gobby::HistoryComboBoxEntry::HistoryComboBoxEntry::get_accessible()
+Glib::RefPtr<Atk::Object> Gobby::HistoryComboBox::get_accessible()
 {
 	return get_entry()->get_accessible();
 }
 
-bool Gobby::HistoryComboBoxEntry::on_entry_key_press_event(GdkEventKey* event)
+bool Gobby::HistoryComboBox::on_entry_key_press_event(GdkEventKey* event)
 {
 	Glib::ustring entry;
 

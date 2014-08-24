@@ -16,7 +16,6 @@
 
 #include "dialogs/goto-dialog.hpp"
 #include "util/i18n.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/textbuffer.h>
@@ -26,7 +25,7 @@ Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, const Folder& folder):
 	Gtk::Dialog(_("Go to line"), parent),
 	m_folder(folder),
 	m_table(1, 2),
-	m_label_line(_("Line _number:"), GtkCompat::ALIGN_LEFT,
+	m_label_line(_("Line _number:"), Gtk::ALIGN_START,
 	             Gtk::ALIGN_CENTER, true),
 	m_current_view(NULL)
 {

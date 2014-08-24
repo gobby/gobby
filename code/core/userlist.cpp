@@ -19,7 +19,6 @@
 
 #include "util/i18n.hpp"
 #include "util/color.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/stock.h>
@@ -42,9 +41,14 @@ namespace
 			Gobby::IconManager::STOCK_USER_COLOR_INDICATOR;
 
 		Glib::RefPtr<Gdk::Pixbuf> pixbuf =
-			Gobby::GtkCompat::render_icon(
-				w, id,
+			w.render_icon_pixbuf(id, Gtk::ICON_SIZE_MENU);
+
+		if(!pixbuf) // icon not found
+		{
+			pixbuf = w.render_icon_pixbuf(
+				Gtk::Stock::MISSING_IMAGE,
 				Gtk::ICON_SIZE_MENU);
+		}
 
 		// pixbuf is shared, though we want to mess with it here
 		pixbuf = pixbuf->copy();

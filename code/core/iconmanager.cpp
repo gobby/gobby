@@ -30,11 +30,11 @@ Gtk::StockID Gobby::IconManager::STOCK_USER_COLOR_INDICATOR(
 // TODO: The save-all icon does not match the save icon for toolbar
 // or menu sized items. It is not yet enabled therefore.
 Gobby::IconManager::IconManager():
-	m_is_save_all(GtkCompat::create_icon_set()),
-	m_is_userlist(GtkCompat::create_icon_set()),
-	m_is_doclist(GtkCompat::create_icon_set()),
-	m_is_chat(GtkCompat::create_icon_set()),
-	m_is_user_color_indicator(GtkCompat::create_icon_set()),
+	m_is_save_all(Gtk::IconSet::create()),
+	m_is_userlist(Gtk::IconSet::create()),
+	m_is_doclist(Gtk::IconSet::create()),
+	m_is_chat(Gtk::IconSet::create()),
+	m_is_user_color_indicator(Gtk::IconSet::create()),
 	m_icon_factory(Gtk::IconFactory::create())
 {
 	Gtk::IconTheme::get_default()->append_search_path(PUBLIC_ICONS_DIR);

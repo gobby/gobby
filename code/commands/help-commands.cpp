@@ -16,7 +16,6 @@
 
 #include "commands/help-commands.hpp"
 #include "util/i18n.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <gio/gio.h>
 #include <gtkmm/messagedialog.h>
@@ -43,11 +42,6 @@ Gobby::HelpCommands::HelpCommands(Gtk::Window& parent, Header& header,
                                   const IconManager& icon_manager):
 	m_parent(parent), m_header(header), m_icon_manager(icon_manager)
 {
-#ifndef USE_GTKMM3
-	Gtk::AboutDialog::set_url_hook(sigc::ptr_fun(url_hook));
-	Gtk::AboutDialog::set_email_hook(sigc::ptr_fun(email_hook));
-#endif
-
 	header.action_help_contents->signal_activate().connect(
 		sigc::mem_fun(*this, &HelpCommands::on_contents));
 	header.action_help_about->signal_activate().connect(

@@ -40,26 +40,7 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-###################################
-# Check for GTK+ 3
-###################################
-
-AC_ARG_WITH([gtk3], AS_HELP_STRING([--with-gtk3],
-            [Builds gobby against GTK+ 3 instead of GTK+ 2[[default=no]]]),
-	    [with_gtk3=$withval], [with_gtk3=no])
-
-if test "x$with_gtk3" = "xyes"; then
-	# TODO: Increase to 2.99.2 once it's out
-	gtk_requirement="gtkmm-3.0 >= 2.99.1 gtksourceview-3.0 >= 2.91.0"
-	gtk_version=3
-	infgtkver=gtk3
-else
-	gtk_requirement="gtkmm-2.4 >= 2.12.0 gtksourceview-2.0 >= 2.4"
-	gtk_version=2
-	infgtkver=gtk
-fi
-
-required_libs="libxml++-2.6 glibmm-2.4 >= 2.18.0 giomm-2.4 >= 2.18.0 gthread-2.0 libgsasl >= 0.2.21 $gtk_requirement"
+required_libs="libxml++-2.6 glibmm-2.4 >= 2.18.0 giomm-2.4 >= 2.18.0 gthread-2.0 libgsasl >= 0.2.21 gtkmm-3.0 >= 3.0.0 gtksourceview-3.0 >= 3.0.0"
 
 ###################################
 # Check for Mac OS X
@@ -70,11 +51,7 @@ if test "x$build_vendor" = "xapple" ; then
   AC_DEFINE([PLATFORM_OSX], 1, [Define whether we are running on Mac OS X.])
 
   # Check whether we are running the native quartz backend
-  if test "$gtk_version" == "2"; then
-    target=`pkg-config --variable=target gtk+-2.0`
-  else
-    target=`pkg-config --variable=targets gtk+-3.0`
-  fi
+  target=`pkg-config --variable=targets gtk+-3.0`
 
   # If so use ige-mac-integration
   if test "$target" = "quartz" ; then
@@ -90,7 +67,7 @@ AC_CACHE_SAVE
 ###################################
 
 PKG_CHECK_MODULES([gobby], [$required_libs])
-PKG_CHECK_MODULES([infinote], [libinfinity-0.7 libinftext-0.7 libinf${infgtkver}-0.7 libinftext${infgtkver}-0.7])
+PKG_CHECK_MODULES([infinote], [libinfinity-0.7 libinftext-0.7 libinfgtk-0.7 libinftextgtk-0.7])
 AC_CACHE_SAVE
 
 ###################################

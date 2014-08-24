@@ -20,7 +20,6 @@ noinst_HEADERS = \
         defaultaccumulator.hpp \
         file.hpp \
 	groupframe.hpp \
-	gtk-compat.hpp \
 	historyentry.hpp \
         i18n.hpp \
         serialize.hpp \

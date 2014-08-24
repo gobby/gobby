@@ -50,8 +50,7 @@ public:
 
 	typedef MessageList::iterator MessageHandle;
 
-	StatusBar(Gtk::Window& window,
-	          const Folder& folder,
+	StatusBar(const Folder& folder,
 	          const Preferences& preferences);
 	~StatusBar();
 
@@ -106,7 +105,6 @@ protected:
 	void on_mark_set(GtkTextMark* mark);
 	void on_toggled_overwrite();
 	void on_changed();
-	bool on_window_state_event(GdkEventWindowState* event);
 
 	void update_pos_display();
 

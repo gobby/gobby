@@ -17,7 +17,6 @@
 #include "dialogs/password-dialog.hpp"
 #include "core/browser.hpp"
 #include "core/noteplugin.hpp"
-#include "util/gtk-compat.hpp"
 #include "util/file.hpp"
 #include "util/uri.hpp"
 #include "util/i18n.hpp"
@@ -358,7 +357,7 @@ void Gobby::Browser::on_expanded_changed()
 {
 	if(m_expander.get_expanded())
 	{
-		if(GtkCompat::is_realized(m_entry_hostname))
+		if(m_entry_hostname.get_realized())
 		{
 			m_entry_hostname.grab_focus();
 		}

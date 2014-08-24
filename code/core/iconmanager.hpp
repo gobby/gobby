@@ -22,8 +22,6 @@
 #include <gtkmm/iconset.h>
 #include <gtkmm/iconfactory.h>
 
-#include "util/gtk-compat.hpp"
-
 namespace Gobby
 {
 	class IconManager
@@ -38,11 +36,11 @@ namespace Gobby
 		IconManager();
 
 	protected:
-		GtkCompat::IconSet m_is_save_all;
-		GtkCompat::IconSet m_is_userlist;
-		GtkCompat::IconSet m_is_doclist;
-		GtkCompat::IconSet m_is_chat;
-		GtkCompat::IconSet m_is_user_color_indicator;
+		Glib::RefPtr<Gtk::IconSet> m_is_save_all;
+		Glib::RefPtr<Gtk::IconSet> m_is_userlist;
+		Glib::RefPtr<Gtk::IconSet> m_is_doclist;
+		Glib::RefPtr<Gtk::IconSet> m_is_chat;
+		Glib::RefPtr<Gtk::IconSet> m_is_user_color_indicator;
 
 		Glib::RefPtr<Gtk::IconFactory> m_icon_factory;
 	};

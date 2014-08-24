@@ -17,7 +17,6 @@
 #include "dialogs/preferences-dialog.hpp"
 #include "util/color.hpp"
 #include "util/i18n.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <glibmm/markup.h>
 #include <gtkmm/messagedialog.h>
@@ -199,11 +198,11 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_group_remote(_("Remote Users")),
 	m_group_local(_("Local Documents")),
 	m_box_user_name(false, 6),
-	m_lbl_user_name(_("User name:"), GtkCompat::ALIGN_LEFT),
+	m_lbl_user_name(_("User name:"), Gtk::ALIGN_START),
 	m_box_user_color(false, 6),
-	m_lbl_user_color(_("User color:"), GtkCompat::ALIGN_LEFT),
+	m_lbl_user_color(_("User color:"), Gtk::ALIGN_START),
 	m_box_user_alpha(false, 6),
-	m_lbl_user_alpha(_("Color intensity:"), GtkCompat::ALIGN_LEFT),
+	m_lbl_user_alpha(_("Color intensity:"), Gtk::ALIGN_START),
 	m_scl_user_alpha(0.0, 1.0, 0.025),
 	m_btn_user_color(_("Choose a new user color"), parent),
 	m_btn_remote_show_cursors(_("Show cursors of remote users")),
@@ -217,9 +216,9 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 		_("Allow remote users to edit local documents")),
 	m_btn_local_require_password(
 		_("Require remote users to enter a password")),
-	m_lbl_local_password(_("Password:"), GtkCompat::ALIGN_LEFT),
+	m_lbl_local_password(_("Password:"), Gtk::ALIGN_START),
 	m_box_local_password(false, 6),
-	m_lbl_local_port(_("Port:"), GtkCompat::ALIGN_LEFT),
+	m_lbl_local_port(_("Port:"), Gtk::ALIGN_START),
 	m_box_local_port(false, 6),
 	m_box_local_connections(false, 6),
 	m_btn_local_keep_documents(
@@ -424,7 +423,7 @@ Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
 	m_group_indentation(_("Indentation")),
 	m_group_homeend(_("Home/End Behavior")),
 	m_group_saving(_("File Saving")),
-	m_lbl_tab_width(_("_Tab width:"), GtkCompat::ALIGN_RIGHT,
+	m_lbl_tab_width(_("_Tab width:"), Gtk::ALIGN_END,
 	                Gtk::ALIGN_CENTER, true),
 	m_btn_tab_spaces(_("Insert _spaces instead of tabs"), true),
 	m_btn_indentation_auto(_("Enable automatic _indentation"), true),
@@ -729,11 +728,7 @@ Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
 			sigc::mem_fun(*this, &Appearance::on_scheme_changed),
 			sigc::ref(preferences)));
 
-#ifdef USE_GTKMM3
 	m_list->set_sort_column(m_columns.name, Gtk::SORT_ASCENDING);
-#else
-	m_list->set_sort_column_id(m_columns.name, Gtk::SORT_ASCENDING);
-#endif
 
 	add(m_group_toolbar, false);
 	add(m_group_font, false);
@@ -759,23 +754,23 @@ Gobby::PreferencesDialog::Security::Security(Gtk::Window& parent,
 	m_btn_path_trust_file(_("Select a file containing trusted CAs")),
 	m_conn_path_trust_file(m_btn_path_trust_file,
 	                       preferences.security.trust_file),
-	m_error_trust_file("", GtkCompat::ALIGN_LEFT),
+	m_error_trust_file("", Gtk::ALIGN_START),
 	m_cmb_connection_policy(preferences.security.policy),
 	m_btn_auth_none(_("None")),
 	m_btn_auth_cert(_("Use a certificate")),
-	m_lbl_key_file(_("Private key:"), GtkCompat::ALIGN_LEFT),
+	m_lbl_key_file(_("Private key:"), Gtk::ALIGN_START),
 	m_btn_key_file(_("Select a private key file")),
 	m_conn_path_key_file(m_btn_key_file, preferences.security.key_file),
 	m_btn_key_file_create(_("Create New...")),
 	m_box_key_file(false, 6),
-	m_error_key_file("", GtkCompat::ALIGN_LEFT),
-	m_lbl_cert_file(_("Certificate:"), GtkCompat::ALIGN_LEFT),
+	m_error_key_file("", Gtk::ALIGN_START),
+	m_lbl_cert_file(_("Certificate:"), Gtk::ALIGN_START),
 	m_btn_cert_file(_("Select a certificate file")),
 	m_conn_path_cert_file(m_btn_cert_file,
 	                      preferences.security.certificate_file),
 	m_btn_cert_file_create(_("Create New...")),
 	m_box_cert_file(false, 6),
-	m_error_cert_file("", GtkCompat::ALIGN_LEFT),
+	m_error_cert_file("", Gtk::ALIGN_START),
 	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL)),
 	m_key_generator_handle(NULL), m_cert_generator_handle(NULL)
 {

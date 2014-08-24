@@ -17,7 +17,6 @@
 #include "core/textsessionview.hpp"
 #include "util/i18n.hpp"
 #include "util/color.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <glibmm/main.h>
 #include <glibmm/markup.h>
@@ -121,6 +120,15 @@ namespace
 					*static_cast<Gobby::TextSessionView*>(
 						user_data))));
 	}
+
+	inline Gdk::Color color_from_rgba(const Gdk::RGBA& rgba)
+	{
+		Gdk::Color c;
+		c.set_red(rgba.get_red_u());
+		c.set_green(rgba.get_green_u());
+		c.set_blue(rgba.get_blue_u());
+		return c;
+	}
 }
 
 Gobby::TextSessionView::TextSessionView(InfTextSession* session,
@@ -145,19 +153,11 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 		GTK_TEXT_VIEW(m_view),
 		user_table);
 
-#ifdef USE_GTKMM3
 	g_signal_connect_after(
 		G_OBJECT(m_view),
 		"style-updated",
 		G_CALLBACK(on_style_updated_static),
 		this);
-#else
-	g_signal_connect_after(
-		G_OBJECT(m_view),
-		"style-set",
-		G_CALLBACK(on_style_set_static),
-		this);
-#endif
 
 	// This is a hack to make sure that the author tags in the textview
 	// have lowest priority of all tags, especially lower than
@@ -443,7 +443,6 @@ void Gobby::TextSessionView::on_user_color_changed()
 
 void Gobby::TextSessionView::on_alpha_changed()
 {
-#ifdef USE_GTKMM3
 	GtkStyleContext* style =
 		gtk_widget_get_style_context(GTK_WIDGET(m_view));
 	g_assert(style != NULL);
@@ -457,14 +456,8 @@ void Gobby::TextSessionView::on_alpha_changed()
 	gtk_style_context_restore(style);
 
 	Gdk::RGBA rgbacpp(&rgba);
-	const Gdk::Color colorcpp = GtkCompat::color_from_rgba(rgbacpp);
+	const Gdk::Color colorcpp = color_from_rgba(rgbacpp);
 	const GdkColor& color = *colorcpp.gobj();
-#else
-	GtkStyle* style = gtk_widget_get_style(GTK_WIDGET(m_view));
-	g_assert(style != NULL);
-
-	const GdkColor& color = style->base[GTK_STATE_NORMAL];
-#endif
 
 	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 		inf_session_get_buffer(INF_SESSION(m_session)));
@@ -647,9 +640,8 @@ bool Gobby::TextSessionView::
 	return true;
 }
 
-void Gobby::TextSessionView::on_style_set()
+void Gobby::TextSessionView::on_style_updated()
 {
-#ifdef USE_GTKMM3
 	GtkStyleContext* style =
 		gtk_widget_get_style_context(GTK_WIDGET(m_view));
 	g_assert(style != NULL);
@@ -663,14 +655,8 @@ void Gobby::TextSessionView::on_style_set()
 	gtk_style_context_restore(style);
 
 	Gdk::RGBA rgbacpp(&rgba);
-	const Gdk::Color colorcpp = GtkCompat::color_from_rgba(rgbacpp);
+	const Gdk::Color colorcpp = color_from_rgba(rgbacpp);
 	const GdkColor& color = *colorcpp.gobj();
-#else
-	GtkStyle* style = gtk_widget_get_style(GTK_WIDGET(m_view));
-	g_assert(style != NULL);
-
-	const GdkColor& color = style->base[GTK_STATE_NORMAL];
-#endif
 
 	double rh = color.red / 65535.0;
 	double gs = color.green / 65535.0;

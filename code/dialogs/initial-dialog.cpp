@@ -21,7 +21,6 @@
 #include "util/color.hpp"
 #include "util/file.hpp"
 #include "util/i18n.hpp"
-#include "util/gtk-compat.hpp"
 #include "features.hpp"
 
 #include <glibmm/markup.h>
@@ -34,7 +33,7 @@ namespace
 	{
 		Gtk::Alignment* alignment =
 			new Gtk::Alignment(Gtk::ALIGN_CENTER,
-			                   Gobby::GtkCompat::ALIGN_TOP,
+			                   Gtk::ALIGN_START,
 			                   1.0, 0.0);
 		alignment->add(widget);
 		alignment->show();
@@ -209,7 +208,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 
 	m_image.set_from_icon_name("gobby-0.5",
 	                           Gtk::IconSize::from_name("welcome"));
-	m_image.set_alignment(Gtk::ALIGN_CENTER, GtkCompat::ALIGN_TOP);
+	m_image.set_alignment(Gtk::ALIGN_CENTER, Gtk::ALIGN_START),
 	m_image.show();
 
 	m_intro.set_text(
@@ -226,7 +225,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		Glib::Markup::escape_text(_("Your name as shown to "
 		                            "other users.")) +
 		"</small>");
-	m_name_label.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_name_label.set_alignment(Gtk::ALIGN_START);
 	m_name_label.set_line_wrap(true);
 	m_name_label.set_width_chars(20);
 	m_name_label.show();
@@ -237,7 +236,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		Glib::Markup::escape_text(_("The color with which text you "
 		                            "have written is branded.")) +
 		"</small>");
-	m_color_label.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_color_label.set_alignment(Gtk::ALIGN_START);
 	m_color_label.set_line_wrap(true);
 	m_color_label.set_width_chars(20);
 	m_color_label.show();
@@ -255,7 +254,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		"<b>" +
 		Glib::Markup::escape_text(_("Remote Connections")) +
 		"</b>");
-	m_remote_label.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_remote_label.set_alignment(Gtk::ALIGN_START);
 	m_remote_label.show();
 
 	m_remote_allow_connections.set_label(
@@ -289,7 +288,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 
 	m_remote_auth_label.set_markup(
 		"<b>" + Glib::Markup::escape_text("Authentication") + "</b>");
-	m_remote_auth_label.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_remote_auth_label.set_alignment(Gtk::ALIGN_START);
 	m_remote_auth_label.show();
 
 	Gtk::RadioButton::Group group;
@@ -306,7 +305,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		"</small>");
 	m_remote_auth_none_help.set_line_wrap(true);
 	m_remote_auth_none_help.set_width_chars(30);
-	m_remote_auth_none_help.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_remote_auth_none_help.set_alignment(Gtk::ALIGN_START);
 	m_remote_auth_none_help.show();
 
 	m_remote_auth_self.set_label(
@@ -324,7 +323,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		"</small>");
 	m_remote_auth_self_help.set_line_wrap(true);
 	m_remote_auth_self_help.set_width_chars(30);
-	m_remote_auth_self_help.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_remote_auth_self_help.set_alignment(Gtk::ALIGN_START);
 	m_remote_auth_self_help.show();
 
 	m_remote_auth_external.set_label(
@@ -341,7 +340,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 		"</small>");
 	m_remote_auth_external_help.set_line_wrap(true);
 	m_remote_auth_external_help.set_width_chars(30);
-	m_remote_auth_external_help.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_remote_auth_external_help.set_alignment(Gtk::ALIGN_START);
 	m_remote_auth_external_help.show();
 
 	m_remote_auth_external_keyfile_label.set_label(_("Private key:"));

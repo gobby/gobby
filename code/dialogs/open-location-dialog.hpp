@@ -42,7 +42,7 @@ protected:
 
 	Gtk::VBox m_box;
 	Gtk::Label m_label;
-	HistoryComboBoxEntry m_combo;
+	HistoryComboBox m_combo;
 };
 
 }

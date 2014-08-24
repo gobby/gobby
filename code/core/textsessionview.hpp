@@ -20,7 +20,6 @@
 #include "core/sessionview.hpp"
 #include "core/textundogrouping.hpp"
 #include "core/preferences.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <gtkmm/tooltip.h>
 
@@ -106,7 +105,7 @@ protected:
 	void on_font_changed();
 	void on_scheme_changed();
 
-	void on_style_set();
+	void on_style_updated();
 
 	bool on_query_tooltip(int x, int y, bool keyboard_mode,
 	                      const Glib::RefPtr<Gtk::Tooltip>& tooltip);
@@ -121,20 +120,11 @@ protected:
 			                 Glib::wrap(tooltip, true));
 	}
 
-#ifdef USE_GTKMM3
 	static void on_style_updated_static(GtkWidget* view,
 	                                    gpointer user_data)
 	{
-		static_cast<TextSessionView*>(user_data)->on_style_set();
+		static_cast<TextSessionView*>(user_data)->on_style_updated();
 	}
-#else
-	static void on_style_set_static(GtkWidget* view,
-	                                GtkStyle* previous_style,
-	                                gpointer user_data)
-	{
-		static_cast<TextSessionView*>(user_data)->on_style_set();
-	}
-#endif
 
 	std::string m_info_storage_key;
 	Preferences& m_preferences;

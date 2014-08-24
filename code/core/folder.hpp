@@ -21,7 +21,6 @@
 #include "core/chatsessionview.hpp"
 #include "core/preferences.hpp"
 #include "util/defaultaccumulator.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <gtkmm/notebook.h>
 #include <sigc++/signal.h>
@@ -31,7 +30,7 @@
 namespace Gobby
 {
 
-class Folder : public GtkCompat::Notebook
+class Folder : public Gtk::Notebook
 {
 public:
 	// TODO chat: This should be SignalSessionAdded/Removed/Changed

@@ -16,7 +16,6 @@
 
 #include "core/tablabel.hpp"
 #include "core/folder.hpp"
-#include "util/gtk-compat.hpp"
 
 #include <gtkmm/stock.h>
 
@@ -26,7 +25,7 @@ Gobby::TabLabel::TabLabel(Folder& folder, SessionView& view,
 	m_title(view.get_title()), m_changed(false),
 	m_active_icon(active_icon)
 {
-	m_title.set_alignment(GtkCompat::ALIGN_LEFT);
+	m_title.set_alignment(Gtk::ALIGN_START);
 
 	update_icon();
 	update_color();
@@ -145,40 +144,18 @@ void Gobby::TabLabel::update_color()
 	if(m_changed)
 	{
 		// Document has changed: awareness -> red
-#ifdef USE_GTKMM3
 		m_title.override_color(Gdk::RGBA("#c00000"));
-#else
-		m_title.modify_fg(Gtk::STATE_NORMAL, Gdk::Color("#c00000"));
-		m_title.modify_fg(Gtk::STATE_ACTIVE, Gdk::Color("#c00000"));
-#endif
 	}
 	else if(inf_session_get_subscription_group(session) == NULL ||
 	        inf_session_get_status(session) != INF_SESSION_RUNNING)
 	{
 		// Document disconnected or not yet running
 		// (most probably synchronizing): not (yet) available -> grey
-#ifdef USE_GTKMM3
 		m_title.override_color(Gdk::RGBA("#606060"));
-#else
-		m_title.modify_fg(Gtk::STATE_NORMAL, Gdk::Color("#606060"));
-		m_title.modify_fg(Gtk::STATE_ACTIVE, Gdk::Color("#606060"));
-#endif
 	}
 	else
 	{
 		// Otherwise default
-#ifdef USE_GTKMM3
 		m_title.unset_color();
-#else
-		Glib::RefPtr<Gtk::Style> default_style =
-			Gtk::Widget::get_default_style();
-
-		m_title.modify_fg(
-			Gtk::STATE_ACTIVE,
-			default_style->get_fg(Gtk::STATE_ACTIVE));
-		m_title.modify_fg(
-			Gtk::STATE_NORMAL,
-			default_style->get_fg(Gtk::STATE_NORMAL));
-#endif
 	}
 }

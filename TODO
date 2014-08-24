@@ -1,11 +1,18 @@
 Modernization:
-  Replace unique by GtkApplication
+  Don't use any deprecated GTK+ API anymore
+  Replace unique by GtkApplication (also ditch ige-mac-integration)
   Replace GtkUIManager by GApplication/GMenu/GtkBuilder(?)
   Replace context menu by GMenu/GtkBuilder?
   Use the Undo interface of GtkSourceBuffer
   Use gsettings to store preferences
+  Replace std::auto_ptr by std::unique_ptr, and use move semantics where
+    appropriate
+  Remove use of stock icons
+  Replace Gdk::Color by Gdk::RGBA
+  Design widgets and dialogs with Glade, and embed them as gresource
+  Replace Gtk::Box and Gtk::Table by Gtk::Grid
 
-Some features that would be nice for a final Gobby 0.5 release. We could
+Some features that would be nice for a final Gobby 1.0 release. We could
 perhaps do pre-releases with some of these missing before:
 
  - Add base preferences class with Preferences::Option definition to util/,
@@ -17,4 +24,4 @@ These things need to be implemented in infinote, but again would be nice
 to have:
 
  - Show other user's viewport position in the scrollbar, instead or in addition to cursor position
- - Show what tab another user currently is in (needs cross-session user management as planned for the authentication business)
+ - Show what tab another user currently is in
