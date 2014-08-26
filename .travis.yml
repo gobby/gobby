@@ -2,11 +2,12 @@ language: cpp
 compiler:
   - gcc
   - clang
-script: ./autogen.sh && ./configure --with-unique --with-gtk3 && make -j3
 before_install:
  - sudo apt-get update -qq
  - sudo apt-get install -qq libgnutls-dev libgsasl7-dev libxml2-dev libgtk-3-dev libavahi-client-dev libdaemon-dev libpam-dev gtk-doc-tools
  - wget https://github.com/gobby/libinfinity/archive/master.tar.gz -O /tmp/infinote-master.tar.gz
  - tar -xzf /tmp/infinote-master.tar.gz
- - cd libinfinity-master && ./autogen.sh --with-gtk3 --with-infgtk --with-inftextgtk --with-avahi --with-libdaemon --disable-gtk-doc && make -j3 && sudo make install
+ - cd libinfinity-master && ./autogen.sh --with-gtk3 --with-infgtk --with-inftextgtk --with-avahi --with-libdaemon --disable-gtk-doc && make -j3 && sudo -E make install
+install:
  - sudo apt-get install -qq libxml++2.6-dev libglibmm-2.4-dev libgtkmm-3.0-dev libgtksourceview-3.0-dev libgsasl7-dev libunique-3.0-dev gettext intltool gnome-doc-utils rarian-compat
+script: ./autogen.sh && ./configure --with-unique --with-gtk3 && make -j3
