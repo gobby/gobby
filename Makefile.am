@@ -54,9 +54,11 @@ clean-local:
 # (need to) exist in the source tree.
 nodist_EXTRA_gobby_0_5_SOURCES = dummy.cpp
 
+EXTRA_DIST = README.md
+
 # Debian seems to need an XPM of the program icon, so we provide one here.
 # It's currently not used for anything else, though.
-EXTRA_DIST = gobby-0.5.xpm
+EXTRA_DIST += gobby-0.5.xpm
 
 # For the manual
 EXTRA_DIST += gnome-doc-utils.make gobby-0.5.desktop.in gobby-0.5.appdata.xml
