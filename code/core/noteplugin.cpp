@@ -55,6 +55,7 @@ namespace
 	                 InfSessionStatus status,
 	                 InfCommunicationGroup* sync_group,
 	                 InfXmlConnection* sync_connection,
+	                 const gchar* path,
 	                 gpointer user_data)
 	{
 		InfUserTable* user_table = inf_user_table_new();
@@ -125,6 +126,7 @@ namespace
 	                 InfSessionStatus status,
 	                 InfCommunicationGroup* sync_group,
 	                 InfXmlConnection* sync_connection,
+	                 const gchar* path,
 	                 gpointer user_data)
 	{
 		InfChatBuffer* buffer = inf_chat_buffer_new(256);
