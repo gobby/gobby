@@ -38,16 +38,8 @@ nicely into the GNOME desktop environment if you want it to.
 - Glibmm (>= 2.18.0)
 - libxml++ (>= 2.6.0)
 - libgsasl (>= 0.2.21)
-
-For a build with Gtk2:
-
-- Gtkmm-2.4 (>= 2.12.0)
-- GtkSourceView-2.0 (>= 2.4)
-
-For a build with Gtk3:
-
-- Gtkmm-3.0 (>= 2.99.2)
-- GtkSourceView-3.0 (>= 2.91.0)
+- Gtkmm-3.0 (>= 3.0)
+- GtkSourceView-3.0 (>= 3.0)
 
 ## More information
 
