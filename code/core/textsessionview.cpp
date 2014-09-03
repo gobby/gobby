@@ -441,27 +441,11 @@ void Gobby::TextSessionView::on_user_color_changed()
 
 void Gobby::TextSessionView::on_alpha_changed()
 {
-	GtkStyleContext* style =
-		gtk_widget_get_style_context(GTK_WIDGET(m_view));
-	g_assert(style != NULL);
-
-	// Get the view background, not the one for the side panels:
-	gtk_style_context_save(style);
-	gtk_style_context_add_class(style, GTK_STYLE_CLASS_VIEW);
-
-	GdkRGBA rgba;
-	gtk_style_context_get_background_color(style, GTK_STATE_FLAG_NORMAL, &rgba);
-	gtk_style_context_restore(style);
-
-	Gdk::RGBA rgbacpp(&rgba);
-	const Gdk::Color colorcpp = color_from_rgba(rgbacpp);
-	const GdkColor& color = *colorcpp.gobj();
-
 	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 		inf_session_get_buffer(INF_SESSION(m_session)));
 
 	inf_text_gtk_buffer_set_fade(
-		buffer, m_preferences.user.alpha, &color);
+		buffer, m_preferences.user.alpha);
 }
 
 void Gobby::TextSessionView::on_show_remote_cursors_changed()
@@ -669,6 +653,4 @@ void Gobby::TextSessionView::on_style_updated()
 		inf_session_get_buffer(INF_SESSION(m_session)));
 
 	inf_text_gtk_buffer_set_saturation_value(buffer, my_sat, my_val);
-	inf_text_gtk_buffer_set_fade(
-		buffer, m_preferences.user.alpha, &color);
 }
