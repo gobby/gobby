@@ -108,6 +108,7 @@ Gobby::Folder::Folder(bool hide_single_tab,
 	m_lang_manager(lang_manager)
 {
 	set_scrollable(true);
+	set_show_border(false);
 	if(hide_single_tab) set_show_tabs(false);
 }
 
