@@ -78,7 +78,8 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
 	}
 
 	inf_sasl_context_set_callback(
-		m_sasl_context, &AuthCommands::sasl_callback_static, this);
+		m_sasl_context, &AuthCommands::sasl_callback_static,
+		this, NULL);
 
 	// Set SASL context for new connections:
 	m_connection_manager.set_sasl_context(m_sasl_context,
