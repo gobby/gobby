@@ -33,6 +33,7 @@ public:
 
 	// Can throw; can be used on already open servers:
 	void open(unsigned int port,
+	          const InfKeepalive* keepalive,
 	          InfXmppConnectionSecurityPolicy security_policy,
 	          InfCertificateCredentials* creds,
 	          InfSaslContext* sasl_context,
@@ -43,6 +44,9 @@ public:
 	bool is_open() const;
 
 	unsigned int get_port() const;
+
+	// Set new keepalive settings on running server, for new connections:
+	void set_keepalive(const InfKeepalive* keepalive);
 
 	// Use new credentials on running server, for new connections:
 	void set_credentials(InfXmppConnectionSecurityPolicy security_policy,

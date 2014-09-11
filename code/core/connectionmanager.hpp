@@ -107,6 +107,7 @@ protected:
 	void on_connection_removed(InfXmppConnection* xmpp,
 	                           InfXmppConnection* replaced_by);
 	void on_security_policy_changed();
+	void on_keepalive_changed();
 	void on_credentials_changed();
 	void on_notify_status(InfXmppConnection* connection);
 

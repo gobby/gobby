@@ -42,6 +42,7 @@ Gobby::Server::~Server()
 }
 
 void Gobby::Server::open(unsigned int port,
+                         const InfKeepalive* keepalive,
                          InfXmppConnectionSecurityPolicy security_policy,
                          InfCertificateCredentials* creds,
                          InfSaslContext* context,
@@ -56,6 +57,7 @@ void Gobby::Server::open(unsigned int port,
 	// doing anything else.
 	if(is_open() && get_port() == port)
 	{
+		set_keepalive(keepalive);
 		set_credentials(security_policy, creds);
 		set_sasl_context(context, sasl_mechanisms);
 		return;
@@ -113,6 +115,8 @@ void Gobby::Server::open(unsigned int port,
 
 	if(tcp4)
 	{
+		infd_tcp_server_set_keepalive(tcp4, keepalive);
+
 		m_xmpp4 = infd_xmpp_server_new(
 			tcp4, policy, creds,
 			context, sasl_mechanisms);
@@ -121,6 +125,8 @@ void Gobby::Server::open(unsigned int port,
 
 	if(tcp6)
 	{
+		infd_tcp_server_set_keepalive(tcp6, keepalive);
+
 		m_xmpp6 = infd_xmpp_server_new(
 			tcp6, policy, creds,
 			context, sasl_mechanisms);
@@ -189,6 +195,25 @@ unsigned int Gobby::Server::get_port() const
 	g_object_unref(tcp);
 
 	return port;
+}
+
+void Gobby::Server::set_keepalive(const InfKeepalive* keepalive)
+{
+	if(m_xmpp6 != NULL)
+	{
+		InfdTcpServer* tcp;
+		g_object_get(G_OBJECT(m_xmpp6), "tcp-server", &tcp, NULL);
+		infd_tcp_server_set_keepalive(tcp, keepalive);
+		g_object_unref(tcp);
+	}
+
+	if(m_xmpp4 != NULL)
+	{
+		InfdTcpServer* tcp;
+		g_object_get(G_OBJECT(m_xmpp4), "tcp-server", &tcp, NULL);
+		infd_tcp_server_set_keepalive(tcp, keepalive);
+		g_object_unref(tcp);
+	}
 }
 
 void Gobby::Server::set_sasl_context(InfSaslContext* context,

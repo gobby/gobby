@@ -42,12 +42,18 @@ Gobby::ConnectionManager::ConnectionManager(const CertificateManager& manager,
 	// TODO: Should be a constructor argument...
 	inf_discovery_avahi_set_security_policy(
 		m_discovery, m_preferences.security.policy);
+	const InfKeepalive& keepalive = m_preferences.network.keepalive;
+	inf_discovery_avahi_set_keepalive(m_discovery, &keepalive);
 #endif
 
 	m_preferences.security.policy.signal_changed().connect(
 		sigc::mem_fun(
 			*this,
 			&ConnectionManager::on_security_policy_changed));
+	m_preferences.network.keepalive.signal_changed().connect(
+		sigc::mem_fun(
+			*this,
+			&ConnectionManager::on_keepalive_changed));
 	m_cert_manager.signal_credentials_changed().connect(
 		sigc::mem_fun(
 			*this,
@@ -175,7 +181,17 @@ Gobby::ConnectionManager::create_connection(InfTcpConnection* connection,
 		"device-index", device_index,
 		NULL);
 
+	const InfKeepalive& keepalive = m_preferences.network.keepalive;
 	GError* error = NULL;
+	if(!inf_tcp_connection_set_keepalive(connection, &keepalive, &error))
+	{
+		/* This should not happen, since set_keepalive can only fail
+		 * if the connection is open already. */
+		g_warning("Failed to set keepalive: %s", error->message);
+		g_error_free(error);
+		error = NULL;
+	}
+
 	if(!inf_tcp_connection_open(connection, &error))
 	{
 		std::string message = error->message;
@@ -275,6 +291,34 @@ void Gobby::ConnectionManager::on_security_policy_changed()
 	inf_discovery_avahi_set_security_policy(
 		m_discovery, m_preferences.security.policy);
 #endif
+}
+
+void Gobby::ConnectionManager::on_keepalive_changed()
+{
+	const InfKeepalive& keepalive = m_preferences.network.keepalive;
+
+#ifdef LIBINFINITY_HAVE_AVAHI
+	inf_discovery_avahi_set_keepalive(m_discovery, &keepalive);
+#endif
+
+	for(std::map<InfXmppConnection*, ConnectionInfo>::const_iterator it =
+		m_connections.begin();
+	    it != m_connections.end(); ++it)
+	{
+		InfTcpConnection* tcp;
+		g_object_get(G_OBJECT(it->first), "tcp-connection", &tcp, NULL);
+
+		GError* error = NULL;
+		inf_tcp_connection_set_keepalive(tcp, &keepalive, &error);
+		g_object_unref(tcp);
+
+		if(error != NULL)
+		{
+			g_warning("Failed to set keepalive: %s",
+			          error->message);
+			g_error_free(error);
+		}
+	}
 }
 
 void Gobby::ConnectionManager::on_credentials_changed()

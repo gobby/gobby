@@ -21,12 +21,13 @@
 
 #include "features.hpp"
 
+#include <gtkmm/toolbar.h>
+
 #include <gtksourceview/gtksourceview.h>
 #include <gtksourceview/gtksourcestyleschememanager.h>
 
-#include <gtkmm/toolbar.h>
-
 #include <libinfinity/common/inf-xmpp-connection.h>
+#include <libinfinity/common/inf-keepalive.h>
 
 namespace Gobby
 {
@@ -184,11 +185,21 @@ public:
 		Option<std::string> certificate_file;
 	};
 
+	class Network
+	{
+	public:
+		Network(Config::ParentEntry& entry);
+		void serialize(Config::ParentEntry& entry) const;
+
+		Option<InfKeepalive> keepalive;
+	};
+
 	User user;
 	Editor editor;
 	View view;
 	Appearance appearance;
 	Security security;
+	Network network;
 };
 
 template<typename Type>

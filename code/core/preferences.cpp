@@ -214,12 +214,37 @@ void Gobby::Preferences::Security::serialize(Config::ParentEntry& entry) const
 	entry.set_value("key-file", key_file);
 }
 
+Gobby::Preferences::Network::Network(Config::ParentEntry& entry):
+	keepalive(InfKeepalive())
+{
+	InfKeepalive keepalive;
+	keepalive.mask = static_cast<InfKeepaliveMask>(entry.get_value<int>(
+		"keepalive-mask", static_cast<int>(
+			INF_KEEPALIVE_ENABLED |
+			INF_KEEPALIVE_TIME |
+			INF_KEEPALIVE_INTERVAL)));
+	keepalive.enabled = entry.get_value<bool>("keepalive-enabled", true);
+	keepalive.time = entry.get_value<guint>("keepalive-time", 60);
+	keepalive.interval = entry.get_value<guint>("keepalive-interval", 5);
+	this->keepalive = keepalive;
+}
+
+void Gobby::Preferences::Network::serialize(Config::ParentEntry& entry) const
+{
+	const InfKeepalive& keepalive = this->keepalive;
+	entry.set_value("keepalive-mask", static_cast<int>(keepalive.mask));
+	entry.set_value("keepalive-enabled", keepalive.enabled);
+	entry.set_value("keepalive-time", keepalive.time);
+	entry.set_value("keepalive-interval", keepalive.interval);
+}
+
 Gobby::Preferences::Preferences(Config& config):
 	user(config.get_root()["user"]),
 	editor(config.get_root()["editor"]),
 	view(config.get_root()["view"]),
 	appearance(config.get_root()["appearance"]),
-	security(config.get_root()["security"])
+	security(config.get_root()["security"]),
+	network(config.get_root()["network"])
 {
 }
 
@@ -231,5 +256,5 @@ void Gobby::Preferences::serialize(Config& config) const
 	view.serialize(config.get_root()["view"]);
 	appearance.serialize(config.get_root()["appearance"]);
 	security.serialize(config.get_root()["security"]);
+	network.serialize(config.get_root()["network"]);
 }
-

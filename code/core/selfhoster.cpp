@@ -70,6 +70,8 @@ Gobby::SelfHoster::SelfHoster(InfIo* io,
 		connect(sigc::mem_fun(*this, &SelfHoster::apply_preferences));
 	m_preferences.security.policy.signal_changed().connect(
 		sigc::mem_fun(*this, &SelfHoster::apply_preferences));
+	m_preferences.network.keepalive.signal_changed().connect(
+		sigc::mem_fun(*this, &SelfHoster::apply_preferences));
 	m_cert_manager.signal_credentials_changed().connect(
 		sigc::mem_fun(*this, &SelfHoster::apply_preferences));
 
@@ -272,7 +274,9 @@ void Gobby::SelfHoster::apply_preferences()
 	// command below will only change the port and/or security policy.
 	try
 	{
-		m_server.open(m_preferences.user.port,
+		const InfKeepalive& keepalive =
+			m_preferences.network.keepalive;
+		m_server.open(m_preferences.user.port, &keepalive,
 		              m_preferences.security.policy,
 		              m_cert_manager.get_credentials(),
 		              m_sasl_context, get_sasl_mechanisms());
