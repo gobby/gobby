@@ -19,6 +19,8 @@
 
 #include "features.hpp"
 
+#include "commands/file-tasks/task-open.hpp"
+#include "commands/file-tasks/task-open-multiple.hpp"
 #include "commands/autosave-commands.hpp"
 #include "commands/browser-commands.hpp"
 #include "commands/subscription-commands.hpp"
@@ -68,37 +70,16 @@ const int UNIQUE_GOBBY_CONNECT = 1;
 class Window : public Gtk::Window
 {
 public:
-	Window(unsigned int argc, const char* const argv[],
-	       Config& config, Preferences& preferences,
+	Window(Config& config, Preferences& preferences,
 	       const IconManager& icon_manager,
-	       CertificateManager& cert_manager
-#ifdef WITH_UNIQUE
-	       , UniqueApp* app
-#endif
-	       );
-	~Window();
+	       CertificateManager& cert_manager);
 
-	void connect_to_host(const Glib::ustring& hostname)
-	{
-		m_operations.subscribe_path(hostname);
-	}
+	void subscribe(const Glib::ustring& uri);
+	// TODO: This should take a list of Gio::File objects
+	void open_files(const Operations::uri_list& uris);
 
 protected:
-#ifdef WITH_UNIQUE
-	static UniqueResponse
-	on_message_received_static(UniqueApp* app,
-	                           UniqueCommand command,
-	                           UniqueMessageData* message,
-	                           guint time,
-	                           gpointer user_data)
-	{
-		return static_cast<Window*>(user_data)->on_message_received(
-			command, message, time);
-	}
-#endif
-
 	// Gtk::Window overrides
-	virtual bool on_delete_event(GdkEventAny* event);
 	virtual bool on_key_press_event(GdkEventKey* event);
 
 	virtual void on_realize();
@@ -130,22 +111,6 @@ protected:
 	void on_chat_hide();
 	void on_chat_show();
 
-#ifdef WITH_UNIQUE
-	UniqueResponse on_message_received(UniqueCommand command,
-	                                   UniqueMessageData* message,
-	                                   guint time);
-#endif
-
-	// Command line arguments
-	// TODO: We only require these in on_show to initially open files
-	// passed on the command line. We can't do it in the constructor
-	// already, because otherwise the main window is shown after the
-	// document location dialog, and therefore ends up having focus,
-	// which it shouldn't. Maybe we'll find a better solution which does
-	// not require these member variables.
-	unsigned int m_argc;
-	const char* const* m_argv;
-
 	// Config
 	Config& m_config;
 	GtkSourceLanguageManager* m_lang_manager;
@@ -153,9 +118,6 @@ protected:
 	CertificateManager& m_cert_manager;
 	const IconManager& m_icon_manager;
 	ConnectionManager m_connection_manager;
-#ifdef WITH_UNIQUE
-	UniqueApp* m_app;
-#endif
 
 	// GUI
 	Gtk::VBox m_mainbox;

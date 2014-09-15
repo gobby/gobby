@@ -25,24 +25,16 @@
 
 #include <gtkmm/frame.h>
 
-Gobby::Window::Window(unsigned int argc, const char* const argv[],
-                      Config& config,
+Gobby::Window::Window(Config& config,
                       Preferences& preferences,
                       const IconManager& icon_manager,
-                      CertificateManager& cert_manager
-#ifdef WITH_UNIQUE
-                      , UniqueApp* app
-#endif
-                      ):
+                      CertificateManager& cert_manager):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
-	m_argc(argc), m_argv(argv), m_config(config),
+	m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
 	m_preferences(preferences), m_cert_manager(cert_manager),
 	m_icon_manager(icon_manager),
 	m_connection_manager(cert_manager, preferences),
-#ifdef WITH_UNIQUE
-	m_app(app),
-#endif
 	m_text_folder(false, m_preferences, m_lang_manager),
 	m_chat_folder(true, m_preferences, m_lang_manager),
 	m_statusbar(m_text_folder, m_preferences),
@@ -86,14 +78,6 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	m_help_commands(*this, m_header, m_icon_manager),
 	m_title_bar(*this, m_text_folder)
 {
-#ifdef WITH_UNIQUE
-	g_object_ref(app);
-
-	unique_app_watch_window(app, gobj());
-	g_signal_connect(app, "message-received",
-	                 G_CALLBACK(on_message_received_static), this);
-#endif // WITH_UNIQUE
-
 	m_chat_frame.signal_show().connect(
 		sigc::mem_fun(*this, &Window::on_chat_show), true);
 	m_chat_frame.signal_hide().connect(
@@ -163,43 +147,34 @@ Gobby::Window::Window(unsigned int argc, const char* const argv[],
 	set_role("Gobby");
 }
 
-Gobby::Window::~Window()
+void Gobby::Window::subscribe(const Glib::ustring& uri)
 {
-#ifdef WITH_UNIQUE
-	g_object_unref(m_app);
-#endif
+	m_operations.subscribe_path(uri);
 }
 
-bool Gobby::Window::on_delete_event(GdkEventAny* event)
+void Gobby::Window::open_files(const Operations::uri_list& uris)
 {
-#if 0
-	if(m_buffer.get() == NULL) return false;
-	if(!m_buffer->is_open() ) return false;
+	if(uris.size() == 1)
+	{
+		Glib::RefPtr<Gio::File> file(
+			Gio::File::create_for_uri(uris[0]));
+		m_file_commands.set_task(
+			new TaskOpen(m_file_commands, file));
+	}
+	else if(uris.size() > 1)
+	{
+		TaskOpenMultiple* task =
+			new TaskOpenMultiple(m_file_commands);
 
-	Gtk::MessageDialog dlg(
-		*this,
-		_("You are still connected to a session"),
-		false,
-		Gtk::MESSAGE_WARNING,
-		Gtk::BUTTONS_NONE,
-		true
-	);
+		for(Operations::uri_list::const_iterator iter =
+			uris.begin();
+		    iter != uris.end(); ++iter)
+		{
+			task->add_file(*iter);
+		}
 
-	dlg.set_secondary_text(
-		_("Do you want to close Gobby nevertheless?")
-	);
-
-	Gtk::Image* img = Gtk::manage(new Gtk::Image(Gtk::Stock::CANCEL,
-	                                             Gtk::ICON_SIZE_BUTTON));
-	Gtk::Button* cancel_button
-		= dlg.add_button(_("C_ancel"), Gtk::RESPONSE_CANCEL);
-	dlg.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_YES);
-	cancel_button->set_image(*img);
-	cancel_button->grab_focus();
-
-	return dlg.run() != Gtk::RESPONSE_YES;
-#endif
-	return false;
+		m_file_commands.set_task(task);
+	}
 }
 
 // GtkWindow catches keybindings for the menu items _before_ passing them to
@@ -255,44 +230,6 @@ void Gobby::Window::on_show()
 			sigc::mem_fun(*this,
 			              &Window::on_initial_dialog_hide));
 	}
-
-	// Open infinote:// URIs passed on the command line
-	std::vector<std::string> filenames;
-	for(int i = 0; i < m_argc; ++i)
-	{
-		if(g_str_has_prefix(m_argv[i], "infinote://"))
-			connect_to_host(m_argv[i]);
-		else
-			filenames.push_back(m_argv[i]);
-	}
-
-	// Open files passed on the command line
-	if(filenames.size() == 1)
-	{
-		Glib::RefPtr<Gio::File> file(
-			Gio::File::create_for_commandline_arg(filenames[0]));
-		m_file_commands.set_task(new TaskOpen(m_file_commands, file));
-	}
-	else if(filenames.size() > 1)
-	{
-		TaskOpenMultiple* task =
-			new TaskOpenMultiple(m_file_commands);
-
-		for(std::vector<std::string>::const_iterator iter =
-			filenames.begin();
-		    iter != filenames.end(); ++iter)
-		{
-			Glib::RefPtr<Gio::File> file(
-				Gio::File::create_for_commandline_arg(*iter));
-			task->add_file(file->get_uri());
-		}
-
-		m_file_commands.set_task(task);
-	}
-
-	// To avoid doing this again, should on_show() be called again:
-	m_argc = 0;
-	m_argv = NULL;
 }
 
 void Gobby::Window::on_initial_dialog_hide()
@@ -350,86 +287,3 @@ void Gobby::Window::on_chat_show()
 	Gtk::Widget* focus = get_focus();
 	if(!focus) on_switch_to_chat();
 }
-
-#ifdef WITH_UNIQUE
-UniqueResponse Gobby::Window::on_message_received(UniqueCommand command,
-                                                  UniqueMessageData* message,
-                                                  guint time)
-try
-{
-	struct uris_holder
-	{
-		uris_holder(gchar** uris): uris(uris) {}
-		~uris_holder() { if(uris) g_strfreev(uris); }
-		operator gchar* const*() const { return uris; }
-
-		gchar** uris;
-
-	private:
-		uris_holder(const uris_holder&);
-		uris_holder& operator=(const uris_holder&);
-	};
-
-	// Cast to int to suppress a warning about UNIQUE_GOBBY_CONNECT not
-	// being a member of the UniqueCommand enum.
-	switch (static_cast<signed int>(command))
-	{
-	case UNIQUE_ACTIVATE:
-		gtk_window_set_screen(gobj(),
-			unique_message_data_get_screen(message));
-		present(time);
-		return UNIQUE_RESPONSE_OK;
-	case UNIQUE_OPEN:
-		{
-			uris_holder uris(
-				unique_message_data_get_uris(message));
-			if(!uris || !uris[0])
-				return UNIQUE_RESPONSE_FAIL;
-			if(uris[1]) // multiple files?
-			{
-				TaskOpenMultiple* task =
-					new TaskOpenMultiple(m_file_commands);
-				for(const gchar* const* p = uris; *p; ++p)
-					task->add_file(*p);
-				m_file_commands.set_task(task);
-			}
-			else
-			{
-				TaskOpen* task = new TaskOpen(
-					m_file_commands,
-					Gio::File::create_for_uri(*uris));
-				m_file_commands.set_task(task);
-			}
-			return UNIQUE_RESPONSE_OK;
-		}
-	case UNIQUE_GOBBY_CONNECT:
-		{
-			uris_holder uris(unique_message_data_get_uris(message));
-			if(!uris || !uris[0])
-				return UNIQUE_RESPONSE_FAIL;
-			for(const gchar* const* p = uris; *p; ++p)
-			{
-				const gchar protocol[] = "infinote://";
-				if(!g_str_has_prefix(*p, protocol))
-					return UNIQUE_RESPONSE_FAIL;
-				connect_to_host(*p + sizeof(protocol) - 1);
-			}
-			return UNIQUE_RESPONSE_OK;
-		}
-	default:
-		return UNIQUE_RESPONSE_PASSTHROUGH;
-	}
-}
-// For example, connect_to_host might throw Glib::ThreadError
-catch(const Glib::Exception& error)
-{
-	// TODO: Do we want to show a dialog here?
-	g_warning("Failed to process IPC message: %s", error.what().c_str());
-	return UNIQUE_RESPONSE_FAIL;
-}
-catch (...)
-{
-	g_assert_not_reached();
-	return UNIQUE_RESPONSE_FAIL;
-}
-#endif // WITH_UNIQUE
