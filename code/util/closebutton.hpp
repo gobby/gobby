@@ -26,9 +26,6 @@ class CloseButton: public Gtk::Button
 {
 public:
 	CloseButton();
-
-protected:
-	virtual void on_style_updated();
 };
 
 } // namespace Gobby

@@ -16,35 +16,32 @@
 
 #include "util/closebutton.hpp"
 
+#include <gtkmm/cssprovider.h>
 #include <gtkmm/image.h>
-#include <gtkmm/stock.h>
-#include <gtk/gtk.h>
 
 Gobby::CloseButton::CloseButton()
 {
         set_relief(Gtk::RELIEF_NONE);
         set_focus_on_click(false);
-	//set_flags(get_flags() & ~Gtk::CAN_FOCUS);
 
-        GtkRcStyle* rc_style = gtk_rc_style_new();
-        rc_style->xthickness = 0;
-        rc_style->ythickness = 0;
-        gtk_widget_modify_style(GTK_WIDGET(gobj()), rc_style);
-        g_object_unref(rc_style);
+	static const gchar button_style[] =
+		"* {\n"
+		"  -GtkButton-default-border: 0;\n"
+		"  -GtkButton-default-outside-border: 0;\n"
+		"  -GtkButton-inner-border: 0;\n"
+		"  -GtkWidget-focus-line-width: 0;\n"
+		"  -GtkWidget-focus-padding: 0;\n"
+		"  padding: 0;\n"
+		"}";
 
-        Gtk::Image* button_image = Gtk::manage(
-                new Gtk::Image(Gtk::Stock::CLOSE, Gtk::ICON_SIZE_MENU));
+	Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
+	provider->load_from_data(button_style);
+
+	get_style_context()->add_provider(
+		provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	
+        Gtk::Image* button_image = Gtk::manage(new Gtk::Image);
+	button_image->set_from_icon_name("window-close", Gtk::ICON_SIZE_MENU);
         add(*button_image);
         button_image->show();
-}
-
-void Gobby::CloseButton::on_style_updated()
-{
-	int width;
-	int height;
-
-	gtk_icon_size_lookup_for_settings(
-		gtk_widget_get_settings(GTK_WIDGET(gobj())),
-		GTK_ICON_SIZE_MENU, &width, &height);
-	set_size_request(width + 2, height + 2);
 }
