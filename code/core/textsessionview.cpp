@@ -154,7 +154,7 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	g_signal_connect_after(
 		G_OBJECT(m_view),
 		"style-updated",
-		G_CALLBACK(on_style_updated_static),
+		G_CALLBACK(on_view_style_updated_static),
 		this);
 
 	// This is a hack to make sure that the author tags in the textview
@@ -622,7 +622,7 @@ bool Gobby::TextSessionView::
 	return true;
 }
 
-void Gobby::TextSessionView::on_style_updated()
+void Gobby::TextSessionView::on_view_style_updated()
 {
 	GtkStyleContext* style =
 		gtk_widget_get_style_context(GTK_WIDGET(m_view));

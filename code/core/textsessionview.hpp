@@ -105,7 +105,7 @@ protected:
 	void on_font_changed();
 	void on_scheme_changed();
 
-	void on_style_updated();
+	void on_view_style_updated();
 
 	bool on_query_tooltip(int x, int y, bool keyboard_mode,
 	                      const Glib::RefPtr<Gtk::Tooltip>& tooltip);
@@ -120,10 +120,11 @@ protected:
 			                 Glib::wrap(tooltip, true));
 	}
 
-	static void on_style_updated_static(GtkWidget* view,
-	                                    gpointer user_data)
+	static void on_view_style_updated_static(GtkWidget* view,
+	                                         gpointer user_data)
 	{
-		static_cast<TextSessionView*>(user_data)->on_style_updated();
+		static_cast<TextSessionView*>(user_data)->
+			on_view_style_updated();
 	}
 
 	std::string m_info_storage_key;
