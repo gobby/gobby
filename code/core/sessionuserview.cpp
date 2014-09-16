@@ -15,7 +15,6 @@
  */
 
 #include "core/sessionuserview.hpp"
-#include "core/iconmanager.hpp"
 #include "core/closableframe.hpp"
 
 #include "util/i18n.hpp"
@@ -36,7 +35,7 @@ Gobby::SessionUserView::SessionUserView(SessionView& view,
 	m_userlist.show();
 	m_userlist.set_show_disconnected(show_disconnected);
 	Gtk::Frame* frame = Gtk::manage(new ClosableFrame(
-		_("User List"), IconManager::STOCK_USERLIST, opt_view));
+		_("User List"), "user-list", opt_view));
 	frame->set_shadow_type(Gtk::SHADOW_IN);
 	frame->add(m_userlist);
 	// frame manages visibility itself

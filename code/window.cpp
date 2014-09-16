@@ -19,7 +19,6 @@
 
 #include "commands/file-tasks/task-open.hpp"
 #include "commands/file-tasks/task-open-multiple.hpp"
-#include "core/iconmanager.hpp"
 
 #include "util/i18n.hpp"
 
@@ -27,21 +26,18 @@
 
 Gobby::Window::Window(Config& config,
                       Preferences& preferences,
-                      const IconManager& icon_manager,
                       CertificateManager& cert_manager):
 	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
 	m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
 	m_preferences(preferences), m_cert_manager(cert_manager),
-	m_icon_manager(icon_manager),
 	m_connection_manager(cert_manager, preferences),
 	m_text_folder(false, m_preferences, m_lang_manager),
 	m_chat_folder(true, m_preferences, m_lang_manager),
 	m_statusbar(m_text_folder, m_preferences),
 	m_header(m_preferences, m_lang_manager),
 	m_browser(*this, m_statusbar, m_connection_manager),
-	m_chat_frame(_("Chat"), IconManager::STOCK_CHAT,
-	             m_preferences.appearance.show_chat),
+	m_chat_frame(_("Chat"), "chat", m_preferences.appearance.show_chat),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
 	m_folder_manager(m_browser, m_info_storage,
 	                 m_text_folder, m_chat_folder),
@@ -75,7 +71,7 @@ Gobby::Window::Window(Config& config,
 	m_view_commands(*this, m_header, m_text_folder,
 	                m_chat_frame, m_chat_folder,
 	                m_preferences),
-	m_help_commands(*this, m_header, m_icon_manager),
+	m_help_commands(*this, m_header),
 	m_title_bar(*this, m_text_folder)
 {
 	m_chat_frame.signal_show().connect(
@@ -109,7 +105,7 @@ Gobby::Window::Window(Config& config,
 	add_accel_group(group);
 
 	Gtk::Frame* frame_browser = Gtk::manage(new ClosableFrame(
-		_("Document Browser"), IconManager::STOCK_DOCLIST,
+		_("Document Browser"), "document-list",
 		m_preferences.appearance.show_browser));
 	frame_browser->set_shadow_type(Gtk::SHADOW_IN);
 	frame_browser->add(m_browser);
@@ -213,7 +209,7 @@ void Gobby::Window::on_show()
 		m_initial_dlg.reset(
 			new InitialDialog(
 				*this, m_statusbar, m_preferences,
-				m_cert_manager, m_icon_manager));
+				m_cert_manager));
 		m_initial_dlg->present();
 		m_initial_dlg->signal_hide().connect(
 			sigc::mem_fun(*this,

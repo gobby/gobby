@@ -17,13 +17,11 @@
 #include "core/tablabel.hpp"
 #include "core/folder.hpp"
 
-#include <gtkmm/stock.h>
-
 Gobby::TabLabel::TabLabel(Folder& folder, SessionView& view,
-                          Gtk::StockID active_icon):
+                          const Glib::ustring& active_icon_name):
 	Gtk::HBox(false, 6), m_folder(folder), m_view(view),
 	m_title(view.get_title()), m_changed(false),
-	m_active_icon(active_icon)
+	m_active_icon_name(active_icon_name)
 {
 	m_title.set_alignment(Gtk::ALIGN_START);
 
@@ -107,7 +105,8 @@ void Gobby::TabLabel::update_icon()
 
 	if(inf_session_get_subscription_group(session) == NULL)
 	{
-		m_icon.set(Gtk::Stock::DISCONNECT, Gtk::ICON_SIZE_MENU);
+		m_icon.set_from_icon_name("network-offline",
+		                          Gtk::ICON_SIZE_MENU);
 	}
 	else
 	{
@@ -115,23 +114,27 @@ void Gobby::TabLabel::update_icon()
 		{
 		case INF_SESSION_PRESYNC:
 		case INF_SESSION_SYNCHRONIZING:
-			m_icon.set(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_MENU);
+			// TODO: Switch to process-working, if/when m_icon can
+			// show animations.
+			m_icon.set_from_icon_name("system-run",
+			                          Gtk::ICON_SIZE_MENU);
 			break;
 		case INF_SESSION_RUNNING:
 			if(m_view.get_active_user() != NULL)
 			{
-				m_icon.set(m_active_icon,
-				           Gtk::ICON_SIZE_MENU);
+				m_icon.set_from_icon_name(m_active_icon_name,
+				                          Gtk::ICON_SIZE_MENU);
 			}
 			else
 			{
-				m_icon.set(Gtk::Stock::FILE,
-				           Gtk::ICON_SIZE_MENU);
+				m_icon.set_from_icon_name("text-x-generic",
+				                          Gtk::ICON_SIZE_MENU);
 			}
 
 			break;
 		case INF_SESSION_CLOSED:
-			m_icon.set(Gtk::Stock::STOP, Gtk::ICON_SIZE_MENU);
+			m_icon.set_from_icon_name("network-offline",
+			                          Gtk::ICON_SIZE_MENU);
 			break;
 		}
 	}

@@ -25,5 +25,5 @@ noinst_HEADERS = \
         serialize.hpp \
 	uri.hpp
 
-AM_CPPFLAGS = $(gobby_CFLAGS) $(unique_CFLAGS) $(infinote_CFLAGS) \
+AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code

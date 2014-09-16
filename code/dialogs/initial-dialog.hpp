@@ -20,7 +20,6 @@
 #include "core/certificatemanager.hpp"
 #include "core/statusbar.hpp"
 #include "core/preferences.hpp"
-#include "core/iconmanager.hpp"
 #include "core/huebutton.hpp"
 
 #include <gtkmm/dialog.h>
@@ -42,8 +41,7 @@ public:
 	InitialDialog(Gtk::Window& parent,
 	              StatusBar& status_bar,
 	              Preferences& preferences,
-	              CertificateManager& cert_manager,
-	              const IconManager& icon_manager);
+	              CertificateManager& cert_manager);
 
 protected:
 	virtual void on_response(int id);

@@ -104,6 +104,8 @@ namespace Gobby
 		void on_row_activated(const Gtk::TreePath& path,
 		                      Gtk::TreeViewColumn* column);
 
+		virtual void on_style_updated();
+
 		Gtk::TreeIter find_user_iter(InfUser* user);
 
 		Columns m_columns;

@@ -187,8 +187,7 @@ namespace
 Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
                                     StatusBar& status_bar,
                                     Preferences& preferences,
-                                    CertificateManager& cert_manager,
-                                    const IconManager& icon_manager):
+                                    CertificateManager& cert_manager):
 	Gtk::Dialog("Gobby", parent),
 	m_status_bar(status_bar),
 	m_preferences(preferences),

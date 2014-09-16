@@ -15,15 +15,14 @@
  */
 
 #include "core/chattablabel.hpp"
-#include "core/iconmanager.hpp"
 #include <gtkmm/stock.h>
 
 Gobby::ChatTabLabel::ChatTabLabel(Folder& folder, ChatSessionView& view,
                                   bool always_show_close_button):
 	TabLabel(folder, view,
 	         always_show_close_button ?
-	         Gobby::IconManager::STOCK_CHAT :
-	         Gtk::Stock::NETWORK),
+	         "chat" :
+	         "network-idle"),
 	m_always_show_close_button(always_show_close_button)
 {
 	if(!m_always_show_close_button)

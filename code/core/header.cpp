@@ -15,7 +15,6 @@
  */
 
 #include "core/header.hpp"
-#include "core/iconmanager.hpp"
 #include "util/i18n.hpp"
 #include "features.hpp" // For PLATFORM_OSX_NATIVE
 
@@ -237,8 +236,8 @@ Gobby::Header::Header(Preferences& preferences,
 		                    _("Save _As..."))),
 	action_file_save_all(
 		Gtk::Action::create(
-			"FileSaveAll", Gobby::IconManager::STOCK_SAVE_ALL,
-			_("Save All"), _("Save all open files locally"))),
+			"FileSaveAll", _("Save All"),
+			_("Save all open files locally"))),
 	action_file_export_html(
 		Gtk::Action::create("FileExportHtml", _("Export As _HTML..."))),
 	action_file_connect(

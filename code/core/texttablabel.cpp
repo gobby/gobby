@@ -64,7 +64,7 @@ void Gobby::TextTabLabel::UserWatcher::on_notify_hue(GObject* user_object,
 
 
 Gobby::TextTabLabel::TextTabLabel(Folder& folder, TextSessionView& view):
-	TabLabel(folder, view, Gtk::Stock::EDIT), m_dot_char(0)
+	TabLabel(folder, view, "text-x-generic"), m_dot_char(0)
 {
 	m_modified_changed_handle = g_signal_connect_after(
 		G_OBJECT(view.get_text_buffer()), "modified-changed",

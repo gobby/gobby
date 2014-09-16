@@ -32,7 +32,8 @@ class TabLabel: public Gtk::HBox
 public:
 	typedef Glib::SignalProxy0<void> SignalCloseRequest;
 
-	TabLabel(Folder& folder, SessionView& view, Gtk::StockID active_icon);
+	TabLabel(Folder& folder, SessionView& view,
+	         const Glib::ustring& active_icon_name);
 	virtual ~TabLabel();
 
 	SignalCloseRequest signal_close_request()
@@ -81,7 +82,7 @@ private:
 	void update_icon();
 	void update_color();
 
-	Gtk::StockID m_active_icon;
+	const Glib::ustring m_active_icon_name;
 
 	// Whether the document was changed since it has been active.
 	gulong m_notify_status_handle;

@@ -20,6 +20,8 @@
 #include "util/i18n.hpp"
 #include "util/file.hpp"
 
+#include <gtkmm/icontheme.h>
+
 #include <iostream>
 
 #include <libinfinity/common/inf-init.h>
@@ -62,7 +64,6 @@ public:
 	Config config;
 	Preferences preferences;
 	CertificateManager certificate_manager;
-	IconManager icon_manager; // TODO: Switch to icon names
 };
 
 Gobby::Application::Data::Data():
@@ -154,6 +155,11 @@ void Gobby::Application::on_startup()
 		if(inf_init(&error) != TRUE)
 			throw Glib::Error(error);
 
+		Gtk::IconTheme::get_default()->append_search_path(
+			PUBLIC_ICONS_DIR);
+		Gtk::IconTheme::get_default()->append_search_path(
+			PRIVATE_ICONS_DIR);
+
 		// Allocate the per-application data. This cannot be
 		// done earlier, such as in the contrutor, since we only
 		// need to do it if we are the primary instance.
@@ -161,7 +167,7 @@ void Gobby::Application::on_startup()
 
 		m_gobby_window = new Gobby::Window(
 			m_data->config, m_data->preferences,
-			m_data->icon_manager, m_data->certificate_manager);
+			m_data->certificate_manager);
 
 		m_window.reset(m_gobby_window);
 		m_window->show();

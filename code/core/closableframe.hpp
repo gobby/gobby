@@ -29,7 +29,7 @@ class ClosableFrame: public Gtk::Frame
 {
 public:
 	ClosableFrame(const Glib::ustring& title,
-	              const Gtk::StockID& stock_id,
+	              const Glib::ustring& icon_name,
 	              Preferences::Option<bool>& option);
 
 	void set_allow_visible(bool allow_visible);

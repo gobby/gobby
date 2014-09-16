@@ -18,7 +18,6 @@
 #define _GOBBY_HELP_COMMANDS_HPP_
 
 #include "core/header.hpp"
-#include "core/iconmanager.hpp"
 
 #include <gtkmm/window.h>
 #include <gtkmm/aboutdialog.h>
@@ -32,8 +31,7 @@ namespace Gobby
 class HelpCommands: public sigc::trackable
 {
 public:
-	HelpCommands(Gtk::Window& parent, Header& header,
-	             const IconManager& icon_manager);
+	HelpCommands(Gtk::Window& parent, Header& header);
 
 protected:
 	void on_contents();
@@ -43,7 +41,6 @@ protected:
 
 	Gtk::Window& m_parent;
 	Header& m_header;
-	const IconManager& m_icon_manager;
 
 	std::auto_ptr<Gtk::AboutDialog> m_about_dialog;
 };

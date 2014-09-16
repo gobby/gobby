@@ -15,13 +15,12 @@
  */
 
 #include "core/userlist.hpp"
-#include "core/iconmanager.hpp"
 
 #include "util/i18n.hpp"
 #include "util/color.hpp"
 
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/stock.h>
+#include <gtkmm/icontheme.h>
 
 #include <cstring>
 
@@ -37,17 +36,21 @@ namespace
 	Glib::RefPtr<Gdk::Pixbuf> generate_user_color_pixbuf(Gtk::Widget& w,
 	                                                     gdouble hue)
 	{
-		Gtk::StockID id =
-			Gobby::IconManager::STOCK_USER_COLOR_INDICATOR;
+		Glib::RefPtr<Gtk::IconTheme> icon_theme =
+			Gtk::IconTheme::get_for_screen(w.get_screen());
 
-		Glib::RefPtr<Gdk::Pixbuf> pixbuf =
-			w.render_icon_pixbuf(id, Gtk::ICON_SIZE_MENU);
-
-		if(!pixbuf) // icon not found
+		Glib::RefPtr<Gdk::Pixbuf> pixbuf;
+		try
 		{
-			pixbuf = w.render_icon_pixbuf(
-				Gtk::Stock::MISSING_IMAGE,
-				Gtk::ICON_SIZE_MENU);
+			pixbuf = icon_theme->load_icon(
+				"user-color-indicator", 16);
+		}
+		catch(const Glib::Error& ex)
+		{
+			// Icon not found
+			// TODO: Check error domain and code
+			pixbuf = icon_theme->load_icon(
+				"image-missing", 16);
 		}
 
 		// pixbuf is shared, though we want to mess with it here
@@ -217,12 +220,12 @@ void Gobby::UserList::icon_cell_data_func(Gtk::CellRenderer* renderer,
 		{
 		case INF_USER_ACTIVE:
 		case INF_USER_INACTIVE:
-			pixbuf_renderer->property_stock_id() =
-				Gtk::Stock::CONNECT.id;
+			pixbuf_renderer->property_icon_name() =
+				"user-available";
 			break;
 		case INF_USER_UNAVAILABLE:
-			pixbuf_renderer->property_stock_id() =
-				Gtk::Stock::DISCONNECT.id;
+			pixbuf_renderer->property_icon_name() =
+				"user-offline";
 			break;
 		default:
 			g_assert_not_reached();
@@ -372,6 +375,25 @@ void Gobby::UserList::on_row_activated(const Gtk::TreePath& path,
 
 	if(inf_user_get_status(user) != INF_USER_UNAVAILABLE)
 		m_signal_user_activated.emit(user);
+}
+
+void Gobby::UserList::on_style_updated()
+{
+	// Re-render all user color pixbufs, since the icon might have changed
+	// with the new style.
+	const Gtk::TreeModel::Children& children = m_store->children();
+	for(Gtk::TreeIter iter = children.begin();
+	    iter != children.end(); ++ iter)
+	{
+		InfUser* user = (*iter)[m_columns.user];
+
+		if(INF_TEXT_IS_USER(user))
+		{
+			(*iter)[m_columns.color] = generate_user_color_pixbuf(
+				*this,
+				inf_text_user_get_hue(INF_TEXT_USER(user)));
+		}
+	}
 }
 
 Gtk::TreeIter Gobby::UserList::find_user_iter(InfUser* user)

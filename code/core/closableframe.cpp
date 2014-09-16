@@ -21,7 +21,7 @@
 #include <gtkmm/label.h>
 
 Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
-                                    const Gtk::StockID& stock_id,
+                                    const Glib::ustring& icon_name,
                                     Preferences::Option<bool>& option):
 	m_option(option), m_box(false, 6), m_allow_visible(true)
 {
@@ -35,7 +35,8 @@ Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
 	button->show();
 
 	Gtk::Image* image = Gtk::manage(
-		new Gtk::Image(stock_id, Gtk::ICON_SIZE_MENU));
+		new Gtk::Image);
+	image->set_from_icon_name(icon_name, Gtk::ICON_SIZE_MENU);
 	image->show();
 
 	Gtk::Label* label_title = Gtk::manage(

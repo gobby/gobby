@@ -38,7 +38,6 @@
 #include "dialogs/initial-dialog.hpp"
 
 #include "core/selfhoster.hpp"
-#include "core/iconmanager.hpp"
 #include "core/header.hpp"
 #include "core/folder.hpp"
 #include "core/browser.hpp"
@@ -71,7 +70,6 @@ class Window : public Gtk::Window
 {
 public:
 	Window(Config& config, Preferences& preferences,
-	       const IconManager& icon_manager,
 	       CertificateManager& cert_manager);
 
 	void subscribe(const Glib::ustring& uri);
@@ -115,7 +113,6 @@ protected:
 	GtkSourceLanguageManager* m_lang_manager;
 	Preferences& m_preferences;
 	CertificateManager& m_cert_manager;
-	const IconManager& m_icon_manager;
 	ConnectionManager m_connection_manager;
 
 	// GUI

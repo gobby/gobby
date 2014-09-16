@@ -38,9 +38,8 @@ namespace
 	}
 }
 
-Gobby::HelpCommands::HelpCommands(Gtk::Window& parent, Header& header,
-                                  const IconManager& icon_manager):
-	m_parent(parent), m_header(header), m_icon_manager(icon_manager)
+Gobby::HelpCommands::HelpCommands(Gtk::Window& parent, Header& header):
+	m_parent(parent), m_header(header)
 {
 	header.action_help_contents->signal_activate().connect(
 		sigc::mem_fun(*this, &HelpCommands::on_contents));
