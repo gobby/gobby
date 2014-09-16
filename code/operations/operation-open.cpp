@@ -59,10 +59,10 @@ Gobby::OperationOpen::OperationOpen(Operations& operations,
                                     InfBrowser* browser,
                                     const InfBrowserIter* parent,
                                     const std::string& name,
-                                    const std::string& uri,
+                                    const Glib::RefPtr<Gio::File>& file,
                                     const char* encoding):
 	Operation(operations), m_preferences(preferences),
-	m_name(name), m_uri(uri), m_parent(browser, parent),
+	m_name(name), m_file(file), m_parent(browser, parent),
 	m_encoding_auto_detect_index(-1),
 	m_eol_style(DocumentInfoStorage::EOL_CR), m_request(NULL),
 	m_raw_pos(0), m_content(NULL),
@@ -105,13 +105,12 @@ void Gobby::OperationOpen::start()
 
 	try
 	{
-		m_file = Gio::File::create_for_uri(m_uri);
 		m_file->read_async(sigc::mem_fun(
 			*this, &OperationOpen::on_file_read));
 
 		m_message_handle = get_status_bar().add_info_message(
 			Glib::ustring::compose(
-				_("Opening document \"%1\"..."), m_uri));
+				_("Opening document \"%1\"..."), m_file->get_uri()));
 
 		m_parent.signal_node_removed().connect(
 			sigc::mem_fun(

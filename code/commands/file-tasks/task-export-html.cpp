@@ -57,7 +57,7 @@ void Gobby::TaskExportHtml::on_response(int response_id)
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
 		get_operations().export_html(
-			*m_view, m_file_dialog.get_uri());
+			*m_view, m_file_dialog.get_file());
 	}
 
 	finish();

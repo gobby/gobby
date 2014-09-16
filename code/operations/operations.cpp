@@ -76,12 +76,11 @@ Gobby::Operations::create_document(InfBrowser* browser,
                                    const InfBrowserIter* parent,
                                    const Glib::ustring& name,
                                    const Preferences& preferences,
-                                   const Glib::ustring& from_uri,
+                                   const Glib::RefPtr<Gio::File>& file,
                                    const char* encoding)
 {
 	OperationOpen* op = new OperationOpen(*this, preferences, browser,
-	                                      parent, name, from_uri,
-	                                      encoding);
+	                                      parent, name, file, encoding);
 	m_operations.insert(op);
 	op->start();
 	return check_operation(op);
@@ -91,11 +90,11 @@ Gobby::OperationOpenMultiple*
 Gobby::Operations::create_documents(InfBrowser* browser,
                                     const InfBrowserIter* parent,
                                     const Preferences& prefs,
-                                    const uri_list& uris)
+                                    const file_list& files)
 {
 	OperationOpenMultiple* op = new OperationOpenMultiple(*this, prefs,
 	                                                      browser, parent,
-	                                                      uris);
+	                                                      files);
 	m_operations.insert(op);
 	op->start();
 	return check_operation(op);
@@ -103,7 +102,7 @@ Gobby::Operations::create_documents(InfBrowser* browser,
 
 Gobby::OperationSave*
 Gobby::Operations::save_document(TextSessionView& view,
-                                 const std::string& uri,
+                                 const Glib::RefPtr<Gio::File>& file,
                                  const std::string& encoding,
                                  DocumentInfoStorage::EolStyle eol_style)
 {
@@ -113,7 +112,7 @@ Gobby::Operations::save_document(TextSessionView& view,
 	if(prev_op != NULL)
 		fail_operation(prev_op);
 
-	OperationSave* op = new OperationSave(*this, view, uri,
+	OperationSave* op = new OperationSave(*this, view, file,
 	                                      encoding, eol_style);
 
 	m_operations.insert(op);
@@ -156,10 +155,10 @@ Gobby::Operations::subscribe_path(InfBrowser* browser,
 
 Gobby::OperationExportHtml*
 Gobby::Operations::export_html(TextSessionView& view,
-                               const std::string& uri)
+                               const Glib::RefPtr<Gio::File>& file)
 {
 	OperationExportHtml* op =
-		new OperationExportHtml(*this, view, uri);
+		new OperationExportHtml(*this, view, file);
 	m_operations.insert(op);
 	op->start();
 	return op;

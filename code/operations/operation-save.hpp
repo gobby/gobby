@@ -35,7 +35,8 @@ public:
 	// TODO: This should maybe just take a text buffer to save, not a
 	// textsessionview.
 	OperationSave(Operations& operations, TextSessionView& view,
-	              const std::string& uri, const std::string& encoding,
+	              const Glib::RefPtr<Gio::File>& file,
+	              const std::string& encoding,
 	              DocumentInfoStorage::EolStyle eol_style);
 
 	virtual ~OperationSave();
@@ -58,7 +59,7 @@ protected:
 	void write_next();
 	void error(const Glib::ustring& message);
 protected:
-	const std::string m_uri;
+	const Glib::RefPtr<Gio::File> m_file;
 	TextSessionView* m_view;
 	std::time_t m_start_time;
 
@@ -77,7 +78,6 @@ protected:
 	std::size_t m_buffer_size;
 	std::size_t m_buffer_index;
 
-	Glib::RefPtr<Gio::File> m_file;
 	Glib::RefPtr<Gio::OutputStream> m_stream;
 
 	StatusBar::MessageHandle m_message_handle;

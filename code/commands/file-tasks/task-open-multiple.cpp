@@ -17,8 +17,9 @@
 #include "commands/file-tasks/task-open-multiple.hpp"
 #include "operations/operation-open-multiple.hpp"
 
-Gobby::TaskOpenMultiple::TaskOpenMultiple(FileCommands& file_commands):
-	Task(file_commands)
+Gobby::TaskOpenMultiple::TaskOpenMultiple(FileCommands& file_commands,
+                                          const file_list& files):
+	Task(file_commands), m_files(files)
 {
 }
 
@@ -37,11 +38,6 @@ void Gobby::TaskOpenMultiple::run()
 	dialog.present();
 }
 
-void Gobby::TaskOpenMultiple::add_file(const Glib::ustring& uri)
-{
-	m_uris.push_back(uri);
-}
-
 void Gobby::TaskOpenMultiple::on_location_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
@@ -56,7 +52,7 @@ void Gobby::TaskOpenMultiple::on_location_response(int response_id)
 		OperationOpenMultiple* operation =
 			get_operations().create_documents(
 				browser, &iter,
-				get_preferences(), m_uris);
+				get_preferences(), m_files);
 	}
 
 	finish();

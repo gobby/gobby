@@ -26,7 +26,7 @@ Gobby::OperationOpenMultiple::OperationOpenMultiple(
 		const Preferences& prefs,
 		InfBrowser* browser,
 		const InfBrowserIter* parent,
-		const uri_list& uris):
+		const file_list& files):
 	Operation(operations), m_preferences(prefs),
 	m_parent(browser, parent), m_current(NULL)
 {
@@ -34,14 +34,14 @@ Gobby::OperationOpenMultiple::OperationOpenMultiple(
 		sigc::mem_fun(*this,
 			&OperationOpenMultiple::on_node_removed));
 
-	for(uri_list::const_iterator iter = uris.begin();
-	    iter != uris.end(); ++iter)
+	for(file_list::const_iterator iter = files.begin();
+	    iter != files.end(); ++iter)
 	{
 		info_list::iterator info_iter =
 			m_infos.insert(m_infos.end(), Info());
 		Info& info = *info_iter;
 
-		info.uri = *iter;
+		info.file = *iter;
 		info.encoding = NULL; /* auto-detect... */
 	}
 }
@@ -57,21 +57,18 @@ void Gobby::OperationOpenMultiple::start()
 
 void Gobby::OperationOpenMultiple::query(const info_list::iterator& info)
 {
-	Glib::RefPtr<Gio::File> file =
-		Gio::File::create_for_uri(info->uri);
-
 	if(info->name.empty())
 	{
 		try
 		{
 			// Query file name
-			file->query_info_async(
+			info->file->query_info_async(
 				sigc::bind(
 					sigc::mem_fun(
 						*this,
 						&OperationOpenMultiple::
 							on_query_info),
-					file, info),
+					info),
 					G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 		}
 		catch(const Gio::Error& ex)
@@ -93,13 +90,12 @@ void Gobby::OperationOpenMultiple::on_node_removed()
 
 void Gobby::OperationOpenMultiple::on_query_info(
 		const Glib::RefPtr<Gio::AsyncResult>& result,
-		const Glib::RefPtr<Gio::File>& file,
-	const info_list::iterator& info)
+		const info_list::iterator& info)
 {
 	try
 	{
 		Glib::RefPtr<Gio::FileInfo> file_info =
-			file->query_info_finish(result);
+			info->file->query_info_finish(result);
 
 		info->name = file_info->get_display_name();
 		if(!m_current) load_info(info);
@@ -147,7 +143,7 @@ void Gobby::OperationOpenMultiple::load_info(const info_list::iterator& iter)
 
 	m_current = m_operations.create_document(
 		m_parent.get_browser(), m_parent.get_browser_iter(),
-		iter->name, m_preferences, iter->uri, iter->encoding);
+		iter->name, m_preferences, iter->file, iter->encoding);
 
 	// TODO: In principle this could be NULL if the whole operation
 	// finished synchrounously. In this case with the current API we
@@ -177,12 +173,12 @@ void Gobby::OperationOpenMultiple::single_error(
 {
 	get_status_bar().add_error_message(
 		Glib::ustring::compose(
-			_("Failed to open document \"%1\""), iter->uri),
+			_("Failed to open document \"%1\""), iter->file->get_uri()),
 		message);
 
 	m_infos.erase(iter);
 
-	// Finish operation if there are no more URIs to load
+	// Finish operation if there are no more files to load
 	if(m_infos.empty())
 		finish();
 }

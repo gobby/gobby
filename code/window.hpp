@@ -75,8 +75,7 @@ public:
 	       CertificateManager& cert_manager);
 
 	void subscribe(const Glib::ustring& uri);
-	// TODO: This should take a list of Gio::File objects
-	void open_files(const Operations::uri_list& uris);
+	void open_files(const Operations::file_list& files);
 
 protected:
 	// Gtk::Window overrides

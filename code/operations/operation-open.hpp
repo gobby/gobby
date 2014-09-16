@@ -35,7 +35,7 @@ class OperationOpen: public Operations::Operation, public sigc::trackable
 public:
 	OperationOpen(Operations& operations, const Preferences& preferences,
 	              InfBrowser* browser, const InfBrowserIter* parent,
-	              const std::string& name, const std::string& uri,
+	              const std::string& name, const Glib::RefPtr<Gio::File>& file,
 	              const char* encoding /* NULL means auto-detect */);
 
 	virtual ~OperationOpen();
@@ -72,7 +72,7 @@ protected:
 protected:
 	const Preferences& m_preferences;
 	const std::string m_name;
-	const std::string m_uri;
+	const Glib::RefPtr<Gio::File> m_file;
 	NodeWatch m_parent;
 
 	int m_encoding_auto_detect_index;
@@ -86,7 +86,6 @@ protected:
 		char buf[SIZE];
 	};
 
-	Glib::RefPtr<Gio::File> m_file;
 	Glib::RefPtr<Gio::InputStream> m_stream;
 	std::auto_ptr<buffer> m_buffer;
 	sigc::connection m_idle_connection;

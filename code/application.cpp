@@ -82,7 +82,6 @@ Gobby::Application::Application():
 	                 Gio::APPLICATION_HANDLES_OPEN)
 {
 	setlocale(LC_ALL, "");
-	textdomain(GETTEXT_PACKAGE);
 	bindtextdomain(GETTEXT_PACKAGE, gobby_localedir().c_str());
 	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 
@@ -197,7 +196,7 @@ void Gobby::Application::on_open(const type_vec_files& files,
 	if(!m_gobby_window)
 		return;
 
-	Operations::uri_list uris;
+	Operations::file_list non_infinote_files;
 	for(type_vec_files::const_iterator iter = files.begin();
 	    iter != files.end(); ++iter)
 	{
@@ -205,11 +204,11 @@ void Gobby::Application::on_open(const type_vec_files& files,
 		if(file->get_uri_scheme() == "infinote")
 			m_gobby_window->subscribe(file->get_uri());
 		else
-			uris.push_back(file->get_uri());
+			non_infinote_files.push_back(file);
 	}
 
-	if(!uris.empty())
-		m_gobby_window->open_files(uris);
+	if(!files.empty())
+		m_gobby_window->open_files(non_infinote_files);
 }
 
 void Gobby::Application::handle_error(const std::string& message)

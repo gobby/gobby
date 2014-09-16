@@ -1,6 +1,5 @@
 Modernization:
   Don't use any deprecated GTK+ API anymore
-  Replace uris in operations and file tasks by GFile (OperationOpenMultiple should take uris in ctor)
   Move non-window-specific functionality from Window to Application
   Replace GtkUIManager by GApplication/GMenu/GtkBuilder(?) (also ditch ige-mac-integration)
   Replace context menu by GMenu/GtkBuilder?

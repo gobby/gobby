@@ -203,8 +203,10 @@ void Gobby::FileCommands::on_save()
 
 	if(info != NULL && !info->uri.empty())
 	{
+		Glib::RefPtr<Gio::File> file =
+			Gio::File::create_for_uri(info->uri);
 		m_operations.save_document(
-			*text_view, info->uri,
+			*text_view, file,
 			info->encoding, info->eol_style);
 	}
 	else

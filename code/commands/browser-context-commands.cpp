@@ -639,13 +639,11 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 		static_cast<FileChooser::Dialog*>(m_dialog.get());
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
-		Glib::SListHandle<Glib::ustring> uris = dialog->get_uris();
-
-		OperationOpenMultiple::uri_list uri_list(
-			uris.begin(), uris.end());
+		const std::vector<Glib::RefPtr<Gio::File> > files =
+			dialog->get_files();
 
 		m_operations.create_documents(
-			browser, &iter, m_preferences, uri_list);
+			browser, &iter, m_preferences, files);
 	}
 
 	m_watch.reset(NULL);

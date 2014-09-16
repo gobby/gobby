@@ -30,18 +30,17 @@ namespace Gobby
 class TaskOpenMultiple: public FileCommands::Task
 {
 public:
-	TaskOpenMultiple(FileCommands& file_commands);
+	typedef OperationOpenMultiple::file_list file_list;
+
+	TaskOpenMultiple(FileCommands& file_commands, const file_list& files);
 	virtual ~TaskOpenMultiple();
 
 	virtual void run();
 
-	void add_file(const Glib::ustring& uri);
-
 private:
 	void on_location_response(int response_id);
 
-	typedef OperationOpenMultiple::uri_list uri_list;
-	uri_list m_uris;
+	const file_list m_files;
 };
 
 } // namespace Gobby

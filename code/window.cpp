@@ -152,28 +152,17 @@ void Gobby::Window::subscribe(const Glib::ustring& uri)
 	m_operations.subscribe_path(uri);
 }
 
-void Gobby::Window::open_files(const Operations::uri_list& uris)
+void Gobby::Window::open_files(const Operations::file_list& files)
 {
-	if(uris.size() == 1)
+	if(files.size() == 1)
 	{
-		Glib::RefPtr<Gio::File> file(
-			Gio::File::create_for_uri(uris[0]));
 		m_file_commands.set_task(
-			new TaskOpen(m_file_commands, file));
+			new TaskOpen(m_file_commands, files[0]));
 	}
-	else if(uris.size() > 1)
+	else if(files.size() > 1)
 	{
-		TaskOpenMultiple* task =
-			new TaskOpenMultiple(m_file_commands);
-
-		for(Operations::uri_list::const_iterator iter =
-			uris.begin();
-		    iter != uris.end(); ++iter)
-		{
-			task->add_file(*iter);
-		}
-
-		m_file_commands.set_task(task);
+		m_file_commands.set_task(
+			new TaskOpenMultiple(m_file_commands, files));
 	}
 }
 

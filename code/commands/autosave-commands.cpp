@@ -171,8 +171,10 @@ protected:
 		// don't assert here.
 		if(info != NULL)
 		{
+			Glib::RefPtr<Gio::File> file =
+				Gio::File::create_for_uri(info->uri);
 			m_commands.m_operations.save_document(
-				m_view, info->uri,
+				m_view, file,
 				info->encoding, info->eol_style);
 
 			g_assert(m_save_op != NULL);

@@ -85,8 +85,10 @@ void Gobby::TaskSaveAll::process_current()
 
 		if(info != NULL && !info->uri.empty())
 		{
+			Glib::RefPtr<Gio::File> file =
+				Gio::File::create_for_uri(info->uri);
 			get_operations().save_document(
-				view, info->uri,
+				view, file,
 				info->encoding, info->eol_style);
 
 			m_current = m_views.erase(m_current);

@@ -441,10 +441,11 @@ namespace
 	}
 } // anonymous namespace
 
-Gobby::OperationExportHtml::OperationExportHtml(Operations& operations,
-                                                TextSessionView& view,
-                                                const std::string& uri):
-	Operation(operations), m_title(view.get_title()), m_uri(uri),
+Gobby::OperationExportHtml::OperationExportHtml(
+	Operations& operations, TextSessionView& view,
+	const Glib::RefPtr<Gio::File>& file)
+:
+	Operation(operations), m_title(view.get_title()), m_file(file),
 	m_xml(export_html(view)), m_index(0)
 {
 }
@@ -455,25 +456,18 @@ Gobby::OperationExportHtml::~OperationExportHtml()
 	{
 		// TODO: Cancel outstanding async operations?
 		get_status_bar().remove_message(m_message_handle);
-
-		// Reset file explicitely before closing stream so that, on
-		// failure, existing files are not overriden with the
-		// temporary files we actually wrote to, at least for local
-		// files.
-		m_file.reset();
 	}
 }
 
 void Gobby::OperationExportHtml::start()
 {
-	m_file = Gio::File::create_for_uri(m_uri);
 	m_file->replace_async(
 		sigc::mem_fun(*this, &OperationExportHtml::on_file_replace));
 
 	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(
 			_("Exporting document \"%1\" to \"%2\" in HTML..."),
-			m_title, m_uri));
+			m_title, m_file->get_uri()));
 }
 
 void Gobby::OperationExportHtml::on_file_replace(

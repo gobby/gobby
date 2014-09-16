@@ -32,7 +32,7 @@ class OperationExportHtml: public Operations::Operation, public sigc::trackable
 {
 public:
 	OperationExportHtml(Operations& operations, TextSessionView& view,
-	                    const std::string& uri);
+	                    const Glib::RefPtr<Gio::File>& file);
 
 	virtual ~OperationExportHtml();
 
@@ -46,11 +46,10 @@ protected:
 
 protected:
 	const std::string m_title;
-	const std::string m_uri;
+	const Glib::RefPtr<Gio::File> m_file;
 	const std::string m_xml;
 	std::string::size_type m_index;
 
-	Glib::RefPtr<Gio::File> m_file;
 	Glib::RefPtr<Gio::OutputStream> m_stream;
 
 	StatusBar::MessageHandle m_message_handle;

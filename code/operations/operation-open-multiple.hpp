@@ -31,20 +31,20 @@ class OperationOpenMultiple:
 	public Operations::Operation, public sigc::trackable
 {
 public:
-	typedef Operations::uri_list uri_list;
+	typedef Operations::file_list file_list;
 
 	OperationOpenMultiple(Operations& operations,
 	                      const Preferences& preferences,
 	                      InfBrowser* browser,
 	                      const InfBrowserIter* parent,
-	                      const uri_list& uris);
+	                      const file_list& files);
 
 	virtual void start();
 
 protected:
 	struct Info
 	{
-		Glib::ustring uri;
+		Glib::RefPtr<Gio::File> file;
 		std::string name;
 		const char* encoding;
 	};
@@ -55,7 +55,6 @@ protected:
 
 	void on_node_removed();
 	void on_query_info(const Glib::RefPtr<Gio::AsyncResult>& result,
-	                   const Glib::RefPtr<Gio::File>& file,
 	                   const info_list::iterator& info);
 	void on_finished(bool success, const info_list::iterator& info);
 

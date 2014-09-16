@@ -90,7 +90,7 @@ void Gobby::TaskOpen::on_location_response(int response_id)
 
 		get_operations().create_document(
 			browser, &iter, dialog.get_document_name(),
-			get_preferences(), m_file->get_uri(), NULL);
+			get_preferences(), m_file, NULL);
 	}
 
 	finish();

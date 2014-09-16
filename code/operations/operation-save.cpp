@@ -23,10 +23,10 @@
 
 Gobby::OperationSave::OperationSave(Operations& operations,
                                     TextSessionView& view,
-                                    const std::string& uri,
+                                    const Glib::RefPtr<Gio::File>& file,
                                     const std::string& encoding,
                                     DocumentInfoStorage::EolStyle eol_style):
-	Operation(operations), m_uri(uri), m_view(&view),
+	Operation(operations), m_file(file), m_view(&view),
 	m_start_time(std::time(NULL)), m_current_line_index(0),
 	m_encoding(encoding), m_eol_style(eol_style),
 	m_storage_key(view.get_info_storage_key()),
@@ -79,23 +79,17 @@ Gobby::OperationSave::~OperationSave()
 	}
 
 	get_status_bar().remove_message(m_message_handle);
-
-	// Reset file explicitely before closing stream so that, on failure,
-	// existing files are not overriden with the temporary files we
-	// actually wrote to, at least for local files.
-	m_file.reset();
 }
 
 void Gobby::OperationSave::start()
 {
-	m_file = Gio::File::create_for_uri(m_uri);
 	m_file->replace_async(sigc::mem_fun(*this,
 	                                   &OperationSave::on_file_replace));
 
 	m_message_handle = get_status_bar().add_info_message(
 		Glib::ustring::compose(
 			_("Saving document \"%1\" to \"%2\"..."),
-			m_view->get_title(), m_uri));
+			m_view->get_title(), m_file->get_uri()));
 }
 
 void Gobby::OperationSave::on_document_removed(SessionView& view)

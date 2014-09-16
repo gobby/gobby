@@ -98,7 +98,7 @@ public:
 	};
 
 	typedef sigc::signal<void, OperationSave*> SignalBeginSaveOperation;
-	typedef std::vector<Glib::ustring> uri_list;
+	typedef std::vector<Glib::RefPtr<Gio::File> > file_list;
 
 	Operations(DocumentInfoStorage& info_storage,
 	           Browser& browser,
@@ -118,16 +118,16 @@ public:
 	                               const InfBrowserIter* parent,
 	                               const Glib::ustring& name,
 	                               const Preferences& preferences,
-	                               const Glib::ustring& from_uri,
+	                               const Glib::RefPtr<Gio::File>& file,
 	                               const char* encoding);
 
 	OperationOpenMultiple* create_documents(InfBrowser* browser,
 	                                        const InfBrowserIter* parent,
 	                                        const Preferences& prefs,
-	                                        const uri_list& uris);
+	                                        const file_list& files);
 
 	OperationSave* save_document(TextSessionView& view,
-	                             const std::string& uri,
+	                             const Glib::RefPtr<Gio::File>& file,
 	                             const std::string& encoding,
 	                             DocumentInfoStorage::EolStyle eol_style);
 
@@ -140,7 +140,7 @@ public:
 	                                       const std::string& path);
 
 	OperationExportHtml* export_html(TextSessionView& view,
-	                                 const std::string& uri);
+	                                 const Glib::RefPtr<Gio::File>& file);
 
 	OperationSave* get_save_operation_for_document(TextSessionView& view);
 
