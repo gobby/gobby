@@ -255,6 +255,8 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 		m_infview,
 		m_preferences.user.show_remote_current_lines
 	);
+	inf_text_gtk_buffer_set_fade(
+		INF_TEXT_GTK_BUFFER(buffer), m_preferences.user.alpha);
 
 	gtk_source_view_set_tab_width(m_view, m_preferences.editor.tab_width);
 	gtk_source_view_set_insert_spaces_instead_of_tabs(
