@@ -206,20 +206,11 @@ void Gobby::TextTabLabel::update_dots()
 		{
 			double hue = inf_text_user_get_hue(iter->get_user());
 
-			Gdk::Color c;
-			c.set_hsv(360.0 * hue, 0.6, 0.6);
+			Gdk::Color color;
+			color.set_hsv(hue * 360., 0.6, 0.6);
 
-			// We are using the C API here since
-			// gdk_color_to_string is available since GTK 2.12,
-			// but Gdk::Color::to_string only since gtkmm 2.14,
-			// and we want to require nothing more recent than
-			// 2.12 for now. See also bug #447.
-			gchar* color_str = gdk_color_to_string(c.gobj());
-			Glib::ustring cpp_color_str(color_str);
-			g_free(color_str);
-
-			markup += "<span color=\"" + cpp_color_str + "\">" +
-			          m_dot_char + "</span>";
+			markup += "<span color=\"" + color.to_string() +
+			          "\">" + m_dot_char + "</span>";
 		}
 		m_dots.set_markup(markup);
 		m_dots.show();
