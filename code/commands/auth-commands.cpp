@@ -20,8 +20,6 @@
 #include <libinfinity/common/inf-xmpp-connection.h>
 #include <libinfinity/common/inf-error.h>
 
-#include <gtkmm/stock.h>
-
 namespace
 {
 	void show_error(const GError* error,
@@ -168,11 +166,9 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 				info.password_dialog = new PasswordDialog(
 					m_parent, remote_id_, info.retries);
 				info.password_dialog->add_button(
-					Gtk::Stock::CANCEL,
-					Gtk::RESPONSE_CANCEL);
+					_("_Cancel"), Gtk::RESPONSE_CANCEL);
 				info.password_dialog->add_button(
-					Gtk::Stock::OK,
-					Gtk::RESPONSE_ACCEPT);
+					_("_Ok"), Gtk::RESPONSE_ACCEPT);
 
 				Gtk::Dialog& dialog = *info.password_dialog;
 				dialog.signal_response().connect(sigc::bind(

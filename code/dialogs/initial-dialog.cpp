@@ -24,7 +24,6 @@
 #include "features.hpp"
 
 #include <glibmm/markup.h>
-#include <gtkmm/stock.h>
 #include <gtkmm/alignment.h>
 
 namespace
@@ -447,7 +446,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	get_vbox()->pack_start(m_topbox, Gtk::PACK_EXPAND_WIDGET);
 
 	set_resizable(false);
-	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 }
 
 void Gobby::InitialDialog::on_response(int id)

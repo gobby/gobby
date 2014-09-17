@@ -19,21 +19,22 @@
 
 #include <glibmm/main.h>
 #include <gtkmm/frame.h>
-#include <gtkmm/stock.h>
+#include <gtkmm/image.h>
 
 namespace
 {
-	Gtk::StockID
-	message_type_to_stock_id(Gobby::StatusBar::MessageType type)
+	const gchar*
+	message_type_to_icon_name(Gobby::StatusBar::MessageType type)
 	{
 		switch(type)
 		{
 		case Gobby::StatusBar::INFO:
-			return Gtk::Stock::DIALOG_INFO;
+			return "dialog-information";
 		case Gobby::StatusBar::ERROR:
-			return Gtk::Stock::DIALOG_ERROR;
+			return "dialog-error";
 		default:
 			g_assert_not_reached();
+			return NULL;
 		}
 	}
 
@@ -69,7 +70,7 @@ public:
 			Gtk::BUTTONS_NONE,
 			false);
 
-		dialog->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+		dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 
 		dialog->set_secondary_text(m_detail_desc, true);
 		dialog->signal_response().connect(
@@ -148,8 +149,9 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 
 	Gtk::HBox* bar = Gtk::manage(new Gtk::HBox(false, 6));
 
-	Gtk::Image* image = Gtk::manage(new Gtk::Image(
-		message_type_to_stock_id(type), Gtk::ICON_SIZE_MENU));
+	Gtk::Image* image = Gtk::manage(new Gtk::Image);
+	image->set_from_icon_name(message_type_to_icon_name(type),
+	                          Gtk::ICON_SIZE_MENU);
 	bar->pack_start(*image, Gtk::PACK_SHRINK);
 	image->show();
 

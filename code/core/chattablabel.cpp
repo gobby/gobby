@@ -15,7 +15,6 @@
  */
 
 #include "core/chattablabel.hpp"
-#include <gtkmm/stock.h>
 
 Gobby::ChatTabLabel::ChatTabLabel(Folder& folder, ChatSessionView& view,
                                   bool always_show_close_button):

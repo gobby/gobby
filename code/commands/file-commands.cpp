@@ -23,7 +23,7 @@
 #include "commands/file-tasks/task-save-all.hpp"
 #include "commands/file-tasks/task-export-html.hpp"
 
-#include <gtkmm/stock.h>
+#include "util/i18n.hpp"
 
 Gobby::FileCommands::Task::Task(FileCommands& file_commands):
 	m_file_commands(file_commands)
@@ -250,9 +250,9 @@ void Gobby::FileCommands::on_connect()
 			sigc::mem_fun(*this,
 				&FileCommands::on_connect_response));
 
-		m_connection_dialog->add_button(Gtk::Stock::CANCEL,
+		m_connection_dialog->add_button(_("Cancel"),
 		                                Gtk::RESPONSE_CANCEL);
-		m_connection_dialog->add_button(Gtk::Stock::CONNECT,
+		m_connection_dialog->add_button(_("Connect"),
 		                                Gtk::RESPONSE_ACCEPT);
 	}
 

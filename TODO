@@ -7,10 +7,10 @@ Modernization:
   Use gsettings to store preferences
   Replace std::auto_ptr by std::unique_ptr, and use move semantics where
     appropriate
-  Remove use of stock icons
   Replace Gdk::Color by Gdk::RGBA
   Design widgets and dialogs with Glade, and embed them as gresource
   Replace Gtk::Box and Gtk::Table by Gtk::Grid
+  Possibility for regex search and async search
 
 Some features that would be nice for a final Gobby 1.0 release. We could
 perhaps do pre-releases with some of these missing before:

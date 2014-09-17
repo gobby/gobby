@@ -17,8 +17,6 @@
 #include "dialogs/connection-dialog.hpp"
 #include "util/i18n.hpp"
 
-#include <gtkmm/stock.h>
-
 // TODO: Merge this with entrydialog and passworddialog to a slightly more
 // generic entry dialog.
 
@@ -26,11 +24,11 @@ Gobby::ConnectionDialog::ConnectionDialog(Gtk::Window& parent):
 	Gtk::Dialog(_("Connect to Server"), parent), m_box(false, 12),
 	m_rightbox(false, 6),
 	m_promptbox(false, 12),
-	m_image(Gtk::Stock::NETWORK, Gtk::ICON_SIZE_DIALOG),
 	m_intro_label(_("Please enter a host name with which "
 	                "to establish a connection.")),
 	m_prompt_label(_("_Remote Endpoint:"), true)
 {
+	m_image.set_from_icon_name("network-server", Gtk::ICON_SIZE_DIALOG);
 	m_prompt_label.set_mnemonic_widget(m_entry);
 	m_promptbox.pack_start(m_prompt_label, Gtk::PACK_SHRINK);
 	m_entry.set_activates_default(true);

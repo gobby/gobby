@@ -17,8 +17,6 @@
 #include "core/texttablabel.hpp"
 #include "core/folder.hpp"
 
-#include <gtkmm/stock.h>
-
 Gobby::TextTabLabel::UserWatcher::UserWatcher(TextTabLabel* label,
                                               InfTextUser* user):
 	m_label(label), m_user(user)

@@ -17,15 +17,12 @@
 #include "dialogs/password-dialog.hpp"
 #include "util/i18n.hpp"
 
-#include <gtkmm/stock.h>
-
 Gobby::PasswordDialog::PasswordDialog(Gtk::Window& parent,
-                                const Glib::ustring& remote_id,
-                                unsigned int retry_counter):
+                                      const Glib::ustring& remote_id,
+                                      unsigned int retry_counter):
 	Gtk::Dialog(_("Password Required"), parent), m_box(false, 12),
 	m_rightbox(false, 6),
 	m_promptbox(false, 12),
-	m_image(Gtk::Stock::DIALOG_AUTHENTICATION, Gtk::ICON_SIZE_DIALOG),
 	m_intro_label(Glib::ustring::compose(
 		(retry_counter == 0)
 			? _("Connection to host \"%1\" requires a password.")
@@ -34,6 +31,7 @@ Gobby::PasswordDialog::PasswordDialog(Gtk::Window& parent,
 		remote_id)),
 	m_prompt_label(_("Server _Password:"), true)
 {
+	m_image.set_from_icon_name("dialog-password", Gtk::ICON_SIZE_DIALOG);
 	m_prompt_label.set_mnemonic_widget(m_entry);
 	m_promptbox.pack_start(m_prompt_label, Gtk::PACK_SHRINK);
 	m_entry.set_visibility(false);

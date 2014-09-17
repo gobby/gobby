@@ -19,7 +19,6 @@
 #include "features.hpp" // For PLATFORM_OSX_NATIVE
 
 #include <glibmm/markup.h>
-#include <gtkmm/stock.h>
 #include <gtksourceview/gtksourcelanguage.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -197,7 +196,7 @@ Gobby::Header::LanguageAction::LanguageAction(GtkSourceLanguage* language,
 		"ViewHighlightModeLanguage_" +
 			Glib::ustring(language ?
 				gtk_source_language_get_id(language) :
-				"None"), Gtk::StockID(),
+				"None"),
 		language ? gtk_source_language_get_name(language) :
 			_("_None")),
 	m_language(language)
@@ -224,38 +223,35 @@ Gobby::Header::Header(Preferences& preferences,
 	group_help(Gtk::ActionGroup::create("MenuHelp") ),
 
 	action_file(Gtk::Action::create("MenuFile", _("_File"))),
-	action_file_new(Gtk::Action::create("FileNew", Gtk::Stock::NEW)),
-	action_file_open(Gtk::Action::create("FileOpen", Gtk::Stock::OPEN,
-	                                     _("_Open..."))),
+	action_file_new(Gtk::Action::create("FileNew", _("_New..."))),
+	action_file_open(Gtk::Action::create("FileOpen", _("_Open..."))),
 	action_file_open_location(
 		Gtk::Action::create("FileOpenLocation",
 		                    _("Open _Location..."))),
-	action_file_save(Gtk::Action::create("FileSave", Gtk::Stock::SAVE)),
+	action_file_save(Gtk::Action::create("FileSave", _("_Save"))),
 	action_file_save_as(
-		Gtk::Action::create("FileSaveAs", Gtk::Stock::SAVE_AS,
-		                    _("Save _As..."))),
+		Gtk::Action::create("FileSaveAs", _("Save _As..."))),
 	action_file_save_all(
 		Gtk::Action::create(
 			"FileSaveAll", _("Save All"),
 			_("Save all open files locally"))),
 	action_file_export_html(
-		Gtk::Action::create("FileExportHtml", _("Export As _HTML..."))),
+		Gtk::Action::create("FileExportHtml",
+		                    _("Export As _HTML..."))),
 	action_file_connect(
-		Gtk::Action::create("FileConnect", Gtk::Stock::CONNECT,
+		Gtk::Action::create("FileConnect",
 		                    _("Connect _to Server..."))),
 	action_file_close(
-		Gtk::Action::create("FileClose", Gtk::Stock::CLOSE)),
-	action_file_quit(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT)),
+		Gtk::Action::create("FileClose", _("_Close"))),
+	action_file_quit(Gtk::Action::create("FileQuit", _("_Quit"))),
 
 	action_edit(Gtk::Action::create("MenuEdit", _("_Edit"))),
-	action_edit_undo(Gtk::Action::create("EditUndo", Gtk::Stock::UNDO)),
-	action_edit_redo(Gtk::Action::create("EditRedo", Gtk::Stock::REDO)),
-	action_edit_cut(Gtk::Action::create("EditCut", Gtk::Stock::CUT)),
-	action_edit_copy(Gtk::Action::create("EditCopy", Gtk::Stock::COPY)),
-	action_edit_paste(
-		Gtk::Action::create("EditPaste", Gtk::Stock::PASTE)),
-	action_edit_find(Gtk::Action::create("EditFind", Gtk::Stock::FIND,
-	                                     _("_Find..."))),
+	action_edit_undo(Gtk::Action::create("EditUndo", _("_Undo"))),
+	action_edit_redo(Gtk::Action::create("EditRedo", _("_Redo"))),
+	action_edit_cut(Gtk::Action::create("EditCut", _("Cut"))),
+	action_edit_copy(Gtk::Action::create("EditCopy", _("Copy"))),
+	action_edit_paste(Gtk::Action::create("EditPaste", _("Paste"))),
+	action_edit_find(Gtk::Action::create("EditFind", _("_Find..."))),
 	action_edit_find_next(
 		Gtk::Action::create("EditFindNext", _("Find Ne_xt"),
 		                    _("Find next match of phrase "
@@ -266,16 +262,13 @@ Gobby::Header::Header(Preferences& preferences,
 		                      "searched for"))),
 	action_edit_find_replace(
 		Gtk::Action::create("EditFindReplace",
-		                    Gtk::Stock::FIND_AND_REPLACE,
-		                    _("Find and Rep_lace..."))),
+		                    _("Find and Re_place..."))),
 	action_edit_goto_line(
 		Gtk::Action::create("EditGotoLine",
-		                    Gtk::Stock::JUMP_TO,
 				    _("Go to _Line..."))),
 	action_edit_preferences(
 		Gtk::Action::create("EditPreferences",
-		                    Gtk::Stock::PREFERENCES,
-		                    _("Pr_eferences..."))),
+		                    _("_Preferences..."))),
 
 	action_view(Gtk::Action::create("MenuView", _("_View"))),
 	action_view_hide_user_colors(
@@ -284,16 +277,14 @@ Gobby::Header::Header(Preferences& preferences,
 			_("Hide user colors in current document"))),
 	action_view_fullscreen(
 		Gtk::ToggleAction::create(
-			"ViewFullscreen", Gtk::Stock::FULLSCREEN,
+			"ViewFullscreen",
 			_("Fullscreen"),
 			_("Show the editing window in fullscreen mode"),
 			false)),
 	action_view_zoom_in(
-		Gtk::Action::create(
-			"ViewZoomIn", Gtk::Stock::ZOOM_IN, _("Zoom In"))),
+		Gtk::Action::create("ViewZoomIn", _("Zoom In"))),
 	action_view_zoom_out(
-		Gtk::Action::create(
-			"ViewZoomOut", Gtk::Stock::ZOOM_OUT, _("Zoom Out"))),
+		Gtk::Action::create("ViewZoomOut", _("Zoom Out"))),
 	action_view_toolbar(
 		Gtk::ToggleAction::create(
 			"ViewToolbar", _("View Toolbar"),
@@ -335,13 +326,35 @@ Gobby::Header::Header(Preferences& preferences,
 	action_help(Gtk::Action::create("MenuHelp", _("_Help")) ),
 	action_help_contents(
 		Gtk::Action::create(
-			"HelpContents", Gtk::Stock::HELP, _("_Contents"),
+			"HelpContents", _("_Contents"),
 			_("Opens the Gobby manual"))),
 	action_help_about(
 		Gtk::Action::create(
-			"HelpAbout", Gtk::Stock::ABOUT, _("_About..."),
+			"HelpAbout", _("_About..."),
 			_("Shows Gobby's copyright and credits")))
 {
+	action_file_new->set_icon_name("document-new");
+	action_file_open->set_icon_name("document-open");
+	action_file_save->set_icon_name("document-save");
+	action_file_save_as->set_icon_name("document-save-as");
+	action_file_connect->set_icon_name("network-server");
+	action_file_close->set_icon_name("window-close");
+	action_file_quit->set_icon_name("application-quit");
+	action_edit_undo->set_icon_name("edit-undo");
+	action_edit_redo->set_icon_name("edit-redo");
+	action_edit_cut->set_icon_name("edit-cut");
+	action_edit_copy->set_icon_name("edit-copy");
+	action_edit_paste->set_icon_name("edit-paste");
+	action_edit_find->set_icon_name("edit-find");
+	action_edit_find_replace->set_icon_name("edit-find-replace");
+	action_edit_goto_line->set_icon_name("go-jump");
+	action_edit_preferences->set_icon_name("preferences-system");
+	action_view_fullscreen->set_icon_name("view-fullscreen");
+	action_view_zoom_in->set_icon_name("zoom-in");
+	action_view_zoom_out->set_icon_name("zoom-out");
+	action_help_contents->set_icon_name("help-contents");
+	action_help_about->set_icon_name("help-about");
+
 	// Add basic menu
 	m_ui_manager->add_ui_from_string(ui_desc);
 

@@ -20,7 +20,6 @@
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/textbuffer.h>
-#include <gtkmm/stock.h>
 
 namespace
 {
@@ -95,16 +94,13 @@ Gobby::FindDialog::FindDialog(Gtk::Window& parent, const Folder& folder,
 	set_border_width(12);
 	set_resizable(false);
 
-	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 	m_button_replace_all = add_button(_("Replace _All"),
 	                                  RESPONSE_REPLACE_ALL);
 	m_button_replace = add_button(_("_Replace"), RESPONSE_REPLACE);
-	add_button(Gtk::Stock::FIND, RESPONSE_FIND);
+	add_button(_("_Find"), RESPONSE_FIND);
 
 	set_default_response(RESPONSE_FIND);
-
-	m_button_replace->set_image(*Gtk::manage(new Gtk::Image(
-		Gtk::Stock::FIND_AND_REPLACE, Gtk::ICON_SIZE_BUTTON)));
 
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &FindDialog::on_document_changed));

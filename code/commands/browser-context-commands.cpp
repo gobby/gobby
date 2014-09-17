@@ -22,7 +22,6 @@
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
-#include <gtkmm/stock.h>
 #include <giomm/file.h>
 #include <glibmm/fileutils.h>
 
@@ -151,8 +150,10 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		{
 			Gtk::ImageMenuItem *remove_item = Gtk::manage(
 				new Gtk::ImageMenuItem(_("_Remove"), true));
-			remove_item->set_image(*Gtk::manage(new Gtk::Image(
-				Gtk::Stock::CLOSE, Gtk::ICON_SIZE_MENU)));
+			Gtk::Image* image = Gtk::manage(new Gtk::Image);
+			image->set_from_icon_name(_("list-remove"),
+			                          Gtk::ICON_SIZE_MENU);
+			remove_item->set_image(*image);
 			remove_item->signal_activate().connect(sigc::bind(
 				sigc::mem_fun(*this,
 					&BrowserContextCommands::on_remove),
@@ -186,8 +187,10 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		Gtk::ImageMenuItem* disconnect_item = Gtk::manage(
 			new Gtk::ImageMenuItem(
 				_("_Disconnect from Server"), true));
-		disconnect_item->set_image(*Gtk::manage(new Gtk::Image(
-			Gtk::Stock::DISCONNECT, Gtk::ICON_SIZE_MENU)));
+		Gtk::Image* image = Gtk::manage(new Gtk::Image);
+		image->set_from_icon_name("network-offline",
+		                          Gtk::ICON_SIZE_MENU);
+		disconnect_item->set_image(*image);
 		disconnect_item->signal_activate().connect(sigc::bind(
 			sigc::mem_fun(*this,
 				&BrowserContextCommands::on_disconnect),
@@ -244,8 +247,9 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	Gtk::ImageMenuItem* new_document_item = Gtk::manage(
 		new Gtk::ImageMenuItem(_("Create Do_cument..."),
 		                       true));
-	new_document_item->set_image(*Gtk::manage(new Gtk::Image(
-		Gtk::Stock::NEW, Gtk::ICON_SIZE_MENU)));
+	Gtk::Image* image = Gtk::manage(new Gtk::Image);
+	image->set_from_icon_name("document-new", Gtk::ICON_SIZE_MENU);
+	new_document_item->set_image(*image);
 	new_document_item->signal_activate().connect(sigc::bind(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_new),
@@ -255,31 +259,16 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	menu->append(*new_document_item);
 
 	// Create Directory
-
-	// Check whether we have the folder-new icon, fall back to
-	// Stock::DIRECTORY otherwise
 	Glib::RefPtr<Gdk::Screen> screen = menu->get_screen();
 	Glib::RefPtr<Gtk::IconTheme> icon_theme(
 		Gtk::IconTheme::get_for_screen(screen));
 
-	Gtk::Image* new_directory_image = Gtk::manage(new Gtk::Image);
-	if(icon_theme->lookup_icon("folder-new",
-	                           Gtk::ICON_SIZE_MENU,
-	                           Gtk::ICON_LOOKUP_USE_BUILTIN))
-	{
-		new_directory_image->set_from_icon_name(
-			"folder-new", Gtk::ICON_SIZE_MENU);
-	}
-	else
-	{
-		new_directory_image->set(
-			Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_MENU);
-	}
-
 	Gtk::ImageMenuItem* new_directory_item = Gtk::manage(
 		new Gtk::ImageMenuItem(_("Create Di_rectory..."),
 		                       true));
-	new_directory_item->set_image(*new_directory_image);
+	image = Gtk::manage(new Gtk::Image);
+	image->set_from_icon_name("folder-new", Gtk::ICON_SIZE_MENU);
+	new_directory_item->set_image(*image);
 	new_directory_item->signal_activate().connect(sigc::bind(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_new),
@@ -291,8 +280,9 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	// Open Document
 	Gtk::ImageMenuItem* open_document_item = Gtk::manage(
 		new Gtk::ImageMenuItem(_("_Open Document..."), true));
-	open_document_item->set_image(*Gtk::manage(new Gtk::Image(
-		Gtk::Stock::OPEN, Gtk::ICON_SIZE_MENU)));
+	image = Gtk::manage(new Gtk::Image);
+	image->set_from_icon_name("document-open", Gtk::ICON_SIZE_MENU);
+	open_document_item->set_image(*image);
 	open_document_item->signal_activate().connect(sigc::bind(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_open),
@@ -310,8 +300,9 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	// Permissions
 	Gtk::ImageMenuItem* permissions_item = Gtk::manage(
 		new Gtk::ImageMenuItem(_("_Permissions..."), true));
-	permissions_item->set_image(*Gtk::manage(new Gtk::Image(
-		Gtk::Stock::PROPERTIES, Gtk::ICON_SIZE_MENU)));
+	image = Gtk::manage(new Gtk::Image);
+	image->set_from_icon_name("document-properties", Gtk::ICON_SIZE_MENU);
+	permissions_item->set_image(*image);
 	permissions_item->signal_activate().connect(sigc::bind(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_permissions),
@@ -322,8 +313,9 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	// Delete
 	Gtk::ImageMenuItem* delete_item = Gtk::manage(
 		new Gtk::ImageMenuItem(_("D_elete"), true));
-	delete_item->set_image(*Gtk::manage(new Gtk::Image(
-		Gtk::Stock::DELETE, Gtk::ICON_SIZE_MENU)));
+	image = Gtk::manage(new Gtk::Image);
+	image->set_from_icon_name("edit-delete", Gtk::ICON_SIZE_MENU);
+	delete_item->set_image(*image);
 	delete_item->signal_activate().connect(sigc::bind(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_delete),
@@ -366,8 +358,7 @@ void Gobby::BrowserContextCommands::on_create_account(InfBrowser* browser)
 	std::auto_ptr<Gtk::Dialog> account_creation_dialog(
 		Glib::wrap(GTK_DIALOG(dlg)));
 
-	account_creation_dialog->add_button(
-		Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	account_creation_dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 
 	account_creation_dialog->signal_response().connect(
 		sigc::mem_fun(*this,
@@ -407,10 +398,8 @@ void Gobby::BrowserContextCommands::on_new(InfBrowser* browser,
 			directory ? _("_Directory Name:")
 			          : _("_Document Name:")));
 
-	entry_dialog->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	entry_dialog->add_button(_("C_reate"), Gtk::RESPONSE_ACCEPT)
-		->set_image(*Gtk::manage(new Gtk::Image(
-			Gtk::Stock::NEW, Gtk::ICON_SIZE_BUTTON)));
+	entry_dialog->add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+	entry_dialog->add_button(_("C_reate"), Gtk::RESPONSE_ACCEPT);
 
 	entry_dialog->set_text(directory ? _("New Directory")
 	                                   : _("New Document"));
@@ -459,7 +448,7 @@ void Gobby::BrowserContextCommands::on_permissions(InfBrowser* browser,
 	std::auto_ptr<Gtk::Dialog> permissions_dialog(
 		Glib::wrap(GTK_DIALOG(dlg)));
 
-	permissions_dialog->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	permissions_dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 
 	permissions_dialog->signal_response().connect(
 		sigc::mem_fun(*this,

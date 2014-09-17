@@ -15,10 +15,10 @@
  */
 
 #include "core/filechooser.hpp"
+#include "util/i18n.hpp"
 
 #include <glibmm/miscutils.h>
 #include <glibmm/convert.h>
-#include <gtkmm/stock.h>
 
 Gobby::FileChooser::Dialog::Dialog(Gobby::FileChooser& chooser,
                                    Gtk::Window& parent,
@@ -31,13 +31,13 @@ Gobby::FileChooser::Dialog::Dialog(Gobby::FileChooser& chooser,
 	switch(action)
 	{
 	case Gtk::FILE_CHOOSER_ACTION_SAVE:
-		add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-		add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_ACCEPT);
+		add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+		add_button(_("_Save"), Gtk::RESPONSE_ACCEPT);
 		set_do_overwrite_confirmation(true);
 		break;
 	case Gtk::FILE_CHOOSER_ACTION_OPEN:
-		add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-		add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_ACCEPT);
+		add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+		add_button(_("_Open"), Gtk::RESPONSE_ACCEPT);
 		break;
 	default:
 		g_assert_not_reached();

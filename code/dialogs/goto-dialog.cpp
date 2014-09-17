@@ -19,7 +19,6 @@
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/textbuffer.h>
-#include <gtkmm/stock.h>
 
 Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, const Folder& folder):
 	Gtk::Dialog(_("Go to line"), parent),
@@ -44,12 +43,8 @@ Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, const Folder& folder):
 
 	get_vbox()->pack_start(m_table, Gtk::PACK_EXPAND_WIDGET);
 
-	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
-	Gtk::Button* button =
-		add_button(_("Go To _Line"), Gtk::RESPONSE_ACCEPT);
-
-	button->set_image(*Gtk::manage(new Gtk::Image(
-		Gtk::Stock::JUMP_TO, Gtk::ICON_SIZE_BUTTON)));
+	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
+	add_button(_("Go To _Line"), Gtk::RESPONSE_ACCEPT);
 
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &GotoDialog::on_document_changed));

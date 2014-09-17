@@ -15,8 +15,7 @@
  */
 
 #include "commands/file-tasks/task-open-location.hpp"
-
-#include <gtkmm/stock.h>
+#include "util/i18n.hpp"
 
 Gobby::TaskOpenLocation::TaskOpenLocation(FileCommands& file_commands):
 	Task(file_commands), m_location_dialog(get_parent())
@@ -28,8 +27,8 @@ void Gobby::TaskOpenLocation::run()
 	m_location_dialog.signal_response().connect(
 		sigc::mem_fun( *this, &TaskOpenLocation::on_response));
 
-	m_location_dialog.add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
-	m_location_dialog.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_ACCEPT);
+	m_location_dialog.add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
+	m_location_dialog.add_button(_("_Open"), Gtk::RESPONSE_ACCEPT);
 
 	m_location_dialog.present();
 }

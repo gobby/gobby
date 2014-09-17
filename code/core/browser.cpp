@@ -23,7 +23,6 @@
 
 #include <atkmm/relationset.h>
 
-#include <gtkmm/stock.h>
 #include <gtkmm/image.h>
 
 #include <libinfinity/server/infd-directory.h>

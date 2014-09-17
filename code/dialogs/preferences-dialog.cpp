@@ -21,7 +21,6 @@
 #include <glibmm/markup.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/stock.h>
 #include <stdexcept>
 
 #include <gtksourceview/gtksourcestyleschememanager.h>
@@ -1081,7 +1080,7 @@ Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
 	get_vbox()->pack_start(m_notebook, Gtk::PACK_EXPAND_WIDGET);
 	m_notebook.show();
 
-	add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 
 	set_border_width(12);
 	set_resizable(false);

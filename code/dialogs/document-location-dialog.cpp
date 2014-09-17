@@ -17,8 +17,6 @@
 #include "dialogs/document-location-dialog.hpp"
 #include "util/i18n.hpp"
 
-#include <gtkmm/stock.h>
-
 Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
                                                       InfGtkBrowserModel* m):
 	Gtk::Dialog("", parent),
@@ -68,8 +66,8 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(Gtk::Window& parent,
 
 	get_vbox()->pack_start(m_box, Gtk::PACK_EXPAND_WIDGET);
 
-	add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_ACCEPT);
+	add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+	add_button(_("_Open"), Gtk::RESPONSE_ACCEPT);
 
 	set_response_sensitive(Gtk::RESPONSE_ACCEPT, false);
 	set_default_response(Gtk::RESPONSE_ACCEPT);
