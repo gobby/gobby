@@ -122,6 +122,8 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 	const Glib::ustring username = m_preferences.user.name;
 	const std::string correct_password = m_preferences.user.password;
 	const char* password;
+	gsize password_len;
+	gchar cmp;
 
 	switch(prop)
 	{
@@ -201,7 +203,22 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 	case GSASL_VALIDATE_SIMPLE:
 		password = inf_sasl_context_session_get_property(
 			session, GSASL_PASSWORD);
-		if(strcmp(password, correct_password.c_str()) != 0)
+
+		/* length-independent string compare */
+		cmp = 0;
+		password_len = strlen(password);
+		for(unsigned i = 0; i < correct_password.size(); ++i)
+		{
+			if(i < password_len)
+				cmp |= (password[i] ^ correct_password[i]);
+			else
+				cmp |= (0x00 ^ correct_password[i]);
+		}
+
+		if(password_len != correct_password.size())
+			cmp = 0xFF;
+
+		if(cmp != 0)
 		{
 			inf_sasl_context_session_continue(
 				session,
