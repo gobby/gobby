@@ -515,6 +515,11 @@ bool Gobby::BrowserCommands::create_chat_document(InfBrowser* browser)
 		iter->second->set_pending_chat(proxy);
 		return true;
 	}
+
+	// This cannot actually happen, but return to silence compiler
+	// warnings
+	g_assert_not_reached();
+	return false;
 }
 
 void Gobby::BrowserCommands::on_connect(const Glib::ustring& hostname)
