@@ -246,5 +246,5 @@ void Gobby::UserJoin::user_join_complete(InfUser* user, const GError* error)
 	m_user = user;
 	if(error) m_error = g_error_copy(error);
 
-	m_signal_finished.emit(m_user, m_error);
+	m_signal_finished.emit(m_user, error);
 }
