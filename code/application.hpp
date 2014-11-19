@@ -46,6 +46,7 @@ protected:
 	Application(); // loads all the stuff, mostly what main() currently does? Should actually go in startup after GTK is initialized, so we can show error dialogs. Except really really basic stuff that goes in Application ctor. Then creates window...
 	std::auto_ptr<Gtk::Window> m_window;
 	Gobby::Window* m_gobby_window;
+	std::vector<Glib::ustring> m_startup_hostnames;
 
 	// next step: remove header, and create menu model, maybe in another src file... with gresource...
 };
