@@ -105,12 +105,20 @@ Gobby::Application::Application():
 	const GOptionEntry entries[] = {
 		{ "version", 'v', 0, G_OPTION_ARG_NONE, NULL,
 		  _("Display version information and exit"), NULL
-		}, { "new-instance", 'n', 0, G_OPTION_ARG_NONE, NULL,
+		},
+		{ "new-instance", 'n', 0, G_OPTION_ARG_NONE, NULL,
 		  _("Start a new gobby instance also if there is one "
 		     "already running"), NULL
-		/*}, { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY,
-		     NULL, NULL, N_("[FILE1 or URI1] [FILE2 or URI2] [...]")
-		*/}, { NULL }
+		},
+		{ "connect", 'c', 0, G_OPTION_ARG_STRING_ARRAY, NULL,
+		  _("Connect to given host on startup, can be given multiple times"), NULL
+		},
+		/*
+		{ G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, NULL, NULL,
+		  N_("[FILE1 or URI1] [FILE2 or URI2] [...]")
+		},
+		*/
+		{ NULL }
 	};
 
 	g_application_add_main_option_entries(G_APPLICATION(gobj()), entries);
@@ -137,6 +145,11 @@ int Gobby::Application::on_handle_local_options(
 	{
 		set_flags(get_flags() | Gio::APPLICATION_NON_UNIQUE);
 		options_dict->remove("new-instance");
+	}
+
+	if(options_dict->lookup_value("connect", m_startup_hostnames))
+	{
+		options_dict->remove("connect");
 	}
 
 	// Continue normal processing
@@ -171,6 +184,12 @@ void Gobby::Application::on_startup()
 
 		m_window.reset(m_gobby_window);
 		m_window->show();
+		for(std::vector<Glib::ustring>::const_iterator i
+			= m_startup_hostnames.begin();
+			i != m_startup_hostnames.end(); ++i)
+		{
+			m_gobby_window->subscribe(*i);
+		}
 		add_window(*m_window);
 	}
 	catch(const Glib::Exception& ex)
