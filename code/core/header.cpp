@@ -373,12 +373,18 @@ Gobby::Header::Header(Preferences& preferences,
 	action_edit_find_replace->set_is_important(true);
 
 	group_file->add(action_file);
-	group_file->add(action_file_new);
-	group_file->add(action_file_open);
+	group_file->add(action_file_new,
+	                Gtk::AccelKey("<control>N",
+			              "<Actions>/MenuFile/FileNew"));
+	group_file->add(action_file_open,
+	                Gtk::AccelKey("<control>O",
+			              "<Actions>/MenuFile/FileOpen"));
 	group_file->add(action_file_open_location,
 	                Gtk::AccelKey("<control>L",
 			              "<Actions>/MenuFile/FileOpenLocation"));
-	group_file->add(action_file_save);
+	group_file->add(action_file_save,
+	                Gtk::AccelKey("<control>S",
+	                              "<Actions>/MenuFile/FileSave"));
 	group_file->add(action_file_save_as,
 	                Gtk::AccelKey("<control><shift>S",
 			              "<Actions>/MenuFile/FileSaveAs"));
@@ -391,8 +397,12 @@ Gobby::Header::Header(Preferences& preferences,
 	group_file->add(action_file_connect,
 	                Gtk::AccelKey("<control>T",
 	                              "<Actions>/MenuFile/FileConnect"));
-	group_file->add(action_file_close);
-	group_file->add(action_file_quit);
+	group_file->add(action_file_close,
+	                Gtk::AccelKey("<control>W",
+			              "<Actions>/MenuFile/FileClose"));
+	group_file->add(action_file_quit,
+	                Gtk::AccelKey("<control>Q",
+			              "<Actions>/MenuFile/FileQuit"));
 
 	group_edit->add(action_edit);
 	group_edit->add(action_edit_undo,
@@ -401,10 +411,18 @@ Gobby::Header::Header(Preferences& preferences,
 	group_edit->add(action_edit_redo,
 	                Gtk::AccelKey("<control><shift>Z",
 			              "<Actions>/MenuEdit/EditRedo"));
-	group_edit->add(action_edit_cut);
-	group_edit->add(action_edit_copy);
-	group_edit->add(action_edit_paste);
-	group_edit->add(action_edit_find);
+	group_edit->add(action_edit_cut,
+	                Gtk::AccelKey("<control>X",
+			              "<Actions>/MenuFile/EditCut"));
+	group_edit->add(action_edit_copy,
+	                Gtk::AccelKey("<control>C",
+			              "<Actions>/MenuFile/EditCopy"));
+	group_edit->add(action_edit_paste,
+	                Gtk::AccelKey("<control>V",
+			              "<Actions>/MenuFile/EditPaste"));
+	group_edit->add(action_edit_find,
+	                Gtk::AccelKey("<control>F",
+			              "<Actions>/MenuFile/EditFind"));
 	group_edit->add(action_edit_find_next,
 	                Gtk::AccelKey("<control>G",
 	                              "<Actions>/MenuEdit/EditFindNext"));
