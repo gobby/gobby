@@ -9,4 +9,4 @@ Type=Application
 Icon=gobby-0.5
 Categories=TextEditor;Network;
 StartupNotify=true
-MimeType=text/plain;
+MimeType=text/plain;x-scheme-handler/infinote;
