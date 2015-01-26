@@ -17,10 +17,16 @@
 #include "application.hpp"
 #include "features.hpp"
 
+// Needed to register Gobby resource explicitly:
+extern "C" {
+#include "gobby-resources.h"
+}
+
 #include "util/i18n.hpp"
 #include "util/file.hpp"
 
 #include <gtkmm/icontheme.h>
+#include <gtkmm/builder.h>
 
 #include <iostream>
 
@@ -147,6 +153,26 @@ void Gobby::Application::on_startup()
 {
 	Gtk::Application::on_startup();
 
+	// Register Gobby resource explicitly -- GCC constructors do not
+	// work for executables?
+	_gobby_get_resource();
+
+	// TODO: This should be handled by a new commands class,
+	// application-commands
+	add_action("quit",
+	           sigc::mem_fun(*this, &Application::on_quit));
+	add_action("preferences",
+	           sigc::mem_fun(*this, &Application::on_preferences));
+
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/menu/appmenu.ui");
+	Glib::RefPtr<Gio::Menu> menu =
+		Glib::RefPtr<Gio::Menu>::cast_dynamic(
+			builder->get_object("appmenu"));
+
+	set_app_menu(menu);
+
 	try
 	{
 		Gtk::Window::set_default_icon_name("gobby-0.5");
@@ -170,8 +196,9 @@ void Gobby::Application::on_startup()
 			m_data->certificate_manager);
 
 		m_window.reset(m_gobby_window);
+		add_window(*m_gobby_window);
+
 		m_window->show();
-		add_window(*m_window);
 	}
 	catch(const Glib::Exception& ex)
 	{
@@ -185,10 +212,10 @@ void Gobby::Application::on_startup()
 
 void Gobby::Application::on_activate()
 {
+	Gtk::Application::on_activate();
+
 	if(m_window.get())
 		m_window->present();
-
-	Gtk::Application::on_activate();
 }
 
 void Gobby::Application::on_open(const type_vec_files& files,
@@ -229,7 +256,20 @@ void Gobby::Application::handle_error(const std::string& message)
 	dialog->set_title("Gobby");
 	dialog->set_secondary_text(message);
 	m_window = dialog;
+	add_window(*m_window);
 
 	m_window->show();
-	add_window(*m_window);
+}
+
+void Gobby::Application::on_quit()
+{
+	m_window->hide();
+}
+
+void Gobby::Application::on_preferences()
+{
+	if(!m_gobby_window)
+		return;
+
+	m_gobby_window->open_preferences();
 }

@@ -5,14 +5,32 @@ noinst_LIBRARIES = libgobby.a
 libgobby_a_SOURCES = \
 	application.cpp \
 	main.cpp \
-	window.cpp
+	window.cpp \
+	gobby-resources.c
 
 noinst_HEADERS = \
 	application.hpp \
-	window.hpp
+	window.hpp \
+	gobby-resources.h
 
 appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby-0.5
+
+resources = \
+	resources/menu/appmenu.ui
+
+gobby-resources.h: resources/gobby.gresources.xml
+	glib-compile-resources $< \
+		--target=$@ --sourcedir=$(srcdir)/resources \
+		--c-name _gobby --generate-header
+
+gobby-resources.c: resources/gobby.gresources.xml $(resources)
+	glib-compile-resources $< \
+		--target=$@ --sourcedir=$(srcdir)/resources \
+		--c-name _gobby --generate-source
+
+BUILT_SOURCES = gobby-resources.h gobby-resources.c
+CLEANFILES = gobby-resources.h gobby-resources.c
 
 # PRIVATE_ICONS_DIR is required by application.cpp to get access to the
 # private icons that are installed into prefix/share/gobby-0.5/icons instead

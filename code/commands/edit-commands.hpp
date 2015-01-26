@@ -42,6 +42,7 @@ public:
 	             CertificateManager& cert_manager);
 	~EditCommands();
 
+	void open_preferences();
 protected:
 	void on_document_removed(SessionView& view);
 	void on_document_changed(SessionView* view);

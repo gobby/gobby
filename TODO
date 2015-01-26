@@ -11,6 +11,7 @@ Modernization:
   Design widgets and dialogs with Glade, and embed them as gresource
   Replace Gtk::Box and Gtk::Table by Gtk::Grid
   Possibility for regex search and async search
+  Make one gobby process handle multiple windows, then don't make -n spawn another instance but another window
 
 Some features that would be nice for a final Gobby 1.0 release. We could
 perhaps do pre-releases with some of these missing before:

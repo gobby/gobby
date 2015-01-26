@@ -69,6 +69,18 @@ Gobby::EditCommands::~EditCommands()
 	on_document_changed(NULL);
 }
 
+void Gobby::EditCommands::open_preferences()
+{
+	if(!m_preferences_dialog.get())
+	{
+		m_preferences_dialog.reset(
+			new PreferencesDialog(m_parent, m_file_chooser,
+			                      m_preferences, m_cert_manager));
+	}
+
+	m_preferences_dialog->present();
+}
+
 void Gobby::EditCommands::on_document_removed(SessionView& view)
 {
 	// TODO: Isn't this emitted by Folder already?
@@ -473,14 +485,7 @@ void Gobby::EditCommands::on_goto_line()
 
 void Gobby::EditCommands::on_preferences()
 {
-	if(!m_preferences_dialog.get())
-	{
-		m_preferences_dialog.reset(
-			new PreferencesDialog(m_parent, m_file_chooser,
-			                      m_preferences, m_cert_manager));
-	}
-
-	m_preferences_dialog->present();
+	open_preferences();
 }
 
 void Gobby::EditCommands::ensure_find_dialog()

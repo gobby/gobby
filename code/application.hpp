@@ -43,11 +43,14 @@ protected:
 	class Data;
 	std::auto_ptr<Data> m_data;
 
-	Application(); // loads all the stuff, mostly what main() currently does? Should actually go in startup after GTK is initialized, so we can show error dialogs. Except really really basic stuff that goes in Application ctor. Then creates window...
+	Application();
 	std::auto_ptr<Gtk::Window> m_window;
 	Gobby::Window* m_gobby_window;
 
 	// next step: remove header, and create menu model, maybe in another src file... with gresource...
+private:
+	void on_quit();
+	void on_preferences();
 };
 
 }

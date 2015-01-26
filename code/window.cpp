@@ -27,7 +27,6 @@
 Gobby::Window::Window(Config& config,
                       Preferences& preferences,
                       CertificateManager& cert_manager):
-	Gtk::Window(Gtk::WINDOW_TOPLEVEL),
 	m_config(config),
 	m_lang_manager(gtk_source_language_manager_get_default()),
 	m_preferences(preferences), m_cert_manager(cert_manager),
@@ -162,6 +161,11 @@ void Gobby::Window::open_files(const Operations::file_list& files)
 	}
 }
 
+void Gobby::Window::open_preferences()
+{
+	m_edit_commands.open_preferences();
+}
+
 // GtkWindow catches keybindings for the menu items _before_ passing them to
 // the focused widget. This is unfortunate and means that pressing ctrl+V
 // in an entry on the browser ends up pasting text in the TextView.
@@ -183,8 +187,10 @@ bool Gobby::Window::on_key_press_event(GdkEventKey* event)
 	if(event->keyval == GDK_KEY_z || event->keyval == GDK_KEY_Z)
 		return Gtk::Window::on_key_press_event(event);
 
-	bool handled = gtk_window_propagate_key_event(gobj(), event);
-	if(!handled) handled = gtk_window_activate_key(gobj(), event);
+	bool handled =
+		gtk_window_propagate_key_event(GTK_WINDOW(gobj()), event);
+	if(!handled)
+		handled = gtk_window_activate_key(GTK_WINDOW(gobj()), event);
 
 	// Skip Gtk::Window default handler here:
 	if(!handled) handled = Gtk::Container::on_key_press_event(event);

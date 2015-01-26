@@ -49,7 +49,7 @@
 
 #include "util/config.hpp"
 
-#include <gtkmm/window.h>
+#include <gtkmm/applicationwindow.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
 
@@ -66,15 +66,16 @@ namespace Gobby
 const int UNIQUE_GOBBY_CONNECT = 1;
 #endif
 
-class Window : public Gtk::Window
+class Window : public Gtk::ApplicationWindow
 {
 public:
-	Window(Config& config, Preferences& preferences,
-	       CertificateManager& cert_manager);
+	Window(Config& config,
+	       Preferences& preferences, CertificateManager& cert_manager);
 
 	void subscribe(const Glib::ustring& uri);
 	void open_files(const Operations::file_list& files);
 
+	void open_preferences();
 protected:
 	// Gtk::Window overrides
 	virtual bool on_key_press_event(GdkEventKey* event);
