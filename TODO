@@ -2,6 +2,11 @@ Modernization:
   Don't use any deprecated GTK+ API anymore
   Move non-window-specific functionality from Window to Application
   Replace GtkUIManager by GApplication/GMenu/GtkBuilder(?) (also ditch ige-mac-integration)
+    Make sure the translatable strings from the .ui file actually show up in the .po files
+     take from libinfinity
+    Fix the crash when choosing applicationcommands->quit()
+    Add the toolbar
+    Rename menumanager to menu
   Replace context menu by GMenu/GtkBuilder?
   Use the Undo interface of GtkSourceBuffer
   Use gsettings to store preferences

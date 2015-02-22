@@ -17,7 +17,7 @@
 #ifndef _GOBBY_HELP_COMMANDS_HPP_
 #define _GOBBY_HELP_COMMANDS_HPP_
 
-#include "core/header.hpp"
+#include "core/applicationactions.hpp"
 
 #include <gtkmm/window.h>
 #include <gtkmm/aboutdialog.h>
@@ -31,7 +31,8 @@ namespace Gobby
 class HelpCommands: public sigc::trackable
 {
 public:
-	HelpCommands(Gtk::Window& parent, Header& header);
+	HelpCommands(Gtk::Application& application,
+	             const ApplicationActions& actions);
 
 protected:
 	void on_contents();
@@ -39,8 +40,7 @@ protected:
 	void on_about();
 	void on_about_response(int response_id);
 
-	Gtk::Window& m_parent;
-	Header& m_header;
+	Gtk::Application& m_application;
 
 	std::auto_ptr<Gtk::AboutDialog> m_about_dialog;
 };

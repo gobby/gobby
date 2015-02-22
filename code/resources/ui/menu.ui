@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="appmenu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">About</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="action">app.quit</attribute>
+      </item>
+    </section>
+  </menu>
+
+  <menu id="winmenu">
+    <submenu>
+      <attribute name="label" translatable="yes">_File</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_New...</attribute>
+          <attribute name="action">win.new</attribute>
+          <attribute name="accel">&lt;primary&gt;n</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Open...</attribute>
+          <attribute name="action">win.open</attribute>
+          <attribute name="accel">&lt;primary&gt;o</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Open _Location...</attribute>
+          <attribute name="action">win.open-location</attribute>
+          <attribute name="accel">&lt;primary&gt;l</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Save</attribute>
+          <attribute name="action">win.save</attribute>
+          <attribute name="accel">&lt;primary&gt;s</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Save _As...</attribute>
+          <attribute name="action">win.save-as</attribute>
+          <attribute name="accel">&lt;primary&gt;&lt;shift&gt;s</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Save All</attribute>
+          <attribute name="action">win.save-all</attribute>
+          <attribute name="accel">&lt;primary&gt;&lt;shift&gt;l</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Export As _HTML...</attribute>
+          <attribute name="action">win.export-html</attribute>
+          <attribute name="accel">&lt;primary&gt;&lt;shift&gt;h</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Connect _To Server...</attribute>
+          <attribute name="action">win.connect</attribute>
+          <attribute name="accel">&lt;primary&gt;t</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Close</attribute>
+          <attribute name="action">win.close</attribute>
+          <attribute name="accel">&lt;primary&gt;w</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Edit</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Undo</attribute>
+          <attribute name="action">win.undo</attribute>
+          <attribute name="accel">&lt;primary&gt;z</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Redo</attribute>
+          <attribute name="action">win.redo</attribute>
+          <attribute name="accel">&lt;primary&gt;&lt;shift&gt;z</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Cut</attribute>
+          <attribute name="action">win.cut</attribute>
+          <attribute name="accel">&lt;primary&gt;x</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Copy</attribute>
+          <attribute name="action">win.copy</attribute>
+          <attribute name="accel">&lt;primary&gt;c</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Paste</attribute>
+          <attribute name="action">win.paste</attribute>
+          <attribute name="accel">&lt;primary&gt;v</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Find...</attribute>
+          <attribute name="action">win.find</attribute>
+          <attribute name="accel">&lt;primary&gt;f</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Find Ne_xt</attribute>
+          <attribute name="action">win.find-next</attribute>
+          <attribute name="accel">&lt;primary&gt;g</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Find Pre_vious</attribute>
+          <attribute name="action">win.find-prev</attribute>
+          <attribute name="accel">&lt;primary&gt;&lt;shift&gt;g</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Find And Re_place...</attribute>
+          <attribute name="action">win.find-replace</attribute>
+          <attribute name="accel">&lt;primary&gt;h</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Go To _Line</attribute>
+          <attribute name="action">win.goto-line</attribute>
+          <attribute name="accel">&lt;primary&gt;i</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_View</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Reset User Colors</attribute>
+          <attribute name="action">win.hide-user-colors</attribute>
+          <attribute name="accel">&lt;primary&gt;&lt;shift&gt;c</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Fullscreen</attribute>
+          <attribute name="action">win.fullscreen</attribute>
+          <attribute name="accel">F11</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Zoom In</attribute>
+          <attribute name="action">win.zoom-in</attribute>
+          <attribute name="accel">&lt;primary&gt;plus</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Zoom Out</attribute>
+          <attribute name="action">win.zoom-out</attribute>
+          <attribute name="accel">&lt;primary&gt;minus</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">View Tool Bar</attribute>
+          <attribute name="action">win.view-toolbar</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">View Status Bar</attribute>
+          <attribute name="action">win.view-statusbar</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">View Document Browser</attribute>
+          <attribute name="action">win.view-browser</attribute>
+          <attribute name="accel">F9</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">View Chat</attribute>
+          <attribute name="action">win.view-chat</attribute>
+          <attribute name="accel">&lt;shift&gt;F9</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">View Document User List</attribute>
+          <attribute name="action">win.view-document-user-list</attribute>
+          <attribute name="accel">&lt;primary&gt;F9</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">View Chat User List</attribute>
+          <attribute name="action">win.view-chat-user-list</attribute>
+          <attribute name="accel">&lt;primary&gt;&lt;shift&gt;F9</attribute>
+        </item>
+      </section>
+      <section>
+        <submenu>
+          <attribute name="label" translatable="yes">_Highlight Mode</attribute>
+          <item>
+            <attribute name="label" translatable="yes">None</attribute>
+            <attribute name="action">win.highlight-mode</attribute>
+            <attribute name="target"></attribute>
+          </item>
+          <!-- this is filled programatically -->
+        </submenu>
+      </section>
+    </submenu>
+  </menu>
+</interface>

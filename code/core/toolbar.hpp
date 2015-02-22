@@ -14,40 +14,30 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef _GOBBY_APPLICATION_HPP_
-#define _GOBBY_APPLICATION_HPP_
+#ifndef _GOBBY_TOOLBAR_HPP_
+#define _GOBBY_TOOLBAR_HPP_
 
-#include "window.hpp"
+#include "core/preferences.hpp"
 
-#include <gtkmm/application.h>
+#include <gtkmm/box.h>
+#include <gtkmm/toolbar.h>
 
 namespace Gobby
 {
 
-class Application: public Gtk::Application
+class Toolbar: public Gtk::Box
 {
 public:
-	static Glib::RefPtr<Application> create();
+	Toolbar(const Preferences& preferences);
 
-protected:
-	int on_handle_local_options(
-		const Glib::RefPtr<Glib::VariantDict>& options_dict);
-	virtual void on_startup();
+private:
+	void on_toolbar_style_changed();
+	void on_show_toolbar_changed();
 
-	virtual void on_activate();
-	virtual void on_open(const type_vec_files& files,
-	                     const Glib::ustring& hint);
-
-	void handle_error(const std::string& message);
-
-	class Data;
-	std::auto_ptr<Data> m_data;
-
-	Application();
-	std::auto_ptr<Gtk::Window> m_window;
-	Gobby::Window* m_gobby_window;
+	const Preferences& m_preferences;
+	Gtk::Toolbar* m_toolbar;
 };
 
 }
 
-#endif // _GOBBY_APPLICATION_HPP_
+#endif // _GOBBY_TOOLBAR_HPP_

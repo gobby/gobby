@@ -25,18 +25,22 @@
 #include <gtkmm/frame.h>
 
 Gobby::Window::Window(Config& config,
+                      GtkSourceLanguageManager* language_manager,
+                      FileChooser& file_chooser,
                       Preferences& preferences,
                       CertificateManager& cert_manager):
 	m_config(config),
-	m_lang_manager(gtk_source_language_manager_get_default()),
+	m_lang_manager(language_manager),
+	m_file_chooser(file_chooser),
 	m_preferences(preferences), m_cert_manager(cert_manager),
 	m_connection_manager(cert_manager, preferences),
 	m_text_folder(false, m_preferences, m_lang_manager),
 	m_chat_folder(true, m_preferences, m_lang_manager),
 	m_statusbar(m_text_folder, m_preferences),
-	m_header(m_preferences, m_lang_manager),
+	m_toolbar(m_preferences),
 	m_browser(*this, m_statusbar, m_connection_manager),
 	m_chat_frame(_("Chat"), "chat", m_preferences.appearance.show_chat),
+	m_actions(*this, m_preferences),
 	m_info_storage(INF_GTK_BROWSER_MODEL(m_browser.get_store())),
 	m_folder_manager(m_browser, m_info_storage,
 	                 m_text_folder, m_chat_folder),
@@ -61,16 +65,12 @@ Gobby::Window::Window(Config& config,
 	m_user_join_commands(m_folder_manager, m_preferences),
 	m_text_folder_commands(m_text_folder),
 	m_chat_folder_commands(m_chat_folder),
-	m_file_commands(*this, m_header, m_browser, m_folder_manager,
+	m_file_commands(*this, m_actions, m_browser, m_folder_manager,
 	                m_statusbar, m_file_chooser, m_operations,
 	                m_info_storage, m_preferences),
-	m_edit_commands(*this, m_header, m_text_folder,
-	                m_statusbar, m_file_chooser, m_preferences,
-	                m_cert_manager),
-	m_view_commands(*this, m_header, m_text_folder,
-	                m_chat_frame, m_chat_folder,
-	                m_preferences),
-	m_help_commands(*this, m_header),
+	m_edit_commands(*this, m_actions, m_text_folder, m_statusbar),
+	m_view_commands(*this, m_actions, m_lang_manager, m_text_folder,
+	                m_chat_frame, m_chat_folder, m_preferences),
 	m_title_bar(*this, m_text_folder)
 {
 	m_chat_frame.signal_show().connect(
@@ -81,13 +81,13 @@ Gobby::Window::Window(Config& config,
 	m_browser.add_browser(INF_BROWSER(m_self_hoster.get_directory()),
 	                      _("This Computer"));
 
-	m_header.show();
+	m_toolbar.show();
 	m_browser.show();
 	m_text_folder.show();
 	m_chat_folder.show();
 
 	// Build UI
-	Glib::RefPtr<Gtk::AccelGroup> group = m_header.get_accel_group();
+	Glib::RefPtr<Gtk::AccelGroup> group = Gtk::AccelGroup::create();
 	// Add focus shortcuts; unfortunately gtkmm does not wrap that API
 	GClosure* closure = g_cclosure_new(
 		G_CALLBACK(on_switch_to_chat_static), this, NULL);
@@ -127,7 +127,7 @@ Gobby::Window::Window(Config& config,
 	m_paned.pack2(m_chat_paned, true, false);
 	m_paned.show();
 
-	m_mainbox.pack_start(m_header, Gtk::PACK_SHRINK);
+	m_mainbox.pack_start(m_toolbar, Gtk::PACK_SHRINK);
 	m_mainbox.pack_start(m_paned, Gtk::PACK_EXPAND_WIDGET);
 	m_mainbox.pack_start(m_statusbar, Gtk::PACK_SHRINK);
 	m_mainbox.show();
@@ -159,11 +159,6 @@ void Gobby::Window::open_files(const Operations::file_list& files)
 		m_file_commands.set_task(
 			new TaskOpenMultiple(m_file_commands, files));
 	}
-}
-
-void Gobby::Window::open_preferences()
-{
-	m_edit_commands.open_preferences();
 }
 
 // GtkWindow catches keybindings for the menu items _before_ passing them to

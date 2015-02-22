@@ -3,6 +3,7 @@ SUBDIRS = file-tasks
 noinst_LIBRARIES = libgobby-commands.a
 
 libgobby_commands_a_SOURCES = \
+	application-commands.cpp \
 	auth-commands.cpp \
 	autosave-commands.cpp \
 	browser-commands.cpp \
@@ -17,6 +18,7 @@ libgobby_commands_a_SOURCES = \
 	view-commands.cpp
 
 noinst_HEADERS = \
+	application-commands.hpp \
 	auth-commands.hpp \
 	autosave-commands.hpp \
         browser-commands.hpp \

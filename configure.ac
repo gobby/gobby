@@ -31,7 +31,7 @@ case "$host_os" in
 *mingw*)
         win32=true
         AC_MSG_RESULT([yes])
-  AC_CHECK_TOOL(WINDRES, windres)
+	AC_CHECK_TOOL(WINDRES, windres)
   ;;
 *)
         win32=false
@@ -41,26 +41,6 @@ esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
 required_libs="libxml++-2.6 glibmm-2.4 >= 2.40.0 giomm-2.4 >= 2.40.0 libgsasl >= 0.2.21 gtkmm-3.0 >= 3.6.0 gtksourceview-3.0 >= 3.0.0"
-
-###################################
-# Check for Mac OS X
-###################################
-
-# Check if we are running on OS X, for special link handling.
-if test "x$build_vendor" = "xapple" ; then
-  AC_DEFINE([PLATFORM_OSX], 1, [Define whether we are running on Mac OS X.])
-
-  # Check whether we are running the native quartz backend
-  target=`pkg-config --variable=targets gtk+-3.0`
-
-  # If so use ige-mac-integration
-  if test "$target" = "quartz" ; then
-    AC_DEFINE([PLATFORM_OSX_NATIVE], 1, [Define whether we are running on
-                                         Mac OS X with the quartz GDK target])
-    required_libs="$required_libs ige-mac-integration"
-  fi
-fi
-AC_CACHE_SAVE
 
 ###################################
 # Check for libraries.
@@ -87,10 +67,6 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 ###################################
 GNOME_DOC_INIT([0.9.0],,
   [AC_MSG_WARN([[gnome-doc-utils not found: documentation will not be built.]])])
-
-# AC_DEFINE(GOBBY_CONFIGDIR, [".gobby-0.5"],
-#           [where to store Gobby's config files,
-#            relative to the user's home directory])
 
 ###################################
 # Output

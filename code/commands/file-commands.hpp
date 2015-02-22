@@ -22,12 +22,12 @@
 #include "operations/operations.hpp"
 #include "dialogs/document-location-dialog.hpp"
 #include "dialogs/connection-dialog.hpp"
-#include "core/header.hpp"
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
 #include "core/filechooser.hpp"
+#include "core/windowactions.hpp"
 
-#include <gtkmm/window.h>
+#include <gtkmm/applicationwindow.h>
 #include <sigc++/trackable.h>
 
 namespace Gobby
@@ -36,7 +36,7 @@ namespace Gobby
 class FileCommands: public sigc::trackable
 {
 public:
-	FileCommands(Gtk::Window& parent, Header& header,
+	FileCommands(Gtk::Window& parent, WindowActions& actions,
 	             Browser& browser, FolderManager& folder_manager,
 	             StatusBar& status_bar, FileChooser& file_chooser,
 	             Operations& operations,
@@ -76,7 +76,6 @@ public:
 	void set_task(Task* task);
 
 protected:
-
 	static void on_row_inserted_static(GtkTreeModel* model, 
 	                                   GtkTreePath* path,
 					   GtkTreeIter* iter,
@@ -108,14 +107,13 @@ protected:
 	void on_connect();
 
 	void on_close();
-	void on_quit();
 
 	void on_connect_response(int response_id);
 
 	void update_sensitivity();
 
 	Gtk::Window& m_parent;
-	Header& m_header;
+	WindowActions& m_actions;
 	Browser& m_browser;
 	FolderManager& m_folder_manager;
 	StatusBar& m_status_bar;
@@ -137,5 +135,5 @@ protected:
 };
 
 }
-	
+
 #endif // _GOBBY_FILE_COMMANDS_HPP_

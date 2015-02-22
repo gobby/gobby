@@ -14,6 +14,8 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include "core/menumanager.hpp"
+#include "core/applicationactions.hpp"
 #include "application.hpp"
 #include "features.hpp"
 
@@ -21,6 +23,9 @@
 extern "C" {
 #include "gobby-resources.h"
 }
+
+#include "commands/application-commands.hpp"
+#include "commands/help-commands.hpp"
 
 #include "util/i18n.hpp"
 #include "util/file.hpp"
@@ -62,20 +67,35 @@ namespace
 class Gobby::Application::Data
 {
 public:
-	Data();
+	Data(Gobby::Application& application);
 	~Data();
 
 	// TODO: Does the config object really need to stay around, or can
 	// it be thrown away after we have loaded the preferences?
 	Config config;
+	FileChooser file_chooser;
 	Preferences preferences;
 	CertificateManager certificate_manager;
+	GtkSourceLanguageManager* language_manager;
+
+	ApplicationActions application_actions;
+	MenuManager menu_manager;
+
+	ApplicationCommands m_application_commands;
+	HelpCommands m_help_commands;
 };
 
-Gobby::Application::Data::Data():
+Gobby::Application::Data::Data(Gobby::Application& application):
 	config(config_filename("config.xml")),
 	preferences(config),
-	certificate_manager(preferences)
+	certificate_manager(preferences),
+	language_manager(gtk_source_language_manager_get_default()),
+	application_actions(application),
+	menu_manager(language_manager),
+	m_application_commands(application, application_actions,
+	                       file_chooser, preferences,
+	                       certificate_manager),
+	m_help_commands(application, application_actions)
 {
 }
 
@@ -157,22 +177,6 @@ void Gobby::Application::on_startup()
 	// work for executables?
 	_gobby_get_resource();
 
-	// TODO: This should be handled by a new commands class,
-	// application-commands
-	add_action("quit",
-	           sigc::mem_fun(*this, &Application::on_quit));
-	add_action("preferences",
-	           sigc::mem_fun(*this, &Application::on_preferences));
-
-	Glib::RefPtr<Gtk::Builder> builder =
-		Gtk::Builder::create_from_resource(
-			"/de/0x539/gobby/menu/appmenu.ui");
-	Glib::RefPtr<Gio::Menu> menu =
-		Glib::RefPtr<Gio::Menu>::cast_dynamic(
-			builder->get_object("appmenu"));
-
-	set_app_menu(menu);
-
 	try
 	{
 		Gtk::Window::set_default_icon_name("gobby-0.5");
@@ -189,10 +193,15 @@ void Gobby::Application::on_startup()
 		// Allocate the per-application data. This cannot be
 		// done earlier, such as in the contrutor, since we only
 		// need to do it if we are the primary instance.
-		m_data.reset(new Data);
+		m_data.reset(new Data(*this));
 
+		set_app_menu(m_data->menu_manager.get_app_menu());
+		set_menubar(m_data->menu_manager.get_menu());
+
+		// TODO: language manager should be given to window
 		m_gobby_window = new Gobby::Window(
-			m_data->config, m_data->preferences,
+			m_data->config, m_data->language_manager,
+			m_data->file_chooser, m_data->preferences,
 			m_data->certificate_manager);
 
 		m_window.reset(m_gobby_window);
@@ -259,17 +268,4 @@ void Gobby::Application::handle_error(const std::string& message)
 	add_window(*m_window);
 
 	m_window->show();
-}
-
-void Gobby::Application::on_quit()
-{
-	m_window->hide();
-}
-
-void Gobby::Application::on_preferences()
-{
-	if(!m_gobby_window)
-		return;
-
-	m_gobby_window->open_preferences();
 }

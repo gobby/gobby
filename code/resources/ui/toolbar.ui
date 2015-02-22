@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<interface>
+  <object class="GtkToolbar" id="toolbar">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.new</property>
+        <property name="icon_name">document-new</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">New</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.open</property>
+        <property name="icon_name">document-open</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Open</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.save</property>
+        <property name="icon_name">document-save</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Save</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.undo</property>
+        <property name="icon_name">edit-undo</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Undo</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.redo</property>
+        <property name="icon_name">edit-redo</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Redo</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.cut</property>
+        <property name="icon_name">edit-cut</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Cut</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.copy</property>
+        <property name="icon_name">edit-copy</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Copy</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.paste</property>
+        <property name="icon_name">edit-paste</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Paste</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem">
+        <property name="visible">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.find</property>
+        <property name="icon_name">edit-find</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Find</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">win.find-replace</property>
+        <property name="icon_name">edit-find-replace</property>
+        <property name="is_important">True</property>
+        <property name="label" translatable="yes">Find And Replace</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+</interface>

@@ -17,9 +17,11 @@
 #ifndef _GOBBY_VIEW_COMMANDS_HPP_
 #define _GOBBY_VIEW_COMMANDS_HPP_
 
-#include "core/header.hpp"
 #include "core/folder.hpp"
 #include "core/closableframe.hpp"
+#include "core/windowactions.hpp"
+
+#include <gtkmm/applicationwindow.h>
 
 #include <sigc++/trackable.h>
 
@@ -32,7 +34,8 @@ private:
 	class Fullscreen;
 
 public:
-	ViewCommands(Gtk::Window& main_window, Header& header,
+	ViewCommands(Gtk::Window& window, WindowActions& actions,
+	             GtkSourceLanguageManager* language_manager,
 	             const Folder& text_folder, ClosableFrame& chat_frame,
 	             const Folder& chat_folder, Preferences& preferences);
 	~ViewCommands();
@@ -65,12 +68,12 @@ protected:
 	void on_pref_document_userlist_changed();
 	void on_pref_chat_userlist_changed();
 
-	void on_menu_language_changed(
-		const Glib::RefPtr<Gtk::RadioAction>& action);
+	void on_menu_language_changed();
 	void on_doc_language_changed(GtkSourceLanguage* language);
 
-	Gtk::Window& m_main_window;
-	Header& m_header;
+	Gtk::Window& m_parent;
+	WindowActions& m_actions;
+	GtkSourceLanguageManager* m_language_manager;
 	const Folder& m_text_folder;
 	ClosableFrame& m_chat_frame;
 	const Folder& m_chat_folder;

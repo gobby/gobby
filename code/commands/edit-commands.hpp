@@ -21,11 +21,11 @@
 #include "dialogs/goto-dialog.hpp"
 #include "dialogs/preferences-dialog.hpp"
 
-#include "core/header.hpp"
 #include "core/folder.hpp"
 #include "core/statusbar.hpp"
+#include "core/windowactions.hpp"
 
-#include <gtkmm/window.h>
+#include <gtkmm/applicationwindow.h>
 #include <gtkmm/filechooserdialog.h>
 #include <sigc++/trackable.h>
 
@@ -35,14 +35,10 @@ namespace Gobby
 class EditCommands: public sigc::trackable
 {
 public:
-	EditCommands(Gtk::Window& parent, Header& header,
-	             const Folder& folder, StatusBar& status_bar,
-	             FileChooser& file_chooser,
-	             Preferences& preferences,
-	             CertificateManager& cert_manager);
+	EditCommands(Gtk::Window& parent, WindowActions& actions,
+	             const Folder& folder, StatusBar& status_bar);
 	~EditCommands();
 
-	void open_preferences();
 protected:
 	void on_document_removed(SessionView& view);
 	void on_document_changed(SessionView* view);
@@ -105,21 +101,17 @@ protected:
 	void on_find_prev();
 	void on_find_replace();
 	void on_goto_line();
-	void on_preferences();
 
 	Gtk::Window& m_parent;
-	Header& m_header;
+	WindowActions& m_actions;
 	const Folder& m_folder;
 	StatusBar& m_status_bar;
-	FileChooser& m_file_chooser;
-	Preferences& m_preferences;
-	CertificateManager& m_cert_manager;
 
 	std::auto_ptr<FindDialog> m_find_dialog;
 	std::auto_ptr<GotoDialog> m_goto_dialog;
-	std::auto_ptr<PreferencesDialog> m_preferences_dialog;
 
 	TextSessionView* m_current_view;
+
 	// Only valid when m_current_document is nonzero:
 	sigc::connection m_active_user_changed_connection;
 	gulong m_can_undo_changed_handler;

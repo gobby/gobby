@@ -92,7 +92,8 @@ Gobby::FileCommands::Task::get_document_location_dialog()
 	return *m_file_commands.m_location_dialog;
 }
 
-Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
+Gobby::FileCommands::FileCommands(Gtk::Window& parent,
+                                  WindowActions& actions,
                                   Browser& browser,
                                   FolderManager& folder_manager,
                                   StatusBar& status_bar,
@@ -100,31 +101,29 @@ Gobby::FileCommands::FileCommands(Gtk::Window& parent, Header& header,
                                   Operations& operations,
                                   const DocumentInfoStorage& info_storage,
                                   Preferences& preferences):
-	m_parent(parent), m_header(header), m_browser(browser),
+	m_parent(parent), m_actions(actions), m_browser(browser),
 	m_folder_manager(folder_manager), m_status_bar(status_bar),
 	m_file_chooser(file_chooser), m_operations(operations),
 	m_document_info_storage(info_storage), m_preferences(preferences)
 {
-	header.action_file_new->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_new));
-	header.action_file_open->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_open));
-	header.action_file_open_location->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_open_location));
-	header.action_file_save->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_save));
-	header.action_file_save_as->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_save_as));
-	header.action_file_save_all->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_save_all));
-	header.action_file_export_html->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_export_html));
-	header.action_file_connect->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_connect));
-	header.action_file_close->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_close));
-	header.action_file_quit->signal_activate().connect(
-		sigc::mem_fun(*this, &FileCommands::on_quit));
+	actions.new_document->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_new)));
+	actions.open->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_open)));
+	actions.open_location->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_open_location)));
+	actions.save->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_save)));
+	actions.save_as->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_save_as)));
+	actions.save_all->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_save_all)));
+	actions.export_html->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_export_html)));
+	actions.connect->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_connect)));
+	actions.close->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &FileCommands::on_close)));
 
 	folder_manager.get_text_folder().signal_document_changed().connect(
 		sigc::mem_fun(*this, &FileCommands::on_document_changed));
@@ -268,11 +267,6 @@ void Gobby::FileCommands::on_close()
 	m_folder_manager.remove_document(*view);
 }
 
-void Gobby::FileCommands::on_quit()
-{
-	m_parent.hide();
-}
-
 void Gobby::FileCommands::on_connect_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
@@ -291,24 +285,24 @@ void Gobby::FileCommands::on_connect_response(int response_id)
 void Gobby::FileCommands::update_sensitivity()
 {
 	GtkTreeIter dummy_iter;
-	bool create_sensitivity = gtk_tree_model_get_iter_first(
+	const bool create_sensitivity = gtk_tree_model_get_iter_first(
 		GTK_TREE_MODEL(m_browser.get_store()), &dummy_iter);
 
 	SessionView* view =
 		m_folder_manager.get_text_folder().get_current_document();
-	gboolean view_sensitivity = view != NULL;
+	const bool view_sensitivity = view != NULL;
 
 	// We can only save text documents currently
-	gboolean text_sensitivity =
+	const bool text_sensitivity =
 		dynamic_cast<TextSessionView*>(view) != NULL;
 
-	m_header.action_file_new->set_sensitive(create_sensitivity);
-	m_header.action_file_open->set_sensitive(create_sensitivity);
-	m_header.action_file_open_location->set_sensitive(create_sensitivity);
+	m_actions.new_document->set_enabled(create_sensitivity);
+	m_actions.open->set_enabled(create_sensitivity);
+	m_actions.open_location->set_enabled(create_sensitivity);
 
-	m_header.action_file_save->set_sensitive(text_sensitivity);
-	m_header.action_file_save_as->set_sensitive(text_sensitivity);
-	m_header.action_file_save_all->set_sensitive(text_sensitivity);
-	m_header.action_file_export_html->set_sensitive(text_sensitivity);
-	m_header.action_file_close->set_sensitive(view_sensitivity);
+	m_actions.save->set_enabled(text_sensitivity);
+	m_actions.save_as->set_enabled(text_sensitivity);
+	m_actions.save_all->set_enabled(text_sensitivity);
+	m_actions.export_html->set_enabled(text_sensitivity);
+	m_actions.close->set_enabled(view_sensitivity);
 }

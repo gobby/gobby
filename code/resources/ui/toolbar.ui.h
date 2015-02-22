@@ -1,0 +1,10 @@
+N_("New");
+N_("Open");
+N_("Save");
+N_("Undo");
+N_("Redo");
+N_("Cut");
+N_("Copy");
+N_("Paste");
+N_("Find");
+N_("Find And Replace");

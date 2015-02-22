@@ -32,13 +32,12 @@
 #include "commands/file-commands.hpp"
 #include "commands/edit-commands.hpp"
 #include "commands/view-commands.hpp"
-#include "commands/help-commands.hpp"
 #include "operations/operations.hpp"
 
 #include "dialogs/initial-dialog.hpp"
 
 #include "core/selfhoster.hpp"
-#include "core/header.hpp"
+#include "core/toolbar.hpp"
 #include "core/folder.hpp"
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
@@ -46,6 +45,7 @@
 #include "core/filechooser.hpp"
 #include "core/closableframe.hpp"
 #include "core/titlebar.hpp"
+#include "core/windowactions.hpp"
 
 #include "util/config.hpp"
 
@@ -69,13 +69,13 @@ const int UNIQUE_GOBBY_CONNECT = 1;
 class Window : public Gtk::ApplicationWindow
 {
 public:
-	Window(Config& config,
-	       Preferences& preferences, CertificateManager& cert_manager);
+	Window(Config& config, GtkSourceLanguageManager* language_manager,
+	       FileChooser& file_chooser, Preferences& preferences,
+	       CertificateManager& cert_manager);
 
 	void subscribe(const Glib::ustring& uri);
 	void open_files(const Operations::file_list& files);
 
-	void open_preferences();
 protected:
 	// Gtk::Window overrides
 	virtual bool on_key_press_event(GdkEventKey* event);
@@ -112,6 +112,7 @@ protected:
 	// Config
 	Config& m_config;
 	GtkSourceLanguageManager* m_lang_manager;
+	FileChooser& m_file_chooser;
 	Preferences& m_preferences;
 	CertificateManager& m_cert_manager;
 	ConnectionManager m_connection_manager;
@@ -124,14 +125,14 @@ protected:
 	Folder m_text_folder;
 	Folder m_chat_folder;
 	StatusBar m_statusbar;
-	Header m_header;
+	Toolbar m_toolbar;
 	Browser m_browser;
 	ClosableFrame m_chat_frame;
 
 	// Functionality
+	WindowActions m_actions;
 	DocumentInfoStorage m_info_storage;
 	FolderManager m_folder_manager;
-	FileChooser m_file_chooser;
 	Operations m_operations;
 
 	BrowserCommands m_browser_commands;
@@ -160,7 +161,6 @@ protected:
 	FileCommands m_file_commands;
 	EditCommands m_edit_commands;
 	ViewCommands m_view_commands;
-	HelpCommands m_help_commands;
 
 	TitleBar m_title_bar;
 

@@ -14,40 +14,44 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef _GOBBY_APPLICATION_HPP_
-#define _GOBBY_APPLICATION_HPP_
+#ifndef _GOBBY_APPLICATION_COMMANDS_HPP_
+#define _GOBBY_APPLICATION_COMMANDS_HPP_
 
-#include "window.hpp"
+#include "dialogs/preferences-dialog.hpp"
+#include "core/applicationactions.hpp"
+#include "core/filechooser.hpp"
+#include "core/preferences.hpp"
+#include "core/certificatemanager.hpp"
 
 #include <gtkmm/application.h>
+#include <sigc++/trackable.h>
+
+#include <memory>
 
 namespace Gobby
 {
 
-class Application: public Gtk::Application
+class ApplicationCommands: public sigc::trackable
 {
 public:
-	static Glib::RefPtr<Application> create();
+	ApplicationCommands(Gtk::Application& application,
+	                    const ApplicationActions& actions,
+	                    FileChooser& file_chooser,
+	                    Preferences& preferences,
+	                    CertificateManager& cert_manager);
 
 protected:
-	int on_handle_local_options(
-		const Glib::RefPtr<Glib::VariantDict>& options_dict);
-	virtual void on_startup();
+	void on_preferences();
+	void on_quit();
 
-	virtual void on_activate();
-	virtual void on_open(const type_vec_files& files,
-	                     const Glib::ustring& hint);
+	Gtk::Application& m_application;
+	FileChooser& m_file_chooser;
+	Preferences& m_preferences;
+	CertificateManager& m_cert_manager;
 
-	void handle_error(const std::string& message);
-
-	class Data;
-	std::auto_ptr<Data> m_data;
-
-	Application();
-	std::auto_ptr<Gtk::Window> m_window;
-	Gobby::Window* m_gobby_window;
+	std::auto_ptr<PreferencesDialog> m_preferences_dialog;
 };
 
 }
 
-#endif // _GOBBY_APPLICATION_HPP_
+#endif // _GOBBY_APPLICATION_COMMANDS_HPP_

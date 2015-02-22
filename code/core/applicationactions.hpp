@@ -14,40 +14,26 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef _GOBBY_APPLICATION_HPP_
-#define _GOBBY_APPLICATION_HPP_
+#ifndef _GOBBY_APPLICATIONACTIONS_HPP_
+#define _GOBBY_APPLICATIONACTIONS_HPP_
 
-#include "window.hpp"
-
-#include <gtkmm/application.h>
+#include <giomm/actionmap.h>
 
 namespace Gobby
 {
 
-class Application: public Gtk::Application
+class ApplicationActions
 {
 public:
-	static Glib::RefPtr<Application> create();
+	ApplicationActions(Gio::ActionMap& map);
 
-protected:
-	int on_handle_local_options(
-		const Glib::RefPtr<Glib::VariantDict>& options_dict);
-	virtual void on_startup();
+	const Glib::RefPtr<Gio::SimpleAction> quit;
+	const Glib::RefPtr<Gio::SimpleAction> preferences;
+	const Glib::RefPtr<Gio::SimpleAction> help;
+	const Glib::RefPtr<Gio::SimpleAction> about;
 
-	virtual void on_activate();
-	virtual void on_open(const type_vec_files& files,
-	                     const Glib::ustring& hint);
-
-	void handle_error(const std::string& message);
-
-	class Data;
-	std::auto_ptr<Data> m_data;
-
-	Application();
-	std::auto_ptr<Gtk::Window> m_window;
-	Gobby::Window* m_gobby_window;
 };
 
 }
 
-#endif // _GOBBY_APPLICATION_HPP_
+#endif // _GOBBY_APPLICATIONACTIONS_HPP_

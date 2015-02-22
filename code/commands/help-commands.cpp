@@ -16,42 +16,28 @@
 
 #include "commands/help-commands.hpp"
 #include "util/i18n.hpp"
+#include "features.hpp"
 
 #include <gio/gio.h>
 #include <gtkmm/messagedialog.h>
 
-namespace
+Gobby::HelpCommands::HelpCommands(Gtk::Application& application,
+                                  const ApplicationActions& actions):
+	m_application(application)
 {
-	void url_hook(Gtk::AboutDialog& dialog, const Glib::ustring& link)
-	{
-		// TODO: Set correct timestamp here, using
-		// GdkAppLaunchContext?
-		g_app_info_launch_default_for_uri(link.c_str(), NULL, NULL);
-	}
-
-	void email_hook(Gtk::AboutDialog& dialog, const Glib::ustring& link)
-	{
-		// TODO: Set correct timestamp here, using
-		// GdkAppLaunchContext?
-		g_app_info_launch_default_for_uri(
-			("mailto:" + link).c_str(), NULL, NULL);
-	}
-}
-
-Gobby::HelpCommands::HelpCommands(Gtk::Window& parent, Header& header):
-	m_parent(parent), m_header(header)
-{
-	header.action_help_contents->signal_activate().connect(
-		sigc::mem_fun(*this, &HelpCommands::on_contents));
-	header.action_help_about->signal_activate().connect(
-		sigc::mem_fun(*this, &HelpCommands::on_about));
+	actions.help->signal_activate().connect(
+		sigc::hide(sigc::mem_fun(*this, &HelpCommands::on_contents)));
+	actions.about->signal_activate().connect(
+		sigc::hide(sigc::mem_fun(*this, &HelpCommands::on_about)));
 }
 
 void Gobby::HelpCommands::on_contents()
 {
 	GError* error = NULL;
 
-	gtk_show_uri(m_parent.get_screen()->gobj(),
+	Gtk::Window* parent = m_application.get_windows()[0];
+
+	gtk_show_uri(parent->get_screen()->gobj(),
 		"ghelp:gobby",
 		GDK_CURRENT_TIME,
 		&error);
@@ -60,7 +46,7 @@ void Gobby::HelpCommands::on_contents()
 		return;
 
 	// Help browser could not be invoked, show an error message to the user.
-	Gtk::MessageDialog dlg(m_parent, _("There was an error displaying help."),
+	Gtk::MessageDialog dlg(*parent, _("There was an error displaying help."),
 		false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 	dlg.set_secondary_text(error->message);
 	dlg.run();
@@ -72,8 +58,10 @@ void Gobby::HelpCommands::on_about()
 {
 	if(m_about_dialog.get() == NULL)
 	{
+		Gtk::Window* parent = m_application.get_windows()[0];
+
 		m_about_dialog.reset(new Gtk::AboutDialog);
-		m_about_dialog->set_transient_for(m_parent);
+		m_about_dialog->set_transient_for(*parent);
 
 		std::vector<Glib::ustring> artists;
 		artists.push_back("Benjamin Herr <ben@0x539.de>");

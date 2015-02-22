@@ -1,10 +1,13 @@
+code/application.cpp
 code/commands/auth-commands.cpp
 code/commands/browser-commands.cpp
 code/commands/browser-context-commands.cpp
+code/commands/file-commands.cpp
 code/commands/file-tasks/task-export-html.cpp
 code/commands/file-tasks/task-new.cpp
 code/commands/file-tasks/task-open.cpp
 code/commands/file-tasks/task-open-file.cpp
+code/commands/file-tasks/task-open-location.cpp
 code/commands/file-tasks/task-save.cpp
 code/commands/help-commands.cpp
 code/commands/subscription-commands.cpp
@@ -12,9 +15,9 @@ code/commands/synchronization-commands.cpp
 code/commands/user-join-commands.cpp
 code/core/browser.cpp
 code/core/certificatemanager.cpp
+code/core/filechooser.cpp
 code/core/foldermanager.cpp
-code/core/header.cpp
-code/core/iconmanager.cpp
+code/core/huebutton.cpp
 code/core/selfhoster.cpp
 code/core/sessionuserview.cpp
 code/core/statusbar.cpp
@@ -28,7 +31,7 @@ code/dialogs/initial-dialog.cpp
 code/dialogs/open-location-dialog.cpp
 code/dialogs/password-dialog.cpp
 code/dialogs/preferences-dialog.cpp
-code/main.cpp
+code/gobby-resources.c
 code/operations/operation-delete.cpp
 code/operations/operation-export-html.cpp
 code/operations/operation-new.cpp
@@ -36,6 +39,8 @@ code/operations/operation-open.cpp
 code/operations/operation-open-multiple.cpp
 code/operations/operation-save.cpp
 code/operations/operation-subscribe-path.cpp
+code/resources/ui/menu.ui.h
+code/resources/ui/toolbar.ui.h
 code/util/file.cpp
 code/util/i18n.cpp
 code/util/i18n.hpp

@@ -14,40 +14,32 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef _GOBBY_APPLICATION_HPP_
-#define _GOBBY_APPLICATION_HPP_
+#ifndef _GOBBY_MENUMANAGER_HPP_
+#define _GOBBY_MENUMANAGER_HPP_
 
-#include "window.hpp"
+#include <giomm/menumodel.h>
+#include <giomm/menu.h>
 
-#include <gtkmm/application.h>
+#include <gtksourceview/gtksourcelanguagemanager.h>
 
 namespace Gobby
 {
 
-class Application: public Gtk::Application
+class MenuManager
 {
 public:
-	static Glib::RefPtr<Application> create();
+	MenuManager(GtkSourceLanguageManager* language_manager);
 
+	Glib::RefPtr<Gio::MenuModel> get_app_menu() { return m_app_menu; }
+	Glib::RefPtr<Gio::MenuModel> get_menu() { return m_menu; }
 protected:
-	int on_handle_local_options(
-		const Glib::RefPtr<Glib::VariantDict>& options_dict);
-	virtual void on_startup();
+	Glib::RefPtr<Gio::Menu> m_app_menu;
+	Glib::RefPtr<Gio::Menu> m_menu;
 
-	virtual void on_activate();
-	virtual void on_open(const type_vec_files& files,
-	                     const Glib::ustring& hint);
-
-	void handle_error(const std::string& message);
-
-	class Data;
-	std::auto_ptr<Data> m_data;
-
-	Application();
-	std::auto_ptr<Gtk::Window> m_window;
-	Gobby::Window* m_gobby_window;
+private:
+	Glib::RefPtr<Gio::Menu> get_highlight_mode_menu();
 };
 
 }
 
-#endif // _GOBBY_APPLICATION_HPP_
+#endif // _GOBBY_MENUMARAGER_HPP_

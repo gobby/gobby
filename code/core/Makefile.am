@@ -1,6 +1,7 @@
 noinst_LIBRARIES = libgobby-core.a
 
 libgobby_core_a_SOURCES = \
+	applicationactions.cpp \
 	browser.cpp \
 	certificatemanager.cpp \
 	chatsessionview.cpp \
@@ -12,8 +13,8 @@ libgobby_core_a_SOURCES = \
 	filechooser.cpp \
 	folder.cpp \
 	foldermanager.cpp \
-	header.cpp \
 	huebutton.cpp \
+	menumanager.cpp \
 	nodewatch.cpp \
 	noteplugin.cpp \
 	preferences.cpp \
@@ -28,10 +29,13 @@ libgobby_core_a_SOURCES = \
 	textundogrouping.cpp \
 	texttablabel.cpp \
 	titlebar.cpp \
+	toolbar.cpp \
 	userjoin.cpp \
-	userlist.cpp
+	userlist.cpp \
+	windowactions.cpp
 
 noinst_HEADERS = \
+	applicationactions.hpp \
         browser.hpp \
 	certificatemanager.hpp \
 	chatsessionview.hpp \
@@ -43,7 +47,7 @@ noinst_HEADERS = \
         filechooser.hpp \
         folder.hpp \
         foldermanager.hpp \
-        header.hpp \
+        menumanager.hpp \
         huebutton.hpp \
         nodewatch.hpp \
         noteplugin.hpp \
@@ -59,8 +63,10 @@ noinst_HEADERS = \
 	textundogrouping.hpp \
 	texttablabel.hpp \
 	titlebar.hpp \
+	toolbar.hpp \
 	userjoin.hpp \
-        userlist.hpp
+        userlist.hpp \
+        windowactions.hpp
 
 appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby-0.5

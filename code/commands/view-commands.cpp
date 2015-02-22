@@ -27,13 +27,13 @@ public:
 	class Preserve: public sigc::trackable
 	{
 	public:
-		Preserve(const Glib::RefPtr<Gtk::ToggleAction>& action);
+		Preserve(const Glib::RefPtr<Gio::Action>& action);
 		~Preserve();
 	
 	private:
 		void on_toggled();
 
-		const Glib::RefPtr<Gtk::ToggleAction>& m_action;
+		Glib::RefPtr<Gio::Action> m_action;
 		bool m_value;
 	};
 
@@ -51,104 +51,109 @@ private:
 };
 
 Gobby::ViewCommands::Fullscreen::Preserve::Preserve(
-	const Glib::RefPtr<Gtk::ToggleAction>& action)
+	const Glib::RefPtr<Gio::Action>& action)
 :
 	m_action(action)
 {
+	g_assert(action->get_state_type().equal(
+		Glib::VariantType(G_VARIANT_TYPE_BOOLEAN)));
+
 	// De-activate all the clutter, but remember their state before
 	// we went fullscreen, so that we can restore when we leave
 	// fullscreen again.
-	m_value = action->get_active();
-	action->set_active(false);
+	action->get_state(m_value);
+	action->change_state(false);
 
-	action->signal_toggled().connect(sigc::mem_fun(
-		*this, &Preserve::on_toggled));
+	action->property_state().signal_changed().connect(
+		sigc::mem_fun(*this, &Preserve::on_toggled));
 }
 
 Gobby::ViewCommands::Fullscreen::Preserve::~Preserve()
 {
-	m_action->set_active(m_value);
+	m_action->change_state(m_value);
 }
 
 void Gobby::ViewCommands::Fullscreen::Preserve::on_toggled()
 {
 	// Update value; if one of the options is toggled we keep the
 	// toggled version when fullscreen is left.
-	m_value = m_action->get_active();
+	m_action->get_state(m_value);
 }
 
 Gobby::ViewCommands::Fullscreen::Fullscreen(ViewCommands& commands):
 	m_commands(commands),
-	m_preserve_toolbar(commands.m_header.action_view_toolbar),
-	m_preserve_browser(commands.m_header.action_view_browser),
-	m_preserve_chat(commands.m_header.action_view_chat),
+	m_preserve_toolbar(commands.m_actions.view_toolbar),
+	m_preserve_browser(commands.m_actions.view_browser),
+	m_preserve_chat(commands.m_actions.view_chat),
 	m_preserve_document_userlist(
-		commands.m_header.action_view_document_userlist),
+		commands.m_actions.view_document_userlist),
 	m_preserve_chat_userlist(
-		commands.m_header.action_view_chat_userlist)
+		commands.m_actions.view_chat_userlist)
 {
-	m_commands.m_main_window.fullscreen();
+	m_commands.m_parent.fullscreen();
 }
 
 Gobby::ViewCommands::Fullscreen::~Fullscreen()
 {
-	m_commands.m_main_window.unfullscreen();
+	m_commands.m_parent.unfullscreen();
 }
 
 
-Gobby::ViewCommands::ViewCommands(Gtk::Window& main_window,
-                                  Header& header, const Folder& text_folder,
+Gobby::ViewCommands::ViewCommands(Gtk::Window& parent,
+                                  WindowActions& actions,
+                                  GtkSourceLanguageManager* language_manager,
+                                  const Folder& text_folder,
                                   ClosableFrame& chat_frame,
 	                          const Folder& chat_folder,
                                   Preferences& preferences):
-	m_main_window(main_window), m_header(header),
+	m_parent(parent), m_actions(actions),
+	m_language_manager(language_manager),
 	m_text_folder(text_folder), m_chat_frame(chat_frame),
 	m_chat_folder(chat_folder), m_preferences(preferences),
 	m_current_view(NULL)
 {
-	m_header.action_view_hide_user_colors->signal_activate().connect(
-		sigc::mem_fun(*this, &ViewCommands::on_hide_user_colors));
-
-	m_header.action_view_fullscreen->signal_toggled().connect(
+	actions.hide_user_colors->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &ViewCommands::on_hide_user_colors)));
+	actions.fullscreen->property_state().signal_changed().connect(
 		sigc::mem_fun(*this, &ViewCommands::on_fullscreen_toggled));
-	m_header.action_view_zoom_in->signal_activate().connect(
-		sigc::mem_fun(*this, &ViewCommands::on_zoom_in));
-	m_header.action_view_zoom_out->signal_activate().connect(
-		sigc::mem_fun(*this, &ViewCommands::on_zoom_out));
+	actions.zoom_in->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &ViewCommands::on_zoom_in)));
+	actions.zoom_out->signal_activate().connect(sigc::hide(
+		sigc::mem_fun(*this, &ViewCommands::on_zoom_out)));
 
-	m_menu_view_toolbar_connection =
-		m_header.action_view_toolbar->signal_toggled().connect(
+	m_menu_view_toolbar_connection = actions.view_toolbar->
+		property_state().signal_changed().connect(
 			sigc::mem_fun(
 				*this,
 				&ViewCommands::on_menu_toolbar_toggled));
 
-	m_menu_view_statusbar_connection =
-		m_header.action_view_statusbar->signal_toggled().connect(
+	m_menu_view_statusbar_connection = actions.view_statusbar->
+		property_state().signal_changed().connect(
 			sigc::mem_fun(
 				*this,
 				&ViewCommands::on_menu_statusbar_toggled));
 
-	m_menu_view_browser_connection =
-		m_header.action_view_browser->signal_toggled().connect(
+	m_menu_view_browser_connection = actions.view_browser->
+		property_state().signal_changed().connect(
 			sigc::mem_fun(
 				*this,
 				&ViewCommands::on_menu_browser_toggled));
 
-	m_menu_view_chat_connection =
-		m_header.action_view_chat->signal_toggled().connect(
+	m_menu_view_chat_connection = actions.view_chat->
+		property_state().signal_changed().connect(
 			sigc::mem_fun(
 				*this,
 				&ViewCommands::on_menu_chat_toggled));
 
 	m_menu_view_document_userlist_connection =
-		m_header.action_view_document_userlist->
-			signal_toggled().connect(sigc::mem_fun(
+		actions.view_document_userlist->
+			property_state().signal_changed().connect(sigc::mem_fun(
 				*this,
 				&ViewCommands::
 					on_menu_document_userlist_toggled));
 
-	m_menu_view_chat_userlist_connection =
-		m_header.action_view_chat_userlist->signal_toggled().connect(
+	m_menu_view_chat_userlist_connection = actions.view_chat_userlist->
+		property_state().signal_changed().connect(
 			sigc::mem_fun(
 				*this,
 				&ViewCommands::
@@ -211,8 +216,8 @@ Gobby::ViewCommands::ViewCommands(Gtk::Window& main_window,
 		sigc::mem_fun(
 			*this, &ViewCommands::on_chat_document_changed));
 
-	m_menu_language_changed_connection =
-		m_header.action_view_highlight_none->signal_changed().connect(
+	m_menu_language_changed_connection = actions.highlight_mode->
+		property_state().signal_changed().connect(
 			sigc::mem_fun(
 				*this,
 				&ViewCommands::on_menu_language_changed));
@@ -224,7 +229,7 @@ Gobby::ViewCommands::ViewCommands(Gtk::Window& main_window,
 
 	// Chat View by default not sensitive, becomes sensitive if a server
 	// connection is made.
-	m_header.action_view_chat->set_sensitive(false);
+	actions.view_chat->set_enabled(false);
 	m_chat_frame.set_allow_visible(false);
 
 	// Setup initial sensitivity:
@@ -248,12 +253,11 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 
 	if(m_current_view != NULL)
 	{
-		m_header.action_view_hide_user_colors->set_sensitive(true);
-		//m_header.action_view_fullscreen->set_sensitive(true);
-		m_header.action_view_zoom_in->set_sensitive(true);
-		m_header.action_view_zoom_out->set_sensitive(true);
-		m_header.action_view_highlight_mode->set_sensitive(true);
-		m_header.action_view_document_userlist->set_sensitive(true);
+		m_actions.hide_user_colors->set_enabled(true);
+		m_actions.zoom_in->set_enabled(true);
+		m_actions.zoom_out->set_enabled(true);
+		m_actions.highlight_mode->set_enabled(true);
+		m_actions.view_document_userlist->set_enabled(true);
 
 		m_document_language_changed_connection =
 			m_current_view->signal_language_changed().connect(
@@ -264,17 +268,17 @@ void Gobby::ViewCommands::on_text_document_changed(SessionView* view)
 	}
 	else
 	{
-		m_header.action_view_hide_user_colors->set_sensitive(false);
-		//m_header.action_view_fullscreen->set_sensitive(false);
-		m_header.action_view_zoom_in->set_sensitive(false);
-		m_header.action_view_zoom_out->set_sensitive(false);
+		m_actions.hide_user_colors->set_enabled(false);
+		m_actions.zoom_in->set_enabled(false);
+		m_actions.zoom_out->set_enabled(false);
 
 		m_menu_language_changed_connection.block();
-		m_header.action_view_highlight_mode->set_sensitive(false);
-		m_header.action_view_highlight_none->set_active(true);
+		m_actions.highlight_mode->set_enabled(false);
+		m_actions.highlight_mode->change_state(
+			Glib::Variant<Glib::ustring>::create(""));
 		m_menu_language_changed_connection.unblock();
 
-		m_header.action_view_document_userlist->set_sensitive(false);
+		m_actions.view_document_userlist->set_enabled(false);
 	}
 
 	on_doc_language_changed(
@@ -286,7 +290,7 @@ void Gobby::ViewCommands::on_chat_document_added(SessionView& view)
 	// Allow the chat frame to be visible if the option allows it
 	m_chat_frame.set_allow_visible(true);
 
-	m_header.action_view_chat->set_sensitive(true);
+	m_actions.view_chat->set_enabled(true);
 }
 
 void Gobby::ViewCommands::on_chat_document_removed(SessionView& view)
@@ -294,7 +298,7 @@ void Gobby::ViewCommands::on_chat_document_removed(SessionView& view)
 	if(m_chat_folder.get_n_pages() == 1)
 	{
 		// This is the last document, and it is about to be removed.
-		m_header.action_view_chat->set_sensitive(false);
+		m_actions.view_chat->set_enabled(false);
 		// Hide the chat frame independent of the option
 		m_chat_frame.set_allow_visible(false);
 	}
@@ -306,13 +310,12 @@ void Gobby::ViewCommands::on_chat_document_changed(SessionView* view)
 	{
 		if(m_chat_frame.get_visible())
 		{
-			m_header.action_view_chat_userlist->set_sensitive(
-				true);
+			m_actions.view_chat_userlist->set_enabled(true);
 		}
 	}
 	else
 	{
-		m_header.action_view_chat_userlist->set_sensitive(false);
+		m_actions.view_chat_userlist->set_enabled(false);
 	}
 }
 
@@ -320,12 +323,12 @@ void Gobby::ViewCommands::on_chat_show()
 {
 	SessionView* view = m_chat_folder.get_current_document();
 	if(view != NULL)
-		m_header.action_view_chat_userlist->set_sensitive(true);
+		m_actions.view_chat_userlist->set_enabled(true);
 }
 
 void Gobby::ViewCommands::on_chat_hide()
 {
-	m_header.action_view_chat_userlist->set_sensitive(false);
+	m_actions.view_chat_userlist->set_enabled(false);
 }
 
 void Gobby::ViewCommands::on_zoom_in()
@@ -363,7 +366,10 @@ void Gobby::ViewCommands::on_hide_user_colors()
 
 void Gobby::ViewCommands::on_fullscreen_toggled()
 {
-	if(m_header.action_view_fullscreen->get_active())
+	bool is_fullscreen;
+	m_actions.fullscreen->get_state(is_fullscreen);
+
+	if(is_fullscreen)
 	{
 		if(!m_fullscreen.get())
 			m_fullscreen.reset(new Fullscreen(*this));
@@ -372,132 +378,149 @@ void Gobby::ViewCommands::on_fullscreen_toggled()
 	{
 		m_fullscreen.reset(NULL);
 	}
-/*		bool browser_was_open = m_header.action_
-		m_main_window.fullscreen();
-	else
-		m_main_window.unfullscreen();*/
 }
 
 void Gobby::ViewCommands::on_menu_toolbar_toggled()
 {
+	bool value;
+	m_actions.view_toolbar->get_state(value);
+
 	m_pref_view_toolbar_connection.block();
-	m_preferences.appearance.show_toolbar =
-		m_header.action_view_toolbar->get_active();
+	m_preferences.appearance.show_toolbar = value;
 	m_pref_view_toolbar_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_menu_statusbar_toggled()
 {
+	bool value;
+	m_actions.view_statusbar->get_state(value);
+
 	m_pref_view_statusbar_connection.block();
-	m_preferences.appearance.show_statusbar =
-		m_header.action_view_statusbar->get_active();
+	m_preferences.appearance.show_statusbar = value;
 	m_pref_view_statusbar_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_menu_browser_toggled()
 {
+	bool value;
+	m_actions.view_browser->get_state(value);
+
 	m_pref_view_browser_connection.block();
-	m_preferences.appearance.show_browser =
-		m_header.action_view_browser->get_active();
+	m_preferences.appearance.show_browser = value;
 	m_pref_view_browser_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_menu_chat_toggled()
 {
+	bool value;
+	m_actions.view_chat->get_state(value);
+
 	m_pref_view_chat_connection.block();
-	m_preferences.appearance.show_chat =
-		m_header.action_view_chat->get_active();
+	m_preferences.appearance.show_chat = value;
 	m_pref_view_chat_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_menu_document_userlist_toggled()
 {
+	bool value;
+	m_actions.view_document_userlist->get_state(value);
+
 	m_pref_view_document_userlist_connection.block();
-	m_preferences.appearance.show_document_userlist =
-		m_header.action_view_document_userlist->get_active();
+	m_preferences.appearance.show_document_userlist = value;
 	m_pref_view_document_userlist_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_menu_chat_userlist_toggled()
 {
+	bool value;
+	m_actions.view_chat_userlist->get_state(value);
+
 	m_pref_view_chat_userlist_connection.block();
-	m_preferences.appearance.show_chat_userlist =
-		m_header.action_view_chat_userlist->get_active();
+	m_preferences.appearance.show_chat_userlist = value;
 	m_pref_view_chat_userlist_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_pref_toolbar_changed()
 {
 	m_menu_view_toolbar_connection.block();
-	m_header.action_view_toolbar->set_active(
-		m_preferences.appearance.show_toolbar);
+	m_actions.view_toolbar->change_state(
+		static_cast<bool>(m_preferences.appearance.show_toolbar));
 	m_menu_view_toolbar_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_pref_statusbar_changed()
 {
 	m_menu_view_statusbar_connection.block();
-	m_header.action_view_statusbar->set_active(
-		m_preferences.appearance.show_statusbar);
+	m_actions.view_statusbar->change_state(
+		static_cast<bool>(m_preferences.appearance.show_statusbar));
 	m_menu_view_statusbar_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_pref_browser_changed()
 {
 	m_menu_view_browser_connection.block();
-	m_header.action_view_browser->set_active(
-		m_preferences.appearance.show_browser);
+	m_actions.view_browser->change_state(
+		static_cast<bool>(m_preferences.appearance.show_browser));
 	m_menu_view_browser_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_pref_chat_changed()
 {
 	m_menu_view_chat_connection.block();
-	m_header.action_view_chat->set_active(
-		m_preferences.appearance.show_chat);
+	m_actions.view_chat->change_state(
+		static_cast<bool>(m_preferences.appearance.show_chat));
 	m_menu_view_chat_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_pref_document_userlist_changed()
 {
 	m_menu_view_document_userlist_connection.block();
-	m_header.action_view_document_userlist->set_active(
-		m_preferences.appearance.show_document_userlist);
+	m_actions.view_document_userlist->change_state(
+		static_cast<bool>(
+			m_preferences.appearance.show_document_userlist));
 	m_menu_view_document_userlist_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_pref_chat_userlist_changed()
 {
 	m_menu_view_chat_userlist_connection.block();
-	m_header.action_view_chat_userlist->set_active(
-		m_preferences.appearance.show_chat_userlist);
+	m_actions.view_chat_userlist->change_state(
+		static_cast<bool>(
+			m_preferences.appearance.show_chat_userlist));
 	m_menu_view_chat_userlist_connection.unblock();
 }
 
-void Gobby::ViewCommands::on_menu_language_changed(
-	const Glib::RefPtr<Gtk::RadioAction>& action)
+void Gobby::ViewCommands::on_menu_language_changed()
 {
-	Glib::RefPtr<Header::LanguageAction> language_action =
-		Glib::RefPtr<Header::LanguageAction>::cast_static(action);
+	// TODO: Get ID, lookup language, set language.
+	Glib::ustring language_id;
+	m_actions.highlight_mode->get_state(language_id);
+
+	GtkSourceLanguage* language = NULL;
+	if(!language_id.empty())
+	{
+		language = gtk_source_language_manager_get_language(
+			m_language_manager, language_id.c_str());
+
+		// The language should exist by construction, if the languages
+		// available in the language manager don't change at runtime
+		g_assert(language != NULL);
+	}
 
 	g_assert(m_current_view != NULL);
 
 	m_document_language_changed_connection.block();
-	m_current_view->set_language(language_action->get_language());
+	m_current_view->set_language(language);
 	m_document_language_changed_connection.unblock();
 }
 
 void Gobby::ViewCommands::on_doc_language_changed(GtkSourceLanguage* language)
 {
-	// Select the language of document:
-	const Glib::RefPtr<Header::LanguageAction> action =
-		(language != NULL) ?
-			m_header.lookup_language_action(
-				m_current_view->get_language()) :
-			m_header.action_view_highlight_none;
-
 	m_menu_language_changed_connection.block();
-	// lookup_language_action guarantees not to return NULL:
-	action->set_active(true);
+	const gchar* language_id = "";
+	if(language != NULL)
+		language_id = gtk_source_language_get_id(language);
+	m_actions.highlight_mode->change_state(
+		Glib::Variant<Glib::ustring>::create(language_id));
 	m_menu_language_changed_connection.unblock();
 }
