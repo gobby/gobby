@@ -73,3 +73,5 @@ pixmapdir = $(datadir)/pixmaps/gobby-0.5
 
 AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
               -I$(top_srcdir)/code
+
+SUBDIRS = gobject

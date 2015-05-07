@@ -14,6 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include "core/gobject/gobby-undo-manager.h"
 #include "core/textsessionview.hpp"
 #include "util/i18n.hpp"
 #include "util/color.hpp"
@@ -412,10 +413,20 @@ void Gobby::TextSessionView::set_active_user(InfTextUser* user)
 				inf_adopted_session_get_algorithm(
 					INF_ADOPTED_SESSION(m_session)),
 				user, GTK_TEXT_BUFFER(m_buffer)));
+
+		GobbyUndoManager* undo_manager = gobby_undo_manager_new(
+			INF_TEXT_SESSION(m_session),
+			m_undo_grouping->get_inf_grouping());
+
+		gtk_source_buffer_set_undo_manager(
+			m_buffer,
+			GTK_SOURCE_UNDO_MANAGER(undo_manager));
+		g_object_unref(undo_manager);
 	}
 	else
 	{
 		m_undo_grouping.reset(NULL);
+		gtk_source_buffer_set_undo_manager(m_buffer, NULL);
 	}
 }
 

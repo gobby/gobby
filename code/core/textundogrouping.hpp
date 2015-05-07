@@ -37,6 +37,8 @@ public:
 	guint get_undo_size() const;
 	guint get_redo_size() const;
 
+	InfTextUndoGrouping* get_inf_grouping() { return m_grouping; }
+
 protected:
 	static void
 	on_begin_user_action_static(GtkTextBuffer* buffer,
@@ -66,4 +68,4 @@ protected:
 
 }
 
-#endif // _GOBBY_TEXTSESSIONVIEW_HPP_
+#endif // _GOBBY_TEXTUNDOGROUPING_HPP_

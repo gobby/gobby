@@ -23,9 +23,7 @@
 
 #include <gtkmm/tooltip.h>
 
-#include <gtksourceview/gtksourceview.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
-#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksource.h>
 
 #include <libinftextgtk/inf-text-gtk-view.h>
 #include <libinftextgtk/inf-text-gtk-viewport.h>

@@ -170,18 +170,6 @@ void Gobby::Window::open_files(const Operations::file_list& files)
 // This code is basically stolen from gedit, but ported to C++.
 bool Gobby::Window::on_key_press_event(GdkEventKey* event)
 {
-	// We can't let GtkSourceView handle this, since we override
-	// Undo/Redo. TODO: This is a bit of a hack. A proper solution would
-	// perhaps be to subclass GtkSourceView, and either
-	// unregister/reregister the keybinding there, or making sure the
-	// key-press-event default handler returns false.
-	// TODO: An even properer solution is to use the new GtkSourceView3
-	// feature which allows to plug a different undo manager to the
-	// SourceView. This would also make the Undo/Redo context menu items
-	// work.
-	if(event->keyval == GDK_KEY_z || event->keyval == GDK_KEY_Z)
-		return Gtk::Window::on_key_press_event(event);
-
 	bool handled =
 		gtk_window_propagate_key_event(GTK_WINDOW(gobj()), event);
 	if(!handled)

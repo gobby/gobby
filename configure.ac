@@ -80,6 +80,7 @@ AC_OUTPUT([
     code/Makefile
       code/util/Makefile
       code/core/Makefile
+        code/core/gobject/Makefile
       code/dialogs/Makefile
       code/operations/Makefile
       code/commands/Makefile

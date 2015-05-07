@@ -117,10 +117,6 @@ void Gobby::OperationOpen::start()
 				*this, &OperationOpen::on_node_removed));
 
 		m_content = GTK_TEXT_BUFFER(gtk_source_buffer_new(NULL));
-		// Disable GtkSourceView's Undo by beginning a not undoable
-		// action lasting forever. We have our own (local group) Undo.
-		gtk_source_buffer_begin_not_undoable_action(
-			GTK_SOURCE_BUFFER(m_content));
 	}
 	catch(const Gio::Error& err)
 	{

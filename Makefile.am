@@ -18,6 +18,7 @@ gobby_0_5_LDADD = \
 	code/operations/libgobby-operations.a \
 	code/dialogs/libgobby-dialogs.a \
 	code/core/libgobby-core.a \
+	code/core/gobject/libgobby-core-gobject.a \
 	code/util/libgobby-util.a \
 	$(gobby_LIBS) \
 	$(infinote_LIBS) \
