@@ -25,6 +25,9 @@
 #include "core/browser.hpp"
 #include "core/filechooser.hpp"
 
+#include <giomm/simpleactiongroup.h>
+#include <giomm/simpleaction.h>
+
 #include <sigc++/trackable.h>
 
 #include <libinfgtk/inf-gtk-account-creation-dialog.h>
@@ -70,15 +73,14 @@ protected:
 	void on_popdown();
 
 	// Context commands
-	void on_disconnect(InfcBrowser* browser);
-	void on_create_account(InfBrowser* browser);
-	void on_remove(InfBrowser* browser);
+	void on_remove(const Glib::VariantBase& param);
+	void on_disconnect(const Glib::VariantBase& param);
+	void on_create_account(const Glib::VariantBase& param);
 
-	void on_new(InfBrowser* browser, InfBrowserIter iter,
-	            bool directory);
-	void on_open(InfBrowser* browser, InfBrowserIter iter);
-	void on_permissions(InfBrowser* browser, InfBrowserIter iter);
-	void on_delete(InfBrowser* browser, InfBrowserIter iter);
+	void on_new(const Glib::VariantBase& param, bool directory);
+	void on_open(const Glib::VariantBase& param);
+	void on_permissions(const Glib::VariantBase& param);
+	void on_delete(const Glib::VariantBase& param);
 
 	void on_dialog_node_removed();
 	void on_create_account_response(int response_id);
@@ -100,12 +102,25 @@ protected:
 	const CertificateManager& m_cert_manager;
 	Preferences& m_preferences;
 
-	// Browser item for which
+	// Popup menu
 	Gtk::Menu* m_popup_menu;
-	std::auto_ptr<NodeWatch> m_watch;
-	std::auto_ptr<Gtk::Dialog> m_dialog;
-
+	std::auto_ptr<NodeWatch> m_popup_watch;
 	gulong m_populate_popup_handler;
+
+	// Dialog
+	std::auto_ptr<Gtk::Dialog> m_dialog;
+	std::auto_ptr<NodeWatch> m_dialog_watch;
+
+	// Allowed Actions (TODO: move them to browsercontextactions.cpp)
+	const Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_remove;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_disconnect;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_create_account;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_create_document;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_create_directory;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_open_document;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_permissions;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_delete;
 };
 
 }

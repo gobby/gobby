@@ -2,5 +2,6 @@
  <gresource prefix="/de/0x539/gobby">
   <file preprocess="xml-stripblanks">ui/menu.ui</file>
   <file preprocess="xml-stripblanks">ui/toolbar.ui</file>
+  <file preprocess="xml-stripblanks">ui/browser-context-menu.ui</file>
  </gresource>
 </gresources>

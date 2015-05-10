@@ -18,7 +18,8 @@ pixmapdir = $(datadir)/pixmaps/gobby-0.5
 
 resources = \
 	resources/ui/menu.ui \
-	resources/ui/toolbar.ui
+	resources/ui/toolbar.ui \
+	resources/ui/browser-context-menu.ui
 
 gobby-resources.h: resources/gobby.gresources.xml
 	glib-compile-resources $< \

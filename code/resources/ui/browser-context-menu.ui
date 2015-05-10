@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="browser-context-menu-inactive">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Remove</attribute>
+        <attribute name="action">browser.remove</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="browser-context-menu-active">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Disconnect From Server</attribute>
+        <attribute name="action">browser.disconnect</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Create Account...</attribute>
+        <attribute name="action">browser.create-account</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Create Do_cument...</attribute>
+        <attribute name="action">browser.create-document</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Create Director_y...</attribute>
+        <attribute name="action">browser.create-directory</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Open Document...</attribute>
+        <attribute name="action">browser.open-document</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Permissions...</attribute>
+        <attribute name="action">browser.permissions</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">D_elete</attribute>
+        <attribute name="action">browser.delete</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

@@ -19,9 +19,7 @@
 #include "util/file.hpp"
 #include "util/i18n.hpp"
 
-#include <gtkmm/icontheme.h>
-#include <gtkmm/imagemenuitem.h>
-#include <gtkmm/separatormenuitem.h>
+#include <gtkmm/builder.h>
 #include <giomm/file.h>
 #include <glibmm/fileutils.h>
 
@@ -95,13 +93,50 @@ Gobby::BrowserContextCommands::BrowserContextCommands(
 	m_parent(parent), m_io(io), m_browser(browser),
 	m_file_chooser(chooser), m_operations(operations),
 	m_cert_manager(cert_manager), m_preferences(prefs),
-	m_popup_menu(NULL)
+	m_popup_menu(NULL),
+
+	m_action_group(Gio::SimpleActionGroup::create()),
+	m_action_remove(m_action_group->add_action("remove")),
+	m_action_disconnect(m_action_group->add_action("disconnect")),
+	m_action_create_account(m_action_group->add_action("create-account")),
+	m_action_create_document(
+		m_action_group->add_action("create-document")),
+	m_action_create_directory(
+		m_action_group->add_action("create-directory")),
+	m_action_open_document(m_action_group->add_action("open-document")),
+	m_action_permissions(m_action_group->add_action("permissions")),
+	m_action_delete(m_action_group->add_action("delete"))
 {
 	g_object_ref(io);
 
 	m_populate_popup_handler = g_signal_connect(
 		m_browser.get_view(), "populate-popup",
 		G_CALLBACK(on_populate_popup_static), this);
+
+	gtk_widget_insert_action_group(
+		GTK_WIDGET(m_browser.get_view()),
+		"browser", G_ACTION_GROUP(m_action_group->gobj()));
+
+	m_action_remove->signal_activate().connect(
+		sigc::mem_fun(*this, &BrowserContextCommands::on_remove));
+	m_action_disconnect->signal_activate().connect(
+		sigc::mem_fun(*this, &BrowserContextCommands::on_disconnect));
+	m_action_create_account->signal_activate().connect(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_create_account));
+	m_action_create_document->signal_activate().connect(
+		sigc::bind(sigc::mem_fun(*this,
+			&BrowserContextCommands::on_new), false));
+	m_action_create_directory->signal_activate().connect(
+		sigc::bind(sigc::mem_fun(*this,
+			&BrowserContextCommands::on_new), true));
+	m_action_open_document->signal_activate().connect(
+		sigc::mem_fun(*this, &BrowserContextCommands::on_open));
+	m_action_permissions->signal_activate().connect(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_permissions));
+	m_action_delete->signal_activate().connect(
+		sigc::mem_fun(*this, &BrowserContextCommands::on_delete));
 }
 
 Gobby::BrowserContextCommands::~BrowserContextCommands()
@@ -112,27 +147,15 @@ Gobby::BrowserContextCommands::~BrowserContextCommands()
 	g_object_unref(m_io);
 }
 
-void Gobby::BrowserContextCommands::on_menu_node_removed()
-{
-	g_assert(m_popup_menu != NULL);
-
-	// This calls deactivate, causing the watch to be removed.
-	m_popup_menu->popdown();
-}
-
-void Gobby::BrowserContextCommands::on_menu_deactivate()
-{
-	m_watch.reset(NULL);
-}
-
 void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 {
 	// TODO: Can this happen? Should we close the old popup here?
 	g_assert(m_popup_menu == NULL);
+	g_assert(m_popup_watch.get() == NULL);
 
-	// Cancel previous attempts
-	m_watch.reset(NULL);
+	// Cancel previous dialogs
 	m_dialog.reset(NULL);
+	m_dialog_watch.reset(NULL);
 
 	InfBrowser* browser;
 	InfBrowserIter iter;
@@ -140,190 +163,69 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	if(!m_browser.get_selected_browser(&browser))
 		return;
 
-	if(!m_browser.get_selected_iter(browser, &iter))
+	const bool has_iter = m_browser.get_selected_iter(browser, &iter);
+
+	// Watch the node, and close the popup menu when the node
+	// it refers to is removed.
+	m_popup_watch.reset(new NodeWatch(browser, has_iter ? &iter : NULL));
+	m_popup_watch->signal_node_removed().connect(sigc::mem_fun(
+		*this, &BrowserContextCommands::on_menu_node_removed));
+
+	// TODO: At the moment, action handlers access the browser item using
+	// the m_popup_watch variable. We should change it such that
+	// the selected item is passed as an action parameter, as two
+	// strings: The browser store item name, and the path to the selected
+	// node. This could then also easily allow browser actions to be
+	// invoked via d-bus.
+
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/browser-context-menu.ui");
+
+	if(!has_iter)
 	{
 		InfBrowserStatus browser_status;
 		g_object_get(G_OBJECT(browser), "status",
 		             &browser_status, NULL);
 
+		Glib::RefPtr<Gio::Menu> menu_model =
+			Glib::RefPtr<Gio::Menu>::cast_dynamic(
+				builder->get_object(
+					"browser-context-menu-inactive"));
+
 		if(browser_status == INF_BROWSER_CLOSED)
 		{
-			Gtk::ImageMenuItem *remove_item = Gtk::manage(
-				new Gtk::ImageMenuItem(_("_Remove"), true));
-			Gtk::Image* image = Gtk::manage(new Gtk::Image);
-			image->set_from_icon_name(_("list-remove"),
-			                          Gtk::ICON_SIZE_MENU);
-			remove_item->set_image(*image);
-			remove_item->signal_activate().connect(sigc::bind(
-				sigc::mem_fun(*this,
-					&BrowserContextCommands::on_remove),
-				browser));
-			remove_item->show();
-			menu->append(*remove_item);
-		}
-
-		return;
-	}
-
-	InfBrowserIter dummy_iter = iter;
-	bool is_subdirectory = inf_browser_is_subdirectory(browser, &iter);
-	bool is_toplevel = !inf_browser_get_parent(browser, &dummy_iter);
-
-	// Watch the node, and close the popup menu when the node
-	// it refers to is removed.
-	m_watch.reset(new NodeWatch(browser, &iter));
-	m_watch->signal_node_removed().connect(sigc::mem_fun(
-		*this, &BrowserContextCommands::on_menu_node_removed));
-
-	menu->signal_deactivate().connect(sigc::mem_fun(
-		*this, &BrowserContextCommands::on_menu_deactivate));
-
-	bool have_toplevel_entries = false;
-
-	// Add "Disconnect" menu option if the connection
-	// item has been clicked at
-	if(is_toplevel && INFC_IS_BROWSER(browser))
-	{
-		Gtk::ImageMenuItem* disconnect_item = Gtk::manage(
-			new Gtk::ImageMenuItem(
-				_("_Disconnect from Server"), true));
-		Gtk::Image* image = Gtk::manage(new Gtk::Image);
-		image->set_from_icon_name("network-offline",
-		                          Gtk::ICON_SIZE_MENU);
-		disconnect_item->set_image(*image);
-		disconnect_item->signal_activate().connect(sigc::bind(
-			sigc::mem_fun(*this,
-				&BrowserContextCommands::on_disconnect),
-			INFC_BROWSER(browser)));
-		disconnect_item->show();
-		menu->append(*disconnect_item);
-		have_toplevel_entries = true;
-	}
-
-	// Add create account option if the connection item has been clicked at
-	// Only offer this for clients at the moment, since local servers do
-	// not support this.
-	if(is_toplevel && INFC_IS_BROWSER(browser))
-	{
-		const InfAclAccount* account =
-			inf_browser_get_acl_local_account(browser);
-		const InfAclAccountId acc_id =
-			(account != NULL) ? account->id : 0;
-
-		InfAclMask mask;
-		inf_acl_mask_set1(&mask, INF_ACL_CAN_CREATE_ACCOUNT);
-		inf_browser_check_acl(browser, &iter, acc_id, &mask, &mask);
-		if(inf_acl_mask_has(&mask, INF_ACL_CAN_CREATE_ACCOUNT))
-		{
-			Gtk::Image* image = Gtk::manage(new Gtk::Image);
-			image->set_from_icon_name("application-certificate",
-			                          Gtk::ICON_SIZE_MENU);
-			Gtk::ImageMenuItem* item =
-				Gtk::manage(new Gtk::ImageMenuItem(
-	                                _("Create _Account..."), true));
-			item->set_image(*image);
-			item->signal_activate().connect(sigc::bind(
-				sigc::mem_fun(
-					*this,
-					&BrowserContextCommands::
-						on_create_account),
-				browser));
-			item->show();
-			menu->append(*item);
-			have_toplevel_entries = true;
+			menu->bind_model(menu_model, true);
 		}
 	}
-
-	// Separator, if we have entries dedicated to the browser itself
-	if(have_toplevel_entries)
+	else
 	{
-		Gtk::SeparatorMenuItem* sep_item =
-			Gtk::manage(new Gtk::SeparatorMenuItem);
-		sep_item->show();
-		menu->append(*sep_item);
+		InfBrowserIter dummy_iter = iter;
+		const bool is_subdirectory =
+			inf_browser_is_subdirectory(browser, &iter);
+		const bool is_toplevel =
+			!inf_browser_get_parent(browser, &dummy_iter);
+
+		// TODO: Use another menu where this two are not visible
+		// when !is_toplevel || !INFC_IS_BROWSER.
+		m_action_disconnect->set_enabled(
+			is_toplevel && INFC_IS_BROWSER(browser));
+		m_action_create_account->set_enabled(
+			is_toplevel && INFC_IS_BROWSER(browser));
+
+		m_action_create_document->set_enabled(is_subdirectory);
+		m_action_create_directory->set_enabled(is_subdirectory);
+		m_action_open_document->set_enabled(is_subdirectory);
+		m_action_delete->set_enabled(!is_toplevel);
+
+		Glib::RefPtr<Gio::Menu> menu_model =
+			Glib::RefPtr<Gio::Menu>::cast_dynamic(
+				builder->get_object(
+					"browser-context-menu-active"));
+
+		menu->bind_model(menu_model, true);
 	}
 
-	// Create Document
-	Gtk::ImageMenuItem* new_document_item = Gtk::manage(
-		new Gtk::ImageMenuItem(_("Create Do_cument..."),
-		                       true));
-	Gtk::Image* image = Gtk::manage(new Gtk::Image);
-	image->set_from_icon_name("document-new", Gtk::ICON_SIZE_MENU);
-	new_document_item->set_image(*image);
-	new_document_item->signal_activate().connect(sigc::bind(
-		sigc::mem_fun(*this,
-			&BrowserContextCommands::on_new),
-		browser, iter, false));
-	new_document_item->set_sensitive(is_subdirectory);
-	new_document_item->show();
-	menu->append(*new_document_item);
-
-	// Create Directory
-	Glib::RefPtr<Gdk::Screen> screen = menu->get_screen();
-	Glib::RefPtr<Gtk::IconTheme> icon_theme(
-		Gtk::IconTheme::get_for_screen(screen));
-
-	Gtk::ImageMenuItem* new_directory_item = Gtk::manage(
-		new Gtk::ImageMenuItem(_("Create Di_rectory..."),
-		                       true));
-	image = Gtk::manage(new Gtk::Image);
-	image->set_from_icon_name("folder-new", Gtk::ICON_SIZE_MENU);
-	new_directory_item->set_image(*image);
-	new_directory_item->signal_activate().connect(sigc::bind(
-		sigc::mem_fun(*this,
-			&BrowserContextCommands::on_new),
-		browser, iter, true));
-	new_directory_item->set_sensitive(is_subdirectory);
-	new_directory_item->show();
-	menu->append(*new_directory_item);
-
-	// Open Document
-	Gtk::ImageMenuItem* open_document_item = Gtk::manage(
-		new Gtk::ImageMenuItem(_("_Open Document..."), true));
-	image = Gtk::manage(new Gtk::Image);
-	image->set_from_icon_name("document-open", Gtk::ICON_SIZE_MENU);
-	open_document_item->set_image(*image);
-	open_document_item->signal_activate().connect(sigc::bind(
-		sigc::mem_fun(*this,
-			&BrowserContextCommands::on_open),
-		browser, iter));
-	open_document_item->set_sensitive(is_subdirectory);
-	open_document_item->show();
-	menu->append(*open_document_item);
-
-	// Separator
-	Gtk::SeparatorMenuItem* sep_item =
-		Gtk::manage(new Gtk::SeparatorMenuItem);
-	sep_item->show();
-	menu->append(*sep_item);
-
-	// Permissions
-	Gtk::ImageMenuItem* permissions_item = Gtk::manage(
-		new Gtk::ImageMenuItem(_("_Permissions..."), true));
-	image = Gtk::manage(new Gtk::Image);
-	image->set_from_icon_name("document-properties", Gtk::ICON_SIZE_MENU);
-	permissions_item->set_image(*image);
-	permissions_item->signal_activate().connect(sigc::bind(
-		sigc::mem_fun(*this,
-			&BrowserContextCommands::on_permissions),
-		browser, iter));
-	permissions_item->show();
-	menu->append(*permissions_item);
-
-	// Delete
-	Gtk::ImageMenuItem* delete_item = Gtk::manage(
-		new Gtk::ImageMenuItem(_("D_elete"), true));
-	image = Gtk::manage(new Gtk::Image);
-	image->set_from_icon_name("edit-delete", Gtk::ICON_SIZE_MENU);
-	delete_item->set_image(*image);
-	delete_item->signal_activate().connect(sigc::bind(
-		sigc::mem_fun(*this,
-			&BrowserContextCommands::on_delete),
-		browser, iter));
-	delete_item->set_sensitive(!is_toplevel);
-	delete_item->show();
-	menu->append(*delete_item);
-	
 	m_popup_menu = menu;
 	menu->signal_selection_done().connect(
 		sigc::mem_fun(
@@ -331,13 +233,42 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 			&BrowserContextCommands::on_popdown));
 }
 
+void Gobby::BrowserContextCommands::on_menu_node_removed()
+{
+	g_assert(m_popup_menu != NULL);
+
+	// This calls selection_done, causing the watch to be removed
+	// and the m_popup_menu pointer to be reset.
+	m_popup_menu->popdown();
+}
+
 void Gobby::BrowserContextCommands::on_popdown()
 {
 	m_popup_menu = NULL;
+	m_popup_watch.reset(NULL);
 }
 
-void Gobby::BrowserContextCommands::on_disconnect(InfcBrowser* browser)
+// Action handlers
+
+void Gobby::BrowserContextCommands::on_remove(const Glib::VariantBase& param)
 {
+	InfBrowser* browser = m_popup_watch->get_browser();
+
+	InfBrowserStatus status;
+	g_object_get(G_OBJECT(browser), "status", &status, NULL);
+
+	g_assert(status == INF_BROWSER_CLOSED);
+
+	// Reset the watch explicitly here in case we drop the last reference
+	// to the browser.
+	m_popup_watch.reset(NULL);
+	m_browser.remove_browser(browser);
+}
+
+void Gobby::BrowserContextCommands::on_disconnect(
+	const Glib::VariantBase& param)
+{
+	InfcBrowser* browser = INFC_BROWSER(m_popup_watch->get_browser());
 	InfXmlConnection* connection = infc_browser_get_connection(browser);
 	InfXmlConnectionStatus status;
 	g_object_get(G_OBJECT(connection), "status", &status, NULL);
@@ -349,8 +280,11 @@ void Gobby::BrowserContextCommands::on_disconnect(InfcBrowser* browser)
 	}
 }
 
-void Gobby::BrowserContextCommands::on_create_account(InfBrowser* browser)
+void Gobby::BrowserContextCommands::on_create_account(
+	const Glib::VariantBase& param)
 {
+	InfBrowser* browser = m_popup_watch->get_browser();
+
 	InfGtkAccountCreationDialog* dlg =
 		inf_gtk_account_creation_dialog_new(
 			m_parent.gobj(), static_cast<GtkDialogFlags>(0),
@@ -372,22 +306,14 @@ void Gobby::BrowserContextCommands::on_create_account(InfBrowser* browser)
 	m_dialog->present();
 }
 
-void Gobby::BrowserContextCommands::on_remove(InfBrowser* browser)
-{
-	InfBrowserStatus status;
-	g_object_get(G_OBJECT(browser), "status", &status, NULL);
-
-	g_assert(status == INF_BROWSER_CLOSED);
-
-	m_browser.remove_browser(browser);
-}
-
-void Gobby::BrowserContextCommands::on_new(InfBrowser* browser,
-                                           InfBrowserIter iter,
+void Gobby::BrowserContextCommands::on_new(const Glib::VariantBase& param,
                                            bool directory)
 {
-	m_watch.reset(new NodeWatch(browser, &iter));
-	m_watch->signal_node_removed().connect(sigc::mem_fun(
+	InfBrowser* browser = m_popup_watch->get_browser();
+	const InfBrowserIter iter = *m_popup_watch->get_browser_iter();
+
+	m_dialog_watch.reset(new NodeWatch(browser, &iter));
+	m_dialog_watch->signal_node_removed().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_dialog_node_removed));
 
 	std::auto_ptr<EntryDialog> entry_dialog(
@@ -412,11 +338,13 @@ void Gobby::BrowserContextCommands::on_new(InfBrowser* browser,
 	m_dialog->present();
 }
 
-void Gobby::BrowserContextCommands::on_open(InfBrowser* browser,
-                                            InfBrowserIter iter)
+void Gobby::BrowserContextCommands::on_open(const Glib::VariantBase& param)
 {
-	m_watch.reset(new NodeWatch(browser, &iter));
-	m_watch->signal_node_removed().connect(sigc::mem_fun(
+	InfBrowser* browser = m_popup_watch->get_browser();
+	const InfBrowserIter iter = *m_popup_watch->get_browser_iter();
+
+	m_dialog_watch.reset(new NodeWatch(browser, &iter));
+	m_dialog_watch->signal_node_removed().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_dialog_node_removed));
 
 	std::auto_ptr<FileChooser::Dialog> file_dialog(
@@ -435,11 +363,14 @@ void Gobby::BrowserContextCommands::on_open(InfBrowser* browser,
 	m_dialog->present();
 }
 
-void Gobby::BrowserContextCommands::on_permissions(InfBrowser* browser,
-                                                   InfBrowserIter iter)
+void Gobby::BrowserContextCommands::on_permissions(
+	const Glib::VariantBase& param)
 {
-	m_watch.reset(new NodeWatch(browser, &iter));
-	m_watch->signal_node_removed().connect(sigc::mem_fun(
+	InfBrowser* browser = m_popup_watch->get_browser();
+	const InfBrowserIter iter = *m_popup_watch->get_browser_iter();
+
+	m_dialog_watch.reset(new NodeWatch(browser, &iter));
+	m_dialog_watch->signal_node_removed().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_dialog_node_removed));
 
 	InfGtkPermissionsDialog* dlg = inf_gtk_permissions_dialog_new(
@@ -458,22 +389,28 @@ void Gobby::BrowserContextCommands::on_permissions(InfBrowser* browser,
 	m_dialog->present();
 }
 
-void Gobby::BrowserContextCommands::on_delete(InfBrowser* browser,
-                                              InfBrowserIter iter)
+void Gobby::BrowserContextCommands::on_delete(
+	const Glib::VariantBase& param)
 {
-	m_operations.delete_node(browser, &iter);
+	InfBrowser* browser = m_popup_watch->get_browser();
+	const InfBrowserIter* iter = m_popup_watch->get_browser_iter();
+
+	m_operations.delete_node(browser, iter);
 }
+
+// Dialogs
 
 void Gobby::BrowserContextCommands::on_dialog_node_removed()
 {
-	m_watch.reset(NULL);
 	m_dialog.reset(NULL);
+	m_dialog_watch.reset(NULL);
 }
 
-void Gobby::BrowserContextCommands::on_create_account_response(int response_id)
+void Gobby::BrowserContextCommands::on_create_account_response(
+	int response_id)
 {
-	m_watch.reset(NULL);
 	m_dialog.reset(NULL);
+	m_dialog_watch.reset(NULL);
 }
 
 void Gobby::BrowserContextCommands::on_account_created(
@@ -523,7 +460,8 @@ void Gobby::BrowserContextCommands::on_account_created(
 
 	try
 	{
-		const std::string filename = make_certificate_filename(cn, host);
+		const std::string filename =
+			make_certificate_filename(cn, host);
 
 		GError* error = NULL;
 		inf_cert_util_write_certificate_with_key(
@@ -616,8 +554,8 @@ void Gobby::BrowserContextCommands::on_new_response(int response_id,
 		}
 	}
 
-	m_watch.reset(NULL);
 	m_dialog.reset(NULL);
+	m_dialog_watch.reset(NULL);
 }
 
 void Gobby::BrowserContextCommands::on_open_response(int response_id,
@@ -635,12 +573,12 @@ void Gobby::BrowserContextCommands::on_open_response(int response_id,
 			browser, &iter, m_preferences, files);
 	}
 
-	m_watch.reset(NULL);
 	m_dialog.reset(NULL);
+	m_dialog_watch.reset(NULL);
 }
 
 void Gobby::BrowserContextCommands::on_permissions_response(int response_id)
 {
-	m_watch.reset(NULL);
 	m_dialog.reset(NULL);
+	m_dialog_watch.reset(NULL);
 }

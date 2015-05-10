@@ -18,7 +18,8 @@
 
 Gobby::NodeWatch::NodeWatch(InfBrowser* browser,
                             const InfBrowserIter* iter):
-	m_browser(browser), m_node_removed_handler(0)
+	m_browser(browser), m_node_removed_handler(0),
+	m_notify_status_handler(0)
 {
 	if(iter != NULL)
 		m_iter = *iter;
@@ -28,14 +29,14 @@ Gobby::NodeWatch::NodeWatch(InfBrowser* browser,
 	// TODO: (weak-)ref browser?
 	InfBrowserStatus status;
 	g_object_get(G_OBJECT(m_browser), "status", &status, NULL);
-	g_assert(status == INF_BROWSER_OPEN);
+	g_assert(iter == NULL || status == INF_BROWSER_OPEN);
 	
-	m_notify_status_handler = g_signal_connect(
-		browser, "notify::status",
-		G_CALLBACK(on_notify_status_static), this);
-
 	if(m_iter.node != NULL)
 	{
+		m_notify_status_handler = g_signal_connect(
+			browser, "notify::status",
+			G_CALLBACK(on_notify_status_static), this);
+
 		m_node_removed_handler = g_signal_connect(
 			m_browser, "node-removed",
 			G_CALLBACK(on_node_removed_static), this);
@@ -79,8 +80,11 @@ void Gobby::NodeWatch::reset()
 {
 	g_assert(m_browser != NULL);
 
-	g_signal_handler_disconnect(
-		m_browser, m_notify_status_handler);
+	if(m_notify_status_handler != 0)
+	{
+		g_signal_handler_disconnect(
+			m_browser, m_notify_status_handler);
+	}
 
 	if(m_node_removed_handler != 0)
 	{

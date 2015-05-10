@@ -25,6 +25,8 @@
 namespace Gobby
 {
 
+// Weak reference on a node in a browser. If iter is null, keeps a
+// reference to the browser itself.
 class NodeWatch
 {
 public:
