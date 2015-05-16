@@ -25,6 +25,10 @@ Gobby::HelpCommands::HelpCommands(Gtk::Application& application,
                                   const ApplicationActions& actions):
 	m_application(application)
 {
+#ifndef HAVE_GNOME_DOC_UTILS
+	actions.help->set_enabled(false);
+#endif
+
 	actions.help->signal_activate().connect(
 		sigc::hide(sigc::mem_fun(*this, &HelpCommands::on_contents)));
 	actions.about->signal_activate().connect(
