@@ -104,13 +104,13 @@ gobby_undo_manager_set_session(GobbyUndoManager* undo_manager,
       INF_ADOPTED_SESSION(priv->session)
     );
 
-    inf_signal_handlers_disconnect_by_func(
+    g_signal_handlers_disconnect_by_func(
       G_OBJECT(algorithm),
       G_CALLBACK(gobby_undo_manager_can_undo_changed_cb),
       undo_manager
     );
 
-    inf_signal_handlers_disconnect_by_func(
+    g_signal_handlers_disconnect_by_func(
       G_OBJECT(algorithm),
       G_CALLBACK(gobby_undo_manager_can_redo_changed_cb),
       undo_manager
