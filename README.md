@@ -49,11 +49,7 @@ The primary distribution point is <http://releases.0x539.de/>.
 ### How to report bugs
 
 Bugs should be files as issues on the github issue tracker at
-<https://github.com/gobby/gobby/issues>. Please include a
-reachable email address in your bug report as we often need to
-contact the reporters for clarifications. Commonly bugs are
-scheduled for the next major release and will be listed in the
-roadmap.
+<https://github.com/gobby/gobby/issues>. 
 
 ### How to get involved
 
@@ -61,9 +57,9 @@ We urgently seek all kind of people who could help us in any
 way. Firstly we need documentation writers who could help us
 crafting a help file and some standalone documentation for the
 web. Secondly, if you are skilled in C/C++ programming, we could
-need helping hands with programming. You could use our project
-page as a starting point to look for tickets which need
-fixing. And last, but certainly not least, we need translators
+need helping hands with programming. A starting point could be
+[github issues](https://github.com/gobby/gobby.git).
+And last, but certainly not least, we need translators
 who get their hands at Gobby's string templates to get it
 localised. Thus more could use Gobby in their native language.
 Just contact us, if in doubt, for more details.
@@ -72,19 +68,19 @@ There are also two mailing lists which should provide a mean
 of contact to other Gobby users and to the developers.
 
 - *obby-announce*: A moderated list used to announce new
-  releases of Gobby and its foundation, net6, obby and libinfinity.
-  Please refer to
-  <http://list.0x539.de/mailman/listinfo/obby-announce> if you
-  want to subscribe to it.
+  releases of Gobby and its foundation, libinfinity. To subscribe,
+  please send an email with the topic "subscribe" to
+  <obby-announce-subscribe@list.0x539.de>. A list archive is
+  available at <http://www.mail-archive.com/obby-announce@list.0x539.de>.
 - *obby-users*: Discussions about Gobby's usage and
   installation problems. The announcements are also posted
-  there. Please refer to
-  <http://list.0x539.de/mailman/listinfo/obby-users> if you
-  want to subscribe to it.
+  there. To subscribe, please send an email with the topic
+  "subscribe" to <obby-users-subscribe@list.0x539.de>. A list
+  archive is available at <http://www.mail-archive.com/obby-users@list.0x539.de>.
 
 ## Licensing
 
-Copyright (C) 2008-2014, Armin Burgmeier <armin@arbur.net>
+Copyright (C) 2008-2015, Armin Burgmeier <armin@arbur.net>
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -100,8 +96,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ## Development
 
-To get in contact with the developers, either use the obby-users mailing
-list mentioned above or drop by in our IRC channel #infinote on
-irc.freenode.org. To get the up-to-date Gobby code to hack on, use
-`git clone https://github.com/gobby/gobby.git'. Pull requests against
-our [GitHub repository](https://github.com/gobby/gobby) are appreciated.
+To get in contact with the developers, please use the obby-users mailing
+list mentioned above, or open an issue on github. To get the up-to-date
+Gobby code to hack on, use `git clone https://github.com/gobby/gobby.git`.
+Pull requests against our [GitHub repository](https://github.com/gobby/gobby)
+are appreciated.
