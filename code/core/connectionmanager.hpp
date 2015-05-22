@@ -56,13 +56,17 @@ public:
 #endif
 
 	// Use existing connection if any, otherwise make new one. May throw.
+	// If connect is false and a new connection would need to be made,
+	// then don't immediately open the new connection.
 	InfXmppConnection* make_connection(const std::string& hostname,
 	                                   const std::string& service,
-					   unsigned int device_index);
+	                                   unsigned int device_index,
+	                                   bool connect);
 	InfXmppConnection* make_connection(const InfIpAddress* address,
 	                                   guint port,
 	                                   unsigned int device_index,
-	                                   const std::string& hostname);
+	                                   const std::string& hostname,
+	                                   bool connect);
 
 	void remove_connection(InfXmppConnection* connection);
 
@@ -75,7 +79,8 @@ public:
 private:
 	InfXmppConnection* create_connection(InfTcpConnection* connection,
 	                                     unsigned int device_index,
-	                                     const std::string& hostname);
+	                                     const std::string& hostname,
+	                                     bool connect);
 
 	static void on_notify_status_static(GObject* object,
 	                                    GParamSpec* pspec,

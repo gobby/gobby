@@ -89,7 +89,7 @@ Gobby::ConnectionManager::~ConnectionManager()
 
 InfXmppConnection* Gobby::ConnectionManager::make_connection(
 	const std::string& hostname, const std::string& service,
-	unsigned int device_index)
+	unsigned int device_index, bool connect)
 {
 	// Check whether we do have such a connection already:
 	InfXmppConnection* xmpp =
@@ -108,9 +108,10 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 
 		g_object_unref(resolver);
 
-		xmpp = create_connection(connection, device_index, hostname);
+		xmpp = create_connection(
+			connection, device_index, hostname, connect);
 	}
-	else
+	else if(connect)
 	{
 		InfXmlConnectionStatus status;
 		g_object_get(G_OBJECT(xmpp), "status", &status, NULL);
@@ -137,7 +138,8 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 	const InfIpAddress* address,
 	guint port,
 	unsigned int device_index,
-	const std::string& hostname)
+	const std::string& hostname,
+	bool connect)
 {
 	// Check whether we do have such a connection already:
 	InfXmppConnection* xmpp =
@@ -148,9 +150,10 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 	{
 		InfTcpConnection* connection = inf_tcp_connection_new(
 			m_io, address, port);
-		xmpp = create_connection(connection, device_index, hostname);
+		xmpp = create_connection(
+			connection, device_index, hostname, connect);
 	}
-	else
+	else if(connect)
 	{
 		InfXmlConnectionStatus status;
 		g_object_get(G_OBJECT(xmpp), "status", &status, NULL);
@@ -175,7 +178,8 @@ InfXmppConnection* Gobby::ConnectionManager::make_connection(
 InfXmppConnection*
 Gobby::ConnectionManager::create_connection(InfTcpConnection* connection,
                                             unsigned int device_index,
-                                            const std::string& hostname)
+                                            const std::string& hostname,
+                                            bool connect)
 {
 	g_object_set(G_OBJECT(connection),
 		"device-index", device_index,
@@ -192,7 +196,7 @@ Gobby::ConnectionManager::create_connection(InfTcpConnection* connection,
 		error = NULL;
 	}
 
-	if(!inf_tcp_connection_open(connection, &error))
+	if(connect && !inf_tcp_connection_open(connection, &error))
 	{
 		std::string message = error->message;
 		g_error_free(error);

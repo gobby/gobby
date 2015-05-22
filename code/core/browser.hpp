@@ -67,12 +67,14 @@ public:
 	bool get_selected_iter(InfBrowser* browser, InfBrowserIter* iter);
 	void set_selected(InfBrowser* browser, const InfBrowserIter* iter);
 
-	InfBrowser* connect_to_host(const std::string& hostname,
-	                            const std::string& service,
-	                            unsigned int device_index);
-	InfBrowser* connect_to_host(const InfIpAddress* address, guint port,
-	                            unsigned int device_index,
-	                            const std::string& hostname);
+	InfBrowser* add_remote(const std::string& hostname,
+	                       const std::string& service,
+	                       unsigned int device_index,
+	                       bool connect);
+	InfBrowser* add_remote(const InfIpAddress* address, guint port,
+	                       unsigned int device_index,
+	                       const std::string& hostname,
+	                       bool connect);
 	void add_browser(InfBrowser* browser, const char* name);
 	void remove_browser(InfBrowser* browser);
 

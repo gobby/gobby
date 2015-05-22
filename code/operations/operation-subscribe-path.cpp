@@ -174,8 +174,8 @@ void Gobby::OperationSubscribePath::start_without_browser()
 
 	try
 	{
-		m_browser = get_browser().connect_to_host(
-			hostname, service, device_index);
+		m_browser = get_browser().add_remote(
+			hostname, service, device_index, true);
 		g_assert(m_browser != NULL);
 
 		// We need a weak reference on the browser, so that we can

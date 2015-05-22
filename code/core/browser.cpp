@@ -273,13 +273,14 @@ void Gobby::Browser::set_selected(InfBrowser* browser,
 	inf_gtk_browser_view_set_selected(m_browser_view, &tree_iter);
 }
 
-InfBrowser* Gobby::Browser::connect_to_host(const std::string& hostname,
-                                            const std::string& service,
-                                            unsigned int device_index)
+InfBrowser* Gobby::Browser::add_remote(const std::string& hostname,
+                                       const std::string& service,
+                                       unsigned int device_index,
+                                       bool connect)
 {
 	// Check whether we do have such a connection already:
 	InfXmppConnection* xmpp = m_connection_manager.make_connection(
-		hostname, service, device_index);
+		hostname, service, device_index, connect);
 
 	// Should have thrown otherwise:
 	g_assert(xmpp != NULL);
@@ -294,14 +295,15 @@ InfBrowser* Gobby::Browser::connect_to_host(const std::string& hostname,
 	return browser;
 }
 
-InfBrowser* Gobby::Browser::connect_to_host(const InfIpAddress* address,
-                                            guint port,
-                                            unsigned int device_index,
-                                            const std::string& hostname)
+InfBrowser* Gobby::Browser::add_remote(const InfIpAddress* address,
+                                       guint port,
+                                       unsigned int device_index,
+                                       const std::string& hostname,
+                                       bool connect)
 {
 	// Check whether we do have such a connection already:
 	InfXmppConnection* xmpp = m_connection_manager.make_connection(
-		address, port, device_index, hostname);
+		address, port, device_index, hostname, connect);
 
 	// Should have thrown otherwise:
 	g_assert(xmpp != NULL);
