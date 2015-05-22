@@ -14,6 +14,7 @@ libgobby_core_a_SOURCES = \
 	folder.cpp \
 	foldermanager.cpp \
 	huebutton.cpp \
+	knownhoststorage.cpp \
 	menumanager.cpp \
 	nodewatch.cpp \
 	noteplugin.cpp \
@@ -36,37 +37,38 @@ libgobby_core_a_SOURCES = \
 
 noinst_HEADERS = \
 	applicationactions.hpp \
-        browser.hpp \
+	browser.hpp \
 	certificatemanager.hpp \
 	chatsessionview.hpp \
 	chattablabel.hpp \
-        closableframe.hpp \
+	closableframe.hpp \
 	connectionmanager.hpp \
 	credentialsgenerator.hpp \
-        documentinfostorage.hpp \
-        filechooser.hpp \
-        folder.hpp \
-        foldermanager.hpp \
-        menumanager.hpp \
-        huebutton.hpp \
-        nodewatch.hpp \
-        noteplugin.hpp \
-        preferences.hpp \
+	documentinfostorage.hpp \
+	filechooser.hpp \
+	folder.hpp \
+	foldermanager.hpp \
+	menumanager.hpp \
+	huebutton.hpp \
+	knownhoststorage.hpp \
+	nodewatch.hpp \
+	noteplugin.hpp \
+	preferences.hpp \
 	selfhoster.hpp \
 	server.hpp \
 	sessionuserview.hpp \
 	sessionview.hpp \
-        statusbar.hpp \
+	statusbar.hpp \
 	tablabel.hpp \
-        textsessionuserview.hpp \
-        textsessionview.hpp \
+	textsessionuserview.hpp \
+	textsessionview.hpp \
 	textundogrouping.hpp \
 	texttablabel.hpp \
 	titlebar.hpp \
 	toolbar.hpp \
 	userjoin.hpp \
-        userlist.hpp \
-        windowactions.hpp
+	userlist.hpp \
+	windowactions.hpp
 
 appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby-0.5

@@ -46,6 +46,7 @@
 #include "core/closableframe.hpp"
 #include "core/titlebar.hpp"
 #include "core/windowactions.hpp"
+#include "core/knownhoststorage.hpp"
 
 #include "util/config.hpp"
 
@@ -132,6 +133,7 @@ protected:
 	// Functionality
 	WindowActions m_actions;
 	DocumentInfoStorage m_info_storage;
+	KnownHostStorage m_host_storage;
 	FolderManager m_folder_manager;
 	Operations m_operations;
 
