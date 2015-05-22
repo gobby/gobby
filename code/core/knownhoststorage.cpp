@@ -89,6 +89,18 @@ Gobby::KnownHostStorage::KnownHostStorage(Browser& browser):
 	try
 	{
 		parser.parse_file(filename());
+	}
+	catch(xmlpp::exception& e)
+	{
+		// Could not open file, or file is invalid. Start
+		// with a single entry.
+		std::string service = Glib::ustring::compose(
+			"%1", inf_protocol_get_default_port());
+		browser.add_remote("gobby.0x539.de", service, 0, false);
+	}
+
+	try
+	{
 		xmlpp::Document* document = parser.get_document();
 		if(document)
 		{
