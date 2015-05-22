@@ -103,6 +103,26 @@ Gobby::FolderManager::FolderManager(Browser& browser,
 		G_OBJECT(model), "set-browser",
 		G_CALLBACK(&on_set_browser_static), this);
 
+	// Add already existing browsers
+	GtkTreeIter iter;
+	GtkTreeModel* treemodel = GTK_TREE_MODEL(model);
+	for(gboolean have_entry =
+		gtk_tree_model_get_iter_first(treemodel, &iter);
+	    have_entry == TRUE;
+	    have_entry = gtk_tree_model_iter_next(treemodel, &iter))
+	{
+		InfBrowser* browser;
+
+		gtk_tree_model_get(
+			treemodel, &iter,
+			INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
+			-1);
+
+		m_browser_map[browser] =
+			new BrowserInfo(*this, browser);
+		g_object_unref(browser);
+	}
+
 	m_text_document_added_connection = 
 		m_text_folder.signal_document_added().connect(
 			sigc::mem_fun(

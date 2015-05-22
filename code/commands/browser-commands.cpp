@@ -341,6 +341,34 @@ Gobby::BrowserCommands::BrowserCommands(Browser& browser,
 	m_set_browser_handler = g_signal_connect(
 		browser.get_store(), "set-browser",
 		G_CALLBACK(on_set_browser_static), this);
+
+	// Add already existing browsers
+	GtkTreeIter iter;
+	GtkTreeModel* treemodel = GTK_TREE_MODEL(browser.get_store());
+	for(gboolean have_entry =
+		gtk_tree_model_get_iter_first(treemodel, &iter);
+	    have_entry == TRUE;
+	    have_entry = gtk_tree_model_iter_next(treemodel, &iter))
+	{
+		InfBrowser* browser;
+
+		gtk_tree_model_get(
+			treemodel, &iter,
+			INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
+			-1);
+
+		InfBrowserStatus browser_status;
+		g_object_get(
+			G_OBJECT(browser), "status",
+			&browser_status, NULL);
+
+		m_browser_map[browser] =
+			new BrowserInfo(*this, browser);
+		if(browser_status == INF_BROWSER_OPEN)
+			if(!create_chat_document(browser))
+				subscribe_chat(browser);
+		g_object_unref(browser);
+	}
 }
 
 Gobby::BrowserCommands::~BrowserCommands()
