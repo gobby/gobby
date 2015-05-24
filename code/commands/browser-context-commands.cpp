@@ -16,6 +16,7 @@
 
 #include "commands/browser-context-commands.hpp"
 #include "operations/operation-open-multiple.hpp"
+#include "dialogs/connection-info-dialog.hpp"
 #include "util/file.hpp"
 #include "util/i18n.hpp"
 
@@ -97,6 +98,7 @@ Gobby::BrowserContextCommands::BrowserContextCommands(
 
 	m_action_group(Gio::SimpleActionGroup::create()),
 	m_action_remove(m_action_group->add_action("remove")),
+	m_action_connection_info(m_action_group->add_action("connection-info")),
 	m_action_disconnect(m_action_group->add_action("disconnect")),
 	m_action_create_account(m_action_group->add_action("create-account")),
 	m_action_create_document(
@@ -119,6 +121,9 @@ Gobby::BrowserContextCommands::BrowserContextCommands(
 
 	m_action_remove->signal_activate().connect(
 		sigc::mem_fun(*this, &BrowserContextCommands::on_remove));
+	m_action_connection_info->signal_activate().connect(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::on_connection_info));
 	m_action_disconnect->signal_activate().connect(
 		sigc::mem_fun(*this, &BrowserContextCommands::on_disconnect));
 	m_action_create_account->signal_activate().connect(
@@ -159,10 +164,12 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 
 	InfBrowser* browser;
 	InfBrowserIter iter;
+	InfBrowserStatus status;
 
 	if(!m_browser.get_selected_browser(&browser))
 		return;
 
+	g_object_get(G_OBJECT(browser), "status", &status, NULL);
 	const bool has_iter = m_browser.get_selected_iter(browser, &iter);
 
 	// Watch the node, and close the popup menu when the node
@@ -206,8 +213,8 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		const bool is_toplevel =
 			!inf_browser_get_parent(browser, &dummy_iter);
 
-		// TODO: Use another menu where this two are not visible
-		// when !is_toplevel || !INFC_IS_BROWSER.
+		m_action_connection_info->set_enabled(
+			is_toplevel && status == INF_BROWSER_OPEN);
 		m_action_disconnect->set_enabled(
 			is_toplevel && INFC_IS_BROWSER(browser));
 		m_action_create_account->set_enabled(
@@ -263,6 +270,20 @@ void Gobby::BrowserContextCommands::on_remove(const Glib::VariantBase& param)
 	// to the browser.
 	m_popup_watch.reset(NULL);
 	m_browser.remove_browser(browser);
+}
+
+void Gobby::BrowserContextCommands::on_connection_info(
+	const Glib::VariantBase& param)
+{
+	InfBrowser* browser = m_popup_watch->get_browser();
+
+	m_dialog.reset(new ConnectionInfoDialog(m_parent, browser));
+	m_dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
+	m_dialog->signal_response().connect(
+		sigc::mem_fun(*this,
+			&BrowserContextCommands::
+				on_connection_info_response));
+	m_dialog->present();
 }
 
 void Gobby::BrowserContextCommands::on_disconnect(
@@ -407,6 +428,13 @@ void Gobby::BrowserContextCommands::on_dialog_node_removed()
 }
 
 void Gobby::BrowserContextCommands::on_create_account_response(
+	int response_id)
+{
+	m_dialog.reset(NULL);
+	m_dialog_watch.reset(NULL);
+}
+
+void Gobby::BrowserContextCommands::on_connection_info_response(
 	int response_id)
 {
 	m_dialog.reset(NULL);

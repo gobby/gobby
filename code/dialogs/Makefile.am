@@ -2,6 +2,7 @@ noinst_LIBRARIES = libgobby-dialogs.a
 
 libgobby_dialogs_a_SOURCES = \
 	connection-dialog.cpp \
+	connection-info-dialog.cpp \
 	document-location-dialog.cpp \
 	entry-dialog.cpp \
 	find-dialog.cpp \
@@ -13,6 +14,7 @@ libgobby_dialogs_a_SOURCES = \
 
 noinst_HEADERS = \
 	connection-dialog.hpp \
+	connection-info-dialog.hpp \
         document-location-dialog.hpp \
         entry-dialog.hpp \
         find-dialog.hpp \

@@ -74,6 +74,7 @@ protected:
 
 	// Context commands
 	void on_remove(const Glib::VariantBase& param);
+	void on_connection_info(const Glib::VariantBase& param);
 	void on_disconnect(const Glib::VariantBase& param);
 	void on_create_account(const Glib::VariantBase& param);
 
@@ -87,6 +88,7 @@ protected:
 	void on_account_created(gnutls_x509_privkey_t key,
 	                        InfCertificateChain* certificate,
 	                        const InfAclAccount* account);
+	void on_connection_info_response(int response_id);
 	void on_account_created_response(int response_id);
 	void on_new_response(int response_id, InfBrowser* browser,
 	                     InfBrowserIter iter, bool directory);
@@ -114,6 +116,7 @@ protected:
 	// Allowed Actions (TODO: move them to browsercontextactions.cpp)
 	const Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;
 	const Glib::RefPtr<Gio::SimpleAction> m_action_remove;
+	const Glib::RefPtr<Gio::SimpleAction> m_action_connection_info;
 	const Glib::RefPtr<Gio::SimpleAction> m_action_disconnect;
 	const Glib::RefPtr<Gio::SimpleAction> m_action_create_account;
 	const Glib::RefPtr<Gio::SimpleAction> m_action_create_document;

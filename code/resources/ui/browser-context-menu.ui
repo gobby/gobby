@@ -15,6 +15,10 @@
         <attribute name="action">browser.disconnect</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">_Connection Info...</attribute>
+        <attribute name="action">browser.connection-info</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_Create Account...</attribute>
         <attribute name="action">browser.create-account</attribute>
       </item>
