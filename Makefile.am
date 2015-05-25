@@ -44,6 +44,15 @@ appdatadir = $(datadir)/appdata
 appdata_DATA = gobby-0.5.appdata.xml
 endif
 
+gsettings_SCHEMAS = de.0x539.gobby.gschema.xml
+
+EXTRA_DIST = de.0x539.gobby.gschema.xml.in
+CLEANFILES = de.0x539.gobby.gschema.xml
+DISTCLEANFILES = de.0x539.gobby.gschema.xml
+MAINTAINERCLEANFILES = $(gsettings_SCHEMAS:.xml=.valid)
+
+@GSETTINGS_RULES@
+
 clean-local:
 	-rm -rf gobby-0.5.desktop
 
@@ -54,7 +63,7 @@ clean-local:
 # (need to) exist in the source tree.
 nodist_EXTRA_gobby_0_5_SOURCES = dummy.cpp
 
-EXTRA_DIST = README.md
+EXTRA_DIST += README.md
 
 # Debian seems to need an XPM of the program icon, so we provide one here.
 # It's currently not used for anything else, though.
@@ -62,10 +71,10 @@ EXTRA_DIST += gobby-0.5.xpm
 
 # For the manual
 EXTRA_DIST += gnome-doc-utils.make gobby-0.5.desktop.in gobby-0.5.appdata.xml
-DISTCLEANFILES = gnome-doc-utils.make
+DISTCLEANFILES += gnome-doc-utils.make
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
 
-MAINTAINERCLEANFILES = \
+MAINTAINERCLEANFILES += \
 	ChangeLog
 
 distclean-local:

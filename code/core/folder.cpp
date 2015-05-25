@@ -105,7 +105,11 @@ Gobby::Folder::Folder(bool hide_single_tab,
                       Preferences& preferences,
                       GtkSourceLanguageManager* lang_manager):
 	m_hide_single_tab(hide_single_tab), m_preferences(preferences),
-	m_lang_manager(lang_manager)
+	m_lang_manager(lang_manager),
+	m_document_userlist_width(Gio::Settings::create(
+		"de.0x539.gobby.state.window"), "document-userlist-width"),
+	m_chat_userlist_width(Gio::Settings::create(
+		"de.0x539.gobby.state.window"), "chat-userlist-width")
 {
 	set_scrollable(true);
 	set_show_border(false);
@@ -139,7 +143,7 @@ Gobby::Folder::add_text_session(InfTextSession* session,
 		new TextSessionUserView(
 			*view, true,
 			m_preferences.appearance.show_document_userlist,
-			m_preferences.appearance.document_userlist_width));
+			m_document_userlist_width));
 	userview->show();
 
 	TabLabel* tablabel = Gtk::manage(new TextTabLabel(*this, *view));
@@ -176,7 +180,7 @@ Gobby::Folder::add_chat_session(InfChatSession* session,
 		new SessionUserView(
 			*view, false,
 			m_preferences.appearance.show_chat_userlist,
-			m_preferences.appearance.chat_userlist_width));
+			m_chat_userlist_width));
 	userview->show();
 
 	TabLabel* tablabel = Gtk::manage(

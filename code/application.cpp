@@ -37,6 +37,8 @@ extern "C" {
 
 #include <libinfinity/common/inf-init.h>
 
+#include <glib/gstdio.h>
+
 #include <libintl.h>
 
 namespace
@@ -68,7 +70,6 @@ class Gobby::Application::Data
 {
 public:
 	Data(Gobby::Application& application);
-	~Data();
 
 	// TODO: Does the config object really need to stay around, or can
 	// it be thrown away after we have loaded the preferences?
@@ -97,11 +98,9 @@ Gobby::Application::Data::Data(Gobby::Application& application):
 	                       certificate_manager),
 	m_help_commands(application, application_actions)
 {
-}
-
-Gobby::Application::Data::~Data()
-{
-	preferences.serialize(config);
+	// Remove configuration file, since we have transferred the options
+	// now to GSettings.
+	g_unlink(config_filename("config.xml").c_str());
 }
 
 Gobby::Application::Application():
@@ -198,7 +197,6 @@ void Gobby::Application::on_startup()
 		set_app_menu(m_data->menu_manager.get_app_menu());
 		set_menubar(m_data->menu_manager.get_menu());
 
-		// TODO: language manager should be given to window
 		m_gobby_window = new Gobby::Window(
 			m_data->config, m_data->language_manager,
 			m_data->file_chooser, m_data->preferences,

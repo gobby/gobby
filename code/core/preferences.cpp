@@ -24,160 +24,90 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/random.h>
 
-// TODO: Support direct enum config storage via context specialization for
-// enums.
-Gobby::Preferences::User::User(Config::ParentEntry& entry):
-	name(entry.get_value<Glib::ustring>("name", Glib::get_user_name())),
-	hue(entry.get_value<double>("hue", Glib::Rand().get_double())),
-	alpha(entry.get_value<double>("alpha", 1.0)),
-	show_remote_cursors(entry.get_value<bool>(
-		"show-remote-cursors", true)),
-	show_remote_selections(entry.get_value<bool>(
-		"show-remote-selections", true)),
-	show_remote_current_lines(entry.get_value<bool>(
-		"show-remote-current-lines", true)),
-	show_remote_cursor_positions(entry.get_value<bool>(
-		"show-remote-cursor-positions", true)),
-	allow_remote_access(entry.get_value<bool>(
-		"allow-remote-access", true)),
-	require_password(entry.get_value<bool>(
-		"require-password", false)),
-	password(entry.get_value<std::string>(
-		"password")),
-	port(entry.get_value<unsigned int>(
-		"port", inf_protocol_get_default_port())),
-	keep_local_documents(entry.get_value<bool>(
-		"keep-local-documents", true)),
-	host_directory(entry.get_value<std::string>("host-directory",
-		config_filename("local-documents")))
+Gobby::Preferences::User::User(
+	const Glib::RefPtr<Gio::Settings>& settings,
+	Config::ParentEntry& entry)
+:
+	name(settings, entry, "name"),
+	hue(settings, entry, "hue"),
+	alpha(settings, entry, "alpha"),
+	show_remote_cursors(settings, entry, "show-remote-cursors"),
+	show_remote_selections(settings, entry, "show-remote-selections"),
+	show_remote_current_lines(
+		settings, entry, "show-remote-current-lines"),
+	show_remote_cursor_positions(
+		settings, entry, "show-remote-cursor-positions"),
+	allow_remote_access(settings, entry, "allow-remote-access"),
+	require_password(settings, entry, "require-password"),
+	password(settings, entry, "password"),
+	port(settings, entry, "port"),
+	keep_local_documents(settings, entry, "keep-local-documents"),
+	host_directory(settings, entry, "host-directory")
+{
+	if(name.is_default())
+		name = Glib::get_user_name();
+	if(hue.is_default())
+		hue = Glib::Rand().get_double();
+	if(host_directory.is_default())
+		host_directory = config_filename("local-documents");
+}
+
+Gobby::Preferences::Editor::Editor(
+	const Glib::RefPtr<Gio::Settings>& settings,
+	Config::ParentEntry& entry)
+:
+	tab_width(settings, entry, "tab-width"),
+	tab_spaces(settings, entry, "tab-insert-spaces"),
+	indentation_auto(settings, entry, "auto-indentation"),
+	homeend_smart(settings, entry, "smart-homeend"),
+	autosave_enabled(settings, entry, "autosave-enabled"),
+	autosave_interval(settings, entry, "autosave-interval")
 {
 }
 
-void Gobby::Preferences::User::serialize(Config::ParentEntry& entry) const
-{
-	entry.set_value("name", name);
-	entry.set_value("hue", hue);
-	entry.set_value("alpha", alpha);
-	
-	entry.set_value("show-remote-cursors", show_remote_cursors);
-	entry.set_value("show-remote-selections", show_remote_selections);
-	entry.set_value("show-remote-current-lines", show_remote_current_lines);
-	entry.set_value("show-remote-cursor-positions",
-	                show_remote_cursor_positions);
-
-	entry.set_value("allow-remote-access", allow_remote_access);
-	entry.set_value("require-password", require_password);
-	entry.set_value("password", password),
-	entry.set_value("port", port);
-	entry.set_value("keep-local-documents", keep_local_documents);
-	entry.set_value("host-directory", host_directory);
-}
-
-Gobby::Preferences::Editor::Editor(Config::ParentEntry& entry):
-	tab_width(entry.get_value<unsigned int>("tab-width", 8)),
-	tab_spaces(entry.get_value<bool>("tab-insert-spaces", false)),
-	indentation_auto(entry.get_value<bool>("auto-indentation", true)),
-	homeend_smart(entry.get_value<bool>("smart-homeend", false) ),
-	autosave_enabled(entry.get_value<bool>("autosave-enabled", false) ),
-	autosave_interval(
-		entry.get_value<unsigned int>("autosave-interval", 10))
+Gobby::Preferences::View::View(
+	const Glib::RefPtr<Gio::Settings>& settings,
+	Config::ParentEntry& entry)
+:
+	wrap_mode(settings, entry, "wrap-mode"),
+	linenum_display(settings, entry, "display-line-numbers"),
+	curline_highlight(settings, entry, "highlight-current-line"),
+	margin_display(settings, entry, "margin-display"),
+	margin_pos(settings, entry, "margin-position"),
+	bracket_highlight(settings, entry, "highlight-matching-brackets"),
+	whitespace_display(settings, entry, "display-whitespace")
 {
 }
 
-void Gobby::Preferences::Editor::serialize(Config::ParentEntry& entry) const
-{
-	entry.set_value("tab-width", tab_width);
-	entry.set_value("tab-insert-spaces", tab_spaces);
-	entry.set_value("auto-indentation", indentation_auto);
-	entry.set_value("smart-homeend", homeend_smart);
-	entry.set_value("autosave-enabled", autosave_enabled);
-	entry.set_value("autosave-interval", autosave_interval);
-}
-
-Gobby::Preferences::View::View(Config::ParentEntry& entry):
-	wrap_mode(static_cast<Gtk::WrapMode>(entry.get_value<int>(
-		"wrap-mode", static_cast<int>(Gtk::WRAP_WORD_CHAR)))),
-	linenum_display(entry.get_value<bool>("display-line-numbers", true)),
-	curline_highlight(entry.get_value<bool>(
-		"highlight-current-line", true)),
-	margin_display(entry.get_value<bool>("margin-display", true) ),
-	margin_pos(entry.get_value<unsigned int>("margin-position", 80) ),
-	bracket_highlight(entry.get_value<bool>(
-		"highlight-matching-brackets", true)),
-	whitespace_display(static_cast<GtkSourceDrawSpacesFlags>(
-		entry.get_value<int>("display-whitespace", 0)))
+Gobby::Preferences::Appearance::Appearance(
+	const Glib::RefPtr<Gio::Settings>& settings,
+	Config::ParentEntry& entry)
+:
+	toolbar_style(settings, entry, "toolbar-style"),
+	font(settings, entry, "font"),
+	scheme_id(settings, entry, "scheme-id"),
+	show_toolbar(settings, entry, "show-toolbar"),
+	show_statusbar(settings, entry, "show-statusbar"),
+	show_browser(settings, entry, "show-browser"),
+	show_chat(settings, entry, "show-chat"),
+	show_document_userlist(settings, entry, "show-document-userlist"),
+	show_chat_userlist(settings, entry, "show-chat-userlist")
 {
 }
 
-void Gobby::Preferences::View::serialize(Config::ParentEntry& entry) const
-{
-	entry.set_value("wrap-mode", static_cast<int>(wrap_mode));
-	entry.set_value("display-line-numbers", linenum_display);
-	entry.set_value("highlight-current-line", curline_highlight);
-	entry.set_value("margin-display", margin_display);
-	entry.set_value("margin-position", margin_pos);
-	entry.set_value("highlight-matching-brackets", bracket_highlight);
-	entry.set_value("display-whitespace",
-	                static_cast<int>(whitespace_display));
-}
-
-Gobby::Preferences::Appearance::Appearance(Config::ParentEntry& entry):
-	toolbar_style(static_cast<Gtk::ToolbarStyle>(entry.get_value<int>(
-		"toolbar-style", static_cast<int>(Gtk::TOOLBAR_BOTH)))),
-	font(Pango::FontDescription(entry.get_value<Glib::ustring>(
-		"font", "Monospace 10"))),
-	scheme_id(entry.get_value<Glib::ustring>("scheme-id", "classic")),
-	document_userlist_width(entry.get_value<unsigned int>(
-		"document-userlist-width", 150)),
-	chat_userlist_width(entry.get_value<unsigned int>(
-		"chat-userlist-width", 150)),
-
-	show_toolbar(entry.get_value<bool>("show-toolbar", true)),
-	show_statusbar(entry.get_value<bool>("show-statusbar", true)),
-	show_browser(entry.get_value<bool>("show-browser", true)),
-	show_chat(entry.get_value<bool>("show-chat", true)),
-	show_document_userlist(entry.get_value<bool>(
-		"show-document-userlist", true)),
-	show_chat_userlist(entry.get_value<bool>(
-		"show-chat-userlist", true))
-{
-}
-
-void Gobby::Preferences::Appearance::
-	serialize(Config::ParentEntry& entry) const
-{
-	entry.set_value("toolbar-style", static_cast<int>(toolbar_style) );
-
-	entry.set_value(
-		"font",
-		static_cast<const Pango::FontDescription&>(font).to_string());
-
-	entry.set_value("scheme-id", scheme_id);
-
-	entry.set_value("document-userlist-width", document_userlist_width);
-	entry.set_value("chat-userlist-width", chat_userlist_width);
-
-	entry.set_value("show-toolbar", show_toolbar);
-	entry.set_value("show-statusbar", show_statusbar);
-	entry.set_value("show-browser", show_browser);
-	entry.set_value("show-chat", show_chat);
-	entry.set_value("show-document-userlist", show_document_userlist);
-	entry.set_value("show-chat-userlist", show_chat_userlist);
-}
-
-Gobby::Preferences::Security::Security(Config::ParentEntry& entry):
-	trust_file(entry.get_value<std::string>("trust-file")),
-	policy(static_cast<InfXmppConnectionSecurityPolicy>(
-		entry.get_value<int>("policy", static_cast<int>(
-			INF_XMPP_CONNECTION_SECURITY_BOTH_PREFER_TLS)))),
-	authentication_enabled(
-		entry.get_value<bool>("authentication-enabled", true)),
-	certificate_file(entry.get_value<std::string>("certificate-file")),
-	key_file(entry.get_value<std::string>("key-file"))
+Gobby::Preferences::Security::Security(
+	const Glib::RefPtr<Gio::Settings>& settings,
+	Config::ParentEntry& entry)
+:
+	trust_file(settings, entry, "trust-file"),
+	policy(settings, entry, "policy"),
+	authentication_enabled(settings, entry, "authentication-enabled"),
+	certificate_file(settings, entry, "certificate-file"),
+	key_file(settings, entry, "key-file")
 {
 	// Load default trust-file. As this accesses the filesystem, only do
 	// it when we really need it, i.e. when starting Gobby the first time.
-	if(!entry.has_value("trust-file"))
+	if(trust_file.is_default())
 	{
 #ifdef G_OS_WIN32
 		gchar* package_directory =
@@ -204,57 +134,28 @@ Gobby::Preferences::Security::Security(Config::ParentEntry& entry):
 	}
 }
 
-void Gobby::Preferences::Security::serialize(Config::ParentEntry& entry) const
+Gobby::Preferences::Network::Network(
+	const Glib::RefPtr<Gio::Settings>& settings,
+	Config::ParentEntry& entry)
+:
+	keepalive(settings, entry, "keepalive")
 {
-	entry.set_value("trust-file", trust_file);
-	entry.set_value("policy", static_cast<int>(policy));
-
-	entry.set_value("authentication-enabled", authentication_enabled);
-	entry.set_value("certificate-file", certificate_file);
-	entry.set_value("key-file", key_file);
-}
-
-Gobby::Preferences::Network::Network(Config::ParentEntry& entry):
-	keepalive(InfKeepalive())
-{
-	InfKeepalive keepalive;
-	keepalive.mask = static_cast<InfKeepaliveMask>(entry.get_value<int>(
-		"keepalive-mask", static_cast<int>(
-			INF_KEEPALIVE_ENABLED |
-			INF_KEEPALIVE_TIME |
-			INF_KEEPALIVE_INTERVAL)));
-	keepalive.enabled = entry.get_value<bool>("keepalive-enabled", true);
-	keepalive.time = entry.get_value<guint>("keepalive-time", 60);
-	keepalive.interval = entry.get_value<guint>("keepalive-interval", 5);
-	this->keepalive = keepalive;
-}
-
-void Gobby::Preferences::Network::serialize(Config::ParentEntry& entry) const
-{
-	const InfKeepalive& keepalive = this->keepalive;
-	entry.set_value("keepalive-mask", static_cast<int>(keepalive.mask));
-	entry.set_value("keepalive-enabled", keepalive.enabled);
-	entry.set_value("keepalive-time", keepalive.time);
-	entry.set_value("keepalive-interval", keepalive.interval);
 }
 
 Gobby::Preferences::Preferences(Config& config):
-	user(config.get_root()["user"]),
-	editor(config.get_root()["editor"]),
-	view(config.get_root()["view"]),
-	appearance(config.get_root()["appearance"]),
-	security(config.get_root()["security"]),
-	network(config.get_root()["network"])
+	m_settings(Gio::Settings::create("de.0x539.gobby.preferences")),
+	user(m_settings->get_child("user"),
+	     config.get_root()["user"]),
+	editor(m_settings->get_child("editor"),
+	       config.get_root()["editor"]),
+	view(m_settings->get_child("view"),
+	     config.get_root()["view"]),
+	appearance(m_settings->get_child("appearance"),
+	           config.get_root()["appearance"]),
+	security(m_settings->get_child("security"),
+	         config.get_root()["security"]),
+	network(m_settings->get_child("network"),
+	        config.get_root()["network"])
 {
 }
 
-void Gobby::Preferences::serialize(Config& config) const
-{
-	// Serialise into config
-	user.serialize(config.get_root()["user"]);
-	editor.serialize(config.get_root()["editor"]);
-	view.serialize(config.get_root()["view"]);
-	appearance.serialize(config.get_root()["appearance"]);
-	security.serialize(config.get_root()["security"]);
-	network.serialize(config.get_root()["network"]);
-}

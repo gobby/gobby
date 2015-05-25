@@ -94,6 +94,10 @@ protected:
 	Preferences& m_preferences;
 	GtkSourceLanguageManager* m_lang_manager;
 
+	// Persistent state
+	Preferences::Option<unsigned int> m_document_userlist_width;
+	Preferences::Option<unsigned int> m_chat_userlist_width;
+
 	SignalDocumentAdded m_signal_document_added;
 	SignalDocumentRemoved m_signal_document_removed;
 	SignalDocumentChanged m_signal_document_changed;

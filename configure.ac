@@ -83,6 +83,12 @@ else
 fi
 
 ###################################
+# GSettings
+###################################
+
+GLIB_GSETTINGS
+
+###################################
 # Output
 ###################################
 
@@ -128,6 +134,8 @@ AC_OUTPUT([
     help/Makefile
 
     win32/Makefile
+
+    de.0x539.gobby.gschema.xml
 ])
 
 # vim:set et sw=2 ts=2:

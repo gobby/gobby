@@ -1,0 +1,304 @@
+<schemalist>
+  <enum id="de.0x539.gobby.ToolbarStyle">
+    <value nick="icons" value="0" />
+    <value nick="text" value="1" />
+    <value nick="both" value="2" />
+    <value nick="both-horiz" value="3" />
+  </enum>
+
+  <enum id="de.0x539.gobby.WrapMode">
+    <value nick="none" value="0" />
+    <value nick="char" value="1" />
+    <value nick="word" value="2" />
+    <value nick="word-char" value="3" />
+  </enum>
+
+  <enum id="de.0x539.gobby.SecurityPolicy">
+    <value nick="no-tls" value="0" />
+    <value nick="require-tls" value="1" />
+    <value nick="prefer-no-tls" value="2" />
+    <value nick="prefer-tls" value="3" />
+  </enum>
+
+  <flags id="de.0x539.gobby.DrawSpaces">
+    <value nick="space" value="1" />
+    <value nick="tab" value="2" />
+    <value nick="newline" value="4" />
+    <value nick="nbsp" value="8" />
+    <value nick="leading" value="16" />
+    <value nick="text" value="32" />
+    <value nick="trailing" value="64" />
+  </flags>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby" path="/de/0x539/gobby/">
+    <child name="preferences" schema="de.0x539.gobby.preferences" />
+    <child name="state" schema="de.0x539.gobby.state" />
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences" path="/de/0x539/gobby/preferences/">
+    <child name="appearance" schema="de.0x539.gobby.preferences.appearance" />
+    <child name="editor" schema="de.0x539.gobby.preferences.editor" />
+    <child name="network" schema="de.0x539.gobby.preferences.network" />
+    <child name="security" schema="de.0x539.gobby.preferences.security" />
+    <child name="user" schema="de.0x539.gobby.preferences.user" />
+    <child name="view" schema="de.0x539.gobby.preferences.view" />
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.state" path="/de/0x539/gobby/state/">
+    <child name="window" schema="de.0x539.gobby.state.window" />
+    <child name="initial" schema="de.0x539.gobby.state.initial" />
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences.appearance" path="/de/0x539/gobby/preferences/appearance/">
+    <key name="toolbar-style" enum="de.0x539.gobby.ToolbarStyle">
+      <default>'both'</default>
+      <summary>Toolbar Style</summary>
+      <description>Specifies how to display the tool bar.</description>
+    </key>
+    <key name="font" type="s">
+      <default>'Monospace 12'</default>
+      <summary>Font</summary>
+      <description>The font that is used in the main editing area.</description>
+    </key>
+    <key name="scheme-id" type="s">
+      <default>'classic'</default>
+      <summary>Style Scheme</summary>
+      <description>Specifies the GtkSourceView style scheme to be used for the main editing area.</description>
+    </key>
+    <key name="show-toolbar" type="b">
+      <default>true</default>
+      <summary>Show Toolbar</summary>
+      <description>Whether or not to display the tool bar.</description>
+    </key>
+    <key name="show-statusbar" type="b">
+      <default>true</default>
+      <summary>Show Status Bar</summary>
+      <description>Whether or not to display the status bar.</description>
+    </key>
+    <key name="show-browser" type="b">
+      <default>true</default>
+      <summary>Show Document Browser</summary>
+      <description>Whether or not to display the document browser.</description>
+    </key>
+    <key name="show-chat" type="b">
+      <default>true</default>
+      <summary>Show Chat</summary>
+      <description>Whether or not to show the chat pane.</description>
+    </key>
+    <key name="show-document-userlist" type="b">
+      <default>true</default>
+      <summary>Show Document User List</summary>
+      <description>Whether or not to show the list of participants in the currently open document.</description>
+    </key>
+    <key name="show-chat-userlist" type="b">
+      <default>true</default>
+      <summary>Show Chat User List</summary>
+      <description>Whether or not to show the list of users currently participating in the chat.</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences.editor" path="/de/0x539/gobby/preferences/editor/">
+    <key name="tab-width" type="u">
+      <default>8</default>
+      <range min="1" max="8" />
+      <summary>Tab Width</summary>
+      <description>Number of spaces equivalent to one tabstop character.</description>
+    </key>
+    <key name="tab-insert-spaces" type="b">
+      <default>false</default>
+      <summary>Insert Spaces Instead of Tabs</summary>
+      <description>When pressing the tab key, insert the equivalent number of spaces instead of a tabstop character.</description>
+    </key>
+    <key name="auto-indentation" type="b">
+      <default>true</default>
+      <summary>Automatic Indentation</summary>
+      <description>When inserting a new line, automatically indent the new line to the same level as the previous line.</description>
+    </key>
+    <key name="smart-homeend" type="b">
+      <default>true</default>
+      <summary>Smart Home/End Keys</summary>
+      <description>When this is enabled, pressing the home key at the beginning of the line moves to the first non-whitespace character on that line. Same with the end key and the last non-whitespace character on the line.</description>
+    </key>
+    <key name="autosave-enabled" type="b">
+      <default>false</default>
+      <summary>Autosave Enabled</summary>
+      <description>If this is on, a copy of every open document is saved to disk periodically. This option only takes effect for documents that have been saved manually once before, such that a path where to store the document to is known.</description>
+    </key>
+    <key name="autosave-interval" type="u">
+      <default>10</default>
+      <range min="1" max="3600" />
+      <summary>Autosave Interval</summary>
+      <description>If autosave is enabled, this specifies the interval in milliseconds within which each document is saved to disk.</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences.network" path="/de/0x539/gobby/preferences/network/">
+    <key name="keepalive" type="(asbuu)">
+      <default>(['enabled', 'time', 'interval'], false, 60, 5)</default>
+      <summary>Keepalive Settings</summary>
+      <description>Settings for sending keepalive probes to detect whether the connection is still alive. This is a tuple of 4 values. The first is an array of strings which can be either 'enabled', 'time', or 'interval'. The following three values are known as 'enabled', 'time' and 'interval', and they are only used if the corresponding flag is set in the first value, otherwise the system default settings are taken. The second value ('enabled') specifies whether keepalive probes should be sent or not, the thirh value ('time') specifies the time in seconds the connection has to be idle before sending the first keepalive probe, and the fourth value ('interval') specifies the time in seconds to send subsequent keepalive probes.</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences.security" path="/de/0x539/gobby/preferences/security/">
+    <key name="trust-file" type="s">
+      <default>''</default>
+      <summary>CA Certificates</summary>
+      <description>Specifies the file with a list of trusted CA certificates in PEM format. If this is empty, it is set to the CA certificates trusted by default by the operating system.</description>
+    </key>
+    <key name="policy" enum="de.0x539.gobby.SecurityPolicy">
+      <default>'prefer-tls'</default>
+      <summary>Security Policy</summary>
+      <description>Specifies whether transport layer security (TLS) should be used or not, also depending on whether the server offers this or not.</description>
+    </key>
+    <key name="authentication-enabled" type="b">
+      <default>true</default>
+      <summary>Authentication Enabled</summary>
+      <description>If this is true, the local computer authenticates itself with a certificate to remote hosts that support TLS. The certificate in specified in 'certificate-file' is used and acts either as a server certificate (for incoming connections) or a client certificate (for outgoing connections).</description>
+    </key>
+    <key name="certificate-file" type="s">
+      <default>''</default>
+      <summary>Certificate</summary>
+      <description>A X.509 certificate (possibly a certificate chain), in PEM format, to be presented to the remote host for authentication of a TLS connection.</description>
+    </key>
+    <key name="key-file" type="s">
+      <default>''</default>
+      <summary>Private Key</summary>
+      <description>The private key, in PEM format, for the certificate given in 'certificate-file'. The private key can, but does not have to be, in the same file. </description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences.user" path="/de/0x539/gobby/preferences/user/">
+    <key name="name" type="s">
+      <default>''</default>
+      <summary>Name</summary>
+      <description>The name of the local user, as shown to other participants. If this is the empty string, Gobby will default to the name of the current unix user.</description>
+    </key>
+    <key name="hue" type="d">
+      <default>-1</default>
+      <range min="-1.0" max="1.0"/>
+      <summary>User Color</summary>
+      <description>A value between 0 and 1, specifying the color with which text that the local user writes is branded. If -1, Gobby will choose a random color.</description>
+    </key>
+    <key name="alpha" type="d">
+      <default>1.0</default>
+      <range min="0.0" max="1.0"/>
+      <summary>User Color Transparency</summary>
+      <description>The transparency with which user colors are drawn. A value of 1.0 means fully opaque, while 0.0 is fully transparent (no user colors drawn).</description>
+    </key>
+    <key name="show-remote-cursors" type="b">
+      <default>true</default>
+      <summary>Show Remote Cursors</summary>
+      <description>Whether or not to show the insertion cursors of remote users.</description>
+    </key>
+    <key name="show-remote-selections" type="b">
+      <default>true</default>
+      <summary>Show Remote Selections</summary>
+      <description>Whether or not to highlight text that is currently selected by remote users.</description>
+    </key>
+    <key name="show-remote-current-lines" type="b">
+      <default>true</default>
+      <summary>Show Remote Current Lines</summary>
+      <description>Whether to highlight the line in which remote users have the insertion cursor at the moment.</description>
+    </key>
+    <key name="show-remote-cursor-positions" type="b">
+      <default>true</default>
+      <summary>Show Remote Cursor Positions</summary>
+      <description>Whether to indicate the cursor position of remote users in the scrollbar.</description>
+    </key>
+    <key name="allow-remote-access" type="b">
+      <default>true</default>
+      <summary>Allow Remote Access</summary>
+      <description>Allow remote users to connect to this computer and modify documents stored on this computer.</description>
+    </key>
+    <key name="require-password" type="b">
+      <default>true</default>
+      <summary>Require Password</summary>
+      <description>Whether to ask for a password before allowing remote users to connect to this computer.</description>
+    </key>
+    <key name="password" type="s">
+      <default>''</default>
+      <summary>Password</summary>
+      <description>The password that needs to be entered before being able to connect to this computer. This value is only used if the 'require-password' option is set.</description>
+    </key>
+    <key name="port" type="u">
+      <default>6523</default>
+      <range min="0" max="65535"/>
+      <summary>Port Number</summary>
+      <description>The TCP port number to listen on when allowing remote users to connect.</description>
+    </key>
+    <key name="keep-local-documents" type="b">
+      <default>true</default>
+      <summary>Save Local Documents</summary>
+      <description>Whether to save documents created on this computer so that when closing Gobby and opening it again the documents remain available.</description>
+    </key>
+    <key name="host-directory" type="s">
+      <default>''</default>
+      <summary>Host Directory</summary>
+      <description>The directory in which to store documents saved on this computer. This option only has an effect if the 'keep-local-documents' option is set. If this is the empty string, Gobby chooses a location within its configuration directory.</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences.view" path="/de/0x539/gobby/preferences/view/">
+    <key name="wrap-mode" enum="de.0x539.gobby.WrapMode">
+      <default>'word-char'</default>
+      <summary>Wrap Mode</summary>
+      <description>Specifies whether and how to wrap lines that do not fit on a single line of the screen.</description>
+    </key>
+    <key name="display-line-numbers" type="b">
+      <default>true</default>
+      <summary>Display Line Numbers</summary>
+      <description>Whether to display line numbers at the left hand side of the main editing area.</description>
+    </key>
+    <key name="highlight-current-line" type="b">
+      <default>true</default>
+      <summary>Highlight Current Line</summary>
+      <description>Whether to highlight the line that the insertion cursor is currently in.</description>
+    </key>
+    <key name="margin-display" type="b">
+      <default>true</default>
+      <summary>Display Margin</summary>
+      <description>Whether to display a margin on the right hand side of the editing area, beyond a fixed number of fixed-width characters.</description>
+    </key>
+    <key name="margin-position" type="u">
+      <default>80</default>
+      <range min="1" max="4096" />
+      <summary>Margin Position</summary>
+      <description>The number of characters at which to display the right margin. This option only has any effect if the 'margin-display' option is set.</description>
+    </key>
+    <key name="highlight-matching-brackets" type="b">
+      <default>true</default>
+      <summary>Highlight Matching Brackets</summary>
+      <description>Whether to highlight matching brackets when the insertion cursor is currently at either an opening or a closing bracket.</description>
+    </key>
+    <key name="display-whitespace" flags="de.0x539.gobby.DrawSpaces">
+      <default>[]</default>
+      <summary>Draw Spaces</summary>
+      <description>Whether to draw any whitespace, and if so, what kind of whitespace.</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.state.window" path="/de/0x539/gobby/state/window/">
+    <key name="document-userlist-width" type="u">
+      <default>150</default>
+      <range min="0" max="4096"/>
+      <summary>Document User List Width</summary>
+      <description>Width, in pixels, of the user list in the main editing area.</description>
+    </key>
+    <key name="chat-userlist-width" type="u">
+      <default>150</default>
+      <range min="0" max="4096"/>
+      <summary>Chat User List Width</summary>
+      <description>Width, in pixels, of the user list in the chat area.</description>
+    </key>
+  </schema>
+
+  <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.state.initial" path="/de/0x539/gobby/state/initial/">
+    <key name="run" type="b">
+      <default>false</default>
+      <summary>Run</summary>
+      <description>Whether Gobby has been run for the first time.</description>
+    </key>
+  </schema>
+
+</schemalist>

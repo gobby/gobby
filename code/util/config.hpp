@@ -248,7 +248,7 @@ public:
 		/** @brief: Returns whether there is a child ValueEntry with
 		 * the given name.
 		 */
-		bool has_value(const Glib::ustring& name);
+		bool has_value(const Glib::ustring& name) const;
 
 		/** @brief Returns the value from the child with the given
 		 * name.

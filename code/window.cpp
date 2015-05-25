@@ -194,7 +194,15 @@ void Gobby::Window::on_show()
 {
 	Gtk::Window::on_show();
 
-	if(!m_config.get_root()["initial"].get_value<bool>("run", false))
+	Glib::RefPtr<Gio::Settings> settings(
+		Gio::Settings::create("de.0x539.gobby.state.initial"));
+
+	// Migrate from config.xml
+	const Config::ParentEntry& entry = m_config.get_root()["initial"];
+	if(entry.has_value("run"))
+		settings->set_boolean("run", entry.get_value<bool>("run"));
+
+	if(!settings->get_boolean("run"))
 	{
 		m_initial_dlg.reset(
 			new InitialDialog(
@@ -210,8 +218,11 @@ void Gobby::Window::on_show()
 void Gobby::Window::on_initial_dialog_hide()
 {
 	m_initial_dlg.reset(NULL);
+
 	// Don't show again
-	m_config.get_root()["initial"].set_value("run", true);
+	Glib::RefPtr<Gio::Settings> settings(
+		Gio::Settings::create("de.0x539.gobby.state.initial"));
+	settings->set_boolean("run", true);
 }
 
 bool Gobby::Window::on_switch_to_chat()
