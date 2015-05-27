@@ -257,7 +257,8 @@ void Gobby::SelfHoster::apply_preferences()
 	// Make sure TLS credentials are available.
 	if(m_preferences.security.policy !=
 	   INF_XMPP_CONNECTION_SECURITY_ONLY_UNSECURED &&
-	   (m_cert_manager.get_private_key() == NULL ||
+	   (m_preferences.security.authentication_enabled != true ||
+            m_cert_manager.get_private_key() == NULL ||
 	    m_cert_manager.get_certificates() == NULL))
 	{
 		m_info_handle = m_status_bar.add_info_message(
