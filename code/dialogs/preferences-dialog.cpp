@@ -750,9 +750,12 @@ Gobby::PreferencesDialog::Security::Security(Gtk::Window& parent,
 	m_group_trust_file(_("Trusted CAs")),
 	m_group_connection_policy(_("Secure Connection")),
 	m_group_authentication(_("Authentication")),
-	m_btn_path_trust_file(_("Select a file containing trusted CAs")),
+	m_btn_use_system_trust(_("Trust this computer's default CAs")),
+	m_lbl_trust_file(_("Additionally Trusted CAs:")),
+	m_btn_path_trust_file(_("Select Additionally Trusted CAs")),
 	m_conn_path_trust_file(m_btn_path_trust_file,
-	                       preferences.security.trust_file),
+	                       preferences.security.trusted_cas),
+	m_box_trust_file(false, 6),
 	m_error_trust_file("", Gtk::ALIGN_START),
 	m_cmb_connection_policy(preferences.security.policy),
 	m_btn_auth_none(_("None")),
@@ -778,13 +781,26 @@ Gobby::PreferencesDialog::Security::Security(Gtk::Window& parent,
 	m_btn_auth_cert.signal_toggled().connect(
 		sigc::mem_fun(*this, &Security::on_auth_cert_toggled));
 
+	m_btn_use_system_trust.set_active(
+		m_preferences.security.use_system_trust);
+	m_btn_use_system_trust.signal_toggled().connect(
+		sigc::mem_fun(*this, &Security::on_use_system_trust_toggled));
+	m_btn_use_system_trust.show();
+
+	m_lbl_trust_file.show();
 	m_btn_path_trust_file.set_width_chars(20);
-	const std::string& trust_file = preferences.security.trust_file;
+	const std::string& trust_file = preferences.security.trusted_cas;
 	if(!trust_file.empty())
 		m_btn_path_trust_file.set_filename(trust_file);
-
 	m_btn_path_trust_file.show();
-	m_group_trust_file.add(m_btn_path_trust_file);
+
+	m_box_trust_file.pack_start(m_lbl_trust_file, Gtk::PACK_SHRINK);
+	m_box_trust_file.pack_start(m_btn_path_trust_file,
+	                            Gtk::PACK_EXPAND_WIDGET);
+	m_box_trust_file.show();
+
+	m_group_trust_file.add(m_btn_use_system_trust);
+	m_group_trust_file.add(m_box_trust_file);
 	m_group_trust_file.add(m_error_trust_file);
 	m_group_trust_file.show();
 
@@ -892,6 +908,12 @@ void Gobby::PreferencesDialog::Security::set_file_error(Gtk::Label& label,
 	{
 		label.hide();
 	}
+}
+
+void Gobby::PreferencesDialog::Security::on_use_system_trust_toggled()
+{
+	m_preferences.security.use_system_trust =
+		m_btn_use_system_trust.get_active();
 }
 
 void Gobby::PreferencesDialog::Security::on_credentials_changed()

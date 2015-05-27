@@ -659,7 +659,8 @@ public:
 		Security(const Glib::RefPtr<Gio::Settings>& settings,
 		         Config::ParentEntry& entry);
 
-		Option<std::string> trust_file;
+		Option<bool> use_system_trust;
+		Option<std::string> trusted_cas;
 		Option<InfXmppConnectionSecurityPolicy> policy;
 
 		Option<bool> authentication_enabled;

@@ -35,9 +35,12 @@ Gobby::CertificateManager::CertificateManager(Preferences& preferences):
 		signal_changed().connect(sigc::mem_fun(
 			*this,
 			 &CertificateManager::on_certificate_file_changed));
-	m_preferences.security.trust_file.signal_changed().connect(
+	m_preferences.security.use_system_trust.signal_changed().connect(
 		sigc::mem_fun(
-			*this, &CertificateManager::on_trust_file_changed));
+			*this, &CertificateManager::on_trusted_cas_changed));
+	m_preferences.security.trusted_cas.signal_changed().connect(
+		sigc::mem_fun(
+			*this, &CertificateManager::on_trusted_cas_changed));
 
 	m_preferences.security.authentication_enabled.
 		signal_changed().connect(
@@ -364,7 +367,7 @@ void Gobby::CertificateManager::load_trust()
 	old_trust.swap(m_trust);
 
 	GError* error = NULL;
-	const std::string& filename = m_preferences.security.trust_file;
+	const std::string& filename = m_preferences.security.trusted_cas;
 
 	if(!filename.empty())
 	{
@@ -433,6 +436,17 @@ void Gobby::CertificateManager::make_credentials()
 		);
 	}
 
+	if(m_preferences.security.use_system_trust)
+	{
+		const int n_cas = gnutls_certificate_set_x509_system_trust(
+			gnutls_creds);
+		if(n_cas < 0)
+		{
+			g_warning("Failed to add system CAs: %s\n",
+				gnutls_strerror(n_cas));
+		}
+	}
+
 	if(!m_trust.empty())
 	{
 		gnutls_certificate_set_x509_trust(
@@ -469,7 +483,7 @@ void Gobby::CertificateManager::on_certificate_file_changed()
 	//make_credentials();
 }
 
-void Gobby::CertificateManager::on_trust_file_changed()
+void Gobby::CertificateManager::on_trusted_cas_changed()
 {
 	load_trust();
 	//make_credentials();

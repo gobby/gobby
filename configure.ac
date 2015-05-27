@@ -40,7 +40,7 @@ case "$host_os" in
 esac
 AM_CONDITIONAL(WIN32, test x$win32 = xtrue)
 
-required_libs="libxml++-2.6 glibmm-2.4 >= 2.39.93 giomm-2.4 >= 2.39.93 libgsasl >= 0.2.21 gtkmm-3.0 >= 3.6.0 gtksourceview-3.0 >= 3.0.0"
+required_libs="libxml++-2.6 glibmm-2.4 >= 2.39.93 giomm-2.4 >= 2.39.93 libgsasl >= 0.2.21 gnutls >= 3.0.20 gtkmm-3.0 >= 3.6.0 gtksourceview-3.0 >= 3.0.0"
 
 ###################################
 # Check for libraries.

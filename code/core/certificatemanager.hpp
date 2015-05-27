@@ -102,7 +102,7 @@ namespace Gobby
 
 		void on_key_file_changed();
 		void on_certificate_file_changed();
-		void on_trust_file_changed();
+		void on_trusted_cas_changed();
 
 		void on_authentication_enabled_changed();
 	};

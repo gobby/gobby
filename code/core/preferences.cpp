@@ -99,39 +99,13 @@ Gobby::Preferences::Security::Security(
 	const Glib::RefPtr<Gio::Settings>& settings,
 	Config::ParentEntry& entry)
 :
-	trust_file(settings, entry, "trust-file"),
+	use_system_trust(settings, entry, "use-system-trust"),
+	trusted_cas(settings, entry, "trusted-cas"),
 	policy(settings, entry, "policy"),
 	authentication_enabled(settings, entry, "authentication-enabled"),
 	certificate_file(settings, entry, "certificate-file"),
 	key_file(settings, entry, "key-file")
 {
-	// Load default trust-file. As this accesses the filesystem, only do
-	// it when we really need it, i.e. when starting Gobby the first time.
-	if(trust_file.is_default())
-	{
-#ifdef G_OS_WIN32
-		gchar* package_directory =
-			g_win32_get_package_installation_directory_of_module(
-				NULL);
-
-		trust_file = Glib::build_filename(
-			Glib::build_filename(package_directory, "certs"),
-			"ca-certificates.crt");
-
-		g_free(package_directory);
-#else
-		// This seems to be the default location for both
-		// Debian and Gentoo. I don't know about other distributions.
-		// Maybe they need a distro-patch for this.
-		const std::string DEFAULT_TRUST_FILE =
-			"/etc/ssl/certs/ca-certificates.crt";
-		if(Glib::file_test(DEFAULT_TRUST_FILE,
-		                   Glib::FILE_TEST_IS_REGULAR))
-		{
-			trust_file = DEFAULT_TRUST_FILE;
-		}
-#endif
-	}
 }
 
 Gobby::Preferences::Network::Network(

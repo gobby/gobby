@@ -141,10 +141,15 @@
   </schema>
 
   <schema gettext-domain="@GETTEXT_PACKAGE@" id="de.0x539.gobby.preferences.security" path="/de/0x539/gobby/preferences/security/">
-    <key name="trust-file" type="s">
+    <key name="use-system-trust" type="b">
+      <default>true</default>
+      <summary>Trust the Default System CAs</summary>
+      <description>If true, trust the default system CAs. It is platform dependent where this CAs are obtained from, but on a Linux system it is typically from the file '/etc/ssl/certs/ca-certificates.crt'.</description>
+    </key>
+    <key name="trusted-cas" type="s">
       <default>''</default>
-      <summary>CA Certificates</summary>
-      <description>Specifies the file with a list of trusted CA certificates in PEM format. If this is empty, it is set to the CA certificates trusted by default by the operating system.</description>
+      <summary>Additionally Trusted CAs</summary>
+      <description>If this is not empty, specifies a file with additional trusted CA certificates in PEM format. If 'use-system-trust' is disabled, this is the only source of trusted CAs.</description>
     </key>
     <key name="policy" enum="de.0x539.gobby.SecurityPolicy">
       <default>'prefer-tls'</default>

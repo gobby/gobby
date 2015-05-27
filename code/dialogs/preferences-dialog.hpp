@@ -429,6 +429,8 @@ public:
 	protected:
 		void set_file_error(Gtk::Label& label, const GError* error);
 
+		void on_use_system_trust_toggled();
+
 		void on_credentials_changed();
 		void on_auth_cert_toggled();
 
@@ -456,8 +458,11 @@ public:
 		GroupFrame m_group_connection_policy;
 		GroupFrame m_group_authentication;
 
+		Gtk::CheckButton m_btn_use_system_trust;
+		Gtk::Label m_lbl_trust_file;
 		Gtk::FileChooserButton m_btn_path_trust_file;
 		PathConnection m_conn_path_trust_file;
+		Gtk::HBox m_box_trust_file;
 		Gtk::Label m_error_trust_file;
 		PreferencesComboBox<InfXmppConnectionSecurityPolicy>
 			m_cmb_connection_policy;
