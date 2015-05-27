@@ -290,6 +290,7 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_remote_auth_label.show();
 
 	Gtk::RadioButton::Group group;
+
 	m_remote_auth_none.set_label(
 		_("No authentication (Not recommended)"));
 	m_remote_auth_none.set_group(group);
@@ -365,10 +366,20 @@ Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
 	m_remote_auth_external_table.show();
 
 	m_remote_auth_box.set_spacing(6);
+
+	// Disable the option not to create a certificate. This would only
+	// work if the security policy could also be set to ONLY_UNSECURED,
+	// but that would also disable TLS in outgoing connections, and we
+	// don't want that. We could introduce two separate security-policy
+	// options for incoming and outgoing connections, but instead, for
+	// simplicity, we just make sure we always have a certificate when
+	// the self-hoster is enabled.
+#if 0
 	m_remote_auth_box.pack_start(
 		m_remote_auth_none, Gtk::PACK_SHRINK);
 	m_remote_auth_box.pack_start(
 		*indent(m_remote_auth_none_help), Gtk::PACK_SHRINK);
+#endif
 	m_remote_auth_box.pack_start(
 		m_remote_auth_self, Gtk::PACK_SHRINK);
 	m_remote_auth_box.pack_start(
