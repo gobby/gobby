@@ -97,12 +97,16 @@ protected:
 
 Gobby::StatusBar::StatusBar(const Folder& folder,
                             const Preferences& preferences):
-	Gtk::HBox(false, 2), m_folder(folder), m_preferences(preferences),
-	m_visible_messages(0), m_current_view(NULL), m_position_context_id(0)
+	m_folder(folder), m_preferences(preferences),
+	m_visible_messages(0), m_current_view(NULL)
 {
-	pack_end(m_bar_position, Gtk::PACK_SHRINK);
-	m_bar_position.set_size_request(200, -1);
-	m_bar_position.show();
+	set_column_spacing(2);
+
+	m_lbl_position.set_halign(Gtk::ALIGN_END);
+	m_lbl_position.set_hexpand(true);
+	m_lbl_position.set_margin_end(6);
+	m_lbl_position.show();
+	attach(m_lbl_position, 0, 0, 1, 1);
 
 	m_folder.signal_document_removed().connect(
 		sigc::mem_fun(*this, &StatusBar::on_document_removed));
@@ -147,23 +151,34 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 		}
 	}
 
-	Gtk::HBox* bar = Gtk::manage(new Gtk::HBox(false, 6));
+	Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
+	grid->set_column_spacing(6);
+	grid->set_margin_start(2);
+	grid->set_margin_end(2);
 
 	Gtk::Image* image = Gtk::manage(new Gtk::Image);
 	image->set_from_icon_name(message_type_to_icon_name(type),
 	                          Gtk::ICON_SIZE_MENU);
-	bar->pack_start(*image, Gtk::PACK_SHRINK);
+	grid->attach(*image, 0, 0, 1, 1);
 	image->show();
 
 	Gtk::Label* label = Gtk::manage(
 		new Gtk::Label(message, Gtk::ALIGN_START));
 	label->set_ellipsize(Pango::ELLIPSIZE_END);
-	bar->pack_start(*label, Gtk::PACK_EXPAND_WIDGET);
-	label->show();
 
-	GtkShadowType shadow_type;
-	gtk_widget_style_get(GTK_WIDGET(m_bar_position.gobj()),
-	                     "shadow-type", &shadow_type, NULL);
+	// If we set halign instead, the label will not behave correctly
+	// when ellipsized, because then it has always all space around it
+	// allocated, and the alignment "jumps" around whin resizing the
+	// window due to new characters appearing or disappearing as a result
+	// of the ellipsization.
+#if GTK_CHECK_VERSION(3, 16, 0)
+	gtk_label_set_xalign(label->gobj(), 0.0);
+#else
+	label->set_alignment(0.0, 0.0);
+#endif
+	label->show();
+	grid->attach(*label, 1, 0, 1, 1);
+
 	Gtk::Frame* frame = Gtk::manage(new Gtk::Frame);
 
 	m_list.push_back(0);
@@ -186,13 +201,13 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 
 	if(dialog_message.empty())
 	{
-		frame->add(*bar);
+		frame->add(*grid);
 	}
 	else
 	{
 		Gtk::EventBox *eventbox = Gtk::manage(new Gtk::EventBox);
 		frame->add(*eventbox);
-		eventbox->add(*bar);
+		eventbox->add(*grid);
 		eventbox->signal_button_press_event().connect(
 			sigc::bind_return(sigc::bind(
 				sigc::mem_fun(
@@ -203,12 +218,16 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 		eventbox->show();
 	}
 
-	frame->set_shadow_type(static_cast<Gtk::ShadowType>(shadow_type));
-	bar->show();
+	grid->show();
 
-	pack_start(*frame, Gtk::PACK_EXPAND_WIDGET);
-	reorder_child(*frame, 0);
+	// Insert at front
+	gtk_grid_attach_next_to(
+		gobj(), GTK_WIDGET(frame->gobj()),
+		NULL, GTK_POS_LEFT, 1, 1);
 
+	frame->set_halign(Gtk::ALIGN_START);
+	frame->set_hexpand(false);
+	frame->set_shadow_type(Gtk::SHADOW_NONE);
 	frame->show();
 
 	return iter;
@@ -367,9 +386,6 @@ void Gobby::StatusBar::on_changed()
 
 void Gobby::StatusBar::update_pos_display()
 {
-	if(m_position_context_id)
-		m_bar_position.remove_message(m_position_context_id);
-
 	if(m_current_view != NULL)
 	{
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
@@ -396,7 +412,7 @@ void Gobby::StatusBar::update_pos_display()
 
 		// TODO: We might want to have a separate widget for the
 		// OVR/INS display.
-		m_position_context_id = m_bar_position.push(
+		m_lbl_position.set_text(
 			Glib::ustring::compose(
 				_("Ln %1, Col %2\t%3"),
 				gtk_text_iter_get_line(&iter) + 1,
@@ -404,5 +420,9 @@ void Gobby::StatusBar::update_pos_display()
 				gtk_text_view_get_overwrite(GTK_TEXT_VIEW(m_current_view->get_text_view())) ? _("OVR") : _("INS")
 			)
 		);
+	}
+	else
+	{
+		m_lbl_position.set_text("");
 	}
 }

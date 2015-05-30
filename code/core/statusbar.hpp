@@ -19,10 +19,9 @@
 
 #include "folder.hpp"
 
-#include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/statusbar.h>
 
 #include <glibmm/ustring.h>
 
@@ -36,7 +35,7 @@
 namespace Gobby
 {
 
-class StatusBar: public Gtk::HBox
+class StatusBar: public Gtk::Grid
 {
 protected:
 	class Message;
@@ -113,13 +112,11 @@ protected:
 	MessageList m_list;
 	unsigned int m_visible_messages;
 
-	Gtk::Statusbar m_bar_position;
+	Gtk::Label m_lbl_position;
 	TextSessionView* m_current_view;
 	gulong m_mark_set_handler;
 	gulong m_changed_handler;
 	gulong m_toverwrite_handler;
-
-	guint m_position_context_id;
 };
 
 }
