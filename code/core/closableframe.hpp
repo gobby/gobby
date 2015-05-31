@@ -20,7 +20,7 @@
 #include "core/preferences.hpp"
 
 #include <gtkmm/frame.h>
-#include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 
 namespace Gobby
 {
@@ -41,7 +41,7 @@ protected:
 	void on_option();
 
 	Preferences::Option<bool>& m_option;
-	Gtk::VBox m_box;
+	Gtk::Grid m_grid;
 	bool m_allow_visible;
 };
 

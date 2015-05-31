@@ -19,18 +19,19 @@
 
 Gobby::TabLabel::TabLabel(Folder& folder, SessionView& view,
                           const Glib::ustring& active_icon_name):
-	Gtk::HBox(false, 6), m_folder(folder), m_view(view),
+	m_folder(folder), m_view(view),
 	m_title(view.get_title()), m_changed(false),
 	m_active_icon_name(active_icon_name)
 {
-	m_title.set_alignment(Gtk::ALIGN_START);
+	set_column_spacing(6);
+	m_title.set_halign(Gtk::ALIGN_START);
 
 	update_icon();
 	update_color();
 
 	m_icon.show();
 	m_title.show();
-	m_extra.show();
+	m_button.set_halign(Gtk::ALIGN_END);
 	m_button.show();
 
 	view.signal_active_user_changed().connect(
@@ -47,10 +48,9 @@ Gobby::TabLabel::TabLabel(Folder& folder, SessionView& view,
 	m_folder.signal_document_changed().connect(
 		sigc::mem_fun(*this, &TabLabel::on_folder_document_changed));
 
-	pack_start(m_icon, Gtk::PACK_SHRINK);
-	pack_start(m_title, Gtk::PACK_SHRINK);
-	pack_start(m_extra, Gtk::PACK_EXPAND_WIDGET);
-	pack_end(m_button, Gtk::PACK_SHRINK);
+	attach(m_icon, 0, 0, 1, 1);
+	attach(m_title, 1, 0, 1, 1);
+	attach(m_button, 2, 0, 1, 1);
 }
 
 Gobby::TabLabel::~TabLabel()

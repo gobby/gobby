@@ -128,16 +128,17 @@ Gobby::Window::Window(Config& config,
 	m_paned.pack2(m_chat_paned, true, false);
 	m_paned.show();
 
-	m_mainbox.pack_start(m_toolbar, Gtk::PACK_SHRINK);
-	m_mainbox.pack_start(m_paned, Gtk::PACK_EXPAND_WIDGET);
-	m_mainbox.pack_start(m_statusbar, Gtk::PACK_SHRINK);
-	m_mainbox.show();
+	m_grid.set_orientation(Gtk::ORIENTATION_VERTICAL);
+	m_grid.attach(m_toolbar, 0, 0, 1, 1);
+	m_grid.attach(m_paned, 0, 1, 1, 1);
+	m_grid.attach(m_statusbar, 0, 2, 1, 1);
+	m_grid.show();
 
 	// Give initial focus to the browser, which will in turn give focus
 	// to the "Direct Connection" expander, so people can quickly
 	// get going.
 	set_focus_child(m_browser);
-	add(m_mainbox);
+	add(m_grid);
 
 	set_default_size(800, 600);
 	set_role("Gobby");

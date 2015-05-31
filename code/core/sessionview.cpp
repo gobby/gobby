@@ -23,32 +23,35 @@ Gobby::SessionView::SessionView(InfSession* session,
                                 const Glib::ustring& path,
                                 const Glib::ustring& hostname):
 	m_session(session), m_title(title), m_path(path),
-	m_hostname(hostname), m_info_box(false, 0),
-	m_info_close_button_box(false, 6)
+	m_hostname(hostname)
 {
 	g_object_ref(m_session);
 
+	m_info_label.set_halign(Gtk::ALIGN_START);
+	m_info_label.set_hexpand(true);
 	m_info_label.set_selectable(true);
 	m_info_label.set_line_wrap(true);
 	m_info_label.show();
 
+	m_info_close_button.set_halign(Gtk::ALIGN_END);
+	m_info_close_button.set_valign(Gtk::ALIGN_START);
 	m_info_close_button.signal_clicked().connect(
 		sigc::mem_fun(m_info_frame, &Gtk::Frame::hide));
-	m_info_close_button.show();
+	// Don't show info close button by default
 
-	m_info_close_button_box.pack_end(m_info_close_button, Gtk::PACK_SHRINK);
-	// Don't show info close button box by default
-
-	m_info_box.pack_start(m_info_close_button_box, Gtk::PACK_SHRINK);
-	m_info_box.pack_start(m_info_label, Gtk::PACK_SHRINK);
-	m_info_box.set_border_width(6);
-	m_info_box.show();
+	m_info_grid.set_orientation(Gtk::ORIENTATION_VERTICAL);
+	m_info_grid.set_row_spacing(6);
+	m_info_grid.attach(m_info_close_button, 0, 0, 1, 1);
+	m_info_grid.attach(m_info_label, 0, 1, 1, 1);
+	m_info_grid.set_border_width(6);
+	m_info_grid.show();
 
 	m_info_frame.set_shadow_type(Gtk::SHADOW_IN);
-	m_info_frame.add(m_info_box);
+	m_info_frame.add(m_info_grid);
 	// Don't show infoframe by default
 
-	pack_start(m_info_frame, Gtk::PACK_SHRINK);
+	set_orientation(Gtk::ORIENTATION_VERTICAL);
+	attach(m_info_frame, 0, 0, 1, 1);
 }
 
 Gobby::SessionView::~SessionView()
@@ -61,8 +64,8 @@ void Gobby::SessionView::set_info(const Glib::ustring& info, bool closable)
 {
 	m_info_label.set_text(info);
 
-	if(closable) m_info_close_button_box.show();
-	else m_info_close_button_box.hide();
+	if(closable) m_info_close_button.show();
+	else m_info_close_button.hide();
 
 	m_info_frame.show();
 }

@@ -27,8 +27,9 @@ Gobby::ChatSessionView::ChatSessionView(InfChatSession* session,
 	inf_gtk_chat_set_session(m_chat, session);
 	gtk_widget_show(GTK_WIDGET(m_chat));
 
-	gtk_box_pack_start(GTK_BOX(gobj()), GTK_WIDGET(m_chat),
-	                   TRUE, TRUE, 0);
+	gtk_grid_attach_next_to(GTK_GRID(gobj()), GTK_WIDGET(m_chat),
+	                        GTK_WIDGET(m_info_frame.gobj()),
+	                        GTK_POS_BOTTOM, 1, 1);
 }
 
 InfUser* Gobby::ChatSessionView::get_active_user() const

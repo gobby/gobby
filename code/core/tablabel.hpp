@@ -19,7 +19,7 @@
 
 #include "core/sessionview.hpp"
 
-#include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/image.h>
 
 namespace Gobby
@@ -27,7 +27,7 @@ namespace Gobby
 
 class Folder;
 
-class TabLabel: public Gtk::HBox
+class TabLabel: public Gtk::Grid
 {
 public:
 	typedef Glib::SignalProxy0<void> SignalCloseRequest;
@@ -73,7 +73,6 @@ protected:
 
 	Gtk::Image m_icon;
 	Gtk::Label m_title;
-	Gtk::HBox m_extra;
 	CloseButton m_button;
 
 	bool m_changed;

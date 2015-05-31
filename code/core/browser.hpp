@@ -29,8 +29,7 @@
 #include <libinfinity/common/inf-browser.h>
 
 #include <gtkmm/window.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/entry.h>
@@ -40,7 +39,7 @@
 namespace Gobby
 {
 
-class Browser: public Gtk::VBox
+class Browser: public Gtk::Grid
 {
 public:
 	typedef sigc::signal<void, Glib::ustring>
@@ -120,7 +119,7 @@ protected:
 	Gtk::ScrolledWindow m_scroll;
 
 	Gtk::Expander m_expander;
-	Gtk::HBox m_hbox;
+	Gtk::Grid m_grid;
 	Gtk::Label m_label_hostname;
 	HistoryComboBox m_entry_hostname;
 

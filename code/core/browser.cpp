@@ -107,20 +107,22 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	m_connection_manager(connection_manager),
 
 	m_expander(_("_Direct Connection"), true),
-	m_hbox(false, 6),
 	m_label_hostname(_("Host Name:")),
 	m_entry_hostname(config_filename("recent_hosts"), 5)
 {
 	m_label_hostname.show();
+	m_entry_hostname.set_hexpand(true);
 	m_entry_hostname.get_entry()->signal_activate().connect(
 		sigc::mem_fun(*this, &Browser::on_hostname_activate));
 	m_entry_hostname.show();
 
-	m_hbox.pack_start(m_label_hostname, Gtk::PACK_SHRINK);
-	m_hbox.pack_start(m_entry_hostname, Gtk::PACK_EXPAND_WIDGET);
-	m_hbox.show();
+	m_grid.set_column_spacing(6);
+	m_grid.attach(m_label_hostname, 0, 0, 1, 1);
+	m_grid.attach(m_entry_hostname, 1, 0, 1, 1);
+	m_grid.show();
 
-	m_expander.add(m_hbox);
+	m_expander.set_spacing(6);
+	m_expander.add(m_grid);
 	m_expander.show();
 	m_expander.property_expanded().signal_changed().connect(
 		sigc::mem_fun(*this, &Browser::on_expanded_changed));
@@ -157,6 +159,7 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 	                  GTK_WIDGET(m_browser_view));
 	m_scroll.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	m_scroll.set_shadow_type(Gtk::SHADOW_IN);
+	m_scroll.set_vexpand(true);
 	m_scroll.show();
 
 	connection_manager.signal_connection_replaced().connect(
@@ -176,9 +179,9 @@ Gobby::Browser::Browser(Gtk::Window& parent,
 		this
 	);
 
-	set_spacing(6);
-	pack_start(m_scroll, Gtk::PACK_EXPAND_WIDGET);
-	pack_start(m_expander, Gtk::PACK_SHRINK);
+	set_row_spacing(6);
+	attach(m_scroll, 0, 0, 1, 1);
+	attach(m_expander, 0, 1, 1, 1);
 
 	init_accessibility();
 

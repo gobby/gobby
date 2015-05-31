@@ -19,7 +19,7 @@
 
 #include "util/closebutton.hpp"
 
-#include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 
@@ -28,7 +28,7 @@
 namespace Gobby
 {
 
-class SessionView: public Gtk::VBox
+class SessionView: public Gtk::Grid
 {
 public:
 	typedef sigc::signal<void, InfUser*> SignalActiveUserChanged;
@@ -64,8 +64,7 @@ protected:
 	const Glib::ustring m_hostname;
 
 	Gtk::Frame m_info_frame;
-	Gtk::VBox m_info_box;
-	Gtk::HBox m_info_close_button_box;
+	Gtk::Grid m_info_grid;
 	CloseButton m_info_close_button;
 	Gtk::Label m_info_label;
 

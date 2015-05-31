@@ -79,7 +79,8 @@ Gobby::TextTabLabel::TextTabLabel(Folder& folder, TextSessionView& view):
 		G_OBJECT(buffer), "text-erased",
 		G_CALLBACK(on_text_erased_static), this);
 
-	m_extra.pack_start(m_dots, Gtk::PACK_SHRINK);
+	insert_next_to(m_title, Gtk::POS_RIGHT);
+	attach_next_to(m_dots, m_title, Gtk::POS_RIGHT, 1, 1);
 
 	update_modified();
 	update_dot_char();

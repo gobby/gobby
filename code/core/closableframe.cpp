@@ -23,9 +23,12 @@
 Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
                                     const Glib::ustring& icon_name,
                                     Preferences::Option<bool>& option):
-	m_option(option), m_box(false, 6), m_allow_visible(true)
+	m_option(option), m_allow_visible(true)
 {
 	CloseButton* button = Gtk::manage(new CloseButton);
+
+	button->set_hexpand(true);
+	button->set_halign(Gtk::ALIGN_END);
 
 	button->signal_clicked().connect(
 		sigc::mem_fun(*this, &ClosableFrame::on_clicked));
@@ -43,17 +46,15 @@ Gobby::ClosableFrame::ClosableFrame(const Glib::ustring& title,
 		new Gtk::Label(title, Gtk::ALIGN_START));
 	label_title->show();
 
-	Gtk::HBox* hbox = Gtk::manage(new Gtk::HBox(false, 6));
-	hbox->pack_start(*image, Gtk::PACK_SHRINK);
-	hbox->pack_start(*label_title, Gtk::PACK_SHRINK);
-	hbox->pack_end(*button, Gtk::PACK_SHRINK);
-	hbox->show();
+	m_grid.set_border_width(6);
+	m_grid.set_column_spacing(6);
+	m_grid.set_row_spacing(6);
+	m_grid.attach(*image, 0, 0, 1, 1);
+	m_grid.attach(*label_title, 1, 0, 1, 1);
+	m_grid.attach(*button, 2, 0, 1, 1);
+	m_grid.show();
 
-	m_box.set_border_width(6);
-	m_box.pack_start(*hbox, Gtk::PACK_SHRINK);
-	m_box.show();
-
-	add(m_box);
+	add(m_grid);
 
 	on_option();
 }
@@ -68,10 +69,10 @@ void Gobby::ClosableFrame::set_allow_visible(bool allow_visible)
 
 void Gobby::ClosableFrame::on_add(Gtk::Widget* widget)
 {
-	if(widget == &m_box)
+	if(widget == &m_grid)
 		Gtk::Frame::on_add(widget);
 	else
-		m_box.pack_start(*widget, Gtk::PACK_EXPAND_WIDGET);
+		m_grid.attach(*widget, 0, 1, 3, 1);
 }
 
 void Gobby::ClosableFrame::on_clicked()

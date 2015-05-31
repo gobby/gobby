@@ -119,7 +119,7 @@ protected:
 	ConnectionManager m_connection_manager;
 
 	// GUI
-	Gtk::VBox m_mainbox;
+	Gtk::Grid m_grid;
 	Gtk::HPaned m_paned;
 	Gtk::VPaned m_chat_paned;
 

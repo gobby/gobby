@@ -292,6 +292,8 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
 	scroll->set_shadow_type(Gtk::SHADOW_IN);
 	scroll->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	scroll->set_hexpand(true);
+	scroll->set_vexpand(true);
 	gtk_container_add(GTK_CONTAINER(scroll->gobj()), GTK_WIDGET(m_view));
 	scroll->show();
 
@@ -301,7 +303,7 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 		m_preferences.user.show_remote_cursor_positions
 	);
 
-	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
+	attach_next_to(*scroll, m_info_frame, Gtk::POS_BOTTOM, 1, 1);
 }
 
 Gobby::TextSessionView::~TextSessionView()

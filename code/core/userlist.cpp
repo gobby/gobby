@@ -139,10 +139,12 @@ Gobby::UserList::UserList(InfUserTable* table):
 	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
 	scroll->set_shadow_type(Gtk::SHADOW_IN);
 	scroll->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	scroll->set_hexpand(true);
+	scroll->set_vexpand(true);
 	scroll->add(m_view);
 	scroll->show();
 
-	pack_start(*scroll, Gtk::PACK_EXPAND_WIDGET);
+	attach(*scroll, 0, 0, 1, 1);
 }
 
 Gobby::UserList::~UserList()

@@ -20,14 +20,14 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/treemodelfilter.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 
 #include <libinfinity/common/inf-user-table.h>
 #include <libinftext/inf-text-user.h>
 
 namespace Gobby
 {
-	class UserList: public Gtk::VBox
+	class UserList: public Gtk::Grid
 	{
 	public:
 		typedef sigc::signal<void, InfUser*> SignalUserActivated;
