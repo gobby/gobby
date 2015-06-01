@@ -20,16 +20,23 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/box.h>
+#include <gtkmm/builder.h>
 
 namespace Gobby
 {
 
 class EntryDialog: public Gtk::Dialog
 {
+private:
+	friend class Gtk::Builder;
+
+	EntryDialog(GtkDialog* cobject,
+	            const Glib::RefPtr<Gtk::Builder>& builder);
+
 public:
-	EntryDialog(Gtk::Window& parent, const Glib::ustring& title,
-	            const Glib::ustring& intro_text);
+	static std::auto_ptr<EntryDialog> create(
+		Gtk::Window& parent, const Glib::ustring& title,
+		const Glib::ustring& intro_text);
 
 	Glib::ustring get_text() const;
 	void set_text(const Glib::ustring& text);
@@ -37,9 +44,8 @@ public:
 protected:
 	virtual void on_show();
 
-	Gtk::HBox m_box;
-	Gtk::Label m_intro_label;
-	Gtk::Entry m_entry;
+	Gtk::Label* m_intro_label;
+	Gtk::Entry* m_entry;
 };
 
 }

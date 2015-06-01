@@ -17,9 +17,10 @@ appicondir = $(datadir)/pixmaps
 pixmapdir = $(datadir)/pixmaps/gobby-0.5
 
 resources = \
+	resources/ui/browser-context-menu.ui \
+	resources/ui/entry-dialog.ui \
 	resources/ui/menu.ui \
-	resources/ui/toolbar.ui \
-	resources/ui/browser-context-menu.ui
+	resources/ui/toolbar.ui
 
 gobby-resources.h: resources/gobby.gresources.xml
 	glib-compile-resources $< \

@@ -16,37 +16,41 @@
 
 #include "dialogs/entry-dialog.hpp"
 
-Gobby::EntryDialog::EntryDialog(Gtk::Window& parent,
-                                const Glib::ustring& title,
-                                const Glib::ustring& intro_text):
-	Gtk::Dialog(title, parent), m_box(false, 6),
-	m_intro_label(intro_text, Gtk::ALIGN_END, Gtk::ALIGN_CENTER, true)
+Gobby::EntryDialog::EntryDialog(GtkDialog* cobject,
+                                const Glib::RefPtr<Gtk::Builder>& builder):
+	Gtk::Dialog(cobject)
 {
-	m_intro_label.set_mnemonic_widget(m_entry);
-	m_box.pack_start(m_intro_label, Gtk::PACK_EXPAND_WIDGET);
-	m_intro_label.show();
+	builder->get_widget("intro-label", m_intro_label);
+	builder->get_widget("entry", m_entry);
+}
 
-	m_entry.set_activates_default(true);
-	m_box.pack_start(m_entry, Gtk::PACK_EXPAND_WIDGET);
-	m_entry.show();
+std::auto_ptr<Gobby::EntryDialog>
+Gobby::EntryDialog::create(Gtk::Window& parent,
+                           const Glib::ustring& title,
+                           const Glib::ustring& intro_text)
+{
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/entry-dialog.ui");
 
-	m_box.show();
+	EntryDialog* dialog = NULL;
+	builder->get_widget_derived("EntryDialog", dialog);
 
-	get_vbox()->set_spacing(6);
-	get_vbox()->pack_start(m_box, Gtk::PACK_EXPAND_WIDGET);
+	dialog->set_transient_for(parent);
+	dialog->set_title(title);
+	dialog->m_intro_label->set_text_with_mnemonic(intro_text);
 
-	set_resizable(false);
-	set_border_width(12);
+	return std::auto_ptr<EntryDialog>(dialog);
 }
 
 Glib::ustring Gobby::EntryDialog::get_text() const
 {
-	return m_entry.get_text();
+	return m_entry->get_text();
 }
 
 void Gobby::EntryDialog::set_text(const Glib::ustring& text)
 {
-	m_entry.set_text(text);
+	m_entry->set_text(text);
 }
 
 void Gobby::EntryDialog::on_show()
@@ -57,6 +61,6 @@ void Gobby::EntryDialog::on_show()
 	// by the caller after the widget has been constructed.
 	set_default_response(Gtk::RESPONSE_ACCEPT);
 
-	m_entry.select_region(0, m_entry.get_text().length());
-	m_entry.grab_focus();
+	m_entry->select_region(0, m_entry->get_text().length());
+	m_entry->grab_focus();
 }

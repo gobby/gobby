@@ -3,5 +3,6 @@
   <file preprocess="xml-stripblanks">ui/menu.ui</file>
   <file preprocess="xml-stripblanks">ui/toolbar.ui</file>
   <file preprocess="xml-stripblanks">ui/browser-context-menu.ui</file>
+  <file preprocess="xml-stripblanks">ui/entry-dialog.ui</file>
  </gresource>
 </gresources>

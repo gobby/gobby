@@ -338,7 +338,7 @@ void Gobby::BrowserContextCommands::on_new(const Glib::VariantBase& param,
 		*this, &BrowserContextCommands::on_dialog_node_removed));
 
 	std::auto_ptr<EntryDialog> entry_dialog(
-		new EntryDialog(
+		EntryDialog::create(
 			m_parent,
 			directory ? _("Choose a name for the directory")
 			          : _("Choose a name for the document"),
