@@ -20,36 +20,30 @@
 // TODO: Merge this with entrydialog and passworddialog to a slightly more
 // generic entry dialog.
 
-Gobby::ConnectionDialog::ConnectionDialog(Gtk::Window& parent):
-	Gtk::Dialog(_("Connect to Server"), parent), m_box(false, 12),
-	m_rightbox(false, 6),
-	m_promptbox(false, 12),
-	m_intro_label(_("Please enter a host name with which "
-	                "to establish a connection.")),
-	m_prompt_label(_("_Remote Endpoint:"), true)
+Gobby::ConnectionDialog::ConnectionDialog(
+	GtkDialog* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
+:
+	Gtk::Dialog(cobject)
 {
-	m_image.set_from_icon_name("network-server", Gtk::ICON_SIZE_DIALOG);
-	m_prompt_label.set_mnemonic_widget(m_entry);
-	m_promptbox.pack_start(m_prompt_label, Gtk::PACK_SHRINK);
-	m_entry.set_activates_default(true);
-	m_promptbox.pack_start(m_entry, Gtk::PACK_EXPAND_WIDGET);
-	m_rightbox.pack_start(m_intro_label, Gtk::PACK_SHRINK);
-	m_rightbox.pack_start(m_promptbox, Gtk::PACK_SHRINK);
-	m_box.pack_start(m_image, Gtk::PACK_SHRINK);
-	m_box.pack_start(m_rightbox, Gtk::PACK_EXPAND_WIDGET);
+	builder->get_widget("entry", m_entry);
+}
 
-	m_box.show_all();
+std::auto_ptr<Gobby::ConnectionDialog>
+Gobby::ConnectionDialog::create(Gtk::Window& parent)
+{
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/connection-dialog.ui");
 
-	get_vbox()->set_spacing(6);
-	get_vbox()->pack_start(m_box, Gtk::PACK_EXPAND_WIDGET);
-
-	set_resizable(false);
-	set_border_width(12);
+	ConnectionDialog* dialog;
+	builder->get_widget_derived("ConnectionDialog", dialog);
+	dialog->set_transient_for(parent);
+	return std::auto_ptr<ConnectionDialog>(dialog);
 }
 
 Glib::ustring Gobby::ConnectionDialog::get_host_name() const
 {
-	return m_entry.get_text();
+	return m_entry->get_text();
 }
 
 void Gobby::ConnectionDialog::on_show()
@@ -60,6 +54,6 @@ void Gobby::ConnectionDialog::on_show()
 	// by the caller after the widget has been constructed.
 	set_default_response(Gtk::RESPONSE_ACCEPT);
 
-	m_entry.select_region(0, m_entry.get_text().length());
-	m_entry.grab_focus();
+	m_entry->select_region(0, m_entry->get_text().length());
+	m_entry->grab_focus();
 }

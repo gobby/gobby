@@ -18,31 +18,29 @@
 #define _GOBBY_CONNECTIONDIALOG_HPP_
 
 #include <gtkmm/dialog.h>
-#include <gtkmm/label.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/box.h>
-#include <gtkmm/image.h>
+#include <gtkmm/builder.h>
 
 namespace Gobby
 {
 
 class ConnectionDialog: public Gtk::Dialog
 {
+private:
+	friend class Gtk::Builder;
+
+	ConnectionDialog(GtkDialog* cobject,
+	                 const Glib::RefPtr<Gtk::Builder>& builder);
+
 public:
-	ConnectionDialog(Gtk::Window& parent);
+	static std::auto_ptr<ConnectionDialog> create(Gtk::Window& parent);
 
 	Glib::ustring get_host_name() const;
 
 protected:
 	virtual void on_show();
 
-	Gtk::HBox m_box;
-	Gtk::VBox m_rightbox;
-	Gtk::HBox m_promptbox;
-        Gtk::Image m_image;
-	Gtk::Label m_intro_label;
-	Gtk::Label m_prompt_label;
-	Gtk::Entry m_entry;
+	Gtk::Entry* m_entry; // TODO: Use HistoryComboBox here, with the same history as the direct connection box
 };
 
 }

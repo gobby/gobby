@@ -243,7 +243,7 @@ void Gobby::FileCommands::on_connect()
 {
 	if(m_connection_dialog.get() == NULL)
 	{
-		m_connection_dialog.reset(new ConnectionDialog(m_parent));
+		m_connection_dialog = ConnectionDialog::create(m_parent);
 
 		m_connection_dialog->signal_response().connect(
 			sigc::mem_fun(*this,

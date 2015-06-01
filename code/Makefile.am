@@ -18,6 +18,7 @@ pixmapdir = $(datadir)/pixmaps/gobby-0.5
 
 resources = \
 	resources/ui/browser-context-menu.ui \
+	resources/ui/connection-dialog.ui \
 	resources/ui/entry-dialog.ui \
 	resources/ui/menu.ui \
 	resources/ui/toolbar.ui
