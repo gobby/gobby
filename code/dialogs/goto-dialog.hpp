@@ -21,18 +21,24 @@
 #include "core/sessionview.hpp"
 
 #include <gtkmm/dialog.h>
-#include <gtkmm/table.h>
-#include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
+#include <gtkmm/builder.h>
 
 namespace Gobby
 {
 
 class GotoDialog: public Gtk::Dialog
 {
+private:
+	friend class Gtk::Builder;
+
+	GotoDialog(GtkDialog* cobject,
+	           const Glib::RefPtr<Gtk::Builder>& builder);
 public:
-	GotoDialog(Gtk::Window& parent, const Folder& m_folder);
 	~GotoDialog();
+
+	static std::auto_ptr<GotoDialog> create(Gtk::Window& parent,
+	                                        const Folder& folder);
 
 protected:
 	static void on_changed_static(GtkTextBuffer* buffer,
@@ -47,12 +53,9 @@ protected:
 	void on_document_changed(SessionView* view);
 	void on_changed();
 
-	const Folder& m_folder;
+	const Folder* m_folder;
 
-	Gtk::Table m_table;
-
-	Gtk::Label m_label_line;
-	Gtk::SpinButton m_entry_line;
+	Gtk::SpinButton* m_entry_line;
 
 	TextSessionView* m_current_view;
 	gulong m_changed_handler;

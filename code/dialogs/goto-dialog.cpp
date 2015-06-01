@@ -20,41 +20,16 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/textbuffer.h>
 
-Gobby::GotoDialog::GotoDialog(Gtk::Window& parent, const Folder& folder):
-	Gtk::Dialog(_("Go to line"), parent),
-	m_folder(folder),
-	m_table(1, 2),
-	m_label_line(_("Line _number:"), Gtk::ALIGN_START,
-	             Gtk::ALIGN_CENTER, true),
-	m_current_view(NULL)
+Gobby::GotoDialog::GotoDialog(GtkDialog* cobject,
+                              const Glib::RefPtr<Gtk::Builder>& builder):
+	Gtk::Dialog(cobject), m_folder(NULL), m_current_view(NULL)
 {
-	m_label_line.set_mnemonic_widget(m_entry_line);
-	m_label_line.show();
-
-	m_entry_line.set_increments(1, 10);
-	m_entry_line.set_activates_default(true);
-	m_entry_line.show();
-
-	m_table.attach(m_label_line, 0, 1, 0, 1, Gtk::FILL, Gtk::FILL);
-	m_table.attach(m_entry_line, 1, 2, 0, 1,
-	               Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
-	m_table.set_spacings(12);
-	m_table.show();
-
-	get_vbox()->pack_start(m_table, Gtk::PACK_EXPAND_WIDGET);
+	builder->get_widget("spin-button", m_entry_line);
+	m_entry_line->set_increments(1, 10);
 
 	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 	add_button(_("Go To _Line"), Gtk::RESPONSE_ACCEPT);
-
-	m_folder.signal_document_changed().connect(
-		sigc::mem_fun(*this, &GotoDialog::on_document_changed));
-
 	set_default_response(Gtk::RESPONSE_ACCEPT);
-	set_border_width(12);
-	set_resizable(false);
-
-	// For initial sensitivity:
-	on_document_changed(m_folder.get_current_document());
 }
 
 Gobby::GotoDialog::~GotoDialog()
@@ -62,10 +37,32 @@ Gobby::GotoDialog::~GotoDialog()
 	on_document_changed(NULL);
 }
 
+std::auto_ptr<Gobby::GotoDialog>
+Gobby::GotoDialog::create(Gtk::Window& parent, const Folder& folder)
+{
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/goto-dialog.ui");
+
+	GotoDialog* dialog_ptr;
+	builder->get_widget_derived("GotoDialog", dialog_ptr);
+	std::auto_ptr<GotoDialog> dialog(dialog_ptr);
+
+	dialog->set_transient_for(parent);
+	dialog->m_folder = &folder;
+
+	folder.signal_document_changed().connect(
+		sigc::mem_fun(*dialog, &GotoDialog::on_document_changed));
+
+	// For initial sensitivity:
+	dialog->on_document_changed(folder.get_current_document());
+	return dialog;
+}
+
 void Gobby::GotoDialog::on_show()
 {
 	Gtk::Dialog::on_show();
-	m_entry_line.grab_focus();
+	m_entry_line->grab_focus();
 
 	if(m_current_view != NULL)
 	{
@@ -75,9 +72,9 @@ void Gobby::GotoDialog::on_show()
 		gtk_text_buffer_get_iter_at_mark(
 			buffer, &cursor, gtk_text_buffer_get_insert(buffer));
 
-		m_entry_line.set_value(gtk_text_iter_get_line(&cursor) + 1);
-		m_entry_line.select_region(
-			0, m_entry_line.get_text().length());
+		m_entry_line->set_value(gtk_text_iter_get_line(&cursor) + 1);
+		m_entry_line->select_region(
+			0, m_entry_line->get_text().length());
 	}
 }
 
@@ -87,7 +84,7 @@ void Gobby::GotoDialog::on_response(int id)
 	{
 		g_assert(m_current_view != NULL);
 
-		int value = m_entry_line.get_value_as_int();
+		int value = m_entry_line->get_value_as_int();
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
 			m_current_view->get_text_buffer());
 		GtkTextIter begin;
@@ -113,7 +110,7 @@ void Gobby::GotoDialog::on_document_changed(SessionView* view)
 
 	m_current_view = dynamic_cast<TextSessionView*>(view);
 	set_response_sensitive(Gtk::RESPONSE_ACCEPT, m_current_view != NULL);
-	m_entry_line.set_sensitive(m_current_view != NULL);
+	m_entry_line->set_sensitive(m_current_view != NULL);
 
 	if(m_current_view != NULL)
 	{
@@ -134,5 +131,5 @@ void Gobby::GotoDialog::on_changed()
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
 		m_current_view->get_text_buffer());
 
-	m_entry_line.set_range(1, gtk_text_buffer_get_line_count(buffer));
+	m_entry_line->set_range(1, gtk_text_buffer_get_line_count(buffer));
 }

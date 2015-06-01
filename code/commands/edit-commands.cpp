@@ -462,7 +462,7 @@ void Gobby::EditCommands::on_find_replace()
 void Gobby::EditCommands::on_goto_line()
 {
 	if(!m_goto_dialog.get())
-		m_goto_dialog.reset(new GotoDialog(m_parent, m_folder));
+		m_goto_dialog = GotoDialog::create(m_parent, m_folder);
 
 	m_goto_dialog->present();
 }
