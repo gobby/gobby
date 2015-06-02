@@ -20,6 +20,7 @@ resources = \
 	resources/ui/browser-context-menu.ui \
 	resources/ui/connection-dialog.ui \
 	resources/ui/entry-dialog.ui \
+	resources/ui/find-dialog.ui \
 	resources/ui/goto-dialog.ui \
 	resources/ui/menu.ui \
 	resources/ui/toolbar.ui

@@ -471,8 +471,8 @@ void Gobby::EditCommands::ensure_find_dialog()
 {
 	if(!m_find_dialog.get())
 	{
-		m_find_dialog.reset(new FindDialog(m_parent, m_folder,
-		                                   m_status_bar));
+		m_find_dialog = FindDialog::create(m_parent, m_folder,
+		                                   m_status_bar);
 		m_find_dialog->signal_find_text_changed().connect(
 			sigc::mem_fun(
 				*this, &EditCommands::on_find_text_changed));

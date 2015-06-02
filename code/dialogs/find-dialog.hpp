@@ -22,23 +22,29 @@
 #include "core/sessionview.hpp"
 
 #include <gtkmm/dialog.h>
-#include <gtkmm/box.h>
-#include <gtkmm/table.h>
 #include <gtkmm/label.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/checkbutton.h>
+#include <gtkmm/builder.h>
 
 namespace Gobby
 {
 
 class FindDialog: public Gtk::Dialog
 {
+private:
+	friend class Gtk::Builder;
+	FindDialog(GtkDialog* cobject,
+	           const Glib::RefPtr<Gtk::Builder>& builder);
+
 public:
 	typedef sigc::signal<void> SignalFindTextChanged;
 	typedef sigc::signal<void> SignalReplaceTextChanged;
 
-	FindDialog(Gtk::Window& parent, const Folder& folder,
-	           StatusBar& status_bar);
+	static std::auto_ptr<FindDialog> create(Gtk::Window& parent,
+	                                        const Folder& folder,
+	                                        StatusBar& status_bar);
+
 	~FindDialog();
 
 	bool get_search_only() const;
@@ -104,22 +110,19 @@ protected:
 	                     GtkTextIter* match_start,
 	                     GtkTextIter* match_end);
 
-	const Folder& m_folder;
-	StatusBar& m_status_bar;
+	const Folder* m_folder;
+	StatusBar* m_status_bar;
 
 	sigc::connection m_active_user_changed_connection;
 
-	Gtk::VBox m_box_main;
-	Gtk::Table m_table_entries;
-	Gtk::Label m_label_find;
-	Gtk::Label m_label_replace;
-	Gtk::Entry m_entry_find;
-	Gtk::Entry m_entry_replace;
+	Gtk::Label* m_label_replace;
+	Gtk::Entry* m_entry_find;
+	Gtk::Entry* m_entry_replace;
 
-	Gtk::CheckButton m_check_case;
-	Gtk::CheckButton m_check_whole_word;
-	Gtk::CheckButton m_check_backwards;
-	Gtk::CheckButton m_check_wrap_around;
+	Gtk::CheckButton* m_check_case;
+	Gtk::CheckButton* m_check_whole_word;
+	Gtk::CheckButton* m_check_backwards;
+	Gtk::CheckButton* m_check_wrap_around;
 
 	Gtk::Button* m_button_replace;
 	Gtk::Button* m_button_replace_all;
