@@ -81,12 +81,12 @@ Gobby::FileCommands::Task::get_document_location_dialog()
 {
 	if(m_file_commands.m_location_dialog.get() == NULL)
 	{
-		m_file_commands.m_location_dialog.reset(
-			new DocumentLocationDialog(
+		m_file_commands.m_location_dialog =
+			DocumentLocationDialog::create(
 				m_file_commands.m_parent,
 				INF_GTK_BROWSER_MODEL(
 					m_file_commands.m_browser.
-						get_store())));
+						get_store()));
 	}
 
 	return *m_file_commands.m_location_dialog;

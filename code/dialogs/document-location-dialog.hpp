@@ -18,10 +18,9 @@
 #define _GOBBY_DOCUMENTLOCATIONDIALOG_HPP_
 
 #include <gtkmm/dialog.h>
-#include <gtkmm/table.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
-#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/builder.h>
 
 #include <libinfgtk/inf-gtk-browser-model.h>
 #include <libinfgtk/inf-gtk-browser-model-filter.h>
@@ -32,9 +31,15 @@ namespace Gobby
 
 class DocumentLocationDialog : public Gtk::Dialog
 {
+private:
+	friend class Gtk::Builder;
+	DocumentLocationDialog(GtkDialog* cobject,
+	                       const Glib::RefPtr<Gtk::Builder>& builder);
 public:
-	DocumentLocationDialog(Gtk::Window& parent,
-	                       InfGtkBrowserModel* model);
+	static std::auto_ptr<DocumentLocationDialog> create(
+		Gtk::Window& parent,
+		InfGtkBrowserModel* model);
+
 	~DocumentLocationDialog();
 
 	Glib::ustring get_document_name() const;
@@ -78,15 +83,11 @@ protected:
 
 	bool filter_visible_func(GtkTreeModel* model, GtkTreeIter* iter);
 
-  Gtk::VBox m_box;
+	Gtk::Label* m_name_label;
+	Gtk::Entry* m_name_entry;
+	Gtk::Label* m_location_label;
 
-  Gtk::HBox m_name_box;
-	Gtk::Label m_name_label;
-	Gtk::Entry m_name_entry;
-
-	Gtk::Label m_location_label;
 	InfGtkBrowserModelFilter* m_filter_model;
-	Gtk::ScrolledWindow m_scroll;
 	InfGtkBrowserView* m_view;
 };
 
