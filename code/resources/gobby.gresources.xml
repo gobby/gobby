@@ -2,6 +2,7 @@
  <gresource prefix="/de/0x539/gobby">
   <file preprocess="xml-stripblanks">ui/browser-context-menu.ui</file>
   <file preprocess="xml-stripblanks">ui/connection-dialog.ui</file>
+  <file preprocess="xml-stripblanks">ui/connection-info-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/document-location-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/entry-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/find-dialog.ui</file>

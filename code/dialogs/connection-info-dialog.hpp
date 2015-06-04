@@ -18,10 +18,10 @@
 #define _GOBBY_CONNECTIONINFODIALOG_HPP_
 
 #include <gtkmm/dialog.h>
-#include <gtkmm/box.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/builder.h>
 
 #include <libinfgtk/inf-gtk-connection-view.h>
 
@@ -33,11 +33,16 @@ namespace Gobby
 
 class ConnectionInfoDialog: public Gtk::Dialog
 {
+	friend class Gtk::Builder;
+	ConnectionInfoDialog(GtkDialog* cobject,
+	                     const Glib::RefPtr<Gtk::Builder>& builder);
 public:
-	ConnectionInfoDialog(Gtk::Window& parent,
-	                     InfBrowser* browser);
 	~ConnectionInfoDialog();
 
+	static std::auto_ptr<ConnectionInfoDialog> create(
+		Gtk::Window& parent, InfBrowser* browser);
+
+	void set_browser(InfBrowser* browser);
 private:
 	static void foreach_connection_func_static(InfXmlConnection* conn,
 	                                           gpointer user_data)
@@ -91,11 +96,10 @@ protected:
 
 	Columns m_columns;
 	Glib::RefPtr<Gtk::ListStore> m_connection_store;
-	Gtk::Box m_box;
 
-	Gtk::Image m_image;
-	Gtk::TreeView m_connection_tree_view;
-	Gtk::ScrolledWindow m_connection_scroll;
+	Gtk::Image* m_image;
+	Gtk::TreeView* m_connection_tree_view;
+	Gtk::ScrolledWindow* m_connection_scroll;
 
 	InfGtkConnectionView* m_connection_view;
 

@@ -20,22 +20,110 @@
 
 #include <libinfinity/client/infc-browser.h>
 
-Gobby::ConnectionInfoDialog::ConnectionInfoDialog(Gtk::Window& parent,
-                                                  InfBrowser* browser):
-	Gtk::Dialog(_("Connection Information"), parent), m_browser(browser),
+Gobby::ConnectionInfoDialog::ConnectionInfoDialog(
+	GtkDialog* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
+:
+	Gtk::Dialog(cobject), m_browser(NULL),
 	m_connection_store(Gtk::ListStore::create(m_columns)),
-	m_connection_tree_view(m_connection_store),
-	m_box(Gtk::ORIENTATION_HORIZONTAL, 12),
-	m_connection_view(
-		INF_GTK_CONNECTION_VIEW(inf_gtk_connection_view_new())),
 	m_connection_added_handler(0),
 	m_connection_removed_handler(0),
 	m_empty(true)
 {
-	g_object_ref(m_browser);
+	builder->get_widget("image", m_image);
+	builder->get_widget("treeview", m_connection_tree_view);
+	builder->get_widget("scrolled-window", m_connection_scroll);
+
+	m_connection_view = INF_GTK_CONNECTION_VIEW(
+		gtk_builder_get_object(builder->gobj(), "connection-info"));
+
+	m_connection_tree_view->set_model(m_connection_store);
+
+	Gtk::CellRendererPixbuf* icon_renderer =
+		Gtk::manage(new Gtk::CellRendererPixbuf);
+
+	Gtk::CellRendererText* name_renderer =
+		Gtk::manage(new Gtk::CellRendererText);
+
+	Gtk::TreeViewColumn* column =
+		Gtk::manage(new Gtk::TreeViewColumn(_("Connections")));
+	column->pack_start(*icon_renderer, false);
+	column->pack_start(*name_renderer, true);
+
+	column->set_cell_data_func(
+		*icon_renderer,
+		sigc::mem_fun(*this,
+			&ConnectionInfoDialog::icon_cell_data_func));
+	column->set_cell_data_func(
+		*name_renderer,
+		sigc::mem_fun(*this,
+			&ConnectionInfoDialog::name_cell_data_func));
+
+	m_connection_tree_view->append_column(*column);
+
+	Glib::RefPtr<Gtk::TreeSelection> selection =
+		m_connection_tree_view->get_selection();
+	selection->signal_changed().connect(
+		sigc::mem_fun(*this,
+			&ConnectionInfoDialog::on_selection_changed));
+}
+
+Gobby::ConnectionInfoDialog::~ConnectionInfoDialog()
+{
+	set_browser(NULL);
+}
+
+std::auto_ptr<Gobby::ConnectionInfoDialog>
+Gobby::ConnectionInfoDialog::create(Gtk::Window& parent, InfBrowser* browser)
+{
+	// Make sure the GType for InfGtkConnectionView is registered,
+	// since the UI definition contains a widget of this kind, and
+	// GtkBuilder will want to look it up.
+	// Also, make sure the call does not get optimized out.
+	GType type = inf_gtk_connection_view_get_type();
+	if(type == 0)
+		throw std::logic_error("inf_gtk_connection_view_get_type");
+
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/connection-info-dialog.ui");
+
+	ConnectionInfoDialog* dialog_ptr;
+	builder->get_widget_derived("ConnectionInfoDialog", dialog_ptr);
+	std::auto_ptr<ConnectionInfoDialog> dialog(dialog_ptr);
+	dialog->set_transient_for(parent);
+	dialog->set_browser(browser);
+	return dialog;
+}
+
+void Gobby::ConnectionInfoDialog::set_browser(InfBrowser* browser)
+{
+	if(m_browser != NULL)
+	{
+		if(m_connection_added_handler != 0)
+		{
+			g_signal_handler_disconnect(
+				G_OBJECT(m_browser),
+				m_connection_added_handler);
+		}
+
+		if(m_connection_removed_handler != 0)
+		{
+			g_signal_handler_disconnect(
+				G_OBJECT(m_browser),
+				m_connection_removed_handler);
+		}
+
+		g_object_unref(m_browser);
+	}
+
+	m_browser = browser;
+	if(m_browser != NULL)
+		g_object_ref(m_browser);
 
 	if(INFC_IS_BROWSER(browser))
 	{
+		m_empty = false;
+
 		InfXmlConnection* conn = infc_browser_get_connection(
 			INFC_BROWSER(browser));
 		if(INF_IS_XMPP_CONNECTION(conn))
@@ -47,13 +135,15 @@ Gobby::ConnectionInfoDialog::ConnectionInfoDialog(Gtk::Window& parent,
 
 		/* TODO: Show this corresponding to connection status, or
 		 * network-server if we are a server. */
-		m_image.set_from_icon_name(
+		m_image->set_from_icon_name(
 			"network-idle", Gtk::ICON_SIZE_DIALOG);
-
-		m_empty = false;
+		m_connection_scroll->hide();
 	}
 	else if(INFD_IS_DIRECTORY(browser))
 	{
+		m_connection_store->clear();
+		m_empty = true;
+
 		infd_directory_foreach_connection(
 			INFD_DIRECTORY(browser),
 			&ConnectionInfoDialog::foreach_connection_func_static,
@@ -71,92 +161,28 @@ Gobby::ConnectionInfoDialog::ConnectionInfoDialog(Gtk::Window& parent,
 			G_CALLBACK(on_connection_removed_static),
 			this);
 
+		Glib::RefPtr<Gtk::TreeSelection> selection =
+			m_connection_tree_view->get_selection();
 		if(m_empty)
 		{
+			selection->set_mode(Gtk::SELECTION_NONE);
+
 			Gtk::TreeIter iter = m_connection_store->append();
 			(*iter)[m_columns.connection] = NULL;
 		}
-
-		Gtk::CellRendererPixbuf* icon_renderer =
-			Gtk::manage(new Gtk::CellRendererPixbuf);
-
-		Gtk::CellRendererText* name_renderer =
-			Gtk::manage(new Gtk::CellRendererText);
-
-		Gtk::TreeViewColumn* column =
-			Gtk::manage(new Gtk::TreeViewColumn(_("Connections")));
-		column->pack_start(*icon_renderer, false);
-		column->pack_start(*name_renderer, true);
-
-		column->set_cell_data_func(
-			*icon_renderer,
-			sigc::mem_fun(*this,
-				&ConnectionInfoDialog::icon_cell_data_func));
-		column->set_cell_data_func(
-			*name_renderer,
-			sigc::mem_fun(*this,
-				&ConnectionInfoDialog::name_cell_data_func));
-
-		m_connection_tree_view.append_column(*column);
-
-		Glib::RefPtr<Gtk::TreeSelection> selection =
-			m_connection_tree_view.get_selection();
-		if(m_empty)
-			selection->set_mode(Gtk::SELECTION_NONE);
 		else
+		{
 			selection->set_mode(Gtk::SELECTION_BROWSE);
-		selection->signal_changed().connect(
-			sigc::mem_fun(*this,
-				&ConnectionInfoDialog::on_selection_changed));
-		m_connection_tree_view.show();
+		}
 
-		m_connection_scroll.set_min_content_width(200);
-		m_connection_scroll.set_min_content_height(80);
-		m_connection_scroll.set_policy(
-			Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-		m_connection_scroll.set_shadow_type(Gtk::SHADOW_IN);
-		m_connection_scroll.add(m_connection_tree_view);
-		m_connection_scroll.show();
-
-		m_image.set_from_icon_name(
+		m_image->set_from_icon_name(
 			"network-server", Gtk::ICON_SIZE_DIALOG);
 	}
 
-	m_image.set_valign(Gtk::ALIGN_START);
-	m_image.show();
 	if(!m_empty)
 		gtk_widget_show(GTK_WIDGET(m_connection_view));
-
-	m_box.pack_start(m_image, Gtk::PACK_SHRINK);
-	m_box.pack_start(m_connection_scroll, Gtk::PACK_SHRINK);
-
-	gtk_box_pack_start(
-		m_box.gobj(), GTK_WIDGET(m_connection_view),
-		FALSE, FALSE, 0);
-	m_box.show();
-
-	get_vbox()->set_spacing(6);
-	get_vbox()->pack_start(m_box, Gtk::PACK_EXPAND_WIDGET);
-
-	set_resizable(false);
-	set_border_width(12);
-}
-
-Gobby::ConnectionInfoDialog::~ConnectionInfoDialog()
-{
-	if(m_connection_added_handler != 0)
-	{
-		g_signal_handler_disconnect(
-			G_OBJECT(m_browser), m_connection_added_handler);
-	}
-
-	if(m_connection_removed_handler != 0)
-	{
-		g_signal_handler_disconnect(
-			G_OBJECT(m_browser), m_connection_removed_handler);
-	}
-
-	g_object_unref(m_browser);
+	else
+		gtk_widget_hide(GTK_WIDGET(m_connection_view));
 }
 
 void Gobby::ConnectionInfoDialog::foreach_connection_func(
@@ -176,9 +202,9 @@ void Gobby::ConnectionInfoDialog::foreach_connection_func(
 		if(m_empty)
 		{
 			gtk_widget_show(GTK_WIDGET(m_connection_view));
-			m_connection_tree_view.get_selection()->
+			m_connection_tree_view->get_selection()->
 				set_mode(Gtk::SELECTION_BROWSE);
-			m_connection_tree_view.get_selection()->select(iter);
+			m_connection_tree_view->get_selection()->select(iter);
 			m_empty = false;
 		}
 	}
@@ -201,9 +227,9 @@ void Gobby::ConnectionInfoDialog::on_connection_added(
 		if(m_empty)
 		{
 			gtk_widget_show(GTK_WIDGET(m_connection_view));
-			m_connection_tree_view.get_selection()->
+			m_connection_tree_view->get_selection()->
 				set_mode(Gtk::SELECTION_BROWSE);
-			m_connection_tree_view.get_selection()->select(iter);
+			m_connection_tree_view->get_selection()->select(iter);
 			m_empty = false;
 		}
 	}
@@ -226,7 +252,7 @@ void Gobby::ConnectionInfoDialog::on_connection_removed(
 			(*iter)[m_columns.connection] = NULL;
 
 			gtk_widget_hide(GTK_WIDGET(m_connection_view));
-			m_connection_tree_view.get_selection()->
+			m_connection_tree_view->get_selection()->
 				set_mode(Gtk::SELECTION_NONE);
 			m_empty = true;
 		}
@@ -235,10 +261,10 @@ void Gobby::ConnectionInfoDialog::on_connection_removed(
 
 void Gobby::ConnectionInfoDialog::on_selection_changed()
 {
-	if(m_connection_tree_view.get_selection()->count_selected_rows() > 0)
+	if(m_connection_tree_view->get_selection()->count_selected_rows() > 0)
 	{
 		Gtk::TreeIter iter =
-			m_connection_tree_view.get_selection()->
+			m_connection_tree_view->get_selection()->
 				get_selected();
 		inf_gtk_connection_view_set_connection(
 			m_connection_view, (*iter)[m_columns.connection]);

@@ -277,7 +277,7 @@ void Gobby::BrowserContextCommands::on_connection_info(
 {
 	InfBrowser* browser = m_popup_watch->get_browser();
 
-	m_dialog.reset(new ConnectionInfoDialog(m_parent, browser));
+	m_dialog = ConnectionInfoDialog::create(m_parent, browser);
 	m_dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 	m_dialog->signal_response().connect(
 		sigc::mem_fun(*this,

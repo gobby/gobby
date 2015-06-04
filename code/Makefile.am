@@ -19,6 +19,7 @@ pixmapdir = $(datadir)/pixmaps/gobby-0.5
 resources = \
 	resources/ui/browser-context-menu.ui \
 	resources/ui/connection-dialog.ui \
+	resources/ui/connection-info-dialog.ui \
 	resources/ui/document-location-dialog.ui \
 	resources/ui/entry-dialog.ui \
 	resources/ui/find-dialog.ui \
