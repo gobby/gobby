@@ -205,10 +205,8 @@ void Gobby::Window::on_show()
 
 	if(!settings->get_boolean("run"))
 	{
-		m_initial_dlg.reset(
-			new InitialDialog(
-				*this, m_statusbar, m_preferences,
-				m_cert_manager));
+		m_initial_dlg = InitialDialog::create(
+			*this, m_statusbar, m_preferences, m_cert_manager);
 		m_initial_dlg->present();
 		m_initial_dlg->signal_hide().connect(
 			sigc::mem_fun(*this,

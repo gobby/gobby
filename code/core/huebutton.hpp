@@ -19,6 +19,7 @@
 
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/builder.h>
 
 #include <memory>
 
@@ -30,7 +31,9 @@ namespace Gobby
 class HueButton: public Gtk::ColorButton
 {
 public:
-	HueButton(const Glib::ustring& title, Gtk::Window& parent);
+	HueButton(GtkColorButton* cobject,
+	          const Glib::RefPtr<Gtk::Builder>& builder);
+	HueButton(const Glib::ustring& title);
 
 	double get_hue() const;
 	double get_saturation() const;
@@ -45,9 +48,6 @@ protected:
 
 	void on_parent_hide();
 	void on_dialog_response(int response_id);
-
-	Glib::ustring m_title;
-	Gtk::Window& m_parent;
 
 	std::auto_ptr<Gtk::Dialog> m_dialog;
 	GtkWidget* m_hue_chooser;

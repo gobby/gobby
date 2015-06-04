@@ -183,310 +183,114 @@ namespace
 	};
 }
 
-Gobby::InitialDialog::InitialDialog(Gtk::Window& parent,
-                                    StatusBar& status_bar,
-                                    Preferences& preferences,
-                                    CertificateManager& cert_manager):
-	Gtk::Dialog("Gobby", parent),
-	m_status_bar(status_bar),
-	m_preferences(preferences),
-	m_cert_manager(cert_manager),
-	m_vbox(false, 12),
-	m_color_button(_("Choose a user color"), *this),
-	m_user_table(3, 2),
-	m_remote_auth_external_table(2, 2)
+Gobby::InitialDialog::InitialDialog(
+	GtkDialog* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
+:
+	Gtk::Dialog(cobject), m_status_bar(NULL), m_preferences(NULL),
+	m_cert_manager(NULL)
 {
-	m_title.set_markup(
-		"<span size=\"x-large\" weight=\"bold\">" +
-		Glib::Markup::escape_text(_("Welcome to Gobby")) +
-		"</span>");
-	m_title.show();
+	builder->get_widget("name-entry", m_name_entry);
+	builder->get_widget_derived("color-button", m_color_button);
 
-	Gtk::IconSize::register_new("welcome", 128, 128);
+	builder->get_widget("allow-remote-connections",
+	                    m_remote_allow_connections);
+	builder->get_widget("ask-password", m_remote_require_password);
+	builder->get_widget("password", m_remote_password_entry);
+	builder->get_widget("create-self-signed", m_remote_auth_self);
+	builder->get_widget("use-existing-certificate",
+	                    m_remote_auth_external);
+	builder->get_widget("private-key-file",
+	                    m_remote_auth_external_keyfile);
+	builder->get_widget("certificate-file",
+	                    m_remote_auth_external_certfile);
 
-	m_image.set_from_icon_name("gobby-0.5",
-	                           Gtk::IconSize::from_name("welcome"));
-	m_image.set_alignment(Gtk::ALIGN_CENTER, Gtk::ALIGN_START),
-	m_image.show();
+	builder->get_widget("remote-connections-grid",
+	                    m_remote_connections_grid);
+	builder->get_widget("password-grid",
+	                    m_password_grid);
+	builder->get_widget("certificate-grid",
+	                    m_certificate_grid);
 
-	m_intro.set_text(
-		_("Before we start, a few options need to be configured. "
-		  "You can later change them by choosing Edit ▸ Preferences "
-		  "from the menu."));
-	m_intro.set_width_chars(50);
-	m_intro.set_line_wrap(true);
-	m_intro.show();
-
-	m_name_label.set_markup(
-		"<b>" + Glib::Markup::escape_text(_("User Name")) + "</b>"
-		"<small>\n\n" +
-		Glib::Markup::escape_text(_("Your name as shown to "
-		                            "other users.")) +
-		"</small>");
-	m_name_label.set_alignment(Gtk::ALIGN_START);
-	m_name_label.set_line_wrap(true);
-	m_name_label.set_width_chars(20);
-	m_name_label.show();
-	
-	m_color_label.set_markup(
-		"<b>" + Glib::Markup::escape_text(_("User Color")) + "</b>"
-		"<small>\n\n" +
-		Glib::Markup::escape_text(_("The color with which text you "
-		                            "have written is branded.")) +
-		"</small>");
-	m_color_label.set_alignment(Gtk::ALIGN_START);
-	m_color_label.set_line_wrap(true);
-	m_color_label.set_width_chars(20);
-	m_color_label.show();
-
-	m_name_entry.set_text(preferences.user.name);
-	m_name_entry.set_activates_default(true);
-	m_name_entry.show();
-
-	m_color_button.set_hue(preferences.user.hue);
-	m_color_button.set_saturation(0.35);
-	m_color_button.set_value(1.0);
-	m_color_button.show();
-
-	m_remote_label.set_markup(
-		"<b>" +
-		Glib::Markup::escape_text(_("Remote Connections")) +
-		"</b>");
-	m_remote_label.set_alignment(Gtk::ALIGN_START);
-	m_remote_label.show();
-
-	m_remote_allow_connections.set_label(
-		_("Allow remote users to edit local documents"));
-	m_remote_allow_connections.set_active(
-		preferences.user.allow_remote_access);
-	m_remote_allow_connections.show();
-
-	m_remote_require_password.set_label(
-		_("Ask remote users for a password")); 
-	m_remote_require_password.set_active(
-		preferences.user.require_password);
-	m_remote_require_password.show();
-
-	m_remote_password_label.set_label(_("Password:"));
-	m_remote_password_label.show();
-
-	m_remote_password_entry.set_visibility(false);
-	m_remote_password_entry.set_text(
-		static_cast<std::string>(preferences.user.password));
-	m_remote_password_entry.show();
-
-	m_remote_password_box.set_spacing(12);
-	m_remote_password_box.pack_start(
-		m_remote_password_label, Gtk::PACK_SHRINK);
-	m_remote_password_box.pack_start(
-		m_remote_password_entry, Gtk::PACK_EXPAND_WIDGET);
-	m_remote_password_box.set_sensitive(
-		preferences.user.require_password);
-	m_remote_password_box.show();
-
-	m_remote_auth_label.set_markup(
-		"<b>" + Glib::Markup::escape_text("Authentication") + "</b>");
-	m_remote_auth_label.set_alignment(Gtk::ALIGN_START);
-	m_remote_auth_label.show();
-
-	Gtk::RadioButton::Group group;
-
-	m_remote_auth_none.set_label(
-		_("No authentication (Not recommended)"));
-	m_remote_auth_none.set_group(group);
-	m_remote_auth_none.show();
-
-	m_remote_auth_none_help.set_markup(
-		"<small>" +
-		Glib::Markup::escape_text(
-			_("Don't authenticate ourselves to remote users. "
-			  "Data transfer will be unencrypted.")) +
-		"</small>");
-	m_remote_auth_none_help.set_line_wrap(true);
-	m_remote_auth_none_help.set_width_chars(30);
-	m_remote_auth_none_help.set_alignment(Gtk::ALIGN_START);
-	m_remote_auth_none_help.show();
-
-	m_remote_auth_self.set_label(
-		_("Create a self-signed certificate (Recommended)"));
-	m_remote_auth_self.set_group(group);
-	m_remote_auth_self.set_active(true);
-	m_remote_auth_self.show();
-
-	m_remote_auth_self_help.set_markup(
-		"<small>" +
-		Glib::Markup::escape_text(
-			_("It may take a minute or two until remote users "
-			  "can connect while the security certificate is "
-			  "being generated.")) +
-		"</small>");
-	m_remote_auth_self_help.set_line_wrap(true);
-	m_remote_auth_self_help.set_width_chars(30);
-	m_remote_auth_self_help.set_alignment(Gtk::ALIGN_START);
-	m_remote_auth_self_help.show();
-
-	m_remote_auth_external.set_label(
-		_("Use an existing certificate (Expert option)"));
-	m_remote_auth_external.set_group(group);
-	m_remote_auth_external.show();
-
-	m_remote_auth_external_help.set_markup(
-		"<small>" +
-		Glib::Markup::escape_text(
-			_("Use an existing private key and certificate for "
-			  "authentication. The files must be in PEM "
-			  "format.")) +
-		"</small>");
-	m_remote_auth_external_help.set_line_wrap(true);
-	m_remote_auth_external_help.set_width_chars(30);
-	m_remote_auth_external_help.set_alignment(Gtk::ALIGN_START);
-	m_remote_auth_external_help.show();
-
-	m_remote_auth_external_keyfile_label.set_label(_("Private key:"));
-	m_remote_auth_external_keyfile_label.show();
-	m_remote_auth_external_certfile_label.set_label(_("Certificate:"));
-	m_remote_auth_external_certfile_label.show();
-	m_remote_auth_external_keyfile.show();
-	m_remote_auth_external_certfile.show();
-
-	m_remote_auth_external_table.set_spacings(6);
-	m_remote_auth_external_table.attach(
-		m_remote_auth_external_keyfile_label, 0, 1, 0, 1,
-		Gtk::FILL | Gtk::SHRINK, Gtk::FILL | Gtk::SHRINK);
-	m_remote_auth_external_table.attach(
-		m_remote_auth_external_keyfile, 1, 2, 0, 1,
-		Gtk::FILL | Gtk::EXPAND, Gtk::FILL | Gtk::SHRINK);
-	m_remote_auth_external_table.attach(
-		m_remote_auth_external_certfile_label, 0, 1, 1, 2,
-		Gtk::FILL | Gtk::SHRINK, Gtk::FILL | Gtk::SHRINK);
-	m_remote_auth_external_table.attach(
-		m_remote_auth_external_certfile, 1, 2, 1, 2,
-		Gtk::FILL | Gtk::EXPAND, Gtk::FILL | Gtk::SHRINK);
-	m_remote_auth_external_table.set_sensitive(false);
-	m_remote_auth_external_table.show();
-
-	m_remote_auth_box.set_spacing(6);
-
-	// Disable the option not to create a certificate. This would only
-	// work if the security policy could also be set to ONLY_UNSECURED,
-	// but that would also disable TLS in outgoing connections, and we
-	// don't want that. We could introduce two separate security-policy
-	// options for incoming and outgoing connections, but instead, for
-	// simplicity, we just make sure we always have a certificate when
-	// the self-hoster is enabled.
-#if 0
-	m_remote_auth_box.pack_start(
-		m_remote_auth_none, Gtk::PACK_SHRINK);
-	m_remote_auth_box.pack_start(
-		*indent(m_remote_auth_none_help), Gtk::PACK_SHRINK);
-#endif
-	m_remote_auth_box.pack_start(
-		m_remote_auth_self, Gtk::PACK_SHRINK);
-	m_remote_auth_box.pack_start(
-		*indent(m_remote_auth_self_help), Gtk::PACK_SHRINK);
-	m_remote_auth_box.pack_start(
-		m_remote_auth_external, Gtk::PACK_SHRINK);
-	m_remote_auth_box.pack_start(
-		*indent(m_remote_auth_external_help), Gtk::PACK_SHRINK);
-	m_remote_auth_box.pack_start(
-		*indent(m_remote_auth_external_table), Gtk::PACK_SHRINK);
-	m_remote_auth_box.show();
-
-	m_remote_options_box.set_spacing(6);
-	m_remote_options_box.pack_start(
-		m_remote_require_password, Gtk::PACK_SHRINK);
-	m_remote_options_box.pack_start(
-		*indent(m_remote_password_box), Gtk::PACK_SHRINK);
-	m_remote_options_box.pack_start(
-		m_remote_auth_label, Gtk::PACK_SHRINK);
-	m_remote_options_box.pack_start(
-		*indent(m_remote_auth_box), Gtk::PACK_SHRINK);
-	m_remote_options_box.set_sensitive(
-		preferences.user.allow_remote_access);
-	m_remote_options_box.show();
-
-	m_remote_box.pack_start(m_remote_label, Gtk::PACK_SHRINK);
-	m_remote_box.pack_start(m_remote_allow_connections, Gtk::PACK_SHRINK);
-	m_remote_box.pack_start(*indent(m_remote_options_box),
-	                        Gtk::PACK_SHRINK);
-	m_remote_box.show();
-
-	m_user_table.set_row_spacings(12);
-
-	m_user_table.attach(m_image, 0, 2, 0, 1,
-	                    Gtk::FILL | Gtk::SHRINK, Gtk::FILL | Gtk::SHRINK);
-	m_user_table.attach(m_name_label, 0, 1, 1, 2,
-	                    Gtk::FILL | Gtk::SHRINK, Gtk::FILL | Gtk::SHRINK);
-	m_user_table.attach(*align_top(m_name_entry), 1, 2, 1, 2,
-	                    Gtk::FILL | Gtk::EXPAND, Gtk::FILL | Gtk::SHRINK);
-	m_user_table.attach(m_color_label, 0, 1, 2, 3,
-	                    Gtk::FILL | Gtk::SHRINK, Gtk::FILL | Gtk::SHRINK);
-	m_user_table.attach(*align_top(m_color_button), 1, 2, 2, 3,
-	                    Gtk::FILL | Gtk::EXPAND, Gtk::FILL | Gtk::SHRINK);
-	m_user_table.show();
-
-	m_main_box.set_spacing(24);
-	m_main_box.pack_start(m_user_table, Gtk::PACK_SHRINK);
-	m_main_box.pack_start(m_remote_box, Gtk::PACK_SHRINK);
-	m_main_box.show();
-
-	m_vbox.set_spacing(24);
-	m_vbox.pack_start(m_intro, Gtk::PACK_SHRINK);
-	m_vbox.pack_start(m_main_box, Gtk::PACK_EXPAND_WIDGET);
-	m_vbox.show();
-
-	m_topbox.pack_start(m_title, Gtk::PACK_SHRINK);
-	m_topbox.pack_start(m_vbox, Gtk::PACK_EXPAND_WIDGET);
-	m_topbox.set_spacing(24);
-	m_topbox.set_border_width(12);
-	m_topbox.show();
-
-	m_remote_allow_connections.signal_toggled().connect(
+	m_remote_allow_connections->signal_toggled().connect(
 		sigc::mem_fun(*this,
 			&Gobby::InitialDialog::
 				on_remote_allow_connections_toggled));
-	m_remote_require_password.signal_toggled().connect(
+	m_remote_require_password->signal_toggled().connect(
 		sigc::mem_fun(*this,
 			&Gobby::InitialDialog::
 				on_remote_require_password_toggled));
-	m_remote_auth_external.signal_toggled().connect(
+	m_remote_auth_external->signal_toggled().connect(
 		sigc::mem_fun(*this,
 			&Gobby::InitialDialog::
 				on_remote_auth_external_toggled));
 
-	get_vbox()->pack_start(m_topbox, Gtk::PACK_EXPAND_WIDGET);
-
-	set_resizable(false);
 	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
+}
+
+std::auto_ptr<Gobby::InitialDialog>
+Gobby::InitialDialog::create(Gtk::Window& parent,
+                             StatusBar& status_bar,
+                             Preferences& preferences,
+                             CertificateManager& cert_manager)
+{
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/initial-dialog.ui");
+
+	InitialDialog* dialog_ptr;
+	builder->get_widget_derived("InitialDialog", dialog_ptr);
+	std::auto_ptr<InitialDialog> dialog(dialog_ptr);
+
+	dialog->set_transient_for(parent);
+
+	dialog->m_status_bar = &status_bar;
+	dialog->m_preferences = &preferences;
+	dialog->m_cert_manager = &cert_manager;
+
+	// Set initial values
+	dialog->m_name_entry->set_text(preferences.user.name);
+	dialog->m_color_button->set_hue(preferences.user.hue);
+	dialog->m_remote_allow_connections->set_active(
+		preferences.user.allow_remote_access);
+	dialog->m_remote_require_password->set_active(
+		preferences.user.require_password);
+	dialog->m_remote_password_entry->set_text(
+		static_cast<std::string>(preferences.user.password));
+
+	// Set initial sensitivity
+	dialog->on_remote_allow_connections_toggled();
+	dialog->on_remote_require_password_toggled();
+	dialog->on_remote_auth_external_toggled();
+
+	return dialog;
 }
 
 void Gobby::InitialDialog::on_response(int id)
 {
-	m_preferences.user.name = m_name_entry.get_text();
-	m_preferences.user.hue =
-		hue_from_gdk_color(m_color_button.get_color());
-	m_preferences.user.allow_remote_access =
-		m_remote_allow_connections.get_active();
-	m_preferences.user.require_password =
-		m_remote_require_password.get_active();
-	m_preferences.user.password =
-		m_remote_password_entry.get_text();
-	m_preferences.security.authentication_enabled =
-		!m_remote_auth_none.get_active();
-	if(m_remote_auth_self.get_active())
+	m_preferences->user.name = m_name_entry->get_text();
+	m_preferences->user.hue =
+		hue_from_gdk_color(m_color_button->get_color());
+	m_preferences->user.allow_remote_access =
+		m_remote_allow_connections->get_active();
+	m_preferences->user.require_password =
+		m_remote_require_password->get_active();
+	m_preferences->user.password =
+		m_remote_password_entry->get_text();
+	m_preferences->security.authentication_enabled = true;
+	if(m_remote_auth_self->get_active())
 	{
 		// The certificate generator takes care of its own:
 		new InitialCertGenerator(
-			m_cert_manager, m_status_bar,
+			*m_cert_manager, *m_status_bar,
 			config_filename("key.pem"),
 			config_filename("cert.pem"));
 	}
 	else
 	{
-		m_preferences.security.certificate_file =
-			m_remote_auth_external_certfile.get_filename();
-		m_preferences.security.key_file =
-			m_remote_auth_external_keyfile.get_filename();
+		m_preferences->security.certificate_file =
+			m_remote_auth_external_certfile->get_filename();
+		m_preferences->security.key_file =
+			m_remote_auth_external_keyfile->get_filename();
 	}
 
 	hide();
@@ -494,18 +298,18 @@ void Gobby::InitialDialog::on_response(int id)
 
 void Gobby::InitialDialog::on_remote_allow_connections_toggled()
 {
-	m_remote_options_box.set_sensitive(
-		m_remote_allow_connections.get_active());
+	m_remote_connections_grid->set_sensitive(
+		m_remote_allow_connections->get_active());
 }
 
 void Gobby::InitialDialog::on_remote_require_password_toggled()
 {
-	m_remote_password_box.set_sensitive(
-		m_remote_require_password.get_active());
+	m_password_grid->set_sensitive(
+		m_remote_require_password->get_active());
 }
 
 void Gobby::InitialDialog::on_remote_auth_external_toggled()
 {
-	m_remote_auth_external_table.set_sensitive(
-		m_remote_auth_external.get_active());
+	m_certificate_grid->set_sensitive(
+		m_remote_auth_external->get_active());
 }

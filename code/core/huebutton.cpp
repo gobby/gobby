@@ -21,11 +21,17 @@
 
 #include <libinftextgtk/inf-text-gtk-hue-chooser.h>
 
-Gobby::HueButton::HueButton(const Glib::ustring& title, Gtk::Window& parent):
-	m_title(title), m_parent(parent), m_saturation(1.0), m_value(1.0)
+Gobby::HueButton::HueButton(GtkColorButton* cobject,
+                            const Glib::RefPtr<Gtk::Builder>& builder):
+	Gtk::ColorButton(cobject), m_saturation(1.0), m_value(1.0)
 {
-	parent.signal_hide().connect(
-		sigc::mem_fun(*this, &HueButton::on_parent_hide));
+	set_hue(1.0);
+}
+
+Gobby::HueButton::HueButton(const Glib::ustring& title):
+	m_saturation(1.0), m_value(1.0)
+{
+	set_title(title);
 	set_hue(1.0);
 }
 
@@ -67,7 +73,19 @@ void Gobby::HueButton::on_clicked()
 {
 	if(!m_dialog.get())
 	{
-		m_dialog.reset(new Gtk::Dialog(m_title, m_parent));
+		Gtk::Window* parent = NULL;
+		Gtk::Widget* toplevel_widget = get_toplevel();
+		if(gtk_widget_is_toplevel(toplevel_widget->gobj()))
+			parent = dynamic_cast<Gtk::Window*>(toplevel_widget);
+
+		if(parent == NULL)
+		{
+			g_warning("Gobby::HueButton::on_clicked: "
+			          "No toplevel widget found");
+			return;
+		}
+
+		m_dialog.reset(new Gtk::Dialog(get_title(), *parent));
 		m_hue_chooser =
 			inf_text_gtk_hue_chooser_new_with_hue(get_hue());
 		gtk_box_pack_start(GTK_BOX(m_dialog->get_vbox()->gobj()),

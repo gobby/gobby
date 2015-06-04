@@ -203,7 +203,7 @@ Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
 	m_box_user_alpha(false, 6),
 	m_lbl_user_alpha(_("Color intensity:"), Gtk::ALIGN_START),
 	m_scl_user_alpha(0.0, 1.0, 0.025),
-	m_btn_user_color(_("Choose a new user color"), parent),
+	m_btn_user_color(_("Choose a new user color")),
 	m_btn_remote_show_cursors(_("Show cursors of remote users")),
 	m_btn_remote_show_selections(_("Show selections of remote users")),
 	m_btn_remote_show_current_lines(

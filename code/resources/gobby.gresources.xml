@@ -7,6 +7,7 @@
   <file preprocess="xml-stripblanks">ui/entry-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/find-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/goto-dialog.ui</file>
+  <file preprocess="xml-stripblanks">ui/initial-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/menu.ui</file>
   <file preprocess="xml-stripblanks">ui/toolbar.ui</file>
  </gresource>
