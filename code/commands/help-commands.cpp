@@ -1,5 +1,5 @@
 /* Gobby - GTK-based collaborative text editor
- * Copyright (C) 2008-2014 Armin Burgmeier <armin@arbur.net>
+ * Copyright (C) 2008-2015 Armin Burgmeier <armin@arbur.net>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -98,7 +98,7 @@ void Gobby::HelpCommands::on_about()
 		m_about_dialog->set_authors(authors);
 		m_about_dialog->set_translator_credits(transl);
 		m_about_dialog->set_copyright(
-			"Copyright © 2008-2014 Armin Burgmeier");
+			"Copyright © 2008-2015 Armin Burgmeier");
 		m_about_dialog->set_license(_(
 			"Permission to use, copy, modify, and/or distribute "
 			"this software for any urpose with or without fee is "

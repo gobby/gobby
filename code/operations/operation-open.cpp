@@ -1,5 +1,5 @@
 /* Gobby - GTK-based collaborative text editor
- * Copyright (C) 2008-2014 Armin Burgmeier <armin@arbur.net>
+ * Copyright (C) 2008-2015 Armin Burgmeier <armin@arbur.net>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
