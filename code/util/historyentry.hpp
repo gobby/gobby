@@ -21,6 +21,7 @@
 #include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/combobox.h>
+#include <gtkmm/builder.h>
 
 #include <memory>
 
@@ -80,6 +81,7 @@ protected:
 class HistoryComboBox: public Gtk::ComboBox
 {
 public:
+  HistoryComboBox(const Glib::RefPtr<Gtk::Builder>& builder, const char* id, const std::string& history_file, unsigned int length);
   HistoryComboBox(const std::string& history_file, unsigned int length);
   HistoryComboBox(unsigned int length);
 

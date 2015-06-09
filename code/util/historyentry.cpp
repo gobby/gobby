@@ -365,6 +365,25 @@ bool Gobby::HistoryEntry::on_key_press_event(GdkEventKey* event)
 	return Gtk::Entry::on_key_press_event(event);
 }
 
+Gobby::HistoryComboBox::HistoryComboBox(
+	const Glib::RefPtr<Gtk::Builder>& builder,
+	const char* id,
+	const std::string& history_file,
+	unsigned int length)
+:
+	Gtk::ComboBox(GTK_COMBO_BOX(
+		gtk_builder_get_object(builder->gobj(), id))),
+	m_history(history_file, length)
+{
+	set_model(m_history.get_store());
+	set_entry_text_column(m_history.get_columns().text);
+
+	get_entry()->signal_key_press_event().connect(
+		sigc::mem_fun(
+			*this, &HistoryComboBox::on_entry_key_press_event),
+		false);
+}
+
 Gobby::HistoryComboBox::HistoryComboBox(const std::string& history_file,
                                         unsigned int length):
 	Gtk::ComboBox(true), m_history(history_file, length)

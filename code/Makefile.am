@@ -26,6 +26,7 @@ resources = \
 	resources/ui/goto-dialog.ui \
 	resources/ui/initial-dialog.ui \
 	resources/ui/menu.ui \
+	resources/ui/open-location-dialog.ui \
 	resources/ui/preferences-dialog.ui \
 	resources/ui/toolbar.ui
 

@@ -18,8 +18,7 @@
 #define _GOBBY_OPENLOCATIONDIALOG_HPP_
 
 #include <gtkmm/dialog.h>
-#include <gtkmm/label.h>
-#include <gtkmm/box.h>
+#include <gtkmm/builder.h>
 
 #include "util/historyentry.hpp"
 
@@ -28,8 +27,13 @@ namespace Gobby
 
 class OpenLocationDialog: public Gtk::Dialog
 {
+private:
+	friend class Gtk::Builder;
+	OpenLocationDialog(GtkDialog* cobject,
+	                   const Glib::RefPtr<Gtk::Builder>& builder);
+
 public:
-	OpenLocationDialog(Gtk::Window& parent);
+	static std::auto_ptr<OpenLocationDialog> create(Gtk::Window& parent);
 
 	Glib::ustring get_uri() const;
 	void set_uri(const Glib::ustring& uri);
@@ -40,8 +44,6 @@ protected:
 
 	void on_entry_changed();
 
-	Gtk::VBox m_box;
-	Gtk::Label m_label;
 	HistoryComboBox m_combo;
 };
 

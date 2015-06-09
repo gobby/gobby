@@ -21,31 +21,29 @@
 
 #include "features.hpp"
 
-Gobby::OpenLocationDialog::OpenLocationDialog(Gtk::Window& parent):
-	Gtk::Dialog(_("Open Location"), parent), m_box(false, 6),
-	m_label(_("Enter the _location (URI) of the file you would "
-	          "like to open:"), Gtk::ALIGN_START,
-	        Gtk::ALIGN_CENTER, true),
-	m_combo(config_filename("recent_uris"), 8)
+Gobby::OpenLocationDialog::OpenLocationDialog(
+	GtkDialog* cobject, const Glib::RefPtr<Gtk::Builder>& builder)
+:
+	Gtk::Dialog(cobject),
+	m_combo(builder, "location-combo", config_filename("recent_uris"), 8)
 {
-	m_label.set_mnemonic_widget(m_combo);
-	m_box.pack_start(m_label, Gtk::PACK_SHRINK);
-	m_label.show();
-
 	m_combo.get_entry()->set_activates_default(true);
-	m_box.pack_start(m_combo, Gtk::PACK_SHRINK);
-	m_combo.show();
 
 	m_combo.get_entry()->signal_changed().connect(
 		sigc::mem_fun(*this, &OpenLocationDialog::on_entry_changed));
+}
 
-	m_box.show();
+std::auto_ptr<Gobby::OpenLocationDialog>
+Gobby::OpenLocationDialog::create(Gtk::Window& parent)
+{
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/open-location-dialog.ui");
 
-	get_vbox()->set_spacing(6);
-	get_vbox()->pack_start(m_box, Gtk::PACK_EXPAND_WIDGET);
-
-	set_resizable(false);
-	set_border_width(12);
+	OpenLocationDialog* dialog;
+	builder->get_widget_derived("OpenLocationDialog", dialog);
+	dialog->set_transient_for(parent);
+	return std::auto_ptr<OpenLocationDialog>(dialog);
 }
 
 Glib::ustring Gobby::OpenLocationDialog::get_uri() const

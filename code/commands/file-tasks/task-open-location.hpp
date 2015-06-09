@@ -34,7 +34,7 @@ public:
 private:
 	void on_response(int response_id);
 
-	OpenLocationDialog m_location_dialog;
+	std::auto_ptr<OpenLocationDialog> m_location_dialog;
 	std::auto_ptr<TaskOpen> m_open_task;
 };
 

@@ -18,29 +18,30 @@
 #include "util/i18n.hpp"
 
 Gobby::TaskOpenLocation::TaskOpenLocation(FileCommands& file_commands):
-	Task(file_commands), m_location_dialog(get_parent())
+	Task(file_commands)
 {
 }
 
 void Gobby::TaskOpenLocation::run()
 {
-	m_location_dialog.signal_response().connect(
+	m_location_dialog = OpenLocationDialog::create(get_parent());
+	m_location_dialog->signal_response().connect(
 		sigc::mem_fun( *this, &TaskOpenLocation::on_response));
 
-	m_location_dialog.add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
-	m_location_dialog.add_button(_("_Open"), Gtk::RESPONSE_ACCEPT);
+	m_location_dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
+	m_location_dialog->add_button(_("_Open"), Gtk::RESPONSE_ACCEPT);
 
-	m_location_dialog.present();
+	m_location_dialog->present();
 }
 
 void Gobby::TaskOpenLocation::on_response(int response_id)
 {
 	if(response_id == Gtk::RESPONSE_ACCEPT)
 	{
-		std::string uri = m_location_dialog.get_uri();
+		std::string uri = m_location_dialog->get_uri();
 		Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(uri);
 
-		m_location_dialog.hide();
+		m_location_dialog.reset(NULL);
 
 		m_open_task.reset(new TaskOpen(m_file_commands, file));
 		m_open_task->signal_finished().connect(
@@ -49,6 +50,6 @@ void Gobby::TaskOpenLocation::on_response(int response_id)
 	}
 	else
 	{
-		finish();
+		finish(); // deletes this
 	}
 }
