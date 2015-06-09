@@ -42,9 +42,9 @@ void Gobby::ApplicationCommands::on_preferences()
 
 	if(!m_preferences_dialog.get())
 	{
-		m_preferences_dialog.reset(
-			new PreferencesDialog(*parent, m_file_chooser,
-			                      m_preferences, m_cert_manager));
+		m_preferences_dialog = PreferencesDialog::create(
+			*parent, m_file_chooser,
+			m_preferences, m_cert_manager);
 	}
 
 	m_preferences_dialog->present();

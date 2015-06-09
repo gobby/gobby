@@ -32,15 +32,6 @@ namespace
 {
 	using namespace Gobby;
 
-	Gtk::Widget* indent(Gtk::Widget& widget)
-	{
-		Gtk::Alignment* alignment = new Gtk::Alignment;
-		alignment->set_padding(0, 0, 12, 0);
-		alignment->add(widget);
-		alignment->show();
-		return Gtk::manage(alignment);
-	}
-
 	Gtk::WrapMode
 	wrap_mode_from_check_buttons(Gtk::CheckButton& char_button,
 	                             Gtk::CheckButton& word_button)
@@ -51,11 +42,6 @@ namespace
 			return Gtk::WRAP_CHAR;
 		else
 			return Gtk::WRAP_WORD_CHAR;
-	}
-
-	Pango::FontDescription create_description(const Glib::ustring& str)
-	{
-		return Pango::FontDescription(str);
 	}
 
 	template<typename OptionType>
@@ -175,720 +161,454 @@ namespace
 	}
 }
 
-Gobby::PreferencesDialog::Page::Page():
-	Gtk::Frame(), m_box(false, 12)
+Gobby::PreferencesDialog::User::User(
+	const Glib::RefPtr<Gtk::Builder>& builder,
+	Preferences& preferences)
 {
-	Gtk::Frame::add(m_box);
-	m_box.show();
+	builder->get_widget("user-name", m_ent_user_name);
+	builder->get_widget_derived("user-color", m_btn_user_color);
+	builder->get_widget("color-intensity", m_scl_user_alpha);
+	builder->get_widget("remote-show-cursors", m_btn_remote_show_cursors);
+	builder->get_widget("remote-show-selections",
+	                    m_btn_remote_show_selections);
+	builder->get_widget("remote-show-current-line",
+	                    m_btn_remote_show_current_lines);
+	builder->get_widget("remote-show-in-scrollbar",
+	                    m_btn_remote_show_cursor_positions);
+	builder->get_widget("grid-local-connections",
+	                    m_grid_local_connections);
+	builder->get_widget("remote-allow-edit",
+	                    m_btn_local_allow_connections);
+	builder->get_widget("require-password",
+	                    m_btn_local_require_password);
+	builder->get_widget("grid-password", m_grid_password);
+	builder->get_widget("password-entry", m_ent_local_password);
+	builder->get_widget("port-number", m_ent_local_port);
+	builder->get_widget("remember-local-documents",
+	                    m_btn_local_keep_documents);
+	builder->get_widget("grid-local-documents-directory",
+	                    m_grid_local_documents_directory);
+	builder->get_widget("local-documents-directory",
+	                    m_btn_local_documents_directory);
 
-	// Remove shadow - use the frame just as container
-	set_shadow_type(Gtk::SHADOW_NONE);
-	set_border_width(12);
-}
+	m_conn_local_documents_directory.reset(new PathConnection(
+		*m_btn_local_documents_directory,
+		preferences.user.host_directory));
 
-void Gobby::PreferencesDialog::Page::add(Gtk::Widget& widget, bool expand)
-{
-	m_box.pack_start(widget, expand ? Gtk::PACK_EXPAND_WIDGET : Gtk::PACK_SHRINK);
-}
-
-Gobby::PreferencesDialog::User::User(Gtk::Window& parent,
-                                     Preferences& preferences):
-	m_group_settings(_("Settings")),
-	m_group_remote(_("Remote Users")),
-	m_group_local(_("Local Documents")),
-	m_box_user_name(false, 6),
-	m_lbl_user_name(_("User name:"), Gtk::ALIGN_START),
-	m_box_user_color(false, 6),
-	m_lbl_user_color(_("User color:"), Gtk::ALIGN_START),
-	m_box_user_alpha(false, 6),
-	m_lbl_user_alpha(_("Color intensity:"), Gtk::ALIGN_START),
-	m_scl_user_alpha(0.0, 1.0, 0.025),
-	m_btn_user_color(_("Choose a new user color")),
-	m_btn_remote_show_cursors(_("Show cursors of remote users")),
-	m_btn_remote_show_selections(_("Show selections of remote users")),
-	m_btn_remote_show_current_lines(
-		_("Highlight current line of remote users")),
-	m_btn_remote_show_cursor_positions(
-		_("Indicate cursor position of remote users "
-		  "in the scrollbar")),
-	m_btn_local_allow_connections(
-		_("Allow remote users to edit local documents")),
-	m_btn_local_require_password(
-		_("Require remote users to enter a password")),
-	m_lbl_local_password(_("Password:"), Gtk::ALIGN_START),
-	m_box_local_password(false, 6),
-	m_lbl_local_port(_("Port:"), Gtk::ALIGN_START),
-	m_box_local_port(false, 6),
-	m_box_local_connections(false, 6),
-	m_btn_local_keep_documents(
-		_("Remember local documents after Gobby restart")),
-	m_lbl_local_documents_directory(_("Local documents directory:")),
-	m_btn_local_documents_directory(
-		Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER),
-	m_conn_local_documents_directory(m_btn_local_documents_directory,
-	                                 preferences.user.host_directory),
-	m_box_local_documents_directory(false, 6),
-	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL))
-{
-	m_btn_local_allow_connections.signal_toggled().connect(
+	m_btn_local_allow_connections->signal_toggled().connect(
 		sigc::mem_fun(
 			*this, &User::on_local_allow_connections_toggled));
-	m_btn_local_require_password.signal_toggled().connect(
+	m_btn_local_require_password->signal_toggled().connect(
 		sigc::mem_fun(
 			*this, &User::on_local_require_password_toggled));
-	m_btn_local_keep_documents.signal_toggled().connect(
+	m_btn_local_keep_documents->signal_toggled().connect(
 		sigc::mem_fun(
 			*this, &User::on_local_keep_documents_toggled));
 
-	m_lbl_user_name.show();
-	m_ent_user_name.set_text(preferences.user.name);
-	m_ent_user_name.show();
-	connect_option(m_ent_user_name, preferences.user.name);
+	m_ent_user_name->set_text(preferences.user.name);
+	connect_option(*m_ent_user_name, preferences.user.name);
 
-	m_box_user_name.pack_start(m_lbl_user_name, Gtk::PACK_SHRINK);
-	m_box_user_name.pack_start(m_ent_user_name, Gtk::PACK_SHRINK);
-	m_box_user_name.show();
+	m_btn_user_color->set_hue(preferences.user.hue);
+	m_btn_user_color->set_saturation(0.35);
+	m_btn_user_color->set_value(1.0);
+	connect_hue_option(*m_btn_user_color, preferences.user.hue);
 
-	m_btn_user_color.set_hue(preferences.user.hue);
-	m_btn_user_color.set_saturation(0.35);
-	m_btn_user_color.set_value(1.0);
-	m_btn_user_color.set_size_request(150, -1);
-	m_lbl_user_color.show();
-	m_btn_user_color.show();
-	connect_hue_option(m_btn_user_color, preferences.user.hue);
+	m_scl_user_alpha->set_range(0.0, 1.0);
+	m_scl_user_alpha->set_increments(0.0025, 0.1);
+	m_scl_user_alpha->set_value(preferences.user.alpha);
+	connect_option(*m_scl_user_alpha, preferences.user.alpha);
 
-	m_box_user_color.pack_start(m_lbl_user_color, Gtk::PACK_SHRINK);
-	m_box_user_color.pack_start(
-		m_btn_user_color, Gtk::PACK_SHRINK);
-	m_box_user_color.show();
-
-	m_lbl_user_alpha.show();
-	m_scl_user_alpha.set_value(preferences.user.alpha);
-	m_scl_user_alpha.set_show_fill_level(false);
-	m_scl_user_alpha.set_draw_value(false);
-	m_scl_user_alpha.show();
-	connect_option(m_scl_user_alpha, preferences.user.alpha);
-
-	m_box_user_alpha.pack_start(m_lbl_user_alpha, Gtk::PACK_SHRINK);
-	m_box_user_alpha.pack_start(
-		m_scl_user_alpha, Gtk::PACK_EXPAND_WIDGET);
-	m_box_user_alpha.show();
-
-	m_group_settings.add(m_box_user_name);
-	m_group_settings.add(m_box_user_color);
-	m_group_settings.add(m_box_user_alpha);
-
-	m_size_group->add_widget(m_lbl_user_name);
-	m_size_group->add_widget(m_lbl_user_color);
-	m_size_group->add_widget(m_lbl_user_alpha);
-	m_group_settings.show();
-
-	m_btn_remote_show_cursors.set_active(
+	m_btn_remote_show_cursors->set_active(
 		preferences.user.show_remote_cursors);
-	m_btn_remote_show_cursors.show();
-	connect_option(m_btn_remote_show_cursors,
+	connect_option(*m_btn_remote_show_cursors,
 	               preferences.user.show_remote_cursors);
 
-	m_btn_remote_show_selections.set_active(
+	m_btn_remote_show_selections->set_active(
 		preferences.user.show_remote_selections);
-	m_btn_remote_show_selections.show();
-	connect_option(m_btn_remote_show_selections,
+	connect_option(*m_btn_remote_show_selections,
 	               preferences.user.show_remote_selections);
 
-	m_btn_remote_show_current_lines.set_active(
+	m_btn_remote_show_current_lines->set_active(
 		preferences.user.show_remote_current_lines);
-	m_btn_remote_show_current_lines.show();
-	connect_option(m_btn_remote_show_current_lines,
+	connect_option(*m_btn_remote_show_current_lines,
 	               preferences.user.show_remote_current_lines);
 
-	m_btn_remote_show_cursor_positions.set_active(
+	m_btn_remote_show_cursor_positions->set_active(
 		preferences.user.show_remote_cursor_positions);
-	m_btn_remote_show_cursor_positions.show();
-	connect_option(m_btn_remote_show_cursor_positions,
+	connect_option(*m_btn_remote_show_cursor_positions,
 	               preferences.user.show_remote_cursor_positions);
 
-	m_group_remote.add(m_btn_remote_show_cursors);
-	m_group_remote.add(m_btn_remote_show_selections);
-	m_group_remote.add(m_btn_remote_show_current_lines);
-	m_group_remote.add(m_btn_remote_show_cursor_positions);
-	m_group_remote.show();
-
-	// TODO: Set mnemonics
-	// m_lbl_autosave_interval.set_mnemonic_widget(m_ent_autosave_interval);
-
-	m_btn_local_allow_connections.set_active(
+	m_btn_local_allow_connections->set_active(
 		preferences.user.allow_remote_access);
-	m_btn_local_allow_connections.show();
-	connect_option(m_btn_local_allow_connections,
+	connect_option(*m_btn_local_allow_connections,
 	               preferences.user.allow_remote_access);
 
-	m_btn_local_require_password.set_active(
+	m_btn_local_require_password->set_active(
 		preferences.user.require_password);
-	m_btn_local_require_password.show();
-	connect_option(m_btn_local_require_password,
+	connect_option(*m_btn_local_require_password,
 	               preferences.user.require_password);
 
-	m_lbl_local_password.show();
-	m_ent_local_password.set_visibility(false);
-	m_ent_local_password.set_text(
+	m_ent_local_password->set_text(
 		static_cast<std::string>(preferences.user.password));
-	m_ent_local_password.show();
-	connect_option(m_ent_local_password,
+	connect_option(*m_ent_local_password,
 	               preferences.user.password);
 
-	m_box_local_password.pack_start(m_lbl_local_password,
-	                                Gtk::PACK_SHRINK);
-	m_box_local_password.pack_start(m_ent_local_password,
-	                                Gtk::PACK_SHRINK);
-	m_box_local_password.set_sensitive(preferences.user.require_password);
-	m_box_local_password.show();
+	m_ent_local_port->set_range(1, 65535);
+	m_ent_local_port->set_value(preferences.user.port);
+	m_ent_local_port->set_increments(1, 1);
+	connect_option(*m_ent_local_port, preferences.user.port);
 
-	m_lbl_local_port.show();
-	m_ent_local_port.set_range(1, 65535);
-	m_ent_local_port.set_value(preferences.user.port);
-	m_ent_local_port.set_increments(1, 1);
-	m_ent_local_port.show();
-	connect_option(m_ent_local_port, preferences.user.port);
-
-	m_box_local_port.pack_start(m_lbl_local_port,
-	                            Gtk::PACK_SHRINK);
-	m_box_local_port.pack_start(m_ent_local_port,
-	                            Gtk::PACK_SHRINK);
-	m_box_local_port.show();
-
-	m_box_local_connections.pack_start(m_btn_local_require_password,
-	                                   Gtk::PACK_SHRINK);
-	m_box_local_connections.pack_start(*indent(m_box_local_password),
-	                                   Gtk::PACK_SHRINK);
-	m_box_local_connections.pack_start(m_box_local_port,
-	                                   Gtk::PACK_SHRINK);
-	m_box_local_connections.set_sensitive(
-		preferences.user.allow_remote_access);
-	m_box_local_connections.show();
-
-	m_btn_local_keep_documents.set_active(
+	m_btn_local_keep_documents->set_active(
 		preferences.user.keep_local_documents);
-	m_btn_local_keep_documents.show();
-	connect_option(m_btn_local_keep_documents,
+	connect_option(*m_btn_local_keep_documents,
 	               preferences.user.keep_local_documents);
 
-	m_lbl_local_documents_directory.show();
-	m_btn_local_documents_directory.set_width_chars(20);
-	m_btn_local_documents_directory.set_filename(
+	m_btn_local_documents_directory->set_filename(
 		static_cast<std::string>(preferences.user.host_directory));
-	m_btn_local_documents_directory.show();
 
-	m_box_local_documents_directory.pack_start(
-		m_lbl_local_documents_directory,
-		Gtk::PACK_SHRINK);
-	m_box_local_documents_directory.pack_start(
-		m_btn_local_documents_directory,
-		Gtk::PACK_SHRINK);
-	m_box_local_documents_directory.set_sensitive(
-		preferences.user.keep_local_documents);
-	m_box_local_documents_directory.show();
-
-	m_group_local.add(m_btn_local_allow_connections);
-	m_group_local.add(*indent(m_box_local_connections));
-	m_group_local.add(m_btn_local_keep_documents);
-	m_group_local.add(*indent(m_box_local_documents_directory));
-	m_group_local.show();
-
-	add(m_group_settings, false);
-	add(m_group_remote, false);
-	add(m_group_local, false);
+	// Initial sensitivity
+	on_local_allow_connections_toggled();
+	on_local_require_password_toggled();
+	on_local_keep_documents_toggled();
 }
 
 void Gobby::PreferencesDialog::User::on_local_allow_connections_toggled()
 {
-	m_box_local_connections.set_sensitive(
-		m_btn_local_allow_connections.get_active());
+	m_grid_local_connections->set_sensitive(
+		m_btn_local_allow_connections->get_active());
 }
 
 void Gobby::PreferencesDialog::User::on_local_require_password_toggled()
 {
-	m_box_local_password.set_sensitive(
-		m_btn_local_require_password.get_active());
+	m_grid_password->set_sensitive(
+		m_btn_local_require_password->get_active());
 }
 
 void Gobby::PreferencesDialog::User::on_local_keep_documents_toggled()
 {
-	m_box_local_documents_directory.set_sensitive(
-		m_btn_local_keep_documents.get_active());
+	m_grid_local_documents_directory->set_sensitive(
+		m_btn_local_keep_documents->get_active());
 }
 
-Gobby::PreferencesDialog::Editor::Editor(Preferences& preferences):
-	m_group_tab(_("Tab Stops")),
-	m_group_indentation(_("Indentation")),
-	m_group_homeend(_("Home/End Behavior")),
-	m_group_saving(_("File Saving")),
-	m_lbl_tab_width(_("_Tab width:"), Gtk::ALIGN_END,
-	                Gtk::ALIGN_CENTER, true),
-	m_btn_tab_spaces(_("Insert _spaces instead of tabs"), true),
-	m_btn_indentation_auto(_("Enable automatic _indentation"), true),
-	m_btn_homeend_smart(_("Smart _home/end"), true),
-	m_btn_autosave_enabled(_("Enable _automatic saving of documents"),
-	                       true),
-	m_lbl_autosave_interval(_("Autosave interval in _minutes:"), true)
+Gobby::PreferencesDialog::Editor::Editor(
+	const Glib::RefPtr<Gtk::Builder>& builder,
+	Preferences& preferences)
 {
-	unsigned int tab_width = preferences.editor.tab_width;
-	bool tab_spaces = preferences.editor.tab_spaces;
-	bool indentation_auto = preferences.editor.indentation_auto;
-	bool homeend_smart = preferences.editor.homeend_smart;
-	unsigned int autosave_enabled = preferences.editor.autosave_enabled;
-	unsigned int autosave_interval = preferences.editor.autosave_interval;
+	builder->get_widget("tab-width", m_ent_tab_width);
+	builder->get_widget("insert-spaces", m_btn_tab_spaces);
+	builder->get_widget("automatic-indentation", m_btn_indentation_auto);
+	builder->get_widget("smart-home-end", m_btn_homeend_smart);
+	builder->get_widget("enable-autosave", m_btn_autosave_enabled);
+	builder->get_widget("grid-autosave-interval",
+	                    m_grid_autosave_interval);
+	builder->get_widget("autosave-interval", m_ent_autosave_interval);
 
-	m_btn_autosave_enabled.signal_toggled().connect(
+	const unsigned int tab_width = preferences.editor.tab_width;
+	const bool tab_spaces = preferences.editor.tab_spaces;
+	const bool indentation_auto = preferences.editor.indentation_auto;
+	const bool homeend_smart = preferences.editor.homeend_smart;
+	const unsigned int autosave_enabled =
+		preferences.editor.autosave_enabled;
+	const unsigned int autosave_interval =
+		preferences.editor.autosave_interval;
+
+	m_btn_autosave_enabled->signal_toggled().connect(
 		sigc::mem_fun(*this, &Editor::on_autosave_enabled_toggled));
 
-	m_lbl_tab_width.set_mnemonic_widget(m_ent_tab_width);
-	m_lbl_tab_width.show();
-	m_ent_tab_width.set_range(1, 8);
-	m_ent_tab_width.set_value(tab_width);
-	m_ent_tab_width.set_increments(1, 1);
-	m_ent_tab_width.show();
-	connect_option(m_ent_tab_width, preferences.editor.tab_width);
+	m_ent_tab_width->set_range(1, 8);
+	m_ent_tab_width->set_value(tab_width);
+	m_ent_tab_width->set_increments(1, 1);
+	connect_option(*m_ent_tab_width, preferences.editor.tab_width);
 
-	m_btn_homeend_smart.set_tooltip_text(
-		_("With this option enabled, Home/End keys move to "
-		  "first/last character before going to the start/end of the "
-		  "line.")
-	);
+	m_btn_tab_spaces->set_active(tab_spaces);
+	connect_option(*m_btn_tab_spaces, preferences.editor.tab_spaces);
 
-	m_box_tab_width.set_spacing(6);
-	m_box_tab_width.pack_start(m_lbl_tab_width, Gtk::PACK_SHRINK);
-	m_box_tab_width.pack_start(m_ent_tab_width, Gtk::PACK_SHRINK);
-	m_box_tab_width.show();
-
-	m_btn_tab_spaces.set_active(tab_spaces);
-	m_btn_tab_spaces.show();
-	connect_option(m_btn_tab_spaces, preferences.editor.tab_spaces);
-	m_btn_indentation_auto.set_active(indentation_auto);
-	m_btn_indentation_auto.show();
-	connect_option(m_btn_indentation_auto,
+	m_btn_indentation_auto->set_active(indentation_auto);
+	connect_option(*m_btn_indentation_auto,
 	               preferences.editor.indentation_auto);
-	m_btn_homeend_smart.set_active(homeend_smart);
-	m_btn_homeend_smart.show();
-	connect_option(m_btn_homeend_smart, preferences.editor.homeend_smart);
 
-	m_btn_autosave_enabled.set_active(autosave_enabled);
-	m_btn_autosave_enabled.show();
-	connect_option(m_btn_autosave_enabled,
+	m_btn_homeend_smart->set_active(homeend_smart);
+	connect_option(*m_btn_homeend_smart,
+	               preferences.editor.homeend_smart);
+
+	m_btn_autosave_enabled->set_active(autosave_enabled);
+	connect_option(*m_btn_autosave_enabled,
 	               preferences.editor.autosave_enabled);
 
-	m_lbl_autosave_interval.set_mnemonic_widget(m_ent_autosave_interval);
-	m_lbl_autosave_interval.show();
-	m_ent_autosave_interval.set_range(1,60);
-	m_ent_autosave_interval.set_value(autosave_interval);
-	m_ent_autosave_interval.set_increments(1,10);
-	m_ent_autosave_interval.show();
-	connect_option(m_ent_autosave_interval,
+	m_ent_autosave_interval->set_range(1, 60);
+	m_ent_autosave_interval->set_value(autosave_interval);
+	m_ent_autosave_interval->set_increments(1, 10);
+	connect_option(*m_ent_autosave_interval,
 	               preferences.editor.autosave_interval);
 
-	m_box_autosave_interval.set_spacing(6);
-	m_box_autosave_interval.pack_start(m_lbl_autosave_interval,
-	                                   Gtk::PACK_SHRINK);
-	m_box_autosave_interval.pack_start(m_ent_autosave_interval,
-	                                   Gtk::PACK_SHRINK);
-	m_box_autosave_interval.set_sensitive(autosave_enabled);
-	m_box_autosave_interval.show();
-
-	m_group_tab.add(m_box_tab_width);
-	m_group_tab.add(m_btn_tab_spaces);
-	m_group_tab.show();
-
-	m_group_indentation.add(m_btn_indentation_auto);
-	m_group_indentation.show();
-
-	m_group_homeend.add(m_btn_homeend_smart);
-	m_group_homeend.show();
-
-	m_group_saving.add(m_btn_autosave_enabled);
-	m_group_saving.add(*indent(m_box_autosave_interval));
-	m_group_saving.show();
-
-	add(m_group_tab, false);
-	add(m_group_indentation, false);
-	add(m_group_homeend, false);
-	add(m_group_saving, false);
+	// Initial sensitivity
+	on_autosave_enabled_toggled();
 }
 
 void Gobby::PreferencesDialog::Editor::on_autosave_enabled_toggled()
 {
-	m_box_autosave_interval.set_sensitive(
-		m_btn_autosave_enabled.get_active());
+	m_grid_autosave_interval->set_sensitive(
+		m_btn_autosave_enabled->get_active());
 }
 
-Gobby::PreferencesDialog::View::View(Preferences& preferences):
-	m_group_wrap(_("Text Wrapping") ),
-	m_group_linenum(_("Line Numbers") ),
-	m_group_curline(_("Current Line") ),
-	m_group_margin(_("Right Margin") ),
-	m_group_bracket(_("Bracket Matching") ),
-	m_group_spaces(_("Whitespace Display") ),
-	m_btn_wrap_text(_("Enable text wrapping") ),
-	m_btn_wrap_words(_("Do not split words over two lines") ),
-	m_btn_linenum_display(_("Display line numbers") ),
-	m_btn_curline_highlight(_("Highlight current line") ),
-	m_btn_margin_display(_("Display right margin") ),
-	m_lbl_margin_pos(_("Right margin at column:") ),
-	m_btn_bracket_highlight(_("Highlight matching bracket") ),
-	m_cmb_spaces_display(preferences.view.whitespace_display)
+Gobby::PreferencesDialog::View::View(
+	const Glib::RefPtr<Gtk::Builder>& builder,Preferences& preferences)
 {
-	Gtk::WrapMode mode = preferences.view.wrap_mode;
-	bool linenum_display = preferences.view.linenum_display;
-	bool curline_highlight = preferences.view.curline_highlight;
-	bool margin_display = preferences.view.margin_display;
-	unsigned int margin_pos = preferences.view.margin_pos;
-	bool bracket_highlight = preferences.view.bracket_highlight;
+	builder->get_widget("enable-wrapping", m_btn_wrap_text);
+	builder->get_widget("do-not-split-words", m_btn_wrap_words);
+	builder->get_widget("display-line-numbers", m_btn_linenum_display);
+	builder->get_widget("highlight-current-line",
+	                    m_btn_curline_highlight);
+	builder->get_widget("display-right-margin", m_btn_margin_display);
+	builder->get_widget("grid-margin-position", m_grid_margin_pos);
+	builder->get_widget("right-margin-column", m_ent_margin_pos);
+	builder->get_widget("highlight-matching-brackets",
+	                    m_btn_bracket_highlight);
+	builder->get_widget_derived("display-whitespace",
+	                            m_cmb_spaces_display);
 
-	m_btn_margin_display.signal_toggled().connect(
+	const Gtk::WrapMode mode = preferences.view.wrap_mode;
+	const bool linenum_display = preferences.view.linenum_display;
+	const bool curline_highlight = preferences.view.curline_highlight;
+	const bool margin_display = preferences.view.margin_display;
+	const unsigned int margin_pos = preferences.view.margin_pos;
+	const bool bracket_highlight = preferences.view.bracket_highlight;
+
+	m_btn_margin_display->signal_toggled().connect(
 		sigc::mem_fun(*this, &View::on_margin_display_toggled));
-	m_btn_wrap_text.signal_toggled().connect(
+	m_btn_wrap_text->signal_toggled().connect(
 		sigc::mem_fun(*this, &View::on_wrap_text_toggled));
 
-	m_lbl_margin_pos.show();
-	m_ent_margin_pos.set_range(1, 1024);
-	m_ent_margin_pos.set_value(margin_pos);
-	m_ent_margin_pos.set_increments(1, 16);
-	m_ent_margin_pos.show();
-	connect_option(m_ent_margin_pos, preferences.view.margin_pos);
+	m_ent_margin_pos->set_range(1, 1024);
+	m_ent_margin_pos->set_value(margin_pos);
+	m_ent_margin_pos->set_increments(1, 16);
+	connect_option(*m_ent_margin_pos, preferences.view.margin_pos);
 
-	m_btn_wrap_text.set_active(mode != Gtk::WRAP_NONE);
-	m_btn_wrap_text.show();
-	m_btn_wrap_words.set_active(mode == Gtk::WRAP_WORD_CHAR);
-	m_btn_wrap_words.set_sensitive(mode != Gtk::WRAP_NONE);
-	m_btn_wrap_words.show();
-	connect_wrap_option(m_btn_wrap_text,
-	                    m_btn_wrap_words,
+	m_btn_wrap_text->set_active(mode != Gtk::WRAP_NONE);
+	m_btn_wrap_words->set_active(mode == Gtk::WRAP_WORD_CHAR);
+	connect_wrap_option(*m_btn_wrap_text, *m_btn_wrap_words,
                             preferences.view.wrap_mode);
-	m_btn_linenum_display.set_active(linenum_display);
-	m_btn_linenum_display.show();
-	connect_option(m_btn_linenum_display,
+
+	m_btn_linenum_display->set_active(linenum_display);
+	connect_option(*m_btn_linenum_display,
 	               preferences.view.linenum_display);
-	m_btn_curline_highlight.set_active(curline_highlight);
-	m_btn_curline_highlight.show();
-	connect_option(m_btn_curline_highlight,
+
+	m_btn_curline_highlight->set_active(curline_highlight);
+	connect_option(*m_btn_curline_highlight,
 	               preferences.view.curline_highlight);
-	m_btn_margin_display.set_active(margin_display);
-	m_btn_margin_display.show();
-	connect_option(m_btn_margin_display,
+
+	m_btn_margin_display->set_active(margin_display);
+	connect_option(*m_btn_margin_display,
 	               preferences.view.margin_display);
-	m_btn_bracket_highlight.set_active(bracket_highlight);
-	m_btn_bracket_highlight.show();
-	connect_option(m_btn_bracket_highlight,
+
+	m_btn_bracket_highlight->set_active(bracket_highlight);
+	connect_option(*m_btn_bracket_highlight,
 	               preferences.view.bracket_highlight);
 
 	// TODO: When we require a higher version of GtkSourceView, then
 	// we should add GTK_SOURCE_DRAW_SPACES_NBSP here.
 	const int SOURCE_DRAW_SPACES = GTK_SOURCE_DRAW_SPACES_SPACE;
 
-	m_cmb_spaces_display.add(
+	m_cmb_spaces_display->set_option(preferences.view.whitespace_display);
+	m_cmb_spaces_display->add(
 		_("Display no whitespace"),
 		static_cast<GtkSourceDrawSpacesFlags>(0));
-	m_cmb_spaces_display.add(
+	m_cmb_spaces_display->add(
 		_("Display spaces"),
 		static_cast<GtkSourceDrawSpacesFlags>(
 			SOURCE_DRAW_SPACES));
-	m_cmb_spaces_display.add(
+	m_cmb_spaces_display->add(
 		_("Display tabs"),
 		static_cast<GtkSourceDrawSpacesFlags>(
 			GTK_SOURCE_DRAW_SPACES_TAB));
-	m_cmb_spaces_display.add(
+	m_cmb_spaces_display->add(
 		_("Display tabs and spaces"),
 		static_cast<GtkSourceDrawSpacesFlags>(
 			SOURCE_DRAW_SPACES | GTK_SOURCE_DRAW_SPACES_TAB));
-	m_cmb_spaces_display.show();
 
-	m_box_margin_pos.set_spacing(6);
-	m_box_margin_pos.set_sensitive(margin_display);
-	m_box_margin_pos.pack_start(m_lbl_margin_pos, Gtk::PACK_SHRINK);
-	m_box_margin_pos.pack_start(*indent(m_ent_margin_pos),
-	                            Gtk::PACK_SHRINK);
-	m_box_margin_pos.show();
-
-	m_group_wrap.add(m_btn_wrap_text);
-	m_group_wrap.add(*indent(m_btn_wrap_words));
-	m_group_wrap.show();
-
-	m_group_linenum.add(m_btn_linenum_display);
-	m_group_linenum.show();
-
-	m_group_curline.add(m_btn_curline_highlight);
-	m_group_curline.show();
-
-	m_group_margin.add(m_btn_margin_display);
-	m_group_margin.add(m_box_margin_pos);
-	m_group_margin.show();
-
-	m_group_bracket.add(m_btn_bracket_highlight);
-	m_group_bracket.show();
-
-	m_group_spaces.add(m_cmb_spaces_display);
-	m_group_spaces.show();
-
-	add(m_group_wrap, false);
-	add(m_group_linenum, false);
-	add(m_group_curline, false);
-	add(m_group_margin, false);
-	add(m_group_bracket, false);
-	add(m_group_spaces, false);
+	// Initial sensitivity
+	on_wrap_text_toggled();
+	on_margin_display_toggled();
 }
 
 void Gobby::PreferencesDialog::View::on_wrap_text_toggled()
 {
-	m_btn_wrap_words.set_sensitive(m_btn_wrap_text.get_active());
+	m_btn_wrap_words->set_sensitive(m_btn_wrap_text->get_active());
 }
 
 void Gobby::PreferencesDialog::View::on_margin_display_toggled()
 {
-	m_box_margin_pos.set_sensitive(m_btn_margin_display.get_active());
+	m_grid_margin_pos->set_sensitive(m_btn_margin_display->get_active());
 }
 
-Gobby::PreferencesDialog::Appearance::Appearance(Preferences& preferences):
-	m_group_toolbar(_("Toolbar") ),
-	m_group_font(_("Font") ),
-	m_group_scheme(_("Color Scheme")),
-	m_cmb_toolbar_style(preferences.appearance.toolbar_style),
-	m_conn_font(m_btn_font, preferences.appearance.font),
-	m_list(Gtk::ListStore::create(m_columns)),
-	m_tree(m_list)
+Gobby::PreferencesDialog::Appearance::Appearance(
+	const Glib::RefPtr<Gtk::Builder>& builder,
+	Preferences& preferences)
+:
+	m_scheme_list(Gtk::ListStore::create(m_scheme_columns))
 {
+	builder->get_widget_derived("toolbar-style", m_cmb_toolbar_style);
+	builder->get_widget("font", m_btn_font);
+	builder->get_widget("color-scheme-treeview", m_scheme_tree);
+
 	const Pango::FontDescription& font = preferences.appearance.font;
 
-	m_cmb_toolbar_style.add(_("Show text only"),
-	                        Gtk::TOOLBAR_TEXT);
-	m_cmb_toolbar_style.add(_("Show icons only"),
-	                        Gtk::TOOLBAR_ICONS);
-	m_cmb_toolbar_style.add(_("Show both icons and text"),
-	                        Gtk::TOOLBAR_BOTH );
-	m_cmb_toolbar_style.add(_("Show text besides icons"),
-	                        Gtk::TOOLBAR_BOTH_HORIZ );
-	m_cmb_toolbar_style.show();
+	m_cmb_toolbar_style->set_option(preferences.appearance.toolbar_style);
+	m_cmb_toolbar_style->add(_("Show text only"),
+	                         Gtk::TOOLBAR_TEXT);
+	m_cmb_toolbar_style->add(_("Show icons only"),
+	                         Gtk::TOOLBAR_ICONS);
+	m_cmb_toolbar_style->add(_("Show both icons and text"),
+	                         Gtk::TOOLBAR_BOTH );
+	m_cmb_toolbar_style->add(_("Show text besides icons"),
+	                         Gtk::TOOLBAR_BOTH_HORIZ );
 
-	m_conn_font.block();
-	m_btn_font.set_font_name(font.to_string());
-	m_btn_font.show();
-	m_conn_font.unblock();
-
-	m_group_toolbar.add(m_cmb_toolbar_style);
-	m_group_toolbar.show();
-
-	m_group_font.add(m_btn_font);
-	m_group_font.show();
+	m_btn_font->set_font_name(font.to_string());
+	m_conn_font.reset(new FontConnection(
+		*m_btn_font, preferences.appearance.font));
 
 	Gtk::TreeViewColumn column_name;
 	Gtk::CellRendererText renderer_name;
 	column_name.pack_start(renderer_name, false);
-	column_name.add_attribute(renderer_name.property_text(), m_columns.name);
-
-	m_tree.append_column(column_name);//"Scheme Name", m_columns.name);
-	m_tree.append_column("Scheme description", m_columns.description);
+	column_name.add_attribute(renderer_name.property_text(),
+	                          m_scheme_columns.name);
 
 	Pango::AttrList list;
-	Pango::Attribute attr(Pango::Attribute::create_attr_weight(Pango::WEIGHT_BOLD));
+	Pango::Attribute attr(Pango::Attribute::create_attr_weight(
+		Pango::WEIGHT_BOLD));
 	list.insert(attr);
 	renderer_name.property_attributes() = list;
 
-	m_tree.set_headers_visible(false);
-	m_tree.show();
+	m_scheme_tree->append_column(column_name);
+	m_scheme_tree->append_column(_("Scheme Description"),
+	                             m_scheme_columns.description);
+	m_scheme_tree->set_model(m_scheme_list);
 
-	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
-	scroll->set_shadow_type(Gtk::SHADOW_IN);
-	scroll->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-	scroll->add(m_tree);
-	scroll->show();
+	// Populate scheme list
+	GtkSourceStyleSchemeManager* manager =
+		gtk_source_style_scheme_manager_get_default();
+	const gchar* const* ids =
+		gtk_source_style_scheme_manager_get_scheme_ids(manager);
 
-	m_group_scheme.add(*scroll);
-	m_group_scheme.show();
-
-	GtkSourceStyleSchemeManager* manager = gtk_source_style_scheme_manager_get_default();
-	const gchar* const* ids = gtk_source_style_scheme_manager_get_scheme_ids(manager);
-
-	Glib::ustring current_scheme = preferences.appearance.scheme_id;
+	const Glib::ustring current_scheme = preferences.appearance.scheme_id;
 
 	for (const gchar* const* id = ids; *id != NULL; ++id)
 	{
-		GtkSourceStyleScheme* scheme = gtk_source_style_scheme_manager_get_scheme(manager, *id);
-		const gchar* name = gtk_source_style_scheme_get_name(scheme);
-		const gchar* desc = gtk_source_style_scheme_get_description(scheme);
+		GtkSourceStyleScheme* scheme =
+			gtk_source_style_scheme_manager_get_scheme(
+				manager, *id);
+		const gchar* name =
+			gtk_source_style_scheme_get_name(scheme);
+		const gchar* desc =
+			gtk_source_style_scheme_get_description(scheme);
 
-		Gtk::TreeIter iter = m_list->append();
-		(*iter)[m_columns.name] = name;
-		(*iter)[m_columns.description] = desc;
-		(*iter)[m_columns.scheme] = scheme;
+		Gtk::TreeIter iter = m_scheme_list->append();
+		(*iter)[m_scheme_columns.name] = name;
+		(*iter)[m_scheme_columns.description] = desc;
+		(*iter)[m_scheme_columns.scheme] = scheme;
 
 		if (current_scheme == gtk_source_style_scheme_get_id(scheme))
-			m_tree.get_selection()->select(iter);
+			m_scheme_tree->get_selection()->select(iter);
 	}
 
-	m_tree.get_selection()->signal_changed().connect(
+	m_scheme_tree->get_selection()->signal_changed().connect(
 		sigc::bind(
 			sigc::mem_fun(*this, &Appearance::on_scheme_changed),
 			sigc::ref(preferences)));
 
-	m_list->set_sort_column(m_columns.name, Gtk::SORT_ASCENDING);
-
-	add(m_group_toolbar, false);
-	add(m_group_font, false);
-	add(m_group_scheme, true);
+	m_scheme_list->set_sort_column(m_scheme_columns.name,
+	                               Gtk::SORT_ASCENDING);
 }
 
-void Gobby::PreferencesDialog::Appearance::on_scheme_changed(Preferences& preferences)
+void Gobby::PreferencesDialog::Appearance::on_scheme_changed(
+	Preferences& preferences)
 {
-	Gtk::TreeIter iter = m_tree.get_selection()->get_selected();
-	GtkSourceStyleScheme* scheme = (*iter)[m_columns.scheme];
-	preferences.appearance.scheme_id = gtk_source_style_scheme_get_id(scheme);
+	Gtk::TreeIter iter = m_scheme_tree->get_selection()->get_selected();
+	GtkSourceStyleScheme* scheme = (*iter)[m_scheme_columns.scheme];
+
+	preferences.appearance.scheme_id =
+		gtk_source_style_scheme_get_id(scheme);
 }
 
-Gobby::PreferencesDialog::Security::Security(Gtk::Window& parent,
-                                             FileChooser& file_chooser,
-                                             Preferences& preferences,
-                                             CertificateManager& cert_manager):
-	m_preferences(preferences), m_parent(parent), m_file_chooser(file_chooser),
-	m_cert_manager(cert_manager),
-	m_group_trust_file(_("Trusted CAs")),
-	m_group_connection_policy(_("Secure Connection")),
-	m_group_authentication(_("Authentication")),
-	m_btn_use_system_trust(_("Trust this computer's default CAs")),
-	m_lbl_trust_file(_("Additionally Trusted CAs:")),
-	m_btn_path_trust_file(_("Select Additionally Trusted CAs")),
-	m_conn_path_trust_file(m_btn_path_trust_file,
-	                       preferences.security.trusted_cas),
-	m_box_trust_file(false, 6),
-	m_error_trust_file("", Gtk::ALIGN_START),
-	m_cmb_connection_policy(preferences.security.policy),
-	m_btn_auth_none(_("None")),
-	m_btn_auth_cert(_("Use a certificate")),
-	m_lbl_key_file(_("Private key:"), Gtk::ALIGN_START),
-	m_btn_key_file(_("Select a private key file")),
-	m_conn_path_key_file(m_btn_key_file, preferences.security.key_file),
-	m_btn_key_file_create(_("Create New...")),
-	m_box_key_file(false, 6),
-	m_error_key_file("", Gtk::ALIGN_START),
-	m_lbl_cert_file(_("Certificate:"), Gtk::ALIGN_START),
-	m_btn_cert_file(_("Select a certificate file")),
-	m_conn_path_cert_file(m_btn_cert_file,
-	                      preferences.security.certificate_file),
-	m_btn_cert_file_create(_("Create New...")),
-	m_box_cert_file(false, 6),
-	m_error_cert_file("", Gtk::ALIGN_START),
-	m_size_group(Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL)),
-	m_key_generator_handle(NULL), m_cert_generator_handle(NULL)
+Gobby::PreferencesDialog::Security::Security(
+	const Glib::RefPtr<Gtk::Builder>& builder,
+	FileChooser& file_chooser, Preferences& preferences,
+	CertificateManager& cert_manager)
+:
+	m_preferences(preferences),
+	m_file_chooser(file_chooser),
+	m_cert_manager(cert_manager)
 {
+	builder->get_widget("trust-default-cas", m_btn_use_system_trust);
+	builder->get_widget("additionally-trusted-cas", m_btn_path_trust_file);
+	builder->get_widget("ca-error-message", m_error_trust_file);
+	builder->get_widget_derived("secure-connection",
+	                            m_cmb_connection_policy);
+	builder->get_widget("authentication-none", m_btn_auth_none);
+	builder->get_widget("authentication-certificate", m_btn_auth_cert);
+	builder->get_widget("grid-auth-certificate", m_grid_auth_cert);
+
+	builder->get_widget("private-key-file", m_btn_key_file);
+	builder->get_widget("create-private-key", m_btn_key_file_create);
+	builder->get_widget("key-error-message", m_error_key_file);
+
+	builder->get_widget("certificate-file", m_btn_cert_file);
+	builder->get_widget("create-certificate", m_btn_cert_file_create);
+	builder->get_widget("cert-error-message", m_error_cert_file);
+
 	m_cert_manager.signal_credentials_changed().connect(
 		sigc::mem_fun(*this, &Security::on_credentials_changed));
-	m_btn_auth_cert.signal_toggled().connect(
+	m_btn_auth_cert->signal_toggled().connect(
 		sigc::mem_fun(*this, &Security::on_auth_cert_toggled));
 
-	m_btn_use_system_trust.set_active(
+	m_btn_use_system_trust->set_active(
 		m_preferences.security.use_system_trust);
-	m_btn_use_system_trust.signal_toggled().connect(
+	m_btn_use_system_trust->signal_toggled().connect(
 		sigc::mem_fun(*this, &Security::on_use_system_trust_toggled));
-	m_btn_use_system_trust.show();
 
-	m_lbl_trust_file.show();
-	m_btn_path_trust_file.set_width_chars(20);
 	const std::string& trust_file = preferences.security.trusted_cas;
 	if(!trust_file.empty())
-		m_btn_path_trust_file.set_filename(trust_file);
-	m_btn_path_trust_file.show();
+		m_btn_path_trust_file->set_filename(trust_file);
+	m_conn_path_trust_file.reset(new PathConnection(
+		*m_btn_path_trust_file, preferences.security.trusted_cas));
 
-	m_box_trust_file.pack_start(m_lbl_trust_file, Gtk::PACK_SHRINK);
-	m_box_trust_file.pack_start(m_btn_path_trust_file,
-	                            Gtk::PACK_EXPAND_WIDGET);
-	m_box_trust_file.show();
-
-	m_group_trust_file.add(m_btn_use_system_trust);
-	m_group_trust_file.add(m_box_trust_file);
-	m_group_trust_file.add(m_error_trust_file);
-	m_group_trust_file.show();
-
-/*	m_cmb_connection_policy.add(
+	m_cmb_connection_policy->set_option(preferences.security.policy);
+/*	m_cmb_connection_policy->add(
 		_("Never use a secure connection"),
 		INF_XMPP_CONNECTION_SECURITY_ONLY_UNSECURED);*/
-	m_cmb_connection_policy.add(
+	m_cmb_connection_policy->add(
 		_("Use TLS if possible"),
 		INF_XMPP_CONNECTION_SECURITY_BOTH_PREFER_TLS);
-	m_cmb_connection_policy.add(
+	m_cmb_connection_policy->add(
 		_("Always use TLS"),
 		INF_XMPP_CONNECTION_SECURITY_ONLY_TLS);
-	m_cmb_connection_policy.show();
-	m_group_connection_policy.add(m_cmb_connection_policy);
-	m_group_connection_policy.show();
 
-	Gtk::RadioButton::Group group;
-	m_btn_auth_none.set_group(group);
-	m_btn_auth_none.show();
-	m_btn_auth_cert.set_group(group);
-	m_btn_auth_cert.show();
 	if(preferences.security.authentication_enabled)
-		m_btn_auth_cert.set_active(true);
+		m_btn_auth_cert->set_active(true);
 	else
-		m_btn_auth_none.set_active(true);
-	connect_option(m_btn_auth_cert,
+		m_btn_auth_none->set_active(true);
+	connect_option(*m_btn_auth_cert,
 	               preferences.security.authentication_enabled);
 
-	m_lbl_key_file.show();
-	m_btn_key_file.set_width_chars(20);
 	const std::string& key_file = preferences.security.key_file;
 	if(!key_file.empty())
-	{
-		m_conn_path_key_file.block();
-		m_btn_key_file.set_filename(key_file);
-		m_conn_path_key_file.unblock();
-	}
-	m_btn_key_file.show();
-
-	m_btn_key_file_create.signal_clicked().connect(
+		m_btn_key_file->set_filename(key_file);
+	m_conn_path_key_file.reset(new PathConnection(
+		*m_btn_key_file, preferences.security.key_file));
+	m_btn_key_file_create->signal_clicked().connect(
 		sigc::mem_fun(*this, &Security::on_create_key_clicked));
-	m_btn_key_file_create.show();
 
-	m_box_key_file.pack_start(m_lbl_key_file, Gtk::PACK_SHRINK);
-	m_box_key_file.pack_start(m_btn_key_file, Gtk::PACK_SHRINK);
-	m_box_key_file.pack_start(m_btn_key_file_create, Gtk::PACK_SHRINK);
-	m_box_key_file.set_sensitive(
-		preferences.security.authentication_enabled);
-	m_box_key_file.show();
-
-	m_lbl_cert_file.show();
-	m_btn_cert_file.set_width_chars(20);
 	const std::string& cert_file = preferences.security.certificate_file;
 	if(!cert_file.empty())
-	{
-		m_conn_path_cert_file.block();
-		m_btn_cert_file.set_filename(cert_file);
-		m_conn_path_cert_file.unblock();
-	}
-	m_btn_cert_file.show();
-
-	m_btn_cert_file_create.signal_clicked().connect(
+		m_btn_cert_file->set_filename(cert_file);
+	m_conn_path_cert_file.reset(new PathConnection(
+		*m_btn_cert_file, preferences.security.certificate_file));
+	m_btn_cert_file_create->signal_clicked().connect(
 		sigc::mem_fun(*this, &Security::on_create_cert_clicked));
-	m_btn_cert_file_create.show();
 
-	m_box_cert_file.pack_start(m_lbl_cert_file, Gtk::PACK_SHRINK);
-	m_box_cert_file.pack_start(m_btn_cert_file, Gtk::PACK_SHRINK);
-	m_box_cert_file.pack_start(m_btn_cert_file_create, Gtk::PACK_SHRINK);
-	m_box_cert_file.set_sensitive(
-		preferences.security.authentication_enabled);
-	m_box_cert_file.show();
-
-	m_size_group->add_widget(m_lbl_key_file);
-	m_size_group->add_widget(m_lbl_cert_file);
-
-	m_group_authentication.add(m_btn_auth_none);
-	m_group_authentication.add(m_btn_auth_cert);
-	m_group_authentication.add(*indent(m_box_key_file));
-	m_group_authentication.add(*indent(m_error_key_file));
-	m_group_authentication.add(*indent(m_box_cert_file));
-	m_group_authentication.add(*indent(m_error_cert_file));
-	m_group_authentication.show();
-
+	// Initial sensitivity and content
+	on_auth_cert_toggled();
 	on_credentials_changed();
-
-	add(m_group_trust_file, false);
-	add(m_group_connection_policy, false);
-	add(m_group_authentication, false);
 }
 
 void Gobby::PreferencesDialog::Security::set_file_error(Gtk::Label& label,
@@ -896,12 +616,8 @@ void Gobby::PreferencesDialog::Security::set_file_error(Gtk::Label& label,
 {
 	if(error != NULL)
 	{
-		label.set_markup(
-			//"<span style='color: red;'>" +
-			"<span foreground='red'>" +
-			std::string(_("Error reading file:")) + " " +
-			Glib::Markup::escape_text(error->message) +
-			"</span>");
+		label.set_text(Glib::ustring::compose(
+			_("Error reading file: %1"), error->message));
 		label.show();
 	}
 	else
@@ -910,57 +626,67 @@ void Gobby::PreferencesDialog::Security::set_file_error(Gtk::Label& label,
 	}
 }
 
+Gtk::Window&
+Gobby::PreferencesDialog::Security::get_toplevel(Gtk::Widget& widget)
+{
+	Gtk::Window* parent = NULL;
+	Gtk::Widget* toplevel_widget = widget.get_toplevel();
+	if(gtk_widget_is_toplevel(toplevel_widget->gobj()))
+		parent = dynamic_cast<Gtk::Window*>(toplevel_widget);
+
+	g_assert(parent != NULL);
+	return *parent;
+}
+
 void Gobby::PreferencesDialog::Security::on_use_system_trust_toggled()
 {
 	m_preferences.security.use_system_trust =
-		m_btn_use_system_trust.get_active();
+		m_btn_use_system_trust->get_active();
 }
 
 void Gobby::PreferencesDialog::Security::on_credentials_changed()
 {
-	set_file_error(m_error_trust_file,
+	set_file_error(*m_error_trust_file,
 	               m_cert_manager.get_trust_error());
 
 	if(m_key_generator_handle.get() == NULL)
 	{
-		set_file_error(m_error_key_file,
+		set_file_error(*m_error_key_file,
 		               m_cert_manager.get_key_error());
 	}
 	else
 	{
-		m_error_key_file.set_text(
+		m_error_key_file->set_text(
 			_("2048-bit RSA private key is being "
 			  "generated, please wait..."));
-		m_error_key_file.show();
+		m_error_key_file->show();
 	}
 
 	if(m_cert_generator_handle.get() == NULL)
-		set_file_error(m_error_cert_file,
+		set_file_error(*m_error_cert_file,
 		               m_cert_manager.get_certificate_error());
 
 	const bool operation_in_progress =
 		m_key_generator_handle.get() != NULL ||
 		m_cert_generator_handle.get() != NULL;
 
-	m_btn_key_file.set_sensitive(!operation_in_progress);
-	m_btn_key_file_create.set_sensitive(!operation_in_progress);
-	m_btn_cert_file.set_sensitive(!operation_in_progress);
-
-	m_btn_cert_file_create.set_sensitive(
+	m_btn_key_file->set_sensitive(!operation_in_progress);
+	m_btn_key_file_create->set_sensitive(!operation_in_progress);
+	m_btn_cert_file->set_sensitive(!operation_in_progress);
+	m_btn_cert_file_create->set_sensitive(
 		!operation_in_progress &&
 		m_cert_manager.get_private_key() != NULL);
 }
 
 void Gobby::PreferencesDialog::Security::on_auth_cert_toggled()
 {
-	m_box_key_file.set_sensitive(m_btn_auth_cert.get_active());
-	m_box_cert_file.set_sensitive(m_btn_auth_cert.get_active());
+	m_grid_auth_cert->set_sensitive(m_btn_auth_cert->get_active());
 }
 
 void Gobby::PreferencesDialog::Security::on_create_key_clicked()
 {
 	m_file_dialog.reset(new FileChooser::Dialog(
-		m_file_chooser, m_parent,
+		m_file_chooser, get_toplevel(*m_btn_key_file_create),
 		_("Select a location for the generated key"),
 		Gtk::FILE_CHOOSER_ACTION_SAVE));
 
@@ -978,7 +704,7 @@ void Gobby::PreferencesDialog::Security::on_create_key_clicked()
 void Gobby::PreferencesDialog::Security::on_create_cert_clicked()
 {
 	m_file_dialog.reset(new FileChooser::Dialog(
-		m_file_chooser, m_parent,
+		m_file_chooser, get_toplevel(*m_btn_cert_file_create),
 		_("Select a location for the generated certificate"),
 		Gtk::FILE_CHOOSER_ACTION_SAVE));
 
@@ -1077,35 +803,39 @@ void Gobby::PreferencesDialog::Security::on_cert_generated(
 	}
 }
 
-Gobby::PreferencesDialog::PreferencesDialog(Gtk::Window& parent,
-                                            FileChooser& file_chooser,
-                                            Preferences& preferences,
-	                                    CertificateManager& cert_manager):
-	Gtk::Dialog(_("Preferences"), parent), m_preferences(preferences),
-	m_page_user(*this, preferences), m_page_editor(preferences),
-	m_page_view(preferences), m_page_appearance(preferences),
-	m_page_security(*this, file_chooser, preferences, cert_manager)
+Gobby::PreferencesDialog::PreferencesDialog(
+	const Glib::RefPtr<Gtk::Builder>& builder,
+	FileChooser& file_chooser,
+	Preferences& preferences,
+	CertificateManager& cert_manager
+):
+	Gtk::Dialog(GTK_DIALOG(gtk_builder_get_object(builder->gobj(),
+	                                              "PreferencesDialog"))),
+	m_page_user(builder, preferences),
+	m_page_editor(builder, preferences),
+	m_page_view(builder, preferences),
+	m_page_appearance(builder, preferences),
+	m_page_security(builder, file_chooser, preferences, cert_manager)
 {
-	m_notebook.append_page(m_page_user, _("User"));
-	m_notebook.append_page(m_page_editor, _("Editor"));
-	m_notebook.append_page(m_page_view, _("View"));
-	m_notebook.append_page(m_page_appearance, _("Appearance"));
-	m_notebook.append_page(m_page_security, _("Security"));
-
-	m_page_user.show();
-	m_page_editor.show();
-	m_page_view.show();
-	m_page_appearance.show();
-	m_page_security.show();
-
-	get_vbox()->set_spacing(6);
-	get_vbox()->pack_start(m_notebook, Gtk::PACK_EXPAND_WIDGET);
-	m_notebook.show();
-
 	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
+}
 
-	set_border_width(12);
-	set_resizable(false);
+std::auto_ptr<Gobby::PreferencesDialog>
+Gobby::PreferencesDialog::create(Gtk::Window& parent,
+                                 FileChooser& file_chooser,
+                                 Preferences& preferences,
+	                         CertificateManager& cert_manager)
+{
+	Glib::RefPtr<Gtk::Builder> builder =
+		Gtk::Builder::create_from_resource(
+			"/de/0x539/gobby/ui/preferences-dialog.ui");
+
+	std::auto_ptr<PreferencesDialog> dialog(
+		new PreferencesDialog(builder, file_chooser,
+		                      preferences, cert_manager));
+
+	dialog->set_transient_for(parent);
+	return dialog;
 }
 
 void Gobby::PreferencesDialog::on_response(int id)

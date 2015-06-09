@@ -22,22 +22,17 @@
 #include "core/certificatemanager.hpp"
 #include "core/credentialsgenerator.hpp"
 #include "core/huebutton.hpp"
-#include "util/groupframe.hpp"
 
 #include <gtkmm/dialog.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/combobox.h>
-#include <gtkmm/notebook.h>
-#include <gtkmm/alignment.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/filechooserbutton.h>
 #include <gtkmm/fontbutton.h>
-#include <gtkmm/sizegroup.h>
 #include <gtkmm/liststore.h>
 
 namespace Gobby
@@ -47,8 +42,10 @@ template<typename OptionType>
 class PreferencesComboBox: public Gtk::ComboBox
 {
 public:
-	PreferencesComboBox(Preferences::Option<OptionType>& option):
-		m_option(option), m_store(Gtk::ListStore::create(m_columns))
+	PreferencesComboBox(GtkComboBox* box,
+	                    const Glib::RefPtr<Gtk::Builder>& builder):
+		Gtk::ComboBox(box), m_option(NULL),
+		m_store(Gtk::ListStore::create(m_columns))
 	{
 		set_model(m_store);
 
@@ -58,13 +55,18 @@ public:
 		add_attribute(renderer->property_text(), m_columns.text);
 	}
 
+	void set_option(Preferences::Option<OptionType>& option)
+	{
+		m_option = &option;
+	}
+
 	void add(const Glib::ustring& text, const OptionType& value)
 	{
 		Gtk::TreeIter iter = m_store->append();
 		(*iter)[m_columns.text] = text;
 		(*iter)[m_columns.value] = value;
 
-		if(m_option == value)
+		if(*m_option == value)
 			set_active(iter);
 	}
 
@@ -83,11 +85,11 @@ private:
 		Gtk::ComboBox::on_changed();
 		OptionType value = (*get_active())[m_columns.value];
 
-		if(m_option != value)
-			m_option = value;
+		if(*m_option != value)
+			*m_option = value;
 	}
 
-	Preferences::Option<OptionType>& m_option;
+	Preferences::Option<OptionType>* m_option;
 
 	Columns m_columns;
 	Glib::RefPtr<Gtk::ListStore> m_store;
@@ -95,7 +97,17 @@ private:
 
 class PreferencesDialog : public Gtk::Dialog
 {
+private:
+	PreferencesDialog(const Glib::RefPtr<Gtk::Builder>& builder,
+	                  FileChooser& file_chooser,
+	                  Preferences& preferences,
+	                  CertificateManager& cert_manager);
+
 public:
+	static std::auto_ptr<PreferencesDialog> create(
+		Gtk::Window& parent, FileChooser& file_chooser,
+		Preferences& preferences, CertificateManager& cert_manager);
+
 	// An object which keeps two values in sync with each other, using
 	// notification signals of both objects.
 	template<typename Type>
@@ -254,146 +266,101 @@ public:
 		bool m_seen_initial_value;
 	};
 
-	template<typename OptionType>
-	class ComboColumns: public Gtk::TreeModelColumnRecord
-	{
-	};
-
-	class Page: public Gtk::Frame
+	class User
 	{
 	public:
-		Page();
-		void add(Gtk::Widget& widget, bool expand);
-
-	protected:
-		Gtk::VBox m_box;
-	};
-
-	class User: public Page
-	{
-	public:
-		User(Gtk::Window& parent, Preferences& preferences);
+		User(const Glib::RefPtr<Gtk::Builder>& builder,
+		     Preferences& preferences);
 
 	protected:
 		void on_local_allow_connections_toggled();
 		void on_local_require_password_toggled();
 		void on_local_keep_documents_toggled();
 
-		GroupFrame m_group_settings;
-		GroupFrame m_group_remote;
-		GroupFrame m_group_local;
+		Gtk::Entry* m_ent_user_name;
+		HueButton* m_btn_user_color;
 
-		Gtk::HBox m_box_user_name;
-		Gtk::Label m_lbl_user_name;
-		Gtk::Entry m_ent_user_name;
+		Gtk::Scale* m_scl_user_alpha;
 
-		Gtk::HBox m_box_user_color;
-		Gtk::Label m_lbl_user_color;
-		HueButton m_btn_user_color;
+		Gtk::CheckButton* m_btn_remote_show_cursors;
+		Gtk::CheckButton* m_btn_remote_show_selections;
+		Gtk::CheckButton* m_btn_remote_show_current_lines;
+		Gtk::CheckButton* m_btn_remote_show_cursor_positions;
 
-		Gtk::HBox m_box_user_alpha;
-		Gtk::Label m_lbl_user_alpha;
-		Gtk::HScale m_scl_user_alpha;
-
-		Gtk::CheckButton m_btn_remote_show_cursors;
-		Gtk::CheckButton m_btn_remote_show_selections;
-		Gtk::CheckButton m_btn_remote_show_current_lines;
-		Gtk::CheckButton m_btn_remote_show_cursor_positions;
-
-		Gtk::CheckButton m_btn_local_allow_connections;
-		Gtk::CheckButton m_btn_local_require_password;
-		Gtk::Label m_lbl_local_password;
-		Gtk::Entry m_ent_local_password;
-		Gtk::HBox m_box_local_password;
-		Gtk::Label m_lbl_local_port;
-		Gtk::SpinButton m_ent_local_port;
-		Gtk::HBox m_box_local_port;
-		Gtk::VBox m_box_local_connections;
-		Gtk::CheckButton m_btn_local_keep_documents;
-		Gtk::Label m_lbl_local_documents_directory;
-		Gtk::FileChooserButton m_btn_local_documents_directory;
-		PathConnection m_conn_local_documents_directory;
-		Gtk::HBox m_box_local_documents_directory;
-
-		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
+		Gtk::Grid* m_grid_local_connections;
+		Gtk::CheckButton* m_btn_local_allow_connections;
+		Gtk::Grid* m_grid_password;
+		Gtk::CheckButton* m_btn_local_require_password;
+		Gtk::Entry* m_ent_local_password;
+		Gtk::SpinButton* m_ent_local_port;
+		Gtk::CheckButton* m_btn_local_keep_documents;
+		Gtk::Grid* m_grid_local_documents_directory;
+		Gtk::FileChooserButton* m_btn_local_documents_directory;
+		std::auto_ptr<PathConnection>
+			m_conn_local_documents_directory;
 	};
 
-	class Editor: public Page
+	class Editor
 	{
 	public:
-		Editor(Preferences& preferences);
+		Editor(const Glib::RefPtr<Gtk::Builder>& builder,
+		       Preferences& preferences);
 
 	protected:
 		void on_autosave_enabled_toggled();
 
-		GroupFrame m_group_tab;
-		GroupFrame m_group_indentation;
-		GroupFrame m_group_homeend;
-		GroupFrame m_group_saving;
+		Gtk::SpinButton* m_ent_tab_width;
+		Gtk::CheckButton* m_btn_tab_spaces;
 
-		Gtk::HBox m_box_tab_width;
-		Gtk::Label m_lbl_tab_width;
-		Gtk::SpinButton m_ent_tab_width;
-		Gtk::CheckButton m_btn_tab_spaces;
+		Gtk::CheckButton* m_btn_indentation_auto;
 
-		Gtk::CheckButton m_btn_indentation_auto;
+		Gtk::CheckButton* m_btn_homeend_smart;
 
-		Gtk::CheckButton m_btn_homeend_smart;
-
-		Gtk::CheckButton m_btn_autosave_enabled;
-		Gtk::HBox m_box_autosave_interval;
-		Gtk::Label m_lbl_autosave_interval;
-		Gtk::Label m_lbl_autosave_interval_suffix;
-		Gtk::SpinButton m_ent_autosave_interval;
+		Gtk::CheckButton* m_btn_autosave_enabled;
+		Gtk::Grid* m_grid_autosave_interval;
+		Gtk::SpinButton* m_ent_autosave_interval;
 	};
 
-	class View: public Page
+	class View
 	{
 	public:
-		View(Preferences& preferences);
-		void set(Preferences::View& view) const;
+		View(const Glib::RefPtr<Gtk::Builder>& builder,
+		     Preferences& preferences);
 
 	protected:
 		void on_wrap_text_toggled();
 		void on_margin_display_toggled();
 
-		GroupFrame m_group_wrap;
-		GroupFrame m_group_linenum;
-		GroupFrame m_group_curline;
-		GroupFrame m_group_margin;
-		GroupFrame m_group_bracket;
-		GroupFrame m_group_spaces;
+		Gtk::CheckButton* m_btn_wrap_text;
+		Gtk::CheckButton* m_btn_wrap_words;
 
-		Gtk::CheckButton m_btn_wrap_text;
-		Gtk::CheckButton m_btn_wrap_words;
+		Gtk::CheckButton* m_btn_linenum_display;
 
-		Gtk::CheckButton m_btn_linenum_display;
+		Gtk::CheckButton* m_btn_curline_highlight;
 
-		Gtk::CheckButton m_btn_curline_highlight;
+		Gtk::CheckButton* m_btn_margin_display;
+		Gtk::Grid* m_grid_margin_pos;
+		Gtk::SpinButton* m_ent_margin_pos;
 
-		Gtk::CheckButton m_btn_margin_display;
-		Gtk::HBox m_box_margin_pos;
-		Gtk::Label m_lbl_margin_pos;
-		Gtk::SpinButton m_ent_margin_pos;
-
-		Gtk::CheckButton m_btn_bracket_highlight;
-		PreferencesComboBox<GtkSourceDrawSpacesFlags>
+		Gtk::CheckButton* m_btn_bracket_highlight;
+		PreferencesComboBox<GtkSourceDrawSpacesFlags>*
 			m_cmb_spaces_display;
 	};
 
-	class Appearance: public Page
+	class Appearance
 	{
 	public:
-		Appearance(Preferences& preferences);
+		Appearance(const Glib::RefPtr<Gtk::Builder>& builder,
+		           Preferences& preferences);
 
 	protected:
-		class Columns: public Gtk::TreeModelColumnRecord
+		class SchemeColumns: public Gtk::TreeModelColumnRecord
 		{
 		public:
 			Gtk::TreeModelColumn<GtkSourceStyleScheme*> scheme;
 			Gtk::TreeModelColumn<Glib::ustring> name;
 			Gtk::TreeModelColumn<Glib::ustring> description;
-			Columns()
+			SchemeColumns()
 			{
 				add(scheme);
 				add(name);
@@ -405,29 +372,26 @@ public:
 
 		void on_scheme_changed(Preferences& preferences);
 
-		GroupFrame m_group_toolbar;
-		GroupFrame m_group_font;
-		GroupFrame m_group_scheme;
+		PreferencesComboBox<Gtk::ToolbarStyle>* m_cmb_toolbar_style;
+		Gtk::FontButton* m_btn_font;
+		std::auto_ptr<FontConnection> m_conn_font;
 
-		PreferencesComboBox<Gtk::ToolbarStyle> m_cmb_toolbar_style;
-		Gtk::FontButton m_btn_font;
-		FontConnection m_conn_font;
-
-		Columns m_columns;
-		Glib::RefPtr<Gtk::ListStore> m_list;
-		Gtk::TreeView m_tree;
+		SchemeColumns m_scheme_columns;
+		Glib::RefPtr<Gtk::ListStore> m_scheme_list;
+		Gtk::TreeView* m_scheme_tree;
 	};
 
-	class Security: public Page
+	class Security
 	{
 	public:
-		Security(Gtk::Window& parent,
+		Security(const Glib::RefPtr<Gtk::Builder>& builder,
 		         FileChooser& file_chooser,
 		         Preferences& preferences,
 		         CertificateManager& cert_manager);
 	
 	protected:
 		void set_file_error(Gtk::Label& label, const GError* error);
+		Gtk::Window& get_toplevel(Gtk::Widget& widget);
 
 		void on_use_system_trust_toggled();
 
@@ -451,55 +415,38 @@ public:
 
 		Preferences& m_preferences;
 		FileChooser& m_file_chooser;
-		Gtk::Window& m_parent;
 		CertificateManager& m_cert_manager;
 
-		GroupFrame m_group_trust_file;
-		GroupFrame m_group_connection_policy;
-		GroupFrame m_group_authentication;
+		Gtk::CheckButton* m_btn_use_system_trust;
+		Gtk::FileChooserButton* m_btn_path_trust_file;
+		std::auto_ptr<PathConnection> m_conn_path_trust_file;
+		Gtk::Label* m_error_trust_file;
 
-		Gtk::CheckButton m_btn_use_system_trust;
-		Gtk::Label m_lbl_trust_file;
-		Gtk::FileChooserButton m_btn_path_trust_file;
-		PathConnection m_conn_path_trust_file;
-		Gtk::HBox m_box_trust_file;
-		Gtk::Label m_error_trust_file;
-		PreferencesComboBox<InfXmppConnectionSecurityPolicy>
+		PreferencesComboBox<InfXmppConnectionSecurityPolicy>*
 			m_cmb_connection_policy;
 
-		Gtk::RadioButton m_btn_auth_none;
-		Gtk::RadioButton m_btn_auth_cert;
-		Gtk::Label m_lbl_key_file;
-		Gtk::FileChooserButton m_btn_key_file;
-		PathConnection m_conn_path_key_file;
-		Gtk::Button m_btn_key_file_create;
-		Gtk::HBox m_box_key_file;
-		Gtk::Label m_error_key_file;
-		Gtk::Label m_lbl_cert_file;
-		Gtk::FileChooserButton m_btn_cert_file;
-		PathConnection m_conn_path_cert_file;
-		Gtk::Button m_btn_cert_file_create;
-		Gtk::HBox m_box_cert_file;
-		Gtk::Label m_error_cert_file;
+		Gtk::RadioButton* m_btn_auth_none;
+		Gtk::RadioButton* m_btn_auth_cert;
+		Gtk::Grid* m_grid_auth_cert;
 
-		Glib::RefPtr<Gtk::SizeGroup> m_size_group;
+		Gtk::FileChooserButton* m_btn_key_file;
+		std::auto_ptr<PathConnection> m_conn_path_key_file;
+		Gtk::Button* m_btn_key_file_create;
+		Gtk::Label* m_error_key_file;
+
+		Gtk::FileChooserButton* m_btn_cert_file;
+		std::auto_ptr<PathConnection> m_conn_path_cert_file;
+		Gtk::Button* m_btn_cert_file_create;
+		Gtk::Label* m_error_cert_file;
 
 		std::auto_ptr<KeyGeneratorHandle> m_key_generator_handle;
-		std::auto_ptr<CertificateGeneratorHandle> m_cert_generator_handle;
+		std::auto_ptr<CertificateGeneratorHandle>
+			m_cert_generator_handle;
 		std::auto_ptr<FileChooser::Dialog> m_file_dialog;
 	};
 
-	PreferencesDialog(Gtk::Window& parent,
-	                  FileChooser& file_chooser,
-	                  Preferences& preferences,
-	                  CertificateManager& cert_manager);
-
 protected:
 	virtual void on_response(int id);
-
-	Preferences& m_preferences;
-
-	Gtk::Notebook m_notebook;
 
 	User m_page_user;
 	Editor m_page_editor;

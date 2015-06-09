@@ -6,7 +6,6 @@ libgobby_util_a_SOURCES = \
 	color.cpp \
 	config.cpp \
 	file.cpp \
-	groupframe.cpp \
 	historyentry.cpp \
 	i18n.cpp \
 	serialize.cpp \
@@ -14,15 +13,14 @@ libgobby_util_a_SOURCES = \
 
 noinst_HEADERS = \
 	asyncoperation.hpp \
-        closebutton.hpp \
-        color.hpp \
-        config.hpp \
-        defaultaccumulator.hpp \
-        file.hpp \
-	groupframe.hpp \
+	closebutton.hpp \
+	color.hpp \
+	config.hpp \
+	defaultaccumulator.hpp \
+	file.hpp \
 	historyentry.hpp \
-        i18n.hpp \
-        serialize.hpp \
+	i18n.hpp \
+	serialize.hpp \
 	uri.hpp
 
 AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
