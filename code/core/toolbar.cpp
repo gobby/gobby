@@ -20,9 +20,10 @@
 #include <gtkmm/builder.h>
 
 Gobby::Toolbar::Toolbar(const Preferences& preferences):
-	Gtk::Box(Gtk::ORIENTATION_VERTICAL),
 	m_preferences(preferences)
 {
+	set_orientation(Gtk::ORIENTATION_VERTICAL);
+
 	Glib::RefPtr<Gtk::Builder> builder =
 		Gtk::Builder::create_from_resource(
 			"/de/0x539/gobby/ui/toolbar.ui");
@@ -38,7 +39,7 @@ Gobby::Toolbar::Toolbar(const Preferences& preferences):
 	preferences.appearance.show_toolbar.signal_changed().connect(
 		sigc::mem_fun(*this, &Toolbar::on_show_toolbar_changed));
 
-	pack_start(*m_toolbar, Gtk::PACK_SHRINK);
+	attach(*m_toolbar, 0, 0, 1, 1);
 }
 
 void Gobby::Toolbar::on_toolbar_style_changed()

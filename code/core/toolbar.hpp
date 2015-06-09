@@ -19,13 +19,13 @@
 
 #include "core/preferences.hpp"
 
-#include <gtkmm/box.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/toolbar.h>
 
 namespace Gobby
 {
 
-class Toolbar: public Gtk::Box
+class Toolbar: public Gtk::Grid
 {
 public:
 	Toolbar(const Preferences& preferences);
