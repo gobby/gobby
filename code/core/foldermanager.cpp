@@ -118,9 +118,12 @@ Gobby::FolderManager::FolderManager(Browser& browser,
 			INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser,
 			-1);
 
-		m_browser_map[browser] =
-			new BrowserInfo(*this, browser);
-		g_object_unref(browser);
+		if(browser != NULL)
+		{
+			m_browser_map[browser] =
+				new BrowserInfo(*this, browser);
+			g_object_unref(browser);
+		}
 	}
 
 	m_text_document_added_connection = 
