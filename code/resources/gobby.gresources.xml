@@ -10,6 +10,7 @@
   <file preprocess="xml-stripblanks">ui/initial-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/menu.ui</file>
   <file preprocess="xml-stripblanks">ui/open-location-dialog.ui</file>
+  <file preprocess="xml-stripblanks">ui/password-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/preferences-dialog.ui</file>
   <file preprocess="xml-stripblanks">ui/toolbar.ui</file>
  </gresource>

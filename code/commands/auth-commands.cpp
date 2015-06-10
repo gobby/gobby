@@ -184,15 +184,18 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 				Glib::ustring remote_id_(remote_id);
 				g_free(remote_id);
 
-				info.password_dialog = new PasswordDialog(
-					m_parent, remote_id_, info.retries);
+				std::auto_ptr<PasswordDialog> dialog =
+					PasswordDialog::create(
+						m_parent, remote_id_,
+						info.retries);
+				info.password_dialog = dialog.release();
 				info.password_dialog->add_button(
 					_("_Cancel"), Gtk::RESPONSE_CANCEL);
 				info.password_dialog->add_button(
 					_("_Ok"), Gtk::RESPONSE_ACCEPT);
 
-				Gtk::Dialog& dialog = *info.password_dialog;
-				dialog.signal_response().connect(sigc::bind(
+				Gtk::Dialog& dlg = *info.password_dialog;
+				dlg.signal_response().connect(sigc::bind(
 					sigc::mem_fun(
 						*this,
 						&AuthCommands::on_response),
