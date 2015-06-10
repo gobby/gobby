@@ -79,7 +79,7 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
 		m_sasl_context, &AuthCommands::sasl_callback_static,
 		this, NULL);
 
-	// Set SASL context for new connections:
+	// Set SASL context for new and existing connections:
 	m_connection_manager.set_sasl_context(m_sasl_context,
 	                                      "ANONYMOUS PLAIN");
 
@@ -88,6 +88,25 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
 		"set-browser",
 		G_CALLBACK(&AuthCommands::set_browser_callback_static),
 		this);
+
+	// Setup callback for existing browsers
+	GtkTreeIter iter;
+	GtkTreeModel* model = GTK_TREE_MODEL(m_browser.get_store());
+	for(gboolean have_entry = gtk_tree_model_get_iter_first(model, &iter);
+	    have_entry == TRUE;
+	    have_entry = gtk_tree_model_iter_next(model, &iter))
+	{
+		InfBrowser* browser;
+		gtk_tree_model_get(
+			model, &iter,
+			INF_GTK_BROWSER_MODEL_COL_BROWSER, &browser, -1);
+
+		if(browser != NULL)
+		{
+			set_browser_callback(NULL, browser);
+			g_object_unref(browser);
+		}
+	}
 }
 
 Gobby::AuthCommands::~AuthCommands()

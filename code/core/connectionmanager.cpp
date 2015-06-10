@@ -237,9 +237,17 @@ void Gobby::ConnectionManager::set_sasl_context(InfSaslContext* sasl_context,
 	if(m_sasl_context) inf_sasl_context_ref(m_sasl_context);
 	m_sasl_mechanisms = mechanisms ? mechanisms : "";
 
-	// TODO: Should we also change the SASL context
-	// for existing connections? Doesn't really matter because
-	// SASL context does not change for client side...
+	for(std::map<InfXmppConnection*, ConnectionInfo>::const_iterator it =
+		m_connections.begin();
+	    it != m_connections.end(); ++it)
+	{
+		InfXmppConnection* conn = it->first;
+		inf_xmpp_connection_reset_sasl_authentication(
+			conn, m_sasl_context,
+			m_sasl_mechanisms.empty()
+				? ""
+				: m_sasl_mechanisms.c_str());
+	}
 
 #ifdef LIBINFINITY_HAVE_AVAHI
 	g_object_set(G_OBJECT(m_discovery),
