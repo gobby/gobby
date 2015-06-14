@@ -70,6 +70,14 @@ public:
 			Gtk::BUTTONS_NONE,
 			false);
 
+		Gtk::Window* parent = NULL;
+		Gtk::Widget* toplevel_widget = m_widget->get_toplevel();
+		if(gtk_widget_is_toplevel(toplevel_widget->gobj()))
+			parent = dynamic_cast<Gtk::Window*>(toplevel_widget);
+
+		g_assert(parent != NULL);
+		dialog->set_transient_for(*parent);
+
 		dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 
 		dialog->set_secondary_text(m_detail_desc, true);
