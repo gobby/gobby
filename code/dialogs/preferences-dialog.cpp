@@ -15,7 +15,6 @@
  */
 
 #include "dialogs/preferences-dialog.hpp"
-#include "util/color.hpp"
 #include "util/i18n.hpp"
 
 #include <glibmm/markup.h>
@@ -140,21 +139,18 @@ namespace
 		word_button.signal_toggled().connect(toggled_slot);
 	}
 
-	void connect_hue_option(Gtk::ColorButton& color_button,
+	void connect_hue_option(Gobby::HueButton& hue_button,
 	                        Preferences::Option<double>& option)
 	{
-		color_button.property_color().signal_changed().connect(
+		hue_button.property_color().signal_changed().connect(
 			sigc::compose(
 				sigc::mem_fun(
 					option,
 					&Preferences::Option<double>::set
 				),
-				sigc::compose(
-					sigc::ptr_fun(&hue_from_gdk_color),
-					sigc::mem_fun(
-						color_button,
-						&Gtk::ColorButton::get_color
-					)
+				sigc::mem_fun(
+					hue_button,
+					&Gobby::HueButton::get_hue
 				)
 			)
 		);

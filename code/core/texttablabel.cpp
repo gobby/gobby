@@ -206,12 +206,24 @@ void Gobby::TextTabLabel::update_dots()
 		    iter != m_changed_by.end(); ++iter)
 		{
 			double hue = inf_text_user_get_hue(iter->get_user());
+			double sat = 0.6;
+			double val = 0.6;
+			double r, g, b;
+			gtk_hsv_to_rgb(hue, sat, val, &r, &g, &b);
 
-			Gdk::Color color;
-			color.set_hsv(hue * 360., 0.6, 0.6);
+			const unsigned short red_i =
+				static_cast<unsigned int>(r * 65535.0 + 0.5);
+			const unsigned short green_i =
+				static_cast<unsigned int>(g * 65535.0 + 0.5);
+			const unsigned short blue_i =
+				static_cast<unsigned int>(b * 65535.0 + 0.5);
 
-			markup += "<span color=\"" + color.to_string() +
-			          "\">" + m_dot_char + "</span>";
+			gchar* markup_escaped = g_markup_printf_escaped(
+				"<span color='#%04hx%04hx%04hx'>&#%u;</span>",
+				red_i, green_i, blue_i,
+				static_cast<unsigned int>(m_dot_char));
+			markup = markup_escaped;
+			g_free(markup_escaped);
 		}
 		m_dots.set_markup(markup);
 		m_dots.show();

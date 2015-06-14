@@ -72,11 +72,16 @@ namespace
 		return result;
 	}
 
-	unsigned int color_to_rgb(GdkColor* color)
+	unsigned int rgba_to_rgb24(const GdkRGBA* rgba)
 	{
-		return ((color->red   & 0xff00) << 8)
-		     |  (color->green & 0xff00)
-		     | ((color->blue  & 0xff00) >> 8);
+		const guint8 red =
+			static_cast<guint8>(rgba->red * 255.0 + 0.5);
+		const guint8 green =
+			static_cast<guint8>(rgba->green * 255.0 + 0.5);
+		const guint8 blue =
+			static_cast<guint8>(rgba->blue * 255.0 + 0.5);
+
+		return (red << 16) | (green << 8) | blue;
 	}
 
 	Glib::ustring get_current_tags(priority_tag_set& tags,
@@ -259,7 +264,7 @@ namespace
 			        hostname, path, time_str));
 
 		xmlpp::Element* link = node->add_child("a");
-		link->set_attribute("href", "http://gobby.0x539.de/");
+		link->set_attribute("href", "http://gobby.github.io/");
 		link->add_child_text(PACKAGE_STRING);
 
 		if(*p != '\0')
@@ -275,19 +280,25 @@ namespace
 		    i != users.end();
 		    ++i)
 		{
-			gdouble hue = inf_text_user_get_hue(*i);
-			hue = std::fmod(hue, 1);
+			// TODO: Get the S and V from the InfTextGtkBuffer
+			// setting?
+			double hue = inf_text_user_get_hue(*i);
+			double sat = 0.35;
+			double val = 1.0;
+			double r, g, b;
+			gtk_hsv_to_rgb(hue, sat, val, &r, &g, &b);
 
-			Gdk::Color c;
-			c.set_hsv(360.0 * hue, 0.35, 1.0);
-			gchar const* name = inf_user_get_name(INF_USER(*i));
-			const unsigned int rgb = color_to_rgb(c.gobj());
+			Gdk::RGBA rgba;
+			rgba.set_rgba(r, g, b, 1.0);
+
+			const char* name = inf_user_get_name(INF_USER(*i));
+			const unsigned int rgb = rgba_to_rgb24(rgba.gobj());
 
 			xmlpp::Element* item = list->add_child("li");
 			item->add_child_text(name);
 			item->set_attribute(
 				"style",
-				uprintf("background-color: #%06x;\n", rgb));
+				uprintf("background-color: #%06x;", rgb));
 		}
 	}
 
@@ -298,50 +309,53 @@ namespace
 		    i != tags.end();
 		    ++i)
 		{
-			GdkColor* fg, * bg;
+			GdkRGBA* fg, * bg;
 			gint weight;
 			gboolean underline;
 			PangoStyle style;
 			gboolean fg_set, bg_set, weight_set,
 				underline_set, style_set;
 			g_object_get(G_OBJECT(*i),
-				"background-gdk", &bg,
-				"foreground-gdk", &fg,
-				"weight",         &weight,
-				"underline",      &underline,
-				"style",          &style,
-				"background-set", &bg_set,
-				"foreground-set", &fg_set,
-				"weight-set",     &weight_set,
-				"underline-set",  &underline_set,
-				"style-set",      &style_set,
+				"background-rgba", &bg,
+				"foreground-rgba", &fg,
+				"weight",          &weight,
+				"underline",       &underline,
+				"style",           &style,
+				"background-set",  &bg_set,
+				"foreground-set",  &fg_set,
+				"weight-set",      &weight_set,
+				"underline-set",   &underline_set,
+				"style-set",       &style_set,
 				NULL);
-			const unsigned int bg_rgb = color_to_rgb(bg);
-			const unsigned int fg_rgb = color_to_rgb(fg);
-			gdk_color_free(fg);
-			gdk_color_free(bg);
+
+			unsigned int bg_rgb, fg_rgb;
+			if(fg_set) fg_rgb = rgba_to_rgb24(fg);
+			if(bg_set) bg_rgb = rgba_to_rgb24(bg);
+
+			gdk_rgba_free(fg);
+			gdk_rgba_free(bg);
 			css->add_child_text(
 				uprintf(".tag_%p {\n",
 				        static_cast<void*>(*i)));
 			if(fg_set)
 				css->add_child_text(uprintf(
-					"  color:                  #%06x;\n",
+					"  color:                  #%06x;",
 					fg_rgb));
 			if(bg_set)
 				css->add_child_text(uprintf(
-					"  background-color:       #%06x;\n",
+					"  background-color:       #%06x;",
 					bg_rgb));
 			if(weight_set)
 				css->add_child_text(uprintf(
-					"  font-weight:            %d;\n",
+					"  font-weight:            %d;",
 					weight));
 			if(underline_set)
 				css->add_child_text(uprintf(
-					"  text-decoration:        %s;\n",
+					"  text-decoration:        %s;",
 					underline ? "underline" : "none"));
 			if(style_set)
 				css->add_child_text(uprintf(
-					"  font-style:             %s;\n",
+					"  font-style:             %s;",
 					(style == PANGO_STYLE_ITALIC) ?
 						"italic" : "none"));
 			css->add_child_text("}\n");

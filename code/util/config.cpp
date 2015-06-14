@@ -258,40 +258,6 @@ const Gobby::Config::ParentEntry& Gobby::Config::get_root() const
 	return *m_root;
 }
 
-std::string Gobby::serialize::default_context_to<Gdk::Color>::
-	to_string(const data_type& from) const
-{
-	unsigned int red = from.get_red() * 255 / 65535;
-	unsigned int green = from.get_green() * 255 / 65535;
-	unsigned int blue = from.get_blue() * 255 / 65535;
-
-	std::stringstream stream;
-	stream << std::hex << ( (red << 16) | (green << 8) | blue);
-	return stream.str();
-}
-
-Gobby::serialize::default_context_from<Gdk::Color>::data_type
-Gobby::serialize::default_context_from<Gdk::Color>::
-	from_string(const std::string& from) const
-{
-	unsigned int rgb_color;
-	std::stringstream stream(from);
-	stream >> std::hex >> rgb_color;
-
-	if(stream.bad() )
-	{
-		throw conversion_error(
-			from + " should be hexadecimal color triple"
-		);
-	}
-
-	Gdk::Color color;
-	color.set_red( ((rgb_color >> 16) & 0xff) * 65535 / 255);
-	color.set_green( ((rgb_color >> 8) & 0xff) * 65535 / 255);
-	color.set_blue( ((rgb_color) & 0xff) * 65535 / 255);
-	return color;
-}
-
 std::string Gobby::serialize::default_context_to<Glib::ustring>::
 	to_string(const data_type& from) const
 {

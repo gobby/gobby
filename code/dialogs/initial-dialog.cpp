@@ -18,7 +18,6 @@
 
 #include "core/credentialsgenerator.hpp"
 
-#include "util/color.hpp"
 #include "util/file.hpp"
 #include "util/i18n.hpp"
 #include "features.hpp"
@@ -268,8 +267,7 @@ Gobby::InitialDialog::create(Gtk::Window& parent,
 void Gobby::InitialDialog::on_response(int id)
 {
 	m_preferences->user.name = m_name_entry->get_text();
-	m_preferences->user.hue =
-		hue_from_gdk_color(m_color_button->get_color());
+	m_preferences->user.hue = m_color_button->get_hue();
 	m_preferences->user.allow_remote_access =
 		m_remote_allow_connections->get_active();
 	m_preferences->user.require_password =

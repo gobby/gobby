@@ -17,7 +17,6 @@
 #include "core/gobject/gobby-undo-manager.h"
 #include "core/textsessionview.hpp"
 #include "util/i18n.hpp"
-#include "util/color.hpp"
 
 #include <glibmm/main.h>
 #include <glibmm/markup.h>
@@ -118,15 +117,6 @@ namespace
 				sigc::ref(
 					*static_cast<Gobby::TextSessionView*>(
 						user_data))));
-	}
-
-	inline Gdk::Color color_from_rgba(const Gdk::RGBA& rgba)
-	{
-		Gdk::Color c;
-		c.set_red(rgba.get_red_u());
-		c.set_green(rgba.get_green_u());
-		c.set_blue(rgba.get_blue_u());
-		return c;
 	}
 }
 
@@ -659,24 +649,20 @@ void Gobby::TextSessionView::on_view_style_updated()
 	gtk_style_context_add_class(style, GTK_STYLE_CLASS_VIEW);
 
 	GdkRGBA rgba;
-	gtk_style_context_get_background_color(style, GTK_STATE_FLAG_NORMAL, &rgba);
+	gtk_style_context_get_background_color(
+		style, GTK_STATE_FLAG_NORMAL, &rgba);
 	gtk_style_context_restore(style);
 
-	Gdk::RGBA rgbacpp(&rgba);
-	const Gdk::Color colorcpp = color_from_rgba(rgbacpp);
-	const GdkColor& color = *colorcpp.gobj();
+	// Convert background color to HSV
+	double h, s, v;
+	gtk_rgb_to_hsv(rgba.red, rgba.green, rgba.blue, &h, &s, &v);
 
-	double rh = color.red / 65535.0;
-	double gs = color.green / 65535.0;
-	double bv = color.blue / 65535.0;
-
-	Gobby::rgb_to_hsv(rh, gs, bv);
-
-	double my_sat = gs * 0.5 + 0.3;
-	double my_val = (std::pow(bv + 1, 3) - 1) / 7 * 0.6 + 0.4;
+	// Adjust S and V for authorship colors
+	s = s * 0.5 + 0.3;
+	v = (std::pow(v + 1, 3) - 1) / 7 * 0.6 + 0.4;
 
 	InfTextGtkBuffer* buffer = INF_TEXT_GTK_BUFFER(
 		inf_session_get_buffer(INF_SESSION(m_session)));
 
-	inf_text_gtk_buffer_set_saturation_value(buffer, my_sat, my_val);
+	inf_text_gtk_buffer_set_saturation_value(buffer, s, v);
 }

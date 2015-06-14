@@ -16,7 +16,6 @@
 
 #include "core/huebutton.hpp"
 
-#include "util/color.hpp"
 #include "util/i18n.hpp"
 
 #include <libinftextgtk/inf-text-gtk-hue-chooser.h>
@@ -37,7 +36,13 @@ Gobby::HueButton::HueButton(const Glib::ustring& title):
 
 double Gobby::HueButton::get_hue() const
 {
-	return hue_from_gdk_color(get_color());
+	const Gdk::RGBA rgba = get_rgba();
+	double h, s, v;
+
+	gtk_rgb_to_hsv(rgba.get_red(), rgba.get_green(), rgba.get_blue(),
+	               &h, &s, &v);
+
+	return h;
 }
 
 double Gobby::HueButton::get_saturation() const
@@ -52,9 +57,12 @@ double Gobby::HueButton::get_value() const
 
 void Gobby::HueButton::set_hue(double hue)
 {
-	Gdk::Color color;
-	color.set_hsv(hue * 360.0, m_saturation, m_value);
-	set_color(color);
+	double r, g, b;
+	gtk_hsv_to_rgb(hue, m_saturation, m_value, &r, &g, &b);
+
+	Gdk::RGBA rgba;
+	rgba.set_rgba(r, g, b, 1.0);
+	set_rgba(rgba);
 }
 
 void Gobby::HueButton::set_saturation(double saturation)
