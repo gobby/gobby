@@ -17,7 +17,6 @@
 #include "core/userlist.hpp"
 
 #include "util/i18n.hpp"
-#include "util/color.hpp"
 
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/icontheme.h>
@@ -69,9 +68,10 @@ namespace
 				double g = pixel[1]/255.0;
 				double b = pixel[2]/255.0;
 
-				Gobby::rgb_to_hsv(r,g,b);
-				r = hue;
-				Gobby::hsv_to_rgb(r,g,b);
+				// Replace hue value
+				double h, s, v;
+				gtk_rgb_to_hsv(r, g, b, &h, &s, &v);
+				gtk_hsv_to_rgb(hue, s, v, &r, &g, &b);
 
 				pixel[0] =
 					static_cast<guint8>(r * 255.0 + 0.5);
