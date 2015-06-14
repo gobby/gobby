@@ -22,6 +22,7 @@
 #include "core/preferences.hpp"
 
 #include <gtkmm/tooltip.h>
+#include <gtkmm/cssprovider.h>
 
 #include <gtksourceview/gtksource.h>
 
@@ -127,6 +128,7 @@ protected:
 
 	std::string m_info_storage_key;
 	Preferences& m_preferences;
+	Glib::RefPtr<Gtk::CssProvider> m_font_provider;
 
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;

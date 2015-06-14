@@ -283,10 +283,6 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 		m_buffer, m_preferences.view.bracket_highlight);
 	gtk_source_view_set_draw_spaces(
 		m_view, m_preferences.view.whitespace_display);
-	const Pango::FontDescription& desc = m_preferences.appearance.font;
-	gtk_widget_modify_font(
-		GTK_WIDGET(m_view),
-		const_cast<PangoFontDescription*>(desc.gobj()));
 
 	gtk_widget_show(GTK_WIDGET(m_view));
 	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
@@ -304,6 +300,9 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 	);
 
 	attach_next_to(*scroll, m_info_frame, Gtk::POS_BOTTOM, 1, 1);
+
+	// Set initial font
+	on_font_changed();
 }
 
 Gobby::TextSessionView::~TextSessionView()
@@ -566,9 +565,21 @@ void Gobby::TextSessionView::on_whitespace_display_changed()
 void Gobby::TextSessionView::on_font_changed()
 {
 	const Pango::FontDescription& desc = m_preferences.appearance.font;
-	gtk_widget_modify_font(
-		GTK_WIDGET(m_view),
-		const_cast<PangoFontDescription*>(desc.gobj()));
+
+	if(!m_font_provider)
+	{
+		m_font_provider = Gtk::CssProvider::create();
+		get_style_context()->add_provider(
+			m_font_provider,
+			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	}
+
+	const Glib::ustring font_style =
+		"* {\n"
+		"  font: " + desc.to_string() + ";\n"
+		"}";
+
+	m_font_provider->load_from_data(font_style);
 }
 
 void Gobby::TextSessionView::on_scheme_changed()
