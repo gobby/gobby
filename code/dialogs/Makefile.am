@@ -1,31 +1,23 @@
-noinst_LIBRARIES = libgobby-dialogs.a
+gobby_0_5_SOURCES += \
+	code/dialogs/connection-dialog.cpp \
+	code/dialogs/connection-info-dialog.cpp \
+	code/dialogs/document-location-dialog.cpp \
+	code/dialogs/entry-dialog.cpp \
+	code/dialogs/find-dialog.cpp \
+	code/dialogs/goto-dialog.cpp \
+	code/dialogs/initial-dialog.cpp \
+	code/dialogs/open-location-dialog.cpp \
+	code/dialogs/password-dialog.cpp \
+	code/dialogs/preferences-dialog.cpp
 
-libgobby_dialogs_a_SOURCES = \
-	connection-dialog.cpp \
-	connection-info-dialog.cpp \
-	document-location-dialog.cpp \
-	entry-dialog.cpp \
-	find-dialog.cpp \
-	goto-dialog.cpp \
-	initial-dialog.cpp \
-	open-location-dialog.cpp \
-	password-dialog.cpp \
-	preferences-dialog.cpp
-
-noinst_HEADERS = \
-	connection-dialog.hpp \
-	connection-info-dialog.hpp \
-        document-location-dialog.hpp \
-        entry-dialog.hpp \
-        find-dialog.hpp \
-        goto-dialog.hpp \
-        initial-dialog.hpp \
-	open-location-dialog.hpp \
-	password-dialog.hpp \
-        preferences-dialog.hpp
-
-appicondir = $(datadir)/pixmaps
-pixmapdir = $(datadir)/pixmaps/gobby-0.5
-
-AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
-              -I$(top_srcdir)/code
+noinst_HEADERS += \
+	code/dialogs/connection-dialog.hpp \
+	code/dialogs/connection-info-dialog.hpp \
+	code/dialogs/document-location-dialog.hpp \
+	code/dialogs/entry-dialog.hpp \
+	code/dialogs/find-dialog.hpp \
+	code/dialogs/goto-dialog.hpp \
+	code/dialogs/initial-dialog.hpp \
+	code/dialogs/open-location-dialog.hpp \
+	code/dialogs/password-dialog.hpp \
+	code/dialogs/preferences-dialog.hpp

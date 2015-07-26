@@ -1,8 +1,8 @@
 if WIN32
-gobby.res: gobby.rc
-	$(WINDRES) -i gobby.rc --input-format=rc -o gobby.res -O coff
+win32/gobby.res: win32/gobby.rc
+	$(WINDRES) -i win32/gobby.rc --input-format=rc -o win32/gobby.res -O coff
 
-BUILT_SOURCES = gobby.res
+BUILT_SOURCES += win32/gobby.res
 endif
 
-EXTRA_DIST = gobby.ico gobby.rc
+EXTRA_DIST += win32/gobby.ico win32/gobby.rc

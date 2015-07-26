@@ -1,25 +1,20 @@
-noinst_LIBRARIES = libgobby-util.a
+gobby_0_5_SOURCES += \
+	code/util/asyncoperation.cpp \
+	code/util/closebutton.cpp \
+	code/util/config.cpp \
+	code/util/file.cpp \
+	code/util/historyentry.cpp \
+	code/util/i18n.cpp \
+	code/util/serialize.cpp \
+	code/util/uri.cpp
 
-libgobby_util_a_SOURCES = \
-	asyncoperation.cpp \
-	closebutton.cpp \
-	config.cpp \
-	file.cpp \
-	historyentry.cpp \
-	i18n.cpp \
-	serialize.cpp \
-	uri.cpp
-
-noinst_HEADERS = \
-	asyncoperation.hpp \
-	closebutton.hpp \
-	config.hpp \
-	defaultaccumulator.hpp \
-	file.hpp \
-	historyentry.hpp \
-	i18n.hpp \
-	serialize.hpp \
-	uri.hpp
-
-AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
-              -I$(top_srcdir)/code
+noinst_HEADERS += \
+	code/util/asyncoperation.hpp \
+	code/util/closebutton.hpp \
+	code/util/config.hpp \
+	code/util/defaultaccumulator.hpp \
+	code/util/file.hpp \
+	code/util/historyentry.hpp \
+	code/util/i18n.hpp \
+	code/util/serialize.hpp \
+	code/util/uri.hpp

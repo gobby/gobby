@@ -1,39 +1,31 @@
-SUBDIRS = file-tasks
+include code/commands/file-tasks/Makefile.am
 
-noinst_LIBRARIES = libgobby-commands.a
+gobby_0_5_SOURCES += \
+	code/commands/application-commands.cpp \
+	code/commands/auth-commands.cpp \
+	code/commands/autosave-commands.cpp \
+	code/commands/browser-commands.cpp \
+	code/commands/browser-context-commands.cpp \
+	code/commands/edit-commands.cpp \
+	code/commands/file-commands.cpp \
+	code/commands/folder-commands.cpp \
+	code/commands/help-commands.cpp \
+	code/commands/subscription-commands.cpp \
+	code/commands/synchronization-commands.cpp \
+	code/commands/user-join-commands.cpp \
+	code/commands/view-commands.cpp
 
-libgobby_commands_a_SOURCES = \
-	application-commands.cpp \
-	auth-commands.cpp \
-	autosave-commands.cpp \
-	browser-commands.cpp \
-	browser-context-commands.cpp \
-	edit-commands.cpp \
-	file-commands.cpp \
-	folder-commands.cpp \
-	help-commands.cpp \
-	subscription-commands.cpp \
-	synchronization-commands.cpp \
-	user-join-commands.cpp \
-	view-commands.cpp
-
-noinst_HEADERS = \
-	application-commands.hpp \
-	auth-commands.hpp \
-	autosave-commands.hpp \
-        browser-commands.hpp \
-        browser-context-commands.hpp \
-        edit-commands.hpp \
-        file-commands.hpp \
-        folder-commands.hpp \
-        help-commands.hpp \
-	subscription-commands.hpp \
-	synchronization-commands.hpp \
-	user-join-commands.hpp \
-        view-commands.hpp
-
-appicondir = $(datadir)/pixmaps
-pixmapdir = $(datadir)/pixmaps/gobby-0.5
-
-AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
-              -I$(top_srcdir)/code
+noinst_HEADERS += \
+	code/commands/application-commands.hpp \
+	code/commands/auth-commands.hpp \
+	code/commands/autosave-commands.hpp \
+	code/commands/browser-commands.hpp \
+	code/commands/browser-context-commands.hpp \
+	code/commands/edit-commands.hpp \
+	code/commands/file-commands.hpp \
+	code/commands/folder-commands.hpp \
+	code/commands/help-commands.hpp \
+	code/commands/subscription-commands.hpp \
+	code/commands/synchronization-commands.hpp \
+	code/commands/user-join-commands.hpp \
+	code/commands/view-commands.hpp

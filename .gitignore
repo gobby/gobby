@@ -25,3 +25,4 @@ gnome-doc-utils.make
 gobby-0.5.desktop
 *.gschema.xml
 *.gschema.valid
+.dirstamp

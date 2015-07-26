@@ -1,4 +1,4 @@
-SUBDIRS = m4 win32 code . icons po
+SUBDIRS = m4 . icons po
 
 if HAVE_GNOME_DOC_UTILS
 SUBDIRS += help
@@ -11,15 +11,19 @@ dist_man_MANS = gobby-0.5.1
 
 bin_PROGRAMS = gobby-0.5
 
+noinst_HEADERS =
+gobby_0_5_SOURCES =
+BUILT_SOURCES =
+
+EXTRA_DIST =
+CLEANFILES =
+DISTCLEANFILES =
+MAINTAINERCLEANFILES =
+
+include code/Makefile.am
+include win32/Makefile.am
+
 gobby_0_5_LDADD = \
-	code/libgobby.a \
-	code/commands/libgobby-commands.a \
-	code/commands/file-tasks/libgobby-file-tasks.a \
-	code/operations/libgobby-operations.a \
-	code/dialogs/libgobby-dialogs.a \
-	code/core/libgobby-core.a \
-	code/core/gobject/libgobby-core-gobject.a \
-	code/util/libgobby-util.a \
 	$(gobby_LIBS) \
 	$(infinote_LIBS) \
 	$(LIBS)
@@ -32,7 +36,14 @@ gobby_0_5_LDFLAGS = \
 	win32/gobby.res
 endif
 
-gobby_0_5_SOURCES = 
+# PRIVATE_ICONS_DIR is required by application.cpp to get access to the
+# private icons that are installed into prefix/share/gobby-0.5/icons instead
+# of prefix/share/icons. We also set PUBLIC_ICONS_DIR explicitely so that
+# we find the application icon if it is installed in a non-standard prefix.
+AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
+              -I$(top_srcdir)/code \
+              -DPRIVATE_ICONS_DIR=\""$(datadir)/gobby-0.5/icons"\" \
+              -DPUBLIC_ICONS_DIR=\""$(datadir)/icons"\"
 
 # .desktop file
 if !WIN32
@@ -46,10 +57,10 @@ endif
 
 gsettings_SCHEMAS = de.0x539.gobby.gschema.xml
 
-EXTRA_DIST = de.0x539.gobby.gschema.xml.in
-CLEANFILES = de.0x539.gobby.gschema.xml
-DISTCLEANFILES = de.0x539.gobby.gschema.xml
-MAINTAINERCLEANFILES = $(gsettings_SCHEMAS:.xml=.valid)
+EXTRA_DIST += de.0x539.gobby.gschema.xml.in
+CLEANFILES += de.0x539.gobby.gschema.xml
+DISTCLEANFILES += de.0x539.gobby.gschema.xml
+MAINTAINERCLEANFILES += $(gsettings_SCHEMAS:.xml=.valid)
 
 @GSETTINGS_RULES@
 
@@ -57,11 +68,6 @@ clean-local:
 	-rm -rf gobby-0.5.desktop
 
 @INTLTOOL_DESKTOP_RULE@
-
-# Dummy C++ source to cause C++ linking, otherwise some platforms don't link
-# correctly against libstdc++. See also #399. Note that this file does not
-# (need to) exist in the source tree.
-nodist_EXTRA_gobby_0_5_SOURCES = dummy.cpp
 
 EXTRA_DIST += README.md
 

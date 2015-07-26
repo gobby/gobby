@@ -1,27 +1,19 @@
-noinst_LIBRARIES = libgobby-operations.a
+gobby_0_5_SOURCES += \
+	code/operations/operations.cpp \
+	code/operations/operation-delete.cpp \
+	code/operations/operation-export-html.cpp \
+	code/operations/operation-new.cpp \
+	code/operations/operation-open.cpp \
+	code/operations/operation-open-multiple.cpp \
+	code/operations/operation-save.cpp \
+	code/operations/operation-subscribe-path.cpp
 
-libgobby_operations_a_SOURCES = \
-	operations.cpp \
-	operation-delete.cpp \
-	operation-export-html.cpp \
-	operation-new.cpp \
-	operation-open.cpp \
-	operation-open-multiple.cpp \
-	operation-save.cpp \
-	operation-subscribe-path.cpp
-
-noinst_HEADERS = \
-        operations.hpp \
-        operation-delete.hpp \
-	operation-export-html.hpp \
-        operation-new.hpp \
-        operation-open.hpp \
-	operation-open-multiple.hpp \
-        operation-save.hpp \
-	operation-subscribe-path.hpp
-
-appicondir = $(datadir)/pixmaps
-pixmapdir = $(datadir)/pixmaps/gobby-0.5
-
-AM_CPPFLAGS = $(gobby_CFLAGS) $(infinote_CFLAGS) \
-              -I$(top_srcdir)/code
+noinst_HEADERS += \
+	code/operations/operations.hpp \
+	code/operations/operation-delete.hpp \
+	code/operations/operation-export-html.hpp \
+	code/operations/operation-new.hpp \
+	code/operations/operation-open.hpp \
+	code/operations/operation-open-multiple.hpp \
+	code/operations/operation-save.hpp \
+	code/operations/operation-subscribe-path.hpp

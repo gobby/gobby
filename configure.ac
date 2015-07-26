@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT([gobby], [0.6.0], [crew@0x539.de])
-AM_INIT_AUTOMAKE(1.9 check-news foreign)
+AM_INIT_AUTOMAKE(1.9 check-news foreign subdir-objects)
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
 AC_CONFIG_SRCDIR([code/window.hpp])
 AC_CONFIG_HEADER([code/features.hpp])
@@ -97,15 +97,6 @@ AC_OUTPUT([
     m4/Makefile
     po/Makefile.in
 
-    code/Makefile
-      code/util/Makefile
-      code/core/Makefile
-        code/core/gobject/Makefile
-      code/dialogs/Makefile
-      code/operations/Makefile
-      code/commands/Makefile
-        code/commands/file-tasks/Makefile
-
     icons/Makefile
       icons/hicolor/Makefile
         icons/hicolor/48x48/Makefile
@@ -132,8 +123,6 @@ AC_OUTPUT([
           icons/HighContrastLargePrintInverse/scalable/actions/Makefile
 
     help/Makefile
-
-    win32/Makefile
 
     de.0x539.gobby.gschema.xml
 ])
