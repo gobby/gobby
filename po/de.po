@@ -871,7 +871,7 @@ msgstr "Intelligentes Pos1/Ende"
 
 #: ../code/dialogs/preferences-dialog.cpp:432
 msgid "Enable _automatic saving of documents"
-msgstr "Dokumente _automatische speichern"
+msgstr "Dokumente _automatisch speichern"
 
 #: ../code/dialogs/preferences-dialog.cpp:434
 msgid "Autosave interval in _minutes:"
