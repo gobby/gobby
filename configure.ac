@@ -22,6 +22,9 @@ AC_PROG_RANLIB
 AM_PROG_CC_C_O
 AC_CACHE_SAVE
 
+# Recent versions of glib/gtkmm need c++11 support
+AX_CXX_COMPILE_STDCXX_11
+
 ###################################
 # Check for Win32
 ###################################
