@@ -1,14 +1,14 @@
 language: cpp
+sudo: required
+dist: trusty
 compiler:
   - gcc
   - clang
 before_install:
  - which $CC
  - export CC=`which $CC`
- - sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 40976EAF437D05B5
- - sudo add-apt-repository "deb mirror://mirrors.ubuntu.com/mirrors.txt trusty main restricted universe multiverse" -y
  - sudo apt-get update -qq
- - sudo apt-get install -t trusty -qq gtk-doc-tools libgnutls-dev libgsasl7-dev libxml2-dev libglib2.0-dev libgtk-3-dev libavahi-client-dev libdaemon-dev libpam-dev gobject-introspection libexpat1-dev zlib1g-dev
+ - sudo apt-get install -qq gtk-doc-tools libgnutls-dev libgsasl7-dev libxml2-dev libglib2.0-dev libgtk-3-dev libavahi-client-dev libdaemon-dev libpam-dev gobject-introspection libexpat1-dev zlib1g-dev
  - wget https://github.com/gobby/libinfinity/archive/master.tar.gz -O /tmp/infinote-master.tar.gz
  - tar -xzf /tmp/infinote-master.tar.gz
  - cd libinfinity-master && ./autogen.sh --with-gtk3 --with-infgtk --with-inftextgtk --with-avahi --with-libdaemon --disable-gtk-doc && make -j3 && sudo -E make install
