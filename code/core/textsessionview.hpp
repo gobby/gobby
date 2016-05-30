@@ -132,7 +132,7 @@ protected:
 
 	GtkSourceView* m_view;
 	GtkSourceBuffer* m_buffer;
-	std::auto_ptr<TextUndoGrouping> m_undo_grouping;
+	std::unique_ptr<TextUndoGrouping> m_undo_grouping;
 	InfTextGtkView* m_infview;
 	InfTextGtkViewport* m_infviewport;
 

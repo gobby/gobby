@@ -76,7 +76,7 @@ protected:
 	NodeWatch m_parent;
 
 	int m_encoding_auto_detect_index;
-	std::auto_ptr<Glib::IConv> m_iconv;
+	std::unique_ptr<Glib::IConv> m_iconv;
 	std::string m_encoding;
 	DocumentInfoStorage::EolStyle m_eol_style;
 
@@ -87,7 +87,7 @@ protected:
 	};
 
 	Glib::RefPtr<Gio::InputStream> m_stream;
-	std::auto_ptr<buffer> m_buffer;
+	std::unique_ptr<buffer> m_buffer;
 	sigc::connection m_idle_connection;
 
 	InfRequest* m_request;

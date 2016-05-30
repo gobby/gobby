@@ -39,7 +39,7 @@ Gobby::DocumentLocationDialog::DocumentLocationDialog(
 	set_default_response(Gtk::RESPONSE_ACCEPT);
 }
 
-std::auto_ptr<Gobby::DocumentLocationDialog>
+std::unique_ptr<Gobby::DocumentLocationDialog>
 Gobby::DocumentLocationDialog::create(Gtk::Window& parent,
                                       InfGtkBrowserModel* model)
 {
@@ -49,7 +49,7 @@ Gobby::DocumentLocationDialog::create(Gtk::Window& parent,
 
 	DocumentLocationDialog* dialog_ptr = NULL;
 	builder->get_widget_derived("DocumentLocationDialog", dialog_ptr);
-	std::auto_ptr<DocumentLocationDialog> dialog(dialog_ptr);
+	std::unique_ptr<DocumentLocationDialog> dialog(dialog_ptr);
 
 	dialog->set_transient_for(parent);
 

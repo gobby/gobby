@@ -102,7 +102,7 @@ private:
 	}
 
 	BrowserCommands& m_commands;
-	std::auto_ptr<UserJoin> m_userjoin;
+	std::unique_ptr<UserJoin> m_userjoin;
 
 	InfBrowser* m_browser;
 	gulong m_notify_status_handler;
@@ -222,9 +222,10 @@ Gobby::BrowserCommands::BrowserInfo::set_pending_chat(InfSessionProxy* proxy)
 	// the folder manager so that we can correctly show the document when
 	// enough users are available. Otherwise if no party would join a user
 	// before other users show up, the chat would never be shown.
-	std::auto_ptr<UserJoin::ParameterProvider> provider(
+	std::unique_ptr<UserJoin::ParameterProvider> provider(
 		new ParameterProvider(m_commands.m_preferences));
-	m_userjoin.reset(new UserJoin(m_browser, NULL, proxy, provider));
+	m_userjoin.reset(new UserJoin(m_browser, NULL, proxy,
+	                              std::move(provider)));
 
 	check_pending_chat();
 }
@@ -471,7 +472,7 @@ void Gobby::BrowserCommands::subscribe_chat(InfBrowser* browser)
 {
 	if(INFC_IS_BROWSER(browser))
 	{
-		std::auto_ptr<RequestInfo> info(new RequestInfo(
+		std::unique_ptr<RequestInfo> info(new RequestInfo(
 			*this, INF_BROWSER(browser), NULL, m_status_bar));
 
 		InfRequest* request = INF_REQUEST(
@@ -586,7 +587,7 @@ void Gobby::BrowserCommands::on_activate(InfBrowser* browser,
 		// If there is already a request don't re-request
 		if(request == NULL)
 		{
-			std::auto_ptr<RequestInfo> info(new RequestInfo(
+			std::unique_ptr<RequestInfo> info(new RequestInfo(
 				*this, browser, iter, m_status_bar));
 
 			request = INF_REQUEST(

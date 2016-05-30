@@ -155,7 +155,7 @@ class Gobby::UserJoinCommands::UserJoinInfo
 {
 public:
 	UserJoinInfo(UserJoinCommands& commands,
-	             std::auto_ptr<UserJoin> userjoin,
+	             std::unique_ptr<UserJoin> userjoin,
 	             Folder& folder,
 	             SessionView& view);
 
@@ -163,16 +163,17 @@ private:
 	void on_user_join_finished(InfUser* user, const GError* error);
 
 	UserJoinCommands& m_commands;
-	std::auto_ptr<UserJoin> m_userjoin;
+	std::unique_ptr<UserJoin> m_userjoin;
 	Folder& m_folder;
 	SessionView& m_view;
 };
 
 Gobby::UserJoinCommands::UserJoinInfo::UserJoinInfo(UserJoinCommands& cmds,
-                                                    std::auto_ptr<UserJoin> j,
+                                                    std::unique_ptr<UserJoin> j,
                                                     Folder& folder,
                                                     SessionView& view):
-	m_commands(cmds), m_userjoin(j), m_folder(folder), m_view(view)
+	m_commands(cmds), m_userjoin(std::move(j)),
+	m_folder(folder), m_view(view)
 {
 	// Only if userjoin is still running:
 	g_assert(m_userjoin->get_user() == NULL);
@@ -224,25 +225,27 @@ void Gobby::UserJoinCommands::on_document_added(InfBrowser* browser,
 
 	g_assert(m_user_join_map.find(proxy) == m_user_join_map.end());
 
-	std::auto_ptr<UserJoin> userjoin;
+	std::unique_ptr<UserJoin> userjoin;
 	if(j && j->get())
 	{
 		// If there is a user already joined for this session,
 		// then simply use that user instead of joining another one.
-		userjoin = *j;
+		userjoin = std::move(*j);
 	}
 	else
 	{
 		// Otherwise join a new user.
-		std::auto_ptr<UserJoin::ParameterProvider> provider(
+		std::unique_ptr<UserJoin::ParameterProvider> provider(
 			new ParameterProvider(view, folder, m_preferences));
-		userjoin.reset(new UserJoin(browser, iter, proxy, provider));
+		userjoin.reset(new UserJoin(browser, iter, proxy,
+		                            std::move(provider)));
 	}
 
 	if(userjoin->get_user() == NULL && userjoin->get_error() == NULL)
 	{
 		m_user_join_map[proxy] =
-			new UserJoinInfo(*this, userjoin, folder, view);
+			new UserJoinInfo(*this, std::move(userjoin),
+			                 folder, view);
 	}
 	else
 	{

@@ -75,7 +75,7 @@ protected:
 	InfdDirectory* m_directory;
 	Server m_server;
 
-	std::auto_ptr<DHParamsGeneratorHandle> m_dh_params_handle;
+	std::unique_ptr<DHParamsGeneratorHandle> m_dh_params_handle;
 };
 
 }

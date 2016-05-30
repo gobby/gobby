@@ -61,7 +61,7 @@ protected:
 
 private:
   class Loader;
-  std::auto_ptr<Loader> m_loader;
+  std::unique_ptr<Loader> m_loader;
 };
 
 class HistoryEntry: public Gtk::Entry

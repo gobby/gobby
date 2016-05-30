@@ -41,10 +41,10 @@ protected:
 	void handle_error(const std::string& message);
 
 	class Data;
-	std::auto_ptr<Data> m_data;
+	std::unique_ptr<Data> m_data;
 
 	Application();
-	std::auto_ptr<Gtk::Window> m_window;
+	std::unique_ptr<Gtk::Window> m_window;
 	Gobby::Window* m_gobby_window;
 };
 

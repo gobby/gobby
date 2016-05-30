@@ -33,7 +33,7 @@ private:
 	                   const Glib::RefPtr<Gtk::Builder>& builder);
 
 public:
-	static std::auto_ptr<OpenLocationDialog> create(Gtk::Window& parent);
+	static std::unique_ptr<OpenLocationDialog> create(Gtk::Window& parent);
 
 	Glib::ustring get_uri() const;
 	void set_uri(const Glib::ustring& uri);

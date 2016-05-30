@@ -104,7 +104,7 @@ private:
 	                  CertificateManager& cert_manager);
 
 public:
-	static std::auto_ptr<PreferencesDialog> create(
+	static std::unique_ptr<PreferencesDialog> create(
 		Gtk::Window& parent, FileChooser& file_chooser,
 		Preferences& preferences, CertificateManager& cert_manager);
 
@@ -296,7 +296,7 @@ public:
 		Gtk::CheckButton* m_btn_local_keep_documents;
 		Gtk::Grid* m_grid_local_documents_directory;
 		Gtk::FileChooserButton* m_btn_local_documents_directory;
-		std::auto_ptr<PathConnection>
+		std::unique_ptr<PathConnection>
 			m_conn_local_documents_directory;
 	};
 
@@ -374,7 +374,7 @@ public:
 
 		PreferencesComboBox<Gtk::ToolbarStyle>* m_cmb_toolbar_style;
 		Gtk::FontButton* m_btn_font;
-		std::auto_ptr<FontConnection> m_conn_font;
+		std::unique_ptr<FontConnection> m_conn_font;
 
 		SchemeColumns m_scheme_columns;
 		Glib::RefPtr<Gtk::ListStore> m_scheme_list;
@@ -419,7 +419,7 @@ public:
 
 		Gtk::CheckButton* m_btn_use_system_trust;
 		Gtk::FileChooserButton* m_btn_path_trust_file;
-		std::auto_ptr<PathConnection> m_conn_path_trust_file;
+		std::unique_ptr<PathConnection> m_conn_path_trust_file;
 		Gtk::Label* m_error_trust_file;
 
 		PreferencesComboBox<InfXmppConnectionSecurityPolicy>*
@@ -430,19 +430,19 @@ public:
 		Gtk::Grid* m_grid_auth_cert;
 
 		Gtk::FileChooserButton* m_btn_key_file;
-		std::auto_ptr<PathConnection> m_conn_path_key_file;
+		std::unique_ptr<PathConnection> m_conn_path_key_file;
 		Gtk::Button* m_btn_key_file_create;
 		Gtk::Label* m_error_key_file;
 
 		Gtk::FileChooserButton* m_btn_cert_file;
-		std::auto_ptr<PathConnection> m_conn_path_cert_file;
+		std::unique_ptr<PathConnection> m_conn_path_cert_file;
 		Gtk::Button* m_btn_cert_file_create;
 		Gtk::Label* m_error_cert_file;
 
-		std::auto_ptr<KeyGeneratorHandle> m_key_generator_handle;
-		std::auto_ptr<CertificateGeneratorHandle>
+		std::unique_ptr<KeyGeneratorHandle> m_key_generator_handle;
+		std::unique_ptr<CertificateGeneratorHandle>
 			m_cert_generator_handle;
-		std::auto_ptr<FileChooser::Dialog> m_file_dialog;
+		std::unique_ptr<FileChooser::Dialog> m_file_dialog;
 	};
 
 protected:

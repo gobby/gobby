@@ -56,8 +56,8 @@ Gobby::AsyncOperation::~AsyncOperation()
 		m_handle->m_operation = NULL;
 }
 
-std::auto_ptr<Gobby::AsyncOperation::Handle> 
-Gobby::AsyncOperation::start(std::auto_ptr<AsyncOperation> operation)
+std::unique_ptr<Gobby::AsyncOperation::Handle> 
+Gobby::AsyncOperation::start(std::unique_ptr<AsyncOperation> operation)
 {
 	assert(operation->m_thread == NULL);
 	assert(operation->m_handle == NULL);
@@ -65,7 +65,7 @@ Gobby::AsyncOperation::start(std::auto_ptr<AsyncOperation> operation)
 
 	AsyncOperation* op = operation.release();
 
-	std::auto_ptr<Handle> handle(new Handle(*op));
+	std::unique_ptr<Handle> handle(new Handle(*op));
 	op->m_handle = handle.get();
 
 	op->m_thread = Glib::Thread::create(

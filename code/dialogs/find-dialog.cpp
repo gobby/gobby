@@ -64,7 +64,7 @@ Gobby::FindDialog::FindDialog(GtkDialog* cobject,
 	set_default_response(RESPONSE_FIND);
 }
 
-std::auto_ptr<Gobby::FindDialog>
+std::unique_ptr<Gobby::FindDialog>
 Gobby::FindDialog::create(Gtk::Window& parent, const Folder& folder,
                           StatusBar& status_bar)
 {
@@ -74,7 +74,7 @@ Gobby::FindDialog::create(Gtk::Window& parent, const Folder& folder,
 
 	FindDialog* dialog_ptr;
 	builder->get_widget_derived("FindDialog", dialog_ptr);
-	std::auto_ptr<FindDialog> dialog(dialog_ptr);
+	std::unique_ptr<FindDialog> dialog(dialog_ptr);
 
 	dialog->set_transient_for(parent);
 	dialog->m_folder = &folder;

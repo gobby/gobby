@@ -37,7 +37,7 @@ private:
 public:
 	~GotoDialog();
 
-	static std::auto_ptr<GotoDialog> create(Gtk::Window& parent,
+	static std::unique_ptr<GotoDialog> create(Gtk::Window& parent,
 	                                        const Folder& folder);
 
 protected:

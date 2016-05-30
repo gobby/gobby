@@ -125,10 +125,10 @@ protected:
 	// Note: Order is important to get deinitialization right: Task may
 	// access the location dialog in its destructor, so make sure the task
 	// is freed before the location dialog.
-	std::auto_ptr<DocumentLocationDialog> m_location_dialog;
-	std::auto_ptr<Task> m_task;
+	std::unique_ptr<DocumentLocationDialog> m_location_dialog;
+	std::unique_ptr<Task> m_task;
 
-	std::auto_ptr<ConnectionDialog> m_connection_dialog;
+	std::unique_ptr<ConnectionDialog> m_connection_dialog;
 
 	gulong m_row_inserted_handler;
 	gulong m_row_deleted_handler;

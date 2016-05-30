@@ -34,8 +34,8 @@ public:
 private:
 	void on_response(int response_id);
 
-	std::auto_ptr<OpenLocationDialog> m_location_dialog;
-	std::auto_ptr<TaskOpen> m_open_task;
+	std::unique_ptr<OpenLocationDialog> m_location_dialog;
+	std::unique_ptr<TaskOpen> m_open_task;
 };
 
 } // namespace Gobby

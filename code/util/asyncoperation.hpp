@@ -42,8 +42,8 @@ public:
 	AsyncOperation();
 	virtual ~AsyncOperation();
 
-	static std::auto_ptr<Handle>
-	start(std::auto_ptr<AsyncOperation> operation);
+	static std::unique_ptr<Handle>
+	start(std::unique_ptr<AsyncOperation> operation);
 
 protected:
 	virtual void run() = 0;

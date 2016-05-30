@@ -39,7 +39,7 @@ class ConnectionInfoDialog: public Gtk::Dialog
 public:
 	~ConnectionInfoDialog();
 
-	static std::auto_ptr<ConnectionInfoDialog> create(
+	static std::unique_ptr<ConnectionInfoDialog> create(
 		Gtk::Window& parent, InfBrowser* browser);
 
 	void set_browser(InfBrowser* browser);

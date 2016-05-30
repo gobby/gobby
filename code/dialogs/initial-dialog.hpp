@@ -40,7 +40,7 @@ private:
 	              const Glib::RefPtr<Gtk::Builder>& builder);
 
 public:
-	static std::auto_ptr<InitialDialog>
+	static std::unique_ptr<InitialDialog>
 	create(Gtk::Window& parent, StatusBar& status_bar,
 	       Preferences& preferences, CertificateManager& cert_manager);
 

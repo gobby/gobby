@@ -38,7 +38,7 @@ private:
 
 	std::list<TextSessionView*> m_views;
 	std::list<TextSessionView*>::iterator m_current;
-	std::auto_ptr<TaskSave> m_task;
+	std::unique_ptr<TaskSave> m_task;
 };
 
 } // namespace Gobby

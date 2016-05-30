@@ -46,9 +46,9 @@ namespace
 
 Gobby::UserJoin::UserJoin(InfBrowser* browser, const InfBrowserIter* iter,
                           InfSessionProxy* proxy,
-                          std::auto_ptr<ParameterProvider> param_provider):
+                          std::unique_ptr<ParameterProvider> param_provider):
 	m_node(browser, iter), m_proxy(proxy),
-	m_param_provider(param_provider),
+	m_param_provider(std::move(param_provider)),
 	m_synchronization_complete_handler(0), m_request(NULL),
 	m_retry_index(1), m_user(NULL), m_error(NULL)
 {

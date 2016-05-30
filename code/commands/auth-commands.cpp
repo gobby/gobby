@@ -184,7 +184,7 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 				Glib::ustring remote_id_(remote_id);
 				g_free(remote_id);
 
-				std::auto_ptr<PasswordDialog> dialog =
+				std::unique_ptr<PasswordDialog> dialog =
 					PasswordDialog::create(
 						m_parent, remote_id_,
 						info.retries);

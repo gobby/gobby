@@ -253,7 +253,7 @@ void Gobby::Application::on_open(const type_vec_files& files,
 
 void Gobby::Application::handle_error(const std::string& message)
 {
-	std::auto_ptr<Gtk::MessageDialog> dialog(
+	std::unique_ptr<Gtk::MessageDialog> dialog(
 		new Gtk::MessageDialog(
 			"Failed to startup Gobby", false,
 			Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, false));
@@ -262,7 +262,7 @@ void Gobby::Application::handle_error(const std::string& message)
 
 	dialog->set_title("Gobby");
 	dialog->set_secondary_text(message);
-	m_window = dialog;
+	m_window = std::move(dialog);
 	add_window(*m_window);
 
 	m_window->show();

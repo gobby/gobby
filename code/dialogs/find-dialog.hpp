@@ -41,7 +41,7 @@ public:
 	typedef sigc::signal<void> SignalFindTextChanged;
 	typedef sigc::signal<void> SignalReplaceTextChanged;
 
-	static std::auto_ptr<FindDialog> create(Gtk::Window& parent,
+	static std::unique_ptr<FindDialog> create(Gtk::Window& parent,
 	                                        const Folder& folder,
 	                                        StatusBar& status_bar);
 

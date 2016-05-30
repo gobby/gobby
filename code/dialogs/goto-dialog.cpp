@@ -37,7 +37,7 @@ Gobby::GotoDialog::~GotoDialog()
 	on_document_changed(NULL);
 }
 
-std::auto_ptr<Gobby::GotoDialog>
+std::unique_ptr<Gobby::GotoDialog>
 Gobby::GotoDialog::create(Gtk::Window& parent, const Folder& folder)
 {
 	Glib::RefPtr<Gtk::Builder> builder =
@@ -46,7 +46,7 @@ Gobby::GotoDialog::create(Gtk::Window& parent, const Folder& folder)
 
 	GotoDialog* dialog_ptr;
 	builder->get_widget_derived("GotoDialog", dialog_ptr);
-	std::auto_ptr<GotoDialog> dialog(dialog_ptr);
+	std::unique_ptr<GotoDialog> dialog(dialog_ptr);
 
 	dialog->set_transient_for(parent);
 	dialog->m_folder = &folder;

@@ -32,7 +32,7 @@ private:
 	               unsigned int retry_counter);
 
 public:
-	static std::auto_ptr<PasswordDialog> create(
+	static std::unique_ptr<PasswordDialog> create(
 		Gtk::Window& parent, const Glib::ustring& remote_id,
 		unsigned int retry_counter);
 

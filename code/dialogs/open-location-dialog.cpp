@@ -33,7 +33,7 @@ Gobby::OpenLocationDialog::OpenLocationDialog(
 		sigc::mem_fun(*this, &OpenLocationDialog::on_entry_changed));
 }
 
-std::auto_ptr<Gobby::OpenLocationDialog>
+std::unique_ptr<Gobby::OpenLocationDialog>
 Gobby::OpenLocationDialog::create(Gtk::Window& parent)
 {
 	Glib::RefPtr<Gtk::Builder> builder =
@@ -43,7 +43,7 @@ Gobby::OpenLocationDialog::create(Gtk::Window& parent)
 	OpenLocationDialog* dialog;
 	builder->get_widget_derived("OpenLocationDialog", dialog);
 	dialog->set_transient_for(parent);
-	return std::auto_ptr<OpenLocationDialog>(dialog);
+	return std::unique_ptr<OpenLocationDialog>(dialog);
 }
 
 Glib::ustring Gobby::OpenLocationDialog::get_uri() const

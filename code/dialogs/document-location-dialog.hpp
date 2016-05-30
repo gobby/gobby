@@ -36,7 +36,7 @@ private:
 	DocumentLocationDialog(GtkDialog* cobject,
 	                       const Glib::RefPtr<Gtk::Builder>& builder);
 public:
-	static std::auto_ptr<DocumentLocationDialog> create(
+	static std::unique_ptr<DocumentLocationDialog> create(
 		Gtk::Window& parent,
 		InfGtkBrowserModel* model);
 

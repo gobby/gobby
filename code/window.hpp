@@ -167,7 +167,7 @@ protected:
 	TitleBar m_title_bar;
 
 	// Dialogs
-	std::auto_ptr<InitialDialog> m_initial_dlg;
+	std::unique_ptr<InitialDialog> m_initial_dlg;
 };
 
 }

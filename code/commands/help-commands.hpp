@@ -42,7 +42,7 @@ protected:
 
 	Gtk::Application& m_application;
 
-	std::auto_ptr<Gtk::AboutDialog> m_about_dialog;
+	std::unique_ptr<Gtk::AboutDialog> m_about_dialog;
 };
 
 }

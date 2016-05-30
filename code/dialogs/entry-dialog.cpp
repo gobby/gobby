@@ -24,7 +24,7 @@ Gobby::EntryDialog::EntryDialog(GtkDialog* cobject,
 	builder->get_widget("entry", m_entry);
 }
 
-std::auto_ptr<Gobby::EntryDialog>
+std::unique_ptr<Gobby::EntryDialog>
 Gobby::EntryDialog::create(Gtk::Window& parent,
                            const Glib::ustring& title,
                            const Glib::ustring& intro_text)
@@ -40,7 +40,7 @@ Gobby::EntryDialog::create(Gtk::Window& parent,
 	dialog->set_title(title);
 	dialog->m_intro_label->set_text_with_mnemonic(intro_text);
 
-	return std::auto_ptr<EntryDialog>(dialog);
+	return std::unique_ptr<EntryDialog>(dialog);
 }
 
 Glib::ustring Gobby::EntryDialog::get_text() const

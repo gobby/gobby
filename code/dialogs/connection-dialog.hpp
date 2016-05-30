@@ -33,7 +33,7 @@ private:
 	                 const Glib::RefPtr<Gtk::Builder>& builder);
 
 public:
-	static std::auto_ptr<ConnectionDialog> create(Gtk::Window& parent);
+	static std::unique_ptr<ConnectionDialog> create(Gtk::Window& parent);
 
 	Glib::ustring get_host_name() const;
 

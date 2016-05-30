@@ -107,8 +107,8 @@ protected:
 	const Folder& m_folder;
 	StatusBar& m_status_bar;
 
-	std::auto_ptr<FindDialog> m_find_dialog;
-	std::auto_ptr<GotoDialog> m_goto_dialog;
+	std::unique_ptr<FindDialog> m_find_dialog;
+	std::unique_ptr<GotoDialog> m_goto_dialog;
 
 	TextSessionView* m_current_view;
 

@@ -319,7 +319,7 @@ public:
 
 protected:
 	Glib::ustring m_filename;
-	std::auto_ptr<ParentEntry> m_root;
+	std::unique_ptr<ParentEntry> m_root;
 };
 
 template<typename DataType>

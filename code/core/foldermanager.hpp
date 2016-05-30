@@ -34,7 +34,7 @@ namespace Gobby
 class FolderManager: public sigc::trackable
 {
 public:
-	typedef std::auto_ptr<UserJoin>* UserJoinRef;
+	typedef std::unique_ptr<UserJoin>* UserJoinRef;
 
 	typedef sigc::signal<void, InfBrowser*, const InfBrowserIter*,
 	                     InfSessionProxy*, Folder&, SessionView&,

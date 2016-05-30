@@ -49,7 +49,7 @@ protected:
 	Preferences& m_preferences;
 	CertificateManager& m_cert_manager;
 
-	std::auto_ptr<PreferencesDialog> m_preferences_dialog;
+	std::unique_ptr<PreferencesDialog> m_preferences_dialog;
 };
 
 }

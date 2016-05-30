@@ -34,7 +34,7 @@ private:
 	            const Glib::RefPtr<Gtk::Builder>& builder);
 
 public:
-	static std::auto_ptr<EntryDialog> create(
+	static std::unique_ptr<EntryDialog> create(
 		Gtk::Window& parent, const Glib::ustring& title,
 		const Glib::ustring& intro_text);
 

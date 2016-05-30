@@ -43,7 +43,7 @@ Gobby::PasswordDialog::PasswordDialog(
 	}
 }
 
-std::auto_ptr<Gobby::PasswordDialog>
+std::unique_ptr<Gobby::PasswordDialog>
 Gobby::PasswordDialog::create(Gtk::Window& parent,
                               const Glib::ustring& remote_id,
                               unsigned int retry_counter)
@@ -52,7 +52,7 @@ Gobby::PasswordDialog::create(Gtk::Window& parent,
 		Gtk::Builder::create_from_resource(
 			"/de/0x539/gobby/ui/password-dialog.ui");
 
-	std::auto_ptr<PasswordDialog> dialog(
+	std::unique_ptr<PasswordDialog> dialog(
 		new PasswordDialog(builder, remote_id, retry_counter));
 	dialog->set_transient_for(parent);
 	return dialog;

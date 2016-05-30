@@ -41,16 +41,16 @@ typedef sigc::slot<
 	const DHParamsGeneratorHandle*, gnutls_dh_params_t, const GError*
 > SlotDHParamsGeneratorDone;
 
-std::auto_ptr<KeyGeneratorHandle>
+std::unique_ptr<KeyGeneratorHandle>
 create_key(gnutls_pk_algorithm_t algo,
            unsigned int bits,
            const SlotKeyGeneratorDone& done_slot);
 
-std::auto_ptr<CertificateGeneratorHandle>
+std::unique_ptr<CertificateGeneratorHandle>
 create_self_signed_certificate(gnutls_x509_privkey_t key,
                                const SlotCertificateGeneratorDone& done_slot);
 
-std::auto_ptr<DHParamsGeneratorHandle>
+std::unique_ptr<DHParamsGeneratorHandle>
 create_dh_params(unsigned int bits,
                  const SlotDHParamsGeneratorDone& done_slot);
 

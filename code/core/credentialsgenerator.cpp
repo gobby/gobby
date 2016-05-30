@@ -176,17 +176,17 @@ namespace
 	};
 }
 
-std::auto_ptr<Gobby::KeyGeneratorHandle>
+std::unique_ptr<Gobby::KeyGeneratorHandle>
 Gobby::create_key(gnutls_pk_algorithm_t algo,
                   unsigned int bits,
                   const SlotKeyGeneratorDone& done_slot)
 {
-	std::auto_ptr<AsyncOperation> operation(
+	std::unique_ptr<AsyncOperation> operation(
 		new Keygen(algo, bits, done_slot));
-	return AsyncOperation::start(operation);
+	return AsyncOperation::start(std::move(operation));
 }
 
-std::auto_ptr<Gobby::CertificateGeneratorHandle>
+std::unique_ptr<Gobby::CertificateGeneratorHandle>
 Gobby::create_self_signed_certificate(
 	gnutls_x509_privkey_t key,
 	const SlotCertificateGeneratorDone& done_slot)
@@ -197,14 +197,14 @@ Gobby::create_self_signed_certificate(
 	// TODO: We should make a copy of the key, so that the caller can
 	// delete theirs.
 
-	std::auto_ptr<AsyncOperation> operation(new Certgen(key, done_slot));
-	return AsyncOperation::start(operation);
+	std::unique_ptr<AsyncOperation> operation(new Certgen(key, done_slot));
+	return AsyncOperation::start(std::move(operation));
 }
 
-std::auto_ptr<Gobby::DHParamsGeneratorHandle>
+std::unique_ptr<Gobby::DHParamsGeneratorHandle>
 Gobby::create_dh_params(unsigned int bits,
                         const SlotDHParamsGeneratorDone& done_slot)
 {
-	std::auto_ptr<AsyncOperation> operation(new DHgen(bits, done_slot));
-	return AsyncOperation::start(operation);
+	std::unique_ptr<AsyncOperation> operation(new DHgen(bits, done_slot));
+	return AsyncOperation::start(std::move(operation));
 }

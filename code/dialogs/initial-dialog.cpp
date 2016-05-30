@@ -176,8 +176,8 @@ namespace
 		const std::string m_cert_filename;
 
 		gnutls_x509_privkey_t m_key;
-		std::auto_ptr<Gobby::KeyGeneratorHandle> m_key_handle;
-		std::auto_ptr<Gobby::CertificateGeneratorHandle> m_crt_handle;
+		std::unique_ptr<Gobby::KeyGeneratorHandle> m_key_handle;
+		std::unique_ptr<Gobby::CertificateGeneratorHandle> m_crt_handle;
 		Gobby::StatusBar::MessageHandle m_status_handle;
 	};
 }
@@ -226,7 +226,7 @@ Gobby::InitialDialog::InitialDialog(
 	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 }
 
-std::auto_ptr<Gobby::InitialDialog>
+std::unique_ptr<Gobby::InitialDialog>
 Gobby::InitialDialog::create(Gtk::Window& parent,
                              StatusBar& status_bar,
                              Preferences& preferences,
@@ -238,7 +238,7 @@ Gobby::InitialDialog::create(Gtk::Window& parent,
 
 	InitialDialog* dialog_ptr;
 	builder->get_widget_derived("InitialDialog", dialog_ptr);
-	std::auto_ptr<InitialDialog> dialog(dialog_ptr);
+	std::unique_ptr<InitialDialog> dialog(dialog_ptr);
 
 	dialog->set_transient_for(parent);
 

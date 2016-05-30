@@ -310,7 +310,7 @@ void Gobby::BrowserContextCommands::on_create_account(
 		inf_gtk_account_creation_dialog_new(
 			m_parent.gobj(), static_cast<GtkDialogFlags>(0),
 			m_io, browser);
-	std::auto_ptr<Gtk::Dialog> account_creation_dialog(
+	std::unique_ptr<Gtk::Dialog> account_creation_dialog(
 		Glib::wrap(GTK_DIALOG(dlg)));
 
 	account_creation_dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
@@ -323,7 +323,7 @@ void Gobby::BrowserContextCommands::on_create_account(
 		G_OBJECT(account_creation_dialog->gobj()), "account-created",
 		G_CALLBACK(on_account_created_static), this);
 
-	m_dialog = account_creation_dialog;
+	m_dialog = std::move(account_creation_dialog);
 	m_dialog->present();
 }
 
@@ -337,7 +337,7 @@ void Gobby::BrowserContextCommands::on_new(const Glib::VariantBase& param,
 	m_dialog_watch->signal_node_removed().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_dialog_node_removed));
 
-	std::auto_ptr<EntryDialog> entry_dialog(
+	std::unique_ptr<EntryDialog> entry_dialog(
 		EntryDialog::create(
 			m_parent,
 			directory ? _("Choose a name for the directory")
@@ -355,7 +355,7 @@ void Gobby::BrowserContextCommands::on_new(const Glib::VariantBase& param,
 			&BrowserContextCommands::on_new_response),
 		browser, iter, directory));
 
-	m_dialog = entry_dialog;
+	m_dialog = std::move(entry_dialog);
 	m_dialog->present();
 }
 
@@ -368,7 +368,7 @@ void Gobby::BrowserContextCommands::on_open(const Glib::VariantBase& param)
 	m_dialog_watch->signal_node_removed().connect(sigc::mem_fun(
 		*this, &BrowserContextCommands::on_dialog_node_removed));
 
-	std::auto_ptr<FileChooser::Dialog> file_dialog(
+	std::unique_ptr<FileChooser::Dialog> file_dialog(
 		new FileChooser::Dialog(
 			m_file_chooser, m_parent,
 			_("Choose a text file to open"),
@@ -380,7 +380,7 @@ void Gobby::BrowserContextCommands::on_open(const Glib::VariantBase& param)
 
 	file_dialog->set_select_multiple(true);
 
-	m_dialog = file_dialog;
+	m_dialog = std::move(file_dialog);
 	m_dialog->present();
 }
 
@@ -397,7 +397,7 @@ void Gobby::BrowserContextCommands::on_permissions(
 	InfGtkPermissionsDialog* dlg = inf_gtk_permissions_dialog_new(
 		m_parent.gobj(), static_cast<GtkDialogFlags>(0),
 		browser, &iter);
-	std::auto_ptr<Gtk::Dialog> permissions_dialog(
+	std::unique_ptr<Gtk::Dialog> permissions_dialog(
 		Glib::wrap(GTK_DIALOG(dlg)));
 
 	permissions_dialog->add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
@@ -406,7 +406,7 @@ void Gobby::BrowserContextCommands::on_permissions(
 		sigc::mem_fun(*this,
 			&BrowserContextCommands::on_permissions_response));
 
-	m_dialog = permissions_dialog;
+	m_dialog = std::move(permissions_dialog);
 	m_dialog->present();
 }
 
@@ -484,7 +484,7 @@ void Gobby::BrowserContextCommands::on_account_created(
 	const unsigned int n_certs =
 		inf_certificate_chain_get_n_certificates(certificate);
 
-	std::auto_ptr<Gtk::MessageDialog> dlg;
+	std::unique_ptr<Gtk::MessageDialog> dlg;
 
 	try
 	{
@@ -545,7 +545,7 @@ void Gobby::BrowserContextCommands::on_account_created(
 			  "account: %1"), ex.what()));
 	}
 
-	m_dialog = dlg;
+	m_dialog = std::move(dlg);
 	m_dialog->signal_response().connect(
 		sigc::mem_fun(
 			*this,

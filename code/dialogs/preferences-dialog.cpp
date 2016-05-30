@@ -816,7 +816,7 @@ Gobby::PreferencesDialog::PreferencesDialog(
 	add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
 }
 
-std::auto_ptr<Gobby::PreferencesDialog>
+std::unique_ptr<Gobby::PreferencesDialog>
 Gobby::PreferencesDialog::create(Gtk::Window& parent,
                                  FileChooser& file_chooser,
                                  Preferences& preferences,
@@ -826,7 +826,7 @@ Gobby::PreferencesDialog::create(Gtk::Window& parent,
 		Gtk::Builder::create_from_resource(
 			"/de/0x539/gobby/ui/preferences-dialog.ui");
 
-	std::auto_ptr<PreferencesDialog> dialog(
+	std::unique_ptr<PreferencesDialog> dialog(
 		new PreferencesDialog(builder, file_chooser,
 		                      preferences, cert_manager));
 

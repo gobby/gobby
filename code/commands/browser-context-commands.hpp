@@ -106,12 +106,12 @@ protected:
 
 	// Popup menu
 	Gtk::Menu* m_popup_menu;
-	std::auto_ptr<NodeWatch> m_popup_watch;
+	std::unique_ptr<NodeWatch> m_popup_watch;
 	gulong m_populate_popup_handler;
 
 	// Dialog
-	std::auto_ptr<Gtk::Dialog> m_dialog;
-	std::auto_ptr<NodeWatch> m_dialog_watch;
+	std::unique_ptr<Gtk::Dialog> m_dialog;
+	std::unique_ptr<NodeWatch> m_dialog_watch;
 
 	// Allowed Actions (TODO: move them to browsercontextactions.cpp)
 	const Glib::RefPtr<Gio::SimpleActionGroup> m_action_group;

@@ -72,7 +72,7 @@ Gobby::ConnectionInfoDialog::~ConnectionInfoDialog()
 	set_browser(NULL);
 }
 
-std::auto_ptr<Gobby::ConnectionInfoDialog>
+std::unique_ptr<Gobby::ConnectionInfoDialog>
 Gobby::ConnectionInfoDialog::create(Gtk::Window& parent, InfBrowser* browser)
 {
 	// Make sure the GType for InfGtkConnectionView is registered,
@@ -89,7 +89,7 @@ Gobby::ConnectionInfoDialog::create(Gtk::Window& parent, InfBrowser* browser)
 
 	ConnectionInfoDialog* dialog_ptr;
 	builder->get_widget_derived("ConnectionInfoDialog", dialog_ptr);
-	std::auto_ptr<ConnectionInfoDialog> dialog(dialog_ptr);
+	std::unique_ptr<ConnectionInfoDialog> dialog(dialog_ptr);
 	dialog->set_transient_for(parent);
 	dialog->set_browser(browser);
 	return dialog;

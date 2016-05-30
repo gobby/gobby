@@ -28,7 +28,7 @@ Gobby::ConnectionDialog::ConnectionDialog(
 	builder->get_widget("entry", m_entry);
 }
 
-std::auto_ptr<Gobby::ConnectionDialog>
+std::unique_ptr<Gobby::ConnectionDialog>
 Gobby::ConnectionDialog::create(Gtk::Window& parent)
 {
 	Glib::RefPtr<Gtk::Builder> builder =
@@ -38,7 +38,7 @@ Gobby::ConnectionDialog::create(Gtk::Window& parent)
 	ConnectionDialog* dialog;
 	builder->get_widget_derived("ConnectionDialog", dialog);
 	dialog->set_transient_for(parent);
-	return std::auto_ptr<ConnectionDialog>(dialog);
+	return std::unique_ptr<ConnectionDialog>(dialog);
 }
 
 Glib::ustring Gobby::ConnectionDialog::get_host_name() const

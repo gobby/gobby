@@ -35,8 +35,8 @@ private:
 	void on_file_response(int response_id);
 
 	FileChooser::Dialog m_file_dialog;
-	std::auto_ptr<TaskOpen> m_open_task;
-	std::auto_ptr<TaskOpenMultiple> m_open_taskm;
+	std::unique_ptr<TaskOpen> m_open_task;
+	std::unique_ptr<TaskOpenMultiple> m_open_taskm;
 };
 
 } // namespace Gobby

@@ -80,7 +80,7 @@ protected:
 	Preferences& m_preferences;
 
 	TextSessionView* m_current_view;
-	std::auto_ptr<Fullscreen> m_fullscreen;
+	std::unique_ptr<Fullscreen> m_fullscreen;
 
 	sigc::connection m_menu_language_changed_connection;
 	sigc::connection m_document_language_changed_connection;

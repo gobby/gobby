@@ -52,7 +52,7 @@ public:
 
 	UserJoin(InfBrowser* browser, const InfBrowserIter* iter,
 	         InfSessionProxy* proxy,
-	         std::auto_ptr<ParameterProvider> param_provider);
+	         std::unique_ptr<ParameterProvider> param_provider);
 	~UserJoin();
 
 	InfSessionProxy* get_proxy() const { return m_proxy; }
@@ -92,7 +92,7 @@ private:
 
 	NodeWatch m_node;
 	InfSessionProxy* m_proxy;
-	std::auto_ptr<ParameterProvider> m_param_provider;
+	std::unique_ptr<ParameterProvider> m_param_provider;
 	gulong m_synchronization_complete_handler;
 
 	InfRequest* m_request;

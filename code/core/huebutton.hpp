@@ -49,7 +49,7 @@ protected:
 	void on_parent_hide();
 	void on_dialog_response(int response_id);
 
-	std::auto_ptr<Gtk::Dialog> m_dialog;
+	std::unique_ptr<Gtk::Dialog> m_dialog;
 	GtkWidget* m_hue_chooser;
 
 	double m_saturation;
