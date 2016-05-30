@@ -54,18 +54,10 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
 
-#ifdef WITH_UNIQUE
-# include <unique/unique.h>
-#endif
-
 #include <memory>
 
 namespace Gobby
 {
-
-#ifdef WITH_UNIQUE
-const int UNIQUE_GOBBY_CONNECT = 1;
-#endif
 
 class Window : public Gtk::ApplicationWindow
 {
