@@ -15,7 +15,7 @@
  */
 
 #ifndef _GOBBY_TEXTSESSIONUSERVIEW_HPP_
-#define _GOBBY_TEXTSESSIENUSERVIEW_HPP_
+#define _GOBBY_TEXTSESSIONUSERVIEW_HPP_
 
 #include "core/sessionuserview.hpp"
 #include "core/textsessionview.hpp"
