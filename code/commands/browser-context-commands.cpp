@@ -22,6 +22,7 @@
 
 #include <gtkmm/builder.h>
 #include <giomm/file.h>
+#include <giomm/menu.h>
 #include <glibmm/fileutils.h>
 
 #include <libinfgtk/inf-gtk-permissions-dialog.h>
