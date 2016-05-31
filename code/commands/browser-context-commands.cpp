@@ -173,12 +173,6 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 	g_object_get(G_OBJECT(browser), "status", &status, NULL);
 	const bool has_iter = m_browser.get_selected_iter(browser, &iter);
 
-	// Watch the node, and close the popup menu when the node
-	// it refers to is removed.
-	m_popup_watch.reset(new NodeWatch(browser, has_iter ? &iter : NULL));
-	m_popup_watch->signal_node_removed().connect(sigc::mem_fun(
-		*this, &BrowserContextCommands::on_menu_node_removed));
-
 	// TODO: At the moment, action handlers access the browser item using
 	// the m_popup_watch variable. We should change it such that
 	// the selected item is passed as an action parameter, as two
@@ -204,6 +198,11 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 		if(browser_status == INF_BROWSER_CLOSED)
 		{
 			menu->bind_model(menu_model, true);
+		}
+		else
+		{
+			// No popup menu
+			return;
 		}
 	}
 	else
@@ -233,6 +232,12 @@ void Gobby::BrowserContextCommands::on_populate_popup(Gtk::Menu* menu)
 
 		menu->bind_model(menu_model, true);
 	}
+
+	// Watch the node, and close the popup menu when the node
+	// it refers to is removed.
+	m_popup_watch.reset(new NodeWatch(browser, has_iter ? &iter : NULL));
+	m_popup_watch->signal_node_removed().connect(sigc::mem_fun(
+		*this, &BrowserContextCommands::on_menu_node_removed));
 
 	m_popup_menu = menu;
 	menu->signal_selection_done().connect(
