@@ -228,7 +228,7 @@
               <object class="GtkGrid" id="remote-connections-grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_start">12</property>
+                <property name="margin_left">12</property>
                 <property name="orientation">vertical</property>
                 <property name="row_spacing">6</property>
                 <child>
@@ -249,7 +249,7 @@
                   <object class="GtkGrid" id="password-grid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="label6">
@@ -305,7 +305,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">create-self-signed</property>
@@ -321,7 +321,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">It may take a few seconds for the certificate to be generated.</property>
                     <attributes>
@@ -339,7 +339,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
@@ -356,7 +356,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Use an existing private key and certificate. The files must be in PEM format.</property>
                     <property name="wrap">True</property>
@@ -373,7 +373,7 @@
                   <object class="GtkGrid" id="certificate-grid">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">24</property>
+                    <property name="margin_left">24</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>

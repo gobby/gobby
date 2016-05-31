@@ -112,7 +112,11 @@ Gobby::StatusBar::StatusBar(const Folder& folder,
 
 	m_lbl_position.set_halign(Gtk::ALIGN_END);
 	m_lbl_position.set_hexpand(true);
-	m_lbl_position.set_margin_end(6);
+#if GTK_CHECK_VERSION(3,12,0)
+	gtk_widget_set_margin_end(GTK_WIDGET(m_lbl_position.gobj()), 6);
+#else
+	gtk_widget_set_margin_right(GTK_WIDGET(m_lbl_position.gobj()), 6);
+#endif
 	m_lbl_position.show();
 	attach(m_lbl_position, 0, 0, 1, 1);
 
@@ -161,8 +165,13 @@ Gobby::StatusBar::add_message(Gobby::StatusBar::MessageType type,
 
 	Gtk::Grid* grid = Gtk::manage(new Gtk::Grid());
 	grid->set_column_spacing(6);
-	grid->set_margin_start(2);
-	grid->set_margin_end(2);
+#if GTK_CHECK_VERSION(3,12,0)
+	gtk_widget_set_margin_start(GTK_WIDGET(grid->gobj()), 2);
+	gtk_widget_set_margin_end(GTK_WIDGET(grid->gobj()), 2);
+#else
+	gtk_widget_set_margin_left(GTK_WIDGET(grid->gobj()), 2);
+	gtk_widget_set_margin_right(GTK_WIDGET(grid->gobj()), 2);
+#endif
 
 	Gtk::Image* image = Gtk::manage(new Gtk::Image);
 	image->set_from_icon_name(message_type_to_icon_name(type),

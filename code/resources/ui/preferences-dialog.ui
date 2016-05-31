@@ -44,7 +44,7 @@
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
@@ -164,7 +164,7 @@
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="orientation">vertical</property>
                     <property name="row_spacing">6</property>
                     <child>
@@ -252,7 +252,7 @@
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="remote-allow-edit">
@@ -273,7 +273,7 @@
                       <object class="GtkGrid" id="grid-local-connections">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_start">12</property>
+                        <property name="margin_left">12</property>
                         <property name="orientation">vertical</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
@@ -321,7 +321,7 @@
                           <object class="GtkGrid" id="grid-password">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_start">12</property>
+                            <property name="margin_left">12</property>
                             <property name="column_spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="label12">
@@ -380,7 +380,7 @@
                       <object class="GtkGrid" id="grid-local-documents-directory">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_start">12</property>
+                        <property name="margin_left">12</property>
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label10">
@@ -456,7 +456,7 @@
                   <object class="GtkGrid" id="grid9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
@@ -527,7 +527,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -559,7 +559,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="tooltip_text" translatable="yes">With this option enabled, pressing home or end at the beginning or end of a line, respectively, moves the cursor to the first or last non-whitespace character in that line.</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -588,7 +588,7 @@
                   <object class="GtkGrid" id="grid10">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="orientation">vertical</property>
                     <property name="row_spacing">6</property>
                     <child>
@@ -610,7 +610,7 @@
                       <object class="GtkGrid" id="grid-autosave-interval">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_start">12</property>
+                        <property name="margin_left">12</property>
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label18">
@@ -691,7 +691,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -707,7 +707,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">24</property>
+                    <property name="margin_left">24</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -738,7 +738,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -769,7 +769,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -798,7 +798,7 @@
                   <object class="GtkGrid" id="grid13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="orientation">vertical</property>
                     <property name="row_spacing">6</property>
                     <child>
@@ -820,7 +820,7 @@
                       <object class="GtkGrid" id="grid-margin-position">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_start">12</property>
+                        <property name="margin_left">12</property>
                         <property name="column_spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="label23">
@@ -880,7 +880,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -909,7 +909,7 @@
                   <object class="GtkComboBox" id="display-whitespace">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -959,7 +959,7 @@
                   <object class="GtkComboBox" id="toolbar-style">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -987,7 +987,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                     <property name="font">Sans 12</property>
                     <property name="preview_text"/>
@@ -1016,7 +1016,7 @@
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="color-scheme-treeview">
@@ -1078,7 +1078,7 @@
                   <object class="GtkGrid" id="grid17">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
                     <child>
@@ -1162,7 +1162,7 @@
                   <object class="GtkComboBox" id="secure-connection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
@@ -1189,7 +1189,7 @@
                   <object class="GtkGrid" id="grid18">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_start">12</property>
+                    <property name="margin_left">12</property>
                     <property name="orientation">vertical</property>
                     <property name="row_spacing">6</property>
                     <child>
@@ -1227,7 +1227,7 @@
                       <object class="GtkGrid" id="grid-auth-certificate">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_start">12</property>
+                        <property name="margin_left">12</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">12</property>
                         <child>
