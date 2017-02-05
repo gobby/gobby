@@ -564,12 +564,24 @@ void Gobby::TextSessionView::on_font_changed()
 			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	}
 
-	const Glib::ustring font_style =
+	const Glib::ustring font_style = Glib::ustring::compose(
 		"* {\n"
-		"  font: " + desc.to_string() + ";\n"
-		"}";
+		"  font-size: %1pt;\n" 
+		"  font-family: \"%2\";\n"
+		"  font-weight: %3;\n"
+		"}",
+		desc.get_size() / PANGO_SCALE,
+		desc.get_family(),
+		desc.get_weight());
 
-	m_font_provider->load_from_data(font_style);
+	try
+	{
+		m_font_provider->load_from_data(font_style);
+	}
+	catch (const Glib::Error& ex)
+	{
+		g_warning("Failed to apply font settings: %s", ex.what().c_str());
+	}
 }
 
 void Gobby::TextSessionView::on_scheme_changed()
