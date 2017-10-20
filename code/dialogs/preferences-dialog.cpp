@@ -22,8 +22,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <stdexcept>
 
-#include <gtksourceview/gtksourcestyleschememanager.h>
-#include <gtksourceview/gtksourcestylescheme.h>
+#include <gtksourceview/gtksource.h>
 
 #include <gnutls/x509.h>
 

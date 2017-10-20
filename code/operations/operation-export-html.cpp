@@ -23,7 +23,7 @@
 #include "util/i18n.hpp"
 
 #include <gtkmm/textbuffer.h>
-#include <gtksourceview/gtksourcebuffer.h>
+#include <gtksourceview/gtksource.h>
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 

@@ -20,7 +20,7 @@
 #include <giomm/menumodel.h>
 #include <giomm/menu.h>
 
-#include <gtksourceview/gtksourcelanguagemanager.h>
+#include <gtksourceview/gtksource.h>
 
 namespace Gobby
 {
