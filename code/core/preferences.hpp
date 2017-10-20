@@ -664,8 +664,8 @@ public:
 		Option<InfXmppConnectionSecurityPolicy> policy;
 
 		Option<bool> authentication_enabled;
-		Option<std::string> key_file;
 		Option<std::string> certificate_file;
+		Option<std::string> key_file;
 	};
 
 	class Network

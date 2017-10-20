@@ -223,7 +223,6 @@ void Gobby::UserJoin::attempt_user_join()
 		g_value_take_string(&name_index->value, new_name);
 	}
 
-	GError* error = NULL;
 	InfRequest* request = inf_session_proxy_join_user(
 		m_proxy, params.size(), &params[0],
 		on_user_join_finished_static, this);

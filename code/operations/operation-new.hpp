@@ -53,11 +53,11 @@ protected:
 	                         const GError* error);
 
 protected:
+	InfRequest* m_request;
 	InfBrowser* m_browser;
 	const InfBrowserIter m_parent;
 	Glib::ustring m_name;
 	bool m_directory;
-	InfRequest* m_request;
 
 	StatusBar::MessageHandle m_message_handle;
 };
