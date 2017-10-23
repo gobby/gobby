@@ -22,7 +22,7 @@
 #include <glibmm/main.h>
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
-#include <gtksourceview/gtksourcebuffer.h>
+#include <gtksourceview/gtksource.h>
 
 #include <cerrno>
 #include <cstring> // memmove. Is there some C++ replacement for this?

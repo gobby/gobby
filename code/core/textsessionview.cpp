@@ -24,9 +24,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textiter.h>
 
-#include <gtksourceview/gtksourcebuffer.h>
-#include <gtksourceview/gtksourcelanguage.h>
-#include <gtksourceview/gtksourcelanguagemanager.h>
+#include <gtksourceview/gtksource.h>
 
 #include <libinftextgtk/inf-text-gtk-buffer.h>
 

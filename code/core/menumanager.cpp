@@ -18,7 +18,7 @@
 
 #include <gtkmm/builder.h>
 
-#include <gtksourceview/gtksourcelanguage.h>
+#include <gtksourceview/gtksource.h>
 
 namespace
 {

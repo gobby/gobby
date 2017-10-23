@@ -25,7 +25,7 @@
 #include <gtkmm/notebook.h>
 #include <sigc++/signal.h>
 
-#include <gtksourceview/gtksourcelanguagemanager.h>
+#include <gtksourceview/gtksource.h>
 
 namespace Gobby
 {

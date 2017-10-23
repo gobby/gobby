@@ -25,8 +25,7 @@
 #include <gtkmm/toolbar.h>
 #include <giomm/settings.h>
 
-#include <gtksourceview/gtksourceview.h>
-#include <gtksourceview/gtksourcestyleschememanager.h>
+#include <gtksourceview/gtksource.h>
 
 #include <libinfinity/common/inf-xmpp-connection.h>
 #include <libinfinity/common/inf-keepalive.h>

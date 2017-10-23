@@ -28,7 +28,7 @@
 #include <libinfinity/common/inf-session.h>
 #include <libinfinity/common/inf-io.h>
 
-#include <gtksourceview/gtksourcebuffer.h>
+#include <gtksourceview/gtksource.h>
 
 namespace
 {
