@@ -43,7 +43,7 @@ nicely into the GNOME desktop environment if you want it to.
 
 ## More information
 
-The development of Gobby is coordinated on github at <http://github.com/gobby>.
+The development of Gobby is coordinated on github at <https://github.com/gobby>.
 The primary distribution point is <http://releases.0x539.de/>.
 
 ### How to report bugs
@@ -71,12 +71,12 @@ of contact to other Gobby users and to the developers.
   releases of Gobby and its foundation, libinfinity. To subscribe,
   please send an email with the topic "subscribe" to
   <obby-announce-subscribe@list.0x539.de>. A list archive is
-  available at <http://www.mail-archive.com/obby-announce@list.0x539.de>.
+  available at <https://www.mail-archive.com/obby-announce@list.0x539.de>.
 - *obby-users*: Discussions about Gobby's usage and
   installation problems. The announcements are also posted
   there. To subscribe, please send an email with the topic
   "subscribe" to <obby-users-subscribe@list.0x539.de>. A list
-  archive is available at <http://www.mail-archive.com/obby-users@list.0x539.de>.
+  archive is available at <https://www.mail-archive.com/obby-users@list.0x539.de>.
 
 ## Licensing
 
