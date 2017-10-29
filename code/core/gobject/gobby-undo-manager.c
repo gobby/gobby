@@ -178,12 +178,6 @@ gobby_undo_manager_dispose(GObject* object)
 static void
 gobby_undo_manager_finalize(GObject* object)
 {
-  GobbyUndoManager* undo_manager;
-  GobbyUndoManagerPrivate* priv;
-
-  undo_manager = GOBBY_UNDO_MANAGER(object);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
-
   G_OBJECT_CLASS(gobby_undo_manager_parent_class)->finalize(object);
 }
 

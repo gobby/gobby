@@ -328,7 +328,7 @@ namespace
 				"style-set",       &style_set,
 				NULL);
 
-			unsigned int bg_rgb, fg_rgb;
+			unsigned int bg_rgb = 0, fg_rgb = 0;
 			if(fg_set) fg_rgb = rgba_to_rgb24(fg);
 			if(bg_set) bg_rgb = rgba_to_rgb24(bg);
 

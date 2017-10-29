@@ -76,8 +76,8 @@ protected:
 	InfXmlConnection* m_connection;
 	InfBrowserIter m_iter;
 
-	gulong m_notify_status_handler;
 	gulong m_node_removed_handler;
+	gulong m_notify_status_handler;
 
 	SignalNodeRemoved m_signal_node_removed;
 };

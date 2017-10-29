@@ -27,26 +27,6 @@
 
 namespace
 {
-	Gtk::Widget* align_top(Gtk::Widget& widget)
-	{
-		Gtk::Alignment* alignment =
-			new Gtk::Alignment(Gtk::ALIGN_CENTER,
-			                   Gtk::ALIGN_START,
-			                   1.0, 0.0);
-		alignment->add(widget);
-		alignment->show();
-		return Gtk::manage(alignment);
-	}
-
-	Gtk::Widget* indent(Gtk::Widget& widget)
-	{
-		Gtk::Alignment* alignment = new Gtk::Alignment;
-		alignment->set_padding(0, 0, 12, 0);
-		alignment->add(widget);
-		alignment->show();
-		return Gtk::manage(alignment);
-	}
-
 	class InitialCertGenerator
 	{
 	public:
