@@ -20,112 +20,112 @@ msgstr ""
 #: ../code/commands/auth-commands.cpp:196
 #, fuzzy
 msgid "Password required"
-msgstr "Es requereix una contrasenya per a la sessió"
+msgstr "Cal una contrasenya per a la sessió"
 
 #: ../code/commands/auth-commands.cpp:214
 #, fuzzy
 msgid "Incorrect password"
-msgstr "Estableix una contrasenya…"
+msgstr "Contrasenya incorrecta"
 
 #: ../code/commands/browser-commands.cpp:288
 msgid "Subscribing to %1..."
-msgstr ""
+msgstr "Subscrivint a %1..."
 
 #: ../code/commands/browser-commands.cpp:301
 msgid "Subscribing to chat on %1..."
-msgstr ""
+msgstr "Subscrivint al Chat de %1..."
 
 #: ../code/commands/browser-commands.cpp:591
 msgid "Subscription failed"
-msgstr ""
+msgstr "Ha fallat la subscripció"
 
 #: ../code/commands/browser-context-commands.cpp:86
 msgid "Could not find a location where to store the certificate"
-msgstr ""
+msgstr "No s'ha trobat on desar el certificat"
 
 #: ../code/commands/browser-context-commands.cpp:153
 msgid "_Remove"
-msgstr ""
+msgstr "_Elimina"
 
 #: ../code/commands/browser-context-commands.cpp:188
 msgid "_Disconnect from Server"
-msgstr ""
+msgstr "_Desconnecta del servidor"
 
 #: ../code/commands/browser-context-commands.cpp:220
 #, fuzzy
 msgid "Create _Account..."
-msgstr "Crea un document…"
+msgstr "Cre_a un compte..."
 
 #: ../code/commands/browser-context-commands.cpp:245
 #, fuzzy
 msgid "Create Do_cument..."
-msgstr "Crea un document…"
+msgstr "Crea un do_cument..."
 
 #: ../code/commands/browser-context-commands.cpp:280
 #, fuzzy
 msgid "Create Di_rectory..."
-msgstr "Crea una sessió…"
+msgstr "Crea una ca_rpeta..."
 
 #: ../code/commands/browser-context-commands.cpp:293
 #, fuzzy
 msgid "_Open Document..."
-msgstr "Obre un document…"
+msgstr "_Obre un document..."
 
 #: ../code/commands/browser-context-commands.cpp:312
 #, fuzzy
 msgid "_Permissions..."
-msgstr "_Sessió"
+msgstr "_Permisos..."
 
 #: ../code/commands/browser-context-commands.cpp:324
 msgid "D_elete"
-msgstr ""
+msgstr "_Elimina"
 
 #: ../code/commands/browser-context-commands.cpp:405
 msgid "Choose a name for the directory"
-msgstr ""
+msgstr "Escriu un nom per la carpeta"
 
 #: ../code/commands/browser-context-commands.cpp:406
 #, fuzzy
 msgid "Choose a name for the document"
-msgstr "Tanca un document obert"
+msgstr "Escriu un nom pel document"
 
 #: ../code/commands/browser-context-commands.cpp:407
 msgid "_Directory Name:"
-msgstr ""
+msgstr "Nom _de la carpeta:"
 
 #: ../code/commands/browser-context-commands.cpp:408
 #, fuzzy
 msgid "_Document Name:"
-msgstr "Gestió de documents"
+msgstr "Nom del document:"
 
 #: ../code/commands/browser-context-commands.cpp:411
 msgid "C_reate"
-msgstr ""
+msgstr "C_rea"
 
 #: ../code/commands/browser-context-commands.cpp:415
 #, fuzzy
 msgid "New Directory"
-msgstr "Direcció"
+msgstr "Nova carpeta"
 
 #: ../code/commands/browser-context-commands.cpp:416
 #: ../code/commands/file-tasks/task-new.cpp:36
 #, fuzzy
 msgid "New Document"
-msgstr "Desa el document"
+msgstr "Nou document"
 
 #: ../code/commands/browser-context-commands.cpp:436
 #: ../code/commands/file-tasks/task-open-file.cpp:22
 msgid "Choose a text file to open"
-msgstr ""
+msgstr "Escolliu un fitxer de text a obrir"
 
 #: ../code/commands/browser-context-commands.cpp:558
 #: ../code/commands/browser-context-commands.cpp:569
 msgid "Account successfully created"
-msgstr ""
+msgstr "El compte ha quedat creat"
 
 #: ../code/commands/browser-context-commands.cpp:562
 msgid "When re-connecting to the server, the new account will be used."
-msgstr ""
+msgstr "En re-connectar al servidor, s'utilitzarà el nou compte."
 
 #: ../code/commands/browser-context-commands.cpp:573
 msgid ""
@@ -134,50 +134,54 @@ msgid ""
 "To login to this account, set the certificate in Gobby's preferences and re-"
 "connect to the server."
 msgstr ""
+"El certificat ha estat desat a %1.\n"
+"\n"
+"Per acreditar-vos per compte, establiu el certificat a les Preferències de"
+"Gobby i re-connecteu al servidor."
 
 #: ../code/commands/browser-context-commands.cpp:586
 msgid "Failed to create account"
-msgstr ""
+msgstr "La creació del compte ha fallat"
 
 #: ../code/commands/browser-context-commands.cpp:589
 msgid "Could not save the certificate for the account: %1"
-msgstr ""
+msgstr "No s'ha pogut desar el certificat pel compte: %1"
 
 #: ../code/commands/file-tasks/task-export-html.cpp:27
 msgid "Choose a location to export document \"%1\" to"
-msgstr ""
+msgstr "Escolliu on exportar el document \"%1\""
 
 #: ../code/commands/file-tasks/task-open.cpp:46
 msgid "Querying \"%1\"..."
-msgstr ""
+msgstr "Consultant \"%1\"..."
 
 #: ../code/commands/file-tasks/task-open.cpp:103
 #: ../code/operations/operation-open.cpp:474
 #: ../code/operations/operation-open-multiple.cpp:180
 #, fuzzy
 msgid "Failed to open document \"%1\""
-msgstr "Tanca un document obert"
+msgstr "Ha fallat l'obertura del document \"%1\""
 
 #: ../code/commands/file-tasks/task-save.cpp:24
 msgid "Choose a location to save document \"%1\" to"
-msgstr ""
+msgstr "Escolliu on desar el document \"%1\""
 
 #. Help browser could not be invoked, show an error message to the user.
 #: ../code/commands/help-commands.cpp:70
 msgid "There was an error displaying help."
-msgstr ""
+msgstr "Hi hagué un problema per mostrar l'ajuda"
 
 #: ../code/commands/help-commands.cpp:93
 msgid "Contributors:"
-msgstr ""
+msgstr "Qui ha contribuït:"
 
 #: ../code/commands/help-commands.cpp:99
 msgid "British English:"
-msgstr ""
+msgstr "Anglès britànic:"
 
 #: ../code/commands/help-commands.cpp:101
 msgid "German:"
-msgstr ""
+msgstr "Alemany:"
 
 #: ../code/commands/help-commands.cpp:118
 msgid ""
@@ -203,16 +207,22 @@ msgid ""
 "Please note also that it is possible that not all of your latest changes "
 "have reached the publisher before the connection was lost."
 msgstr ""
+"S'ha perdut la connexió al centre de servei d'aquest document. Els canvis"
+"nous que ara feu al document podrien no sincronitzar-se més amb els demés, "
+"per tant el document no es pot editar més.\n"
+"\n"
+"Si us plau tingueu clar que és possible que no tots els últims canvis "
+"hauran arribat al centre de servei abans que la connexió es perdés."
 
 #: ../code/commands/synchronization-commands.cpp:30
 msgid "Synchronization in progress... %1%%"
-msgstr ""
+msgstr "S'est sincronitzant... %1%%"
 
 #. Document cannot be used if an error happened
 #. during synchronization.
 #: ../code/commands/synchronization-commands.cpp:42
 msgid "This document cannot be used."
-msgstr ""
+msgstr "Aquest document no es pot utilitzar."
 
 #: ../code/commands/synchronization-commands.cpp:45
 #: ../code/commands/user-join-commands.cpp:43
@@ -225,10 +235,17 @@ msgid ""
 "reproduce the problem (if possible) so that we can fix the problem in a "
 "later version. Thank you."
 msgstr ""
+"Si teniu idea del què ha pogut causar el problema, aleshores podríeu provar "
+"a resoldre'l i intentar de nou (després d'haver tancat aquest document). "
+"D'altra manera sembla ben be una errada al programari. En aquest cas, si us "
+"plau enregistreu un informe d'errada a http://gobby.0x539.de/trac/newticket i "
+"faciliteu tanta informació com podeu, incloent qu és el qu fèieu quan el "
+"problema ha succeït i com reproduïr el problema (si és possible) per tal que "
+"podem corregir aquest problema en una propera versió. Gràcies."
 
 #: ../code/commands/synchronization-commands.cpp:59
 msgid "Synchronization failed: %1"
-msgstr ""
+msgstr "La sincronització ha fallat: %1"
 
 #. TODO: Adjust this for chat sessions
 #: ../code/commands/user-join-commands.cpp:38
@@ -236,46 +253,48 @@ msgid ""
 "You can still watch others editing the document, but you cannot edit it "
 "yourself."
 msgstr ""
+"Encara podeu observar els demés com editen el document, però no el podeu "
+"editar."
 
 #: ../code/commands/user-join-commands.cpp:57
 msgid "User Join failed: %1"
-msgstr ""
+msgstr "L'acreditació d'usuari ha fallat: %1"
 
 #: ../code/commands/user-join-commands.cpp:64
 msgid "Permissions are not granted to modify the document."
-msgstr ""
+msgstr "No s'han concedit permisos per modificar el document."
 
 #: ../code/core/browser.cpp:111
 #, fuzzy
 msgid "_Direct Connection"
-msgstr "Direcció"
+msgstr "Connexió _directa"
 
 #: ../code/core/browser.cpp:113
 #, fuzzy
 msgid "Host Name:"
-msgstr "Nom:"
+msgstr "Servidor:"
 
 #: ../code/core/certificatemanager.cpp:83
 #, c-format
 msgid "Failed to write Diffie-Hellman parameters to \"%s\": %s"
-msgstr ""
+msgstr "Ha fallat l'escriptura de paràmetres Diffie-Hellman a \"%s\": %s"
 
 #: ../code/core/certificatemanager.cpp:276
 #, c-format
 msgid "Failed to read Diffie-Hellman parameters: %s"
-msgstr ""
+msgstr "Ha fallat la lectura de paràmetres Diffie-Hellman: %s"
 
 #: ../code/core/certificatemanager.cpp:338
 msgid "File does not contain a X.509 certificate"
-msgstr ""
+msgstr "El fitxer no conté un certificat X.509"
 
 #: ../code/core/certificatemanager.cpp:414
 msgid "Certificate does not belong to the chosen key"
-msgstr ""
+msgstr "El certificat no es correspòn amb la clau escollida"
 
 #: ../code/core/foldermanager.cpp:322
 msgid "The document has been removed from the server."
-msgstr ""
+msgstr "El document ha estat eliminat del servidor"
 
 #: ../code/core/header.cpp:203
 #, fuzzy
@@ -285,37 +304,37 @@ msgstr "Cap"
 #: ../code/core/header.cpp:227
 #, fuzzy
 msgid "_File"
-msgstr "Fitxers"
+msgstr "_Fitxers"
 
 #: ../code/core/header.cpp:230
 msgid "_Open..."
-msgstr ""
+msgstr "_Obre..."
 
 #: ../code/core/header.cpp:233
 #, fuzzy
 msgid "Open _Location..."
-msgstr "Obre un document…"
+msgstr "Obre una ubicació..."
 
 #: ../code/core/header.cpp:237
 #, fuzzy
 msgid "Save _As..."
-msgstr "Desa la sessió…"
+msgstr "_Anomena i desa..."
 
 #: ../code/core/header.cpp:241 ../code/core/iconmanager.cpp:43
 msgid "Save All"
-msgstr ""
+msgstr "Desa-ho tot"
 
 #: ../code/core/header.cpp:241
 msgid "Save all open files locally"
-msgstr ""
+msgstr "Desa tots els fitxers oberts localment"
 
 #: ../code/core/header.cpp:243
 msgid "Export As _HTML..."
-msgstr ""
+msgstr "Exporta en format _HTML..."
 
 #: ../code/core/header.cpp:246
 msgid "Connect _to Server..."
-msgstr ""
+msgstr "Connec_ta a Servidor..."
 
 #: ../code/core/header.cpp:251
 msgid "_Edit"
@@ -324,53 +343,53 @@ msgstr "_Edita"
 #: ../code/core/header.cpp:259
 #, fuzzy
 msgid "_Find..."
-msgstr "Cerca…"
+msgstr "Cerca..."
 
 #: ../code/core/header.cpp:261
 #, fuzzy
 msgid "Find Ne_xt"
-msgstr "Cerca:"
+msgstr "Cerca següent"
 
 #: ../code/core/header.cpp:262
 msgid "Find next match of phrase searched for"
-msgstr ""
+msgstr "Troba la següent frase coincident amb la cerca"
 
 #: ../code/core/header.cpp:265
 msgid "Find Pre_vious"
-msgstr ""
+msgstr "Cerca enrere"
 
 #: ../code/core/header.cpp:266
 msgid "Find previous match of phrase searched for"
-msgstr ""
+msgstr "Troba l'anterior frase coincident amb la cerca"
 
 #: ../code/core/header.cpp:271
 #, fuzzy
 msgid "Find and Rep_lace..."
-msgstr "Cerca i reemplaça…"
+msgstr "Cerca i reemplaça..."
 
 #: ../code/core/header.cpp:275
 #, fuzzy
 msgid "Go to _Line..."
-msgstr "Vés a la línia…"
+msgstr "Vés a la _línia..."
 
 #: ../code/core/header.cpp:279
 #, fuzzy
 msgid "Pr_eferences..."
-msgstr "Preferències…"
+msgstr "Pr_eferències..."
 
 #: ../code/core/header.cpp:281
 #, fuzzy
 msgid "_View"
-msgstr "Visualitza"
+msgstr "_Visualitza"
 
 #: ../code/core/header.cpp:284
 msgid "Reset User Colors"
-msgstr ""
+msgstr "Reinicialitza colors d'usuari"
 
 #: ../code/core/header.cpp:285
 #, fuzzy
 msgid "Hide user colors in current document"
-msgstr "Cerca un text al document actual"
+msgstr "Amaga colors d'usuari al document actual"
 
 #: ../code/core/header.cpp:289
 msgid "Fullscreen"
@@ -378,70 +397,70 @@ msgstr ""
 
 #: ../code/core/header.cpp:290
 msgid "Show the editing window in fullscreen mode"
-msgstr ""
+msgstr "Mostra la finestra d'edició a pantalla completa"
 
 #: ../code/core/header.cpp:294
 msgid "Zoom In"
-msgstr ""
+msgstr "Apropa zoom"
 
 #: ../code/core/header.cpp:297
 msgid "Zoom Out"
-msgstr ""
+msgstr "Allunya zoom"
 
 #: ../code/core/header.cpp:300
 #, fuzzy
 msgid "View Toolbar"
-msgstr "Barra d'eines"
+msgstr "Mostra la barra d'eines"
 
 #: ../code/core/header.cpp:301
 msgid "Whether to show the toolbar"
-msgstr ""
+msgstr "Quan mostrar la barra d'eines"
 
 #: ../code/core/header.cpp:305
 msgid "View Statusbar"
-msgstr ""
+msgstr "Mostra la barra d'estat"
 
 #: ../code/core/header.cpp:306
 msgid "Whether to show the statusbar"
-msgstr ""
+msgstr "Quan mostrar la barra d'estat"
 
 #: ../code/core/header.cpp:310
 msgid "View Document Browser"
-msgstr ""
+msgstr "Mostra l'explorador de documents"
 
 #: ../code/core/header.cpp:311
 msgid "Whether to show the document browser"
-msgstr ""
+msgstr "Quan mostrar l'explorador de documents"
 
 #: ../code/core/header.cpp:315
 #, fuzzy
 msgid "View Chat"
-msgstr "Xat"
+msgstr "Mostra la conversa"
 
 #: ../code/core/header.cpp:316
 msgid "Whether to show the chat pane"
-msgstr ""
+msgstr "Quan mostrar el quadre de conversa"
 
 #: ../code/core/header.cpp:320
 #, fuzzy
 msgid "View Document User List"
-msgstr "Llista de documents"
+msgstr "Mostra la llista d'usuaris del document"
 
 #: ../code/core/header.cpp:321
 msgid "Whether to show the user list for documents"
-msgstr ""
+msgstr "Quan mostrar la llista d'usuaris del document"
 
 #: ../code/core/header.cpp:325
 msgid "View Chat User List"
-msgstr ""
+msgstr "Mostra la llista d'usuaris en conversa"
 
 #: ../code/core/header.cpp:326
 msgid "Whether to show the user list for the chat"
-msgstr ""
+msgstr "Quan mostrar la llista d'usuaris en conversa"
 
 #: ../code/core/header.cpp:330
 msgid "_Highlight Mode"
-msgstr ""
+msgstr "Forma de ressaltat"
 
 #: ../code/core/header.cpp:336
 msgid "_Help"
@@ -449,21 +468,21 @@ msgstr "A_juda"
 
 #: ../code/core/header.cpp:339
 msgid "_Contents"
-msgstr ""
+msgstr "_Continguts"
 
 #: ../code/core/header.cpp:340
 #, fuzzy
 msgid "Opens the Gobby manual"
-msgstr "Obre una sessió d'obby nova"
+msgstr "Obre el manual del Gobby"
 
 #: ../code/core/header.cpp:343
 #, fuzzy
 msgid "_About..."
-msgstr "Quant a"
+msgstr "Quant _a..."
 
 #: ../code/core/header.cpp:344
 msgid "Shows Gobby's copyright and credits"
-msgstr "Mostra la informació de copyright i autoria del Gobby"
+msgstr "Mostra la llicència i autoria del Gobby"
 
 #: ../code/core/iconmanager.cpp:49
 msgid "User list"
@@ -475,19 +494,19 @@ msgstr "Llista de documents"
 
 #: ../code/core/iconmanager.cpp:61 ../code/window.cpp:52
 msgid "Chat"
-msgstr "Xat"
+msgstr "Conversa"
 
 #: ../code/core/iconmanager.cpp:68
 msgid "User Color Indicator"
-msgstr ""
+msgstr "Indicador de color d'usuari"
 
 #: ../code/core/selfhoster.cpp:103
 msgid "Generating 2048-bit Diffie-Hellman parameters..."
-msgstr ""
+msgstr "Generant paràmetres Diffie-Hellman de 2048 bits"
 
 #: ../code/core/selfhoster.cpp:135
 msgid "Failed to generate Diffie-Hellman parameters"
-msgstr ""
+msgstr "Ha fallat la generació de paràmetres Diffie-Hellman"
 
 #: ../code/core/selfhoster.cpp:137
 msgid ""
@@ -496,17 +515,23 @@ msgid ""
 "\n"
 "%1"
 msgstr ""
+"Això significa que el «Secret Avançat Perfecte» (PFS) no est disponible. "
+"Reinicieu Gobby per re-intentar la generació de paràmetres. El problema "
+"específic fou:\n"
+"%1"
 
 #: ../code/core/selfhoster.cpp:262
 msgid ""
 "In order to start sharing your documents, choose a private key and "
 "certificate or create a new pair in the preferences"
 msgstr ""
+"Per tal que es comencin a compartir els vostres documents, escolliu "
+"una clau privada i el certificat o creeu un nou parell a les preferències"
 
 #: ../code/core/selfhoster.cpp:282
 #, fuzzy
 msgid "Failed to share documents"
-msgstr "Desa el document «%0%»"
+msgstr "S'ha fallat a compartir documents"
 
 #: ../code/core/sessionuserview.cpp:39
 #, fuzzy
@@ -516,73 +541,73 @@ msgstr "Llista d'usuaris"
 #: ../code/core/statusbar.cpp:418
 #, fuzzy
 msgid "Ln %1, Col %2\t%3"
-msgstr "Línia: %0%, Columna: %1%"
+msgstr "Línia: %1, Columna: %2\t%3"
 
 #: ../code/core/statusbar.cpp:421
 msgid "OVR"
-msgstr ""
+msgstr "SOBR"
 
 #: ../code/core/statusbar.cpp:421
 msgid "INS"
-msgstr ""
+msgstr "INS"
 
 #: ../code/core/textsessionview.cpp:638
 msgid "Text written by <b>%1</b>"
-msgstr ""
+msgstr "Text escrit per <b>%1</b>"
 
 #: ../code/core/textsessionview.cpp:644
 msgid "Unowned text"
-msgstr ""
+msgstr "Text sense autoria"
 
 #: ../code/core/userlist.cpp:108
 #, fuzzy
 msgid "Users"
-msgstr "Usuari"
+msgstr "Usuaris"
 
 #: ../code/dialogs/connection-dialog.cpp:26
 msgid "Connect to Server"
-msgstr ""
+msgstr "Connecta al servidor"
 
 #: ../code/dialogs/connection-dialog.cpp:30
 msgid "Please enter a host name with which to establish a connection."
-msgstr ""
+msgstr "Si us plau entreu el centre de servei amb el qual connectar."
 
 #: ../code/dialogs/connection-dialog.cpp:32
 msgid "_Remote Endpoint:"
-msgstr ""
+msgstr "Equip _remot:"
 
 #: ../code/dialogs/document-location-dialog.cpp:28
 #, fuzzy
 msgid "Document Name:"
-msgstr "Gestió de documents"
+msgstr "Nom del document:"
 
 #: ../code/dialogs/document-location-dialog.cpp:155
 #, fuzzy
 msgid "Select document's target location"
-msgstr "Desa el document en una altra ubicació"
+msgstr "Seleccioneu la destinació pel document"
 
 #: ../code/dialogs/document-location-dialog.cpp:157
 msgid "Choose a directory to create the document into:"
-msgstr ""
+msgstr "Escolliu una carpeta on crehari-hi el document:"
 
 #: ../code/dialogs/document-location-dialog.cpp:163
 #, fuzzy
 msgid "Select documents' target location"
-msgstr "Desa el document en una altra ubicació"
+msgstr "Seleccioneu la ubicació pel document"
 
 #: ../code/dialogs/document-location-dialog.cpp:165
 msgid "Choose a directory to create the documents into:"
-msgstr ""
+msgstr "Escolliu una carpeta on crear-hi els documents:"
 
 #: ../code/dialogs/find-dialog.cpp:44 ../code/dialogs/find-dialog.cpp:142
 #, fuzzy
 msgid "Find"
-msgstr "Cerca…"
+msgstr "Cerca"
 
 #: ../code/dialogs/find-dialog.cpp:47
 #, fuzzy
 msgid "_Search for:"
-msgstr "Cerca"
+msgstr "Cerca:"
 
 #: ../code/dialogs/find-dialog.cpp:49
 #, fuzzy
@@ -601,11 +626,11 @@ msgstr "Només paraules senceres"
 
 #: ../code/dialogs/find-dialog.cpp:53
 msgid "Search _backwards"
-msgstr ""
+msgstr "Cerca enrere"
 
 #: ../code/dialogs/find-dialog.cpp:54
 msgid "Wra_p around"
-msgstr ""
+msgstr "Ajusta del text"
 
 #: ../code/dialogs/find-dialog.cpp:100
 #, fuzzy
@@ -624,7 +649,7 @@ msgstr "_Reemplaça"
 #: ../code/dialogs/find-dialog.cpp:161 ../code/dialogs/find-dialog.cpp:177
 #, fuzzy
 msgid "Phrase \"%1\" has not been found"
-msgstr "No s'ha trobat «%0%» en el document."
+msgstr "No s'ha trobat la frase «%1»"
 
 #: ../code/dialogs/find-dialog.cpp:335
 #, fuzzy
@@ -635,8 +660,8 @@ msgstr "No s'ha reemplaçat cap coincidència"
 #, fuzzy
 msgid "%1 occurrence has been replaced"
 msgid_plural "%1 occurrences have been replaced"
-msgstr[0] "S'ha reemplaçat %0% coincidència"
-msgstr[1] "S'han reemplaçat %0% coincidències"
+msgstr[0] "S'ha reemplaçat %1 coincidència"
+msgstr[1] "S'han reemplaçat %1 coincidències"
 
 #: ../code/dialogs/goto-dialog.cpp:26
 msgid "Go to line"
@@ -645,19 +670,19 @@ msgstr "Vés a la línia"
 #: ../code/dialogs/goto-dialog.cpp:29
 #, fuzzy
 msgid "Line _number:"
-msgstr "Número de línia:"
+msgstr "_Número de línia:"
 
 #: ../code/dialogs/goto-dialog.cpp:50
 msgid "Go To _Line"
-msgstr ""
+msgstr "Vés a la _línia"
 
 #: ../code/dialogs/initial-dialog.cpp:76
 msgid "Generating 2048-bit RSA private key..."
-msgstr ""
+msgstr "Generant clau RSA privada de 2048 bits..."
 
 #: ../code/dialogs/initial-dialog.cpp:99
 msgid "Failed to generate private key"
-msgstr ""
+msgstr "Ha fallat la generació de clau privada"
 
 #: ../code/dialogs/initial-dialog.cpp:102
 msgid ""
@@ -666,10 +691,14 @@ msgid ""
 "You can try again to create a key in the Security tab of the preferences "
 "dialog."
 msgstr ""
+"%1\n"
+"\n"
+"Podeu intentar una altra vegada a crear una clau a la solapa «Seguretat» "
+"del quadre de preferències."
 
 #: ../code/dialogs/initial-dialog.cpp:141
 msgid "Failed to generate self-signed certificate"
-msgstr ""
+msgstr "Ha fallat la generació de certificat auto-signat"
 
 #: ../code/dialogs/initial-dialog.cpp:144
 msgid ""
@@ -678,34 +707,40 @@ msgid ""
 "You can try again to create a certificate in the Security tab of the "
 "preferences dialog."
 msgstr ""
+"%1\n"
+"\n"
+"Podeu provar una altra vegada a crear un certificat a la solapa «Seguretat» "
+"del quadre de preferències"
 
 #: ../code/dialogs/initial-dialog.cpp:198
 msgid "Choose a user color"
-msgstr ""
+msgstr "Escolliu un color d'usuari"
 
 #: ../code/dialogs/initial-dialog.cpp:204
 msgid "Welcome to Gobby"
-msgstr ""
+msgstr "La benvinguda a Gobby"
 
 #: ../code/dialogs/initial-dialog.cpp:216
 msgid ""
 "Before we start, a few options need to be configured. You can later change "
 "them by choosing Edit ▸ Preferences from the menu."
 msgstr ""
+"Abans de començar, cal configurar algunes opcions. Podreu canviar-les més "
+"encadant escollint Edició ▸ Preferències del menú."
 
 #: ../code/dialogs/initial-dialog.cpp:224
 #, fuzzy
 msgid "User Name"
-msgstr "Usuari"
+msgstr "Nom d'usuari"
 
 #: ../code/dialogs/initial-dialog.cpp:226
 msgid "Your name as shown to other users."
-msgstr ""
+msgstr "El vostre com ha de ser vist pels demés usuaris."
 
 #: ../code/dialogs/initial-dialog.cpp:235
 #, fuzzy
 msgid "User Color"
-msgstr "Llista d'usuaris"
+msgstr "Color d'usuari"
 
 #: ../code/dialogs/initial-dialog.cpp:237
 msgid "The color with which text you have written is branded."
@@ -714,7 +749,7 @@ msgstr ""
 #: ../code/dialogs/initial-dialog.cpp:256
 #, fuzzy
 msgid "Remote Connections"
-msgstr "S'ha perdut la connexió"
+msgstr "Connexions remotes"
 
 #: ../code/dialogs/initial-dialog.cpp:262
 #: ../code/dialogs/preferences-dialog.cpp:217
@@ -724,7 +759,7 @@ msgstr ""
 #: ../code/dialogs/initial-dialog.cpp:268
 #, fuzzy
 msgid "Ask remote users for a password"
-msgstr "Estableix la contrasenya d'usuari"
+msgstr "Demana contrasenya als usuaris remots"
 
 #: ../code/dialogs/initial-dialog.cpp:273
 #: ../code/dialogs/preferences-dialog.cpp:220
@@ -782,7 +817,7 @@ msgstr ""
 #: ../code/dialogs/password-dialog.cpp:25
 #, fuzzy
 msgid "Password Required"
-msgstr "Es requereix una contrasenya per a la sessió"
+msgstr "Cal contrasenya"
 
 #: ../code/dialogs/password-dialog.cpp:31
 msgid "Connection to host \"%1\" requires a password."
@@ -795,7 +830,7 @@ msgstr ""
 #: ../code/dialogs/password-dialog.cpp:35
 #, fuzzy
 msgid "Server _Password:"
-msgstr "Contrasenya d'usuari:"
+msgstr "Contrasenya del servei:"
 
 #: ../code/dialogs/preferences-dialog.cpp:198
 msgid "Settings"
@@ -808,21 +843,21 @@ msgstr ""
 #: ../code/dialogs/preferences-dialog.cpp:200
 #, fuzzy
 msgid "Local Documents"
-msgstr "Desa tots els documents"
+msgstr "Documents locals"
 
 #: ../code/dialogs/preferences-dialog.cpp:202
 #, fuzzy
 msgid "User name:"
-msgstr "Nom nou:"
+msgstr "Nom d'usuari:"
 
 #: ../code/dialogs/preferences-dialog.cpp:204
 #, fuzzy
 msgid "User color:"
-msgstr "Contrasenya d'usuari:"
+msgstr "Color d'usuari:"
 
 #: ../code/dialogs/preferences-dialog.cpp:206
 msgid "Color intensity:"
-msgstr ""
+msgstr "Intensitat de color"
 
 #: ../code/dialogs/preferences-dialog.cpp:208
 msgid "Choose a new user color"
@@ -839,7 +874,7 @@ msgstr ""
 #: ../code/dialogs/preferences-dialog.cpp:212
 #, fuzzy
 msgid "Highlight current line of remote users"
-msgstr "Realça la línia actual"
+msgstr "Realça la línia actual d'usuaris"
 
 #: ../code/dialogs/preferences-dialog.cpp:214
 msgid "Indicate cursor position of remote users in the scrollbar"
@@ -881,7 +916,7 @@ msgstr ""
 #: ../code/dialogs/preferences-dialog.cpp:427
 #, fuzzy
 msgid "_Tab width:"
-msgstr "Amplada del tabulador:"
+msgstr "Amplada del _tabulador:"
 
 #: ../code/dialogs/preferences-dialog.cpp:429
 #, fuzzy
@@ -901,7 +936,7 @@ msgstr "Inici/fi intel·ligent"
 #: ../code/dialogs/preferences-dialog.cpp:432
 #, fuzzy
 msgid "Enable _automatic saving of documents"
-msgstr "Habilita el sagnat automàtic"
+msgstr "Habilita que es desin els documents _automàticament"
 
 #: ../code/dialogs/preferences-dialog.cpp:434
 msgid "Autosave interval in _minutes:"
@@ -938,7 +973,7 @@ msgstr "Marge dret"
 #: ../code/dialogs/preferences-dialog.cpp:529
 #, fuzzy
 msgid "Bracket Matching"
-msgstr "Emparellament de claus"
+msgstr "Coincidència de parèntesi"
 
 #: ../code/dialogs/preferences-dialog.cpp:530
 msgid "Whitespace Display"
@@ -946,11 +981,11 @@ msgstr ""
 
 #: ../code/dialogs/preferences-dialog.cpp:531
 msgid "Enable text wrapping"
-msgstr "Habilita l'ajustament automàtic del text"
+msgstr "Habilita l'ajustament del text"
 
 #: ../code/dialogs/preferences-dialog.cpp:532
 msgid "Do not split words over two lines"
-msgstr "No divideixes paraules en dos línies"
+msgstr "No divideixis paraules en dues línies"
 
 #: ../code/dialogs/preferences-dialog.cpp:533
 msgid "Display line numbers"
@@ -966,11 +1001,11 @@ msgstr "Mostra el marge dret"
 
 #: ../code/dialogs/preferences-dialog.cpp:536
 msgid "Right margin at column:"
-msgstr "Marge dreta a la columna:"
+msgstr "Marge dret a la columna:"
 
 #: ../code/dialogs/preferences-dialog.cpp:537
 msgid "Highlight matching bracket"
-msgstr "Realça la clau emparellada"
+msgstr "Realça la coincidència de parèntesi"
 
 #: ../code/dialogs/preferences-dialog.cpp:589
 msgid "Display no whitespace"
@@ -983,7 +1018,7 @@ msgstr ""
 #: ../code/dialogs/preferences-dialog.cpp:596
 #, fuzzy
 msgid "Display tabs"
-msgstr "Mostra els números de línia"
+msgstr "Mostra les tabulacions"
 
 #: ../code/dialogs/preferences-dialog.cpp:600
 msgid "Display tabs and spaces"
@@ -995,7 +1030,7 @@ msgstr "Barra d'eines"
 
 #: ../code/dialogs/preferences-dialog.cpp:652
 msgid "Font"
-msgstr "Tipus de lletra"
+msgstr "Tipografia"
 
 #: ../code/dialogs/preferences-dialog.cpp:653
 msgid "Color Scheme"
@@ -1015,7 +1050,7 @@ msgstr "Mostra icones i text"
 
 #: ../code/dialogs/preferences-dialog.cpp:667
 msgid "Show text besides icons"
-msgstr "Mostra text al costat de les icones"
+msgstr "Mostra el text de costat amb les icones"
 
 #: ../code/dialogs/preferences-dialog.cpp:756
 msgid "Trusted CAs"
@@ -1024,12 +1059,12 @@ msgstr ""
 #: ../code/dialogs/preferences-dialog.cpp:757
 #, fuzzy
 msgid "Secure Connection"
-msgstr "S'ha perdut la connexió"
+msgstr "Connexió segura"
 
 #: ../code/dialogs/preferences-dialog.cpp:758
 #, fuzzy
 msgid "Authentication"
-msgstr "Sagnat"
+msgstr "Acreditació"
 
 #: ../code/dialogs/preferences-dialog.cpp:759
 msgid "Select a file containing trusted CAs"
@@ -1051,7 +1086,7 @@ msgstr ""
 #: ../code/dialogs/preferences-dialog.cpp:776
 #, fuzzy
 msgid "Create New..."
-msgstr "Crea una sessió…"
+msgstr "Crea Nou..."
 
 #: ../code/dialogs/preferences-dialog.cpp:773
 msgid "Select a certificate file"
@@ -1176,7 +1211,7 @@ msgstr ""
 #: ../code/operations/operation-new.cpp:76
 #, fuzzy
 msgid "Creating document \"%1\"..."
-msgstr "Crea un document…"
+msgstr "Creant el document  «%1»..."
 
 #: ../code/operations/operation-new.cpp:88
 msgid "Failed to create directory \"%1\""
@@ -1185,7 +1220,7 @@ msgstr ""
 #: ../code/operations/operation-new.cpp:89
 #, fuzzy
 msgid "Failed to create document \"%1\""
-msgstr "Desa el document actual"
+msgstr "Ha fallat la creació del document «%1»"
 
 #. Translators: This is the 8 bit encoding that is tried when
 #. autodetecting a file's encoding.
@@ -1196,7 +1231,7 @@ msgstr ""
 #: ../code/operations/operation-open.cpp:114
 #, fuzzy
 msgid "Opening document \"%1\"..."
-msgstr "Obre un document…"
+msgstr "Obrint el document «%1»..."
 
 #: ../code/operations/operation-open.cpp:134
 msgid ""
@@ -1221,12 +1256,12 @@ msgstr ""
 #: ../code/operations/operation-open-multiple.cpp:193
 #, fuzzy
 msgid "Failed to open multiple documents"
-msgstr "Tanca un document obert"
+msgstr "Ha fallat l'obertura de múltiples documents"
 
 #: ../code/operations/operation-save.cpp:97
 #, fuzzy
 msgid "Saving document \"%1\" to \"%2\"..."
-msgstr "Desa el document «%0%»"
+msgstr "Desant el document «%1» a «%2»..."
 
 #: ../code/operations/operation-save.cpp:226
 msgid ""
@@ -1237,7 +1272,7 @@ msgstr ""
 #: ../code/operations/operation-save.cpp:287
 #, fuzzy
 msgid "Failed to save document \"%1\""
-msgstr "Desa el document «%0%»"
+msgstr "S'ha fallat en desar el document «%1»"
 
 #: ../code/operations/operation-subscribe-path.cpp:33
 msgid "Invalid path: \"%1\""
@@ -1246,7 +1281,7 @@ msgstr ""
 #: ../code/operations/operation-subscribe-path.cpp:45
 #, fuzzy
 msgid "Invalid path component: \"%1\""
-msgstr "Tanca un document obert"
+msgstr "Component invàlid a la ruta: «%1»"
 
 #: ../code/operations/operation-subscribe-path.cpp:135
 #: ../code/operations/operation-subscribe-path.cpp:200
@@ -1257,7 +1292,7 @@ msgstr ""
 #: ../code/operations/operation-subscribe-path.cpp:212
 #, fuzzy
 msgid "Failed to connect to \"%1\""
-msgstr "Desa el document actual"
+msgstr "Ha fallat la connexió a «%1»"
 
 #: ../code/operations/operation-subscribe-path.cpp:164
 msgid "URI scheme \"%1\" not supported"
@@ -1266,7 +1301,7 @@ msgstr ""
 #: ../code/operations/operation-subscribe-path.cpp:193
 #, fuzzy
 msgid "Connecting to \"%1\"..."
-msgstr "Crea un document…"
+msgstr "Connectant a «%1»..."
 
 #: ../code/operations/operation-subscribe-path.cpp:220
 #: ../code/operations/operation-subscribe-path.cpp:319
@@ -1280,7 +1315,7 @@ msgstr ""
 #: ../code/operations/operation-subscribe-path.cpp:358
 #, fuzzy
 msgid "Path \"%1\" does not exist"
-msgstr "El document %0% no existeix."
+msgstr "La ruta «%1» no existeix"
 
 #: ../code/util/file.cpp:65 ../code/util/file.cpp:74
 msgid "Could not create directory \"%1\": %2"
@@ -1289,7 +1324,7 @@ msgstr ""
 #: ../code/util/uri.cpp:91
 #, fuzzy
 msgid "Device \"%1\" does not exist"
-msgstr "El document %0% no existeix."
+msgstr "El dispositiu «%1» no existeix"
 
 #: ../code/window.cpp:104
 msgid "This Computer"
@@ -1298,7 +1333,7 @@ msgstr ""
 #: ../code/window.cpp:129
 #, fuzzy
 msgid "Document Browser"
-msgstr "Llista de documents"
+msgstr "Explorador de documents"
 
 #: ../code/window.cpp:182
 msgid "You are still connected to a session"
@@ -1325,7 +1360,7 @@ msgstr "Editor col·laboratiu Gobby"
 #: ../gobby-0.5.desktop.in.h:3
 #, fuzzy
 msgid "Gobby Collaborative Editor (0.5)"
-msgstr "Editor col·laboratiu Gobby"
+msgstr "Editor col·laboratiu Gobby (0.5)"
 
 #: ../gobby-0.5.desktop.in.h:4
 msgid "Edit text files collaboratively"
@@ -1360,7 +1395,7 @@ msgstr "Editeu fitxers de text col·laborativament"
 
 #, fuzzy
 #~ msgid "Failed to resolve \"%1\": %2"
-#~ msgstr "Desa el document actual"
+#~ msgstr "Ha fallat la resolució de «%1»: %2"
 
 #~ msgid "_Up"
 #~ msgstr "A _dalt"
@@ -1372,9 +1407,7 @@ msgstr "Editeu fitxers de text col·laborativament"
 #~ msgstr "Envia"
 
 #~ msgid "Command '%0%' not found. Type /help for a list of existing commands."
-#~ msgstr ""
-#~ "No s'ha trobat l'ordre '%0%'. Teclegeu /help per llistar les ordres "
-#~ "existents."
+#~ msgstr "No s'ha trobat la instrucció '%0%'. Entreu /help per una llista d'ordres."
 
 #~ msgid "%0%: %1%"
 #~ msgstr "%0%: %1%"
@@ -1405,7 +1438,7 @@ msgstr "Editeu fitxers de text col·laborativament"
 #~ msgstr "Codificació de caràcters:"
 
 #~ msgid "Match as regular expression"
-#~ msgstr "Fes coincidir com una expressió regular"
+#~ msgstr "Fes coincidir com a expressió regular"
 
 #~ msgid "Search and replace"
 #~ msgstr "Cerca i reemplaça"
@@ -1450,7 +1483,7 @@ msgstr "Editeu fitxers de text col·laborativament"
 #~ msgstr "Crea un document nou"
 
 #~ msgid "Loads a file into a new document"
-#~ msgstr "Carrega un fitxer a un document nou"
+#~ msgstr "Carrega un fitxer en un document nou"
 
 #~ msgid "Saves a document into a file"
 #~ msgstr "Desa el document en un fitxer"
@@ -1479,7 +1512,7 @@ msgstr "Editeu fitxers de text col·laborativament"
 
 #~ msgid "Shows a preferences dialog that is just applied to this document"
 #~ msgstr ""
-#~ "Mostra un diàleg de preferèncias que només s'aplica a aquest document"
+#~ "Mostra un diàleg de preferències que només s'aplica a aquest document"
 
 #~ msgid "Syntax"
 #~ msgstr "Sintaxi"
