@@ -1,8 +1,4 @@
-SUBDIRS = m4 . icons po
-
-if HAVE_GNOME_DOC_UTILS
-SUBDIRS += help
-endif
+SUBDIRS = m4 . icons po help
 
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4
@@ -76,7 +72,7 @@ EXTRA_DIST += README.md
 EXTRA_DIST += gobby-0.5.xpm
 
 # For the manual
-EXTRA_DIST += gnome-doc-utils.make gobby-0.5.desktop.in gobby-0.5.appdata.xml
+EXTRA_DIST += gobby-0.5.desktop.in gobby-0.5.appdata.xml
 DISTCLEANFILES += gnome-doc-utils.make
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
 

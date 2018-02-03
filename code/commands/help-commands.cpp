@@ -25,10 +25,6 @@ Gobby::HelpCommands::HelpCommands(Gtk::Application& application,
                                   const ApplicationActions& actions):
 	m_application(application)
 {
-#ifndef HAVE_GNOME_DOC_UTILS
-	actions.help->set_enabled(false);
-#endif
-
 	actions.help->signal_activate().connect(
 		sigc::hide(sigc::mem_fun(*this, &HelpCommands::on_contents)));
 	actions.about->signal_activate().connect(
@@ -42,7 +38,7 @@ void Gobby::HelpCommands::on_contents()
 	Gtk::Window* parent = m_application.get_windows()[0];
 
 	gtk_show_uri(parent->get_screen()->gobj(),
-		"ghelp:gobby",
+		"help:gobby",
 		GDK_CURRENT_TIME,
 		&error);
 

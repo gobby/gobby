@@ -21,7 +21,6 @@ prjtodo
 intltool-extract.in
 intltool-merge.in
 intltool-update.in
-gnome-doc-utils.make
 gobby-0.5.desktop
 *.gschema.xml
 *.gschema.valid
