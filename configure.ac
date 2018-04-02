@@ -69,8 +69,16 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 ###################################
 # Help file building
 ###################################
+AC_ARG_ENABLE([docs], AS_HELP_STRING([--enable-docs],
+	      [Builds and installs the documentation [[default=yes]]]),
+	      [enable_docs=$withval], [enable_docs=yes])
 
-YELP_HELP_INIT
+if test "x$enable_docs" = "xyes"; then
+	YELP_HELP_INIT
+	AM_CONDITIONAL([HAVE_YELP], true)
+else
+	AM_CONDITIONAL([HAVE_YELP], false)
+fi
 
 ###################################
 # GSettings

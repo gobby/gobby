@@ -1,4 +1,7 @@
-SUBDIRS = m4 . icons po help
+SUBDIRS = m4 . icons po
+if HAVE_YELP
+SUBDIRS += help
+endif
 
 # Tell aclocal where to find `.m4' files.
 ACLOCAL_AMFLAGS = -I m4
