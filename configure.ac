@@ -70,20 +70,14 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE], ["${GETTEXT_PACKAGE}"], [gettext domain])
 # Help file building
 ###################################
 AC_ARG_ENABLE([docs], AS_HELP_STRING([--enable-docs],
-              [Builds and installs the documentation [[default=auto]]]),
-              [enable_docs=$withval], [enable_docs=auto])
+	      [Builds and installs the documentation [[default=yes]]]),
+	      [enable_docs=$withval], [enable_docs=yes])
 
-if test "x$enable_docs" = "xauto"; then
-  GNOME_DOC_INIT([0.9.0],
-    [AC_DEFINE([HAVE_GNOME_DOC_UTILS], [], [Whether program help is enabled])],
-    [AC_MSG_WARN([[gnome-doc-utils not found: documentation will not be built.]])])
-elif test "x$enable_docs" = "xyes"; then
-  GNOME_DOC_INIT([0.9.0],
-    [AC_DEFINE([HAVE_GNOME_DOC_UTILS], [], [Whether program help is enabled])],
-    [AC_MSG_ERROR([[gnome-doc-utils not found]])])
+if test "x$enable_docs" = "xyes"; then
+	YELP_HELP_INIT
+	AM_CONDITIONAL([HAVE_YELP], true)
 else
-  AM_CONDITIONAL([ENABLE_SK], false)
-  AM_CONDITIONAL([HAVE_GNOME_DOC_UTILS], false)
+	AM_CONDITIONAL([HAVE_YELP], false)
 fi
 
 ###################################

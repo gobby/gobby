@@ -1,6 +1,5 @@
 SUBDIRS = m4 . icons po
-
-if HAVE_GNOME_DOC_UTILS
+if HAVE_YELP
 SUBDIRS += help
 endif
 
@@ -76,7 +75,7 @@ EXTRA_DIST += README.md
 EXTRA_DIST += gobby-0.5.xpm
 
 # For the manual
-EXTRA_DIST += gnome-doc-utils.make gobby-0.5.desktop.in gobby-0.5.appdata.xml
+EXTRA_DIST += gobby-0.5.desktop.in gobby-0.5.appdata.xml
 DISTCLEANFILES += gnome-doc-utils.make
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
 
