@@ -69,7 +69,7 @@ jobs:
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          PKG_CONFIG_PATH="`pwd`/../prefix/usr/share/pkgconfig" \
+          PKG_CONFIG_PATH="`pwd`/../libinfinity/prefix/mingw64/lib/pkgconfig" \
             ./configure
 
       - name: "gobby: Run the build"
