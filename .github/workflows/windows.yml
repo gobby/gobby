@@ -51,8 +51,8 @@ jobs:
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
-          make install DESTDIR=`pwd`/prefix
-          find "${GITHUB_WORKSPACE}/prefix"
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
 
       - name: "gobby: Check out repository"
         uses: actions/checkout@v2
@@ -68,5 +68,12 @@ jobs:
       - name: "gobby: Run configure"
         shell: msys2 {0}
         run: |
-          PKG_CONFIG_PATH="${GITHUB_WORKSPACE}/prefix/usr/share/pkgconfig" \
+          cd "$GITHUB_WORKSPACE"/gobby
+          PKG_CONFIG_PATH="`pwd`/../prefix/usr/share/pkgconfig" \
             ./configure
+
+      - name: "gobby: Run the build"
+        shell: msys2 {0}
+        run: |
+          cd "$GITHUB_WORKSPACE"/gobby
+          make -j
