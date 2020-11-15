@@ -80,18 +80,31 @@ jobs:
           cd "$GITHUB_WORKSPACE"/gobby
           make install DESTDIR="`pwd`/prefix"
           find "`pwd`/prefix"
-          
+
+      - name: "Windows-10 theme: Check out repository"
+        uses: actions/checkout@v2
+        with:
+          repository: B00merang-Project/Windows-10
+          path: windows-10-theme
+
       - name: Collect results
         run: |
           cd "$GITHUB_WORKSPACE"
           mkdir -p out/bin/ out/share/locale/
           cp libinfinity/prefix/mingw64/bin/*.dll out/bin/
           cp gobby/prefix/mingw64/bin/*.exe out/bin/
-          pushd bin
+          pushd out/bin/
           for fn in *; do echo $fn; ldd $fn | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .; done
           popd
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/
+          echo Compiling schemas...
+          glib-compile-schemas out/share/glib-2.0/schemas
+          echo Installing the theme...
+          mkdir -p out/share/themes/Windows10/gtk-3.0/
+          rsync -av windows-10-theme/gtk-3.20/ out/share/themes/Windows10/gtk-3.0/
+          mkdir -p out/etc/gtk-3.0
+          echo -e "[Settings]\ngtk-theme-name=Windows10\ngtk-font-name=Segoe UI 9\n" > out/etc/gtk-3.0/settings.ini
           
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
