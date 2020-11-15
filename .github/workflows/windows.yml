@@ -29,49 +29,49 @@ jobs:
         with:
           install: base-devel git mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 mingw-w64-x86_64-gobject-introspection libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
-      - name: libinfinity: Check out repository
+      - name: "libinfinity: Check out repository"
         uses: actions/checkout@v2
         with:
           repository: gobby/libinfinity
           path: libinfinity
 
-      - name: libinfinity: Generate autotools build files
+      - name: "libinfinity: Generate autotools build files"
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
           ./autogen.sh
 
-      - name: libinfinity: Generate autotools build files and run configure
+      - name: "libinfinity: Generate autotools build files and run configure"
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
           ./autogen.sh
 
-      - name: libinfinity: Run the build
+      - name: "libinfinity: Run the build"
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
           make -j
 
-      - name: libinfinity: Install the result
+      - name: "libinfinity: Install the result"
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
           make install DESTDIR="${GITHUB_WORKSPACE}/prefix"
           find "${GITHUB_WORKSPACE}/prefix"
 
-      - name: gobby: Check out repository
+      - name: "gobby: Check out repository"
         uses: actions/checkout@v2
         with:
           path: gobby
     
-      - name: gobby: Generate autotools build files
+      - name: "gobby: Generate autotools build files"
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
           ./autogen.sh
 
-      - name: gobby: Run configure
+      - name: "gobby: Run configure"
         shell: msys2 {0}
         run: |
           PKG_CONFIG_PATH="${GITHUB_WORKSPACE}/prefix/usr/share/pkgconfig" \
