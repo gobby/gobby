@@ -35,17 +35,11 @@ jobs:
           repository: gobby/libinfinity
           path: libinfinity
 
-      - name: "libinfinity: Generate autotools build files"
-        shell: msys2 {0}
-        run: |
-          cd "$GITHUB_WORKSPACE"/libinfinity
-          ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk
-
       - name: "libinfinity: Generate autotools build files and run configure"
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
-          ./autogen.sh
+          ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk
 
       - name: "libinfinity: Run the build"
         shell: msys2 {0}
