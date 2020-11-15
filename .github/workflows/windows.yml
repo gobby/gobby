@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Windows build
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -27,7 +25,7 @@ jobs:
       # Install msys and get an entrypoint for it
       - uses: msys2/setup-msys2@v2
         with:
-          install: base-devel git mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+          install: base-devel git rsync mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
       - name: "libinfinity: Check out repository"
         uses: actions/checkout@v2
@@ -77,3 +75,26 @@ jobs:
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
           make
+
+      - name: "gobby: Install the result"
+        shell: msys2 {0}
+        run: |
+          cd "$GITHUB_WORKSPACE"/gobby
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
+          
+      - name: Collect results
+        shell: msys2 {0}
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p out/bin/ out/share/locale/
+          cp libinfinity/prefix/mingw64/bin/*.dll out/bin/
+          cp gobby/prefix/mingw64/bin/*.exe out/bin/
+          rsync -av libinfinity/prefix/share/locale/ out/share/locale/
+          rsync -av gobby/prefix/share/ out/share/
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-result
+          path: ${{ github.workspace }}/out/
