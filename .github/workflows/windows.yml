@@ -22,6 +22,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Set git to use Unix linefeeds to please autotools
+        shell: bash
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
