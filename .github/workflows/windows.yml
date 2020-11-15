@@ -76,4 +76,4 @@ jobs:
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          make -j
+          make
