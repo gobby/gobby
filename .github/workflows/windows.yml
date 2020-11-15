@@ -15,6 +15,10 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
 
+    defaults:
+      run:
+        shell: msys2 {0}
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Set git to use Unix linefeeds to please autotools
@@ -34,19 +38,16 @@ jobs:
           path: libinfinity
 
       - name: "libinfinity: Generate autotools build files and run configure"
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
           ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk
 
       - name: "libinfinity: Run the build"
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
           make -j
 
       - name: "libinfinity: Install the result"
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
           make install DESTDIR="`pwd`/prefix"
@@ -58,38 +59,36 @@ jobs:
           path: gobby
     
       - name: "gobby: Generate autotools build files"
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
           ./autogen.sh
 
       - name: "gobby: Run configure"
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
           PKG_CONFIG_PATH="`pwd`/../libinfinity/prefix/mingw64/lib/pkgconfig" \
             ./configure
 
       - name: "gobby: Run the build"
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
           make
 
       - name: "gobby: Install the result"
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
           make install DESTDIR="`pwd`/prefix"
           find "`pwd`/prefix"
           
       - name: Collect results
-        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"
           mkdir -p out/bin/ out/share/locale/
           cp libinfinity/prefix/mingw64/bin/*.dll out/bin/
           cp gobby/prefix/mingw64/bin/*.exe out/bin/
+          pushd bin
+          for fn in *; do echo $fn; ldd $fn | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .; done
+          popd
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/
           
