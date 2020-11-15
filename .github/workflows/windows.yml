@@ -51,7 +51,7 @@ jobs:
         shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
-          make install DESTDIR=../prefix
+          make install DESTDIR=`pwd`/prefix
           find "${GITHUB_WORKSPACE}/prefix"
 
       - name: "gobby: Check out repository"
