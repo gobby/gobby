@@ -19,14 +19,25 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Set git to use Unix linefeeds to please autotools
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
     
       # Install msys and get an entrypoint for it
       - uses: msys2/setup-msys2@v2
         with:
-          install: base-devel git autoconf automake1.16 intltool glib2-devel
-      - shell: msys2 {0}
+          install: base-devel git autoconf automake1.16 intltool glib2-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++ mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+
+      - name: Generate autotools build files
+        shell: msys2 {0}
         run: |
           cd "$GITHUB_WORKSPACE"
           ./autogen.sh
+
+      - shell: msys2 {0}
+        run: |
+          ./configure
