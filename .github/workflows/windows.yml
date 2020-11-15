@@ -32,6 +32,23 @@ jobs:
         with:
           install: base-devel git rsync mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
+      - name: Download GNOME Adwaita icon theme
+        uses: carlosperate/download-file-action@v1.0.3
+        id: adwaita-icon-theme
+        with:
+          file-url: https://download.gnome.org/sources/adwaita-icon-theme/3.38/adwaita-icon-theme-3.38.0.tar.xz
+          file-name: adwaita-icon-theme-3.38.0.tar.xz
+          location: adwaita-icon-theme/
+
+      - name: Build and install Adwaita icon theme
+        run: |
+          cd adwaita-icon-theme/
+          tar -xvf adwaita-icon-theme-3.38.0.tar.xz --strip-components=1
+          ./configure
+          make -j
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
+
       - name: "libinfinity: Check out repository"
         uses: actions/checkout@v2
         with:
@@ -94,7 +111,7 @@ jobs:
           cp libinfinity/prefix/mingw64/bin/*.dll out/bin/
           cp gobby/prefix/mingw64/bin/*.exe out/bin/
           pushd out/bin/
-          for fn in *; do echo $fn; ldd $fn | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .; done
+          ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .; done
           popd
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/
