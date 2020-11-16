@@ -127,26 +127,30 @@ jobs:
           make install DESTDIR="`pwd`/prefix"
           find "`pwd`/prefix"
 
-      #- name: Build and install Adwaita icon theme
-      #  run: |
-      #    cd adwaita-icon-theme/
-      #    tar -xvf adwaita-icon-theme-3.38.0.tar.xz --strip-components=1
-      #    ./configure
-      #    make -j
-      #    make install DESTDIR="`pwd`/prefix"
-      #    find "`pwd`/prefix"
+      - name: Build and install Adwaita icon theme
+        run: |
+          cd adwaita-icon-theme/
+          tar -xvf adwaita-icon-theme-3.38.0.tar.xz --strip-components=1
+          ./configure
+          make -j
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
 
       - name: Collect other resources
         run: |
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/
+          rm -rf out/share/man/
           echo Compiling schemas...
           glib-compile-schemas out/share/glib-2.0/schemas
-          echo Installing the theme...
+          echo Installing the themes and icons...
           mkdir -p out/share/themes/Windows10/gtk-3.0/
           rsync -av windows-10-theme/gtk-3.20/ out/share/themes/Windows10/gtk-3.0/
           mkdir -p out/etc/gtk-3.0
           echo -e "[Settings]\ngtk-theme-name=Windows10\ngtk-font-name=Segoe UI 9\n" > out/etc/gtk-3.0/settings.ini
+          rsync -av hicolor-icon-theme/prefix/mingw64/share/ out/share/
+          rsync -av adwaita-icon-theme/prefix/mingw64/share/ out/share/
+          # TODO: Install gnutls/glib20/gtk(?) mo files
           
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
