@@ -26,6 +26,11 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
+          
+      - name: Set git to not use symlinks
+        shell: bash
+        run: |
+          git config --global core.symlinks false
 
       - name: "libinfinity: Check out repository"
         uses: actions/checkout@v2
