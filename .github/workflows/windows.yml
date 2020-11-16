@@ -27,10 +27,22 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      # Install msys and get an entrypoint for it
-      - uses: msys2/setup-msys2@v2
+      - name: "libinfinity: Check out repository"
+        uses: actions/checkout@v2
         with:
-          install: base-devel git rsync mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+          repository: pkern/libinfinity
+          path: libinfinity
+
+      - name: "gobby: Check out repository"
+        uses: actions/checkout@v2
+        with:
+          path: gobby
+
+      - name: "Windows-10 theme: Check out repository"
+        uses: actions/checkout@v2
+        with:
+          repository: B00merang-Project/Windows-10
+          path: windows-10-theme
 
       - name: Download GNOME Adwaita icon theme
         uses: carlosperate/download-file-action@v1.0.3
@@ -40,25 +52,23 @@ jobs:
           file-name: adwaita-icon-theme-3.38.0.tar.xz
           location: adwaita-icon-theme/
 
-      - name: Build and install Adwaita icon theme
-        run: |
-          cd adwaita-icon-theme/
-          tar -xvf adwaita-icon-theme-3.38.0.tar.xz --strip-components=1
-          ./configure
-          make -j
-          make install DESTDIR="`pwd`/prefix"
-          find "`pwd`/prefix"
-
-      - name: "libinfinity: Check out repository"
-        uses: actions/checkout@v2
+      - name: Download GNOME hicolor icon theme
+        uses: carlosperate/download-file-action@v1.0.3
+        id: hicolor-icon-theme
         with:
-          repository: pkern/libinfinity
-          path: libinfinity
+          file-url: https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.17.tar.xz
+          file-name: hicolor-icon-theme-0.17.tar.xz
+          location: hicolor-icon-theme/
+
+      # Install msys and get an entrypoint for it
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: base-devel git rsync mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
       - name: "libinfinity: Generate autotools build files and run configure"
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
-          ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk
+          ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk --without-infinoted
 
       - name: "libinfinity: Run the build"
         run: |
@@ -71,11 +81,6 @@ jobs:
           make install DESTDIR="`pwd`/prefix"
           find "`pwd`/prefix"
 
-      - name: "gobby: Check out repository"
-        uses: actions/checkout@v2
-        with:
-          path: gobby
-    
       - name: "gobby: Generate autotools build files"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
@@ -98,21 +103,36 @@ jobs:
           make install DESTDIR="`pwd`/prefix"
           find "`pwd`/prefix"
 
-      - name: "Windows-10 theme: Check out repository"
-        uses: actions/checkout@v2
-        with:
-          repository: B00merang-Project/Windows-10
-          path: windows-10-theme
-
-      - name: Collect results
+      - name: Collect binary results
         run: |
           cd "$GITHUB_WORKSPACE"
           mkdir -p out/bin/ out/share/locale/
           cp libinfinity/prefix/mingw64/bin/*.dll out/bin/
           cp gobby/prefix/mingw64/bin/*.exe out/bin/
           pushd out/bin/
-          ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .; done
+          ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .
           popd
+
+      - name: Build and install hicolor icon theme
+        run: |
+          cd hicolor-icon-theme/
+          tar -xvf hicolor-icon-theme-0.17.tar.xz --strip-components=1
+          ./configure
+          make -j
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
+
+      #- name: Build and install Adwaita icon theme
+      #  run: |
+      #    cd adwaita-icon-theme/
+      #    tar -xvf adwaita-icon-theme-3.38.0.tar.xz --strip-components=1
+      #    ./configure
+      #    make -j
+      #    make install DESTDIR="`pwd`/prefix"
+      #    find "`pwd`/prefix"
+
+      - name: Collect other resources
+        run: |
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/
           echo Compiling schemas...
