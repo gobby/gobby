@@ -10,7 +10,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: windows-latest
@@ -42,28 +41,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: gobby
-
-      - name: "Windows-10 theme: Check out repository"
-        uses: actions/checkout@v2
-        with:
-          repository: B00merang-Project/Windows-10
-          path: windows-10-theme
-
-      - name: Download GNOME Adwaita icon theme
-        uses: carlosperate/download-file-action@v1.0.3
-        id: adwaita-icon-theme
-        with:
-          file-url: https://download.gnome.org/sources/adwaita-icon-theme/3.38/adwaita-icon-theme-3.38.0.tar.xz
-          file-name: adwaita-icon-theme-3.38.0.tar.xz
-          location: adwaita-icon-theme/
-
-      - name: Download GNOME hicolor icon theme
-        uses: carlosperate/download-file-action@v1.0.3
-        id: hicolor-icon-theme
-        with:
-          file-url: https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.17.tar.xz
-          file-name: hicolor-icon-theme-0.17.tar.xz
-          location: hicolor-icon-theme/
 
       # Install msys and get an entrypoint for it
       - uses: msys2/setup-msys2@v2
@@ -117,6 +94,64 @@ jobs:
           pushd out/bin/
           ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .
           popd
+          rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
+          rsync -av gobby/prefix/mingw64/share/ out/share/          
+          rm -rf out/share/man/
+          echo Compiling schemas...
+          glib-compile-schemas out/share/glib-2.0/schemas
+          # TODO: Install gnutls/glib20/gtk(?) mo files
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-result
+          path: ${{ github.workspace }}/out/
+
+  build-icon-themes:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Set git to use Unix linefeeds to please autotools
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+          
+      - name: Set git to not use symlinks
+        shell: bash
+        run: |
+          git config --global core.symlinks false
+
+      # Install msys and get an entrypoint for it
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: base-devel git rsync autoconf automake1.16
+
+      - name: "Windows-10 theme: Check out repository"
+        uses: actions/checkout@v2
+        with:
+          repository: B00merang-Project/Windows-10
+          path: windows-10-theme
+
+      - name: Download GNOME hicolor icon theme
+        uses: carlosperate/download-file-action@v1.0.3
+        id: hicolor-icon-theme
+        with:
+          file-url: https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.17.tar.xz
+          file-name: hicolor-icon-theme-0.17.tar.xz
+          location: hicolor-icon-theme/
+
+      - name: Download GNOME Adwaita icon theme
+        uses: carlosperate/download-file-action@v1.0.3
+        id: adwaita-icon-theme
+        with:
+          file-url: https://download.gnome.org/sources/adwaita-icon-theme/3.38/adwaita-icon-theme-3.38.0.tar.xz
+          file-name: adwaita-icon-theme-3.38.0.tar.xz
+          location: adwaita-icon-theme/
 
       - name: Build and install hicolor icon theme
         run: |
@@ -135,25 +170,49 @@ jobs:
           make -j
           make install DESTDIR="`pwd`/prefix"
           find "`pwd`/prefix"
-
-      - name: Collect other resources
+          
+      - name: Collect results
         run: |
-          rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
-          rsync -av gobby/prefix/mingw64/share/ out/share/
-          rm -rf out/share/man/
-          echo Compiling schemas...
-          glib-compile-schemas out/share/glib-2.0/schemas
-          echo Installing the themes and icons...
+          mkdir -p out/share/
+          rsync -av hicolor-icon-theme/prefix/mingw64/share/ out/share/
+          rsync -av adwaita-icon-theme/prefix/mingw64/share/ out/share/        
           mkdir -p out/share/themes/Windows10/gtk-3.0/
           rsync -av windows-10-theme/gtk-3.20/ out/share/themes/Windows10/gtk-3.0/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: theme-data
+          path: ${{ github.workspace }}/out/
+  
+  package:
+    runs-on: windows-latest
+    needs: [build, build-icon-themes]
+
+    defaults:
+      run:
+        shell: msys2 {0}
+        
+    steps:
+      - name: Download all workflow artifacts
+        uses: actions/download-artifact@v2
+
+      # Install msys and get an entrypoint for it
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: base-devel git rsync
+
+      - name: Package up resources
+        run: |
+          mkdir -p out/
+          find .
+          rsync -av theme-data/ out/
+          rsync -av build-result/ out/
           mkdir -p out/etc/gtk-3.0
           echo -e "[Settings]\ngtk-theme-name=Windows10\ngtk-font-name=Segoe UI 9\n" > out/etc/gtk-3.0/settings.ini
-          rsync -av hicolor-icon-theme/prefix/mingw64/share/ out/share/
-          rsync -av adwaita-icon-theme/prefix/mingw64/share/ out/share/
-          # TODO: Install gnutls/glib20/gtk(?) mo files
           
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: build-result
+          name: package
           path: ${{ github.workspace }}/out/
