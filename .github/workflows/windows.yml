@@ -94,6 +94,8 @@ jobs:
           pushd out/bin/
           ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .
           popd
+          mkdir -p out/lib/gdk-pixbuf-2.0/
+          rsync -av /mingw64/lib/gdk-pixbuf-2.0/ out/lib/gdk-pixbuf-2.0/
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/          
           rm -rf out/share/man/
