@@ -111,7 +111,7 @@ jobs:
           cp -v /mingw64/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml out/share/glib-2.0/schemas
           glib-compile-schemas out/share/glib-2.0/schemas
           echo Installing GtkSourceView language definitions...
-          cp -v /mingw64/share/gtksourceview-3.0/ out/share/gtksourceview-3.0/
+          cp -vr /mingw64/share/gtksourceview-3.0/ out/share/gtksourceview-3.0/
           echo Installing localizations...
           rsync -av --exclude=binutils.mo --exclude=ld.mo --exclude=xz.mo /mingw64/share/locale/ out/share/locale/
 
