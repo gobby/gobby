@@ -95,11 +95,13 @@ jobs:
           ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .
           popd
           mkdir -p out/lib/gdk-pixbuf-2.0/
+          # TODO: Make sure we also install the libraries needed by these loaders
           rsync -av /mingw64/lib/gdk-pixbuf-2.0/ out/lib/gdk-pixbuf-2.0/
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/          
           rm -rf out/share/man/
-          echo Compiling schemas...
+          echo Installing and compiling schemas...
+          cp -v /mingw64/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml out/share/glib-2.0/schemas
           glib-compile-schemas out/share/glib-2.0/schemas
           # TODO: Install gnutls/glib20/gtk(?) mo files
 
