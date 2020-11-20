@@ -45,7 +45,7 @@ jobs:
       # Install msys and get an entrypoint for it
       - uses: msys2/setup-msys2@v2
         with:
-          install: base-devel git rsync mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+          install: base-devel git rsync binutils mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
       - name: "libinfinity: Generate autotools build files and run configure"
         run: |
@@ -94,16 +94,26 @@ jobs:
           pushd out/bin/
           ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .
           popd
-          mkdir -p out/lib/gdk-pixbuf-2.0/
-          # TODO: Make sure we also install the libraries needed by these loaders
-          rsync -av /mingw64/lib/gdk-pixbuf-2.0/ out/lib/gdk-pixbuf-2.0/
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
           rsync -av gobby/prefix/mingw64/share/ out/share/          
           rm -rf out/share/man/
+          echo Copying gdk-pixbuf-2.0 and associated libraries...
+          mkdir -p out/lib/gdk-pixbuf-2.0/
+          rsync -av --exclude="*.a" /mingw64/lib/gdk-pixbuf-2.0/ out/lib/gdk-pixbuf-2.0/
+          for dll in out/lib/gdk-pixbuf-2.0/*/loaders/*.dll; do
+            objdump -p $dll | awk -F: '$1 ~ /DLL Name/ { gsub(/ /, "", $2); print $2 }' | while read needed; do
+              if [ -e /mingw64/bin/$needed ]; then
+                cp -v /mingw64/bin/$needed out/bin/
+              fi
+            done
+          done
           echo Installing and compiling schemas...
           cp -v /mingw64/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml out/share/glib-2.0/schemas
           glib-compile-schemas out/share/glib-2.0/schemas
-          # TODO: Install gnutls/glib20/gtk(?) mo files
+          echo Installing GtkSourceView language definitions...
+          cp -v /mingw64/share/gtksourceview-3.0/ out/share/gtksourceview-3.0/
+          echo Installing localizations...
+          rsync -av --exclude=binutils.mo --exclude=ld.mo --exclude=xz.mo /mingw64/share/locale/ out/share/locale/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
