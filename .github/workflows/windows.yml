@@ -226,7 +226,15 @@ jobs:
         run: |
           mkdir pkg
           robocopy /e theme-data pkg
+          if ($lastExitCode -ge 8) {
+            Write-Host "robocopy failed: $lastExitCode"
+            exit 1
+          }
           robocopy /e build-result pkg
+          if ($lastExitCode -ge 8) {
+            Write-Host "robocopy failed: $lastExitCode"
+          }
+          exit 0
 
       - name: Run Inno Setup compiler
         shell: powershell
