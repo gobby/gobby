@@ -115,6 +115,11 @@ jobs:
           cp -vr /mingw64/share/gtksourceview-3.0/ out/share/gtksourceview-3.0/
           echo Installing localizations...
           rsync -av --exclude=binutils.mo --exclude=ld.mo --exclude=xz.mo /mingw64/share/locale/ out/share/locale/
+          echo Writing settings...
+          mkdir -p out/etc/gtk-3.0
+          echo -e "[Settings]\ngtk-theme-name=Windows10\ngtk-font-name=Segoe UI 9\n" > out/etc/gtk-3.0/settings.ini
+          echo Copying installer script...
+          cp "$GITHUB_WORKSPACE"/gobby/win32/gobby.iss out/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
@@ -204,37 +209,33 @@ jobs:
     runs-on: windows-latest
     needs: [build, build-icon-themes]
 
-    defaults:
-      run:
-        shell: msys2 {0}
-        
     steps:
       - name: Download all workflow artifacts
         uses: actions/download-artifact@v2
 
-      - uses: geekyeggo/delete-artifact@v1
+      - name: Delete previous workflow artifacts
+        uses: geekyeggo/delete-artifact@v1
         with:
           name: |
             build-result
             theme-data
           failOnError: false
 
-      # Install msys and get an entrypoint for it
-      - uses: msys2/setup-msys2@v2
-        with:
-          install: base-devel git rsync
-
-      - name: Package up resources
+      - name: Merge resources
+        shell: powershell
         run: |
-          mkdir -p out/
-          find .
-          rsync -av theme-data/ out/
-          rsync -av build-result/ out/
-          mkdir -p out/etc/gtk-3.0
-          echo -e "[Settings]\ngtk-theme-name=Windows10\ngtk-font-name=Segoe UI 9\n" > out/etc/gtk-3.0/settings.ini
-          
-      - name: Upload artifacts
+          mkdir pkg
+          robocopy /e theme-data pkg
+          robocopy /e build-result pkg
+
+      - name: Run Inno Setup compiler
+        shell: powershell
+        run: |
+          cd pkg/
+          iscc gobby.iss
+
+      - name: Upload installer
         uses: actions/upload-artifact@v2
         with:
-          name: package
-          path: ${{ github.workspace }}/out/
+          name: installer
+          path: ${{ github.workspace }}/pkg/Output/
