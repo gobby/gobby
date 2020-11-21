@@ -123,6 +123,8 @@ AC_OUTPUT([
     help/Makefile
 
     de.0x539.gobby.gschema.xml
+
+    win32/gobby.iss
 ])
 
 # vim:set et sw=2 ts=2:
