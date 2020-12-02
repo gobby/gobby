@@ -24,7 +24,7 @@ msgstr "必須輸入密碼"
 
 #: ../code/commands/auth-commands.cpp:214
 msgid "Incorrect password"
-msgstr ""
+msgstr "不正確的密碼"
 
 #: ../code/commands/browser-commands.cpp:288
 msgid "Subscribing to %1..."
@@ -40,11 +40,11 @@ msgstr "訂用失敗"
 
 #: ../code/commands/browser-context-commands.cpp:86
 msgid "Could not find a location where to store the certificate"
-msgstr ""
+msgstr "無法找到儲存認證的位置"
 
 #: ../code/commands/browser-context-commands.cpp:153
 msgid "_Remove"
-msgstr ""
+msgstr "移除(_R)"
 
 #: ../code/commands/browser-context-commands.cpp:188
 #, fuzzy
@@ -71,7 +71,7 @@ msgstr "開啟文件(_O)…"
 
 #: ../code/commands/browser-context-commands.cpp:312
 msgid "_Permissions..."
-msgstr ""
+msgstr "權限(_P)"
 
 #: ../code/commands/browser-context-commands.cpp:324
 msgid "D_elete"
@@ -114,11 +114,11 @@ msgstr "選擇要開啟的文字檔"
 #: ../code/commands/browser-context-commands.cpp:558
 #: ../code/commands/browser-context-commands.cpp:569
 msgid "Account successfully created"
-msgstr ""
+msgstr "成功建立帳號"
 
 #: ../code/commands/browser-context-commands.cpp:562
 msgid "When re-connecting to the server, the new account will be used."
-msgstr ""
+msgstr "當重新連接至伺服器時，將會使用新的帳號"
 
 #: ../code/commands/browser-context-commands.cpp:573
 msgid ""
@@ -135,7 +135,7 @@ msgstr "建立文件「%1」時失敗"
 
 #: ../code/commands/browser-context-commands.cpp:589
 msgid "Could not save the certificate for the account: %1"
-msgstr ""
+msgstr "無法爲帳號 %1 儲存認證"
 
 #: ../code/commands/file-tasks/task-export-html.cpp:27
 msgid "Choose a location to export document \"%1\" to"
@@ -275,7 +275,7 @@ msgstr ""
 
 #: ../code/core/foldermanager.cpp:322
 msgid "The document has been removed from the server."
-msgstr ""
+msgstr "文件已從伺服器上移除"
 
 #: ../code/core/header.cpp:203
 msgid "_None"
@@ -363,19 +363,19 @@ msgstr "在目前的文件中隱藏使用者顏色"
 
 #: ../code/core/header.cpp:289
 msgid "Fullscreen"
-msgstr ""
+msgstr "全螢幕"
 
 #: ../code/core/header.cpp:290
 msgid "Show the editing window in fullscreen mode"
-msgstr ""
+msgstr "以全螢幕顯示編輯視窗"
 
 #: ../code/core/header.cpp:294
 msgid "Zoom In"
-msgstr ""
+msgstr "放大"
 
 #: ../code/core/header.cpp:297
 msgid "Zoom Out"
-msgstr ""
+msgstr "縮小"
 
 #: ../code/core/header.cpp:300
 msgid "View Toolbar"
