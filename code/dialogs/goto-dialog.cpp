@@ -82,7 +82,10 @@ void Gobby::GotoDialog::on_response(int id)
 {
 	if(id == Gtk::RESPONSE_ACCEPT)
 	{
-		g_assert(m_current_view != NULL);
+		if (!m_current_view) {
+			g_warning("No current view exists.");
+			return;
+		}
 
 		int value = m_entry_line->get_value_as_int();
 		GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
@@ -127,7 +130,11 @@ void Gobby::GotoDialog::on_document_changed(SessionView* view)
 
 void Gobby::GotoDialog::on_changed()
 {
-	g_assert(m_current_view != NULL);
+	if (!m_current_view) {
+		g_warning("No current view exists.");
+		return;
+	}
+
 	GtkTextBuffer* buffer = GTK_TEXT_BUFFER(
 		m_current_view->get_text_buffer());
 

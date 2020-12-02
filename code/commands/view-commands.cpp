@@ -507,7 +507,10 @@ void Gobby::ViewCommands::on_menu_language_changed()
 		g_assert(language != NULL);
 	}
 
-	g_assert(m_current_view != NULL);
+	if (!m_current_view) {
+		g_warning("No current view exists.");
+		return;
+	}
 
 	m_document_language_changed_connection.block();
 	m_current_view->set_language(language);
