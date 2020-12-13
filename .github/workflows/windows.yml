@@ -1,0 +1,251 @@
+name: Windows build
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+    - cron: "5 4 * * 0"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Set git to use Unix linefeeds to please autotools
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+          
+      - name: Set git to not use symlinks
+        shell: bash
+        run: |
+          git config --global core.symlinks false
+
+      - name: "libinfinity: Check out repository"
+        uses: actions/checkout@v2
+        with:
+          repository: gobby/libinfinity
+          path: libinfinity
+
+      - name: "gobby: Check out repository"
+        uses: actions/checkout@v2
+        with:
+          path: gobby
+
+      # Install msys and get an entrypoint for it
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: base-devel git rsync binutils mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+
+      - name: "libinfinity: Generate autotools build files and run configure"
+        run: |
+          cd "$GITHUB_WORKSPACE"/libinfinity
+          ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk --without-infinoted
+
+      - name: "libinfinity: Run the build"
+        run: |
+          cd "$GITHUB_WORKSPACE"/libinfinity
+          make -j
+
+      - name: "libinfinity: Install the result"
+        run: |
+          cd "$GITHUB_WORKSPACE"/libinfinity
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
+
+      - name: "gobby: Generate autotools build files"
+        run: |
+          cd "$GITHUB_WORKSPACE"/gobby
+          ./autogen.sh
+
+      - name: "gobby: Run configure"
+        run: |
+          cd "$GITHUB_WORKSPACE"/gobby
+          PKG_CONFIG_PATH="`pwd`/../libinfinity/prefix/mingw64/lib/pkgconfig" \
+            ./configure
+
+      - name: "gobby: Run the build"
+        run: |
+          cd "$GITHUB_WORKSPACE"/gobby
+          make
+
+      - name: "gobby: Install the result"
+        run: |
+          cd "$GITHUB_WORKSPACE"/gobby
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
+
+      - name: Collect binary results
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p out/bin/ out/share/locale/
+          cp libinfinity/prefix/mingw64/bin/*.dll out/bin/
+          cp gobby/prefix/mingw64/bin/*.exe out/bin/
+          strip -g out/bin/*.dll out/bin/*.exe
+          pushd out/bin/
+          ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .
+          popd
+          rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
+          rsync -av gobby/prefix/mingw64/share/ out/share/          
+          rm -rf out/share/man/
+          echo Copying gdk-pixbuf-2.0 and associated libraries...
+          mkdir -p out/lib/gdk-pixbuf-2.0/
+          rsync -av --exclude="*.a" /mingw64/lib/gdk-pixbuf-2.0/ out/lib/gdk-pixbuf-2.0/
+          for dll in out/lib/gdk-pixbuf-2.0/*/loaders/*.dll; do
+            objdump -p $dll | awk -F: '$1 ~ /DLL Name/ { gsub(/ /, "", $2); print $2 }' | while read needed; do
+              if [ -e /mingw64/bin/$needed ]; then
+                cp -v /mingw64/bin/$needed out/bin/
+              fi
+            done
+          done
+          echo Installing and compiling schemas...
+          cp -v /mingw64/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml out/share/glib-2.0/schemas
+          glib-compile-schemas out/share/glib-2.0/schemas
+          echo Installing GtkSourceView language definitions...
+          cp -vr /mingw64/share/gtksourceview-3.0/ out/share/gtksourceview-3.0/
+          echo Installing localizations...
+          rsync -av --exclude=binutils.mo --exclude=ld.mo --exclude=xz.mo /mingw64/share/locale/ out/share/locale/
+          echo Writing settings...
+          mkdir -p out/etc/gtk-3.0
+          echo -e "[Settings]\ngtk-theme-name=Windows10\ngtk-font-name=Segoe UI 9\n" > out/etc/gtk-3.0/settings.ini
+          echo Copying installer script...
+          cp "$GITHUB_WORKSPACE"/gobby/win32/gobby.iss out/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-result
+          path: ${{ github.workspace }}/out/
+
+  build-icon-themes:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - name: Set git to use Unix linefeeds to please autotools
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+          
+      - name: Set git to not use symlinks
+        shell: bash
+        run: |
+          git config --global core.symlinks false
+
+      # Install msys and get an entrypoint for it
+      - uses: msys2/setup-msys2@v2
+        with:
+          install: base-devel git rsync autoconf automake1.16
+
+      - name: "Windows-10 theme: Check out repository"
+        uses: actions/checkout@v2
+        with:
+          repository: B00merang-Project/Windows-10
+          path: windows-10-theme
+
+      - name: Download GNOME hicolor icon theme
+        uses: carlosperate/download-file-action@v1.0.3
+        id: hicolor-icon-theme
+        with:
+          file-url: https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.17.tar.xz
+          file-name: hicolor-icon-theme-0.17.tar.xz
+          location: hicolor-icon-theme/
+
+      - name: Download GNOME Adwaita icon theme
+        uses: carlosperate/download-file-action@v1.0.3
+        id: adwaita-icon-theme
+        with:
+          file-url: https://download.gnome.org/sources/adwaita-icon-theme/3.38/adwaita-icon-theme-3.38.0.tar.xz
+          file-name: adwaita-icon-theme-3.38.0.tar.xz
+          location: adwaita-icon-theme/
+
+      - name: Build and install hicolor icon theme
+        run: |
+          cd hicolor-icon-theme/
+          tar -xvf hicolor-icon-theme-0.17.tar.xz --strip-components=1
+          ./configure
+          make -j
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
+
+      - name: Build and install Adwaita icon theme
+        run: |
+          cd adwaita-icon-theme/
+          tar -xvf adwaita-icon-theme-3.38.0.tar.xz --strip-components=1
+          ./configure
+          make -j
+          make install DESTDIR="`pwd`/prefix"
+          find "`pwd`/prefix"
+          
+      - name: Collect results
+        run: |
+          mkdir -p out/share/
+          rsync -av hicolor-icon-theme/prefix/mingw64/share/ out/share/
+          rsync -av adwaita-icon-theme/prefix/mingw64/share/ out/share/        
+          mkdir -p out/share/themes/Windows10/gtk-3.0/
+          rsync -av windows-10-theme/gtk-3.20/ out/share/themes/Windows10/gtk-3.0/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: theme-data
+          path: ${{ github.workspace }}/out/
+  
+  package:
+    runs-on: windows-latest
+    needs: [build, build-icon-themes]
+
+    steps:
+      - name: Download all workflow artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Delete previous workflow artifacts
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: |
+            build-result
+            theme-data
+          failOnError: false
+
+      - name: Merge resources
+        shell: powershell
+        run: |
+          mkdir pkg
+          robocopy /e theme-data pkg
+          if ($lastExitCode -ge 8) {
+            Write-Host "robocopy failed: $lastExitCode"
+            exit 1
+          }
+          robocopy /e build-result pkg
+          if ($lastExitCode -ge 8) {
+            Write-Host "robocopy failed: $lastExitCode"
+          }
+          exit 0
+
+      - name: Run Inno Setup compiler
+        shell: powershell
+        run: |
+          cd pkg/
+          iscc gobby.iss
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v2
+        with:
+          name: installer
+          path: ${{ github.workspace }}/pkg/Output/
