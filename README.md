@@ -1,6 +1,7 @@
 # Gobby: First Contact
 
-[![Build Status](https://travis-ci.org/gobby/gobby.svg?branch=master)](https://travis-ci.org/gobby/gobby)
+![Linux build](https://github.com/gobby/gobby/workflows/Linux%20build/badge.svg)
+![Windows build](https://github.com/gobby/gobby/workflows/Windows%20build/badge.svg)
 
 ## Synopsis
 
