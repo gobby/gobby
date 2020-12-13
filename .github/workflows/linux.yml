@@ -49,8 +49,7 @@ jobs:
       - name: "libinfinity: Install the result"
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
-          make install DESTDIR="`pwd`/prefix"
-          find "`pwd`/prefix"
+          sudo make install
 
       - name: "gobby: Install required packages"
         run: |
@@ -64,8 +63,7 @@ jobs:
       - name: "gobby: Run configure"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          PKG_CONFIG_PATH="`pwd`/../libinfinity/prefix/usr/local/lib/pkgconfig" \
-            ./configure
+          ./configure
 
       - name: "gobby: Run the build"
         run: |
@@ -75,4 +73,4 @@ jobs:
       - name: "gobby: Install the result"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          make install DESTDIR="`pwd`/prefix"
+          sudo make install
