@@ -1,7 +1,7 @@
 # Gobby: First Contact
 
-![Linux build](https://github.com/pkern/gobby/workflows/Linux%20build/badge.svg)
-![Windows build](https://github.com/pkern/gobby/workflows/Windows%20build/badge.svg)
+![Linux build](https://github.com/gobby/gobby/workflows/Linux%20build/badge.svg)
+![Windows build](https://github.com/gobby/gobby/workflows/Windows%20build/badge.svg)
 
 ## Synopsis
 
