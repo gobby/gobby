@@ -54,7 +54,7 @@ jobs:
 
       - name: "gobby: Install required packages"
         run: |
-          sudo apt-get install -y libxml++2.6-dev libglibmm-2.4-dev libgtkmm-3.0-dev libgtksourceview-3.0-dev libgsasl7-dev libunique-3.0-dev gettext intltool gnome-doc-utils rarian-compat
+          sudo apt-get install -y libxml++2.6-dev libglibmm-2.4-dev libgtkmm-3.0-dev libgtksourceview-3.0-dev libgsasl7-dev libunique-dev gettext intltool yelp-tools
 
       - name: "gobby: Generate autotools build files"
         run: |
