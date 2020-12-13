@@ -64,7 +64,7 @@ jobs:
       - name: "gobby: Run configure"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          PKG_CONFIG_PATH="`pwd`/../libinfinity/prefix/usr/lib/pkgconfig" \
+          PKG_CONFIG_PATH="`pwd`/../libinfinity/prefix/usr/local/lib/pkgconfig" \
             ./configure
 
       - name: "gobby: Run the build"
