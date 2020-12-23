@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>de.0x539.gobby</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <provides>
+    <binary>gobby-0.5</binary>
+  </provides>
+  <name>Gobby</name>
+  <summary>Collaborative text editor</summary>
+
+  <description>
+    <p>
+      Gobby is a free collaborative editor supporting multiple documents in one session and a multi-user chat. 
+      It runs on Microsoft Windows, Mac OS X, Linux and other Unix-like platforms.
+    </p>
+    <p>
+      It uses GTK+ as its windowing toolkit and thus integrates nicely into the GNOME desktop environment.         
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://gobby.github.io/img/screenshots/Screenshot_ui.png</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://gobby.github.io/</url>
+</component>
