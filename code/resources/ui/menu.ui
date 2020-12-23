@@ -205,7 +205,7 @@
             <attribute name="action">win.highlight-mode</attribute>
             <attribute name="target"></attribute>
           </item>
-          <!-- this is filled programatically -->
+          <!-- this is filled programmatically -->
         </submenu>
       </section>
     </submenu>
