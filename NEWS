@@ -1,6 +1,22 @@
 Gobby
 =====
 
+Version 0.6.0:
+  * Remove support for GTK+ 2.x; at least GTK+ 3.6 is required now.
+  * Enable TCP keepalives, so that inactive connections will drop automatically
+    after a short time.
+  * Gobby is now registered as a handler for infinote:// URLs.
+  * Remember hosts previously connected to and presents them in the list
+    next time Gobby is started until expilictly removed.
+  * Gobby can now show connection parameters, in particular TLS parameters
+    used for the connection.
+  * Gobby's configuration options are stored in GSettings instead of a custam
+    config.xml file.
+  * The option to not set a certificate in the initial welcome dialog is no
+    longer available.
+  * Gobby can now use the default system CAs on Windows.
+  * Small bug fixes and code base modernization.
+
 Version 0.5.0:
   * Allow to run a server within the Gobby process; infinoted is no longer
     required to connect to other people
