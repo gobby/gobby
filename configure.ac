@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT([gobby], [0.6.0], [crew@0x539.de])
+AC_INIT([gobby], [0.7.0], [crew@0x539.de])
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE(1.9 check-news foreign subdir-objects)
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
