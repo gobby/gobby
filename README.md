@@ -35,17 +35,17 @@ nicely into the GNOME desktop environment if you want it to.
 ## Requirements
 
 - libinfinity (0.7.x)
-- Glib (>= 2.18.0)
-- Glibmm (>= 2.18.0)
+- Glib (>= 2.40.0)
+- Glibmm (>= 2.40.0)
 - libxml++ (>= 2.6.0)
 - libgsasl (>= 0.2.21)
-- Gtkmm-3.0 (>= 3.0)
+- Gtkmm-3.0 (>= 3.6)
 - GtkSourceView-3.0 (>= 3.0)
 
 ## More information
 
 The development of Gobby is coordinated on github at <https://github.com/gobby>.
-The primary distribution point is <http://releases.0x539.de/>.
+The primary distribution point is <https://github.com/gobby/gobby/releases>.
 
 ### How to report bugs
 
