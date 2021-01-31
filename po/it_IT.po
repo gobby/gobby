@@ -7,117 +7,117 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-27 22:29+0200\n"
+"POT-Creation-Date: 2021-01-31 11:22+0100\n"
 "PO-Revision-Date: 2016-10-27 23:27+0200\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.9\n"
-"Last-Translator: \n"
-"Language: it_IT\n"
 
-#: ../code/commands/auth-commands.cpp:196
+#: ../code/application.cpp:132
+msgid "Display version information and exit"
+msgstr "Mostra informazioni sulla versione ed esci"
+
+#: ../code/application.cpp:134
+#, fuzzy
+msgid "Start a new gobby instance also if there is one already running"
+msgstr "Apri nuova istanza di Gobby se una è già presente"
+
+#: ../code/commands/auth-commands.cpp:193
+#: ../code/commands/browser-context-commands.cpp:354
+#: ../code/core/filechooser.cpp:34 ../code/core/filechooser.cpp:39
+#: ../code/core/huebutton.cpp:102
+#: ../code/dialogs/document-location-dialog.cpp:35
+#, fuzzy
+msgid "_Cancel"
+msgstr "Annulla"
+
+#: ../code/commands/auth-commands.cpp:195 ../code/core/huebutton.cpp:103
+msgid "_Ok"
+msgstr ""
+
+#: ../code/commands/auth-commands.cpp:217
 msgid "Password required"
 msgstr "È richiesta una password"
 
-#: ../code/commands/auth-commands.cpp:214
+#: ../code/commands/auth-commands.cpp:250
 msgid "Incorrect password"
 msgstr "Password non corretta"
 
-#: ../code/commands/browser-commands.cpp:288
+#: ../code/commands/browser-commands.cpp:289
 msgid "Subscribing to %1..."
 msgstr "Iscrizione a %1..."
 
-#: ../code/commands/browser-commands.cpp:301
+#: ../code/commands/browser-commands.cpp:302
 msgid "Subscribing to chat on %1..."
 msgstr "Iscrizione alla chat su %1..."
 
-#: ../code/commands/browser-commands.cpp:591
+#: ../code/commands/browser-commands.cpp:625
 msgid "Subscription failed"
 msgstr "Iscrizione fallita"
 
-#: ../code/commands/browser-context-commands.cpp:86
+#: ../code/commands/browser-context-commands.cpp:85
 msgid "Could not find a location where to store the certificate"
 msgstr "Impossibile trovare una posizione dove salvare il certificato"
 
-#: ../code/commands/browser-context-commands.cpp:153
-msgid "_Remove"
-msgstr "_Rimuovi"
+#: ../code/commands/browser-context-commands.cpp:287
+#: ../code/commands/browser-context-commands.cpp:322
+#: ../code/commands/browser-context-commands.cpp:409
+#: ../code/commands/file-tasks/task-open-location.cpp:31
+#: ../code/core/statusbar.cpp:81 ../code/dialogs/find-dialog.cpp:58
+#: ../code/dialogs/goto-dialog.cpp:30 ../code/dialogs/initial-dialog.cpp:206
+#: ../code/dialogs/preferences-dialog.cpp:815
+msgid "_Close"
+msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:188
-msgid "_Disconnect from Server"
-msgstr "_Disconnetti dal Server"
-
-#: ../code/commands/browser-context-commands.cpp:220
-msgid "Create _Account..."
-msgstr "crea _Account..."
-
-#: ../code/commands/browser-context-commands.cpp:245
-msgid "Create Do_cument..."
-msgstr "Crea Do_cumento..."
-
-#: ../code/commands/browser-context-commands.cpp:280
-msgid "Create Di_rectory..."
-msgstr "Crea Ca_rtella..."
-
-#: ../code/commands/browser-context-commands.cpp:293
-msgid "_Open Document..."
-msgstr "Apri D_ocumento..."
-
-#: ../code/commands/browser-context-commands.cpp:312
-msgid "_Permissions..."
-msgstr "_Permessi..."
-
-#: ../code/commands/browser-context-commands.cpp:324
-msgid "D_elete"
-msgstr "_Elimina"
-
-#: ../code/commands/browser-context-commands.cpp:405
+#: ../code/commands/browser-context-commands.cpp:349
 msgid "Choose a name for the directory"
 msgstr "Scegli un nome per la cartella"
 
-#: ../code/commands/browser-context-commands.cpp:406
+#: ../code/commands/browser-context-commands.cpp:350
 msgid "Choose a name for the document"
 msgstr "Scegli un nome per il documento"
 
-#: ../code/commands/browser-context-commands.cpp:407
+#: ../code/commands/browser-context-commands.cpp:351
 msgid "_Directory Name:"
 msgstr "Nome _della Cartella:"
 
-#: ../code/commands/browser-context-commands.cpp:408
+#: ../code/commands/browser-context-commands.cpp:352
 msgid "_Document Name:"
 msgstr "Nome del _Documento:"
 
-#: ../code/commands/browser-context-commands.cpp:411
+#: ../code/commands/browser-context-commands.cpp:355
 msgid "C_reate"
 msgstr "C_rea"
 
-#: ../code/commands/browser-context-commands.cpp:415
+#: ../code/commands/browser-context-commands.cpp:357
 msgid "New Directory"
 msgstr "Nuova Cartella"
 
-#: ../code/commands/browser-context-commands.cpp:416
+#: ../code/commands/browser-context-commands.cpp:358
 #: ../code/commands/file-tasks/task-new.cpp:36
 msgid "New Document"
 msgstr "Nuovo Documento"
 
-#: ../code/commands/browser-context-commands.cpp:436
+#: ../code/commands/browser-context-commands.cpp:380
 #: ../code/commands/file-tasks/task-open-file.cpp:22
 msgid "Choose a text file to open"
 msgstr "Scegli un file di testo da aprire"
 
-#: ../code/commands/browser-context-commands.cpp:558
-#: ../code/commands/browser-context-commands.cpp:569
+#: ../code/commands/browser-context-commands.cpp:519
+#: ../code/commands/browser-context-commands.cpp:530
 msgid "Account successfully created"
 msgstr "Account creato con successo"
 
-#: ../code/commands/browser-context-commands.cpp:562
+#: ../code/commands/browser-context-commands.cpp:523
 msgid "When re-connecting to the server, the new account will be used."
 msgstr "Alla riconnessione al server, sarà utilizzato il nuovo account."
 
-#: ../code/commands/browser-context-commands.cpp:573
+#: ../code/commands/browser-context-commands.cpp:534
 msgid ""
 "The certificate has been stored at %1.\n"
 "\n"
@@ -129,13 +129,22 @@ msgstr ""
 "Per accedere a questo account, imposta il certificato nelle preferenze di "
 "Gobby e riconnettiti al server."
 
-#: ../code/commands/browser-context-commands.cpp:586
+#: ../code/commands/browser-context-commands.cpp:547
 msgid "Failed to create account"
 msgstr "Impossibile creare l'account"
 
-#: ../code/commands/browser-context-commands.cpp:589
+#: ../code/commands/browser-context-commands.cpp:550
 msgid "Could not save the certificate for the account: %1"
 msgstr "Impossibile salvare il certificato per l'account: %1"
+
+#: ../code/commands/file-commands.cpp:252
+#, fuzzy
+msgid "Cancel"
+msgstr "Annulla"
+
+#: ../code/commands/file-commands.cpp:254
+msgid "Connect"
+msgstr ""
 
 #: ../code/commands/file-tasks/task-export-html.cpp:27
 msgid "Choose a location to export document \"%1\" to"
@@ -146,33 +155,40 @@ msgid "Querying \"%1\"..."
 msgstr "Interrogazione di \"%1\"..."
 
 #: ../code/commands/file-tasks/task-open.cpp:103
-#: ../code/operations/operation-open.cpp:474
-#: ../code/operations/operation-open-multiple.cpp:180
+#: ../code/operations/operation-open.cpp:469
+#: ../code/operations/operation-open-multiple.cpp:176
 msgid "Failed to open document \"%1\""
 msgstr "Impossibile aprire il documento \"%1\""
+
+#: ../code/commands/file-tasks/task-open-location.cpp:32
+#: ../code/core/filechooser.cpp:40
+#: ../code/dialogs/document-location-dialog.cpp:36
+#, fuzzy
+msgid "_Open"
+msgstr "_Apri..."
 
 #: ../code/commands/file-tasks/task-save.cpp:24
 msgid "Choose a location to save document \"%1\" to"
 msgstr "Scegli una posizione in cui salvare il documento \"%1\""
 
 #. Help browser could not be invoked, show an error message to the user.
-#: ../code/commands/help-commands.cpp:70
+#: ../code/commands/help-commands.cpp:49
 msgid "There was an error displaying help."
 msgstr "C'è stato un errore nell'aprire l'aiuto."
 
-#: ../code/commands/help-commands.cpp:93
+#: ../code/commands/help-commands.cpp:74
 msgid "Contributors:"
 msgstr "Contributors:"
 
-#: ../code/commands/help-commands.cpp:99
+#: ../code/commands/help-commands.cpp:80
 msgid "British English:"
 msgstr "Inglese:"
 
-#: ../code/commands/help-commands.cpp:101
+#: ../code/commands/help-commands.cpp:82
 msgid "German:"
 msgstr "Tedesco:"
 
-#: ../code/commands/help-commands.cpp:118
+#: ../code/commands/help-commands.cpp:99
 msgid ""
 "Permission to use, copy, modify, and/or distribute this software for any "
 "urpose with or without fee is hereby granted, provided that the above "
@@ -264,233 +280,50 @@ msgstr "User Join fallito: %1"
 msgid "Permissions are not granted to modify the document."
 msgstr "Non si dispone dei permessi per modificare il documento."
 
-#: ../code/core/browser.cpp:111
+#: ../code/core/browser.cpp:109
 msgid "_Direct Connection"
 msgstr "Connessione _Diretta"
 
-#: ../code/core/browser.cpp:113
+#: ../code/core/browser.cpp:110
 msgid "Host Name:"
 msgstr "Nome Host:"
 
-#: ../code/core/certificatemanager.cpp:83
+#: ../code/core/certificatemanager.cpp:86
 #, c-format
 msgid "Failed to write Diffie-Hellman parameters to \"%s\": %s"
 msgstr "Impossibile scrivere i parametri di Diffie-Helman in \"%s\": \"%s\""
 
-#: ../code/core/certificatemanager.cpp:276
+#: ../code/core/certificatemanager.cpp:279
 #, c-format
 msgid "Failed to read Diffie-Hellman parameters: %s"
 msgstr "Impossibile leggere i parametri Diffie-Hellman: %s"
 
-#: ../code/core/certificatemanager.cpp:338
+#: ../code/core/certificatemanager.cpp:341
 msgid "File does not contain a X.509 certificate"
 msgstr "Il file non contiene un certificato X.509"
 
-#: ../code/core/certificatemanager.cpp:414
+#: ../code/core/certificatemanager.cpp:417
 msgid "Certificate does not belong to the chosen key"
 msgstr "Il certificato non appartiene alla chiave scelta"
 
-#: ../code/core/foldermanager.cpp:322
+#: ../code/core/filechooser.cpp:35
+#, fuzzy
+msgid "_Save"
+msgstr "Salva Tutti"
+
+#: ../code/core/foldermanager.cpp:345
 msgid "The document has been removed from the server."
 msgstr "Il documento è stato rimosso dal server."
 
-#: ../code/core/header.cpp:203
-msgid "_None"
-msgstr "_Nessuno"
-
-#: ../code/core/header.cpp:227
-msgid "_File"
-msgstr "_File"
-
-#: ../code/core/header.cpp:230
-msgid "_Open..."
-msgstr "_Apri..."
-
-#: ../code/core/header.cpp:233
-msgid "Open _Location..."
-msgstr "Apri _Posizione..."
-
-#: ../code/core/header.cpp:237
-msgid "Save _As..."
-msgstr "Salva _Come..."
-
-#: ../code/core/header.cpp:241 ../code/core/iconmanager.cpp:43
-msgid "Save All"
-msgstr "Salva Tutti"
-
-#: ../code/core/header.cpp:241
-msgid "Save all open files locally"
-msgstr "Salva localmente tutti i file aperti"
-
-#: ../code/core/header.cpp:243
-msgid "Export As _HTML..."
-msgstr "Esporta come _HTML..."
-
-#: ../code/core/header.cpp:246
-msgid "Connect _to Server..."
-msgstr "Conne_tti al Server..."
-
-#: ../code/core/header.cpp:251
-msgid "_Edit"
-msgstr "_Modifica"
-
-#: ../code/core/header.cpp:259
-msgid "_Find..."
-msgstr "_Trova.."
-
-#: ../code/core/header.cpp:261
-msgid "Find Ne_xt"
-msgstr "Trova P_rossimo"
-
-#: ../code/core/header.cpp:262
-msgid "Find next match of phrase searched for"
-msgstr "Trova la prossima corrispondenza della frase cercata"
-
-#: ../code/core/header.cpp:265
-msgid "Find Pre_vious"
-msgstr "Trova Precede_nte"
-
-#: ../code/core/header.cpp:266
-msgid "Find previous match of phrase searched for"
-msgstr "Trova corrispondenza precedente della frase cercata"
-
-#: ../code/core/header.cpp:271
-msgid "Find and Rep_lace..."
-msgstr "Trova e Sos_tituisci"
-
-#: ../code/core/header.cpp:275
-msgid "Go to _Line..."
-msgstr "Vai alla _Linea..."
-
-#: ../code/core/header.cpp:279
-msgid "Pr_eferences..."
-msgstr "Pr_eferenze..."
-
-#: ../code/core/header.cpp:281
-msgid "_View"
-msgstr "_Visualizza"
-
-#: ../code/core/header.cpp:284
-msgid "Reset User Colors"
-msgstr "Reimposta i colori degli utenti"
-
-#: ../code/core/header.cpp:285
-msgid "Hide user colors in current document"
-msgstr "Nascondi i colori degli utenti"
-
-#: ../code/core/header.cpp:289
-msgid "Fullscreen"
-msgstr "Schermo intero"
-
-#: ../code/core/header.cpp:290
-msgid "Show the editing window in fullscreen mode"
-msgstr "Mostra la finestra di modifica a schermo intero"
-
-#: ../code/core/header.cpp:294
-msgid "Zoom In"
-msgstr "Ingrandisci"
-
-#: ../code/core/header.cpp:297
-msgid "Zoom Out"
-msgstr "Rimpicciolisci"
-
-#: ../code/core/header.cpp:300
-msgid "View Toolbar"
-msgstr "Visualizza Barra degli Strumenti"
-
-#: ../code/core/header.cpp:301
-msgid "Whether to show the toolbar"
-msgstr "Stabilisce se mostrare la barra degli strumenti"
-
-#: ../code/core/header.cpp:305
-msgid "View Statusbar"
-msgstr "Visualizza la Barra di Stato"
-
-#: ../code/core/header.cpp:306
-msgid "Whether to show the statusbar"
-msgstr "Stabilisce se visualizzare la barra di stato"
-
-#: ../code/core/header.cpp:310
-msgid "View Document Browser"
-msgstr "Visualizza Browser dei Documenti"
-
-#: ../code/core/header.cpp:311
-msgid "Whether to show the document browser"
-msgstr "Stabilisce se visualizzare il browser dei documenti"
-
-#: ../code/core/header.cpp:315
-msgid "View Chat"
-msgstr "Visualizza Chat"
-
-#: ../code/core/header.cpp:316
-msgid "Whether to show the chat pane"
-msgstr "Stabilisce se visualizzare il pannello della chat"
-
-#: ../code/core/header.cpp:320
-msgid "View Document User List"
-msgstr "Visualizza Lista Utenti del Documento"
-
-#: ../code/core/header.cpp:321
-msgid "Whether to show the user list for documents"
-msgstr "Stabilisce se visualizzare la lista di utenti del documento"
-
-#: ../code/core/header.cpp:325
-msgid "View Chat User List"
-msgstr "Visualizza Lista di utenti della chat"
-
-#: ../code/core/header.cpp:326
-msgid "Whether to show the user list for the chat"
-msgstr "Stabilisce se visiualizzare la lista degli utenti della chat"
-
-#: ../code/core/header.cpp:330
-msgid "_Highlight Mode"
-msgstr "Modalità _Evidenziazione"
-
-#: ../code/core/header.cpp:336
-msgid "_Help"
-msgstr "_Aiuto"
-
-#: ../code/core/header.cpp:339
-msgid "_Contents"
-msgstr "_Contenuti"
-
-#: ../code/core/header.cpp:340
-msgid "Opens the Gobby manual"
-msgstr "Apri il manuale di Gobby"
-
-#: ../code/core/header.cpp:343
-msgid "_About..."
-msgstr "Inform_azioni..."
-
-#: ../code/core/header.cpp:344
-msgid "Shows Gobby's copyright and credits"
-msgstr "Mostra i riconoscimenti e il copyright di Gobby"
-
-#: ../code/core/iconmanager.cpp:49
-msgid "User list"
-msgstr "Lista utenti"
-
-#: ../code/core/iconmanager.cpp:55
-msgid "Document list"
-msgstr "Lista documenti"
-
-#: ../code/core/iconmanager.cpp:61 ../code/window.cpp:52
-msgid "Chat"
-msgstr "Chat"
-
-#: ../code/core/iconmanager.cpp:68
-msgid "User Color Indicator"
-msgstr "Indicatore colore dell'utente"
-
-#: ../code/core/selfhoster.cpp:103
+#: ../code/core/selfhoster.cpp:105
 msgid "Generating 2048-bit Diffie-Hellman parameters..."
 msgstr "Generazione dei parametri Diffie-Hellman a 2048-bit"
 
-#: ../code/core/selfhoster.cpp:135
+#: ../code/core/selfhoster.cpp:137
 msgid "Failed to generate Diffie-Hellman parameters"
 msgstr "Impossibile generare i parametri Diffie-Hellman"
 
-#: ../code/core/selfhoster.cpp:137
+#: ../code/core/selfhoster.cpp:139
 msgid ""
 "This means that Perfect Forward Secrecy (PFS) is not available. Restart "
 "Gobby to re-try generating the parameters. The specific error was:\n"
@@ -502,7 +335,7 @@ msgstr ""
 "\n"
 "%1"
 
-#: ../code/core/selfhoster.cpp:262
+#: ../code/core/selfhoster.cpp:265
 msgid ""
 "In order to start sharing your documents, choose a private key and "
 "certificate or create a new pair in the preferences"
@@ -510,145 +343,111 @@ msgstr ""
 "Per condividere i tuoi documenti, scegli una chiave privata e un certificato "
 "o crea una nuova coppia di chiavi nelle preferenze"
 
-#: ../code/core/selfhoster.cpp:282
+#: ../code/core/selfhoster.cpp:287
 msgid "Failed to share documents"
 msgstr "Impossibile condividere i documenti"
 
-#: ../code/core/sessionuserview.cpp:39
+#: ../code/core/sessionuserview.cpp:38
 msgid "User List"
 msgstr "Lista Utenti"
 
-#: ../code/core/statusbar.cpp:418
+#: ../code/core/statusbar.cpp:434
 msgid "Ln %1, Col %2\t%3"
 msgstr "Ln %1, Col %2\t%3"
 
-#: ../code/core/statusbar.cpp:421
+#: ../code/core/statusbar.cpp:437
 msgid "OVR"
 msgstr "SSC"
 
-#: ../code/core/statusbar.cpp:421
+#: ../code/core/statusbar.cpp:437
 msgid "INS"
 msgstr "INS"
 
-#: ../code/core/textsessionview.cpp:638
+#: ../code/core/textsessionview.cpp:639
 msgid "Text written by <b>%1</b>"
 msgstr "Testo di <b>%1</b>"
 
-#: ../code/core/textsessionview.cpp:644
+#: ../code/core/textsessionview.cpp:645
 msgid "Unowned text"
 msgstr "Testo senza proprietario"
 
-#: ../code/core/userlist.cpp:108
+#: ../code/core/userlist.cpp:115
 msgid "Users"
 msgstr "Utenti"
 
-#: ../code/dialogs/connection-dialog.cpp:26
-msgid "Connect to Server"
-msgstr "Connetti al server"
+#: ../code/dialogs/connection-info-dialog.cpp:48
+#, fuzzy
+msgid "Connections"
+msgstr "Permetti connessioni remote"
 
-#: ../code/dialogs/connection-dialog.cpp:30
-msgid "Please enter a host name with which to establish a connection."
-msgstr "Inserisci un nome host con cui stabilire una connessione."
+#: ../code/dialogs/connection-info-dialog.cpp:313
+msgid "Nobody is connected to this computer"
+msgstr ""
 
-#: ../code/dialogs/connection-dialog.cpp:32
-msgid "_Remote Endpoint:"
-msgstr "Endpoint _remoto:"
-
-#: ../code/dialogs/document-location-dialog.cpp:28
-msgid "Document Name:"
-msgstr "Nome Documento:"
-
-#: ../code/dialogs/document-location-dialog.cpp:155
+#: ../code/dialogs/document-location-dialog.cpp:153
 msgid "Select document's target location"
 msgstr "Scegli la destinazione del documento"
 
-#: ../code/dialogs/document-location-dialog.cpp:157
+#: ../code/dialogs/document-location-dialog.cpp:155
 msgid "Choose a directory to create the document into:"
 msgstr "Scegli una cartella in cui creare il documento:"
 
-#: ../code/dialogs/document-location-dialog.cpp:163
+#: ../code/dialogs/document-location-dialog.cpp:162
 msgid "Select documents' target location"
 msgstr "Scegli la destinazione del documento"
 
-#: ../code/dialogs/document-location-dialog.cpp:165
+#: ../code/dialogs/document-location-dialog.cpp:164
 msgid "Choose a directory to create the documents into:"
 msgstr "Choose a directory to create the document into:"
 
-#: ../code/dialogs/find-dialog.cpp:44 ../code/dialogs/find-dialog.cpp:142
-msgid "Find"
-msgstr "Trova"
-
-#: ../code/dialogs/find-dialog.cpp:47
-msgid "_Search for:"
-msgstr "_Cerca:"
-
-#: ../code/dialogs/find-dialog.cpp:49
-msgid "Replace _with:"
-msgstr "Sostituisci _con"
-
-#: ../code/dialogs/find-dialog.cpp:51
-msgid "_Match case"
-msgstr "Corrispondenza _maiuscole/minuscole"
-
-#: ../code/dialogs/find-dialog.cpp:52
-msgid "Match _entire word only"
-msgstr "Solo parole int_ere"
-
-#: ../code/dialogs/find-dialog.cpp:53
-msgid "Search _backwards"
-msgstr "Cerca all'indietro"
-
-#: ../code/dialogs/find-dialog.cpp:54
-msgid "Wra_p around"
-msgstr "Ricomincia da ca_po"
-
-#: ../code/dialogs/find-dialog.cpp:100
+#: ../code/dialogs/find-dialog.cpp:59
 msgid "Replace _All"
 msgstr "Sostituisci _Tutto"
 
-#: ../code/dialogs/find-dialog.cpp:102
+#: ../code/dialogs/find-dialog.cpp:61
 msgid "_Replace"
 msgstr "Sostituis_ci"
 
-#: ../code/dialogs/find-dialog.cpp:142
+#: ../code/dialogs/find-dialog.cpp:62
+#, fuzzy
+msgid "_Find"
+msgstr "Trova"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Find"
+msgstr "Trova"
+
+#: ../code/dialogs/find-dialog.cpp:119
 msgid "Replace"
 msgstr "Sostituisci"
 
-#: ../code/dialogs/find-dialog.cpp:161 ../code/dialogs/find-dialog.cpp:177
+#: ../code/dialogs/find-dialog.cpp:138 ../code/dialogs/find-dialog.cpp:154
 msgid "Phrase \"%1\" has not been found"
 msgstr "La frase \"%1\" non è stata trovata"
 
-#: ../code/dialogs/find-dialog.cpp:335
+#: ../code/dialogs/find-dialog.cpp:312
 msgid "No occurrence has been replaced"
 msgstr "Nessuna occorrenza sostituita"
 
-#: ../code/dialogs/find-dialog.cpp:341
+#: ../code/dialogs/find-dialog.cpp:318
 msgid "%1 occurrence has been replaced"
 msgid_plural "%1 occurrences have been replaced"
 msgstr[0] "%1 occorrenza è stata sostituita"
 msgstr[1] "%1 occorrenze sono state sostituite"
 
-#: ../code/dialogs/goto-dialog.cpp:26
-msgid "Go to line"
-msgstr "Vai alla riga"
-
-#: ../code/dialogs/goto-dialog.cpp:29
-msgid "Line _number:"
-msgstr "_Numero riga:"
-
-#: ../code/dialogs/goto-dialog.cpp:50
+#: ../code/dialogs/goto-dialog.cpp:31
 msgid "Go To _Line"
 msgstr "Vai alla _Riga"
 
-#: ../code/dialogs/initial-dialog.cpp:76
+#: ../code/dialogs/initial-dialog.cpp:53
 msgid "Generating 2048-bit RSA private key..."
 msgstr "Generazione chiave privata RSA a 2048-bit"
 
-#: ../code/dialogs/initial-dialog.cpp:99
+#: ../code/dialogs/initial-dialog.cpp:76
 msgid "Failed to generate private key"
 msgstr "Impossibile generare la chiave privata"
 
-#: ../code/dialogs/initial-dialog.cpp:102
+#: ../code/dialogs/initial-dialog.cpp:79
 msgid ""
 "%1\n"
 "\n"
@@ -660,11 +459,11 @@ msgstr ""
 "Puoi provare ancora a creare una chiave nella scheda Sicurezza delle "
 "Preferenze"
 
-#: ../code/dialogs/initial-dialog.cpp:141
+#: ../code/dialogs/initial-dialog.cpp:118
 msgid "Failed to generate self-signed certificate"
 msgstr "Impossibile generare il certificato auto-firmato"
 
-#: ../code/dialogs/initial-dialog.cpp:144
+#: ../code/dialogs/initial-dialog.cpp:121
 msgid ""
 "%1\n"
 "\n"
@@ -676,439 +475,74 @@ msgstr ""
 "Puoi provare ancora a creare un certificato nella scheda Sicurezza delle "
 "Preferenze"
 
-#: ../code/dialogs/initial-dialog.cpp:198
-msgid "Choose a user color"
-msgstr "Scegli un colore utente"
-
-#: ../code/dialogs/initial-dialog.cpp:204
-msgid "Welcome to Gobby"
-msgstr "Benvenuto in Gobby"
-
-#: ../code/dialogs/initial-dialog.cpp:216
-msgid ""
-"Before we start, a few options need to be configured. You can later change "
-"them by choosing Edit ▸ Preferences from the menu."
-msgstr ""
-"Prima di iniziare, occorre configurare qualche opzione. Puoi modificarle più "
-"tardi scegliendo Modifica ▸ Preferenze dal menu."
-
-#: ../code/dialogs/initial-dialog.cpp:224
-msgid "User Name"
-msgstr "Nome Utente"
-
-#: ../code/dialogs/initial-dialog.cpp:226
-msgid "Your name as shown to other users."
-msgstr "Il tuo nome come mostrato agli altri"
-
-#: ../code/dialogs/initial-dialog.cpp:235
-msgid "User Color"
-msgstr "Colore utente"
-
-#: ../code/dialogs/initial-dialog.cpp:237
-msgid "The color with which text you have written is branded."
-msgstr "Il colore con cui è marcato il testo scritto da te."
-
-#: ../code/dialogs/initial-dialog.cpp:256
-msgid "Remote Connections"
-msgstr "Permetti connessioni remote"
-
-#: ../code/dialogs/initial-dialog.cpp:262
-#: ../code/dialogs/preferences-dialog.cpp:217
-msgid "Allow remote users to edit local documents"
-msgstr "Permetti agli utenti remoti di modificare i documenti locali"
-
-#: ../code/dialogs/initial-dialog.cpp:268
-msgid "Ask remote users for a password"
-msgstr "Richiedi una password agli utenti remoti"
-
-#: ../code/dialogs/initial-dialog.cpp:273
-#: ../code/dialogs/preferences-dialog.cpp:220
-msgid "Password:"
-msgstr "Password:"
-
-#: ../code/dialogs/initial-dialog.cpp:297
-msgid "No authentication (Not recommended)"
-msgstr "Nessuna autenticazione (sconsigliato)"
-
-#: ../code/dialogs/initial-dialog.cpp:304
-msgid ""
-"Don't authenticate ourselves to remote users. Data transfer will be "
-"unencrypted."
-msgstr ""
-"Non autenticarmi agli utenti remoti. I dati saranno trasmessi in chiaro."
-
-#: ../code/dialogs/initial-dialog.cpp:313
-msgid "Create a self-signed certificate (Recommended)"
-msgstr "Crea un certificato auto-firmato (consigliato)"
-
-#: ../code/dialogs/initial-dialog.cpp:321
-msgid ""
-"It may take a minute or two until remote users can connect while the "
-"security certificate is being generated."
-msgstr ""
-"Potrebbero volerci due minuti prima che gli utenti remoti possano "
-"connettersi, mentre il certificato viene generato."
-
-#: ../code/dialogs/initial-dialog.cpp:331
-msgid "Use an existing certificate (Expert option)"
-msgstr "Usa un certificato esistente (per esperti)"
-
-#: ../code/dialogs/initial-dialog.cpp:338
-msgid ""
-"Use an existing private key and certificate for authentication. The files "
-"must be in PEM format."
-msgstr ""
-"Usa una chiave privata e un certificato esistenti. I file devono essere nel "
-"formato PEM."
-
-#: ../code/dialogs/initial-dialog.cpp:347
-#: ../code/dialogs/preferences-dialog.cpp:766
-msgid "Private key:"
-msgstr "Chiave privata:"
-
-#: ../code/dialogs/initial-dialog.cpp:349
-#: ../code/dialogs/preferences-dialog.cpp:772
-msgid "Certificate:"
-msgstr "Certificato:"
-
-#: ../code/dialogs/open-location-dialog.cpp:26
-msgid "Open Location"
-msgstr "Apri Posizione"
-
-#: ../code/dialogs/open-location-dialog.cpp:27
-msgid "Enter the _location (URI) of the file you would like to open:"
-msgstr "Inserisci la _posizione (URI) del file che vuoi aprire:"
-
-#: ../code/dialogs/password-dialog.cpp:25
-msgid "Password Required"
-msgstr "È richiesta una password"
-
-#: ../code/dialogs/password-dialog.cpp:31
+#: ../code/dialogs/password-dialog.cpp:34
 msgid "Connection to host \"%1\" requires a password."
 msgstr "La connessione all'host \"%1\" richiede una password."
 
-#: ../code/dialogs/password-dialog.cpp:32
+#: ../code/dialogs/password-dialog.cpp:40
 msgid "Invalid password for host \"%1\". Please try again."
 msgstr "Password non valida per l'host \"%1\". Riprova."
 
-#: ../code/dialogs/password-dialog.cpp:35
-msgid "Server _Password:"
-msgstr "_Password del server:"
-
-#: ../code/dialogs/preferences-dialog.cpp:198
-msgid "Settings"
-msgstr "Impostazioni"
-
-#: ../code/dialogs/preferences-dialog.cpp:199
-msgid "Remote Users"
-msgstr "Utenti remoti"
-
-#: ../code/dialogs/preferences-dialog.cpp:200
-msgid "Local Documents"
-msgstr "Documenti locali"
-
-#: ../code/dialogs/preferences-dialog.cpp:202
-msgid "User name:"
-msgstr "Nome utente:"
-
-#: ../code/dialogs/preferences-dialog.cpp:204
-msgid "User color:"
-msgstr "Colore utente:"
-
-#: ../code/dialogs/preferences-dialog.cpp:206
-msgid "Color intensity:"
-msgstr "Intensità colore:"
-
-#: ../code/dialogs/preferences-dialog.cpp:208
-msgid "Choose a new user color"
-msgstr "Scegli un nuovo colore utente"
-
-#: ../code/dialogs/preferences-dialog.cpp:209
-msgid "Show cursors of remote users"
-msgstr "Mostra il cursore degli utenti remoti"
-
-#: ../code/dialogs/preferences-dialog.cpp:210
-msgid "Show selections of remote users"
-msgstr "Mostra la selezione degli utenti remoti"
-
-#: ../code/dialogs/preferences-dialog.cpp:212
-msgid "Highlight current line of remote users"
-msgstr "Evidenzia la linea corrente degli utenti remoti"
-
-#: ../code/dialogs/preferences-dialog.cpp:214
-msgid "Indicate cursor position of remote users in the scrollbar"
-msgstr ""
-"Mostra la posizione del cursore degli utenti remoti sulla barra di "
-"scorrimento"
-
-#: ../code/dialogs/preferences-dialog.cpp:219
-msgid "Require remote users to enter a password"
-msgstr "Richiedi che gli utenti remoti inseriscano una password"
-
-#: ../code/dialogs/preferences-dialog.cpp:222
-msgid "Port:"
-msgstr "Porta:"
-
-#: ../code/dialogs/preferences-dialog.cpp:226
-msgid "Remember local documents after Gobby restart"
-msgstr "Ricorda i documenti locali dopo il riavvio di Gobby"
-
-#: ../code/dialogs/preferences-dialog.cpp:227
-msgid "Local documents directory:"
-msgstr "Cartella dei documenti locali:"
-
-#: ../code/dialogs/preferences-dialog.cpp:423
-msgid "Tab Stops"
-msgstr "Tabulazioni"
-
-#: ../code/dialogs/preferences-dialog.cpp:424
-msgid "Indentation"
-msgstr "Indentazione"
-
-#: ../code/dialogs/preferences-dialog.cpp:425
-msgid "Home/End Behavior"
-msgstr "Comportamento tasti Inizio/Fine"
-
-#: ../code/dialogs/preferences-dialog.cpp:426
-msgid "File Saving"
-msgstr "Salvataggio file"
-
-#: ../code/dialogs/preferences-dialog.cpp:427
-msgid "_Tab width:"
-msgstr "Larghezza _tab"
-
-#: ../code/dialogs/preferences-dialog.cpp:429
-msgid "Insert _spaces instead of tabs"
-msgstr "Inserisci _spazi al posto delle tabulazioni"
-
-#: ../code/dialogs/preferences-dialog.cpp:430
-msgid "Enable automatic _indentation"
-msgstr "Abilita _indentazione automatica"
-
-#: ../code/dialogs/preferences-dialog.cpp:431
-msgid "Smart _home/end"
-msgstr "Inizio/_fine intelligente"
-
-#: ../code/dialogs/preferences-dialog.cpp:432
-msgid "Enable _automatic saving of documents"
-msgstr "Abilita salvataggio _automatico dei documenti"
-
-#: ../code/dialogs/preferences-dialog.cpp:434
-msgid "Autosave interval in _minutes:"
-msgstr "Ogni quanti minuti salvare automaticamente: "
-
-#: ../code/dialogs/preferences-dialog.cpp:455
-msgid ""
-"With this option enabled, Home/End keys move to first/last character before "
-"going to the start/end of the line."
-msgstr ""
-"Con questa opzione abilitata, i tasti Inizio/Fine muovono il cursore al "
-"primo/ultimo carattere prima di andare all'inizio/fine della riga."
-
-#: ../code/dialogs/preferences-dialog.cpp:525
-msgid "Text Wrapping"
-msgstr "A capo automatico"
-
-#: ../code/dialogs/preferences-dialog.cpp:526
-msgid "Line Numbers"
-msgstr "Numeri di linea"
-
-#: ../code/dialogs/preferences-dialog.cpp:527
-msgid "Current Line"
-msgstr "Linea corrente"
-
-#: ../code/dialogs/preferences-dialog.cpp:528
-msgid "Right Margin"
-msgstr "Margine destro"
-
-#: ../code/dialogs/preferences-dialog.cpp:529
-msgid "Bracket Matching"
-msgstr "Parentesi"
-
-#: ../code/dialogs/preferences-dialog.cpp:530
-msgid "Whitespace Display"
-msgstr "Mostra caratteri non stampabili"
-
-#: ../code/dialogs/preferences-dialog.cpp:531
-msgid "Enable text wrapping"
-msgstr "Abilita a capo automatico"
-
-#: ../code/dialogs/preferences-dialog.cpp:532
-msgid "Do not split words over two lines"
-msgstr "Non dividere le parole su due righe"
-
-#: ../code/dialogs/preferences-dialog.cpp:533
-msgid "Display line numbers"
-msgstr "Mostra numeri di riga"
-
-#: ../code/dialogs/preferences-dialog.cpp:534
-msgid "Highlight current line"
-msgstr "Evidenzia riga corrente"
-
-#: ../code/dialogs/preferences-dialog.cpp:535
-msgid "Display right margin"
-msgstr "Mostra margine destro"
-
-#: ../code/dialogs/preferences-dialog.cpp:536
-msgid "Right margin at column:"
-msgstr "Margine destro alla colonna:"
-
-#: ../code/dialogs/preferences-dialog.cpp:537
-msgid "Highlight matching bracket"
-msgstr "Evidenzia parentesi corrispondenti"
-
-#: ../code/dialogs/preferences-dialog.cpp:589
+#: ../code/dialogs/preferences-dialog.cpp:409
 msgid "Display no whitespace"
 msgstr "Non mostrare caratteri non stampabili"
 
-#: ../code/dialogs/preferences-dialog.cpp:592
+#: ../code/dialogs/preferences-dialog.cpp:412
 msgid "Display spaces"
 msgstr "Mostra spazi"
 
-#: ../code/dialogs/preferences-dialog.cpp:596
+#: ../code/dialogs/preferences-dialog.cpp:416
 msgid "Display tabs"
 msgstr "Mostra tabulazioni"
 
-#: ../code/dialogs/preferences-dialog.cpp:600
+#: ../code/dialogs/preferences-dialog.cpp:420
 msgid "Display tabs and spaces"
 msgstr "Mostra spazi e tabulazioni"
 
-#: ../code/dialogs/preferences-dialog.cpp:651
-msgid "Toolbar"
-msgstr "Barra degli strumenti"
-
-#: ../code/dialogs/preferences-dialog.cpp:652
-msgid "Font"
-msgstr "Carattere"
-
-#: ../code/dialogs/preferences-dialog.cpp:653
-msgid "Color Scheme"
-msgstr "Tema dei Colori"
-
-#: ../code/dialogs/preferences-dialog.cpp:661
+#: ../code/dialogs/preferences-dialog.cpp:452
 msgid "Show text only"
 msgstr "Solo testo"
 
-#: ../code/dialogs/preferences-dialog.cpp:663
+#: ../code/dialogs/preferences-dialog.cpp:454
 msgid "Show icons only"
 msgstr "Solo icone"
 
-#: ../code/dialogs/preferences-dialog.cpp:665
+#: ../code/dialogs/preferences-dialog.cpp:456
 msgid "Show both icons and text"
 msgstr "Icone e testo"
 
-#: ../code/dialogs/preferences-dialog.cpp:667
+#: ../code/dialogs/preferences-dialog.cpp:458
 msgid "Show text besides icons"
 msgstr "Testo accanto alle icone"
 
-#: ../code/dialogs/preferences-dialog.cpp:756
-msgid "Trusted CAs"
-msgstr "Certificate Autorities fidate"
+#: ../code/dialogs/preferences-dialog.cpp:478
+msgid "Scheme Description"
+msgstr ""
 
-#: ../code/dialogs/preferences-dialog.cpp:757
-msgid "Secure Connection"
-msgstr "Connessione Sicura"
-
-#: ../code/dialogs/preferences-dialog.cpp:758
-msgid "Authentication"
-msgstr "Autenticazione"
-
-#: ../code/dialogs/preferences-dialog.cpp:759
-msgid "Select a file containing trusted CAs"
-msgstr "Scegli file contenente le Certificate Autorities fidate"
-
-#: ../code/dialogs/preferences-dialog.cpp:764
-msgid "None"
-msgstr "Nessuno"
-
-#: ../code/dialogs/preferences-dialog.cpp:765
-msgid "Use a certificate"
-msgstr "Usa certificato"
-
-#: ../code/dialogs/preferences-dialog.cpp:767
-msgid "Select a private key file"
-msgstr "Scegli file della chiave privata"
-
-#: ../code/dialogs/preferences-dialog.cpp:769
-#: ../code/dialogs/preferences-dialog.cpp:776
-msgid "Create New..."
-msgstr "Crea Nuovo..."
-
-#: ../code/dialogs/preferences-dialog.cpp:773
-msgid "Select a certificate file"
-msgstr "Scegli file del certificato"
-
-#: ../code/dialogs/preferences-dialog.cpp:801
+#: ../code/dialogs/preferences-dialog.cpp:575
 msgid "Use TLS if possible"
 msgstr "Usa TLS se possibile"
 
-#: ../code/dialogs/preferences-dialog.cpp:804
+#: ../code/dialogs/preferences-dialog.cpp:578
 msgid "Always use TLS"
 msgstr "Usa sempre TLS"
 
-#: ../code/dialogs/preferences-dialog.cpp:892
-msgid "Error reading file:"
+#: ../code/dialogs/preferences-dialog.cpp:615
+#, fuzzy
+msgid "Error reading file: %1"
 msgstr "Errore nella lettura del file:"
 
-#: ../code/dialogs/preferences-dialog.cpp:916
+#: ../code/dialogs/preferences-dialog.cpp:655
 msgid "2048-bit RSA private key is being generated, please wait..."
 msgstr "La chiave privata RSA a 2048-bit viene generata, attendere..."
 
-#: ../code/dialogs/preferences-dialog.cpp:948
+#: ../code/dialogs/preferences-dialog.cpp:685
 msgid "Select a location for the generated key"
 msgstr "Scegli una posizione per la chiave generata"
 
-#: ../code/dialogs/preferences-dialog.cpp:966
+#: ../code/dialogs/preferences-dialog.cpp:703
 msgid "Select a location for the generated certificate"
 msgstr "Scegli una posizione per il certificato generato"
-
-#: ../code/dialogs/preferences-dialog.cpp:1068
-msgid "Preferences"
-msgstr "Preferenze"
-
-#: ../code/dialogs/preferences-dialog.cpp:1073
-msgid "User"
-msgstr "Utente"
-
-#: ../code/dialogs/preferences-dialog.cpp:1074
-msgid "Editor"
-msgstr "Editor"
-
-#: ../code/dialogs/preferences-dialog.cpp:1075
-msgid "View"
-msgstr "Visualizzazione"
-
-#: ../code/dialogs/preferences-dialog.cpp:1076
-msgid "Appearance"
-msgstr "Aspetto"
-
-#: ../code/dialogs/preferences-dialog.cpp:1077
-msgid "Security"
-msgstr "Sicurezza"
-
-#: ../code/main.cpp:194
-msgid "Gobby options"
-msgstr "Opzioni di Gobby"
-
-#: ../code/main.cpp:194
-msgid "Options related to Gobby"
-msgstr "Opzioni riguardanti Gobby"
-
-#: ../code/main.cpp:199
-msgid "Display version information and exit"
-msgstr "Mostra informazioni sulla versione ed esci"
-
-#: ../code/main.cpp:206
-msgid "Also start a new Gobby instance when there is one running already"
-msgstr "Apri nuova istanza di Gobby se una è già presente"
-
-#: ../code/main.cpp:214
-msgid "Connect to given host on startup, can be given multiple times"
-msgstr "All'avvio connettiti all'host fornito, può essere fornito più volte"
-
-#: ../code/main.cpp:215
-msgid "HOSTNAME"
-msgstr "HOSTNAME"
 
 #: ../code/operations/operation-delete.cpp:65
 msgid "Removing node \"%1\"..."
@@ -1118,12 +552,12 @@ msgstr "Rimozione nodo \"%1\"..."
 msgid "Failed to delete node \"%1\""
 msgstr "Impossibile rimuovere nodo \"%1\""
 
-#: ../code/operations/operation-export-html.cpp:168
+#: ../code/operations/operation-export-html.cpp:173
 #, c-format
 msgid "written by: %s"
 msgstr "scritto da: %s"
 
-#: ../code/operations/operation-export-html.cpp:241
+#: ../code/operations/operation-export-html.cpp:246
 msgid "<unable to print date>"
 msgstr "<impossibile stampare la data>"
 
@@ -1133,20 +567,20 @@ msgstr "<impossibile stampare la data>"
 #. %4$s is a link to the gobby site, it must be present because
 #. we need to handle that manually to insert a hyperlink
 #. instead of just printf'ing it.
-#: ../code/operations/operation-export-html.cpp:254
+#: ../code/operations/operation-export-html.cpp:259
 #, c-format
 msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
 msgstr "Documento generato a partire da %1$s:%2$s in data %3$s da %4$s"
 
-#: ../code/operations/operation-export-html.cpp:395
+#: ../code/operations/operation-export-html.cpp:409
 msgid "Participants"
 msgstr "Partecipanti"
 
-#: ../code/operations/operation-export-html.cpp:475
+#: ../code/operations/operation-export-html.cpp:483
 msgid "Exporting document \"%1\" to \"%2\" in HTML..."
 msgstr "Esportazione documento \"%1\" su \"%2\" in HTML..."
 
-#: ../code/operations/operation-export-html.cpp:536
+#: ../code/operations/operation-export-html.cpp:544
 msgid "Failed to export document \"%1\" to HTML"
 msgstr "Impossibile esportare il documento \"%1\" in HTML"
 
@@ -1172,41 +606,41 @@ msgstr "Impossibile creare il documento \"%1\""
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: ../code/operations/operation-open.cpp:114
+#: ../code/operations/operation-open.cpp:113
 msgid "Opening document \"%1\"..."
 msgstr "Apertura documento \"%1\"..."
 
-#: ../code/operations/operation-open.cpp:134
+#: ../code/operations/operation-open.cpp:129
 msgid ""
 "The directory into which the new document was supposed to be inserted has "
 "been removed"
 msgstr ""
 "La cartella in cui il nuovo documento doveva essere inserito è stata rimossa"
 
-#: ../code/operations/operation-open.cpp:323
+#: ../code/operations/operation-open.cpp:318
 msgid "The file contains data not in the specified encoding"
 msgstr "Il file contiene dati che non sono nella codifica specificata"
 
-#: ../code/operations/operation-open.cpp:334
+#: ../code/operations/operation-open.cpp:329
 msgid ""
 "The file either contains data in an unknown encoding, or it contains binary "
 "data."
 msgstr ""
 "Il file contiene dati in una codifica non nota, oppure contiene dati binari."
 
-#: ../code/operations/operation-open-multiple.cpp:91
+#: ../code/operations/operation-open-multiple.cpp:88
 msgid "Parent folder was removed"
 msgstr "Una cartella superiore è stata rimossa"
 
-#: ../code/operations/operation-open-multiple.cpp:193
+#: ../code/operations/operation-open-multiple.cpp:189
 msgid "Failed to open multiple documents"
 msgstr "Impossibile aprire più documenti"
 
-#: ../code/operations/operation-save.cpp:97
+#: ../code/operations/operation-save.cpp:91
 msgid "Saving document \"%1\" to \"%2\"..."
 msgstr "Salvataggio documento \"%1\" su \"%2\"..."
 
-#: ../code/operations/operation-save.cpp:226
+#: ../code/operations/operation-save.cpp:220
 msgid ""
 "The document contains one or more characters that cannot be encoded in the "
 "specified character coding."
@@ -1214,7 +648,7 @@ msgstr ""
 "Il documento contiene uno o più caratteri che non possono essere "
 "rappresentati nella codifica specificata."
 
-#: ../code/operations/operation-save.cpp:287
+#: ../code/operations/operation-save.cpp:281
 msgid "Failed to save document \"%1\""
 msgstr "Impossibile salvare il documento \"%1\""
 
@@ -1265,25 +699,17 @@ msgstr "Impossibile creare cartella \"%1\": %2"
 msgid "Device \"%1\" does not exist"
 msgstr "Il dispositivo \"%1\" non esiste"
 
-#: ../code/window.cpp:104
+#: ../code/window.cpp:42
+msgid "Chat"
+msgstr "Chat"
+
+#: ../code/window.cpp:83
 msgid "This Computer"
 msgstr "Questo Computer"
 
-#: ../code/window.cpp:129
+#: ../code/window.cpp:108
 msgid "Document Browser"
 msgstr "Browser Documenti"
-
-#: ../code/window.cpp:182
-msgid "You are still connected to a session"
-msgstr "Sei ancora connesso a una sessione"
-
-#: ../code/window.cpp:190
-msgid "Do you want to close Gobby nevertheless?"
-msgstr "Vuoi ugualmente chiudere Gobby?"
-
-#: ../code/window.cpp:196
-msgid "C_ancel"
-msgstr "Annulla"
 
 #: ../gobby-0.5.desktop.in.h:1
 msgid "Gobby"
@@ -1300,3 +726,471 @@ msgstr "Gobby Editor Collaborativo (0.5)"
 #: ../gobby-0.5.desktop.in.h:4
 msgid "Edit text files collaboratively"
 msgstr "Modifica file di testo in modo collaborativo"
+
+#~ msgid "_Remove"
+#~ msgstr "_Rimuovi"
+
+#~ msgid "_Disconnect from Server"
+#~ msgstr "_Disconnetti dal Server"
+
+#~ msgid "Create _Account..."
+#~ msgstr "crea _Account..."
+
+#~ msgid "Create Do_cument..."
+#~ msgstr "Crea Do_cumento..."
+
+#~ msgid "Create Di_rectory..."
+#~ msgstr "Crea Ca_rtella..."
+
+#~ msgid "_Open Document..."
+#~ msgstr "Apri D_ocumento..."
+
+#~ msgid "_Permissions..."
+#~ msgstr "_Permessi..."
+
+#~ msgid "D_elete"
+#~ msgstr "_Elimina"
+
+#~ msgid "_None"
+#~ msgstr "_Nessuno"
+
+#~ msgid "_File"
+#~ msgstr "_File"
+
+#~ msgid "Open _Location..."
+#~ msgstr "Apri _Posizione..."
+
+#~ msgid "Save _As..."
+#~ msgstr "Salva _Come..."
+
+#~ msgid "Save all open files locally"
+#~ msgstr "Salva localmente tutti i file aperti"
+
+#~ msgid "Export As _HTML..."
+#~ msgstr "Esporta come _HTML..."
+
+#~ msgid "Connect _to Server..."
+#~ msgstr "Conne_tti al Server..."
+
+#~ msgid "_Edit"
+#~ msgstr "_Modifica"
+
+#~ msgid "_Find..."
+#~ msgstr "_Trova.."
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "Trova P_rossimo"
+
+#~ msgid "Find next match of phrase searched for"
+#~ msgstr "Trova la prossima corrispondenza della frase cercata"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "Trova Precede_nte"
+
+#~ msgid "Find previous match of phrase searched for"
+#~ msgstr "Trova corrispondenza precedente della frase cercata"
+
+#~ msgid "Find and Rep_lace..."
+#~ msgstr "Trova e Sos_tituisci"
+
+#~ msgid "Go to _Line..."
+#~ msgstr "Vai alla _Linea..."
+
+#~ msgid "Pr_eferences..."
+#~ msgstr "Pr_eferenze..."
+
+#~ msgid "_View"
+#~ msgstr "_Visualizza"
+
+#~ msgid "Reset User Colors"
+#~ msgstr "Reimposta i colori degli utenti"
+
+#~ msgid "Hide user colors in current document"
+#~ msgstr "Nascondi i colori degli utenti"
+
+#~ msgid "Fullscreen"
+#~ msgstr "Schermo intero"
+
+#~ msgid "Show the editing window in fullscreen mode"
+#~ msgstr "Mostra la finestra di modifica a schermo intero"
+
+#~ msgid "Zoom In"
+#~ msgstr "Ingrandisci"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Rimpicciolisci"
+
+#~ msgid "View Toolbar"
+#~ msgstr "Visualizza Barra degli Strumenti"
+
+#~ msgid "Whether to show the toolbar"
+#~ msgstr "Stabilisce se mostrare la barra degli strumenti"
+
+#~ msgid "View Statusbar"
+#~ msgstr "Visualizza la Barra di Stato"
+
+#~ msgid "Whether to show the statusbar"
+#~ msgstr "Stabilisce se visualizzare la barra di stato"
+
+#~ msgid "View Document Browser"
+#~ msgstr "Visualizza Browser dei Documenti"
+
+#~ msgid "Whether to show the document browser"
+#~ msgstr "Stabilisce se visualizzare il browser dei documenti"
+
+#~ msgid "View Chat"
+#~ msgstr "Visualizza Chat"
+
+#~ msgid "Whether to show the chat pane"
+#~ msgstr "Stabilisce se visualizzare il pannello della chat"
+
+#~ msgid "View Document User List"
+#~ msgstr "Visualizza Lista Utenti del Documento"
+
+#~ msgid "Whether to show the user list for documents"
+#~ msgstr "Stabilisce se visualizzare la lista di utenti del documento"
+
+#~ msgid "View Chat User List"
+#~ msgstr "Visualizza Lista di utenti della chat"
+
+#~ msgid "Whether to show the user list for the chat"
+#~ msgstr "Stabilisce se visiualizzare la lista degli utenti della chat"
+
+#~ msgid "_Highlight Mode"
+#~ msgstr "Modalità _Evidenziazione"
+
+#~ msgid "_Help"
+#~ msgstr "_Aiuto"
+
+#~ msgid "_Contents"
+#~ msgstr "_Contenuti"
+
+#~ msgid "Opens the Gobby manual"
+#~ msgstr "Apri il manuale di Gobby"
+
+#~ msgid "_About..."
+#~ msgstr "Inform_azioni..."
+
+#~ msgid "Shows Gobby's copyright and credits"
+#~ msgstr "Mostra i riconoscimenti e il copyright di Gobby"
+
+#~ msgid "User list"
+#~ msgstr "Lista utenti"
+
+#~ msgid "Document list"
+#~ msgstr "Lista documenti"
+
+#~ msgid "User Color Indicator"
+#~ msgstr "Indicatore colore dell'utente"
+
+#~ msgid "Connect to Server"
+#~ msgstr "Connetti al server"
+
+#~ msgid "Please enter a host name with which to establish a connection."
+#~ msgstr "Inserisci un nome host con cui stabilire una connessione."
+
+#~ msgid "_Remote Endpoint:"
+#~ msgstr "Endpoint _remoto:"
+
+#~ msgid "Document Name:"
+#~ msgstr "Nome Documento:"
+
+#~ msgid "_Search for:"
+#~ msgstr "_Cerca:"
+
+#~ msgid "Replace _with:"
+#~ msgstr "Sostituisci _con"
+
+#~ msgid "_Match case"
+#~ msgstr "Corrispondenza _maiuscole/minuscole"
+
+#~ msgid "Match _entire word only"
+#~ msgstr "Solo parole int_ere"
+
+#~ msgid "Search _backwards"
+#~ msgstr "Cerca all'indietro"
+
+#~ msgid "Wra_p around"
+#~ msgstr "Ricomincia da ca_po"
+
+#~ msgid "Go to line"
+#~ msgstr "Vai alla riga"
+
+#~ msgid "Line _number:"
+#~ msgstr "_Numero riga:"
+
+#~ msgid "Choose a user color"
+#~ msgstr "Scegli un colore utente"
+
+#~ msgid "Welcome to Gobby"
+#~ msgstr "Benvenuto in Gobby"
+
+#~ msgid ""
+#~ "Before we start, a few options need to be configured. You can later "
+#~ "change them by choosing Edit ▸ Preferences from the menu."
+#~ msgstr ""
+#~ "Prima di iniziare, occorre configurare qualche opzione. Puoi modificarle "
+#~ "più tardi scegliendo Modifica ▸ Preferenze dal menu."
+
+#~ msgid "User Name"
+#~ msgstr "Nome Utente"
+
+#~ msgid "Your name as shown to other users."
+#~ msgstr "Il tuo nome come mostrato agli altri"
+
+#~ msgid "User Color"
+#~ msgstr "Colore utente"
+
+#~ msgid "The color with which text you have written is branded."
+#~ msgstr "Il colore con cui è marcato il testo scritto da te."
+
+#~ msgid "Allow remote users to edit local documents"
+#~ msgstr "Permetti agli utenti remoti di modificare i documenti locali"
+
+#~ msgid "Ask remote users for a password"
+#~ msgstr "Richiedi una password agli utenti remoti"
+
+#~ msgid "Password:"
+#~ msgstr "Password:"
+
+#~ msgid "No authentication (Not recommended)"
+#~ msgstr "Nessuna autenticazione (sconsigliato)"
+
+#~ msgid ""
+#~ "Don't authenticate ourselves to remote users. Data transfer will be "
+#~ "unencrypted."
+#~ msgstr ""
+#~ "Non autenticarmi agli utenti remoti. I dati saranno trasmessi in chiaro."
+
+#~ msgid "Create a self-signed certificate (Recommended)"
+#~ msgstr "Crea un certificato auto-firmato (consigliato)"
+
+#~ msgid ""
+#~ "It may take a minute or two until remote users can connect while the "
+#~ "security certificate is being generated."
+#~ msgstr ""
+#~ "Potrebbero volerci due minuti prima che gli utenti remoti possano "
+#~ "connettersi, mentre il certificato viene generato."
+
+#~ msgid "Use an existing certificate (Expert option)"
+#~ msgstr "Usa un certificato esistente (per esperti)"
+
+#~ msgid ""
+#~ "Use an existing private key and certificate for authentication. The files "
+#~ "must be in PEM format."
+#~ msgstr ""
+#~ "Usa una chiave privata e un certificato esistenti. I file devono essere "
+#~ "nel formato PEM."
+
+#~ msgid "Private key:"
+#~ msgstr "Chiave privata:"
+
+#~ msgid "Certificate:"
+#~ msgstr "Certificato:"
+
+#~ msgid "Open Location"
+#~ msgstr "Apri Posizione"
+
+#~ msgid "Enter the _location (URI) of the file you would like to open:"
+#~ msgstr "Inserisci la _posizione (URI) del file che vuoi aprire:"
+
+#~ msgid "Password Required"
+#~ msgstr "È richiesta una password"
+
+#~ msgid "Server _Password:"
+#~ msgstr "_Password del server:"
+
+#~ msgid "Settings"
+#~ msgstr "Impostazioni"
+
+#~ msgid "Remote Users"
+#~ msgstr "Utenti remoti"
+
+#~ msgid "Local Documents"
+#~ msgstr "Documenti locali"
+
+#~ msgid "User name:"
+#~ msgstr "Nome utente:"
+
+#~ msgid "User color:"
+#~ msgstr "Colore utente:"
+
+#~ msgid "Color intensity:"
+#~ msgstr "Intensità colore:"
+
+#~ msgid "Choose a new user color"
+#~ msgstr "Scegli un nuovo colore utente"
+
+#~ msgid "Show cursors of remote users"
+#~ msgstr "Mostra il cursore degli utenti remoti"
+
+#~ msgid "Show selections of remote users"
+#~ msgstr "Mostra la selezione degli utenti remoti"
+
+#~ msgid "Highlight current line of remote users"
+#~ msgstr "Evidenzia la linea corrente degli utenti remoti"
+
+#~ msgid "Indicate cursor position of remote users in the scrollbar"
+#~ msgstr ""
+#~ "Mostra la posizione del cursore degli utenti remoti sulla barra di "
+#~ "scorrimento"
+
+#~ msgid "Require remote users to enter a password"
+#~ msgstr "Richiedi che gli utenti remoti inseriscano una password"
+
+#~ msgid "Port:"
+#~ msgstr "Porta:"
+
+#~ msgid "Remember local documents after Gobby restart"
+#~ msgstr "Ricorda i documenti locali dopo il riavvio di Gobby"
+
+#~ msgid "Local documents directory:"
+#~ msgstr "Cartella dei documenti locali:"
+
+#~ msgid "Tab Stops"
+#~ msgstr "Tabulazioni"
+
+#~ msgid "Indentation"
+#~ msgstr "Indentazione"
+
+#~ msgid "Home/End Behavior"
+#~ msgstr "Comportamento tasti Inizio/Fine"
+
+#~ msgid "File Saving"
+#~ msgstr "Salvataggio file"
+
+#~ msgid "_Tab width:"
+#~ msgstr "Larghezza _tab"
+
+#~ msgid "Insert _spaces instead of tabs"
+#~ msgstr "Inserisci _spazi al posto delle tabulazioni"
+
+#~ msgid "Enable automatic _indentation"
+#~ msgstr "Abilita _indentazione automatica"
+
+#~ msgid "Smart _home/end"
+#~ msgstr "Inizio/_fine intelligente"
+
+#~ msgid "Enable _automatic saving of documents"
+#~ msgstr "Abilita salvataggio _automatico dei documenti"
+
+#~ msgid "Autosave interval in _minutes:"
+#~ msgstr "Ogni quanti minuti salvare automaticamente: "
+
+#~ msgid ""
+#~ "With this option enabled, Home/End keys move to first/last character "
+#~ "before going to the start/end of the line."
+#~ msgstr ""
+#~ "Con questa opzione abilitata, i tasti Inizio/Fine muovono il cursore al "
+#~ "primo/ultimo carattere prima di andare all'inizio/fine della riga."
+
+#~ msgid "Text Wrapping"
+#~ msgstr "A capo automatico"
+
+#~ msgid "Line Numbers"
+#~ msgstr "Numeri di linea"
+
+#~ msgid "Current Line"
+#~ msgstr "Linea corrente"
+
+#~ msgid "Right Margin"
+#~ msgstr "Margine destro"
+
+#~ msgid "Bracket Matching"
+#~ msgstr "Parentesi"
+
+#~ msgid "Whitespace Display"
+#~ msgstr "Mostra caratteri non stampabili"
+
+#~ msgid "Enable text wrapping"
+#~ msgstr "Abilita a capo automatico"
+
+#~ msgid "Do not split words over two lines"
+#~ msgstr "Non dividere le parole su due righe"
+
+#~ msgid "Display line numbers"
+#~ msgstr "Mostra numeri di riga"
+
+#~ msgid "Highlight current line"
+#~ msgstr "Evidenzia riga corrente"
+
+#~ msgid "Display right margin"
+#~ msgstr "Mostra margine destro"
+
+#~ msgid "Right margin at column:"
+#~ msgstr "Margine destro alla colonna:"
+
+#~ msgid "Highlight matching bracket"
+#~ msgstr "Evidenzia parentesi corrispondenti"
+
+#~ msgid "Toolbar"
+#~ msgstr "Barra degli strumenti"
+
+#~ msgid "Font"
+#~ msgstr "Carattere"
+
+#~ msgid "Color Scheme"
+#~ msgstr "Tema dei Colori"
+
+#~ msgid "Trusted CAs"
+#~ msgstr "Certificate Autorities fidate"
+
+#~ msgid "Secure Connection"
+#~ msgstr "Connessione Sicura"
+
+#~ msgid "Authentication"
+#~ msgstr "Autenticazione"
+
+#~ msgid "Select a file containing trusted CAs"
+#~ msgstr "Scegli file contenente le Certificate Autorities fidate"
+
+#~ msgid "None"
+#~ msgstr "Nessuno"
+
+#~ msgid "Use a certificate"
+#~ msgstr "Usa certificato"
+
+#~ msgid "Select a private key file"
+#~ msgstr "Scegli file della chiave privata"
+
+#~ msgid "Create New..."
+#~ msgstr "Crea Nuovo..."
+
+#~ msgid "Select a certificate file"
+#~ msgstr "Scegli file del certificato"
+
+#~ msgid "Preferences"
+#~ msgstr "Preferenze"
+
+#~ msgid "User"
+#~ msgstr "Utente"
+
+#~ msgid "Editor"
+#~ msgstr "Editor"
+
+#~ msgid "View"
+#~ msgstr "Visualizzazione"
+
+#~ msgid "Appearance"
+#~ msgstr "Aspetto"
+
+#~ msgid "Security"
+#~ msgstr "Sicurezza"
+
+#~ msgid "Gobby options"
+#~ msgstr "Opzioni di Gobby"
+
+#~ msgid "Options related to Gobby"
+#~ msgstr "Opzioni riguardanti Gobby"
+
+#~ msgid "Connect to given host on startup, can be given multiple times"
+#~ msgstr "All'avvio connettiti all'host fornito, può essere fornito più volte"
+
+#~ msgid "HOSTNAME"
+#~ msgstr "HOSTNAME"
+
+#~ msgid "You are still connected to a session"
+#~ msgstr "Sei ancora connesso a una sessione"
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Vuoi ugualmente chiudere Gobby?"

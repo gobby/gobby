@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-23 13:43-0400\n"
+"POT-Creation-Date: 2021-01-31 11:22+0100\n"
 "PO-Revision-Date: 2010-06-20 17:27+0300\n"
 "Last-Translator: Yannis Kaskamanidis <kiolalis@gmail.com>\n"
 "Language-Team: Ελληνικά <kde-i18n-doc@kde.org>\n"
@@ -17,110 +17,108 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.0\n"
 
-#: ../code/commands/auth-commands.cpp:196
+#: ../code/application.cpp:132
+msgid "Display version information and exit"
+msgstr "Εμφάνιση πληροφοριών έκδοσης και έξοδος"
+
+#: ../code/application.cpp:134
+#, fuzzy
+msgid "Start a new gobby instance also if there is one already running"
+msgstr ""
+"Έναρξη ενός νέου στιγμιότυπου Gobby όταν υπάρχει ένα που ήδη εκτελείται."
+
+#: ../code/commands/auth-commands.cpp:193
+#: ../code/commands/browser-context-commands.cpp:354
+#: ../code/core/filechooser.cpp:34 ../code/core/filechooser.cpp:39
+#: ../code/core/huebutton.cpp:102
+#: ../code/dialogs/document-location-dialog.cpp:35
+#, fuzzy
+msgid "_Cancel"
+msgstr "Άκυρο"
+
+#: ../code/commands/auth-commands.cpp:195 ../code/core/huebutton.cpp:103
+msgid "_Ok"
+msgstr ""
+
+#: ../code/commands/auth-commands.cpp:217
 #, fuzzy
 msgid "Password required"
 msgstr "Απαιτείται κωδικός πρόσβασης"
 
-#: ../code/commands/auth-commands.cpp:214
+#: ../code/commands/auth-commands.cpp:250
 msgid "Incorrect password"
 msgstr ""
 
-#: ../code/commands/browser-commands.cpp:288
+#: ../code/commands/browser-commands.cpp:289
 msgid "Subscribing to %1..."
 msgstr "Εγγραφή στο %1..."
 
-#: ../code/commands/browser-commands.cpp:301
+#: ../code/commands/browser-commands.cpp:302
 msgid "Subscribing to chat on %1..."
 msgstr "Εγγραφή στη συνομιλία %1..."
 
-#: ../code/commands/browser-commands.cpp:591
+#: ../code/commands/browser-commands.cpp:625
 msgid "Subscription failed"
 msgstr "Η εγγραφή απέτυχε"
 
-#: ../code/commands/browser-context-commands.cpp:86
+#: ../code/commands/browser-context-commands.cpp:85
 msgid "Could not find a location where to store the certificate"
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:153
-msgid "_Remove"
+#: ../code/commands/browser-context-commands.cpp:287
+#: ../code/commands/browser-context-commands.cpp:322
+#: ../code/commands/browser-context-commands.cpp:409
+#: ../code/commands/file-tasks/task-open-location.cpp:31
+#: ../code/core/statusbar.cpp:81 ../code/dialogs/find-dialog.cpp:58
+#: ../code/dialogs/goto-dialog.cpp:30 ../code/dialogs/initial-dialog.cpp:206
+#: ../code/dialogs/preferences-dialog.cpp:815
+msgid "_Close"
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:188
-#, fuzzy
-msgid "_Disconnect from Server"
-msgstr "Σύνδεση στον διακομιστή"
-
-#: ../code/commands/browser-context-commands.cpp:220
-#, fuzzy
-msgid "Create _Account..."
-msgstr "Δημιουργία εγγράφου..."
-
-#: ../code/commands/browser-context-commands.cpp:245
-msgid "Create Do_cument..."
-msgstr "Δημιουργία εγγράφου..."
-
-#: ../code/commands/browser-context-commands.cpp:280
-#, fuzzy
-msgid "Create Di_rectory..."
-msgstr "Δημιουργία φακέλου..."
-
-#: ../code/commands/browser-context-commands.cpp:293
-msgid "_Open Document..."
-msgstr "Άνοιγμα εγγράφου..."
-
-#: ../code/commands/browser-context-commands.cpp:312
-msgid "_Permissions..."
-msgstr ""
-
-#: ../code/commands/browser-context-commands.cpp:324
-msgid "D_elete"
-msgstr "Διαγραφή"
-
-#: ../code/commands/browser-context-commands.cpp:405
+#: ../code/commands/browser-context-commands.cpp:349
 msgid "Choose a name for the directory"
 msgstr "Επιλογή ονόματος για τον φάκελο"
 
-#: ../code/commands/browser-context-commands.cpp:406
+#: ../code/commands/browser-context-commands.cpp:350
 msgid "Choose a name for the document"
 msgstr "Επιλογή ονόματος για το έγγραφο"
 
-#: ../code/commands/browser-context-commands.cpp:407
+#: ../code/commands/browser-context-commands.cpp:351
 msgid "_Directory Name:"
 msgstr "Όνομα φακέλου:"
 
-#: ../code/commands/browser-context-commands.cpp:408
+#: ../code/commands/browser-context-commands.cpp:352
 msgid "_Document Name:"
 msgstr "Όνομα εγγράφου:"
 
-#: ../code/commands/browser-context-commands.cpp:411
+#: ../code/commands/browser-context-commands.cpp:355
 msgid "C_reate"
 msgstr "Δημιουργία"
 
-#: ../code/commands/browser-context-commands.cpp:415
+#: ../code/commands/browser-context-commands.cpp:357
 msgid "New Directory"
 msgstr "Νέος φάκελος"
 
-#: ../code/commands/browser-context-commands.cpp:416
+#: ../code/commands/browser-context-commands.cpp:358
 #: ../code/commands/file-tasks/task-new.cpp:36
 msgid "New Document"
 msgstr "Νέο έγγραφο"
 
-#: ../code/commands/browser-context-commands.cpp:436
+#: ../code/commands/browser-context-commands.cpp:380
 #: ../code/commands/file-tasks/task-open-file.cpp:22
 msgid "Choose a text file to open"
 msgstr "Επιλογή ενός αρχείου κειμένου για άνοιγμα"
 
-#: ../code/commands/browser-context-commands.cpp:558
-#: ../code/commands/browser-context-commands.cpp:569
+#: ../code/commands/browser-context-commands.cpp:519
+#: ../code/commands/browser-context-commands.cpp:530
 msgid "Account successfully created"
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:562
+#: ../code/commands/browser-context-commands.cpp:523
 msgid "When re-connecting to the server, the new account will be used."
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:573
+#: ../code/commands/browser-context-commands.cpp:534
 msgid ""
 "The certificate has been stored at %1.\n"
 "\n"
@@ -128,13 +126,22 @@ msgid ""
 "connect to the server."
 msgstr ""
 
-#: ../code/commands/browser-context-commands.cpp:586
+#: ../code/commands/browser-context-commands.cpp:547
 #, fuzzy
 msgid "Failed to create account"
 msgstr "Αποτυχία δημιουργίας εγγράφου \"%1\""
 
-#: ../code/commands/browser-context-commands.cpp:589
+#: ../code/commands/browser-context-commands.cpp:550
 msgid "Could not save the certificate for the account: %1"
+msgstr ""
+
+#: ../code/commands/file-commands.cpp:252
+#, fuzzy
+msgid "Cancel"
+msgstr "Άκυρο"
+
+#: ../code/commands/file-commands.cpp:254
+msgid "Connect"
 msgstr ""
 
 #: ../code/commands/file-tasks/task-export-html.cpp:27
@@ -146,33 +153,40 @@ msgid "Querying \"%1\"..."
 msgstr "Ερώτημα \"%1\"..."
 
 #: ../code/commands/file-tasks/task-open.cpp:103
-#: ../code/operations/operation-open.cpp:474
-#: ../code/operations/operation-open-multiple.cpp:180
+#: ../code/operations/operation-open.cpp:469
+#: ../code/operations/operation-open-multiple.cpp:176
 msgid "Failed to open document \"%1\""
 msgstr "Αποτυχία ανοίγματος του εγγράφου \"%1\""
+
+#: ../code/commands/file-tasks/task-open-location.cpp:32
+#: ../code/core/filechooser.cpp:40
+#: ../code/dialogs/document-location-dialog.cpp:36
+#, fuzzy
+msgid "_Open"
+msgstr "Άνοιγμα..."
 
 #: ../code/commands/file-tasks/task-save.cpp:24
 msgid "Choose a location to save document \"%1\" to"
 msgstr "Επιλογή τοποθεσίας για αποθήκευση του εγγράφου \"%1\" στο"
 
 #. Help browser could not be invoked, show an error message to the user.
-#: ../code/commands/help-commands.cpp:70
+#: ../code/commands/help-commands.cpp:49
 msgid "There was an error displaying help."
 msgstr "Υπήρξε κάποιο σφάλμα κατά την προβολή της βοήθειας."
 
-#: ../code/commands/help-commands.cpp:93
+#: ../code/commands/help-commands.cpp:74
 msgid "Contributors:"
 msgstr "Άτομα που συνεισέφεραν:"
 
-#: ../code/commands/help-commands.cpp:99
+#: ../code/commands/help-commands.cpp:80
 msgid "British English:"
 msgstr "Αγγλικά (Βρετανίας):"
 
-#: ../code/commands/help-commands.cpp:101
+#: ../code/commands/help-commands.cpp:82
 msgid "German:"
 msgstr "Γερμανικά:"
 
-#: ../code/commands/help-commands.cpp:118
+#: ../code/commands/help-commands.cpp:99
 msgid ""
 "Permission to use, copy, modify, and/or distribute this software for any "
 "urpose with or without fee is hereby granted, provided that the above "
@@ -254,234 +268,51 @@ msgstr "Η σύνδεση του χρήστη απέτυχε: %1"
 msgid "Permissions are not granted to modify the document."
 msgstr ""
 
-#: ../code/core/browser.cpp:111
+#: ../code/core/browser.cpp:109
 msgid "_Direct Connection"
 msgstr "Άμεση σύνδεση"
 
-#: ../code/core/browser.cpp:113
+#: ../code/core/browser.cpp:110
 msgid "Host Name:"
 msgstr "Όνομα κόμβου:"
 
-#: ../code/core/certificatemanager.cpp:83
+#: ../code/core/certificatemanager.cpp:86
 #, c-format
 msgid "Failed to write Diffie-Hellman parameters to \"%s\": %s"
 msgstr ""
 
-#: ../code/core/certificatemanager.cpp:276
+#: ../code/core/certificatemanager.cpp:279
 #, c-format
 msgid "Failed to read Diffie-Hellman parameters: %s"
 msgstr ""
 
-#: ../code/core/certificatemanager.cpp:338
+#: ../code/core/certificatemanager.cpp:341
 msgid "File does not contain a X.509 certificate"
 msgstr ""
 
-#: ../code/core/certificatemanager.cpp:414
+#: ../code/core/certificatemanager.cpp:417
 msgid "Certificate does not belong to the chosen key"
 msgstr ""
 
-#: ../code/core/foldermanager.cpp:322
+#: ../code/core/filechooser.cpp:35
+#, fuzzy
+msgid "_Save"
+msgstr "Αποθήκευση όλων"
+
+#: ../code/core/foldermanager.cpp:345
 msgid "The document has been removed from the server."
 msgstr ""
 
-#: ../code/core/header.cpp:203
-msgid "_None"
-msgstr "Κανένα"
-
-#: ../code/core/header.cpp:227
-msgid "_File"
-msgstr "Αρχείο"
-
-#: ../code/core/header.cpp:230
-msgid "_Open..."
-msgstr "Άνοιγμα..."
-
-#: ../code/core/header.cpp:233
-msgid "Open _Location..."
-msgstr "Άνοιγμα τοποθεσίας..."
-
-#: ../code/core/header.cpp:237
-msgid "Save _As..."
-msgstr "Αποθήκευση ως..."
-
-#: ../code/core/header.cpp:241 ../code/core/iconmanager.cpp:43
-msgid "Save All"
-msgstr "Αποθήκευση όλων"
-
-#: ../code/core/header.cpp:241
-msgid "Save all open files locally"
-msgstr "Αποθήκευση όλων των ανοιχτών αρχείων τοπικά"
-
-#: ../code/core/header.cpp:243
-msgid "Export As _HTML..."
-msgstr "Εξαγωγή ως HTML..."
-
-#: ../code/core/header.cpp:246
-msgid "Connect _to Server..."
-msgstr "Σύνδεση στον διακομιστή..."
-
-#: ../code/core/header.cpp:251
-msgid "_Edit"
-msgstr "Επεξεργασία"
-
-#: ../code/core/header.cpp:259
-msgid "_Find..."
-msgstr "Εύρεση..."
-
-#: ../code/core/header.cpp:261
-msgid "Find Ne_xt"
-msgstr "Εύρεση επόμενου"
-
-#: ../code/core/header.cpp:262
-msgid "Find next match of phrase searched for"
-msgstr "Εύρεση επόμενης φράσης που ταιριάζει με αυτήν που αναζητάτε"
-
-#: ../code/core/header.cpp:265
-msgid "Find Pre_vious"
-msgstr "Εύρεση προηγούμενου"
-
-#: ../code/core/header.cpp:266
-msgid "Find previous match of phrase searched for"
-msgstr "Εύρεση προηγούμενης φράσης που ταιριάζει με αυτήν που αναζητάτε"
-
-#: ../code/core/header.cpp:271
-msgid "Find and Rep_lace..."
-msgstr "Εύρεση και αντικατάσταση..."
-
-#: ../code/core/header.cpp:275
-msgid "Go to _Line..."
-msgstr "Μετάβαση στη γραμμή..."
-
-#: ../code/core/header.cpp:279
-msgid "Pr_eferences..."
-msgstr "Προτιμήσεις..."
-
-#: ../code/core/header.cpp:281
-msgid "_View"
-msgstr "Προβολή"
-
-#: ../code/core/header.cpp:284
-msgid "Reset User Colors"
-msgstr "Επαναφορά χρωμάτων χρήστη"
-
-#: ../code/core/header.cpp:285
-msgid "Hide user colors in current document"
-msgstr "Απόκρυψη χρωμάτων χρήστη στο τρέχον έγγραφο"
-
-#: ../code/core/header.cpp:289
-msgid "Fullscreen"
-msgstr ""
-
-#: ../code/core/header.cpp:290
-msgid "Show the editing window in fullscreen mode"
-msgstr ""
-
-#: ../code/core/header.cpp:294
-msgid "Zoom In"
-msgstr ""
-
-#: ../code/core/header.cpp:297
-msgid "Zoom Out"
-msgstr ""
-
-#: ../code/core/header.cpp:300
-msgid "View Toolbar"
-msgstr "Προβολή γραμμής εργαλείων"
-
-#: ../code/core/header.cpp:301
-msgid "Whether to show the toolbar"
-msgstr "Αν θα εμφανίζεται η γραμμή εργαλείων"
-
-#: ../code/core/header.cpp:305
-msgid "View Statusbar"
-msgstr "Προβολή γραμμής κατάστασης"
-
-#: ../code/core/header.cpp:306
-msgid "Whether to show the statusbar"
-msgstr "Αν θα εμφανίζεται η γραμμή κατάστασης"
-
-#: ../code/core/header.cpp:310
-msgid "View Document Browser"
-msgstr "Προβολή περιηγητή εγγράφου"
-
-#: ../code/core/header.cpp:311
-msgid "Whether to show the document browser"
-msgstr "Αν θα εμφανίζεται ο περιηγητής εγγράφου"
-
-#: ../code/core/header.cpp:315
-msgid "View Chat"
-msgstr "Προβολή συνομιλίας"
-
-#: ../code/core/header.cpp:316
-msgid "Whether to show the chat pane"
-msgstr "Εάν θα εμφανίζεται το παράθυρο συνομιλίας"
-
-#: ../code/core/header.cpp:320
-msgid "View Document User List"
-msgstr "Προβολή καταλόγου χρηστών του εγγράφου"
-
-#: ../code/core/header.cpp:321
-msgid "Whether to show the user list for documents"
-msgstr "Εάν θα εμφανίζεται ο κατάλογος χρηστών για τα έγγραφα"
-
-#: ../code/core/header.cpp:325
-msgid "View Chat User List"
-msgstr "Προβολή καταλόγου χρηστών συνομιλίας"
-
-#: ../code/core/header.cpp:326
-msgid "Whether to show the user list for the chat"
-msgstr "Εάν θα εμφανίζεται ο κατάλογος χρηστών της συνομιλίας"
-
-#: ../code/core/header.cpp:330
-msgid "_Highlight Mode"
-msgstr "Λειτουργία επισήμανσης"
-
-#: ../code/core/header.cpp:336
-msgid "_Help"
-msgstr "Βοήθεια"
-
-#: ../code/core/header.cpp:339
-msgid "_Contents"
-msgstr "Περιεχόμενα"
-
-#: ../code/core/header.cpp:340
-msgid "Opens the Gobby manual"
-msgstr "Ανοίγει το εγχειρίδιο του Gobby"
-
-#: ../code/core/header.cpp:343
-msgid "_About..."
-msgstr "Σχετικά..."
-
-#: ../code/core/header.cpp:344
-msgid "Shows Gobby's copyright and credits"
-msgstr "Εμφανίζει τα πνευματικά δικαιώματα και τα εύσημα για το Gobby"
-
-#: ../code/core/iconmanager.cpp:49
-msgid "User list"
-msgstr "Κατάλογος χρηστών"
-
-#: ../code/core/iconmanager.cpp:55
-msgid "Document list"
-msgstr "Κατάλογος εγγράφων"
-
-#: ../code/core/iconmanager.cpp:61 ../code/window.cpp:52
-msgid "Chat"
-msgstr "Συνομιλία"
-
-#: ../code/core/iconmanager.cpp:68
-msgid "User Color Indicator"
-msgstr "Ένδειξη χρώματος χρήστη"
-
-#: ../code/core/selfhoster.cpp:103
+#: ../code/core/selfhoster.cpp:105
 msgid "Generating 2048-bit Diffie-Hellman parameters..."
 msgstr ""
 
-#: ../code/core/selfhoster.cpp:135
+#: ../code/core/selfhoster.cpp:137
 #, fuzzy
 msgid "Failed to generate Diffie-Hellman parameters"
 msgstr "Αποτυχία διαγραφής διακομιστή %1: %2"
 
-#: ../code/core/selfhoster.cpp:137
+#: ../code/core/selfhoster.cpp:139
 msgid ""
 "This means that Perfect Forward Secrecy (PFS) is not available. Restart "
 "Gobby to re-try generating the parameters. The specific error was:\n"
@@ -489,154 +320,119 @@ msgid ""
 "%1"
 msgstr ""
 
-#: ../code/core/selfhoster.cpp:262
+#: ../code/core/selfhoster.cpp:265
 msgid ""
 "In order to start sharing your documents, choose a private key and "
 "certificate or create a new pair in the preferences"
 msgstr ""
 
-#: ../code/core/selfhoster.cpp:282
+#: ../code/core/selfhoster.cpp:287
 #, fuzzy
 msgid "Failed to share documents"
 msgstr "Αποτυχία αποθήκευσης εγγράφου \"%1\""
 
-#: ../code/core/sessionuserview.cpp:39
+#: ../code/core/sessionuserview.cpp:38
 msgid "User List"
 msgstr "Κατάλογος χρηστών"
 
-#: ../code/core/statusbar.cpp:418
+#: ../code/core/statusbar.cpp:434
 msgid "Ln %1, Col %2\t%3"
 msgstr "Ln %1, Col %2\t%3"
 
-#: ../code/core/statusbar.cpp:421
+#: ../code/core/statusbar.cpp:437
 msgid "OVR"
 msgstr "OVR"
 
-#: ../code/core/statusbar.cpp:421
+#: ../code/core/statusbar.cpp:437
 msgid "INS"
 msgstr "INS"
 
-#: ../code/core/textsessionview.cpp:638
+#: ../code/core/textsessionview.cpp:639
 msgid "Text written by <b>%1</b>"
 msgstr "Κείμενο που συντάχθηκε από τον/την <b>%1</b>"
 
-#: ../code/core/textsessionview.cpp:644
+#: ../code/core/textsessionview.cpp:645
 msgid "Unowned text"
 msgstr "Κείμενο που δεν ανήκει σε κανέναν"
 
-#: ../code/core/userlist.cpp:108
+#: ../code/core/userlist.cpp:115
 msgid "Users"
 msgstr "Χρήστες"
 
-#: ../code/dialogs/connection-dialog.cpp:26
-msgid "Connect to Server"
-msgstr "Σύνδεση στον διακομιστή"
+#: ../code/dialogs/connection-info-dialog.cpp:48
+#, fuzzy
+msgid "Connections"
+msgstr "Ασφαλής σύνδεση"
 
-#: ../code/dialogs/connection-dialog.cpp:30
-msgid "Please enter a host name with which to establish a connection."
+#: ../code/dialogs/connection-info-dialog.cpp:313
+msgid "Nobody is connected to this computer"
 msgstr ""
-"Παρακαλώ εισάγετε το όνομα του διακομιστή με τον οποίο θα γίνει η σύνδεση."
 
-#: ../code/dialogs/connection-dialog.cpp:32
-msgid "_Remote Endpoint:"
-msgstr "Απομακρυσμένο τελικό σημείο:"
-
-#: ../code/dialogs/document-location-dialog.cpp:28
-msgid "Document Name:"
-msgstr "Όνομα εγγράφου:"
-
-#: ../code/dialogs/document-location-dialog.cpp:155
+#: ../code/dialogs/document-location-dialog.cpp:153
 msgid "Select document's target location"
 msgstr "Επιλογή θέσης προορισμού του εγγράφου"
 
-#: ../code/dialogs/document-location-dialog.cpp:157
+#: ../code/dialogs/document-location-dialog.cpp:155
 msgid "Choose a directory to create the document into:"
 msgstr "Επιλογή φακέλου για δημιουργία εγγράφου μέσα σ' αυτόν:"
 
-#: ../code/dialogs/document-location-dialog.cpp:163
+#: ../code/dialogs/document-location-dialog.cpp:162
 msgid "Select documents' target location"
 msgstr "Επιλογή θέσης προορισμού του εγγράφου"
 
-#: ../code/dialogs/document-location-dialog.cpp:165
+#: ../code/dialogs/document-location-dialog.cpp:164
 msgid "Choose a directory to create the documents into:"
 msgstr "Επιλογή φακέλου για δημιουργία εγγράφου μέσα σ' αυτόν:"
 
-#: ../code/dialogs/find-dialog.cpp:44 ../code/dialogs/find-dialog.cpp:142
-msgid "Find"
-msgstr "Εύρεση"
-
-#: ../code/dialogs/find-dialog.cpp:47
-msgid "_Search for:"
-msgstr "Εύρεση για:"
-
-#: ../code/dialogs/find-dialog.cpp:49
-msgid "Replace _with:"
-msgstr "Αντικατάσταση με:"
-
-#: ../code/dialogs/find-dialog.cpp:51
-msgid "_Match case"
-msgstr "Ταίριασμα"
-
-#: ../code/dialogs/find-dialog.cpp:52
-msgid "Match _entire word only"
-msgstr "Ταίριασμα μόνον ολόκληρης λέξης"
-
-#: ../code/dialogs/find-dialog.cpp:53
-msgid "Search _backwards"
-msgstr "Αναζήτηση προς τα πίσω"
-
-#: ../code/dialogs/find-dialog.cpp:54
-msgid "Wra_p around"
-msgstr "Αναδίπλωση ολόγυρα"
-
-#: ../code/dialogs/find-dialog.cpp:100
+#: ../code/dialogs/find-dialog.cpp:59
 msgid "Replace _All"
 msgstr "Αντικατάσταση όλων"
 
-#: ../code/dialogs/find-dialog.cpp:102
+#: ../code/dialogs/find-dialog.cpp:61
 msgid "_Replace"
 msgstr "Αντικατάσταση"
 
-#: ../code/dialogs/find-dialog.cpp:142
+#: ../code/dialogs/find-dialog.cpp:62
+#, fuzzy
+msgid "_Find"
+msgstr "Εύρεση"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Find"
+msgstr "Εύρεση"
+
+#: ../code/dialogs/find-dialog.cpp:119
 msgid "Replace"
 msgstr "Αντικατάσταση"
 
-#: ../code/dialogs/find-dialog.cpp:161 ../code/dialogs/find-dialog.cpp:177
+#: ../code/dialogs/find-dialog.cpp:138 ../code/dialogs/find-dialog.cpp:154
 msgid "Phrase \"%1\" has not been found"
 msgstr "Η φράση \"%1\" δεν βρέθηκε"
 
-#: ../code/dialogs/find-dialog.cpp:335
+#: ../code/dialogs/find-dialog.cpp:312
 msgid "No occurrence has been replaced"
 msgstr "Τίποτε δεν αντικαταστάθηκε"
 
-#: ../code/dialogs/find-dialog.cpp:341
+#: ../code/dialogs/find-dialog.cpp:318
 msgid "%1 occurrence has been replaced"
 msgid_plural "%1 occurrences have been replaced"
 msgstr[0] "%1 αντικαταστάθηκε"
 msgstr[1] "%1 αντικαταστάθηκαν"
 
-#: ../code/dialogs/goto-dialog.cpp:26
-msgid "Go to line"
-msgstr "Μετάβαση στη γραμμή"
-
-#: ../code/dialogs/goto-dialog.cpp:29
-msgid "Line _number:"
-msgstr "Αριθμός γραμμής:"
-
-#: ../code/dialogs/goto-dialog.cpp:50
+#: ../code/dialogs/goto-dialog.cpp:31
 msgid "Go To _Line"
 msgstr "Μετάβαση στη γραμμή"
 
-#: ../code/dialogs/initial-dialog.cpp:76
+#: ../code/dialogs/initial-dialog.cpp:53
 msgid "Generating 2048-bit RSA private key..."
 msgstr ""
 
-#: ../code/dialogs/initial-dialog.cpp:99
+#: ../code/dialogs/initial-dialog.cpp:76
 #, fuzzy
 msgid "Failed to generate private key"
 msgstr "Αποτυχία διαγραφής διακομιστή %1: %2"
 
-#: ../code/dialogs/initial-dialog.cpp:102
+#: ../code/dialogs/initial-dialog.cpp:79
 msgid ""
 "%1\n"
 "\n"
@@ -644,11 +440,11 @@ msgid ""
 "dialog."
 msgstr ""
 
-#: ../code/dialogs/initial-dialog.cpp:141
+#: ../code/dialogs/initial-dialog.cpp:118
 msgid "Failed to generate self-signed certificate"
 msgstr ""
 
-#: ../code/dialogs/initial-dialog.cpp:144
+#: ../code/dialogs/initial-dialog.cpp:121
 msgid ""
 "%1\n"
 "\n"
@@ -656,446 +452,76 @@ msgid ""
 "preferences dialog."
 msgstr ""
 
-#: ../code/dialogs/initial-dialog.cpp:198
-msgid "Choose a user color"
-msgstr "Επιλογή χρώματος χρήστη"
-
-#: ../code/dialogs/initial-dialog.cpp:204
-msgid "Welcome to Gobby"
-msgstr "Καλωσήρθατε στο Gobby"
-
-#: ../code/dialogs/initial-dialog.cpp:216
-msgid ""
-"Before we start, a few options need to be configured. You can later change "
-"them by choosing Edit ▸ Preferences from the menu."
-msgstr ""
-"Πριν ξεκινήσουμε, καλό είναι να ρυθμίσουμε ορισμένες επιλογές. Αργότερα "
-"μπορούμε να τις αλλάξουμε επιλέγοντας το μενού Επεξεργασία ▸ Προτιμήσεις."
-
-#: ../code/dialogs/initial-dialog.cpp:224
-msgid "User Name"
-msgstr "Όνομα χρήστη"
-
-#: ../code/dialogs/initial-dialog.cpp:226
-msgid "Your name as shown to other users."
-msgstr "Το όνομά σας όπως το βλέπουν οι άλλοι χρήστες"
-
-#: ../code/dialogs/initial-dialog.cpp:235
-msgid "User Color"
-msgstr "Χρώμα χρήστη"
-
-#: ../code/dialogs/initial-dialog.cpp:237
-msgid "The color with which text you have written is branded."
-msgstr "Το χρώμα με το οποίο έχετε γράψει το κείμενό σας είναι επώνυμο."
-
-#: ../code/dialogs/initial-dialog.cpp:256
-#, fuzzy
-msgid "Remote Connections"
-msgstr "Ασφαλής σύνδεση"
-
-#: ../code/dialogs/initial-dialog.cpp:262
-#: ../code/dialogs/preferences-dialog.cpp:217
-msgid "Allow remote users to edit local documents"
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:268
-msgid "Ask remote users for a password"
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:273
-#: ../code/dialogs/preferences-dialog.cpp:220
-#, fuzzy
-msgid "Password:"
-msgstr "Κωδικός πρόσβασης διακομιστή:"
-
-#: ../code/dialogs/initial-dialog.cpp:297
-msgid "No authentication (Not recommended)"
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:304
-msgid ""
-"Don't authenticate ourselves to remote users. Data transfer will be "
-"unencrypted."
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:313
-msgid "Create a self-signed certificate (Recommended)"
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:321
-msgid ""
-"It may take a minute or two until remote users can connect while the "
-"security certificate is being generated."
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:331
-msgid "Use an existing certificate (Expert option)"
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:338
-msgid ""
-"Use an existing private key and certificate for authentication. The files "
-"must be in PEM format."
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:347
-#: ../code/dialogs/preferences-dialog.cpp:766
-msgid "Private key:"
-msgstr ""
-
-#: ../code/dialogs/initial-dialog.cpp:349
-#: ../code/dialogs/preferences-dialog.cpp:772
-msgid "Certificate:"
-msgstr ""
-
-#: ../code/dialogs/open-location-dialog.cpp:26
-msgid "Open Location"
-msgstr "Άνοιγμα τοποθεσίας"
-
-#: ../code/dialogs/open-location-dialog.cpp:27
-msgid "Enter the _location (URI) of the file you would like to open:"
-msgstr "Εισαγωγή της τοποθεσίας (URI) του αρχείου που θέλετε να ανοίξετε:"
-
-#: ../code/dialogs/password-dialog.cpp:25
-msgid "Password Required"
-msgstr "Απαιτείται κωδικός πρόσβασης"
-
-#: ../code/dialogs/password-dialog.cpp:31
+#: ../code/dialogs/password-dialog.cpp:34
 msgid "Connection to host \"%1\" requires a password."
 msgstr "Η σύνδεση με τον διακομιστή \"%1\" απαιτεί κωδικό πρόσβασης."
 
-#: ../code/dialogs/password-dialog.cpp:32
+#: ../code/dialogs/password-dialog.cpp:40
 msgid "Invalid password for host \"%1\". Please try again."
 msgstr ""
 "Μη έγκυρος κωδικός πρόσβασης για τον διακομιστή \"%1\". Παρακαλώ προσπαθήστε "
 "πάλι."
 
-#: ../code/dialogs/password-dialog.cpp:35
-msgid "Server _Password:"
-msgstr "Κωδικός πρόσβασης διακομιστή:"
-
-#: ../code/dialogs/preferences-dialog.cpp:198
-msgid "Settings"
-msgstr "Ρυθμίσεις"
-
-#: ../code/dialogs/preferences-dialog.cpp:199
-#, fuzzy
-msgid "Remote Users"
-msgstr "Επαναφορά χρωμάτων χρήστη"
-
-#: ../code/dialogs/preferences-dialog.cpp:200
-#, fuzzy
-msgid "Local Documents"
-msgstr "Νέο έγγραφο"
-
-#: ../code/dialogs/preferences-dialog.cpp:202
-msgid "User name:"
-msgstr "Όνομα χρήστη:"
-
-#: ../code/dialogs/preferences-dialog.cpp:204
-msgid "User color:"
-msgstr "Χρώμα χρήστη:"
-
-#: ../code/dialogs/preferences-dialog.cpp:206
-msgid "Color intensity:"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:208
-msgid "Choose a new user color"
-msgstr "Επιλογή νέου χρώματος χρήστη"
-
-#: ../code/dialogs/preferences-dialog.cpp:209
-msgid "Show cursors of remote users"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:210
-msgid "Show selections of remote users"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:212
-#, fuzzy
-msgid "Highlight current line of remote users"
-msgstr "Επισήμανση τρέχουσας γραμμής"
-
-#: ../code/dialogs/preferences-dialog.cpp:214
-msgid "Indicate cursor position of remote users in the scrollbar"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:219
-msgid "Require remote users to enter a password"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:222
-msgid "Port:"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:226
-msgid "Remember local documents after Gobby restart"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:227
-#, fuzzy
-msgid "Local documents directory:"
-msgstr "Φάκελος κόμβου:"
-
-#: ../code/dialogs/preferences-dialog.cpp:423
-msgid "Tab Stops"
-msgstr "Στηλοθέτες"
-
-#: ../code/dialogs/preferences-dialog.cpp:424
-msgid "Indentation"
-msgstr "Εσοχή"
-
-#: ../code/dialogs/preferences-dialog.cpp:425
-msgid "Home/End Behavior"
-msgstr "Συμπεριφορά πλήκτρων Home/End"
-
-#: ../code/dialogs/preferences-dialog.cpp:426
-msgid "File Saving"
-msgstr "Αποθήκευση αρχείου"
-
-#: ../code/dialogs/preferences-dialog.cpp:427
-msgid "_Tab width:"
-msgstr "Πλάτος στηλοθέτη:"
-
-#: ../code/dialogs/preferences-dialog.cpp:429
-msgid "Insert _spaces instead of tabs"
-msgstr "Εισαγωγή διαστημάτων αντί και στηλοθέτες"
-
-#: ../code/dialogs/preferences-dialog.cpp:430
-msgid "Enable automatic _indentation"
-msgstr "Ενεργοποίηση αυτόματης εισαγωγής εσοχών"
-
-#: ../code/dialogs/preferences-dialog.cpp:431
-msgid "Smart _home/end"
-msgstr "Έξυπνο Home/End"
-
-#: ../code/dialogs/preferences-dialog.cpp:432
-msgid "Enable _automatic saving of documents"
-msgstr "Ενεργοποίηση αυτόματης αποθήκευσης εγγράφων"
-
-#: ../code/dialogs/preferences-dialog.cpp:434
-msgid "Autosave interval in _minutes:"
-msgstr "Χρονικό διάστημα αυτόματης αποθήκευσης σε λεπτά:"
-
-#: ../code/dialogs/preferences-dialog.cpp:455
-msgid ""
-"With this option enabled, Home/End keys move to first/last character before "
-"going to the start/end of the line."
-msgstr ""
-"Με αυτή την επιλογή ενεργοποιημένη, τα πλήκτρα Home/End μας μετακινούν στον "
-"πρώτο/τελευταίο χαρακτήρα πριν μεταβούμε στην αρχή/τέλος της γραμμής."
-
-#: ../code/dialogs/preferences-dialog.cpp:525
-msgid "Text Wrapping"
-msgstr "Αναδίπλωση κειμένου"
-
-#: ../code/dialogs/preferences-dialog.cpp:526
-msgid "Line Numbers"
-msgstr "Αριθμοί γραμμών"
-
-#: ../code/dialogs/preferences-dialog.cpp:527
-msgid "Current Line"
-msgstr "Τρέχουσα γραμμή"
-
-#: ../code/dialogs/preferences-dialog.cpp:528
-msgid "Right Margin"
-msgstr "Δεξί περιθώριο"
-
-#: ../code/dialogs/preferences-dialog.cpp:529
-msgid "Bracket Matching"
-msgstr "Αγκύλες ταιριάσματος"
-
-#: ../code/dialogs/preferences-dialog.cpp:530
-msgid "Whitespace Display"
-msgstr "Εμφάνιση λευκού διαστήματος"
-
-#: ../code/dialogs/preferences-dialog.cpp:531
-msgid "Enable text wrapping"
-msgstr "Ενεργοποίηση αναδίπλωσης κειμένου"
-
-#: ../code/dialogs/preferences-dialog.cpp:532
-msgid "Do not split words over two lines"
-msgstr "Να μη διαχωρίζονται οι λέξεις σε περισσότερες από δυο γραμμές"
-
-#: ../code/dialogs/preferences-dialog.cpp:533
-msgid "Display line numbers"
-msgstr "Εμφάνιση αριθμών στις γραμμές"
-
-#: ../code/dialogs/preferences-dialog.cpp:534
-msgid "Highlight current line"
-msgstr "Επισήμανση τρέχουσας γραμμής"
-
-#: ../code/dialogs/preferences-dialog.cpp:535
-msgid "Display right margin"
-msgstr "Εμφάνιση δεξιού περιθωρίου"
-
-#: ../code/dialogs/preferences-dialog.cpp:536
-msgid "Right margin at column:"
-msgstr "Δεξί περιθώριο σε στήλη:"
-
-#: ../code/dialogs/preferences-dialog.cpp:537
-msgid "Highlight matching bracket"
-msgstr "Επισήμανση αγκύλης ταιριάσματος"
-
-#: ../code/dialogs/preferences-dialog.cpp:589
+#: ../code/dialogs/preferences-dialog.cpp:409
 msgid "Display no whitespace"
 msgstr "Απόκρυψη λευκού διαστήματος"
 
-#: ../code/dialogs/preferences-dialog.cpp:592
+#: ../code/dialogs/preferences-dialog.cpp:412
 msgid "Display spaces"
 msgstr "Εμφάνιση διαστημάτων"
 
-#: ../code/dialogs/preferences-dialog.cpp:596
+#: ../code/dialogs/preferences-dialog.cpp:416
 msgid "Display tabs"
 msgstr "Εμφάνιση στηλοθετών"
 
-#: ../code/dialogs/preferences-dialog.cpp:600
+#: ../code/dialogs/preferences-dialog.cpp:420
 msgid "Display tabs and spaces"
 msgstr "Εμφάνιση στηλοθετών και διαστημάτων"
 
-#: ../code/dialogs/preferences-dialog.cpp:651
-msgid "Toolbar"
-msgstr "Γραμμή εργαλείων"
-
-#: ../code/dialogs/preferences-dialog.cpp:652
-msgid "Font"
-msgstr "Γραμματοσειρά"
-
-#: ../code/dialogs/preferences-dialog.cpp:653
-msgid "Color Scheme"
-msgstr "Απεικόνιση χρώματος"
-
-#: ../code/dialogs/preferences-dialog.cpp:661
+#: ../code/dialogs/preferences-dialog.cpp:452
 msgid "Show text only"
 msgstr "Εμφάνιση μόνο του κειμένου"
 
-#: ../code/dialogs/preferences-dialog.cpp:663
+#: ../code/dialogs/preferences-dialog.cpp:454
 msgid "Show icons only"
 msgstr "Εμφάνιση μόνο των εικονιδίων"
 
-#: ../code/dialogs/preferences-dialog.cpp:665
+#: ../code/dialogs/preferences-dialog.cpp:456
 msgid "Show both icons and text"
 msgstr "Εμφάνιση εικονιδίων και κειμένου"
 
-#: ../code/dialogs/preferences-dialog.cpp:667
+#: ../code/dialogs/preferences-dialog.cpp:458
 msgid "Show text besides icons"
 msgstr "Εμφάνιση κειμένου δίπλα στα εικονίδια"
 
-#: ../code/dialogs/preferences-dialog.cpp:756
-msgid "Trusted CAs"
-msgstr "Έμπιστα CAs"
-
-#: ../code/dialogs/preferences-dialog.cpp:757
-msgid "Secure Connection"
-msgstr "Ασφαλής σύνδεση"
-
-#: ../code/dialogs/preferences-dialog.cpp:758
-#, fuzzy
-msgid "Authentication"
-msgstr "Εσοχή"
-
-#: ../code/dialogs/preferences-dialog.cpp:759
-msgid "Select a file containing trusted CAs"
-msgstr "Επιλογή αρχείου που περιέχει έμπιστα CAs"
-
-#: ../code/dialogs/preferences-dialog.cpp:764
-#, fuzzy
-msgid "None"
-msgstr "Κανένα"
-
-#: ../code/dialogs/preferences-dialog.cpp:765
-msgid "Use a certificate"
+#: ../code/dialogs/preferences-dialog.cpp:478
+msgid "Scheme Description"
 msgstr ""
 
-#: ../code/dialogs/preferences-dialog.cpp:767
-msgid "Select a private key file"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:769
-#: ../code/dialogs/preferences-dialog.cpp:776
-#, fuzzy
-msgid "Create New..."
-msgstr "Δημιουργία εγγράφου..."
-
-#: ../code/dialogs/preferences-dialog.cpp:773
-msgid "Select a certificate file"
-msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:801
+#: ../code/dialogs/preferences-dialog.cpp:575
 msgid "Use TLS if possible"
 msgstr "Χρήση TLS εάν είναι δυνατό"
 
-#: ../code/dialogs/preferences-dialog.cpp:804
+#: ../code/dialogs/preferences-dialog.cpp:578
 msgid "Always use TLS"
 msgstr "Παντοτινή χρήση TLS"
 
-#: ../code/dialogs/preferences-dialog.cpp:892
-msgid "Error reading file:"
-msgstr ""
+#: ../code/dialogs/preferences-dialog.cpp:615
+#, fuzzy
+msgid "Error reading file: %1"
+msgstr "Η σύνδεση του χρήστη απέτυχε: %1"
 
-#: ../code/dialogs/preferences-dialog.cpp:916
+#: ../code/dialogs/preferences-dialog.cpp:655
 msgid "2048-bit RSA private key is being generated, please wait..."
 msgstr ""
 
-#: ../code/dialogs/preferences-dialog.cpp:948
+#: ../code/dialogs/preferences-dialog.cpp:685
 msgid "Select a location for the generated key"
 msgstr ""
 
-#: ../code/dialogs/preferences-dialog.cpp:966
+#: ../code/dialogs/preferences-dialog.cpp:703
 msgid "Select a location for the generated certificate"
 msgstr ""
-
-#: ../code/dialogs/preferences-dialog.cpp:1068
-msgid "Preferences"
-msgstr "Προτιμήσεις"
-
-#: ../code/dialogs/preferences-dialog.cpp:1073
-msgid "User"
-msgstr "Χρήστης"
-
-#: ../code/dialogs/preferences-dialog.cpp:1074
-msgid "Editor"
-msgstr "Επεξεργαστής"
-
-#: ../code/dialogs/preferences-dialog.cpp:1075
-msgid "View"
-msgstr "Προβολή"
-
-#: ../code/dialogs/preferences-dialog.cpp:1076
-msgid "Appearance"
-msgstr "Εμφάνιση"
-
-#: ../code/dialogs/preferences-dialog.cpp:1077
-msgid "Security"
-msgstr "Ασφάλεια"
-
-#: ../code/main.cpp:194
-msgid "Gobby options"
-msgstr "Επιλογές του Gobby"
-
-#: ../code/main.cpp:194
-msgid "Options related to Gobby"
-msgstr "Επιλογές σχετικές με το Gobby"
-
-#: ../code/main.cpp:199
-msgid "Display version information and exit"
-msgstr "Εμφάνιση πληροφοριών έκδοσης και έξοδος"
-
-#: ../code/main.cpp:206
-msgid "Also start a new Gobby instance when there is one running already"
-msgstr ""
-"Έναρξη ενός νέου στιγμιότυπου Gobby όταν υπάρχει ένα που ήδη εκτελείται."
-
-#: ../code/main.cpp:214
-msgid "Connect to given host on startup, can be given multiple times"
-msgstr ""
-"Η σύνδεση με τον συγκεκριμένο διακομιστή κατά την έναρξη, μπορεί να δοθεί "
-"πολλές φορές."
-
-#: ../code/main.cpp:215
-msgid "HOSTNAME"
-msgstr "Όνομα διακομιστή"
 
 #: ../code/operations/operation-delete.cpp:65
 msgid "Removing node \"%1\"..."
@@ -1105,12 +531,12 @@ msgstr "Αφαίρεση διακομιστή %1..."
 msgid "Failed to delete node \"%1\""
 msgstr "Αποτυχία διαγραφής διακομιστή %1: %2"
 
-#: ../code/operations/operation-export-html.cpp:168
+#: ../code/operations/operation-export-html.cpp:173
 #, c-format
 msgid "written by: %s"
 msgstr "συντάχθηκε από τον/την: %s"
 
-#: ../code/operations/operation-export-html.cpp:241
+#: ../code/operations/operation-export-html.cpp:246
 msgid "<unable to print date>"
 msgstr "<αδυναμία εκτύπωσης της ημερομηνίας>"
 
@@ -1120,20 +546,20 @@ msgstr "<αδυναμία εκτύπωσης της ημερομηνίας>"
 #. %4$s is a link to the gobby site, it must be present because
 #. we need to handle that manually to insert a hyperlink
 #. instead of just printf'ing it.
-#: ../code/operations/operation-export-html.cpp:254
+#: ../code/operations/operation-export-html.cpp:259
 #, c-format
 msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
 msgstr "Έγγραφο που δημιουργήθηκε από τους %1$s:%2$s at %3$s by %4$s"
 
-#: ../code/operations/operation-export-html.cpp:395
+#: ../code/operations/operation-export-html.cpp:409
 msgid "Participants"
 msgstr "Συμμετέχοντες"
 
-#: ../code/operations/operation-export-html.cpp:475
+#: ../code/operations/operation-export-html.cpp:483
 msgid "Exporting document \"%1\" to \"%2\" in HTML..."
 msgstr "Εξαγωγή εγγράφου \"%1\" σε \"%2\" σε HTML..."
 
-#: ../code/operations/operation-export-html.cpp:536
+#: ../code/operations/operation-export-html.cpp:544
 msgid "Failed to export document \"%1\" to HTML"
 msgstr "Αποτυχία εξαγωγής του εγγράφου \"%1\" σε HTML"
 
@@ -1159,11 +585,11 @@ msgstr "Αποτυχία δημιουργίας εγγράφου \"%1\""
 msgid "ISO-8859-1"
 msgstr "ISO-8859-1"
 
-#: ../code/operations/operation-open.cpp:114
+#: ../code/operations/operation-open.cpp:113
 msgid "Opening document \"%1\"..."
 msgstr "Άνοιγμα εγγράφου \"%1\"..."
 
-#: ../code/operations/operation-open.cpp:134
+#: ../code/operations/operation-open.cpp:129
 msgid ""
 "The directory into which the new document was supposed to be inserted has "
 "been removed"
@@ -1171,12 +597,12 @@ msgstr ""
 "Ο φάκελος στον οποίο υποτίθεται ότι θα αποθηκευόταν το νέο έγγραφο έχει "
 "αφαιρεθεί."
 
-#: ../code/operations/operation-open.cpp:323
+#: ../code/operations/operation-open.cpp:318
 msgid "The file contains data not in the specified encoding"
 msgstr ""
 "Το αρχείο περιέχει δεδομένα που δεν διαθέτουν την καθορισμένη κωδικοποίηση."
 
-#: ../code/operations/operation-open.cpp:334
+#: ../code/operations/operation-open.cpp:329
 msgid ""
 "The file either contains data in an unknown encoding, or it contains binary "
 "data."
@@ -1184,19 +610,19 @@ msgstr ""
 "Είτε το αρχείο περιέχει δεδομένα σε άγνωστη κωδικοποίηση, είτε περιέχει "
 "δυαδικά δεδομένα."
 
-#: ../code/operations/operation-open-multiple.cpp:91
+#: ../code/operations/operation-open-multiple.cpp:88
 msgid "Parent folder was removed"
 msgstr "Ο γονικός φάκελος αφαιρέθηκε"
 
-#: ../code/operations/operation-open-multiple.cpp:193
+#: ../code/operations/operation-open-multiple.cpp:189
 msgid "Failed to open multiple documents"
 msgstr "Αποτυχία ανοίγματος πολλαπλών εγγράφων"
 
-#: ../code/operations/operation-save.cpp:97
+#: ../code/operations/operation-save.cpp:91
 msgid "Saving document \"%1\" to \"%2\"..."
 msgstr "Αποθήκευση εγγράφου \"%1\" στο \"%2\"..."
 
-#: ../code/operations/operation-save.cpp:226
+#: ../code/operations/operation-save.cpp:220
 msgid ""
 "The document contains one or more characters that cannot be encoded in the "
 "specified character coding."
@@ -1204,7 +630,7 @@ msgstr ""
 "Το έγγραφο περιέχει έναν ή περισσότερους χαρακτήρες που δεν μπορούν να "
 "κωδικοποιηθούν στην καθορισμένη κωδικοποίηση χαρακτήρων."
 
-#: ../code/operations/operation-save.cpp:287
+#: ../code/operations/operation-save.cpp:281
 msgid "Failed to save document \"%1\""
 msgstr "Αποτυχία αποθήκευσης εγγράφου \"%1\""
 
@@ -1261,25 +687,17 @@ msgstr "Αδυναμία δημιουργίας φακέλου \"%1\": %2"
 msgid "Device \"%1\" does not exist"
 msgstr "Η συσκευή \"%1\" δεν υπάρχει"
 
-#: ../code/window.cpp:104
+#: ../code/window.cpp:42
+msgid "Chat"
+msgstr "Συνομιλία"
+
+#: ../code/window.cpp:83
 msgid "This Computer"
 msgstr ""
 
-#: ../code/window.cpp:129
+#: ../code/window.cpp:108
 msgid "Document Browser"
 msgstr "Περιηγητής εγγράφου"
-
-#: ../code/window.cpp:182
-msgid "You are still connected to a session"
-msgstr "Είστε ακόμη συνδεδεμένοι σε μια συνεδρία"
-
-#: ../code/window.cpp:190
-msgid "Do you want to close Gobby nevertheless?"
-msgstr "Θέλετε παρόλα αυτά να κλείσετε το Gobby;"
-
-#: ../code/window.cpp:196
-msgid "C_ancel"
-msgstr "Άκυρο"
 
 #: ../gobby-0.5.desktop.in.h:1
 msgid "Gobby"
@@ -1296,6 +714,397 @@ msgstr "Συνεργατικός επεξεργαστής κειμένων Gobby
 #: ../gobby-0.5.desktop.in.h:4
 msgid "Edit text files collaboratively"
 msgstr "Συνεργατική επεξεργασία αρχείων κειμένου"
+
+#, fuzzy
+#~ msgid "_Disconnect from Server"
+#~ msgstr "Σύνδεση στον διακομιστή"
+
+#, fuzzy
+#~ msgid "Create _Account..."
+#~ msgstr "Δημιουργία εγγράφου..."
+
+#~ msgid "Create Do_cument..."
+#~ msgstr "Δημιουργία εγγράφου..."
+
+#, fuzzy
+#~ msgid "Create Di_rectory..."
+#~ msgstr "Δημιουργία φακέλου..."
+
+#~ msgid "_Open Document..."
+#~ msgstr "Άνοιγμα εγγράφου..."
+
+#~ msgid "D_elete"
+#~ msgstr "Διαγραφή"
+
+#~ msgid "_None"
+#~ msgstr "Κανένα"
+
+#~ msgid "_File"
+#~ msgstr "Αρχείο"
+
+#~ msgid "Open _Location..."
+#~ msgstr "Άνοιγμα τοποθεσίας..."
+
+#~ msgid "Save _As..."
+#~ msgstr "Αποθήκευση ως..."
+
+#~ msgid "Save all open files locally"
+#~ msgstr "Αποθήκευση όλων των ανοιχτών αρχείων τοπικά"
+
+#~ msgid "Export As _HTML..."
+#~ msgstr "Εξαγωγή ως HTML..."
+
+#~ msgid "Connect _to Server..."
+#~ msgstr "Σύνδεση στον διακομιστή..."
+
+#~ msgid "_Edit"
+#~ msgstr "Επεξεργασία"
+
+#~ msgid "_Find..."
+#~ msgstr "Εύρεση..."
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "Εύρεση επόμενου"
+
+#~ msgid "Find next match of phrase searched for"
+#~ msgstr "Εύρεση επόμενης φράσης που ταιριάζει με αυτήν που αναζητάτε"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "Εύρεση προηγούμενου"
+
+#~ msgid "Find previous match of phrase searched for"
+#~ msgstr "Εύρεση προηγούμενης φράσης που ταιριάζει με αυτήν που αναζητάτε"
+
+#~ msgid "Find and Rep_lace..."
+#~ msgstr "Εύρεση και αντικατάσταση..."
+
+#~ msgid "Go to _Line..."
+#~ msgstr "Μετάβαση στη γραμμή..."
+
+#~ msgid "Pr_eferences..."
+#~ msgstr "Προτιμήσεις..."
+
+#~ msgid "_View"
+#~ msgstr "Προβολή"
+
+#~ msgid "Reset User Colors"
+#~ msgstr "Επαναφορά χρωμάτων χρήστη"
+
+#~ msgid "Hide user colors in current document"
+#~ msgstr "Απόκρυψη χρωμάτων χρήστη στο τρέχον έγγραφο"
+
+#~ msgid "View Toolbar"
+#~ msgstr "Προβολή γραμμής εργαλείων"
+
+#~ msgid "Whether to show the toolbar"
+#~ msgstr "Αν θα εμφανίζεται η γραμμή εργαλείων"
+
+#~ msgid "View Statusbar"
+#~ msgstr "Προβολή γραμμής κατάστασης"
+
+#~ msgid "Whether to show the statusbar"
+#~ msgstr "Αν θα εμφανίζεται η γραμμή κατάστασης"
+
+#~ msgid "View Document Browser"
+#~ msgstr "Προβολή περιηγητή εγγράφου"
+
+#~ msgid "Whether to show the document browser"
+#~ msgstr "Αν θα εμφανίζεται ο περιηγητής εγγράφου"
+
+#~ msgid "View Chat"
+#~ msgstr "Προβολή συνομιλίας"
+
+#~ msgid "Whether to show the chat pane"
+#~ msgstr "Εάν θα εμφανίζεται το παράθυρο συνομιλίας"
+
+#~ msgid "View Document User List"
+#~ msgstr "Προβολή καταλόγου χρηστών του εγγράφου"
+
+#~ msgid "Whether to show the user list for documents"
+#~ msgstr "Εάν θα εμφανίζεται ο κατάλογος χρηστών για τα έγγραφα"
+
+#~ msgid "View Chat User List"
+#~ msgstr "Προβολή καταλόγου χρηστών συνομιλίας"
+
+#~ msgid "Whether to show the user list for the chat"
+#~ msgstr "Εάν θα εμφανίζεται ο κατάλογος χρηστών της συνομιλίας"
+
+#~ msgid "_Highlight Mode"
+#~ msgstr "Λειτουργία επισήμανσης"
+
+#~ msgid "_Help"
+#~ msgstr "Βοήθεια"
+
+#~ msgid "_Contents"
+#~ msgstr "Περιεχόμενα"
+
+#~ msgid "Opens the Gobby manual"
+#~ msgstr "Ανοίγει το εγχειρίδιο του Gobby"
+
+#~ msgid "_About..."
+#~ msgstr "Σχετικά..."
+
+#~ msgid "Shows Gobby's copyright and credits"
+#~ msgstr "Εμφανίζει τα πνευματικά δικαιώματα και τα εύσημα για το Gobby"
+
+#~ msgid "User list"
+#~ msgstr "Κατάλογος χρηστών"
+
+#~ msgid "Document list"
+#~ msgstr "Κατάλογος εγγράφων"
+
+#~ msgid "User Color Indicator"
+#~ msgstr "Ένδειξη χρώματος χρήστη"
+
+#~ msgid "Connect to Server"
+#~ msgstr "Σύνδεση στον διακομιστή"
+
+#~ msgid "Please enter a host name with which to establish a connection."
+#~ msgstr ""
+#~ "Παρακαλώ εισάγετε το όνομα του διακομιστή με τον οποίο θα γίνει η σύνδεση."
+
+#~ msgid "_Remote Endpoint:"
+#~ msgstr "Απομακρυσμένο τελικό σημείο:"
+
+#~ msgid "Document Name:"
+#~ msgstr "Όνομα εγγράφου:"
+
+#~ msgid "_Search for:"
+#~ msgstr "Εύρεση για:"
+
+#~ msgid "Replace _with:"
+#~ msgstr "Αντικατάσταση με:"
+
+#~ msgid "_Match case"
+#~ msgstr "Ταίριασμα"
+
+#~ msgid "Match _entire word only"
+#~ msgstr "Ταίριασμα μόνον ολόκληρης λέξης"
+
+#~ msgid "Search _backwards"
+#~ msgstr "Αναζήτηση προς τα πίσω"
+
+#~ msgid "Wra_p around"
+#~ msgstr "Αναδίπλωση ολόγυρα"
+
+#~ msgid "Go to line"
+#~ msgstr "Μετάβαση στη γραμμή"
+
+#~ msgid "Line _number:"
+#~ msgstr "Αριθμός γραμμής:"
+
+#~ msgid "Choose a user color"
+#~ msgstr "Επιλογή χρώματος χρήστη"
+
+#~ msgid "Welcome to Gobby"
+#~ msgstr "Καλωσήρθατε στο Gobby"
+
+#~ msgid ""
+#~ "Before we start, a few options need to be configured. You can later "
+#~ "change them by choosing Edit ▸ Preferences from the menu."
+#~ msgstr ""
+#~ "Πριν ξεκινήσουμε, καλό είναι να ρυθμίσουμε ορισμένες επιλογές. Αργότερα "
+#~ "μπορούμε να τις αλλάξουμε επιλέγοντας το μενού Επεξεργασία ▸ Προτιμήσεις."
+
+#~ msgid "User Name"
+#~ msgstr "Όνομα χρήστη"
+
+#~ msgid "Your name as shown to other users."
+#~ msgstr "Το όνομά σας όπως το βλέπουν οι άλλοι χρήστες"
+
+#~ msgid "User Color"
+#~ msgstr "Χρώμα χρήστη"
+
+#~ msgid "The color with which text you have written is branded."
+#~ msgstr "Το χρώμα με το οποίο έχετε γράψει το κείμενό σας είναι επώνυμο."
+
+#, fuzzy
+#~ msgid "Password:"
+#~ msgstr "Κωδικός πρόσβασης διακομιστή:"
+
+#~ msgid "Open Location"
+#~ msgstr "Άνοιγμα τοποθεσίας"
+
+#~ msgid "Enter the _location (URI) of the file you would like to open:"
+#~ msgstr "Εισαγωγή της τοποθεσίας (URI) του αρχείου που θέλετε να ανοίξετε:"
+
+#~ msgid "Password Required"
+#~ msgstr "Απαιτείται κωδικός πρόσβασης"
+
+#~ msgid "Server _Password:"
+#~ msgstr "Κωδικός πρόσβασης διακομιστή:"
+
+#~ msgid "Settings"
+#~ msgstr "Ρυθμίσεις"
+
+#, fuzzy
+#~ msgid "Remote Users"
+#~ msgstr "Επαναφορά χρωμάτων χρήστη"
+
+#, fuzzy
+#~ msgid "Local Documents"
+#~ msgstr "Νέο έγγραφο"
+
+#~ msgid "User name:"
+#~ msgstr "Όνομα χρήστη:"
+
+#~ msgid "User color:"
+#~ msgstr "Χρώμα χρήστη:"
+
+#~ msgid "Choose a new user color"
+#~ msgstr "Επιλογή νέου χρώματος χρήστη"
+
+#, fuzzy
+#~ msgid "Highlight current line of remote users"
+#~ msgstr "Επισήμανση τρέχουσας γραμμής"
+
+#, fuzzy
+#~ msgid "Local documents directory:"
+#~ msgstr "Φάκελος κόμβου:"
+
+#~ msgid "Tab Stops"
+#~ msgstr "Στηλοθέτες"
+
+#~ msgid "Indentation"
+#~ msgstr "Εσοχή"
+
+#~ msgid "Home/End Behavior"
+#~ msgstr "Συμπεριφορά πλήκτρων Home/End"
+
+#~ msgid "File Saving"
+#~ msgstr "Αποθήκευση αρχείου"
+
+#~ msgid "_Tab width:"
+#~ msgstr "Πλάτος στηλοθέτη:"
+
+#~ msgid "Insert _spaces instead of tabs"
+#~ msgstr "Εισαγωγή διαστημάτων αντί και στηλοθέτες"
+
+#~ msgid "Enable automatic _indentation"
+#~ msgstr "Ενεργοποίηση αυτόματης εισαγωγής εσοχών"
+
+#~ msgid "Smart _home/end"
+#~ msgstr "Έξυπνο Home/End"
+
+#~ msgid "Enable _automatic saving of documents"
+#~ msgstr "Ενεργοποίηση αυτόματης αποθήκευσης εγγράφων"
+
+#~ msgid "Autosave interval in _minutes:"
+#~ msgstr "Χρονικό διάστημα αυτόματης αποθήκευσης σε λεπτά:"
+
+#~ msgid ""
+#~ "With this option enabled, Home/End keys move to first/last character "
+#~ "before going to the start/end of the line."
+#~ msgstr ""
+#~ "Με αυτή την επιλογή ενεργοποιημένη, τα πλήκτρα Home/End μας μετακινούν "
+#~ "στον πρώτο/τελευταίο χαρακτήρα πριν μεταβούμε στην αρχή/τέλος της γραμμής."
+
+#~ msgid "Text Wrapping"
+#~ msgstr "Αναδίπλωση κειμένου"
+
+#~ msgid "Line Numbers"
+#~ msgstr "Αριθμοί γραμμών"
+
+#~ msgid "Current Line"
+#~ msgstr "Τρέχουσα γραμμή"
+
+#~ msgid "Right Margin"
+#~ msgstr "Δεξί περιθώριο"
+
+#~ msgid "Bracket Matching"
+#~ msgstr "Αγκύλες ταιριάσματος"
+
+#~ msgid "Whitespace Display"
+#~ msgstr "Εμφάνιση λευκού διαστήματος"
+
+#~ msgid "Enable text wrapping"
+#~ msgstr "Ενεργοποίηση αναδίπλωσης κειμένου"
+
+#~ msgid "Do not split words over two lines"
+#~ msgstr "Να μη διαχωρίζονται οι λέξεις σε περισσότερες από δυο γραμμές"
+
+#~ msgid "Display line numbers"
+#~ msgstr "Εμφάνιση αριθμών στις γραμμές"
+
+#~ msgid "Highlight current line"
+#~ msgstr "Επισήμανση τρέχουσας γραμμής"
+
+#~ msgid "Display right margin"
+#~ msgstr "Εμφάνιση δεξιού περιθωρίου"
+
+#~ msgid "Right margin at column:"
+#~ msgstr "Δεξί περιθώριο σε στήλη:"
+
+#~ msgid "Highlight matching bracket"
+#~ msgstr "Επισήμανση αγκύλης ταιριάσματος"
+
+#~ msgid "Toolbar"
+#~ msgstr "Γραμμή εργαλείων"
+
+#~ msgid "Font"
+#~ msgstr "Γραμματοσειρά"
+
+#~ msgid "Color Scheme"
+#~ msgstr "Απεικόνιση χρώματος"
+
+#~ msgid "Trusted CAs"
+#~ msgstr "Έμπιστα CAs"
+
+#~ msgid "Secure Connection"
+#~ msgstr "Ασφαλής σύνδεση"
+
+#, fuzzy
+#~ msgid "Authentication"
+#~ msgstr "Εσοχή"
+
+#~ msgid "Select a file containing trusted CAs"
+#~ msgstr "Επιλογή αρχείου που περιέχει έμπιστα CAs"
+
+#, fuzzy
+#~ msgid "None"
+#~ msgstr "Κανένα"
+
+#, fuzzy
+#~ msgid "Create New..."
+#~ msgstr "Δημιουργία εγγράφου..."
+
+#~ msgid "Preferences"
+#~ msgstr "Προτιμήσεις"
+
+#~ msgid "User"
+#~ msgstr "Χρήστης"
+
+#~ msgid "Editor"
+#~ msgstr "Επεξεργαστής"
+
+#~ msgid "View"
+#~ msgstr "Προβολή"
+
+#~ msgid "Appearance"
+#~ msgstr "Εμφάνιση"
+
+#~ msgid "Security"
+#~ msgstr "Ασφάλεια"
+
+#~ msgid "Gobby options"
+#~ msgstr "Επιλογές του Gobby"
+
+#~ msgid "Options related to Gobby"
+#~ msgstr "Επιλογές σχετικές με το Gobby"
+
+#~ msgid "Connect to given host on startup, can be given multiple times"
+#~ msgstr ""
+#~ "Η σύνδεση με τον συγκεκριμένο διακομιστή κατά την έναρξη, μπορεί να δοθεί "
+#~ "πολλές φορές."
+
+#~ msgid "HOSTNAME"
+#~ msgstr "Όνομα διακομιστή"
+
+#~ msgid "You are still connected to a session"
+#~ msgstr "Είστε ακόμη συνδεδεμένοι σε μια συνεδρία"
+
+#~ msgid "Do you want to close Gobby nevertheless?"
+#~ msgstr "Θέλετε παρόλα αυτά να κλείσετε το Gobby;"
 
 #~ msgid ""
 #~ "This program is free software; you can redistribute it and/or modify it "
