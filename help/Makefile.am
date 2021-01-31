@@ -1,7 +1,5 @@
 @YELP_HELP_RULES@
 
-dist-hook: doc-dist-hook
-
 HELP_ID = gobby
 HELP_LINGUAS = 
 HELP_FILES = index.docbook

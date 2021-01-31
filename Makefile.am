@@ -71,7 +71,7 @@ clean-local:
 EXTRA_DIST += README.md
 
 # For the manual
-EXTRA_DIST += gobby-0.5.desktop.in gobby-0.5.appdata.xml
+EXTRA_DIST += gobby-0.5.desktop.in gobby-0.5.metainfo.xml
 DISTCLEANFILES += gnome-doc-utils.make
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
 

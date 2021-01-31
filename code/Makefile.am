@@ -43,5 +43,7 @@ code/gobby-resources.c: code/resources/gobby.gresources.xml $(resources)
 		--target=$@ --sourcedir=$(top_srcdir)/code/resources \
 		--c-name _gobby --generate-source
 
+EXTRA_DIST += $(resources) code/resources/gobby.gresources.xml
+
 BUILT_SOURCES += code/gobby-resources.h code/gobby-resources.c
 CLEANFILES += code/gobby-resources.h code/gobby-resources.c
