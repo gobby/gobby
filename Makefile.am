@@ -70,10 +70,6 @@ clean-local:
 
 EXTRA_DIST += README.md
 
-# Debian seems to need an XPM of the program icon, so we provide one here.
-# It's currently not used for anything else, though.
-EXTRA_DIST += gobby-0.5.xpm
-
 # For the manual
 EXTRA_DIST += gobby-0.5.desktop.in gobby-0.5.appdata.xml
 DISTCLEANFILES += gnome-doc-utils.make
