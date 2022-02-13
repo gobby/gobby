@@ -47,12 +47,12 @@ jobs:
       # Install msys and get an entrypoint for it
       - uses: msys2/setup-msys2@v2
         with:
-          install: base-devel git rsync binutils mingw-w64-x86_64-gcc autoconf automake1.16 intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+          install: base-devel git rsync binutils mingw-w64-x86_64-gcc autoconf automake automake1.16 libtool intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
       - name: "libinfinity: Generate autotools build files and run configure"
         run: |
           cd "$GITHUB_WORKSPACE"/libinfinity
-          ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk --without-infinoted
+          ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal ./autogen.sh --enable-introspection=no --with-infgtk --with-inftextgtk --without-infinoted
 
       - name: "libinfinity: Run the build"
         run: |
