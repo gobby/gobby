@@ -2,6 +2,7 @@
 <component type="desktop-application">
   <id>de.0x539.gobby</id>
   <launchable type="desktop-id">gobby-0.5.desktop</launchable>
+  <project_license>ISC</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <provides>
     <binary>gobby-0.5</binary>
