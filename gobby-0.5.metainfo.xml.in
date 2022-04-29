@@ -29,6 +29,8 @@
   <url type="homepage">https://gobby.github.io/</url>
   <url type="bugtracker">https://github.com/gobby/gobby/issues</url>
 
+  <translation type="gettext">gobby05</translation>
+
   <releases>
     <release version="0.6" date="2021-01-31">
       <description>
