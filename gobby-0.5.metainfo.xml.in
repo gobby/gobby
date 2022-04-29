@@ -8,7 +8,7 @@
     <binary>gobby-0.5</binary>
   </provides>
   <_name>Gobby</_name>
-  <_summary>Collaborative text editor</_summary>
+  <_summary>Edit text files collaboratively</_summary>
 
   <description>
     <_p>
