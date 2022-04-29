@@ -8,3 +8,4 @@ done
 grep --binary-files=without-match "_(" code -R | \
 	sed -e 's/:.*//' | uniq | sort > po/POTFILES.in
 echo gobby-0.5.desktop.in >> po/POTFILES.in
+echo gobby-0.5.metainfo.xml.in >> po.POTFILES.in

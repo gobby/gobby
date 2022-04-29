@@ -11,6 +11,7 @@ depcomp
 .dirstamp
 gobby-0.5
 gobby-0.5.desktop
+gobby-0.5.metainfo.xml
 gobby.iss
 *.gschema.valid
 *.gschema.xml
