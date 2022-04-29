@@ -58,3 +58,4 @@ code/util/i18n.hpp
 code/util/uri.cpp
 code/window.cpp
 gobby-0.5.desktop.in
+gobby-0.5.metainfo.xml.in
