@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gobby 0.4.94\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-31 11:22+0100\n"
+"POT-Creation-Date: 2022-04-29 13:01+0100\n"
 "PO-Revision-Date: 2010-06-26 17:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -681,7 +681,7 @@ msgstr ""
 msgid "Document Browser"
 msgstr "文件瀏覽器"
 
-#: ../gobby-0.5.desktop.in.h:1
+#: ../gobby-0.5.desktop.in.h:1 ../gobby-0.5.metainfo.xml.in.h:1
 msgid "Gobby"
 msgstr "Gobby"
 
@@ -693,9 +693,72 @@ msgstr "共同編輯器"
 msgid "Gobby Collaborative Editor (0.5)"
 msgstr "Gobby 共同編輯器 (0.5)"
 
-#: ../gobby-0.5.desktop.in.h:4
+#: ../gobby-0.5.desktop.in.h:4 ../gobby-0.5.metainfo.xml.in.h:2
 msgid "Edit text files collaboratively"
 msgstr "共同編輯文字檔"
+
+#: ../gobby-0.5.metainfo.xml.in.h:3
+msgid "Armin Burgmeier"
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:4
+msgid ""
+"Gobby is a free collaborative editor supporting multiple documents in one "
+"session and a multi-user chat. It runs on Microsoft Windows, Mac OS X, Linux "
+"and other Unix-like platforms."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:5
+msgid ""
+"It uses GTK+ as its windowing toolkit and thus integrates nicely into the "
+"GNOME desktop environment."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:6
+msgid "Remove support for GTK+ 2.x; at least GTK+ 3.6 is required now."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:7
+msgid ""
+"Enable TCP keepalives, so that inactive connections will drop automatically "
+"after a short time."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:8
+msgid "Gobby is now registered as a handler for infinote:// URLs."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:9
+msgid ""
+"Remember hosts previously connected to and presents them in the list next "
+"time Gobby is started until expilictly removed."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:10
+msgid ""
+"Gobby can now show connection parameters, in particular TLS parameters used "
+"for the connection."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:11
+msgid ""
+"Gobby's configuration options are stored in GSettings instead of a custam "
+"config.xml file."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:12
+msgid ""
+"The option to not set a certificate in the initial welcome dialog is no "
+"longer available."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:13
+msgid "Gobby can now use the default system CAs on Windows."
+msgstr ""
+
+#: ../gobby-0.5.metainfo.xml.in.h:14
+msgid "Small bug fixes and code base modernization."
+msgstr ""
 
 #~ msgid "_Remove"
 #~ msgstr "移除(_R)"
