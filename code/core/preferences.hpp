@@ -24,6 +24,8 @@
 
 #include <gtkmm/toolbar.h>
 #include <giomm/settings.h>
+#include <giomm/settingsschema.h>
+#include <giomm/settingsschemakey.h>
 
 #include <gtksourceview/gtksource.h>
 
@@ -495,10 +497,11 @@ public:
 
 		bool is_default() const
 		{
+			Glib::VariantBase default_variant =
+				m_settings->property_settings_schema().get_value()->
+				get_key(m_key)->get_default_value();
 			Glib::VariantBase current_variant;
-			Glib::VariantBase default_variant;
 			m_settings->get_value(m_key, current_variant);
-			m_settings->get_default_value(m_key, default_variant);
 			return current_variant.equal(default_variant);
 		}
 
