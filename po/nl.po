@@ -1,0 +1,791 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Heimen Stoffels <vistausss@fastmail.com>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-29 13:01+0100\n"
+"PO-Revision-Date: 2023-02-10 15:12+0100\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
+"Language-Team: Dutch\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: ../code/application.cpp:132
+msgid "Display version information and exit"
+msgstr "Toon versie-informatie en sluit af"
+
+#: ../code/application.cpp:134
+msgid "Start a new gobby instance also if there is one already running"
+msgstr "Start een nieuw Gobby-proces indien er al een proces actief is"
+
+#: ../code/commands/auth-commands.cpp:193
+#: ../code/commands/browser-context-commands.cpp:354
+#: ../code/core/filechooser.cpp:34 ../code/core/filechooser.cpp:39
+#: ../code/core/huebutton.cpp:102
+#: ../code/dialogs/document-location-dialog.cpp:35
+msgid "_Cancel"
+msgstr "_Annuleren"
+
+#: ../code/commands/auth-commands.cpp:195 ../code/core/huebutton.cpp:103
+msgid "_Ok"
+msgstr "_Oké"
+
+#: ../code/commands/auth-commands.cpp:217
+msgid "Password required"
+msgstr "Wachtwoord vereist"
+
+#: ../code/commands/auth-commands.cpp:250
+msgid "Incorrect password"
+msgstr "Onjuist wachtwoord"
+
+#: ../code/commands/browser-commands.cpp:289
+msgid "Subscribing to %1..."
+msgstr "Bezig met abonneren op %1…"
+
+#: ../code/commands/browser-commands.cpp:302
+msgid "Subscribing to chat on %1..."
+msgstr "Bezig met abonneren op gesprek op %1…"
+
+#: ../code/commands/browser-commands.cpp:625
+msgid "Subscription failed"
+msgstr "Abonneren mislukt"
+
+#: ../code/commands/browser-context-commands.cpp:85
+msgid "Could not find a location where to store the certificate"
+msgstr "Er is geen locatie aangetroffen om het certificaat in op te slaan"
+
+#: ../code/commands/browser-context-commands.cpp:287
+#: ../code/commands/browser-context-commands.cpp:322
+#: ../code/commands/browser-context-commands.cpp:409
+#: ../code/commands/file-tasks/task-open-location.cpp:31
+#: ../code/core/statusbar.cpp:81 ../code/dialogs/find-dialog.cpp:58
+#: ../code/dialogs/goto-dialog.cpp:30 ../code/dialogs/initial-dialog.cpp:206
+#: ../code/dialogs/preferences-dialog.cpp:815
+msgid "_Close"
+msgstr "_Sluiten"
+
+#: ../code/commands/browser-context-commands.cpp:349
+msgid "Choose a name for the directory"
+msgstr "Geef de map een naam"
+
+#: ../code/commands/browser-context-commands.cpp:350
+msgid "Choose a name for the document"
+msgstr "Geef het document een naam"
+
+#: ../code/commands/browser-context-commands.cpp:351
+msgid "_Directory Name:"
+msgstr "_Mapnaam:"
+
+#: ../code/commands/browser-context-commands.cpp:352
+msgid "_Document Name:"
+msgstr "_Documentnaam:"
+
+#: ../code/commands/browser-context-commands.cpp:355
+msgid "C_reate"
+msgstr "Nieu_w"
+
+#: ../code/commands/browser-context-commands.cpp:357
+msgid "New Directory"
+msgstr "Nieuwe map"
+
+#: ../code/commands/browser-context-commands.cpp:358
+#: ../code/commands/file-tasks/task-new.cpp:36
+msgid "New Document"
+msgstr "Nieuw document"
+
+#: ../code/commands/browser-context-commands.cpp:380
+#: ../code/commands/file-tasks/task-open-file.cpp:22
+msgid "Choose a text file to open"
+msgstr "Kies het te openen tekstbestand"
+
+#: ../code/commands/browser-context-commands.cpp:519
+#: ../code/commands/browser-context-commands.cpp:530
+msgid "Account successfully created"
+msgstr "Het account is aangemaakt"
+
+#: ../code/commands/browser-context-commands.cpp:523
+msgid "When re-connecting to the server, the new account will be used."
+msgstr "Het nieuwe account wordt na herverbinden in gebruik genomen."
+
+#: ../code/commands/browser-context-commands.cpp:534
+msgid ""
+"The certificate has been stored at %1.\n"
+"\n"
+"To login to this account, set the certificate in Gobby's preferences and re-"
+"connect to the server."
+msgstr ""
+"Het certificaat is opgeslagen in %1.\n"
+"\n"
+"Om in te kunnen loggen op dit account, dient u het certificaat in te stellen "
+"Gobbys instellingen en opnieuwverbinding te maken met de server."
+
+#: ../code/commands/browser-context-commands.cpp:547
+msgid "Failed to create account"
+msgstr "Account aanmaken mislukt"
+
+#: ../code/commands/browser-context-commands.cpp:550
+msgid "Could not save the certificate for the account: %1"
+msgstr "Het accountcertificaat kan niet worden opgeslagen: %1"
+
+#: ../code/commands/file-commands.cpp:252
+msgid "Cancel"
+msgstr "Annuleren"
+
+#: ../code/commands/file-commands.cpp:254
+msgid "Connect"
+msgstr "Verbinden"
+
+#: ../code/commands/file-tasks/task-export-html.cpp:27
+msgid "Choose a location to export document \"%1\" to"
+msgstr "Kies een locatie om ‘%1’ in op te slaan"
+
+#: ../code/commands/file-tasks/task-open.cpp:46
+msgid "Querying \"%1\"..."
+msgstr "Bezig met opvragen van ‘%1’…"
+
+#: ../code/commands/file-tasks/task-open.cpp:103
+#: ../code/operations/operation-open.cpp:469
+#: ../code/operations/operation-open-multiple.cpp:176
+msgid "Failed to open document \"%1\""
+msgstr "‘%1’ kan niet worden geopend"
+
+#: ../code/commands/file-tasks/task-open-location.cpp:32
+#: ../code/core/filechooser.cpp:40
+#: ../code/dialogs/document-location-dialog.cpp:36
+msgid "_Open"
+msgstr "_Openen"
+
+#: ../code/commands/file-tasks/task-save.cpp:24
+msgid "Choose a location to save document \"%1\" to"
+msgstr "Kies een locatie om ‘%1’ in op te slaan"
+
+#. Help browser could not be invoked, show an error message to the user.
+#: ../code/commands/help-commands.cpp:49
+msgid "There was an error displaying help."
+msgstr "Er is een fout opgetreden tijdens het tonen van de hulpinformatie."
+
+#: ../code/commands/help-commands.cpp:74
+msgid "Contributors:"
+msgstr "Bijdragers:"
+
+#: ../code/commands/help-commands.cpp:80
+msgid "British English:"
+msgstr "Brits Engels:"
+
+#: ../code/commands/help-commands.cpp:82
+msgid "German:"
+msgstr "Duits:"
+
+#: ../code/commands/help-commands.cpp:99
+msgid ""
+"Permission to use, copy, modify, and/or distribute this software for any "
+"urpose with or without fee is hereby granted, provided that the above "
+"copyright notice and this permission notice appear in all copies.\n"
+"\n"
+"THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES "
+"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF "
+"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY "
+"SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER "
+"RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF "
+"CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN "
+"CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
+msgstr ""
+"Permission to use, copy, modify, and/or distribute this software for any "
+"urpose with or without fee is hereby granted, provided that the above "
+"copyright notice and this permission notice appear in all copies.\n"
+"\n"
+"THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES "
+"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF "
+"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY "
+"SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER "
+"RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF "
+"CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN "
+"CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
+
+#: ../code/commands/subscription-commands.cpp:148
+msgid ""
+"The connection to the publisher of this document has been lost. Further "
+"changes to the document could not be synchronized to others anymore, "
+"therefore the document cannot be edited anymore.\n"
+"\n"
+"Please note also that it is possible that not all of your latest changes have "
+"reached the publisher before the connection was lost."
+msgstr ""
+"De verbinding met de uitgever van het document is verloren. Nieuwere "
+"aanpassingen kunnen niet worden gedeeld met anderen, waardoor het document "
+"onbewerkbaar is geworden. Let op: het is mogelijk dat niet alle reeds gedane "
+"aanpassingen bij de uitgever terecht zijn gekomen."
+
+#: ../code/commands/synchronization-commands.cpp:30
+msgid "Synchronization in progress... %1%%"
+msgstr "Bezig met synchroniseren… %1%%"
+
+#. Document cannot be used if an error happened
+#. during synchronization.
+#: ../code/commands/synchronization-commands.cpp:42
+msgid "This document cannot be used."
+msgstr "Dit document kan niet worden gebruikt."
+
+#: ../code/commands/synchronization-commands.cpp:45
+#: ../code/commands/user-join-commands.cpp:43
+msgid ""
+"If you have an idea what could have caused the problem, then you may attempt "
+"to solve it and try again (after having closed this document). Otherwise it "
+"is most likely a bug in the software. In that case, please file a bug report "
+"at http://gobby.0x539.de/trac/newticket and provide as much information as "
+"you can, including what you did when the problem occurred and how to "
+"reproduce the problem (if possible) so that we can fix the problem in a later "
+"version. Thank you."
+msgstr ""
+"Als u denkt te weten wat er mis kan zijn gegaan, dan kunt u trachten het op "
+"te lossen en het opnieuw te proberen (na het sluiten van het document). Als u "
+"het niet weet, dan betreft het mogelijk een bug. In dat geval kunt u de bug "
+"melden op http://gobby.0x539.de/trac/newticket en daarin zoveel mogelijk "
+"informatie te delen, inclusief wat u aan het doen was ten tijde van het "
+"probleem en hoe het probleem kan worden nagebootst (indien mogelijk) zodat "
+"het probleem in een nieuwere versie kan worden opgelost. Bij voorbaat dank."
+
+#: ../code/commands/synchronization-commands.cpp:59
+msgid "Synchronization failed: %1"
+msgstr "Synchronisatie mislukt: %1"
+
+#. TODO: Adjust this for chat sessions
+#: ../code/commands/user-join-commands.cpp:38
+msgid ""
+"You can still watch others editing the document, but you cannot edit it "
+"yourself."
+msgstr "U kunt toekijken, maar het document zelf niet meer bewerken."
+
+#: ../code/commands/user-join-commands.cpp:57
+msgid "User Join failed: %1"
+msgstr "Deelname mislukt: %1"
+
+#: ../code/commands/user-join-commands.cpp:64
+msgid "Permissions are not granted to modify the document."
+msgstr "U bent niet bevoegd om dit document te bewerken."
+
+#: ../code/core/browser.cpp:109
+msgid "_Direct Connection"
+msgstr "_Directe verbinding"
+
+#: ../code/core/browser.cpp:110
+msgid "Host Name:"
+msgstr "Hostnaam:"
+
+#: ../code/core/certificatemanager.cpp:86
+#, c-format
+msgid "Failed to write Diffie-Hellman parameters to \"%s\": %s"
+msgstr "De Diffie-Hellman-opties kunnen niet worden weggeschreven naar ‘%s’: %s"
+
+#: ../code/core/certificatemanager.cpp:279
+#, c-format
+msgid "Failed to read Diffie-Hellman parameters: %s"
+msgstr "De Diffie-Hellman-opties kunnen niet worden uitgelezen: %s"
+
+#: ../code/core/certificatemanager.cpp:341
+msgid "File does not contain a X.509 certificate"
+msgstr "Het bestand bevat geen X.509-certificaat"
+
+#: ../code/core/certificatemanager.cpp:417
+msgid "Certificate does not belong to the chosen key"
+msgstr "Het certificaat hoort niet bij de gekozen sleutel"
+
+#: ../code/core/filechooser.cpp:35
+msgid "_Save"
+msgstr "Op_slaan"
+
+#: ../code/core/foldermanager.cpp:345
+msgid "The document has been removed from the server."
+msgstr "Het document is verwijderd van de server."
+
+#: ../code/core/selfhoster.cpp:105
+msgid "Generating 2048-bit Diffie-Hellman parameters..."
+msgstr "Bezig met genereren van 2048-bit Diffie-Hellman-opties…"
+
+#: ../code/core/selfhoster.cpp:137
+msgid "Failed to generate Diffie-Hellman parameters"
+msgstr "De Diffie-Hellman-opties kunnen niet worden gegenereerd"
+
+#: ../code/core/selfhoster.cpp:139
+msgid ""
+"This means that Perfect Forward Secrecy (PFS) is not available. Restart Gobby "
+"to re-try generating the parameters. The specific error was:\n"
+"\n"
+"%1"
+msgstr ""
+"Dit betekent dat Perfect Forward Secrecy (PFS) niet beschikbaar is. Herstart "
+"Gobby om het genereerproces opnieuw te starten. Specifieke foutmelding:\n"
+"\n"
+"%1"
+
+#: ../code/core/selfhoster.cpp:265
+msgid ""
+"In order to start sharing your documents, choose a private key and "
+"certificate or create a new pair in the preferences"
+msgstr ""
+"Als u documenten wilt delen, dan dient u een privésleutel en certificaat te "
+"kiezen of een nieuw paar aan te maken in de instellingen."
+
+#: ../code/core/selfhoster.cpp:287
+msgid "Failed to share documents"
+msgstr "Het delen is mislukt"
+
+#: ../code/core/sessionuserview.cpp:38
+msgid "User List"
+msgstr "Gebruikerslijst"
+
+#: ../code/core/statusbar.cpp:434
+msgid "Ln %1, Col %2\t%3"
+msgstr "Rgl %1 - Kol. %2\t%3"
+
+#: ../code/core/statusbar.cpp:437
+msgid "OVR"
+msgstr "OVR"
+
+#: ../code/core/statusbar.cpp:437
+msgid "INS"
+msgstr "INS"
+
+#: ../code/core/textsessionview.cpp:639
+msgid "Text written by <b>%1</b>"
+msgstr "Tekst geschreven door <b>%1</b>"
+
+#: ../code/core/textsessionview.cpp:645
+msgid "Unowned text"
+msgstr "Schrijver onbekend"
+
+#: ../code/core/userlist.cpp:115
+msgid "Users"
+msgstr "Gebruikers"
+
+#: ../code/dialogs/connection-info-dialog.cpp:48
+msgid "Connections"
+msgstr "Verbindingen"
+
+#: ../code/dialogs/connection-info-dialog.cpp:313
+msgid "Nobody is connected to this computer"
+msgstr "Er is niemand verbonden met deze computer"
+
+#: ../code/dialogs/document-location-dialog.cpp:153
+msgid "Select document's target location"
+msgstr "Kies de doellocatie van het document"
+
+#: ../code/dialogs/document-location-dialog.cpp:155
+msgid "Choose a directory to create the document into:"
+msgstr "Kies een map om documenten in op te slaan:"
+
+#: ../code/dialogs/document-location-dialog.cpp:162
+msgid "Select documents' target location"
+msgstr "Kies de doellocatie van het document"
+
+#: ../code/dialogs/document-location-dialog.cpp:164
+msgid "Choose a directory to create the documents into:"
+msgstr "Kies een map om documenten in aan te maken:"
+
+#: ../code/dialogs/find-dialog.cpp:59
+msgid "Replace _All"
+msgstr "_Alles vervangen"
+
+#: ../code/dialogs/find-dialog.cpp:61
+msgid "_Replace"
+msgstr "Ve_rvangen"
+
+#: ../code/dialogs/find-dialog.cpp:62
+msgid "_Find"
+msgstr "Zoeken"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Find"
+msgstr "Zoeken"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Replace"
+msgstr "Vervangen"
+
+#: ../code/dialogs/find-dialog.cpp:138 ../code/dialogs/find-dialog.cpp:154
+msgid "Phrase \"%1\" has not been found"
+msgstr "“%1” is niet aangetroffen"
+
+#: ../code/dialogs/find-dialog.cpp:312
+msgid "No occurrence has been replaced"
+msgstr "Er is niks vervangen"
+
+#: ../code/dialogs/find-dialog.cpp:318
+msgid "%1 occurrence has been replaced"
+msgid_plural "%1 occurrences have been replaced"
+msgstr[0] "Er is %1 vervanging gedaan"
+msgstr[1] "Er zijn %1 vervangingen gedaan"
+
+#: ../code/dialogs/goto-dialog.cpp:31
+msgid "Go To _Line"
+msgstr "Ga naar rege_l"
+
+#: ../code/dialogs/initial-dialog.cpp:53
+msgid "Generating 2048-bit RSA private key..."
+msgstr "Bezig met genereren van 2048-bit RSA-privésleutel…"
+
+#: ../code/dialogs/initial-dialog.cpp:76
+msgid "Failed to generate private key"
+msgstr "De privésleutel kan niet worden gegenereerd"
+
+#: ../code/dialogs/initial-dialog.cpp:79
+msgid ""
+"%1\n"
+"\n"
+"You can try again to create a key in the Security tab of the preferences "
+"dialog."
+msgstr ""
+"%1\n"
+"\n"
+"U kunt het opnieuw proberen in de sectie ‘Beveiliging’ van het instellingen- "
+"venster."
+
+#: ../code/dialogs/initial-dialog.cpp:118
+msgid "Failed to generate self-signed certificate"
+msgstr "Het zelf-ondertekende certificaat kan niet worden gegenereerd"
+
+#: ../code/dialogs/initial-dialog.cpp:121
+msgid ""
+"%1\n"
+"\n"
+"You can try again to create a certificate in the Security tab of the "
+"preferences dialog."
+msgstr ""
+"%1\n"
+"\n"
+"U kunt het opnieuw proberen in de sectie ‘Beveiliging’ van het instellingen- "
+"venster."
+
+#: ../code/dialogs/password-dialog.cpp:34
+msgid "Connection to host \"%1\" requires a password."
+msgstr "‘%1’ vereist een wachtwoord."
+
+#: ../code/dialogs/password-dialog.cpp:40
+msgid "Invalid password for host \"%1\". Please try again."
+msgstr "Het wachtwoord van ‘%1’ is ongeldig. Probeer het opnieuw."
+
+#: ../code/dialogs/preferences-dialog.cpp:409
+msgid "Display no whitespace"
+msgstr "Geen witruimten tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:412
+msgid "Display spaces"
+msgstr "Spaties tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:416
+msgid "Display tabs"
+msgstr "Tabs tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:420
+msgid "Display tabs and spaces"
+msgstr "Tabs en spaties tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:452
+msgid "Show text only"
+msgstr "Alleen tekst tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:454
+msgid "Show icons only"
+msgstr "Alleen pictogrammen tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:456
+msgid "Show both icons and text"
+msgstr "Pictogrammen en tekst tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:458
+msgid "Show text besides icons"
+msgstr "Tekst naast pictogrammen tonen"
+
+#: ../code/dialogs/preferences-dialog.cpp:478
+msgid "Scheme Description"
+msgstr "Schemabeschrijving"
+
+#: ../code/dialogs/preferences-dialog.cpp:575
+msgid "Use TLS if possible"
+msgstr "TLS gebruiken (indien mogelijk)"
+
+#: ../code/dialogs/preferences-dialog.cpp:578
+msgid "Always use TLS"
+msgstr "Altijd TLS gebruiken"
+
+#: ../code/dialogs/preferences-dialog.cpp:615
+msgid "Error reading file: %1"
+msgstr "Het bestand kan niet worden ingelezen: %1"
+
+#: ../code/dialogs/preferences-dialog.cpp:655
+msgid "2048-bit RSA private key is being generated, please wait..."
+msgstr "Bezig met genereren van 2048-bit RSA-privésleutel…"
+
+#: ../code/dialogs/preferences-dialog.cpp:685
+msgid "Select a location for the generated key"
+msgstr "Kies een opslaglocatie"
+
+#: ../code/dialogs/preferences-dialog.cpp:703
+msgid "Select a location for the generated certificate"
+msgstr "Kies een opslaglocatie"
+
+#: ../code/operations/operation-delete.cpp:65
+msgid "Removing node \"%1\"..."
+msgstr "Bezig met verwijderen van ‘%1’…"
+
+#: ../code/operations/operation-delete.cpp:75
+msgid "Failed to delete node \"%1\""
+msgstr "‘%1’ kan niet worden verwijderd"
+
+#: ../code/operations/operation-export-html.cpp:173
+#, c-format
+msgid "written by: %s"
+msgstr "geschreven door: %s"
+
+#: ../code/operations/operation-export-html.cpp:246
+msgid "<unable to print date>"
+msgstr "<er kan geen datum worden getoond>"
+
+#. %1$s is session name/hostname
+#. %2$s is path within the session
+#. %3$s is current date as formatted by %c,
+#. %4$s is a link to the gobby site, it must be present because
+#. we need to handle that manually to insert a hyperlink
+#. instead of just printf'ing it.
+#: ../code/operations/operation-export-html.cpp:259
+#, c-format
+msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
+msgstr "Het document is op %3$s voortgekomen uit %1$s:%2$s door %4$s"
+
+#: ../code/operations/operation-export-html.cpp:409
+msgid "Participants"
+msgstr "Medewerkers"
+
+#: ../code/operations/operation-export-html.cpp:483
+msgid "Exporting document \"%1\" to \"%2\" in HTML..."
+msgstr "Bezig met exporteren van ‘%1’ naar ‘%2’ met html-opmaak…"
+
+#: ../code/operations/operation-export-html.cpp:544
+msgid "Failed to export document \"%1\" to HTML"
+msgstr "‘%1’ kan niet met html-opmaak worden geëxporteerd"
+
+#: ../code/operations/operation-new.cpp:75
+msgid "Creating directory \"%1\"..."
+msgstr "Bezig met aanmaken van ‘%1’…"
+
+#: ../code/operations/operation-new.cpp:76
+msgid "Creating document \"%1\"..."
+msgstr "Bezig met aanmaken van ‘%1’…"
+
+#: ../code/operations/operation-new.cpp:88
+msgid "Failed to create directory \"%1\""
+msgstr "‘%1’ kan niet worden aangemaakt"
+
+#: ../code/operations/operation-new.cpp:89
+msgid "Failed to create document \"%1\""
+msgstr "‘%1’ kan niet worden aangemaakt"
+
+#. Translators: This is the 8 bit encoding that is tried when
+#. autodetecting a file's encoding.
+#: ../code/operations/operation-open.cpp:38
+msgid "ISO-8859-1"
+msgstr "ISO-8859-1"
+
+#: ../code/operations/operation-open.cpp:113
+msgid "Opening document \"%1\"..."
+msgstr "Bezig met openen van ‘%1’…"
+
+#: ../code/operations/operation-open.cpp:129
+msgid ""
+"The directory into which the new document was supposed to be inserted has "
+"been removed"
+msgstr "De map waarin het document zou moeten worden opgeslagen is verwijderd"
+
+#: ../code/operations/operation-open.cpp:318
+msgid "The file contains data not in the specified encoding"
+msgstr "Bestand bevat ongeldige tekens"
+
+#: ../code/operations/operation-open.cpp:329
+msgid ""
+"The file either contains data in an unknown encoding, or it contains binary "
+"data."
+msgstr "Het bestand bevat gegevens in een onbekende tekenset of is binair."
+
+#: ../code/operations/operation-open-multiple.cpp:88
+msgid "Parent folder was removed"
+msgstr "De hoofdmap is verwijderd"
+
+#: ../code/operations/operation-open-multiple.cpp:189
+msgid "Failed to open multiple documents"
+msgstr "Het openen van meerdere documenten is mislukt"
+
+#: ../code/operations/operation-save.cpp:91
+msgid "Saving document \"%1\" to \"%2\"..."
+msgstr "Bezig met opslaan van ‘%1’ als ‘%2’…"
+
+#: ../code/operations/operation-save.cpp:220
+msgid ""
+"The document contains one or more characters that cannot be encoded in the "
+"specified character coding."
+msgstr ""
+"Het document bevat een of meerdere tekens die niet kunnen worden uitgelezen "
+"door de opgegeven tekenset."
+
+#: ../code/operations/operation-save.cpp:281
+msgid "Failed to save document \"%1\""
+msgstr "‘%1’ kan niet worden opgeslagen"
+
+#: ../code/operations/operation-subscribe-path.cpp:33
+msgid "Invalid path: \"%1\""
+msgstr "Ongeldige locatie: ‘%1’"
+
+#: ../code/operations/operation-subscribe-path.cpp:45
+msgid "Invalid path component: \"%1\""
+msgstr "Ongeldige locatie-onderdeel: ‘%1’"
+
+#: ../code/operations/operation-subscribe-path.cpp:135
+#: ../code/operations/operation-subscribe-path.cpp:200
+msgid "Subscribing to \"%1\"..."
+msgstr "Bezig met abonneren op ‘%1’…"
+
+#: ../code/operations/operation-subscribe-path.cpp:149
+#: ../code/operations/operation-subscribe-path.cpp:212
+msgid "Failed to connect to \"%1\""
+msgstr "Er kan geen verbinding met ‘%1’ worden gemaakt"
+
+#: ../code/operations/operation-subscribe-path.cpp:164
+msgid "URI scheme \"%1\" not supported"
+msgstr "Het uri-schema ‘%1’ wordt niet ondersteund"
+
+#: ../code/operations/operation-subscribe-path.cpp:193
+msgid "Connecting to \"%1\"..."
+msgstr "Bezig met verbinden met ‘%1’…"
+
+#: ../code/operations/operation-subscribe-path.cpp:220
+#: ../code/operations/operation-subscribe-path.cpp:319
+#: ../code/operations/operation-subscribe-path.cpp:356
+#: ../code/operations/operation-subscribe-path.cpp:452
+#: ../code/operations/operation-subscribe-path.cpp:472
+msgid "Could not subscribe to \"%1\""
+msgstr "Het abonneren op ‘%1’ is mislukt"
+
+#: ../code/operations/operation-subscribe-path.cpp:322
+#: ../code/operations/operation-subscribe-path.cpp:358
+msgid "Path \"%1\" does not exist"
+msgstr "‘%1’ bestaat niet"
+
+#: ../code/util/file.cpp:65 ../code/util/file.cpp:74
+msgid "Could not create directory \"%1\": %2"
+msgstr "‘%1’ kan niet worden aangemaakt: %2"
+
+#: ../code/util/uri.cpp:91
+msgid "Device \"%1\" does not exist"
+msgstr "‘’ bestaat niet"
+
+#: ../code/window.cpp:42
+msgid "Chat"
+msgstr "Gesprek"
+
+#: ../code/window.cpp:83
+msgid "This Computer"
+msgstr "Deze computer"
+
+#: ../code/window.cpp:108
+msgid "Document Browser"
+msgstr "Documentverkenner"
+
+#: ../gobby-0.5.desktop.in.h:1 ../gobby-0.5.metainfo.xml.in.h:1
+msgid "Gobby"
+msgstr "Gobby"
+
+#: ../gobby-0.5.desktop.in.h:2
+msgid "Collaborative Editor"
+msgstr "Gemeenschappelijke bewerker"
+
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby Collaborative Editor (0.5)"
+msgstr "Gobby gemeenschappelijke bewerker (0.5)"
+
+#: ../gobby-0.5.desktop.in.h:4 ../gobby-0.5.metainfo.xml.in.h:2
+msgid "Edit text files collaboratively"
+msgstr "Werk samen aan tekstbestanden"
+
+#: ../gobby-0.5.metainfo.xml.in.h:3
+msgid "Armin Burgmeier"
+msgstr "Armin Burgmeier"
+
+#: ../gobby-0.5.metainfo.xml.in.h:4
+msgid ""
+"Gobby is a free collaborative editor supporting multiple documents in one "
+"session and a multi-user chat. It runs on Microsoft Windows, Mac OS X, Linux "
+"and other Unix-like platforms."
+msgstr ""
+"Gobby is een gratis, vrije gemeenschappelijke bewerker met ondersteuning voor "
+"meerdere documenten per sessie en gespreksmogelijkheid. Gobby is beschikbaar "
+"voor Microsoft Windows, macOS, Linux en Unix-achtige systemen."
+
+#: ../gobby-0.5.metainfo.xml.in.h:5
+msgid ""
+"It uses GTK+ as its windowing toolkit and thus integrates nicely into the "
+"GNOME desktop environment."
+msgstr ""
+"Dit programma is gemaakt met GTK+ en integreert daardoor mooi in de GNOME-"
+"werkomgeving."
+
+#: ../gobby-0.5.metainfo.xml.in.h:6
+msgid "Remove support for GTK+ 2.x; at least GTK+ 3.6 is required now."
+msgstr ""
+"Ondersteuning voor GTK+ 2.x is verwijderd - 3.6 is voortaan de minimumvereiste"
+
+#: ../gobby-0.5.metainfo.xml.in.h:7
+msgid ""
+"Enable TCP keepalives, so that inactive connections will drop automatically "
+"after a short time."
+msgstr ""
+"TCP-keepalive is voortaan ingeschakeld, zodat inactieve verbindingen na "
+"verloop van tijd automatisch worden gesloten"
+
+#: ../gobby-0.5.metainfo.xml.in.h:8
+msgid "Gobby is now registered as a handler for infinote:// URLs."
+msgstr ""
+"Gobby staat voortaan geregistreerd als afhandelaar van infinote://-uri's"
+
+#: ../gobby-0.5.metainfo.xml.in.h:9
+msgid ""
+"Remember hosts previously connected to and presents them in the list next "
+"time Gobby is started until expilictly removed."
+msgstr ""
+"De vorige hosts worden voortaan onthouden en op een lijst getoond nadat Gobby "
+"is opgestart."
+
+#: ../gobby-0.5.metainfo.xml.in.h:10
+msgid ""
+"Gobby can now show connection parameters, in particular TLS parameters used "
+"for the connection."
+msgstr "Gobby kan voortaan verbindingsopties tonen, met name TLS-opties"
+
+#: ../gobby-0.5.metainfo.xml.in.h:11
+msgid ""
+"Gobby's configuration options are stored in GSettings instead of a custam "
+"config.xml file."
+msgstr ""
+"Gobbys instellingen worden voortaan opgeslagen in GSettings in plaats van in "
+"een config.xml-bestand"
+
+#: ../gobby-0.5.metainfo.xml.in.h:12
+msgid ""
+"The option to not set a certificate in the initial welcome dialog is no "
+"longer available."
+msgstr ""
+"De optie om een certificaat op het welkomstvenster te kiezen is niet meer "
+"beschikbaar"
+
+#: ../gobby-0.5.metainfo.xml.in.h:13
+msgid "Gobby can now use the default system CAs on Windows."
+msgstr "Gobby kan voortaan gebruikmaken van de Windows-systeemcertificaten"
+
+#: ../gobby-0.5.metainfo.xml.in.h:14
+msgid "Small bug fixes and code base modernization."
+msgstr "Kleine bugs opgelost en modernere code geschreven"
