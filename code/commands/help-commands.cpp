@@ -95,7 +95,7 @@ void Gobby::HelpCommands::on_about()
 		m_about_dialog->set_translator_credits(transl);
 		m_about_dialog->set_copyright(
 			"Copyright © 2008-2015 Armin Burgmeier");
-		m_about_dialog->set_license(_(
+		m_about_dialog->set_license(
 			"Permission to use, copy, modify, and/or distribute "
 			"this software for any urpose with or without fee is "
 			"hereby granted, provided that the above copyright "
@@ -112,7 +112,7 @@ void Gobby::HelpCommands::on_about()
 			"WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR "
 			"OTHER TORTIOUS ACTION, ARISING OUT OF OR IN "
 			"CONNECTION WITH THE USE OR PERFORMANCE OF THIS "
-			"SOFTWARE."));
+			"SOFTWARE.");
 		m_about_dialog->set_logo_icon_name("gobby-0.5");
 		m_about_dialog->set_program_name("Gobby");
 		m_about_dialog->set_version(PACKAGE_VERSION);
