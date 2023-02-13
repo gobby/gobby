@@ -45,7 +45,7 @@ namespace
 			  "try again (after having closed this document). "
 			  "Otherwise it is most likely a bug in the "
 			  "software. In that case, please file a bug report "
-			  "at http://gobby.0x539.de/trac/newticket and "
+			  "at https://github.com/gobby/gobby/issues and "
 			  "provide as much information as you can, including "
 			  "what you did when the problem occurred and how to "
 			  "reproduce the problem (if possible) so that we "
