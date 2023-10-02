@@ -1,0 +1,753 @@
+# Korean translation for Gobby
+# Copyright (C) 2023 Listed translators
+# This file is distributed under the same license as the Gobby package.
+# Changwoo Ryu <cwryu@debian.org>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gobby\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-29 13:01+0100\n"
+"PO-Revision-Date: 2023-10-02 15:38+0900\n"
+"Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
+"Language-Team: Korean\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../code/application.cpp:132
+msgid "Display version information and exit"
+msgstr "버전 정보를 표시하고 끝납니다"
+
+#: ../code/application.cpp:134
+msgid "Start a new gobby instance also if there is one already running"
+msgstr "고비 인스턴스가 이미 실행 중인 경우에도 새로운 인스턴스 시작"
+
+#: ../code/commands/auth-commands.cpp:193
+#: ../code/commands/browser-context-commands.cpp:354
+#: ../code/core/filechooser.cpp:34 ../code/core/filechooser.cpp:39
+#: ../code/core/huebutton.cpp:102
+#: ../code/dialogs/document-location-dialog.cpp:35
+msgid "_Cancel"
+msgstr "취소(_C)"
+
+#: ../code/commands/auth-commands.cpp:195 ../code/core/huebutton.cpp:103
+msgid "_Ok"
+msgstr "확인(_O)"
+
+#: ../code/commands/auth-commands.cpp:217
+msgid "Password required"
+msgstr "암호가 필요합니다"
+
+#: ../code/commands/auth-commands.cpp:250
+msgid "Incorrect password"
+msgstr "암호가 잘못되었습니다"
+
+# 구별을 위해 따옴표 추가
+#: ../code/commands/browser-commands.cpp:289
+msgid "Subscribing to %1..."
+msgstr "\"%1\"에 구독하는 중..."
+
+# 구별을 위해 따옴표 추가
+#: ../code/commands/browser-commands.cpp:302
+msgid "Subscribing to chat on %1..."
+msgstr "\"%1\"의 채팅에 구독하는 중..."
+
+#: ../code/commands/browser-commands.cpp:625
+msgid "Subscription failed"
+msgstr "구독 실패"
+
+#: ../code/commands/browser-context-commands.cpp:85
+msgid "Could not find a location where to store the certificate"
+msgstr "인증서를 저장할 위치를 찾을 수 없습니다"
+
+#: ../code/commands/browser-context-commands.cpp:287
+#: ../code/commands/browser-context-commands.cpp:322
+#: ../code/commands/browser-context-commands.cpp:409
+#: ../code/commands/file-tasks/task-open-location.cpp:31
+#: ../code/core/statusbar.cpp:81 ../code/dialogs/find-dialog.cpp:58
+#: ../code/dialogs/goto-dialog.cpp:30 ../code/dialogs/initial-dialog.cpp:206
+#: ../code/dialogs/preferences-dialog.cpp:815
+msgid "_Close"
+msgstr "닫기(_C)"
+
+#: ../code/commands/browser-context-commands.cpp:349
+msgid "Choose a name for the directory"
+msgstr "디렉터리의 이름을 정하십시오"
+
+#: ../code/commands/browser-context-commands.cpp:350
+msgid "Choose a name for the document"
+msgstr "문서의 이름을 정하십시오"
+
+#: ../code/commands/browser-context-commands.cpp:351
+msgid "_Directory Name:"
+msgstr "디렉터리 이름(_D):"
+
+#: ../code/commands/browser-context-commands.cpp:352
+msgid "_Document Name:"
+msgstr "문서 이름(_D):"
+
+#: ../code/commands/browser-context-commands.cpp:355
+msgid "C_reate"
+msgstr "만들기(_R)"
+
+#: ../code/commands/browser-context-commands.cpp:357
+msgid "New Directory"
+msgstr "새 디렉터리"
+
+#: ../code/commands/browser-context-commands.cpp:358
+#: ../code/commands/file-tasks/task-new.cpp:36
+msgid "New Document"
+msgstr "새 문서"
+
+#: ../code/commands/browser-context-commands.cpp:380
+#: ../code/commands/file-tasks/task-open-file.cpp:22
+msgid "Choose a text file to open"
+msgstr "열 텍스트 파일을 고르십시오"
+
+#: ../code/commands/browser-context-commands.cpp:519
+#: ../code/commands/browser-context-commands.cpp:530
+msgid "Account successfully created"
+msgstr "계정을 성공적으로 만들었습니다"
+
+#: ../code/commands/browser-context-commands.cpp:523
+msgid "When re-connecting to the server, the new account will be used."
+msgstr "서버에 다시 연결할 때, 새 계정을 사용합니다."
+
+#: ../code/commands/browser-context-commands.cpp:534
+msgid ""
+"The certificate has been stored at %1.\n"
+"\n"
+"To login to this account, set the certificate in Gobby's preferences and re-"
+"connect to the server."
+msgstr ""
+"인증서는 %1 위치에 저장됩니다.\n"
+"\n"
+"이 계정으로 로그인하려면, 고비의 기본 설정에서 인증서를 설정하고 서버에 다시 연결하십시오."
+
+#: ../code/commands/browser-context-commands.cpp:547
+msgid "Failed to create account"
+msgstr "계정을 만드는데 실패했습니다"
+
+#: ../code/commands/browser-context-commands.cpp:550
+msgid "Could not save the certificate for the account: %1"
+msgstr "이 계정의 인증서를 저장할 수 없습니다: %1"
+
+#: ../code/commands/file-commands.cpp:252
+msgid "Cancel"
+msgstr "취소"
+
+#: ../code/commands/file-commands.cpp:254
+msgid "Connect"
+msgstr "연결"
+
+#: ../code/commands/file-tasks/task-export-html.cpp:27
+msgid "Choose a location to export document \"%1\" to"
+msgstr "\"%1\" 문서를 내보낼 위치를 고르십시오"
+
+#: ../code/commands/file-tasks/task-open.cpp:46
+msgid "Querying \"%1\"..."
+msgstr "\"%1\" 질의 중..."
+
+#: ../code/commands/file-tasks/task-open.cpp:103
+#: ../code/operations/operation-open.cpp:469
+#: ../code/operations/operation-open-multiple.cpp:176
+msgid "Failed to open document \"%1\""
+msgstr "\"%1\" 문서 열기에 실패했습니다"
+
+#: ../code/commands/file-tasks/task-open-location.cpp:32
+#: ../code/core/filechooser.cpp:40
+#: ../code/dialogs/document-location-dialog.cpp:36
+msgid "_Open"
+msgstr "열기"
+
+#: ../code/commands/file-tasks/task-save.cpp:24
+msgid "Choose a location to save document \"%1\" to"
+msgstr "\"%1\" 문서를 저장할 위치를 고르십시오"
+
+#. Help browser could not be invoked, show an error message to the user.
+#: ../code/commands/help-commands.cpp:49
+msgid "There was an error displaying help."
+msgstr "도움말을 표시하는데 오류가 발생했습니다."
+
+#: ../code/commands/help-commands.cpp:74
+msgid "Contributors:"
+msgstr "기여자:"
+
+#: ../code/commands/help-commands.cpp:80
+msgid "British English:"
+msgstr "영국 영어:"
+
+#: ../code/commands/help-commands.cpp:82
+msgid "German:"
+msgstr "독일어:"
+
+#: ../code/commands/help-commands.cpp:99
+msgid ""
+"Permission to use, copy, modify, and/or distribute this software for any "
+"urpose with or without fee is hereby granted, provided that the above "
+"copyright notice and this permission notice appear in all copies.\n"
+"\n"
+"THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES "
+"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF "
+"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY "
+"SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES "
+"WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION "
+"OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN "
+"CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
+msgstr ""
+"Permission to use, copy, modify, and/or distribute this software for any urpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.\n"
+"\n"
+"THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
+
+#: ../code/commands/subscription-commands.cpp:148
+msgid ""
+"The connection to the publisher of this document has been lost. Further "
+"changes to the document could not be synchronized to others anymore, "
+"therefore the document cannot be edited anymore.\n"
+"\n"
+"Please note also that it is possible that not all of your latest changes "
+"have reached the publisher before the connection was lost."
+msgstr ""
+"이 문서를 게시한 서버와 연결이 끊어졌습니다. 이후에는 더 이상 문서를 바꿔도 다른 사람들과 동기화되지 않을 것이므로, 문서를 더 이상 편집할 수 없습니다.\n"
+"\n"
+"또 최근에 변경한 사항도 끊어지기 전에 서버에 반영되지 않았을 가능성이 있습니다."
+
+#: ../code/commands/synchronization-commands.cpp:30
+msgid "Synchronization in progress... %1%%"
+msgstr "동기화 진행 중... %1%%"
+
+#. Document cannot be used if an error happened
+#. during synchronization.
+#: ../code/commands/synchronization-commands.cpp:42
+msgid "This document cannot be used."
+msgstr "이 문서는 사용할 수 없습니다."
+
+#: ../code/commands/synchronization-commands.cpp:45
+#: ../code/commands/user-join-commands.cpp:43
+msgid ""
+"If you have an idea what could have caused the problem, then you may attempt "
+"to solve it and try again (after having closed this document). Otherwise it "
+"is most likely a bug in the software. In that case, please file a bug report "
+"at http://gobby.0x539.de/trac/newticket and provide as much information as "
+"you can, including what you did when the problem occurred and how to "
+"reproduce the problem (if possible) so that we can fix the problem in a "
+"later version. Thank you."
+msgstr "무엇이 문제를 일으켰는지 알고 있다면, (문서를 닫은 뒤) 해당 문제를 해결한 뒤에 다시 시도해 보십시오. 그래도 문제가 계속 일어나면 소프트웨어 버그일 가능성이 큽니다. 그러한 경우 http://gobby.0x539.de/trac/newticket 위치에 버그 리포트를 생성하고 가능한 많은 정보를 제공해 주십시오. 문제가 일어났을 때 무엇을 했는지 및 (가능하다면) 어떻게 문제를 재현하는지 알려 주시면 다음 버전에서 문제를 바로잡을 수 있습니다. 감사합니다."
+
+#: ../code/commands/synchronization-commands.cpp:59
+msgid "Synchronization failed: %1"
+msgstr "동기화 실패: %1"
+
+#. TODO: Adjust this for chat sessions
+#: ../code/commands/user-join-commands.cpp:38
+msgid ""
+"You can still watch others editing the document, but you cannot edit it "
+"yourself."
+msgstr "다른 사람의 문서 편집을 볼 수 있지만, 직접 편집할 수는 없습니다."
+
+#: ../code/commands/user-join-commands.cpp:57
+msgid "User Join failed: %1"
+msgstr "사용자 참가 실패: %1"
+
+#: ../code/commands/user-join-commands.cpp:64
+msgid "Permissions are not granted to modify the document."
+msgstr "문서를 수정할 권한이 주어지지 않았습니다."
+
+#: ../code/core/browser.cpp:109
+msgid "_Direct Connection"
+msgstr "직접 연결(_D)"
+
+#: ../code/core/browser.cpp:110
+msgid "Host Name:"
+msgstr "호스트 이름:"
+
+#: ../code/core/certificatemanager.cpp:86
+#, c-format
+msgid "Failed to write Diffie-Hellman parameters to \"%s\": %s"
+msgstr "디피-헬먼 파라미터 \"%s\"에 쓰는데 실패: %s"
+
+#: ../code/core/certificatemanager.cpp:279
+#, c-format
+msgid "Failed to read Diffie-Hellman parameters: %s"
+msgstr "디피-헬먼 파라미터 읽는데 실패: %s"
+
+#: ../code/core/certificatemanager.cpp:341
+msgid "File does not contain a X.509 certificate"
+msgstr "파일에 X.509 인증서가 들어 있지 않습니다"
+
+#: ../code/core/certificatemanager.cpp:417
+msgid "Certificate does not belong to the chosen key"
+msgstr "인증서가 선택한 키에 속하지 않습니다"
+
+#: ../code/core/filechooser.cpp:35
+msgid "_Save"
+msgstr "저장(_S)"
+
+#: ../code/core/foldermanager.cpp:345
+msgid "The document has been removed from the server."
+msgstr "문서가 서버에서 제거되었습니다."
+
+#: ../code/core/selfhoster.cpp:105
+msgid "Generating 2048-bit Diffie-Hellman parameters..."
+msgstr "2048 비트 디피-헬먼 파라미터를 생성하는 중..."
+
+#: ../code/core/selfhoster.cpp:137
+msgid "Failed to generate Diffie-Hellman parameters"
+msgstr "디피-헬먼 파라미터 생성에 실패했습니다"
+
+#: ../code/core/selfhoster.cpp:139
+msgid ""
+"This means that Perfect Forward Secrecy (PFS) is not available. Restart "
+"Gobby to re-try generating the parameters. The specific error was:\n"
+"\n"
+"%1"
+msgstr ""
+"완전 순방향 비밀성(PFS, Perfect Forward Secrecy)을 사용할 수 없다는 의미입니다. 고비를 다시 시작해서 파라미터를 다시 생성해 보십시오. 해당 오류는 다음과 같습니다:\n"
+"\n"
+"%1"
+
+#: ../code/core/selfhoster.cpp:265
+msgid ""
+"In order to start sharing your documents, choose a private key and "
+"certificate or create a new pair in the preferences"
+msgstr "문서 공유를 시작하려면, 개인 키와 인증서를 선택하거나, 새로운 키 쌍을 기본 설정에서 새로 만드십시오"
+
+#: ../code/core/selfhoster.cpp:287
+msgid "Failed to share documents"
+msgstr "문서 공유에 실패했습니다"
+
+#: ../code/core/sessionuserview.cpp:38
+msgid "User List"
+msgstr "사용자 목록"
+
+#: ../code/core/statusbar.cpp:434
+msgid "Ln %1, Col %2\t%3"
+msgstr "줄 %1, 열 %2\t%3"
+
+#: ../code/core/statusbar.cpp:437
+msgid "OVR"
+msgstr "OVR"
+
+#: ../code/core/statusbar.cpp:437
+msgid "INS"
+msgstr "INS"
+
+#: ../code/core/textsessionview.cpp:639
+msgid "Text written by <b>%1</b>"
+msgstr "텍스트 작성자 <b>%1</b>"
+
+#: ../code/core/textsessionview.cpp:645
+msgid "Unowned text"
+msgstr "소유 없는 텍스트"
+
+#: ../code/core/userlist.cpp:115
+msgid "Users"
+msgstr "사용자"
+
+#: ../code/dialogs/connection-info-dialog.cpp:48
+msgid "Connections"
+msgstr "연결"
+
+#: ../code/dialogs/connection-info-dialog.cpp:313
+msgid "Nobody is connected to this computer"
+msgstr "아무도 이 컴퓨터에 연결하지 않았습니다"
+
+#: ../code/dialogs/document-location-dialog.cpp:153
+msgid "Select document's target location"
+msgstr "문서의 대상 위치를 선택하십시오"
+
+#: ../code/dialogs/document-location-dialog.cpp:155
+msgid "Choose a directory to create the document into:"
+msgstr "문서를 만들 위치의 디렉터리를 고르십시오:"
+
+#: ../code/dialogs/document-location-dialog.cpp:162
+msgid "Select documents' target location"
+msgstr "문서의 대상 위치를 선택하십시오"
+
+#: ../code/dialogs/document-location-dialog.cpp:164
+msgid "Choose a directory to create the documents into:"
+msgstr "문서를 만들 위치의 디렉터리를 고르십시오:"
+
+#: ../code/dialogs/find-dialog.cpp:59
+msgid "Replace _All"
+msgstr "모두 바꾸기(_A)"
+
+#: ../code/dialogs/find-dialog.cpp:61
+msgid "_Replace"
+msgstr "바꾸기(_R)"
+
+#: ../code/dialogs/find-dialog.cpp:62
+msgid "_Find"
+msgstr "찾기(_F)"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Find"
+msgstr "찾기"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Replace"
+msgstr "바꾸기"
+
+#: ../code/dialogs/find-dialog.cpp:138 ../code/dialogs/find-dialog.cpp:154
+msgid "Phrase \"%1\" has not been found"
+msgstr "\"%1\" 문구를 찾지 못했습니다"
+
+#: ../code/dialogs/find-dialog.cpp:312
+msgid "No occurrence has been replaced"
+msgstr "바꾼 일치하는 항목이 없습니다"
+
+#: ../code/dialogs/find-dialog.cpp:318
+msgid "%1 occurrence has been replaced"
+msgid_plural "%1 occurrences have been replaced"
+msgstr[0] "일치하는 항목 %1개를 바꿨습니다"
+
+#: ../code/dialogs/goto-dialog.cpp:31
+msgid "Go To _Line"
+msgstr "해당 줄로 이동(_L)"
+
+#: ../code/dialogs/initial-dialog.cpp:53
+msgid "Generating 2048-bit RSA private key..."
+msgstr "2048 비트 RSA 개인 키를 생성하는 중입니다..."
+
+#: ../code/dialogs/initial-dialog.cpp:76
+msgid "Failed to generate private key"
+msgstr "개인 키 생성에 실패했습니다"
+
+#: ../code/dialogs/initial-dialog.cpp:79
+msgid ""
+"%1\n"
+"\n"
+"You can try again to create a key in the Security tab of the preferences "
+"dialog."
+msgstr ""
+"%1\n"
+"\n"
+"기본 설정 대화창의 보안 탭에서 키를 다시 만들어 볼 수 있습니다."
+
+#: ../code/dialogs/initial-dialog.cpp:118
+msgid "Failed to generate self-signed certificate"
+msgstr "자기 서명 인증서 생성에 실패했습니다"
+
+#: ../code/dialogs/initial-dialog.cpp:121
+msgid ""
+"%1\n"
+"\n"
+"You can try again to create a certificate in the Security tab of the "
+"preferences dialog."
+msgstr ""
+"%1\n"
+"\n"
+"기본 설정 대화창의 보안 탭에서 인증서를 새로 만들어 볼 수 있습니다."
+
+#: ../code/dialogs/password-dialog.cpp:34
+msgid "Connection to host \"%1\" requires a password."
+msgstr "\"%1\" 호스트 연결에는 비밀번호가 필요합니다."
+
+#: ../code/dialogs/password-dialog.cpp:40
+msgid "Invalid password for host \"%1\". Please try again."
+msgstr "\"%1\" 호스트에 대한 암호가 잘못되었습니다. 다시 시도해 보십시오."
+
+#: ../code/dialogs/preferences-dialog.cpp:409
+msgid "Display no whitespace"
+msgstr "공백 문자 표시하지 않음"
+
+#: ../code/dialogs/preferences-dialog.cpp:412
+msgid "Display spaces"
+msgstr "공백 표시"
+
+#: ../code/dialogs/preferences-dialog.cpp:416
+msgid "Display tabs"
+msgstr "탭 표시"
+
+#: ../code/dialogs/preferences-dialog.cpp:420
+msgid "Display tabs and spaces"
+msgstr "탭 및 공백 표시"
+
+#: ../code/dialogs/preferences-dialog.cpp:452
+msgid "Show text only"
+msgstr "텍스트만 표시"
+
+#: ../code/dialogs/preferences-dialog.cpp:454
+msgid "Show icons only"
+msgstr "아이콘만 표시"
+
+#: ../code/dialogs/preferences-dialog.cpp:456
+msgid "Show both icons and text"
+msgstr "아이콘과 텍스트 모두 표시"
+
+#: ../code/dialogs/preferences-dialog.cpp:458
+msgid "Show text besides icons"
+msgstr "아이콘 옆에 텍스트 표시"
+
+#: ../code/dialogs/preferences-dialog.cpp:478
+msgid "Scheme Description"
+msgstr "방식 기술"
+
+#: ../code/dialogs/preferences-dialog.cpp:575
+msgid "Use TLS if possible"
+msgstr "가능한 경우 TLS 사용"
+
+#: ../code/dialogs/preferences-dialog.cpp:578
+msgid "Always use TLS"
+msgstr "항상 TLS 사용"
+
+#: ../code/dialogs/preferences-dialog.cpp:615
+msgid "Error reading file: %1"
+msgstr "파일 읽는 중 오류: %1"
+
+#: ../code/dialogs/preferences-dialog.cpp:655
+msgid "2048-bit RSA private key is being generated, please wait..."
+msgstr "2048 비트 RSA 개인 키를 생성하는 중, 잠시 기다리십시오..."
+
+#: ../code/dialogs/preferences-dialog.cpp:685
+msgid "Select a location for the generated key"
+msgstr "생성한 키의 위치를 선택하십시오"
+
+#: ../code/dialogs/preferences-dialog.cpp:703
+msgid "Select a location for the generated certificate"
+msgstr "생성한 인증서의 위치를 선택하십시오"
+
+#: ../code/operations/operation-delete.cpp:65
+msgid "Removing node \"%1\"..."
+msgstr "\"%1\" 노드 지우는 중..."
+
+#: ../code/operations/operation-delete.cpp:75
+msgid "Failed to delete node \"%1\""
+msgstr "\"%1\" 노드 삭제에 실패했습니다"
+
+#: ../code/operations/operation-export-html.cpp:173
+#, c-format
+msgid "written by: %s"
+msgstr "작성자: %s"
+
+#: ../code/operations/operation-export-html.cpp:246
+msgid "<unable to print date>"
+msgstr "<시각을 표시할 수 없음>"
+
+#. %1$s is session name/hostname
+#. %2$s is path within the session
+#. %3$s is current date as formatted by %c,
+#. %4$s is a link to the gobby site, it must be present because
+#. we need to handle that manually to insert a hyperlink
+#. instead of just printf'ing it.
+#: ../code/operations/operation-export-html.cpp:259
+#, c-format
+msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
+msgstr "문서 생성, 위치 %1$s:%2$s, 시각 %3$s, 작성자 %4$s"
+
+#: ../code/operations/operation-export-html.cpp:409
+msgid "Participants"
+msgstr "참여자"
+
+#: ../code/operations/operation-export-html.cpp:483
+msgid "Exporting document \"%1\" to \"%2\" in HTML..."
+msgstr "\"%1\" 문서를 HTML 형식의 \"%2\"에 내보내는 중..."
+
+#: ../code/operations/operation-export-html.cpp:544
+msgid "Failed to export document \"%1\" to HTML"
+msgstr "\"%1\" 문서를 HTML 형식으로 내보내는데 실패했습니다"
+
+#: ../code/operations/operation-new.cpp:75
+msgid "Creating directory \"%1\"..."
+msgstr "\"%1\" 디렉터리 만드는 중..."
+
+#: ../code/operations/operation-new.cpp:76
+msgid "Creating document \"%1\"..."
+msgstr "\"%1\" 문서 만드는 중..."
+
+#: ../code/operations/operation-new.cpp:88
+msgid "Failed to create directory \"%1\""
+msgstr "\"%1\" 디렉터리 만들기 실패했습니다"
+
+#: ../code/operations/operation-new.cpp:89
+msgid "Failed to create document \"%1\""
+msgstr "\"%1\" 문서 만들기에 실패했습니다"
+
+#. Translators: This is the 8 bit encoding that is tried when
+#. autodetecting a file's encoding.
+#: ../code/operations/operation-open.cpp:38
+msgid "ISO-8859-1"
+msgstr "UTF-8"
+
+#: ../code/operations/operation-open.cpp:113
+msgid "Opening document \"%1\"..."
+msgstr "\"%1\" 문서 여는 중..."
+
+#: ../code/operations/operation-open.cpp:129
+msgid ""
+"The directory into which the new document was supposed to be inserted has "
+"been removed"
+msgstr "새 문서를 생성할 위치의 디렉터리가 제거되었습니다."
+
+#: ../code/operations/operation-open.cpp:318
+msgid "The file contains data not in the specified encoding"
+msgstr "파일에 지정한 인코딩이 아닌 데이터가 들어 있습니다"
+
+#: ../code/operations/operation-open.cpp:329
+msgid ""
+"The file either contains data in an unknown encoding, or it contains binary "
+"data."
+msgstr "파일이 알 수 없는 인코딩의 데이터가 들어 있거나, 바이너리 데이터가 들어 있습니다."
+
+#: ../code/operations/operation-open-multiple.cpp:88
+msgid "Parent folder was removed"
+msgstr "상위 폴더를 제거했습니다"
+
+#: ../code/operations/operation-open-multiple.cpp:189
+msgid "Failed to open multiple documents"
+msgstr "여러 문서를 여는데 실패했습니다"
+
+#: ../code/operations/operation-save.cpp:91
+msgid "Saving document \"%1\" to \"%2\"..."
+msgstr "\"%1\" 문서를 \"%2\"에 저장하는 중..."
+
+#: ../code/operations/operation-save.cpp:220
+msgid ""
+"The document contains one or more characters that cannot be encoded in the "
+"specified character coding."
+msgstr "문서에 지정한 문자 인코딩으로 인코딩할 수 없는 문자가 하나 이상 들어 있습니다."
+
+#: ../code/operations/operation-save.cpp:281
+msgid "Failed to save document \"%1\""
+msgstr "\"%1\" 문서 저장에 실패했습니다"
+
+#: ../code/operations/operation-subscribe-path.cpp:33
+msgid "Invalid path: \"%1\""
+msgstr "잘못된 경로: \"%1\""
+
+#: ../code/operations/operation-subscribe-path.cpp:45
+msgid "Invalid path component: \"%1\""
+msgstr "잘못된 경로 구성 요소: \"%1\""
+
+#: ../code/operations/operation-subscribe-path.cpp:135
+#: ../code/operations/operation-subscribe-path.cpp:200
+msgid "Subscribing to \"%1\"..."
+msgstr "\"%1\"에 구독하는 중..."
+
+#: ../code/operations/operation-subscribe-path.cpp:149
+#: ../code/operations/operation-subscribe-path.cpp:212
+msgid "Failed to connect to \"%1\""
+msgstr "\"%1\"에 구독하는데 실패했습니다"
+
+#: ../code/operations/operation-subscribe-path.cpp:164
+msgid "URI scheme \"%1\" not supported"
+msgstr "\"%1\" URI 방식을 지원하지 않습니다"
+
+#: ../code/operations/operation-subscribe-path.cpp:193
+msgid "Connecting to \"%1\"..."
+msgstr "\"%1\"에 연결하는 중..."
+
+#: ../code/operations/operation-subscribe-path.cpp:220
+#: ../code/operations/operation-subscribe-path.cpp:319
+#: ../code/operations/operation-subscribe-path.cpp:356
+#: ../code/operations/operation-subscribe-path.cpp:452
+#: ../code/operations/operation-subscribe-path.cpp:472
+msgid "Could not subscribe to \"%1\""
+msgstr "\"%1\"에 구독할 수 없습니다"
+
+#: ../code/operations/operation-subscribe-path.cpp:322
+#: ../code/operations/operation-subscribe-path.cpp:358
+msgid "Path \"%1\" does not exist"
+msgstr "\"%1\" 경로가 없습니다"
+
+#: ../code/util/file.cpp:65 ../code/util/file.cpp:74
+msgid "Could not create directory \"%1\": %2"
+msgstr "\"%1\" 디렉터리를 만들 수 없습니다: %2"
+
+#: ../code/util/uri.cpp:91
+msgid "Device \"%1\" does not exist"
+msgstr "\"%1\" 장치가 없습니다"
+
+#: ../code/window.cpp:42
+msgid "Chat"
+msgstr "채팅"
+
+#: ../code/window.cpp:83
+msgid "This Computer"
+msgstr "이 컴퓨터"
+
+#: ../code/window.cpp:108
+msgid "Document Browser"
+msgstr "문서 둘러보기"
+
+#: ../gobby-0.5.desktop.in.h:1 ../gobby-0.5.metainfo.xml.in.h:1
+msgid "Gobby"
+msgstr "고비"
+
+#: ../gobby-0.5.desktop.in.h:2
+msgid "Collaborative Editor"
+msgstr "협동 편집기"
+
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby Collaborative Editor (0.5)"
+msgstr "고비 협동 편집기 (0.5)"
+
+#: ../gobby-0.5.desktop.in.h:4 ../gobby-0.5.metainfo.xml.in.h:2
+msgid "Edit text files collaboratively"
+msgstr "텍스트 파일을 협동해서 편집합니다"
+
+#: ../gobby-0.5.metainfo.xml.in.h:3
+msgid "Armin Burgmeier"
+msgstr "Armin Burgmeier"
+
+#: ../gobby-0.5.metainfo.xml.in.h:4
+msgid ""
+"Gobby is a free collaborative editor supporting multiple documents in one "
+"session and a multi-user chat. It runs on Microsoft Windows, Mac OS X, Linux "
+"and other Unix-like platforms."
+msgstr "고비는 자유 소프트웨어 협동 편집기로, 하나의 세션에 여러 문서를 지원하고 여러 사용자가 채팅할 수 있습니다. 고비는 마이크로소프트 윈도우, 맥오에스, 리눅스 및 기타 유닉스 계열 플랫폼에서 동작합니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:5
+msgid ""
+"It uses GTK+ as its windowing toolkit and thus integrates nicely into the "
+"GNOME desktop environment."
+msgstr "고비는 GTK+를 윈도우 툴킷으로 사용하므로 그놈 데스크톱 환경에 멋지게 어울립니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:6
+msgid "Remove support for GTK+ 2.x; at least GTK+ 3.6 is required now."
+msgstr "GTK+ 2.x 지원 제거; 이제 최소 GTK+ 3.6 필요."
+
+#: ../gobby-0.5.metainfo.xml.in.h:7
+msgid ""
+"Enable TCP keepalives, so that inactive connections will drop automatically "
+"after a short time."
+msgstr "TCP 연결 유지 신호 사용, 반응 없는 연결은 일정 시간 이후 해제되도록."
+
+#: ../gobby-0.5.metainfo.xml.in.h:8
+msgid "Gobby is now registered as a handler for infinote:// URLs."
+msgstr "고비는 이제 infinote:// URL 처리 프로그램으로 등록됩니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:9
+msgid ""
+"Remember hosts previously connected to and presents them in the list next "
+"time Gobby is started until expilictly removed."
+msgstr "이전에 연결했던 호스트를 저장하고 다음에 고비를 시작하면 목록에 미리 설정합니다. 명시적으로 지울 때까지 유지합니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:10
+msgid ""
+"Gobby can now show connection parameters, in particular TLS parameters used "
+"for the connection."
+msgstr "고비는 이제 연결 파라미터를 표시합니다. 특히 연결에 사용된 TLS 파라미터를 표시합니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:11
+msgid ""
+"Gobby's configuration options are stored in GSettings instead of a custam "
+"config.xml file."
+msgstr "고비의 설정 옵션은 커스텀 config.xml 파일이 아닌 GSettings에 저장됩니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:12
+msgid ""
+"The option to not set a certificate in the initial welcome dialog is no "
+"longer available."
+msgstr "최초의 환영 대화창에서 인증서를 설정하지 않는 옵션은 이제 더 이상 없습니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:13
+msgid "Gobby can now use the default system CAs on Windows."
+msgstr "고비는 이제 윈도우의 기본 시스템 인증서를 사용할 수 있습니다."
+
+#: ../gobby-0.5.metainfo.xml.in.h:14
+msgid "Small bug fixes and code base modernization."
+msgstr "작은 버그 수정 및 코드 베이스 현대화"
