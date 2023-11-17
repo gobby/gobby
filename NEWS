@@ -3,6 +3,7 @@ Gobby
 
 Version 0.7.0:
   * Use Meson for building instead of Autotools.
+  * Use GtkSourceView 4 instead of 3.
 
 Version 0.6.0:
   * Remove support for GTK+ 2.x; at least GTK+ 3.6 is required now.

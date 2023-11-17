@@ -47,7 +47,7 @@ jobs:
       # Install msys and get an entrypoint for it
       - uses: msys2/setup-msys2@v2
         with:
-          install: base-devel git rsync binutils autoconf automake automake1.16 libtool intltool mingw-w64-x86_64-gcc glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-meson mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+          install: base-devel git rsync binutils autoconf automake automake1.16 libtool intltool mingw-w64-x86_64-gcc glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-meson mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview4 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
       - name: "libinfinity: Generate autotools build files and run configure"
         run: |
@@ -110,7 +110,7 @@ jobs:
           cp -v /mingw64/share/glib-2.0/schemas/org.gtk.Settings.FileChooser.gschema.xml out/share/glib-2.0/schemas
           glib-compile-schemas out/share/glib-2.0/schemas
           echo Installing GtkSourceView language definitions...
-          cp -vr /mingw64/share/gtksourceview-3.0/ out/share/gtksourceview-3.0/
+          cp -vr /mingw64/share/gtksourceview-4/ out/share/gtksourceview-4/
           echo Installing localizations...
           rsync -av --exclude=binutils.mo --exclude=ld.mo --exclude=xz.mo /mingw64/share/locale/ out/share/locale/
           echo Writing settings...
