@@ -34,13 +34,13 @@ jobs:
           git config --global core.symlinks false
 
       - name: "libinfinity: Check out repository"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: gobby/libinfinity
           path: libinfinity
 
       - name: "gobby: Check out repository"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: gobby
 
@@ -124,7 +124,7 @@ jobs:
           cp "$GITHUB_WORKSPACE"/gobby/win32/gobby.iss out/
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: build-result
           path: ${{ github.workspace }}/out/
@@ -154,13 +154,13 @@ jobs:
           install: base-devel git rsync autoconf automake1.16
 
       - name: "Windows-10 theme: Check out repository"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: B00merang-Project/Windows-10
           path: windows-10-theme
 
       - name: Download GNOME hicolor icon theme
-        uses: carlosperate/download-file-action@v1.0.3
+        uses: carlosperate/download-file-action@v2
         id: hicolor-icon-theme
         with:
           file-url: https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.17.tar.xz
@@ -168,7 +168,7 @@ jobs:
           location: hicolor-icon-theme/
 
       - name: Download GNOME Adwaita icon theme
-        uses: carlosperate/download-file-action@v1.0.3
+        uses: carlosperate/download-file-action@v2
         id: adwaita-icon-theme
         with:
           file-url: https://download.gnome.org/sources/adwaita-icon-theme/3.38/adwaita-icon-theme-3.38.0.tar.xz
@@ -202,7 +202,7 @@ jobs:
           rsync -av windows-10-theme/gtk-3.20/ out/share/themes/Windows10/gtk-3.0/
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: theme-data
           path: ${{ github.workspace }}/out/
@@ -245,7 +245,7 @@ jobs:
           iscc gobby.iss
 
       - name: Upload installer
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: installer
           path: ${{ github.workspace }}/pkg/Output/
