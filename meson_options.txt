@@ -1,0 +1,1 @@
+option('docs', type : 'boolean', value : true)

@@ -53,24 +53,24 @@ jobs:
 
       - name: "gobby: Install required packages"
         run: |
-          sudo apt-get install -y libxml++2.6-dev libglibmm-2.4-dev libgtkmm-3.0-dev libgtksourceview-3.0-dev libgsasl7-dev libunique-dev gettext intltool yelp-tools
+          sudo apt-get install -y meson libxml++2.6-dev libglibmm-2.4-dev libgtkmm-3.0-dev libgtksourceview-3.0-dev libgsasl7-dev libunique-dev gettext yelp-tools desktop-file-utils appstream-util
 
-      - name: "gobby: Generate autotools build files"
+      - name: "gobby: Run meson"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          ./autogen.sh
-
-      - name: "gobby: Run configure"
-        run: |
-          cd "$GITHUB_WORKSPACE"/gobby
-          ./configure
+          meson setup build
 
       - name: "gobby: Run the build"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          make -j3
+          meson compile -C build --verbose
+
+      - name: "gobby: Run tests"
+        run: |
+          cd "$GITHUB_WORKSPACE"/gobby
+          ninja -C build test
 
       - name: "gobby: Install the result"
         run: |
-          cd "$GITHUB_WORKSPACE"/gobby
-          sudo make install
+          cd "$GITHUB_WORKSPACE"/gobby/build
+          sudo meson install

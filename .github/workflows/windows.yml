@@ -47,7 +47,7 @@ jobs:
       # Install msys and get an entrypoint for it
       - uses: msys2/setup-msys2@v2
         with:
-          install: base-devel git rsync binutils mingw-w64-x86_64-gcc autoconf automake automake1.16 libtool intltool glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
+          install: base-devel git rsync binutils autoconf automake automake1.16 libtool intltool mingw-w64-x86_64-gcc glib2-devel gtk-doc mingw-w64-x86_64-gobject-introspection libxml2-devel mingw-w64-x86_64-meson mingw-w64-x86_64-glib2 mingw-w64-x86_64-gtk3 libexpat-devel zlib-devel mingw-w64-x86_64-gtkmm3 mingw-w64-x86_64-libxml++2.6 mingw-w64-x86_64-gtksourceview3 libgnutls-devel mingw-w64-x86_64-gsasl mingw-w64-x86_64-glibmm
 
       - name: "libinfinity: Generate autotools build files and run configure"
         run: |
@@ -65,26 +65,22 @@ jobs:
           make install DESTDIR="`pwd`/prefix"
           find "`pwd`/prefix"
 
-      - name: "gobby: Generate autotools build files"
-        run: |
-          cd "$GITHUB_WORKSPACE"/gobby
-          ./autogen.sh
-
-      - name: "gobby: Run configure"
+      - name: "gobby: Run meson"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
           PKG_CONFIG_PATH="`pwd`/../libinfinity/prefix/mingw64/lib/pkgconfig" \
-            ./configure
+            meson setup build --prefix="`pwd`/prefix"
 
       - name: "gobby: Run the build"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          make
+          meson compile -C build --verbose
+          find build
 
       - name: "gobby: Install the result"
         run: |
           cd "$GITHUB_WORKSPACE"/gobby
-          make install DESTDIR="`pwd`/prefix"
+          meson install -C build
           find "`pwd`/prefix"
 
       - name: Collect binary results
@@ -92,13 +88,13 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           mkdir -p out/bin/ out/share/locale/
           cp libinfinity/prefix/mingw64/bin/*.dll out/bin/
-          cp gobby/prefix/mingw64/bin/*.exe out/bin/
+          cp gobby/prefix/bin/*.exe out/bin/
           strip -g out/bin/*.dll out/bin/*.exe
           pushd out/bin/
           ldd gobby*.exe | grep '\/mingw.*\.dll' -o | xargs -I{} cp -v "{}" .
           popd
           rsync -av libinfinity/prefix/mingw64/share/locale/ out/share/locale/
-          rsync -av gobby/prefix/mingw64/share/ out/share/          
+          rsync -av gobby/prefix/share/ out/share/
           rm -rf out/share/man/
           echo Copying gdk-pixbuf-2.0 and associated libraries...
           mkdir -p out/lib/gdk-pixbuf-2.0/
@@ -121,7 +117,7 @@ jobs:
           mkdir -p out/etc/gtk-3.0
           echo -e "[Settings]\ngtk-theme-name=Windows10\ngtk-font-name=Segoe UI 9\n" > out/etc/gtk-3.0/settings.ini
           echo Copying installer script...
-          cp "$GITHUB_WORKSPACE"/gobby/win32/gobby.iss out/
+          cp "$GITHUB_WORKSPACE"/gobby/build/win32/gobby.iss out/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
