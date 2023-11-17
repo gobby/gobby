@@ -427,6 +427,15 @@ template<>
 struct SettingTraits<InfXmppConnectionSecurityPolicy>:
 	SettingTraitsEnum<InfXmppConnectionSecurityPolicy> {};
 
+// NOTE: This is copied from gtksourceview-3.0, which deprecated this enum
+// in 3.24 - however Gobby embedded the logic in its settings. This only
+// retains the constants we are actually using.
+typedef enum _GtkSourceDrawSpacesFlags
+{
+        GTK_SOURCE_DRAW_SPACES_SPACE      = 1 << 0,
+        GTK_SOURCE_DRAW_SPACES_TAB        = 1 << 1,
+} GtkSourceDrawSpacesFlags;
+
 template<>
 struct SettingTraits<GtkSourceDrawSpacesFlags>:
 	SettingTraitsFlags<GtkSourceDrawSpacesFlags> {};

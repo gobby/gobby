@@ -269,8 +269,7 @@ Gobby::TextSessionView::TextSessionView(InfTextSession* session,
 		m_view, m_preferences.view.margin_pos);
 	gtk_source_buffer_set_highlight_matching_brackets(
 		m_buffer, m_preferences.view.bracket_highlight);
-	gtk_source_view_set_draw_spaces(
-		m_view, m_preferences.view.whitespace_display);
+	on_whitespace_display_changed();
 
 	gtk_widget_show(GTK_WIDGET(m_view));
 	Gtk::ScrolledWindow* scroll = Gtk::manage(new Gtk::ScrolledWindow);
@@ -546,8 +545,18 @@ void Gobby::TextSessionView::on_bracket_highlight_changed()
 
 void Gobby::TextSessionView::on_whitespace_display_changed()
 {
-	gtk_source_view_set_draw_spaces(
-		m_view, m_preferences.view.whitespace_display);
+	GtkSourceSpaceDrawer* space_drawer = gtk_source_view_get_space_drawer(
+		m_view);
+	GtkSourceSpaceLocationFlags locations = GTK_SOURCE_SPACE_LOCATION_ALL;
+	GtkSourceSpaceTypeFlags types = GTK_SOURCE_SPACE_TYPE_NONE;
+	if (m_preferences.view.whitespace_display.get() & GTK_SOURCE_DRAW_SPACES_SPACE) {
+		types = (GtkSourceSpaceTypeFlags)(types | GTK_SOURCE_SPACE_TYPE_SPACE);
+	}
+	if (m_preferences.view.whitespace_display.get() & GTK_SOURCE_DRAW_SPACES_TAB) {
+		types = (GtkSourceSpaceTypeFlags)(types | GTK_SOURCE_SPACE_TYPE_TAB);
+	}
+	gtk_source_space_drawer_set_types_for_locations(space_drawer, locations, types);
+	gtk_source_space_drawer_set_enable_matrix(space_drawer, true);
 }
 
 void Gobby::TextSessionView::on_font_changed()
