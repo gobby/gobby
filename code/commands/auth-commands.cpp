@@ -59,8 +59,8 @@ Gobby::AuthCommands::AuthCommands(Gtk::Window& parent,
                                   const Preferences& preferences):
 	m_parent(parent),
 	m_browser(browser),
-	m_connection_manager(connection_manager),
 	m_statusbar(statusbar),
+	m_connection_manager(connection_manager),
 	m_preferences(preferences)
 {
 	GError* error = NULL;
