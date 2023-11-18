@@ -22,7 +22,7 @@ glibmm_dep = dependency('glibmm-2.4', version : '>= 2.39.93')
 giomm_dep = dependency('giomm-2.4', version : '>= 2.39.93')
 libgsasl_dep = dependency('libgsasl', version : '>= 0.2.21')
 gnutls_dep = dependency('gnutls', version : '>= 3.0.20')
-gtkmm_dep = dependency('gtkmm-3.0', version : '>= 3.6.0')
+gtkmm_dep = dependency('gtkmm-3.0', version : '>= 3.22.0')
 gtksourceview_dep = dependency('gtksourceview-4')
 
 libinfinity_dep = dependency('libinfinity-0.7')

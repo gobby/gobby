@@ -35,9 +35,10 @@ void Gobby::HelpCommands::on_contents()
 {
 	GError* error = NULL;
 
-	Gtk::Window* parent = m_application.get_windows()[0];
-
-	gtk_show_uri(parent->get_screen()->gobj(),
+	// Per https://gitlab.gnome.org/GNOME/gparted/-/merge_requests/82#note_1106114
+	// this should use NULL as the parent window to accurately report errors.
+	gtk_show_uri_on_window(
+		NULL,
 		"help:gobby",
 		GDK_CURRENT_TIME,
 		&error);
@@ -46,6 +47,7 @@ void Gobby::HelpCommands::on_contents()
 		return;
 
 	// Help browser could not be invoked, show an error message to the user.
+	Gtk::Window* parent = m_application.get_windows()[0];
 	Gtk::MessageDialog dlg(*parent, _("There was an error displaying help."),
 		false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 	dlg.set_secondary_text(error->message);
