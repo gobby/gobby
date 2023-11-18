@@ -331,7 +331,7 @@ Gobby::BrowserCommands::BrowserCommands(Browser& browser,
                                         Operations& operations,
                                         const Preferences& preferences):
 	m_browser(browser), m_folder_manager(folder_manager),
-	m_operations(operations), m_status_bar(status_bar),
+	m_status_bar(status_bar), m_operations(operations),
 	m_preferences(preferences)
 {
 	m_browser.signal_connect().connect(
