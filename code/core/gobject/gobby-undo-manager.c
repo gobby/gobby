@@ -31,8 +31,6 @@ enum {
   PROP_UNDO_GROUPING
 };
 
-#define GOBBY_UNDO_MANAGER_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), GOBBY_TYPE_UNDO_MANAGER, GobbyUndoManagerPrivate))
-
 static void gobby_undo_manager_undo_manager_iface_init(GtkSourceUndoManagerIface* iface);
 G_DEFINE_TYPE_WITH_CODE(GobbyUndoManager, gobby_undo_manager, G_TYPE_OBJECT,
   G_ADD_PRIVATE(GobbyUndoManager)
@@ -48,7 +46,7 @@ gobby_undo_manager_can_undo_changed_cb(InfAdoptedAlgorithm* algorithm,
   GobbyUndoManagerPrivate* priv;
 
   undo_manager = GOBBY_UNDO_MANAGER(user_data);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   InfAdoptedUser* our_user;
   g_object_get(G_OBJECT(priv->undo_grouping), "user", &our_user, NULL);
@@ -73,7 +71,7 @@ gobby_undo_manager_can_redo_changed_cb(InfAdoptedAlgorithm* algorithm,
   GobbyUndoManagerPrivate* priv;
 
   undo_manager = GOBBY_UNDO_MANAGER(user_data);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   InfAdoptedUser* our_user;
   g_object_get(G_OBJECT(priv->undo_grouping), "user", &our_user, NULL);
@@ -96,7 +94,7 @@ gobby_undo_manager_set_session(GobbyUndoManager* undo_manager,
   GobbyUndoManagerPrivate* priv;
   InfAdoptedAlgorithm* algorithm;
 
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   if(priv->session != NULL)
   {
@@ -149,7 +147,7 @@ static void
 gobby_undo_manager_init(GobbyUndoManager* undo_manager)
 {
   GobbyUndoManagerPrivate* priv;
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   priv->session = NULL;
   priv->undo_grouping = NULL;
@@ -162,7 +160,7 @@ gobby_undo_manager_dispose(GObject* object)
   GobbyUndoManagerPrivate* priv;
 
   undo_manager = GOBBY_UNDO_MANAGER(object);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   gobby_undo_manager_set_session(undo_manager, NULL);
 
@@ -191,7 +189,7 @@ gobby_undo_manager_set_property(GObject* object,
   GobbyUndoManagerPrivate* priv;
 
   undo_manager = GOBBY_UNDO_MANAGER(object);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   switch(prop_id)
   {
@@ -223,7 +221,7 @@ gobby_undo_manager_get_property(GObject* object,
   GobbyUndoManagerPrivate* priv;
 
   undo_manager = GOBBY_UNDO_MANAGER(object);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   switch(prop_id)
   {
@@ -285,7 +283,7 @@ gobby_undo_manager_can_undo(GtkSourceUndoManager* manager)
   gboolean can_undo;
 
   undo_manager = GOBBY_UNDO_MANAGER(manager);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
   algorithm =
     inf_adopted_session_get_algorithm(INF_ADOPTED_SESSION(priv->session));
   g_object_get(G_OBJECT(priv->undo_grouping), "user", &user, NULL);
@@ -306,7 +304,7 @@ gobby_undo_manager_can_redo(GtkSourceUndoManager* manager)
   gboolean can_redo;
 
   undo_manager = GOBBY_UNDO_MANAGER(manager);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
   algorithm =
     inf_adopted_session_get_algorithm(INF_ADOPTED_SESSION(priv->session));
   g_object_get(G_OBJECT(priv->undo_grouping), "user", &user, NULL);
@@ -326,7 +324,7 @@ gobby_undo_manager_undo(GtkSourceUndoManager* manager)
   guint n_undo;
 
   undo_manager = GOBBY_UNDO_MANAGER(manager);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   g_object_get(G_OBJECT(priv->undo_grouping), "user", &user, NULL);
 
@@ -348,7 +346,7 @@ gobby_undo_manager_redo(GtkSourceUndoManager* manager)
   guint n_redo;
 
   undo_manager = GOBBY_UNDO_MANAGER(manager);
-  priv = GOBBY_UNDO_MANAGER_PRIVATE(undo_manager);
+  priv = gobby_undo_manager_get_instance_private(undo_manager);
 
   g_object_get(G_OBJECT(priv->undo_grouping), "user", &user, NULL);
 
