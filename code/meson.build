@@ -44,7 +44,6 @@ if target_machine.system() == 'windows'
   link_args = [
     '-lws2_32',
     '-Wl,--enable-runtime-pseudo-reloc',
-    '-mwindows',
     gobby_res[0].full_path()
     ]
   link_depends = [gobby_res]
@@ -156,4 +155,5 @@ executable('gobby-0.5',
       ],
     link_args : link_args,
     link_depends : link_depends,
-    install : true)
+    install : true,
+    win_subsystem : 'windows')
