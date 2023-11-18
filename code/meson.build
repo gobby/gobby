@@ -151,7 +151,8 @@ executable('gobby-0.5',
       libinfinity_dep,
       libinftext_dep,
       libinfgtk_dep,
-      libinftextgtk_dep
+      libinftextgtk_dep,
+      sigcpp_dep
       ],
     link_args : link_args,
     link_depends : link_depends,

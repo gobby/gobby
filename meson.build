@@ -18,6 +18,7 @@ if target_machine.system() == 'windows'
 endif
 
 libxmlpp_dep = dependency('libxml++-2.6')
+sigcpp_dep = dependency('sigc++-2.0')
 glibmm_dep = dependency('glibmm-2.4', version : '>= 2.39.93')
 giomm_dep = dependency('giomm-2.4', version : '>= 2.39.93')
 libgsasl_dep = dependency('libgsasl', version : '>= 0.2.21')
