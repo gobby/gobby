@@ -1,7 +1,7 @@
 project('gobby', ['cpp', 'c'],
   version : '0.7.0',
   license : 'ISC',
-  default_options : ['cpp_std=c++11'])
+  default_options : ['cpp_std=c++17'])
 appname = 'gobby-0.5'
 
 ## TODO: WIN32 (+resources), make docs conditional
@@ -25,6 +25,7 @@ libgsasl_dep = dependency('libgsasl', version : '>= 0.2.21')
 gnutls_dep = dependency('gnutls', version : '>= 3.0.20')
 gtkmm_dep = dependency('gtkmm-3.0', version : '>= 3.22.0')
 gtksourceview_dep = dependency('gtksourceview-4')
+libsecret_dep = dependency('libsecret-1', required : false)
 
 libinfinity_dep = dependency('libinfinity-0.7')
 libinftext_dep = dependency('libinftext-0.7')

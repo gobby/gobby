@@ -53,7 +53,7 @@ jobs:
 
       - name: "gobby: Install required packages"
         run: |
-          sudo apt-get install -y meson libsigc++-2.0-dev libxml++2.6-dev libglibmm-2.4-dev libgtkmm-3.0-dev libgtksourceview-4-dev libgsasl7-dev gettext yelp-tools desktop-file-utils appstream-util
+          sudo apt-get install -y meson libsigc++-2.0-dev libxml++2.6-dev libglibmm-2.4-dev libgtkmm-3.0-dev libgtksourceview-4-dev libgsasl7-dev libsecret-1-dev gettext yelp-tools desktop-file-utils appstream-util
 
       - name: "gobby: Run meson"
         run: |
