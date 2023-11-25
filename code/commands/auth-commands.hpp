@@ -22,6 +22,7 @@
 #include "core/browser.hpp"
 #include "core/statusbar.hpp"
 #include "core/preferences.hpp"
+#include "util/secrets.hpp"
 
 #include <gtkmm/window.h>
 #include <sigc++/trackable.h>
@@ -101,7 +102,9 @@ protected:
 
 	struct RetryInfo {
 		unsigned int retries;
+		Glib::ustring username;
 		Glib::ustring last_password;
+		bool attempted_fetch_from_secret_store;
 		gulong handle;
 		PasswordDialog* password_dialog;
 	};
