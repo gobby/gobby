@@ -16,6 +16,7 @@
 
 #include "commands/auth-commands.hpp"
 #include "util/i18n.hpp"
+#include "util/secrets.hpp"
 
 #include <libinfinity/common/inf-xmpp-connection.h>
 #include <libinfinity/common/inf-error.h>
@@ -118,6 +119,11 @@ Gobby::AuthCommands::~AuthCommands()
 	    iter != m_retries.end(); ++iter)
 	{
 		g_signal_handler_disconnect(iter->first, iter->second.handle);
+		if (iter->second.secret_lookup_cancellable) {
+			g_cancellable_cancel(iter->second.secret_lookup_cancellable);
+			g_object_unref(iter->second.secret_lookup_cancellable);
+		}
+		delete iter->second.password_dialog;
 	}
 }
 
@@ -133,6 +139,21 @@ void Gobby::AuthCommands::set_sasl_error(InfXmppConnection* connection,
 	inf_xmpp_connection_set_sasl_error(connection, error);
 	g_error_free(error);
 }
+
+namespace {
+
+Glib::ustring get_remote_hostname(InfXmppConnection* xmpp)
+{
+	gchar* remote_id;
+	g_object_get(G_OBJECT(xmpp),
+	             "remote-hostname", &remote_id,
+		     NULL);
+	Glib::ustring remote_id_(remote_id);
+	g_free(remote_id);
+	return remote_id_;
+};
+
+} // namespace
 
 void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
                                         InfXmppConnection* xmpp,
@@ -172,21 +193,49 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 				inf_sasl_context_session_continue(session,
 				                                  GSASL_OK);
 			}
+			else if (!info.attempted_fetch_from_secret_store)
+			{
+				Glib::ustring remote_id = get_remote_hostname(xmpp);
+				info.attempted_fetch_from_secret_store = true;
+				info.secret_lookup_cancellable = g_cancellable_new();
+				lookup_secret(remote_id, username,
+				              info.secret_lookup_cancellable,
+				              [this, xmpp, session, prop]
+				              (std::optional<std::string> secret,
+				               GError* error) {
+					RetryMap::iterator i = m_retries.find(xmpp);
+					if(i == m_retries.end()) {
+						// By this point we should have an entry. Bail out if not,
+						// because then something caused a disconnect in the meantime.
+						return;
+					}
+					RetryInfo& info(i->second);
+					g_clear_object(&info.secret_lookup_cancellable);
+
+					if (error != nullptr) {
+						if (!g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED)) {
+							m_statusbar.add_error_message(
+								_("Failed to lookup password in secret store"),
+								error->message);
+						}
+					} else if (secret) {
+						info.last_password = *secret;
+					}
+
+					// Restart this function and do not re-query the secret store.
+					sasl_callback(session, xmpp, prop);
+				});
+			}
 			else
 			{
 				// Query user for password
 				g_assert(info.password_dialog == NULL);
 
-				gchar* remote_id;
-				g_object_get(G_OBJECT(xmpp),
-				             "remote-hostname", &remote_id,
-					     NULL);
-				Glib::ustring remote_id_(remote_id);
-				g_free(remote_id);
+				Glib::ustring remote_id = get_remote_hostname(xmpp);
 
 				std::unique_ptr<PasswordDialog> dialog =
 					PasswordDialog::create(
-						m_parent, remote_id_,
+						m_parent, remote_id,
 						info.retries);
 				info.password_dialog = dialog.release();
 				info.password_dialog->add_button(
@@ -394,6 +443,9 @@ Gobby::AuthCommands::insert_retry_info(InfXmppConnection* xmpp)
 		std::make_pair(xmpp,
 		               RetryInfo())).first;
 	iter->second.retries = 0;
+	iter->second.username = m_preferences.user.name;
+	iter->second.attempted_fetch_from_secret_store = false;
+	iter->second.secret_lookup_cancellable = NULL;
 	iter->second.handle = g_signal_connect(
 		G_OBJECT(xmpp),
 		"notify::status",
@@ -409,10 +461,36 @@ void Gobby::AuthCommands::on_notify_status(InfXmppConnection* connection)
 	InfXmlConnectionStatus status;
 	g_object_get(G_OBJECT(connection), "status", &status, NULL);
 
+	if (status == INF_XML_CONNECTION_OPEN)
+	{
+		RetryMap::iterator iter = m_retries.find(connection);
+		if (iter != m_retries.end() && !iter->second.last_password.empty()) {
+			store_secret(
+				get_remote_hostname(connection),
+				iter->second.username,
+				iter->second.last_password,
+				NULL,
+				[this](GError* error) {
+					if (error != nullptr &&
+					    !g_error_matches(error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+					{
+						m_statusbar.add_error_message(
+							_("Failed to store password in secret store"),
+							error->message);
+					}
+				});
+			iter->second.last_password.clear();
+		}
+	}
+
 	if(status != INF_XML_CONNECTION_OPENING)
 	{
 		RetryMap::iterator iter = m_retries.find(connection);
 		g_signal_handler_disconnect(connection, iter->second.handle);
+		if (iter->second.secret_lookup_cancellable) {
+			g_cancellable_cancel(iter->second.secret_lookup_cancellable);
+			g_object_unref(iter->second.secret_lookup_cancellable);
+		}
 		delete iter->second.password_dialog;
 		m_retries.erase(iter);
 	}

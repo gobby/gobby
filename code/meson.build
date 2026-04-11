@@ -4,6 +4,9 @@ conf.set_quoted('PACKAGE_STRING', meson.project_name() + ' ' + meson.project_ver
 conf.set_quoted('PACKAGE_VERSION', meson.project_version())
 conf.set_quoted('PRIVATE_ICONS_DIR', get_option('prefix') / get_option('datadir') / 'gobby-0.5' / 'icons')
 conf.set_quoted('PUBLIC_ICONS_DIR', get_option('prefix') / get_option('datadir') / 'icons')
+if libsecret_dep.found()
+  conf.set('HAVE_LIBSECRET', 1)
+endif
 
 configure_file(
   output : 'features.hpp',
@@ -107,6 +110,7 @@ executable('gobby-0.5',
       'util/file.cpp',
       'util/asyncoperation.cpp',
       'util/uri.cpp',
+      'util/secrets.cpp',
       'util/serialize.cpp',
       'util/i18n.cpp',
       'window.cpp',
@@ -151,7 +155,8 @@ executable('gobby-0.5',
       libinftext_dep,
       libinfgtk_dep,
       libinftextgtk_dep,
-      sigcpp_dep
+      sigcpp_dep,
+      libsecret_dep
       ],
     link_args : link_args,
     link_depends : link_depends,

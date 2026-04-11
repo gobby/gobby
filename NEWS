@@ -3,8 +3,11 @@ Gobby
 
 Version 0.7.0:
   * Use Meson for building instead of Autotools.
+  * Require C++17 for std::optional support.
   * Use GtkSourceView 4 instead of 3.
   * Bump GTK+ dependency to 3.22 for gtk_show_uri_on_window.
+  * Added support for libsecret as an optional dependency
+    (not available on Windows).
 
 Version 0.6.0:
   * Remove support for GTK+ 2.x; at least GTK+ 3.6 is required now.
