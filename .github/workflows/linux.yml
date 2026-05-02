@@ -17,13 +17,13 @@ jobs:
 
     steps:
       - name: "libinfinity: Check out repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: gobby/libinfinity
           path: libinfinity
 
       - name: "gobby: Check out repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: gobby
 

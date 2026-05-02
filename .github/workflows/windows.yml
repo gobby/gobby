@@ -33,13 +33,13 @@ jobs:
           git config --global core.symlinks false
 
       - name: "libinfinity: Check out repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: gobby/libinfinity
           path: libinfinity
 
       - name: "gobby: Check out repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: gobby
 
@@ -149,7 +149,7 @@ jobs:
           install: base-devel git rsync autoconf automake1.16
 
       - name: "Windows-10 theme: Check out repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: B00merang-Project/Windows-10
           path: windows-10-theme
