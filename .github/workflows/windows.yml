@@ -1,8 +1,7 @@
 name: Windows build
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
+  workflow_dispatch: # allows manual triggering
   push:
     branches: [ master ]
   pull_request:
