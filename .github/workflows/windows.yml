@@ -208,7 +208,7 @@ jobs:
 
     steps:
       - name: Download all workflow artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v8
 
       - name: Delete previous workflow artifacts
         uses: geekyeggo/delete-artifact@v6
