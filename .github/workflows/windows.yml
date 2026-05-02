@@ -211,7 +211,7 @@ jobs:
         uses: actions/download-artifact@v2
 
       - name: Delete previous workflow artifacts
-        uses: geekyeggo/delete-artifact@v1
+        uses: geekyeggo/delete-artifact@v6
         with:
           name: |
             build-result
