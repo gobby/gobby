@@ -1,0 +1,802 @@
+# Georgian translation for gobby.
+# Copyright (C) 2026 gobby's authors.
+# This file is distributed under the same license as the gobby package.
+# Ekaterine Papava <papava.e@gtu.ge>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gobby\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-29 13:01+0100\n"
+"PO-Revision-Date: 2026-02-07 14:55+0100\n"
+"Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.8\n"
+
+#: ../code/application.cpp:132
+msgid "Display version information and exit"
+msgstr "ვერსიის ჩვენება და გასვლა"
+
+#: ../code/application.cpp:134
+msgid "Start a new gobby instance also if there is one already running"
+msgstr ""
+"Gobby-ის ახალი გაშვებული ასლის შექმნა მაშინაც კი, თუ ის უკვე გაშვებულია"
+
+#: ../code/commands/auth-commands.cpp:193
+#: ../code/commands/browser-context-commands.cpp:354
+#: ../code/core/filechooser.cpp:34 ../code/core/filechooser.cpp:39
+#: ../code/core/huebutton.cpp:102
+#: ../code/dialogs/document-location-dialog.cpp:35
+msgid "_Cancel"
+msgstr "გაუ_ქმება"
+
+#: ../code/commands/auth-commands.cpp:195 ../code/core/huebutton.cpp:103
+msgid "_Ok"
+msgstr "_დიახ"
+
+#: ../code/commands/auth-commands.cpp:217
+msgid "Password required"
+msgstr "პაროლი აუცილებელია"
+
+#: ../code/commands/auth-commands.cpp:250
+msgid "Incorrect password"
+msgstr "არასწორი პაროლი"
+
+#: ../code/commands/browser-commands.cpp:289
+msgid "Subscribing to %1..."
+msgstr "%1-ის გამოწერა..."
+
+#: ../code/commands/browser-commands.cpp:302
+msgid "Subscribing to chat on %1..."
+msgstr "ჩატში %1-ის გამოწერა..."
+
+#: ../code/commands/browser-commands.cpp:625
+msgid "Subscription failed"
+msgstr "გამოწერის შეცდომა"
+
+#: ../code/commands/browser-context-commands.cpp:85
+msgid "Could not find a location where to store the certificate"
+msgstr "სერტიფიკატის შესანახი ადგილი ვერ ვიპოვე"
+
+#: ../code/commands/browser-context-commands.cpp:287
+#: ../code/commands/browser-context-commands.cpp:322
+#: ../code/commands/browser-context-commands.cpp:409
+#: ../code/commands/file-tasks/task-open-location.cpp:31
+#: ../code/core/statusbar.cpp:81 ../code/dialogs/find-dialog.cpp:58
+#: ../code/dialogs/goto-dialog.cpp:30 ../code/dialogs/initial-dialog.cpp:206
+#: ../code/dialogs/preferences-dialog.cpp:815
+msgid "_Close"
+msgstr "და_ხურვა"
+
+#: ../code/commands/browser-context-commands.cpp:349
+msgid "Choose a name for the directory"
+msgstr "აირჩიეთ საქაღალდის სახელი"
+
+#: ../code/commands/browser-context-commands.cpp:350
+msgid "Choose a name for the document"
+msgstr "აირჩიეთ დოკუმენტის სახელი"
+
+#: ../code/commands/browser-context-commands.cpp:351
+msgid "_Directory Name:"
+msgstr "საქაღალ_დის სახელი:"
+
+#: ../code/commands/browser-context-commands.cpp:352
+msgid "_Document Name:"
+msgstr "_დოკუმენტის სახელი:"
+
+#: ../code/commands/browser-context-commands.cpp:355
+msgid "C_reate"
+msgstr "_შექმნა"
+
+#: ../code/commands/browser-context-commands.cpp:357
+msgid "New Directory"
+msgstr "ახალი საქაღალდე"
+
+#: ../code/commands/browser-context-commands.cpp:358
+#: ../code/commands/file-tasks/task-new.cpp:36
+msgid "New Document"
+msgstr "ახალი დოკუმენტი"
+
+#: ../code/commands/browser-context-commands.cpp:380
+#: ../code/commands/file-tasks/task-open-file.cpp:22
+msgid "Choose a text file to open"
+msgstr "აირჩიეთ გასახსნელი ტექსტური ფაილი"
+
+#: ../code/commands/browser-context-commands.cpp:519
+#: ../code/commands/browser-context-commands.cpp:530
+msgid "Account successfully created"
+msgstr "ანგარიში წარმატებით შეიქმნა"
+
+#: ../code/commands/browser-context-commands.cpp:523
+msgid "When re-connecting to the server, the new account will be used."
+msgstr "სერვერთან თავიდან დაკავშირებისას გამოყენებული იქნება ახალი ანგარიში."
+
+#: ../code/commands/browser-context-commands.cpp:534
+msgid ""
+"The certificate has been stored at %1.\n"
+"\n"
+"To login to this account, set the certificate in Gobby's preferences and re-"
+"connect to the server."
+msgstr ""
+"სერტიფიკატი დამახსოვრებულია მისამართზე %1.\n"
+"\n"
+"ამ ანგარიშზე შესასვლელად დააყენეთ სერტიფიკატი Gobby-ის მორგების ფანჯარაში და "
+"თავიდან დაუკავშირდით სერვერს."
+
+#: ../code/commands/browser-context-commands.cpp:547
+msgid "Failed to create account"
+msgstr "ანგარიშის შექმნის შეცდომა"
+
+#: ../code/commands/browser-context-commands.cpp:550
+msgid "Could not save the certificate for the account: %1"
+msgstr "სერტიფიკატის შენახვის შეცდომა ანგარიშისთვის: %1"
+
+#: ../code/commands/file-commands.cpp:252
+msgid "Cancel"
+msgstr "გაუქმება"
+
+#: ../code/commands/file-commands.cpp:254
+msgid "Connect"
+msgstr "დაკავშირება"
+
+#: ../code/commands/file-tasks/task-export-html.cpp:27
+msgid "Choose a location to export document \"%1\" to"
+msgstr "აირჩიეთ, სად მოხდება გატანა დოკუმენტის \"%1\""
+
+#: ../code/commands/file-tasks/task-open.cpp:46
+msgid "Querying \"%1\"..."
+msgstr "\"%1\"-ის გამოთხოვა..."
+
+#: ../code/commands/file-tasks/task-open.cpp:103
+#: ../code/operations/operation-open.cpp:469
+#: ../code/operations/operation-open-multiple.cpp:176
+msgid "Failed to open document \"%1\""
+msgstr "გახსნის შეცდომა დოკუმენტისთვის \"%1\""
+
+#: ../code/commands/file-tasks/task-open-location.cpp:32
+#: ../code/core/filechooser.cpp:40
+#: ../code/dialogs/document-location-dialog.cpp:36
+msgid "_Open"
+msgstr "_გახსნა"
+
+#: ../code/commands/file-tasks/task-save.cpp:24
+msgid "Choose a location to save document \"%1\" to"
+msgstr "აირჩიეთ, სად მოხდება შენახვა დოკუმენტის \"%1\""
+
+#. Help browser could not be invoked, show an error message to the user.
+#: ../code/commands/help-commands.cpp:49
+msgid "There was an error displaying help."
+msgstr "შეცდომა დახმარების ჩვენებისას."
+
+#: ../code/commands/help-commands.cpp:74
+msgid "Contributors:"
+msgstr "მოხალისეები:"
+
+#: ../code/commands/help-commands.cpp:80
+msgid "British English:"
+msgstr "ბრიტანული ინგლისური:"
+
+#: ../code/commands/help-commands.cpp:82
+msgid "German:"
+msgstr "გერმანული:"
+
+#: ../code/commands/help-commands.cpp:99
+msgid ""
+"Permission to use, copy, modify, and/or distribute this software for any "
+"urpose with or without fee is hereby granted, provided that the above "
+"copyright notice and this permission notice appear in all copies.\n"
+"\n"
+"THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES "
+"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF "
+"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY "
+"SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES "
+"WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION "
+"OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN "
+"CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
+msgstr ""
+"Permission to use, copy, modify, and/or distribute this software for any "
+"urpose with or without fee is hereby granted, provided that the above "
+"copyright notice and this permission notice appear in all copies.\n"
+"\n"
+"THE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES "
+"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF "
+"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY "
+"SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES "
+"WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION "
+"OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN "
+"CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE."
+
+#: ../code/commands/subscription-commands.cpp:148
+msgid ""
+"The connection to the publisher of this document has been lost. Further "
+"changes to the document could not be synchronized to others anymore, "
+"therefore the document cannot be edited anymore.\n"
+"\n"
+"Please note also that it is possible that not all of your latest changes "
+"have reached the publisher before the connection was lost."
+msgstr ""
+"ამ დოკუმენტის გამომცემელთან კავშირი დაიკარგა. დოკუმენტში ამის შემდეგ "
+"შეტანილი ცვლილებების სხვებთან სინქრონიზაცია აღარ მოხდება, ამიტომ დოკუმენტს "
+"ვეღარ ჩაასწორებთ.\n"
+"\n"
+"დაიმახსოვრეთ, რომ ასევე შესაძლებელია, რომ თქვენმა ყველა ცვლილებამ ვერ "
+"მიაღწია გამომცემელთან მანამდე, სანამ კავშირი დაიკარგებოდა."
+
+#: ../code/commands/synchronization-commands.cpp:30
+msgid "Synchronization in progress... %1%%"
+msgstr "მიმდინარეობს სინქრონიზაცია... %1%%"
+
+#. Document cannot be used if an error happened
+#. during synchronization.
+#: ../code/commands/synchronization-commands.cpp:42
+msgid "This document cannot be used."
+msgstr "დოკუმენტის გამოყენება შეუძლებელია."
+
+#: ../code/commands/synchronization-commands.cpp:45
+#: ../code/commands/user-join-commands.cpp:43
+msgid ""
+"If you have an idea what could have caused the problem, then you may attempt "
+"to solve it and try again (after having closed this document). Otherwise it "
+"is most likely a bug in the software. In that case, please file a bug report "
+"at http://gobby.0x539.de/trac/newticket and provide as much information as "
+"you can, including what you did when the problem occurred and how to "
+"reproduce the problem (if possible) so that we can fix the problem in a "
+"later version. Thank you."
+msgstr ""
+"თუ გაქვთ იდეა, რას შეეძლო, ეს პრობლემა გამოეწვია, შეგიძლიათ, სცადოთ, "
+"გადაწყვიტოთ ის და თავიდან სცადოთ (ამ დოკუმენტის დახურვის შემდეგ). წინააღმდეგ "
+"შემთხვევაში, დიდი შანსით, ეს შეცდომაა კოდში და მოგვწერეთ ამის შესახებ "
+"მისამართზე http://gobby.0x539.de/trac/newticket და მოგვაწოდეთ რაც შეიძლება, "
+"მეტი ინფორმაცია იმის ჩათვლით, რა გააკეთეთ, როცა პრობლემა აღმოაჩინეთ და როგორ "
+"გამოვიწვიოთ ეს პრობლემა ჩვენ (თუ ეს შესაძლებელია), რომ ეს პრობლემა "
+"გავასწოროთ შემდეგ ვერსიაში. მადლობა."
+
+#: ../code/commands/synchronization-commands.cpp:59
+msgid "Synchronization failed: %1"
+msgstr "სინქრონიზაცია ჩავარდა: %1"
+
+#. TODO: Adjust this for chat sessions
+#: ../code/commands/user-join-commands.cpp:38
+msgid ""
+"You can still watch others editing the document, but you cannot edit it "
+"yourself."
+msgstr ""
+"თქვენ ჯერ კიდევ შეგიძლიათ უყუროთ სხვებს, როგორ არედაქტირებენ ისინი "
+"დოკუმენტს, მაგრამ რედაქტირება თქვენ არ შეგიძლიათ."
+
+#: ../code/commands/user-join-commands.cpp:57
+msgid "User Join failed: %1"
+msgstr "მომხმარებლის შემოერთება ჩავარდა: %1"
+
+#: ../code/commands/user-join-commands.cpp:64
+msgid "Permissions are not granted to modify the document."
+msgstr "დოკუმენტის ჩასასწორებლად წვდომები მონიჭებული არ გაქვთ."
+
+#: ../code/core/browser.cpp:109
+msgid "_Direct Connection"
+msgstr "პირ_დაპირი გავშირი"
+
+#: ../code/core/browser.cpp:110
+msgid "Host Name:"
+msgstr "ჰოსტის სახელი:"
+
+#: ../code/core/certificatemanager.cpp:86
+#, c-format
+msgid "Failed to write Diffie-Hellman parameters to \"%s\": %s"
+msgstr "დიფი ჰელმანის პარამეტრების ჩაწერის შეცდომა ფაილში \"%s\": %s"
+
+#: ../code/core/certificatemanager.cpp:279
+#, c-format
+msgid "Failed to read Diffie-Hellman parameters: %s"
+msgstr "დიფი-ჰელმანის პარამეტრების წაკითხვა ჩავარდა: %s"
+
+#: ../code/core/certificatemanager.cpp:341
+msgid "File does not contain a X.509 certificate"
+msgstr "ფაილი X.509 სერტიფიკატს არ სეიცავს"
+
+#: ../code/core/certificatemanager.cpp:417
+msgid "Certificate does not belong to the chosen key"
+msgstr "სერტიფიკატი არჩეულ გასაღებს არ ეკთვნის"
+
+#: ../code/core/filechooser.cpp:35
+msgid "_Save"
+msgstr "_შენახვა"
+
+#: ../code/core/foldermanager.cpp:345
+msgid "The document has been removed from the server."
+msgstr "დოკუმენტი წაშლილია სერვერიდან."
+
+#: ../code/core/selfhoster.cpp:105
+msgid "Generating 2048-bit Diffie-Hellman parameters..."
+msgstr "მიმდინარეობს 2048-ბიტიანი დიფი-ჰელმანის პარამეტრების გენერაცია..."
+
+#: ../code/core/selfhoster.cpp:137
+msgid "Failed to generate Diffie-Hellman parameters"
+msgstr "დიფი-ჰელმანის პარამეტრების გენერაცია ჩავარდა"
+
+#: ../code/core/selfhoster.cpp:139
+msgid ""
+"This means that Perfect Forward Secrecy (PFS) is not available. Restart "
+"Gobby to re-try generating the parameters. The specific error was:\n"
+"\n"
+"%1"
+msgstr ""
+"ეს ნიშნავს, რომ შესანიშნავი გადაგზავნის საიდუმლოება (PFS) ხელმისაწვდომი "
+"არაა. გაუშვით თავიდან Gobby, რომ მოხდეს პარამეტრების თავიდან გენერაცია. "
+"სპეციფიკური შეცდომა:\n"
+"\n"
+"%1"
+
+#: ../code/core/selfhoster.cpp:265
+msgid ""
+"In order to start sharing your documents, choose a private key and "
+"certificate or create a new pair in the preferences"
+msgstr ""
+"იმისათვის, რომ დაიწყოთ თქვენი დოკუმენტების გაზიარება, აირჩიეთ პირადი "
+"გასაღები და სერტიფიკატი, ან შექმენით ახალი წყვილი მორგების ფანჯარაში"
+
+#: ../code/core/selfhoster.cpp:287
+msgid "Failed to share documents"
+msgstr "დოკუმენტების გაზიარება ჩავარდა"
+
+#: ../code/core/sessionuserview.cpp:38
+msgid "User List"
+msgstr "მომხმარებლების სია"
+
+#: ../code/core/statusbar.cpp:434
+msgid "Ln %1, Col %2\t%3"
+msgstr "ხზ %1, სვტ %2\t%3"
+
+#: ../code/core/statusbar.cpp:437
+msgid "OVR"
+msgstr "OVR"
+
+#: ../code/core/statusbar.cpp:437
+msgid "INS"
+msgstr "INS"
+
+#: ../code/core/textsessionview.cpp:639
+msgid "Text written by <b>%1</b>"
+msgstr "ტექსტის ავტორია <b>%1</b>"
+
+#: ../code/core/textsessionview.cpp:645
+msgid "Unowned text"
+msgstr "უპატრონო ტექსტი"
+
+#: ../code/core/userlist.cpp:115
+msgid "Users"
+msgstr "მომხმარებლები"
+
+#: ../code/dialogs/connection-info-dialog.cpp:48
+msgid "Connections"
+msgstr "კავშირები"
+
+#: ../code/dialogs/connection-info-dialog.cpp:313
+msgid "Nobody is connected to this computer"
+msgstr "კომპიუტერთან არავინაა დაკავსირებული"
+
+#: ../code/dialogs/document-location-dialog.cpp:153
+msgid "Select document's target location"
+msgstr "აირჩიეთ დოკუმენტის სამიზნე მდებარეობა"
+
+#: ../code/dialogs/document-location-dialog.cpp:155
+msgid "Choose a directory to create the document into:"
+msgstr "აირჩიეთ საქაღალდე, სადაც დოკუმენტის შექმნა მოხდება:"
+
+#: ../code/dialogs/document-location-dialog.cpp:162
+msgid "Select documents' target location"
+msgstr "აირჩიეთ დოკუმენტების სამიზნე მდებარეობა"
+
+#: ../code/dialogs/document-location-dialog.cpp:164
+msgid "Choose a directory to create the documents into:"
+msgstr "აირჩიეთ საქაღალდე, სადაც დოკუმენტების შექმნა მოხდება:"
+
+#: ../code/dialogs/find-dialog.cpp:59
+msgid "Replace _All"
+msgstr "ყველ_აფრის ჩანაცვლება"
+
+#: ../code/dialogs/find-dialog.cpp:61
+msgid "_Replace"
+msgstr "_ჩანაცვლება"
+
+#: ../code/dialogs/find-dialog.cpp:62
+msgid "_Find"
+msgstr "_პოვნა"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Find"
+msgstr "ძებნა"
+
+#: ../code/dialogs/find-dialog.cpp:119
+msgid "Replace"
+msgstr "ჩანაცვლება"
+
+#: ../code/dialogs/find-dialog.cpp:138 ../code/dialogs/find-dialog.cpp:154
+msgid "Phrase \"%1\" has not been found"
+msgstr "ფრაზა \"%1\" აღმოჩენილი არაა"
+
+#: ../code/dialogs/find-dialog.cpp:312
+msgid "No occurrence has been replaced"
+msgstr "შემთხვევები არ ჩანაცვლებულა"
+
+#: ../code/dialogs/find-dialog.cpp:318
+msgid "%1 occurrence has been replaced"
+msgid_plural "%1 occurrences have been replaced"
+msgstr[0] "ჩანაცვლდა %1 შემთხვევა"
+msgstr[1] "ჩანაცვლდა %1 შემთხვევა"
+
+#: ../code/dialogs/goto-dialog.cpp:31
+msgid "Go To _Line"
+msgstr "გადასვ_ლა ხაზზე"
+
+#: ../code/dialogs/initial-dialog.cpp:53
+msgid "Generating 2048-bit RSA private key..."
+msgstr "მიმდინარეობს 2048-ბიტიანი RSA პირადი გასაღების გენერაცია..."
+
+#: ../code/dialogs/initial-dialog.cpp:76
+msgid "Failed to generate private key"
+msgstr "პირადი გასაღების გენერაციის შეცდომა"
+
+#: ../code/dialogs/initial-dialog.cpp:79
+msgid ""
+"%1\n"
+"\n"
+"You can try again to create a key in the Security tab of the preferences "
+"dialog."
+msgstr ""
+"%1\n"
+"\n"
+"შეგიძლიათ, გასაღების შექმნა კიდევ ერთხელ სცადოთ მორგების დიალოგის "
+"უსაფრთხოების ჩანართში."
+
+#: ../code/dialogs/initial-dialog.cpp:118
+msgid "Failed to generate self-signed certificate"
+msgstr "თვითხელმოწერილი სერტიფიკატის გენერაცია ჩავარდა"
+
+#: ../code/dialogs/initial-dialog.cpp:121
+msgid ""
+"%1\n"
+"\n"
+"You can try again to create a certificate in the Security tab of the "
+"preferences dialog."
+msgstr ""
+"%1\n"
+"\n"
+"შეგიძლიათ, სერტიფიკატის შექმნა კიდევ ერთხელ სცადოთ მორგების დიალოგის "
+"უსაფრთხოების ჩანართში."
+
+#: ../code/dialogs/password-dialog.cpp:34
+msgid "Connection to host \"%1\" requires a password."
+msgstr "კავშირს ჰოსტთან \"%1\" პაროლი სჭირდება."
+
+#: ../code/dialogs/password-dialog.cpp:40
+msgid "Invalid password for host \"%1\". Please try again."
+msgstr "არასწორი პაროლი ჰოსტისთვის \"%1\". თავიდან სცადეთ."
+
+#: ../code/dialogs/preferences-dialog.cpp:409
+msgid "Display no whitespace"
+msgstr "ცარიელი ადგილების არჩვენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:412
+msgid "Display spaces"
+msgstr "ჰარეების ჩვენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:416
+msgid "Display tabs"
+msgstr "ტაბულაციების ჩვენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:420
+msgid "Display tabs and spaces"
+msgstr "ტაბულაციების და ჰარეების ჩვენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:452
+msgid "Show text only"
+msgstr "მხოლოდ ტექსტის ჩვენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:454
+msgid "Show icons only"
+msgstr "მხოლოდ ხატულების ჩვენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:456
+msgid "Show both icons and text"
+msgstr "ორივეს, ტექსტისა და ხატულების ჩვენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:458
+msgid "Show text besides icons"
+msgstr "ტექსტის ჩვენება ხატულების გვერდით"
+
+#: ../code/dialogs/preferences-dialog.cpp:478
+msgid "Scheme Description"
+msgstr "სქემის აღწერა"
+
+#: ../code/dialogs/preferences-dialog.cpp:575
+msgid "Use TLS if possible"
+msgstr "TLS დაშიფვრის გამოყენება, თუ შესაძლებელია"
+
+#: ../code/dialogs/preferences-dialog.cpp:578
+msgid "Always use TLS"
+msgstr "TLS-ის ყოველთვის გამოყენება"
+
+#: ../code/dialogs/preferences-dialog.cpp:615
+msgid "Error reading file: %1"
+msgstr "ფაილის წაკითხვის შეცდომა: %1"
+
+#: ../code/dialogs/preferences-dialog.cpp:655
+msgid "2048-bit RSA private key is being generated, please wait..."
+msgstr "მიმდინარეობს 2048-ბიტიანი RSA პირადი გასაღების გენერაცია. მოითმინეთ..."
+
+#: ../code/dialogs/preferences-dialog.cpp:685
+msgid "Select a location for the generated key"
+msgstr "აირჩიეთ მდებარეობა გენერირებული გასაღებისთვის"
+
+#: ../code/dialogs/preferences-dialog.cpp:703
+msgid "Select a location for the generated certificate"
+msgstr "აირჩიეთ მდებარეობა გენერირებული სერტიფიკატისთვის"
+
+#: ../code/operations/operation-delete.cpp:65
+msgid "Removing node \"%1\"..."
+msgstr "იშლება კვანძი \"%1\"..."
+
+#: ../code/operations/operation-delete.cpp:75
+msgid "Failed to delete node \"%1\""
+msgstr "წაშლის შეცდომა კვანძისთვის \"%1\""
+
+#: ../code/operations/operation-export-html.cpp:173
+#, c-format
+msgid "written by: %s"
+msgstr "ავტორი: %s"
+
+#: ../code/operations/operation-export-html.cpp:246
+msgid "<unable to print date>"
+msgstr "<თარიღის გამოტანის შეცდომა>"
+
+#. %1$s is session name/hostname
+#. %2$s is path within the session
+#. %3$s is current date as formatted by %c,
+#. %4$s is a link to the gobby site, it must be present because
+#. we need to handle that manually to insert a hyperlink
+#. instead of just printf'ing it.
+#: ../code/operations/operation-export-html.cpp:259
+#, c-format
+msgid "Document generated from %1$s:%2$s at %3$s by %4$s"
+msgstr "დოკუმენტის გენერაცია მოხდა %1$s:%2$s-დან. დრო: %3$s. ავტორი: %4$s"
+
+#: ../code/operations/operation-export-html.cpp:409
+msgid "Participants"
+msgstr "მონაწილეები"
+
+#: ../code/operations/operation-export-html.cpp:483
+msgid "Exporting document \"%1\" to \"%2\" in HTML..."
+msgstr "მიმდინარეობს გატანა დოკუმენტის \"%1\" \"%2\"-ში HTML-ში..."
+
+#: ../code/operations/operation-export-html.cpp:544
+msgid "Failed to export document \"%1\" to HTML"
+msgstr "დოკუმენტის \"%1\" HTML-ში გატანა ჩავარდა"
+
+#: ../code/operations/operation-new.cpp:75
+msgid "Creating directory \"%1\"..."
+msgstr "იქმნება საქაღალდე \"%1\"..."
+
+#: ../code/operations/operation-new.cpp:76
+msgid "Creating document \"%1\"..."
+msgstr "იქნება დოკუმენტი \"%1\"..."
+
+#: ../code/operations/operation-new.cpp:88
+msgid "Failed to create directory \"%1\""
+msgstr "შექმნის შეცდომა საქაღალდისთვის \"%1\""
+
+#: ../code/operations/operation-new.cpp:89
+msgid "Failed to create document \"%1\""
+msgstr "შექმნის შეცდომა დოკუმენტისთვის \"%1\""
+
+#. Translators: This is the 8 bit encoding that is tried when
+#. autodetecting a file's encoding.
+#: ../code/operations/operation-open.cpp:38
+msgid "ISO-8859-1"
+msgstr "ISO-8859-1"
+
+#: ../code/operations/operation-open.cpp:113
+msgid "Opening document \"%1\"..."
+msgstr "იხსნება დოკუმენტი \"%1\"..."
+
+#: ../code/operations/operation-open.cpp:129
+msgid ""
+"The directory into which the new document was supposed to be inserted has "
+"been removed"
+msgstr ""
+"დოკუმენტი, რომელშიც ახალი დოკუმენტის მოთავსება უნდა მომხდარიყო, წაშლილია"
+
+#: ../code/operations/operation-open.cpp:318
+msgid "The file contains data not in the specified encoding"
+msgstr "ფაილი შეიცავს მონაცემებს, რომლებიც მითითებული კოდირებით არაა"
+
+#: ../code/operations/operation-open.cpp:329
+msgid ""
+"The file either contains data in an unknown encoding, or it contains binary "
+"data."
+msgstr ""
+"ფაილი ან უცნობი კოდირების მქონე მონაცემებს შეიცავს, ან მონაცემები ბინარულია."
+
+#: ../code/operations/operation-open-multiple.cpp:88
+msgid "Parent folder was removed"
+msgstr "მშობელი საქაღალდის წაშლილია"
+
+#: ../code/operations/operation-open-multiple.cpp:189
+msgid "Failed to open multiple documents"
+msgstr "ერთზე მეტი დოკუმენტის გახსნა ჩავარდა"
+
+#: ../code/operations/operation-save.cpp:91
+msgid "Saving document \"%1\" to \"%2\"..."
+msgstr "მიმდინარეობს დოკუმენტის \"%1\" შენახვა \"%2\"-ში..."
+
+#: ../code/operations/operation-save.cpp:220
+msgid ""
+"The document contains one or more characters that cannot be encoded in the "
+"specified character coding."
+msgstr ""
+"დოკუმენტი შეიცავს ერთ ან მეტ სიმბოლოს, რომლის კოდირებაც მითითებული "
+"სიმბოლოების კოდირებით შეუძლებელია."
+
+#: ../code/operations/operation-save.cpp:281
+msgid "Failed to save document \"%1\""
+msgstr "შენახვის შეცდომა დოკუმენტისთვის \"%1\""
+
+#: ../code/operations/operation-subscribe-path.cpp:33
+msgid "Invalid path: \"%1\""
+msgstr "არასწორი ბილიკი: \"%1\""
+
+#: ../code/operations/operation-subscribe-path.cpp:45
+msgid "Invalid path component: \"%1\""
+msgstr "არასწორი ბილიკის კომპონენტი: \"%1\""
+
+#: ../code/operations/operation-subscribe-path.cpp:135
+#: ../code/operations/operation-subscribe-path.cpp:200
+msgid "Subscribing to \"%1\"..."
+msgstr "\"%1\"-ის გამოწერა..."
+
+#: ../code/operations/operation-subscribe-path.cpp:149
+#: ../code/operations/operation-subscribe-path.cpp:212
+msgid "Failed to connect to \"%1\""
+msgstr "\"%1\"-ისთან დაკავშირების შეცდომა"
+
+#: ../code/operations/operation-subscribe-path.cpp:164
+msgid "URI scheme \"%1\" not supported"
+msgstr "URI-ის სქემა \"%1\" მხარდაჭერილი არაა"
+
+#: ../code/operations/operation-subscribe-path.cpp:193
+msgid "Connecting to \"%1\"..."
+msgstr "\"%1\"-ისთან დაკავშირება..."
+
+#: ../code/operations/operation-subscribe-path.cpp:220
+#: ../code/operations/operation-subscribe-path.cpp:319
+#: ../code/operations/operation-subscribe-path.cpp:356
+#: ../code/operations/operation-subscribe-path.cpp:452
+#: ../code/operations/operation-subscribe-path.cpp:472
+msgid "Could not subscribe to \"%1\""
+msgstr "\"%1\"-ის გამოწერის შეცდომა"
+
+#: ../code/operations/operation-subscribe-path.cpp:322
+#: ../code/operations/operation-subscribe-path.cpp:358
+msgid "Path \"%1\" does not exist"
+msgstr "ბილიკი \"%1\" არ არსებობს"
+
+#: ../code/util/file.cpp:65 ../code/util/file.cpp:74
+msgid "Could not create directory \"%1\": %2"
+msgstr "შექმნის შეცდომა საქაღალდისთვის \"%1\": %2"
+
+#: ../code/util/uri.cpp:91
+msgid "Device \"%1\" does not exist"
+msgstr "მოწყობილობა \"%1\" არ არსებობს"
+
+#: ../code/window.cpp:42
+msgid "Chat"
+msgstr "ჩატი"
+
+#: ../code/window.cpp:83
+msgid "This Computer"
+msgstr "ეს კომპიუტერი"
+
+#: ../code/window.cpp:108
+msgid "Document Browser"
+msgstr "დოკუმენტაციის ბრაუზერი"
+
+#: ../gobby-0.5.desktop.in.h:1 ../gobby-0.5.metainfo.xml.in.h:1
+msgid "Gobby"
+msgstr "Gobby"
+
+#: ../gobby-0.5.desktop.in.h:2
+msgid "Collaborative Editor"
+msgstr "კოლაბორაციული რედაქტორი"
+
+#: ../gobby-0.5.desktop.in.h:3
+msgid "Gobby Collaborative Editor (0.5)"
+msgstr "კოლაბორაციული რედაქტორი Gobby (0.5)"
+
+#: ../gobby-0.5.desktop.in.h:4 ../gobby-0.5.metainfo.xml.in.h:2
+msgid "Edit text files collaboratively"
+msgstr "არედაქტირეთ ტექსტური რედაქტორები ერთდროულად"
+
+#: ../gobby-0.5.metainfo.xml.in.h:3
+msgid "Armin Burgmeier"
+msgstr "არმინ ბურგმაიერი"
+
+#: ../gobby-0.5.metainfo.xml.in.h:4
+msgid ""
+"Gobby is a free collaborative editor supporting multiple documents in one "
+"session and a multi-user chat. It runs on Microsoft Windows, Mac OS X, Linux "
+"and other Unix-like platforms."
+msgstr ""
+"Gobby თავისუფალი კოლაბორაციული რედაქტორია, რომელსაც ერთზე მეტი დოკუმენტის "
+"მხარდაჭერა აქვს ერთ სესიაში და ასევე გააჩნია მრავალმომხმარებლიანი ჩატი. ის "
+"ეშვება Microsoft Windows-ზე, Mac OS X-ზე, Linux-ზე და სხვა Unix-ის მსგავს "
+"პლატფორმებზე."
+
+#: ../gobby-0.5.metainfo.xml.in.h:5
+msgid ""
+"It uses GTK+ as its windowing toolkit and thus integrates nicely into the "
+"GNOME desktop environment."
+msgstr ""
+"ფანჯრების სამართავად ის GTK+-ს იყენებს და ამიტომ სასიამოვნოდ ინტეგრირდება "
+"GNOME-ში."
+
+#: ../gobby-0.5.metainfo.xml.in.h:6
+msgid "Remove support for GTK+ 2.x; at least GTK+ 3.6 is required now."
+msgstr "მოცილებულია GTK+ 2.x-ის მხარდაჭერა. ახლა აუცილებელია GTK+ >= 3.6."
+
+#: ../gobby-0.5.metainfo.xml.in.h:7
+msgid ""
+"Enable TCP keepalives, so that inactive connections will drop automatically "
+"after a short time."
+msgstr ""
+"TCP keepalive-ების ჩართვა, რომ არააქტიური კავშირები ცოტა ხანში ავტომატურად "
+"გაწყდეს."
+
+#: ../gobby-0.5.metainfo.xml.in.h:8
+msgid "Gobby is now registered as a handler for infinote:// URLs."
+msgstr "Gobby ახლა რეგისტრირებულია, როგორც პროგრამა infinote:// ბმულებისთვის."
+
+#: ../gobby-0.5.metainfo.xml.in.h:9
+msgid ""
+"Remember hosts previously connected to and presents them in the list next "
+"time Gobby is started until expilictly removed."
+msgstr ""
+"ადრე დაკავშირებული ჰოსტების დამახსოვრება და მათი გამოტანა სიაში შემდეგ "
+"ჯერზე, როცა Gobby გაეშვება, თუ მათ ხელით არ წაშლით."
+
+#: ../gobby-0.5.metainfo.xml.in.h:10
+msgid ""
+"Gobby can now show connection parameters, in particular TLS parameters used "
+"for the connection."
+msgstr ""
+"Gobby-ს ახლა შეუძლია კავშირის პარამეტრების ჩვენება. კერძოდ: კავშირისთვის "
+"გამოყენებული TLS-ის პარამეტრები."
+
+#: ../gobby-0.5.metainfo.xml.in.h:11
+msgid ""
+"Gobby's configuration options are stored in GSettings instead of a custam "
+"config.xml file."
+msgstr ""
+"Gobby-ის მორგების პარამეტრები დამახსოვრებულია GSettings-ში, მორგებული "
+"config.xml ფაილის მაგიერ."
+
+#: ../gobby-0.5.metainfo.xml.in.h:12
+msgid ""
+"The option to not set a certificate in the initial welcome dialog is no "
+"longer available."
+msgstr ""
+"პარამეტრი, რომ სერტიფიკატი არ მიუთითოთ საწყის მისალმების ეკრანზე, "
+"ხელმისაწვდომი აღარაა."
+
+#: ../gobby-0.5.metainfo.xml.in.h:13
+msgid "Gobby can now use the default system CAs on Windows."
+msgstr ""
+"Gobby-ს ახლა Windows-ზე ნაგულისხმევი სისტემური CA-ების გამოყენება შეუძლია."
+
+#: ../gobby-0.5.metainfo.xml.in.h:14
+msgid "Small bug fixes and code base modernization."
+msgstr "გასწორდა პატარა შეცდომები და მოხდება კოდის მოდერნიზაცია."
