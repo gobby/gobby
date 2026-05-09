@@ -16,6 +16,7 @@
 
 #include "commands/auth-commands.hpp"
 #include "util/i18n.hpp"
+#include "util/secrets.hpp"
 
 #include <libinfinity/common/inf-xmpp-connection.h>
 #include <libinfinity/common/inf-error.h>
@@ -134,6 +135,21 @@ void Gobby::AuthCommands::set_sasl_error(InfXmppConnection* connection,
 	g_error_free(error);
 }
 
+namespace {
+
+Glib::ustring get_remote_hostname(InfXmppConnection* xmpp)
+{
+	gchar* remote_id;
+	g_object_get(G_OBJECT(xmpp),
+	             "remote-hostname", &remote_id,
+		     NULL);
+	Glib::ustring remote_id_(remote_id);
+	g_free(remote_id);
+	return remote_id_;
+};
+
+} // namespace
+
 void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
                                         InfXmppConnection* xmpp,
                                         Gsasl_property prop)
@@ -172,21 +188,35 @@ void Gobby::AuthCommands::sasl_callback(InfSaslContextSession* session,
 				inf_sasl_context_session_continue(session,
 				                                  GSASL_OK);
 			}
+			else if (!info.attempted_fetch_from_secret_store)
+			{
+				Glib::ustring remote_id = get_remote_hostname(xmpp);
+				info.attempted_fetch_from_secret_store = true;
+				lookup_secret(remote_id, username, [=] (std::optional<std::string> password) {
+					RetryMap::iterator i = m_retries.find(xmpp);
+					if(i == m_retries.end()) {
+						// By this point we should have an entry. Bail out if not,
+						// because then something caused a disconnect in the meantime.
+						return;
+					}
+					RetryInfo& info(i->second);
+					if (password) {
+						info.last_password = *password;
+					}
+					// Restart this function and do not re-query the secret store.
+					sasl_callback(session, xmpp, prop);
+				});
+			}
 			else
 			{
 				// Query user for password
 				g_assert(info.password_dialog == NULL);
 
-				gchar* remote_id;
-				g_object_get(G_OBJECT(xmpp),
-				             "remote-hostname", &remote_id,
-					     NULL);
-				Glib::ustring remote_id_(remote_id);
-				g_free(remote_id);
+				Glib::ustring remote_id = get_remote_hostname(xmpp);
 
 				std::unique_ptr<PasswordDialog> dialog =
 					PasswordDialog::create(
-						m_parent, remote_id_,
+						m_parent, remote_id,
 						info.retries);
 				info.password_dialog = dialog.release();
 				info.password_dialog->add_button(
@@ -394,6 +424,7 @@ Gobby::AuthCommands::insert_retry_info(InfXmppConnection* xmpp)
 		std::make_pair(xmpp,
 		               RetryInfo())).first;
 	iter->second.retries = 0;
+	iter->second.username = m_preferences.user.name;
 	iter->second.handle = g_signal_connect(
 		G_OBJECT(xmpp),
 		"notify::status",
@@ -408,6 +439,17 @@ void Gobby::AuthCommands::on_notify_status(InfXmppConnection* connection)
 {
 	InfXmlConnectionStatus status;
 	g_object_get(G_OBJECT(connection), "status", &status, NULL);
+
+	if (status == INF_XML_CONNECTION_OPEN)
+	{
+		RetryMap::iterator iter = m_retries.find(connection);
+		if (iter != m_retries.end() && !iter->second.last_password.empty()) {
+			store_secret(
+				get_remote_hostname(connection),
+				iter->second.username,
+				iter->second.last_password);
+		}
+	}
 
 	if(status != INF_XML_CONNECTION_OPENING)
 	{
