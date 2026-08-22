@@ -47,8 +47,6 @@ Gobby::MenuManager::MenuManager(GtkSourceLanguageManager* language_manager)
 		Gtk::Builder::create_from_resource(
 			"/de/0x539/gobby/ui/menu.ui");
 
-	m_app_menu = Glib::RefPtr<Gio::Menu>::cast_dynamic(
-		builder->get_object("appmenu"));
 	m_menu = Glib::RefPtr<Gio::Menu>::cast_dynamic(
 		builder->get_object("winmenu"));
 

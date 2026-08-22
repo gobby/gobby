@@ -30,10 +30,8 @@ class MenuManager
 public:
 	MenuManager(GtkSourceLanguageManager* language_manager);
 
-	Glib::RefPtr<Gio::MenuModel> get_app_menu() { return m_app_menu; }
 	Glib::RefPtr<Gio::MenuModel> get_menu() { return m_menu; }
 protected:
-	Glib::RefPtr<Gio::Menu> m_app_menu;
 	Glib::RefPtr<Gio::Menu> m_menu;
 
 private:
