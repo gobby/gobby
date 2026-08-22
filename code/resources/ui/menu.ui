@@ -1,28 +1,5 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="appmenu">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">_Preferences</attribute>
-        <attribute name="action">app.preferences</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Help</attribute>
-        <attribute name="action">app.help</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">About</attribute>
-        <attribute name="action">app.about</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Quit</attribute>
-        <attribute name="action">app.quit</attribute>
-      </item>
-    </section>
-  </menu>
-
   <menu id="winmenu">
     <submenu>
       <attribute name="label" translatable="yes">_File</attribute>
@@ -77,6 +54,11 @@
           <attribute name="label" translatable="yes">_Close</attribute>
           <attribute name="action">win.close</attribute>
           <attribute name="accel">&lt;primary&gt;w</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Quit</attribute>
+          <attribute name="action">app.quit</attribute>
+          <attribute name="accel">&lt;primary&gt;q</attribute>
         </item>
       </section>
     </submenu>
@@ -136,6 +118,12 @@
           <attribute name="label" translatable="yes">Go To _Line</attribute>
           <attribute name="action">win.goto-line</attribute>
           <attribute name="accel">&lt;primary&gt;i</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Preferences</attribute>
+          <attribute name="action">app.preferences</attribute>
         </item>
       </section>
     </submenu>
@@ -207,6 +195,20 @@
           </item>
           <!-- this is filled programmatically -->
         </submenu>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Help</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Content</attribute>
+          <attribute name="action">app.help</attribute>
+          <attribute name="accel">F1</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_About</attribute>
+          <attribute name="action">app.about</attribute>
+        </item>
       </section>
     </submenu>
   </menu>

@@ -194,7 +194,6 @@ void Gobby::Application::on_startup()
 		// need to do it if we are the primary instance.
 		m_data.reset(new Data(*this));
 
-		set_app_menu(m_data->menu_manager.get_app_menu());
 		set_menubar(m_data->menu_manager.get_menu());
 
 		m_gobby_window = new Gobby::Window(
